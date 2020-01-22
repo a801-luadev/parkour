@@ -34,3 +34,7 @@ else
 		{% require-package "modes/parkour" %}
 	end
 end
+
+for player in next, tfm.get.room.playerList do
+	eventNewPlayer(player)
+end
