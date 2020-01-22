@@ -1,11 +1,11 @@
 [
 	{
 		"type": "require-dir",
-		"dir": "translations/rocketlaunch",
+		"dir": "translations/freezertag",
 		"recursive": false
 	},
 	{
 		"type": "require-file",
-		"file": "modes/rocketlaunch/init.lua"
+		"file": "modes/freezertag/init.lua"
 	}
 ]
