@@ -1,0 +1,33 @@
+translations.hu = {
+	youWon = 'Gratulálunk, teljesítetted a parkour-t';
+	youWon2 = 'Élvezd az új képességeid!';
+	finishParkour = 'teljesítette a parkour-t';
+	congrats = 'gratulálunk';
+	newLevel = 'Gratulálunk! Elérted a következő szintet: ';
+	welcome = 'Üdvözlünk a #parkour modulban';
+	welcomeAgain = 'Üdvözlünk ismét a  #parkour modulban';
+	welcome2 = '<CS>További információk és pályák beküldése: https://atelier801.com/topic?f=6&t=880520</CS>\n<R>A sárga névvel rendelkező játékosok repülhetnek, emellett használhatnak más képességeket is, mint például a teleportálás. Kattints a kézre a megtekintésükhöz. Ezek a játékosok NEM csalók!</R>';
+	help = '<VP>Üdvözlünk a #parkour modulban. Itt be kell bizonyítanod a képességeidet, elsősorban a türelmed! Azok a játékosok, akik teljesítik a pályákat jutalmakat, vagy képességeket kaphatnak. Például: hógolyót, felhőt és lufit.</VP>\n<ROSE>Figyelem! Engedélyezd az effekteket a beállításokban, hogy lásd az ellenőrzőpontokat.</ROSE>';
+	minPlayers = "<R>Legalább 4 játékos szükséges az adatok elmentéséhez.</R>";
+	noTribeHouse = "<R>Ahhoz, hogy jutalmat kapj, a törzsházon kívül kell játszanod.</R>";
+	use = 'Használ';
+	press = 'Nyomd meg';
+	ballon = 'Lufi';
+	masterBallon = 'Mesteri Lufi';
+	bubble = 'Buborék';
+	fly = 'Repülés';
+	snowball = 'Hógolyó';
+	speed = 'Gyorsaság';
+	teleport = 'Teleport';
+	smallbox = 'Kicsi doboz';
+	cloud = 'Felhő';
+	rip = 'RIP';
+	choco = 'Chocoplank';
+	finishedRounds = 'Teljesített pályák';
+	powers = 'Képességek';
+	space = 'SPACE';
+	mouseClick = 'KATTINTÁS';
+	unlockedPower = 'feloldotta ezt a képességet:';
+	seconds = 'másodperc alatt';
+	leaderboard = 'Ranglista';
+}

@@ -1,0 +1,33 @@
+translations.es = {
+	youWon = 'Felicidades, has ganado el parkour en';
+	youWon2 = '¡Disfruta de tus nuevas habilidades!';
+	finishParkour = 'ha terminado el parkour en';
+	congrats = 'felicidades';
+	newLevel = '¡Felicidades! Has llegado al nivel';
+	welcome = 'Bienvenido a #parkour';
+	welcomeAgain = 'Bienvenido de nuevo a #parkour';
+	welcome2 = '<CS>Para más información y para enviar un mapa: https://atelier801.com/topic?f=6&t=880520</CS>\n<R>Players with yellow nicknames can fly and use other powers like teleport, click on the hand to see. They are not hackers.</R>';
+	help = '<VP>Bienvenido a #parkour. Aquí, tendrás que demostrar tus habilidades y, principalmente, ¡tu paciencia! Como recompensa para los que puedan completar los mapas, se les otorgará habilidades como el globo y las bolas de nieve.</VP>\n<ROSE>¡Atención! Activa los efectos de partículas en las opciones para ver los puntos de control.</ROSE>';
+	minPlayers = "<R>Para que cuenten los mapas, es necesario que haya 4 jugadores en la sala.</R>";
+	noTribeHouse = "<R>For the count of maps count, you need play out of tribe house</R>";
+	use = 'Utiliza';
+	press = 'Presiona';
+	ballon = 'Globo';
+	masterBallon = 'Globo Maestro';
+	bubble = 'Burbuja';
+	fly = 'Vuelo';
+	snowball = 'Bola de nieve';
+	speed = 'Velocidad';
+	teleport = 'Teletransporte';
+	smallbox = 'Caja pequeña';
+	cloud = 'Nube';
+	rip = 'RIP';
+	choco = 'Chocoplank';
+	finishedRounds = 'Mapas completados';
+	powers = 'Poderes';
+	space = 'ESPACIO';
+	mouseClick = 'CLIC';
+	unlockedPower = 'ha desbloqueado el poder';
+	seconds = 'segundos';
+	leaderboard = 'Clasificación';
+}

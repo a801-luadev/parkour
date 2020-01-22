@@ -1,0 +1,15 @@
+[
+	{
+		"type": "require-dir",
+		"dir": "translations/parkour",
+		"recursive": false
+	},
+	{
+		"type": "require-package",
+		"package": "tech/require-lib"
+	},
+	{
+		"type": "require-file",
+		"file": "modes/parkour/init.lua"
+	}
+]

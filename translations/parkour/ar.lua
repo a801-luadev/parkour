@@ -1,0 +1,33 @@
+translations.ar = {
+	youWon = 'تهانينا, لقد انهيت الباركور في';
+	youWon2 = 'استمتع بمهارتك الجديدة';
+	finishParkour = 'قد أنهى الباركور في';
+	congrats = 'تهانينا';
+	newLevel = 'تهانينا! لقد صعدت إلى المستوى';
+	welcome = 'مرحبًا في #parkour';
+	welcomeAgain = 'مرحبًا بعودتك في #parkour';
+	welcome2 = '<CS>لمعلومات إضافية وعرض الخرائط: https://atelier801.com/topic?f=6&t=880520</CS>\n<R>Players with yellow nicknames can fly and use other powers like teleport, click on the hand to see. They are not hackers.</R>';
+	help = '<VP>مرحبًا في #parkour. هنا ستضطر لتُثبت مهاراتك, وخصوصًا, صبرك!  كمكافأة لمن يُمكنهُم إنهاء الخرائط, مهارات مثل إسقاط البالونات ورمي كرات الثلج ستُعطى لك.</VP>\n<ROSE>انتباه! قم بتفعيل المؤثرات الخاصة من الإعدادات لترى نقاط التحقق.</ROSE>';
+	minPlayers = "<R>حتى يتم حفظ الإحصائيات, من الضَرُوري وجُود 4 لاعبين في الغرفة.</R>";
+	noTribeHouse = "<R>For the count of maps count, you need play out of tribe house</R>";
+	use = 'استعمل';
+	press = 'اضغط';
+	ballon = 'بالون';
+	masterBallon = 'سيد البالونات';
+	bubble = 'فقاعة';
+	fly = 'طيران';
+	snowball = 'كرة ثلج';
+	speed = 'سرعة';
+	teleport = 'انتقال';
+	smallbox = 'صندوق صغير';
+	cloud = 'سحابة';
+	rip = 'RIP';
+	choco = 'Chocoplank';
+	finishedRounds = 'عدد الخرائط المُكتملة';
+	powers = 'القوى';
+	space = 'مسافة';
+	mouseClick = 'اضغط';
+	unlockedPower = 'فتح المهارة';
+	seconds = 'ثواني';
+	leaderboard = 'قائمة الصدارة';
+}

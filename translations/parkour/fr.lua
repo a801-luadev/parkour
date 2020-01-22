@@ -1,0 +1,33 @@
+translations.fr = {
+	youWon='Félicitations, tu as complété le parkour en';
+	youWon2='Apprécie tes nouveaux pouvoirs!';
+	finishParkour='a fini le parkour en';
+	congrats='félicitations';
+	newLevel='Félicitations, tu arrives au niveau';
+	welcome='Bienvenue en #parkour';
+	welcomeAgain='Bon retour en #parkour';
+	welcome2="<CS>Pour plus d'informations et les soumissions de cartes : https://atelier801.com/topic?f=6&t=880520</CS>\n<R>Players with yellow nicknames can fly and use other powers like teleport, click on the hand to see. They are not hackers.</R>'";
+	help='<VP>Bienvenue en #parkour. Ici, vous devez prouver votre bon niveau, mais aussi et surtout, votre patience ! En récompense pour ceux arrivant à compléter les cartes, des pouvoirs comme poser un ballon, ou lancer une boule de neige te seront offertes.</VP>\n<ROSE>Attention! Il faut activer les particules dans les options pour voir les checkpoints.</ROSE>';
+	minPlayers="<R>Il faut au minimum 4 joueurs dans le salon pour que les cartes comptent.</R>";
+	noTribeHouse = "<R>For the count of maps count, you need play out of tribe house</R>";
+	use='Utiliser';
+	press='Appuyer';
+	ballon='Ballon';
+	masterBallon='Ballon avancé';
+	bubble='Bulle';
+	fly='Vol';
+	snowball='Boule de neige';
+	speed='Vitesse';
+	teleport='Téléportation';
+	smallbox='Petite caisse';
+	cloud='Nuage';
+	rip = 'RIP';
+	choco = 'Chocoplank';
+	finishedRounds='Cartes complétées';
+	powers='Pouvoirs';
+	space='ESPACE';
+	mouseClick='CLIQUE';
+	unlockedPower='a débloqué le pouvoir';
+	seconds='secondes';
+	leaderboard='Classement';
+}

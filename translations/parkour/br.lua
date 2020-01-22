@@ -1,0 +1,34 @@
+translations.br = {
+	youWon = 'Parabéns, você terminou o parkour em';
+	youWon2 = 'Aproveite suas novas habilidades!';
+	finishParkour = 'terminou o parkour em';
+	congrats = 'parabéns';
+	newLevel = 'Parabéns! Você passou para o level';
+	welcome = 'Seja bem-vindo ao #parkour';
+	welcomeAgain = 'Seja bem-vindo de volta ao #parkour';
+	welcome2 = '<CS>Para informações adicionais e envios de mapas: https://atelier801.com/topic?f=6&t=880520</CS>\n<R>Players with yellow nicknames can fly and use other powers like teleport, click on the hand to see. They are not hackers.</R>';
+	help = '<VP>Seja bem-vindo ao #parkour. Aqui, você terá de provar suas habilidades e, principalmente, sua paciência! Como recompensa para os que conseguirem completar os mapas, habilidades como soltar balão e tacar bolinhas de neve lhe serão dadas.</VP>\n<ROSE>Atenção! Ative os efeitos especiais nas configurações para conseguir ver os checkpoints.</ROSE>';
+	minPlayers = '<R>Para a contagem dos mapas contarem, é necessário no mínimo 4 jogadores na sala.</R>';
+	noTribeHouse = "<R>Para a contagem dos mapas contarem, você precisa jogar fora do cafofo</R>";
+	use = 'Use';
+	press = 'Pressione';
+	ballon = 'Balão';
+	masterBallon = 'Balão Master';
+	bubble = 'Bolha';
+	fly = 'Voar';
+	snowball = 'Bolinha de neve';
+	speed = 'Velocidade';
+	teleport = 'Teletransporte';
+	smallbox = 'Caixa pequena';
+	cloud = 'Nuvem';
+	rip = 'RIP';
+	choco = 'Tábua de Chocolate';
+	finishedRounds = 'Mapas terminados';
+	powers = 'Poderes';
+	space = 'ESPAÇO';
+	mouseClick = 'CLIQUE';
+	unlockedPower = 'desbloqueou o poder';
+	seconds = 'segundos';
+	leaderboard = 'Ranking';
+	update = '"O dinheiro não traz felicidade — para quem não sabe o que fazer com ele.", Machado de Assis.\n<B><VP>Freezertag</VP></B> com novidades! <B><R>/sala #parkour0freezertag</R></B>';
+}
