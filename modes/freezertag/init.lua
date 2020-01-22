@@ -456,8 +456,6 @@ onEvent("ChatCommand", function(name, command)
 
 end)
 
-table.foreach(tfm.get.room.playerList, eventNewPlayer)
-
 for index, value in next, {'AutoShaman', 'AutoNewGame', 'AutoTimeLeft', 'AutoScore', 'PhysicalConsumables', 'DebugCommand', 'MinimalistMode'} do
 	tfm.exec['disable' .. value]()
 end

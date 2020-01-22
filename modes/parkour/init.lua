@@ -732,9 +732,6 @@ for index, value in next, {'AutoShaman', 'AutoNewGame', 'AutoTimeLeft', 'Physica
 	tfm.exec['disable' .. value]()
 end
 
--- Considerar jogadores na sala como novos jogadores ✓
-table.foreach(tfm.get.room.playerList, eventNewPlayer)
-
 -- Evento (Quando um arquivo é carregado) ✓
 onEvent("FileLoaded", function(id, result)
 	if id == "2" then
