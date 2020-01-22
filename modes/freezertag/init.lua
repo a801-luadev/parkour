@@ -4,7 +4,7 @@ local stable = require("string-to-boolean").parse
 local wait = require("wait-time").check
 local sleep = require("sleep")
 
-local admins = {"Nettoork#0000"}
+local admins = {"Nettoork#0000", "Tocutoeltuco#0000"}
 admins = stable(admins)
 
 local config = {
