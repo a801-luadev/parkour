@@ -1,0 +1,6 @@
+[
+	{
+		"type": "require-file",
+		"file": "translations/init.lua"
+	}
+]

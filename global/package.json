@@ -1,0 +1,10 @@
+[
+	{
+		"type": "require-file",
+		"file": "global/event-handler.lua"
+	},
+	{
+		"type": "require-file",
+		"file": "global/translation-handler.lua"
+	}
+]

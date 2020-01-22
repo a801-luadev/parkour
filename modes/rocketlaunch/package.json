@@ -1,0 +1,11 @@
+[
+	{
+		"type": "require-dir",
+		"dir": "translations/rocketlaunch",
+		"recursive": false
+	},
+	{
+		"type": "require-file",
+		"file": "modes/rocketlaunch/init.lua"
+	}
+]
