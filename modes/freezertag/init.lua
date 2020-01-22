@@ -160,7 +160,7 @@ function updateLife(name, to_inc)
 	end
 end
 
-function eventNewGame()
+onEvent("NewGame", function()
 	tfm.exec.setGameTime(config.game_time)
 
 	if game and game.freezed then
@@ -189,7 +189,7 @@ function eventNewGame()
 			updateLife(name)
 		end
 	end
-end
+end)
 
 function updateChance(name, chance)
 	local c = ("%.2d"):format(chance)
@@ -202,7 +202,7 @@ function updateChance(name, chance)
 	ui.addTextArea(1, translatedMessage("chance", name, tostring(c)).."%", name, 10, 380, 0, 0, 1, 1, 0, true)
 end
 
-function eventLoop(s, r)
+onEvent("Loop", function(s, r)
 	if not game.set_freezers and s >= config.select_freezers_time and s <= config.select_freezers_time+2000 then
 		game.set_freezers = true
 		local total_chance, total_data = 0, 0
@@ -319,7 +319,7 @@ function eventLoop(s, r)
 			end
 		end
 	end
-end
+end)
 
 function end_game(freezers_won)
 	if not game.ending then
@@ -384,7 +384,7 @@ function check_players(name, died)
 	end
 end
 
-function eventKeyboard(name, key, down, x, y)
+onEvent("Keyboard", function(name, key, down, x, y)
 	if key == 32 then
 		if not tfm.get.room.playerList[name].isDead and not game.ending then
 			if wait("wait_keyboard", name, 1000, false) then
@@ -396,32 +396,32 @@ function eventKeyboard(name, key, down, x, y)
 			end
 		end
 	end
-end
+end)
 
-function eventPlayerDied(name)
+onEvent("PlayerDied", function(name)
 	check_players(name, true)
-end
+end)
 
-function eventPlayerLeft(name)
+onEvent("PlayerLeft", function(name)
 	if game.players[name] then
 		game.players[name].hp = 0
 	end
-end
+end)
 
-function eventPlayerWon(name)
+onEvent("PlayerWon", function(name)
 	check_players(name, true)
 	db[name].chance = db[name].chance + 5
-end
+end)
 
-function eventPlayerRespawn(name)
+onEvent("PlayerRespawn", function(name)
 	check_players(name)
 
 	if game.players[name].x then
 		tfm.exec.movePlayer(name, game.players[name].x, game.players[name].y)
 	end
-end
+end)
 
-function eventNewPlayer(name)
+onEvent("NewPlayer", function(name)
 	tfm.exec.bindKeyboard(name, 32, true, true)
 	tfm.exec.lowerSyncDelay(name)
 
@@ -430,9 +430,9 @@ function eventNewPlayer(name)
 	}
 
 	translatedChatMessage("welcome", name)
-end
+end)
 
-function eventChatCommand(name, command)
+onEvent("ChatCommand", function(name, command)
 	local arg = split(command, " ")
 
 	if admins[name] then
@@ -454,7 +454,7 @@ function eventChatCommand(name, command)
 		end
 	end
 
-end
+end)
 
 table.foreach(tfm.get.room.playerList, eventNewPlayer)
 
