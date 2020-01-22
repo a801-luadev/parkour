@@ -1,0 +1,6 @@
+[
+	{
+		"type": "require-file",
+		"file": "tech/require-lib/init.lua"
+	}
+]
