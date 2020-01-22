@@ -115,9 +115,9 @@ onEvent("NewGame", function()
 	for name, data in next, tfm.get.room.playerList do
 		if data.isShaman then
 			tfm.exec.setShamanMode(name, 1)
-			tfm.exec.chatMessage(translatedMessage("you_are_shaman"), name)
+			translatedChatMessage("you_are_shaman", name)
 		else
-			tfm.exec.chatMessage(translatedMessage("you_are_crew_member"), name)
+			translatedChatMessage("you_are_crew_member", name)
 		end
 	end
 end)
@@ -135,7 +135,7 @@ onEvent("SummoningEnd", function(name, itemType, x, y, ang, data)
 end)
 
 onEvent("NewPlayer", function(name)
-	tfm.exec.chatMessage(translatedMessage("welcome"), name)
+	translatedChatMessage("welcome", name)
 end)
 
 for index, value in next, {'AutoNewGame', 'AutoTimeLeft', 'PhysicalConsumables', 'DebugCommand', 'MinimalistMode', 'AllShamanSkills'} do
