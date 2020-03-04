@@ -45,6 +45,15 @@ class Client(aiotfm.Client):
 		await super().handle_packet(conn, packet)
 
 	async def on_migrating_data(self, to_send): # Acts as a bridge.
+		async with self.pool.acquire() as conn:
+			async with conn.cursor() as cursor:
+				player, data = to_send.split(b",")
+				player = player.decode()
+
+				await cursor.execute("SELECT `player` FROM `migrated` WHERE `player`=%s", (player,))
+				if (await cursor.fetchone()) is not None:
+					return self.drawbattle.dispatch("migrating_data", player.encode())
+
 		await self.sendLuaCallback(MIGRATE_DATA, to_send)
 
 	async def getMapInfo(self, mapcode, timeout=3.0):
@@ -395,4 +404,8 @@ class Client(aiotfm.Client):
 									await self.sendLuaCallback(PERM_MAP, player + "," + _perm + ",0,1," + code + "," + author)
 
 		elif txt_id == MIGRATE_DATA:
+			async with self.pool.acquire() as conn:
+				async with conn.cursor() as cursor:
+					await cursor.execute("INSERT INTO `migrated` VALUES (%s)", (text.decode(),))
+
 			self.drawbattle.dispatch("migrating_data", text)
