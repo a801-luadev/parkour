@@ -142,8 +142,8 @@ class Client(aiotfm.Client):
 		if txt_id == HANDSHAKE:
 			try:
 				self.pool = await aiomysql.create_pool(
-					host="138.197.160.191", port=3306,
-					user="parkour_bot", password="ultra super secure password",
+					host=os.getenv("DB_IP"), port=3306,
+					user=os.getenv("DB_USER"), password=os.getenv("DB_PASSWORD"),
 					db="parkour", loop=self.loop,
 					autocommit=True, cursorclass=aiomysql.DictCursor
 				)
