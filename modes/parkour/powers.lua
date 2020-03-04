@@ -69,7 +69,9 @@ local powers = {
 		azerty = {key = "A", keyCode = 65},
 
 		fnc = function(player, key, down, x, y)
-			despawnableObject(2000, 28, x, y + 10)
+			if players_file[player].parkour.c < 200 then
+				despawnableObject(2000, 28, x, y + 10)
+			end
 		end
 	},
 	{
@@ -128,7 +130,9 @@ local powers = {
 		qwerty = {key = "C", keyCode = 67},
 
 		fnc = function(player, key, down, x, y)
-			despawnableObject(3000, 2804, x, y + 10)
+			if players_file[player].parkour.c < 400 then
+				despawnableObject(3000, 2804, x, y + 10)
+			end
 		end
 	},
 	{
