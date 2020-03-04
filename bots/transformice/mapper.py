@@ -49,7 +49,7 @@ class Client(aiotfm.Client):
 		if self.pool is not None and b"," in to_send:
 			async with self.pool.acquire() as conn:
 				async with conn.cursor() as cursor:
-					player, data = to_send.split(b",")
+					player, data = to_send.split(b",", 1)
 					player = player.decode()
 
 					await cursor.execute("SELECT `player` FROM `migrated` WHERE `player`=%s", (player,))
