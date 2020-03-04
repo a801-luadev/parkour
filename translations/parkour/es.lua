@@ -1,33 +1,115 @@
 translations.es = {
-	youWon = 'Felicidades, has ganado el parkour en';
-	youWon2 = '¡Disfruta de tus nuevas habilidades!';
-	finishParkour = 'ha terminado el parkour en';
-	congrats = 'felicidades';
-	newLevel = '¡Felicidades! Has llegado al nivel';
-	welcome = 'Bienvenido a #parkour';
-	welcomeAgain = 'Bienvenido de nuevo a #parkour';
-	welcome2 = '<CS>Para más información y para enviar un mapa: https://atelier801.com/topic?f=6&t=880520</CS>\n<R>Players with yellow nicknames can fly and use other powers like teleport, click on the hand to see. They are not hackers.</R>';
-	help = '<VP>Bienvenido a #parkour. Aquí, tendrás que demostrar tus habilidades y, principalmente, ¡tu paciencia! Como recompensa para los que puedan completar los mapas, se les otorgará habilidades como el globo y las bolas de nieve.</VP>\n<ROSE>¡Atención! Activa los efectos de partículas en las opciones para ver los puntos de control.</ROSE>';
-	minPlayers = "<R>Para que cuenten los mapas, es necesario que haya 4 jugadores en la sala.</R>";
-	noTribeHouse = "<R>For the count of maps count, you need play out of tribe house</R>";
-	use = 'Utiliza';
-	press = 'Presiona';
-	ballon = 'Globo';
-	masterBallon = 'Globo Maestro';
-	bubble = 'Burbuja';
-	fly = 'Vuelo';
-	snowball = 'Bola de nieve';
-	speed = 'Velocidad';
-	teleport = 'Teletransporte';
-	smallbox = 'Caja pequeña';
-	cloud = 'Nube';
-	rip = 'RIP';
-	choco = 'Chocoplank';
-	finishedRounds = 'Mapas completados';
-	powers = 'Poderes';
-	space = 'ESPACIO';
-	mouseClick = 'CLIC';
-	unlockedPower = 'ha desbloqueado el poder';
-	seconds = 'segundos';
-	leaderboard = 'Clasificación';
+	-- Error messages
+	corrupt_map = "<r>Mapa corrupto. Cargando otro.",
+	corrupt_map_vanilla = "<j>[INFO] <r>No se pudo obtener información de este mapa.",
+	corrupt_map_mouse_start = "<j>[INFO] <r>El mapa tiene que tener un punto de inicio de los ratones.",
+	corrupt_map_needing_chair = "<j>[INFO] <r>El mapa tiene que tener el sillón del final.",
+	corrupt_map_missing_checkpoints = "<j>[INFO] <r>El mapa tiene que tener al menos un checkpoint (anclaje amarillo).",
+	corrupt_data = "<r>Tristemente, tus datos estaban corruptos. Se han reiniciado.",
+	min_players = "<r>Para guardar datos, deben haber al menos %s / %s jugadores únicos en la sala.",
+	tribe_house = "<r>Para guardar datos, debes jugar fuera de una casa de tribu.",
+	invalid_syntax = "<r>Sintaxis inválida.",
+	user_not_in_room = "<r>El usario %s no está en la sala.",
+	arg_must_be_id = "<r>El argumento debe ser una id válida.",
+	cant_update = "<r>No se pueden actualizar los rangos del jugador. Inténtalo más tarde.",
+	cant_edit = "<r>No puedes editar los rangos del jugador %s.",
+	invalid_rank = "<r>Rango inválido: %s.",
+	code_error = "<r>Apareció un error: %s-%s-%s %s",
+	panic_mode = "<r>El módulo entró en modo pánico.",
+	public_panic = "<r>Espera un minuto mientras viene un bot y reinicia el módulo.",
+	tribe_panic = "<r>Por favor, escribe <d>/module parkour</d> para reiniciar el módulo.",
+	emergency_mode = "<r>Empezando apagado de emergencia, no se admiten más jugadores. Por favor ve a otra sala #parkour.",
+	bot_requested = "<r>El bot ha sido alertado. Debería venir en unos segundos.",
+	stream_failure = "<r>Fallo interno del canal de transmisión. No se pueden transmitir datos.",
+	maps_not_available = "<r>El submodo 'maps' de #parkour solo está disponible en la sala <d>*#parkour0maps</d>.",
+	version_mismatch = "<r>Las versiones del bot (<d>%s</d>) y de lua (<d>%s</d>) no coinciden. No se puede iniciar el sistema.",
+	missing_bot = "<r>Falta el bot. Espera un minuto o menciona a @Tocu#0018 en discord: <d>%s</d>",
+	invalid_length = "<r>Tu mensaje debe tener entre 10 y 100 caracteres. Tiene %s.",
+	invalid_map = "<r>Mapa inválido.",
+	map_does_not_exist = "<r>El mapa no existe o no puede ser cargado. Inténtalo más tarde.",
+	invalid_map_perm = "<r>El mapa no está en P22 ni en P41.",
+	invalid_map_perm_specific = "<r>El mapa no está en P%s.",
+	cant_use_this_map = "<r>El mapa tiene un pequeño bug y no puede ser usado.",
+	invalid_map_p41 = "<r>El mapa está en P41, pero no está en la lista de mapas del módulo.",
+	invalid_map_p22 = "<r>El mapa está en P22, pero está en la lista de mapas del módulo.",
+	map_already_voting = "<r>El mapa ya tiene una discusión abierta.",
+	not_enough_permissions = "<r>No tienes permisos suficientes para hacer eso.",
+	already_depermed = "<r>El mapa ya está descategorizado.",
+	already_permed = "<r>El mapa ya está categorizado.",
+	cant_perm_right_now = "<r>No se puede cambiar la categoría de este mapa ahora mismo. Inténtalo más tarde..",
+
+	-- Congratulation messages
+	reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>.",
+	finished = "<d>%s completó el parkour en %s segundos, ¡felicitaciones!",
+	unlocked_power = "<ce>%s desbloqueó el poder <vp>%s<ce>.",
+	enjoy = "<d>¡Disfruta tus nuevas habilidades!",
+
+	-- Information messages
+	paused_events = "<j><b>¡Advertencia!</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
+	resumed_events = "<j>El módulo ha sido reanudado.",
+	welcome = "<d>¡Bienvenido a #parkour!",
+	discord = "<j>¿Tienes alguna buena idea, reporte de bug o simplemente quieres hablar con otros jugadores? Entra a nuestro servidor de discord: <d>%s</d>",
+	map_submissions = "<j>¿Quieres ver tu mapa en el módulo? Publicalo aquí: <d>%s</d>",
+	data_saved = "<vp>Datos guardados.",
+	action_within_minute = "<vp>La acción se aplicará dentro de un minuto.",
+	rank_save = "<j>Escribe <d>!rank save</d> para aplicar los cambios.",
+	module_update = "<j><b>¡Advertencia!</b> El módulo se actualizará en <d>%02d:%02d</d>.",
+	mapping_loaded = "<j>[INFO] <d>Sistema de mapas (v%s) cargado.",
+	mapper_joined = "<j>[INFO] <d>%s (%s) entró a la sala.",
+	mapper_left = "<j>[INFO] <d>%s (%s) salió de la sala.",
+	mapper_loaded = "<j>[INFO] <d>%s cargó este mapa.",
+	starting_perm_change = "<j>[INFO] <d>Empezando cambio de categoría...",
+	got_map_info = "<j>[INFO] <d>Se obtuvo toda la información del mapa. Intentando cambiar la categoría...",
+	perm_changed = "<j>[INFO] <d>Se cambió la categoría del mapa @%s desde P%s hacia P%s exitosamente.",
+	data_migration = "Todos los datos deben migrar. Esto significa, que actualmente no tienes ningún mapa completado. Para restaurar tus datos, simplemente ve a esta sala: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
+
+	-- Miscellaneous
+	important = "IMPORTANTE",
+	unknown = "Desconocido",
+	powers = "Poderes",
+	press = "<vp>Presiona %s",
+	click = "<vp>Haz clic",
+	completed_maps = "<p align='center'><BV><B>Mapas completados: %s</B></p></BV>",
+	leaderboard = "Tabla de clasificación",
+	position = "Posición",
+	username = "Jugador",
+	community = "Comunidad",
+	completed = "Mapas completados",
+	not_permed = "sin categoría",
+	permed = "categorizado",
+	points = "%d puntos",
+	conversation_info = "<j>%s <bl>- @%s <vp>(%s, %s) %s\n<n><font size='10'>Empezado por <d>%s</d>. Último comentaro por <d>%s</d>. <d>%s</d> comentarios, <d>%s</d> sin leer.",
+	map_info = "<p align='center'>Código: <bl>@%s</bl> <g>|</g> Autor: <j>%s</j> <g>|</g> Estado: <vp>%s, %s</vp> <g>|</g> Puntos: <vp>%s</vp>",
+	permed_maps = "Mapas categorizados",
+	ongoing_votations = "Discusiones abiertas",
+	archived_votations = "Discusiones archivadas",
+	open = "Abrir",
+	not_archived = "no archivado",
+	archived = "archivado",
+	delete = "<r><a href='event:%s'>[eliminar]</a> ",
+	see_restore = "<vp><a href='event:%s'>[ver]</a> <a href='event:%s'>[restaurar]</a> ",
+	no_comments = "Sin comentarios.",
+	deleted_by = "<r>[Mensaje eliminado por %s]",
+	dearchive = "desarchivar", -- to dearchive
+	archive = "archivar", -- to archive
+	deperm = "descategorizar", -- to deperm
+	perm = "categorizar", -- to perm
+	map_actions_staff = "<p align='center'><a href='event:%s'>&lt;</a> %s <a href='event:%s'>&gt;</a> <g>|</g> <a href='event:%s'><j>Comentar</j></a> <g>|</g> Tu voto: %s <g>|</g> <vp><a href='event:%s'>[%s]</a> <a href='event:%s'>[%s]</a> <a href='event:%s'>[cargar]</a></p>",
+	map_actions_user = "<p align='center'><a href='event:%s'>&lt;</a> %s <a href='event:%s'>&gt;</a> <g>|</g> <a href='event:%s'><j>Comentar</j></a></p>",
+	load_from_thread = "<p align='center'><a href='event:load_custom'>Cargar mapa</a></p>",
+	write_comment = "Escribe tu comentario aquí abajo",
+	write_map = "Escribe el código de mapa aquí abajo",
+
+	-- Power names
+	ballon = "Globo",
+	masterBallon = "Globo Maestro",
+	bubble = "Burbuja",
+	fly = "Volar",
+	snowball = "Bola de nieve",
+	speed = "Velocidad",
+	teleport = "Teletransporte",
+	smallbox = "Caja pequeña",
+	cloud = "Nube",
+	rip = "Tumba",
+	choco = "Chocolate",
 }

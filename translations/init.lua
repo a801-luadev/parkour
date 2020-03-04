@@ -4,3 +4,4 @@ translations = setmetatable({}, {
 		return translations.en
 	end
 })
+translations.en = {}

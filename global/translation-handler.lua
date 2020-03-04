@@ -16,14 +16,14 @@ do
 		elseif select("#", ...) > 0 then
 			done, text = pcall(string.format, text, ...)
 			if not done then
-				error(debug.traceback())
+				error(debug.traceback(what .. "," .. text))
 			end
 		end
 		return text
 	end
 end
 
-local translatedChatMessage
+--local translatedChatMessage
 do
 	local chatMessage = tfm.exec.chatMessage
 	function translatedChatMessage(what, who, ...)
@@ -33,7 +33,17 @@ do
 			end
 			return
 		end
-		chatMessage(translatedMessage(what, who, ...), who)
+		local msg = translatedMessage(what, who, ...)
+		local length = #msg
+
+		while length > 1000 do
+			chatMessage(string.sub(msg, 1, 1000), who)
+			msg = string.sub(msg, 1001)
+			length = length - 1000
+		end
+		if length > 0 then
+			chatMessage(msg, who)
+		end
 	end
 end
 

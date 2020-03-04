@@ -1,0 +1,14 @@
+[
+	{
+		"type": "require-package",
+		"package": "modes/parkour"
+	},
+	{
+		"type": "require-file",
+		"file": "modes/maps/interface.lua"
+	},
+	{
+		"type": "require-file",
+		"file": "modes/maps/init.lua"
+	}
+]

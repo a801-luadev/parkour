@@ -1,5 +1,9 @@
 [
 	{
+		"type": "require-package",
+		"package": "tech/json"
+	},
+	{
 		"type": "require-file",
 		"file": "global/event-handler.lua"
 	},

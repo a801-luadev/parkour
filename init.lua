@@ -1,3 +1,6 @@
+local discord_link = "https://discord.gg/RXaCyWz"
+local map_submissions = "https://atelier801.com/topic?f=6&t=880520"
+
 local starting = string.sub(tfm.get.room.name, 1, 2)
 
 local tribe, module_name, submode
@@ -30,6 +33,8 @@ else
 		{% require-package "modes/freezertag" %}
 	elseif submode == "rocketlaunch" then
 		{% require-package "modes/rocketlaunch" %}
+	elseif submode == "maps" then
+		{% require-package "modes/maps" %}
 	else
 		{% require-package "modes/parkour" %}
 	end

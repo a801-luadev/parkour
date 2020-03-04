@@ -1,33 +1,115 @@
 translations.en = {
-	youWon = 'Congratulations, you won the parkour in';
-	youWon2 = 'Enjoy your new skills!';
-	finishParkour = 'finished the parkour in';
-	congrats = 'congratulations';
-	newLevel = 'Congratulations! You went to level';
-	welcome = 'Welcome to #parkour';
-	welcomeAgain = 'Welcome back to #parkour';
-	welcome2 = '<CS>For additional information and map submissions: https://atelier801.com/topic?f=6&t=880520</CS>\n<R>Players with yellow nicknames can fly and use other powers like teleport, click on the hand to see. They are not hackers.</R>';
-	help = '<VP>Welcome to #parkour. Here, you will have to prove your skills and mainly, your patience! For those who can complete the maps, they will be given rewards or skills such as snowballs, clouds and balloons.</VP>\n<ROSE>Attention! Enable the effects in the settings to see the checkpoints.</ROSE>';
-	minPlayers = "<R>For the count of maps count, it's necessary at least 4 players in the room.</R>";
-	noTribeHouse = "<R>For wins to be counted, you need play out of tribe house</R>";
-	use = 'Use';
-	press = 'Press';
-	ballon = 'Ballon';
-	masterBallon = 'Master Ballon';
-	bubble = 'Bubble';
-	fly = 'Fly';
-	snowball = 'Snowball';
-	speed = 'Speed';
-	teleport = 'Teleport';
-	smallbox = 'Small box';
-	cloud = 'Cloud';
-	rip = 'RIP';
-	choco = 'Chocoplank';
-	finishedRounds = 'Completed maps';
-	powers = 'Powers';
-	space = 'SPACE';
-	mouseClick = 'CLICK';
-	unlockedPower = 'unlocked the power';
-	seconds = 'seconds';
-	leaderboard = 'Leaderboard';
+	-- Error messages
+	corrupt_map = "<r>Corrupt map. Loading another.",
+	corrupt_map_vanilla = "<j>[INFO] <r>Can not get information of this map.",
+	corrupt_map_mouse_start = "<j>[INFO] <r>This map needs to have a start position (mouse spawn point).",
+	corrupt_map_needing_chair = "<j>[INFO] <r>The map needs to have the end chair.",
+	corrupt_map_missing_checkpoints = "<j>[INFO] <r>The map needs to have at least one checkpoint (yellow nail).",
+	corrupt_data = "<r>Unfortunately, your data was corrupt and has been reset.",
+	min_players = "<r>To save your data, there must be at least %s / %s unique players in the room.",
+	tribe_house = "<r>Data will not be saved in tribehouses.",
+	invalid_syntax = "<r>Invalid syntax.",
+	user_not_in_room = "<r>The user %s is not in the room.",
+	arg_must_be_id = "<r>The argument must be a valid id.",
+	cant_update = "<r>Can't update player ranks right now. Try again later.",
+	cant_edit = "<r>You can't edit %s'(s) ranks.",
+	invalid_rank = "<r>Invalid rank: %s.",
+	code_error = "<r>An error appeared: %s-%s-%s %s",
+	panic_mode = "<r>Module is now entering in panic mode.",
+	public_panic = "<r>Wait until a bot comes here and restarts the module.",
+	tribe_panic = "<r>Please type <d>/module parkour</d> to restart the module.",
+	emergency_mode = "<r>Initiating emergency shutdown, no new players allowed. Please go to another #parkour room.",
+	bot_requested = "<r>The bot has been requested. It should be arriving in a moment.",
+	stream_failure = "<r>Internal stream channel failure. Can not transmit data.",
+	maps_not_available = "<r>#parkour's 'maps' submode is only available in <d>*#parkour0maps</d>.",
+	version_mismatch = "<r>Bot (<d>%s</d>) and lua (<d>%s</d>) versions do not match. Can't start the system.",
+	missing_bot = "<r>Bot missing. Wait until the bot arrives or ping @Tocu#0018 on discord: <d>%s</d>",
+	invalid_length = "<r>Your message must have between 10 and 100 characters. It has %s characters.",
+	invalid_map = "<r>Invalid map.",
+	map_does_not_exist = "<r>The given map does not exist or can't be loaded. Try again later.",
+	invalid_map_perm = "<r>The given map is not in P22 nor P41.",
+	invalid_map_perm_specific = "<r>The given map is not in P%s.",
+	cant_use_this_map = "<r>The given map has a small bug and can't be used.",
+	invalid_map_p41 = "<r>The given map is in P41, but is not in the module map list.",
+	invalid_map_p22 = "<r>The given map is in P22, but is in the module map list.",
+	map_already_voting = "<r>The given map has already an open votation.",
+	not_enough_permissions = "<r>You don't have enough permissions to do this.",
+	already_depermed = "<r>The given map is already depermed.",
+	already_permed = "<r>The given map is already permed.",
+	cant_perm_right_now = "<r>Can't change the perm of this map right now. Try again later.",
+
+	-- Congratulation messages
+	reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>.",
+	finished = "<d>%s finished the parkour in %s seconds, congratulations!",
+	unlocked_power = "<ce>%s unlocked the <vp>%s<ce> power.",
+	enjoy = "<d>Enjoy your new skills!",
+
+	-- Information messages
+	paused_events = "<j><b>Warning!</b> <n>The module has reached it's critical limit and is being paused.",
+	resumed_events = "<j>The module has been resumed.",
+	welcome = "<d>Welcome to #parkour!",
+	discord = "<j>Do you want to report bugs, make suggestions or just want to chat with other players? Join us on discord: <d>%s</d>",
+	map_submissions = "<j>Do you want to see your map in the module? Submit them here: <d>%s</d>",
+	data_saved = "<vp>Data saved.",
+	action_within_minute = "<vp>The action will be applied within a minute.",
+	rank_save = "<j>Type <d>!rank save</d> to apply the changes.",
+	module_update = "<j><b>Warning!</b> The module will update in <d>%02d:%02d</d>.",
+	mapping_loaded = "<j>[INFO] <d>Mapping system (v%s) loaded.",
+	mapper_joined = "<j>[INFO] <d>%s (%s) has joined the room.",
+	mapper_left = "<j>[INFO] <d>%s (%s) has left the room.",
+	mapper_loaded = "<j>[INFO] <d>%s has loaded a map.",
+	starting_perm_change = "<j>[INFO] <d>Starting perm change...",
+	got_map_info = "<j>[INFO] <d>Retrieved map information. Trying to change the perm...",
+	perm_changed = "<j>[INFO] <d>Successfully changed the perm of map @%s from P%s to P%s.",
+	data_migration = "All the data needs to be migrated. This means, you currently don't have any completed maps. To restore your data, just go to room: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
+
+	-- Miscellaneous
+	important = "IMPORTANT",
+	unknown = "Unknown",
+	powers = "Powers",
+	press = "<vp>Press %s",
+	click = "<vp>Left click",
+	completed_maps = "<p align='center'><BV><B>Completed maps: %s</B></p></BV>",
+	leaderboard = "Leaderboard",
+	position = "Position",
+	username = "Username",
+	community = "Community",
+	completed = "Completed maps",
+	not_permed = "not permed",
+	permed = "permed",
+	points = "%d points",
+	conversation_info = "<j>%s <bl>- @%s <vp>(%s, %s) %s\n<n><font size='10'>Started by <d>%s</d>. Last comment by <d>%s</d>. <d>%s</d> comments, <d>%s</d> unread.",
+	map_info = "<p align='center'>Map code: <bl>@%s</bl> <g>|</g> Map author: <j>%s</j> <g>|</g> Status: <vp>%s, %s</vp> <g>|</g> Points: <vp>%s</vp>",
+	permed_maps = "Permed maps",
+	ongoing_votations = "Ongoing votes",
+	archived_votations = "Archived votes",
+	open = "Open",
+	not_archived = "not archived",
+	archived = "archived",
+	delete = "<r><a href='event:%s'>[delete]</a> ",
+	see_restore = "<vp><a href='event:%s'>[see]</a> <a href='event:%s'>[restore]</a> ",
+	no_comments = "No comments.",
+	deleted_by = "<r>[Message deleted by %s]",
+	dearchive = "unarchive", -- to dearchive
+	archive = "archive", -- to archive
+	deperm = "deperm", -- to deperm
+	perm = "perm", -- to perm
+	map_actions_staff = "<p align='center'><a href='event:%s'>&lt;</a> %s <a href='event:%s'>&gt;</a> <g>|</g> <a href='event:%s'><j>Comment</j></a> <g>|</g> Your vote: %s <g>|</g> <vp><a href='event:%s'>[%s]</a> <a href='event:%s'>[%s]</a> <a href='event:%s'>[load]</a></p>",
+	map_actions_user = "<p align='center'><a href='event:%s'>&lt;</a> %s <a href='event:%s'>&gt;</a> <g>|</g> <a href='event:%s'><j>Comment</j></a></p>",
+	load_from_thread = "<p align='center'><a href='event:load_custom'>Load custom map</a></p>",
+	write_comment = "Write your comment down here",
+	write_map = "Write the mapcode down here",
+
+	-- Power names
+	ballon = "Balloon",
+	masterBallon = "Master Ballon",
+	bubble = "Bubble",
+	fly = "Fly",
+	snowball = "Snowball",
+	speed = "Speed",
+	teleport = "Teleport",
+	smallbox = "Small box",
+	cloud = "Cloud",
+	rip = "Tombstone",
+	choco = "Chocoplank",
 }
