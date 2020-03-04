@@ -162,7 +162,7 @@ local powers = {
 	{
 		name = 'choco',
 		maps = 1500,
-		cooldown = 250000,
+		cooldown = 25000,
 		image = {url = '16d2ce46c57.png', x = 20, y = 56},
 
 		qwerty = {key = "CTRL", keyCode = 17},
