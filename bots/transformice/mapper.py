@@ -22,6 +22,7 @@ MIGRATE_DATA  = (13 << 8) + 255 # This packet is not related to the map system, 
 
 class Client(aiotfm.Client):
 	version = b"1.0.0-beta"
+	pool = None
 
 	async def handle_packet(self, conn, packet):
 		CCC = packet.readCode()
