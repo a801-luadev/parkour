@@ -226,7 +226,7 @@ onEvent("Mouse", function(player, x, y)
 	for index = 1, #clickPowers do
 		power = clickPowers[index]
 		cooldown = (not power.cooldown) or checkCooldown(player, power.name, power.cooldown)
-		if players_file[player].parkour.c >= power.maps and cooldown then
+		if players_file[player] and players_file[player].parkour.c >= power.maps and cooldown then
 			if power.fnc(player, x, y) == "break" then
 				break
 			end
@@ -243,6 +243,8 @@ onEvent("NewPlayer", function(player)
 
 	if victory[player] then
 		bindNecessary(player)
+	else
+		unbind(player)
 	end
 end)
 
