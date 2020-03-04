@@ -32,7 +32,9 @@ onEvent("NewPlayer", function(player)
 
 		if players_level[player] then
 			local level = levels[ players_level[player] ]
-			tfm.exec.movePlayer(player, level.x, level.y)
+			if level then
+				tfm.exec.movePlayer(player, level.x, level.y)
+			end
 		else
 			generatePlayer(player)
 		end
