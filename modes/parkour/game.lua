@@ -79,7 +79,7 @@ onEvent("NewGame", function()
 	victory = {}
 
 	for player in next, in_room do
-		generatePlayer(player, true)
+		generatePlayer(player)
 		tfm.exec.setPlayerScore(player, 1, false)
 	end
 end)
