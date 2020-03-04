@@ -63,6 +63,7 @@ do
 			local event_fnc
 			event_fnc = function(...)
 				local start = os_time()
+				local max_runtime = runtime_threshold - runtime
 				local this_check = math_floor(start / 4000)
 				if runtime_check ~= this_check then
 					runtime_check = this_check
@@ -91,11 +92,15 @@ do
 
 						return emergencyShutdown(true)
 					end
+
+					if (os_time() - start) > max_runtime then
+						break
+					end
 				end
 
 				runtime = runtime + (os_time() - start)
 
-				if runtime > runtime_threshold then
+				if runtime >= runtime_threshold then
 					if not _paused then
 						translatedChatMessage("paused_events")
 					end
