@@ -12,11 +12,9 @@ local in_room = {}
 local players_level = {}
 local generated_at = {}
 
-local function generatePlayer(player, skip_save)
+local function generatePlayer(player, save_at)
 	players_level[player] = 1
-	if not skip_save then
-		generated_at[player] = os.time()
-	end
+	generated_at[player] = save_at or os.time()
 end
 
 onEvent("NewPlayer", function(player)
@@ -80,9 +78,10 @@ onEvent("NewGame", function()
 	less_time = false
 	victory = {}
 	players_level = {}
+	generated_at = {}
 
 	for player in next, in_room do
-		generatePlayer(player)
+		generatePlayer(player, os.time())
 		tfm.exec.setPlayerScore(player, 1, false)
 	end
 end)
