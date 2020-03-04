@@ -130,5 +130,6 @@ onEvent("Loop", function()
 end)
 
 onEvent("GameStart", function()
+	tfm.exec.setRoomMaxPlayers(12)
 	tfm.exec.disableAutoScore(true)
 end)
