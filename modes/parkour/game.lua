@@ -79,6 +79,7 @@ onEvent("NewGame", function()
 	victory_count = 0
 	less_time = false
 	victory = {}
+	players_level = {}
 
 	for player in next, in_room do
 		generatePlayer(player)
