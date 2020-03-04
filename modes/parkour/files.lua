@@ -69,10 +69,14 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 end)
 
+onEvent("SavingFile", function(id, data)
+	system.saveFile(json.encode(data), id)
+end)
+
 onEvent("FileLoaded", function(id, data)
 	data = json.decode(data)
 	eventGameDataLoaded(data)
-	system.saveFile(json.encode(data), id)
+	eventSavingFile(id, data) -- if it is reaching a critical point, it will pause and then save the file
 end)
 
 onEvent("Loop", function()
