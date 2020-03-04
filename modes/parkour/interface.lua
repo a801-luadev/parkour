@@ -492,6 +492,21 @@ onEvent("ChatCommand", function(player, msg)
 		ban_actions[ban_actions._count] = {"unban", id, player}
 		translatedChatMessage("action_within_minute", player)
 
+	elseif cmd == "kill" then
+		if not perms[player] or not perms[player].ban then return end
+
+		if pointer < 1 then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		local affected = capitalize(args[1])
+		if not in_room[affected] then
+			return translatedChatMessage("user_not_in_room", player, affected)
+		end
+
+		victory[affected] = false
+		unbind(affected)
+
 	elseif cmd == "rank" then
 		if not perms[player] or not perms[player].set_player_rank then return end
 
