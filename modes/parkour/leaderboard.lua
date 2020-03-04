@@ -31,24 +31,27 @@ local function checkPlayersPosition()
 	end
 
 	local pointer = pointer
-	local completed, data
+	local completed, data, file
 	for player in next, in_room do
-		completed = players_file[player].parkour.c
-		data = room.playerList[player]
+		file = players_file[player]
+		if file and file.parkour then
+			completed = players_file[player].parkour.c
+			data = room.playerList[player]
 
-		if not bans[data.id] then
-			if cache[data.id] then
-				cache[data.id][2] = player
-				cache[data.id][3] = completed
-				cache[data.id][4] = data.community
-			else
-				pointer = pointer + 1
-				leaderboard[pointer] = {
-					data.id,
-					player,
-					completed,
-					data.community
-				}
+			if not bans[data.id] then
+				if cache[data.id] then
+					cache[data.id][2] = player
+					cache[data.id][3] = completed
+					cache[data.id][4] = data.community
+				else
+					pointer = pointer + 1
+					leaderboard[pointer] = {
+						data.id,
+						player,
+						completed,
+						data.community
+					}
+				end
 			end
 		end
 	end
