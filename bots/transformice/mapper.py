@@ -53,7 +53,7 @@ class Client(aiotfm.Client):
 
 	async def on_login_ready(self, *args):
 		print("[MAPPER] Connected. Logging in...")
-		await self.login("Tocutoeltuco#5522", os.getenv("MAPPER_PASSWORD"), encrypted=False, room="*#parkour0maps")
+		await self.login("Tocutoeltuco#2629", os.getenv("MAPPER_PASSWORD"), encrypted=False, room="*#parkour0maps")
 
 	async def on_logged(self, *args):
 		print("[MAPPER] Logged in!")

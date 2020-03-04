@@ -1,4 +1,4 @@
-local mapper_bot = "Tocutoeltuco#5522"
+local mapper_bot = "Tocutoeltuco#2629"
 
 local removing_maps = {}
 local adding_maps = {}
