@@ -109,8 +109,7 @@ local function openVotation(player, code, page)
 			return translatedChatMessage("cant_open_votation", player, code)
 		end
 
-		-- Create the votation
-		return
+		return ui.addTextArea(packets.new_votation, player .. "," .. code, mapper_bot)
 	end
 
 	local can_delete = (perms[player] and perms[player].delete_comments) and "1" or "0"
