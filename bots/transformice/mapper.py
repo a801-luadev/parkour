@@ -45,7 +45,7 @@ class Client(aiotfm.Client):
 		await super().handle_packet(conn, packet)
 
 	async def on_migrating_data(self, to_send): # Acts as a bridge.
-		if self.pool is not None:
+		if self.pool is not None and b"," in to_send:
 			async with self.pool.acquire() as conn:
 				async with conn.cursor() as cursor:
 					player, data = to_send.split(b",")
