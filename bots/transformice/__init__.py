@@ -1,11 +1,12 @@
+import os
 import transformice.mapper as mapper
 import transformice.migrator as migrator
 
 def setup(loop):
-	API_CREDENTIALS = (51058033, "2e234ed900-5c469db-114d3d91600-d6c0451b-116c")
+	API_CREDENTIALS = (int(os.getenv("API_ID")), os.getenv("API_TOKEN"))
 
-	mapper_bot = mapper.Client(loop=loop)
-	migrator_bot = migrator.Client(loop=loop)
+	mapper_bot = mapper.Client(auto_restart=True, loop=loop)
+	migrator_bot = migrator.Client(auto_restart=True, loop=loop)
 
 	mapper_bot.drawbattle = migrator_bot
 	migrator_bot.parkour = mapper_bot
