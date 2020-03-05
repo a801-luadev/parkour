@@ -46,15 +46,15 @@ class Client(aiotfm.Client):
 		await super().handle_packet(conn, packet)
 
 	async def on_migrating_data(self, to_send): # Acts as a bridge.
-		# if self.pool is not None and b"," in to_send:
-		# 	async with self.pool.acquire() as conn:
-		# 		async with conn.cursor() as cursor:
-		# 			player, data = to_send.split(b",", 1)
-		# 			player = player.decode()
+		if self.pool is not None and b"," in to_send:
+			async with self.pool.acquire() as conn:
+				async with conn.cursor() as cursor:
+					player, data = to_send.split(b",", 1)
+					player = player.decode()
 
-		# 			await cursor.execute("SELECT `player` FROM `migrated` WHERE `player`=%s", (player,))
-		# 			if (await cursor.fetchone()) is not None:
-		# 				return self.drawbattle.dispatch("migrating_data", player.encode())
+					await cursor.execute("SELECT `player` FROM `migrated` WHERE `player`=%s", (player,))
+					if (await cursor.fetchone()) is not None:
+						return self.drawbattle.dispatch("migrating_data", player.encode())
 
 		await self.sendLuaCallback(MIGRATE_DATA, to_send)
 
@@ -406,9 +406,9 @@ class Client(aiotfm.Client):
 									await self.sendLuaCallback(PERM_MAP, player + "," + _perm + ",0,1," + code + "," + author)
 
 		elif txt_id == MIGRATE_DATA:
-			# if self.pool is not None:
-			# 	async with self.pool.acquire() as conn:
-			# 		async with conn.cursor() as cursor:
-			# 			await cursor.execute("INSERT INTO `migrated` VALUES (%s)", (text.decode(),))
+			if self.pool is not None:
+				async with self.pool.acquire() as conn:
+					async with conn.cursor() as cursor:
+						await cursor.execute("INSERT INTO `migrated` VALUES (%s)", (text.decode(),))
 
 			self.drawbattle.dispatch("migrating_data", text)
