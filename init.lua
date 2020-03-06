@@ -44,7 +44,7 @@ else
 		module_name = string.match(tfm.get.room.name, "^%*#([a-z]+)")
 		pos = #module_name + 3
 	else
-		module_name = string.match(tfm.get.room.name, "^[a-z][a-z]%-#([a-z]+)")
+		module_name = string.match(tfm.get.room.name, "^[a-z][a-z2]%-#([a-z]+)")
 		pos = #module_name + 5
 	end
 
