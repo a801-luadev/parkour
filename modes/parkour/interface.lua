@@ -387,10 +387,9 @@ onEvent("NewPlayer", function(player)
 	translatedChatMessage("welcome", player)
 	translatedChatMessage("discord", player, discord_link)
 	translatedChatMessage("map_submissions", player, map_submissions)
-
-	for _, keys in next, { 76, 46 } do
-		system.bindKeyboard(player, keys, true, true)
-	end
+		
+	system.bindKeyboard(player, 76, true, true)
+	system.bindKeyboard(player, 46, true, true)
 		
 	if levels then
 		if is_tribe then
