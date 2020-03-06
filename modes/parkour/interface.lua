@@ -588,6 +588,11 @@ onEvent("ChatCommand", function(player, msg)
 
 		save_update = os.time() + 60000 * 3 -- 3 minutes
 		translatedChatMessage("action_within_minute", player)
+			
+	elseif cmd == "map" then
+		if not perms[player] or not perms[player].show_update then return end
+		
+		newMap()
 	end
 end)
 
@@ -607,4 +612,6 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("kill", true)
 	system.disableChatCommandDisplay("rank", true)
 	system.disableChatCommandDisplay("update", true)
+	system.disableChatCommandDisplay("map", true)
+
 end)
