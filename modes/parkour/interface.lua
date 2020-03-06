@@ -388,8 +388,10 @@ onEvent("NewPlayer", function(player)
 	translatedChatMessage("discord", player, discord_link)
 	translatedChatMessage("map_submissions", player, map_submissions)
 
-	system.bindKeyboard(player, 76, true, true)
-
+	for _, keys in next, { 76, 46 } do
+		system.bindKeyboard(player, keys, true, true)
+	end
+		
 	if levels then
 		if is_tribe then
 			translatedChatMessage("tribe_house", player)
@@ -593,6 +595,8 @@ end)
 onEvent("Keyboard", function(player, key)
 	if key == 76 then
 		toggleLeaderboard(player)
+	elseif key == 46 then
+		tfm.exec.killPlayer(name)
 	end
 end)
 
