@@ -389,6 +389,7 @@ onEvent("NewPlayer", function(player)
 	translatedChatMessage("map_submissions", player, map_submissions)
 
 	system.bindKeyboard(player, 76, true, true)
+	system.bindKeyboard(player, 46, true, true)
 
 	if levels then
 		if is_tribe then
@@ -593,6 +594,8 @@ end)
 onEvent("Keyboard", function(player, key)
 	if key == 76 then
 		toggleLeaderboard(player)
+	elseif key == 46 then
+		tfm.exec.killPlayer(player)
 	end
 end)
 
