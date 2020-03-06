@@ -60,7 +60,7 @@ local powers = {
 		end
 	},
 	{
-		name = 'ballon',
+		name = 'balloon',
 		maps = 5,
 		cooldown = 10000,
 		image = {url = '16896d0252b.png', x = 35, y = 20},
@@ -211,6 +211,8 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	elseif key == 2 then
 		facing[player] = true
 		return
+	elseif key == 46 then
+		tfm.exec.killPlayer(name)
 	end
 
 	local power = player_keys[player][key]
