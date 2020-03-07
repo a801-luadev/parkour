@@ -99,7 +99,7 @@ local function setNameColor(player)
 		player,
 
 		victory[player] and 0xFEFF00 -- has won
-		or ranks.admin[player] and 0xD7342A -- admin
+		or ranks.admin[player] and 0xE7342A -- admin
 		or ranks.manager[player] and 0x843DA4 -- manager
 		or ranks.mod[player] and 0xFFAAAA -- moderator
 		or ranks.mapper[player] and 0x25C059 -- mapper
@@ -389,6 +389,7 @@ onEvent("NewPlayer", function(player)
 	translatedChatMessage("map_submissions", player, map_submissions)
 
 	system.bindKeyboard(player, 76, true, true)
+	system.bindKeyboard(player, 46, true, true)
 
 	if levels then
 		if is_tribe then
@@ -587,12 +588,19 @@ onEvent("ChatCommand", function(player, msg)
 
 		save_update = os.time() + 60000 * 3 -- 3 minutes
 		translatedChatMessage("action_within_minute", player)
+			
+	elseif cmd == "map" then
+		if not perms[player] or not perms[player].change_map then return end
+
+		newMap()
 	end
 end)
 
 onEvent("Keyboard", function(player, key)
 	if key == 76 then
 		toggleLeaderboard(player)
+	elseif key == 46 then
+		tfm.exec.killPlayer(player)
 	end
 end)
 
@@ -604,4 +612,6 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("kill", true)
 	system.disableChatCommandDisplay("rank", true)
 	system.disableChatCommandDisplay("update", true)
+	system.disableChatCommandDisplay("map", true)
+	system.disableChatCommandDisplay("a", true)
 end)

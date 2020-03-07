@@ -27,7 +27,8 @@ local ranks_permissions = {
 		delete_comments = true
 	},
 	mapper = {
-		vote_map = true
+		vote_map = true,
+		change_map = true
 	}
 }
 local perms = {}
