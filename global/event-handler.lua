@@ -108,10 +108,10 @@ do
 				done, result = pcall(caller, max_runtime, a, b, c, d, e)
 				if not done then
 					local args = json.encode({a, b, c, d, e})
-					translatedChatMessage("code_error", nil, name, index, args, result)
+					translatedChatMessage("code_error", nil, name, "", args, result)
 
 					webhooks._count = webhooks._count + 1
-					webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` has crashed. <@212634414021214209>: `" .. name .. "`, `" .. index .. "`, `" .. result .. "`"
+					webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` has crashed. <@212634414021214209>: `" .. name .. "`, `" .. result .. "`"
 
 					return emergencyShutdown(true, true)
 				end
