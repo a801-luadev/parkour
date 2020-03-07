@@ -604,7 +604,8 @@ onEvent("ChatCommand", function(player, msg)
 		else
 			tfm.exec.respawnPlayer(player)
 			spec_mode[player] = nil
-		end
+    end
+      
 	end
 end)
 
@@ -626,4 +627,5 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("update", true)
 	system.disableChatCommandDisplay("map", true)
 	system.disableChatCommandDisplay("spec", true)
+
 end)

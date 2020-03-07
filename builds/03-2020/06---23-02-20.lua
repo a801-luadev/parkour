@@ -647,30 +647,30 @@ if starting == "*\003" then
 	translations.es = {
 		-- Error messages
 		corrupt_map = "<r>Mapa corrupto. Cargando otro.",
-		corrupt_map_vanilla = "<r>[ERROR] <n>No se pudo obtener información de este mapa.",
-		corrupt_map_mouse_start = "<r>[ERROR] <n>El mapa tiene que tener un punto de inicio de los ratones.",
-		corrupt_map_needing_chair = "<r>[ERROR] <n>El mapa tiene que tener el sillón del final.",
-		corrupt_map_missing_checkpoints = "<r>[ERROR] <n>El mapa tiene que tener al menos un checkpoint (anclaje amarillo).",
+		corrupt_map_vanilla = "<j>[INFO] <r>No se pudo obtener información de este mapa.",
+		corrupt_map_mouse_start = "<j>[INFO] <r>El mapa tiene que tener un punto de inicio de los ratones.",
+		corrupt_map_needing_chair = "<j>[INFO] <r>El mapa tiene que tener el sillón del final.",
+		corrupt_map_missing_checkpoints = "<j>[INFO] <r>El mapa tiene que tener al menos un checkpoint (anclaje amarillo).",
 		corrupt_data = "<r>Tristemente, tus datos estaban corruptos. Se han reiniciado.",
-		min_players = "<r>Para guardar datos, deben haber al menos 4 jugadores únicos en la sala. <bl>[%s/%s]",
+		min_players = "<r>Para guardar datos, deben haber al menos %s / %s jugadores únicos en la sala.",
 		tribe_house = "<r>Para guardar datos, debes jugar fuera de una casa de tribu.",
 		invalid_syntax = "<r>Sintaxis inválida.",
-		user_not_in_room = "<r>El usario <n2>%s</n2> no está en la sala.",
+		user_not_in_room = "<r>El usario %s no está en la sala.",
 		arg_must_be_id = "<r>El argumento debe ser una id válida.",
 		cant_update = "<r>No se pueden actualizar los rangos del jugador. Inténtalo más tarde.",
-		cant_edit = "<r>No puedes editar los rangos del jugador <n2>%s</n2>.",
-		invalid_rank = "<r>Rango inválido: <n2>%s",
-		code_error = "<r>Apareció un error: <bl>%s-%s-%s %s",
+		cant_edit = "<r>No puedes editar los rangos del jugador %s.",
+		invalid_rank = "<r>Rango inválido: %s.",
+		code_error = "<r>Apareció un error: %s-%s-%s %s",
 		panic_mode = "<r>El módulo entró en modo pánico.",
 		public_panic = "<r>Espera un minuto mientras viene un bot y reinicia el módulo.",
-		tribe_panic = "<r>Por favor, escribe <n2>/module parkour</n2> para reiniciar el módulo.",
+		tribe_panic = "<r>Por favor, escribe <d>/module parkour</d> para reiniciar el módulo.",
 		emergency_mode = "<r>Empezando apagado de emergencia, no se admiten más jugadores. Por favor ve a otra sala #parkour.",
 		bot_requested = "<r>El bot ha sido alertado. Debería venir en unos segundos.",
 		stream_failure = "<r>Fallo interno del canal de transmisión. No se pueden transmitir datos.",
-		maps_not_available = "<r>El submodo 'maps' de #parkour solo está disponible en la sala <n2>*#parkour0maps</n2>.",
+		maps_not_available = "<r>El submodo 'maps' de #parkour solo está disponible en la sala <d>*#parkour0maps</d>.",
 		version_mismatch = "<r>Las versiones del bot (<d>%s</d>) y de lua (<d>%s</d>) no coinciden. No se puede iniciar el sistema.",
 		missing_bot = "<r>Falta el bot. Espera un minuto o menciona a @Tocu#0018 en discord: <d>%s</d>",
-		invalid_length = "<r>Tu mensaje debe tener entre 10 y 100 caracteres. Tiene <n2>%s</n2>.",
+		invalid_length = "<r>Tu mensaje debe tener entre 10 y 100 caracteres. Tiene %s.",
 		invalid_map = "<r>Mapa inválido.",
 		map_does_not_exist = "<r>El mapa no existe o no puede ser cargado. Inténtalo más tarde.",
 		invalid_map_perm = "<r>El mapa no está en P22 ni en P41.",
@@ -686,27 +686,27 @@ if starting == "*\003" then
 
 		-- Congratulation messages
 		reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>.",
-		finished = "<d><o>%s</o> completó el parkour en <vp>%s</vp> segundos, <fc>¡felicitaciones!",
-		unlocked_power = "<ce><d>%s</d> desbloqueó el poder <vp>%s<ce>.",
+		finished = "<d>%s completó el parkour en %s segundos, ¡felicitaciones!",
+		unlocked_power = "<ce>%s desbloqueó el poder <vp>%s<ce>.",
 		enjoy = "<d>¡Disfruta tus nuevas habilidades!",
 
 		-- Information messages
-		paused_events = "<cep><b>[¡Advertencia!]</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
-		resumed_events = "<n2>El módulo ha sido reanudado.",
-		welcome = "<n>¡Bienvenido a <t>#parkour</t>!",
-		discord = "<cs>¿Tienes alguna buena idea, reporte de bug o simplemente quieres hablar con otros jugadores? Entra a nuestro servidor de discord: <pt>%s</pt>",
-		map_submissions = "<pt>¿Quieres ver tu mapa en el módulo? Publicalo aquí: <j>%s</j>",
+		paused_events = "<j><b>¡Advertencia!</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
+		resumed_events = "<j>El módulo ha sido reanudado.",
+		welcome = "<d>¡Bienvenido a #parkour!",
+		discord = "<j>¿Tienes alguna buena idea, reporte de bug o simplemente quieres hablar con otros jugadores? Entra a nuestro servidor de discord: <d>%s</d>",
+		map_submissions = "<j>¿Quieres ver tu mapa en el módulo? Publicalo aquí: <d>%s</d>",
 		data_saved = "<vp>Datos guardados.",
 		action_within_minute = "<vp>La acción se aplicará dentro de un minuto.",
-		rank_save = "<n2>Escribe <d>!rank save</d> para aplicar los cambios.",
-		module_update = "<r><b>[¡Advertencia!]</b> <n>El módulo se actualizará en <d>%02d:%02d</d>.",
-		mapping_loaded = "<j>[INFO] <n>Sistema de mapas <t>(v%s)</t> cargado.",
-		mapper_joined = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> entró a la sala.",
-		mapper_left = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> salió de la sala.",
-		mapper_loaded = "<j>[INFO] <n><ce>%s</ce> cargó este mapa.",
-		starting_perm_change = "<j>[INFO] <n>Empezando cambio de categoría...",
-		got_map_info = "<j>[INFO] <n>Se obtuvo toda la información del mapa. Intentando cambiar la categoría...",
-		perm_changed = "<j>[INFO] <n>Se cambió la categoría del mapa <ch>@%s</ch> desde <r>P%s</r> hacia <t>P%s</t> exitosamente.",
+		rank_save = "<j>Escribe <d>!rank save</d> para aplicar los cambios.",
+		module_update = "<j><b>¡Advertencia!</b> El módulo se actualizará en <d>%02d:%02d</d>.",
+		mapping_loaded = "<j>[INFO] <d>Sistema de mapas (v%s) cargado.",
+		mapper_joined = "<j>[INFO] <d>%s (%s) entró a la sala.",
+		mapper_left = "<j>[INFO] <d>%s (%s) salió de la sala.",
+		mapper_loaded = "<j>[INFO] <d>%s cargó este mapa.",
+		starting_perm_change = "<j>[INFO] <d>Empezando cambio de categoría...",
+		got_map_info = "<j>[INFO] <d>Se obtuvo toda la información del mapa. Intentando cambiar la categoría...",
+		perm_changed = "<j>[INFO] <d>Se cambió la categoría del mapa @%s desde P%s hacia P%s exitosamente.",
 		data_migration = "Todos los datos deben migrar. Esto significa, que actualmente no tienes ningún mapa completado. Para restaurar tus datos, simplemente ve a esta sala: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 		-- Miscellaneous
@@ -764,38 +764,38 @@ if starting == "*\003" then
 	translations.en = {
 		-- Error messages
 		corrupt_map = "<r>Corrupt map. Loading another.",
-		corrupt_map_vanilla = "<r>[ERROR] <n>Can not get information of this map.",
-		corrupt_map_mouse_start = "<r>[ERROR] <n>This map needs to have a start position (mouse spawn point).",
-		corrupt_map_needing_chair = "<r>[ERROR] <n>The map needs to have the end chair.",
-		corrupt_map_missing_checkpoints = "<r>[ERROR] <n>The map needs to have at least one checkpoint (yellow nail).",
+		corrupt_map_vanilla = "<j>[INFO] <r>Can not get information of this map.",
+		corrupt_map_mouse_start = "<j>[INFO] <r>This map needs to have a start position (mouse spawn point).",
+		corrupt_map_needing_chair = "<j>[INFO] <r>The map needs to have the end chair.",
+		corrupt_map_missing_checkpoints = "<j>[INFO] <r>The map needs to have at least one checkpoint (yellow nail).",
 		corrupt_data = "<r>Unfortunately, your data was corrupt and has been reset.",
-		min_players = "<r>To save your data, there must be at least 4 unique players in the room. <bl>[%s/%s]",
+		min_players = "<r>To save your data, there must be at least %s / %s unique players in the room.",
 		tribe_house = "<r>Data will not be saved in tribehouses.",
 		invalid_syntax = "<r>Invalid syntax.",
-		user_not_in_room = "<r>The user <n2>%s</n2> is not in the room.",
+		user_not_in_room = "<r>The user %s is not in the room.",
 		arg_must_be_id = "<r>The argument must be a valid id.",
 		cant_update = "<r>Can't update player ranks right now. Try again later.",
-		cant_edit = "<r>You can't edit <n2>%s's</n2> ranks.",
-		invalid_rank = "<r>Invalid rank: <n2>%s",
-		code_error = "<r>An error appeared: <bl>%s-%s-%s %s",
-		panic_mode = "<r>Module is now entering panic mode.",
-		public_panic = "<r>Please wait until a bot arrives and restarts the module.",
-		tribe_panic = "<r>Please type <n2>/module parkour</n2> to restart the module.",
+		cant_edit = "<r>You can't edit %s'(s) ranks.",
+		invalid_rank = "<r>Invalid rank: %s.",
+		code_error = "<r>An error appeared: %s-%s-%s %s",
+		panic_mode = "<r>Module is now entering in panic mode.",
+		public_panic = "<r>Wait until a bot comes here and restarts the module.",
+		tribe_panic = "<r>Please type <d>/module parkour</d> to restart the module.",
 		emergency_mode = "<r>Initiating emergency shutdown, no new players allowed. Please go to another #parkour room.",
 		bot_requested = "<r>The bot has been requested. It should be arriving in a moment.",
 		stream_failure = "<r>Internal stream channel failure. Can not transmit data.",
-		maps_not_available = "<r>#parkour's 'maps' submode is only available in <n2>*#parkour0maps</n2>.",
+		maps_not_available = "<r>#parkour's 'maps' submode is only available in <d>*#parkour0maps</d>.",
 		version_mismatch = "<r>Bot (<d>%s</d>) and lua (<d>%s</d>) versions do not match. Can't start the system.",
 		missing_bot = "<r>Bot missing. Wait until the bot arrives or ping @Tocu#0018 on discord: <d>%s</d>",
-		invalid_length = "<r>Your message must have between 10 and 100 characters. It has <n2>%s</n2> characters.",
+		invalid_length = "<r>Your message must have between 10 and 100 characters. It has %s characters.",
 		invalid_map = "<r>Invalid map.",
 		map_does_not_exist = "<r>The given map does not exist or can't be loaded. Try again later.",
-		invalid_map_perm = "<r>The given map is not P22 or P41.",
+		invalid_map_perm = "<r>The given map is not in P22 nor P41.",
 		invalid_map_perm_specific = "<r>The given map is not in P%s.",
 		cant_use_this_map = "<r>The given map has a small bug and can't be used.",
 		invalid_map_p41 = "<r>The given map is in P41, but is not in the module map list.",
 		invalid_map_p22 = "<r>The given map is in P22, but is in the module map list.",
-		map_already_voting = "<r>The given map already has an open votation.",
+		map_already_voting = "<r>The given map has already an open votation.",
 		not_enough_permissions = "<r>You don't have enough permissions to do this.",
 		already_depermed = "<r>The given map is already depermed.",
 		already_permed = "<r>The given map is already permed.",
@@ -803,27 +803,27 @@ if starting == "*\003" then
 
 		-- Congratulation messages
 		reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>.",
-		finished = "<d><o>%s</o> finished the parkour in <vp>%s</vp> seconds, <fc>congratulations!",
-		unlocked_power = "<ce><d>%s</d> unlocked the <vp>%s</vp> power.",
+		finished = "<d>%s finished the parkour in %s seconds, congratulations!",
+		unlocked_power = "<ce>%s unlocked the <vp>%s<ce> power.",
 		enjoy = "<d>Enjoy your new skills!",
 
 		-- Information messages
-		paused_events = "<cep><b>[Warning!]</b> <n>The module has reached it's critical limit and is being paused.",
-		resumed_events = "<n2>The module has been resumed.",
-		welcome = "<n>Welcome to <t>#parkour</t>!",
-		discord = "<cs>Do you want to report bugs, make suggestions or just want to chat with other players? Join us on discord: <pt>%s</pt>",
-		map_submissions = "<pt>Do you want to see your map in the module? Submit them here: <j>%s</j>",
+		paused_events = "<j><b>Warning!</b> <n>The module has reached it's critical limit and is being paused.",
+		resumed_events = "<j>The module has been resumed.",
+		welcome = "<d>Welcome to #parkour!",
+		discord = "<j>Do you want to report bugs, make suggestions or just want to chat with other players? Join us on discord: <d>%s</d>",
+		map_submissions = "<j>Do you want to see your map in the module? Submit them here: <d>%s</d>",
 		data_saved = "<vp>Data saved.",
-		action_within_minute = "<vp>The action will be applied in a minute.",
-		rank_save = "<n2>Type <d>!rank save</d> to apply the changes.",
-		module_update = "<r><b>[Warning!]</b> <n>The module will update in <d>%02d:%02d</d>.",
-		mapping_loaded = "<j>[INFO] <n>Mapping system <t>(v%s)</t> loaded.",
-		mapper_joined = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> has joined the room.",
-		mapper_left = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> has left the room.",
-		mapper_loaded = "<j>[INFO] <n><ce>%s</ce> has loaded a map.",
-		starting_perm_change = "<j>[INFO] <n>Starting perm change...",
-		got_map_info = "<j>[INFO] <n>Retrieved map information. Trying to change the perm...",
-		perm_changed = "<j>[INFO] <n>Successfully changed the perm of map <ch>@%s</ch> from <r>P%s</r> to <t>P%s</t>.",
+		action_within_minute = "<vp>The action will be applied within a minute.",
+		rank_save = "<j>Type <d>!rank save</d> to apply the changes.",
+		module_update = "<j><b>Warning!</b> The module will update in <d>%02d:%02d</d>.",
+		mapping_loaded = "<j>[INFO] <d>Mapping system (v%s) loaded.",
+		mapper_joined = "<j>[INFO] <d>%s (%s) has joined the room.",
+		mapper_left = "<j>[INFO] <d>%s (%s) has left the room.",
+		mapper_loaded = "<j>[INFO] <d>%s has loaded a map.",
+		starting_perm_change = "<j>[INFO] <d>Starting perm change...",
+		got_map_info = "<j>[INFO] <d>Retrieved map information. Trying to change the perm...",
+		perm_changed = "<j>[INFO] <d>Successfully changed the perm of map @%s from P%s to P%s.",
 		data_migration = "All the data needs to be migrated. This means, you currently don't have any completed maps. To restore your data, just go to room: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 		-- Miscellaneous
@@ -881,30 +881,30 @@ if starting == "*\003" then
 	translations.br = {
 		-- Error messages
 		corrupt_map = "<r>Mapa corrompido. Carregando outro.",
-		corrupt_map_vanilla = "<r>[ERROR] <n>Não foi possível obter informações deste mapa.",
-		corrupt_map_mouse_start = "<r>[ERROR] <n>O mapa requer um ponto de partida (spawn).",
-		corrupt_map_needing_chair = "<r>[ERROR] <n>O mapa requer a poltrona final.",
-		corrupt_map_missing_checkpoints = "<r>[ERROR] <n>O mapa requer ao menos um checkpoint (prego amarelo).",
+		corrupt_map_vanilla = "<j>[INFO] <r>Não foi possível obter informações deste mapa.",
+		corrupt_map_mouse_start = "<j>[INFO] <r>O mapa requer um ponto de partida (spawn).",
+		corrupt_map_needing_chair = "<j>[INFO] <r>O mapa requer a poltrona final.",
+		corrupt_map_missing_checkpoints = "<j>[INFO] <r>O mapa requer ao menos um checkpoint (prego amarelo).",
 		corrupt_data = "<r>Infelizmente seus dados corromperam e foram reiniciados.",
-		min_players = "<r>Para que dados sejam salvos, ao menos 4 jogadores únicos devem estar na sala. <bl>[%s/%s]",
+		min_players = "<r>Para que dados sejam salvos, ao menos %s / %s jogadores únicos devem estar na sala.",
 		tribe_house = "<r>Para que dados sejam salvos, você precisa jogar fora de um cafofo de tribo.",
 		invalid_syntax = "<r>Sintaxe inválida.",
-		user_not_in_room = "<r>O usuário <n2>%s</n2> não está na sala.",
+		user_not_in_room = "<r>O usuário %s não está na sala.",
 		arg_must_be_id = "<r>O argumento deve ser um ID válido.",
 		cant_update = "<r>Não foi possível atualizar o cargo do jogador. Tente novamente mais tarde.",
-		cant_edit = "<r>Você não pode editar o cargo do jogador <n2>%s</n2>.",
-		invalid_rank = "<r>Cargo inválido: <n2>%s",
-		code_error = "<r>Um erro aconteceu: <bl>%s-%s-%s %s",
+		cant_edit = "<r>Você não pode editar o cargo do jogador %s.",
+		invalid_rank = "<r>Cargo inválido: %s.",
+		code_error = "<r>Um erro aconteceu: %s-%s-%s %s",
 		panic_mode = "<r>Módulo entrando em Modo Pânico.",
 		public_panic = "<r>Espere um momento enquanto um bot entra na sala e reinicia o módulo.",
-		tribe_panic = "<r>Por favor, digite <n2>/module parkour</n2> para reiniciar o módulo.",
+		tribe_panic = "<r>Por favor, digite <d>/module parkour</d> para reiniciar o módulo.",
 		emergency_mode = "<r>Começando desativação de emergência, novos jogadores não serão mais permitidos. Por favor, vá para outra sala #parkour.",
 		bot_requested = "<r>O bot foi requisitado. Ele virá em poucos segundos.",
 		stream_failure = "<r>Erro interno entre canais. Não foi possível transmitir dados.",
-		maps_not_available = "<r>Submodo #parkour 'maps' só está disponível na sala <n2>*#parkour0maps</n2>.",
+		maps_not_available = "<r>Submodo #parkour 'maps' só está disponível na sala <d>*#parkour0maps</d>.",
 		version_mismatch = "<r>Versões do Bot (<d>%s</d>) e lua (<d>%s</d>) não são equivalentes. Não foi possível iniciar o sistema.",
 		missing_bot = "<r>O bot sumiu. Aguarde um minuto ou mencione @Tocu#0018 no discord: <d>%s</d>",
-		invalid_length = "<r>Sua mensagem deve ter algo entre 10 e 100 caracteres. Agora tem <n2>%s</n2> caracteres.",
+		invalid_length = "<r>Sua mensagem deve ter algo entre 10 e 100 caracteres. Agora tem %s caracteres.",
 		invalid_map = "<r>Mapa inválido.",
 		map_does_not_exist = "<r>O mapa não existe ou não pôde ser carregado. Tente novamente mais tarde.",
 		invalid_map_perm = "<r>O mapa não é nem P22, nem P41.",
@@ -920,27 +920,27 @@ if starting == "*\003" then
 
 		-- Congratulation messages
 		reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>.",
-		finished = "<d><o>%s</o> terminou o parkour em <vp>%s</vp> segundos, <fc>parabéns!",
-		unlocked_power = "<ce><d>%s</d> desbloqueou o poder <vp>%s</vp>.",
+		finished = "<d>%s terminou o parkour em %s segundos, parabéns!",
+		unlocked_power = "<ce>%s desbloqueou o poder <vp>%s<ce>.",
 		enjoy = "<d>Aproveite suas novas habilidades!",
 
 		-- Information messages
-		paused_events = "<cep><b>[Atenção!]</b> <n>O módulo está atingindo um estado crítico e está sendo pausado.",
-		resumed_events = "<n2>O módulo está se normalizando.",
-		welcome = "<n>Bem-vindo(a) ao <t>#parkour</t>!",
-		discord = "<cs>Tendo alguma boa ideia, report de bug ou apenas querendo conversar com outros jogadores? Entre em nosso servidor no Discord: <pt>%s</pt>",
-		map_submissions = "<pt>Quer ver seu mapa no módulo? Poste-o aqui: <j>%s</j>",
+		paused_events = "<j><b>Atenção!</b> <n>O módulo está atingindo um estado crítico e está sendo pausado.",
+		resumed_events = "<j>O módulo está se normalizando.",
+		welcome = "<d>Bem-vindo(a) ao #parkour!",
+		discord = "<j>Tendo alguma boa ideia, report de bug ou apenas querendo conversar com outros jogadores? Entre em nosso servidor no Discord: <d>%s</d>",
+		map_submissions = "<j>Quer ver seu mapa no módulo? Poste-o aqui: <d>%s</d>",
 		data_saved = "<vp>Dados salvos.",
 		action_within_minute = "<vp>A ação será aplicada dentre um minuto.",
-		rank_save = "<n2>Digite <d>!rank save</d> para salvar as mudanças.",
-		module_update = "<r><b>[Atenção!]</b> <n>O módulo irá atualizar em <d>%02d:%02d</d>.",
-		mapping_loaded = "<j>[INFO] <n>Sistema de mapas <t>(v%s)</t> carregado.",
-		mapper_joined = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> entrou na sala.",
-		mapper_left = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> saiu da sala.",
-		mapper_loaded = "<j>[INFO] <n><ce>%s</ce> carregou este mapa.",
-		starting_perm_change = "<j>[INFO] <n>Iniciando mudança de categoria...",
-		got_map_info = "<j>[INFO] <n>Todas as informações do mapa foram coletadas. Tentando alterar categoria...",
-		perm_changed = "<j>[INFO] <n>Categoria do mapa <ch>@%s</ch> alterada com sucesso, de <r>P%s</r> para <t>P%s</t>.",
+		rank_save = "<j>Digite <d>!rank save</d> para salvar as mudanças.",
+		module_update = "<j><b>Atenção!</b> O módulo irá atualizar em <d>%02d:%02d</d>.",
+		mapping_loaded = "<j>[INFO] <d>Sistema de mapas (v%s) carregado.",
+		mapper_joined = "<j>[INFO] <d>%s (%s) entrou na sala.",
+		mapper_left = "<j>[INFO] <d>%s (%s) saiu da sala.",
+		mapper_loaded = "<j>[INFO] <d>%s carregou este mapa.",
+		starting_perm_change = "<j>[INFO] <d>Iniciando mudança de categoria...",
+		got_map_info = "<j>[INFO] <d>Todas as informações do mapa foram coletadas. Tentando alterar categoria...",
+		perm_changed = "<j>[INFO] <d>Categoria do mapa @%s alterada com sucesso, de P%s para P%s.",
 		data_migration = "Todos os dados precisam migrar. Isso significa que atualmente você não tem nenhum mapa completado. Para restaurar seus dados, vá até a sala: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 		-- Miscellaneous
@@ -1379,8 +1379,7 @@ if starting == "*\003" then
 			delete_comments = true
 		},
 		mapper = {
-			vote_map = true,
-			change_map = true
+			vote_map = true
 		}
 	}
 	local perms = {}
@@ -1940,7 +1939,7 @@ if starting == "*\003" then
 			player,
 
 			victory[player] and 0xFEFF00 -- has won
-			or ranks.admin[player] and 0xE7342A -- admin
+			or ranks.admin[player] and 0xD7342A -- admin
 			or ranks.manager[player] and 0x843DA4 -- manager
 			or ranks.mod[player] and 0xFFAAAA -- moderator
 			or ranks.mapper[player] and 0x25C059 -- mapper
@@ -2230,7 +2229,6 @@ if starting == "*\003" then
 		translatedChatMessage("map_submissions", player, map_submissions)
 
 		system.bindKeyboard(player, 76, true, true)
-		system.bindKeyboard(player, 46, true, true)
 
 		if levels then
 			if is_tribe then
@@ -2429,19 +2427,12 @@ if starting == "*\003" then
 
 			save_update = os.time() + 60000 * 3 -- 3 minutes
 			translatedChatMessage("action_within_minute", player)
-
-		elseif cmd == "map" then
-			if not perms[player] or not perms[player].change_map then return end
-
-			newMap()
 		end
 	end)
 
 	onEvent("Keyboard", function(player, key)
 		if key == 76 then
 			toggleLeaderboard(player)
-		elseif key == 46 then
-			tfm.exec.killPlayer(player)
 		end
 	end)
 
@@ -2453,8 +2444,6 @@ if starting == "*\003" then
 		system.disableChatCommandDisplay("kill", true)
 		system.disableChatCommandDisplay("rank", true)
 		system.disableChatCommandDisplay("update", true)
-		system.disableChatCommandDisplay("map", true)
-		system.disableChatCommandDisplay("a", true)
 	end)
 	--[[ End of file modes/parkour/interface.lua ]]--
 	--[[ File modes/parkour/init.lua ]]--
@@ -3795,30 +3784,30 @@ else
 		translations.es = {
 			-- Error messages
 			corrupt_map = "<r>Mapa corrupto. Cargando otro.",
-			corrupt_map_vanilla = "<r>[ERROR] <n>No se pudo obtener información de este mapa.",
-			corrupt_map_mouse_start = "<r>[ERROR] <n>El mapa tiene que tener un punto de inicio de los ratones.",
-			corrupt_map_needing_chair = "<r>[ERROR] <n>El mapa tiene que tener el sillón del final.",
-			corrupt_map_missing_checkpoints = "<r>[ERROR] <n>El mapa tiene que tener al menos un checkpoint (anclaje amarillo).",
+			corrupt_map_vanilla = "<j>[INFO] <r>No se pudo obtener información de este mapa.",
+			corrupt_map_mouse_start = "<j>[INFO] <r>El mapa tiene que tener un punto de inicio de los ratones.",
+			corrupt_map_needing_chair = "<j>[INFO] <r>El mapa tiene que tener el sillón del final.",
+			corrupt_map_missing_checkpoints = "<j>[INFO] <r>El mapa tiene que tener al menos un checkpoint (anclaje amarillo).",
 			corrupt_data = "<r>Tristemente, tus datos estaban corruptos. Se han reiniciado.",
-			min_players = "<r>Para guardar datos, deben haber al menos 4 jugadores únicos en la sala. <bl>[%s/%s]",
+			min_players = "<r>Para guardar datos, deben haber al menos %s / %s jugadores únicos en la sala.",
 			tribe_house = "<r>Para guardar datos, debes jugar fuera de una casa de tribu.",
 			invalid_syntax = "<r>Sintaxis inválida.",
-			user_not_in_room = "<r>El usario <n2>%s</n2> no está en la sala.",
+			user_not_in_room = "<r>El usario %s no está en la sala.",
 			arg_must_be_id = "<r>El argumento debe ser una id válida.",
 			cant_update = "<r>No se pueden actualizar los rangos del jugador. Inténtalo más tarde.",
-			cant_edit = "<r>No puedes editar los rangos del jugador <n2>%s</n2>.",
-			invalid_rank = "<r>Rango inválido: <n2>%s",
-			code_error = "<r>Apareció un error: <bl>%s-%s-%s %s",
+			cant_edit = "<r>No puedes editar los rangos del jugador %s.",
+			invalid_rank = "<r>Rango inválido: %s.",
+			code_error = "<r>Apareció un error: %s-%s-%s %s",
 			panic_mode = "<r>El módulo entró en modo pánico.",
 			public_panic = "<r>Espera un minuto mientras viene un bot y reinicia el módulo.",
-			tribe_panic = "<r>Por favor, escribe <n2>/module parkour</n2> para reiniciar el módulo.",
+			tribe_panic = "<r>Por favor, escribe <d>/module parkour</d> para reiniciar el módulo.",
 			emergency_mode = "<r>Empezando apagado de emergencia, no se admiten más jugadores. Por favor ve a otra sala #parkour.",
 			bot_requested = "<r>El bot ha sido alertado. Debería venir en unos segundos.",
 			stream_failure = "<r>Fallo interno del canal de transmisión. No se pueden transmitir datos.",
-			maps_not_available = "<r>El submodo 'maps' de #parkour solo está disponible en la sala <n2>*#parkour0maps</n2>.",
+			maps_not_available = "<r>El submodo 'maps' de #parkour solo está disponible en la sala <d>*#parkour0maps</d>.",
 			version_mismatch = "<r>Las versiones del bot (<d>%s</d>) y de lua (<d>%s</d>) no coinciden. No se puede iniciar el sistema.",
 			missing_bot = "<r>Falta el bot. Espera un minuto o menciona a @Tocu#0018 en discord: <d>%s</d>",
-			invalid_length = "<r>Tu mensaje debe tener entre 10 y 100 caracteres. Tiene <n2>%s</n2>.",
+			invalid_length = "<r>Tu mensaje debe tener entre 10 y 100 caracteres. Tiene %s.",
 			invalid_map = "<r>Mapa inválido.",
 			map_does_not_exist = "<r>El mapa no existe o no puede ser cargado. Inténtalo más tarde.",
 			invalid_map_perm = "<r>El mapa no está en P22 ni en P41.",
@@ -3834,27 +3823,27 @@ else
 
 			-- Congratulation messages
 			reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>.",
-			finished = "<d><o>%s</o> completó el parkour en <vp>%s</vp> segundos, <fc>¡felicitaciones!",
-			unlocked_power = "<ce><d>%s</d> desbloqueó el poder <vp>%s<ce>.",
+			finished = "<d>%s completó el parkour en %s segundos, ¡felicitaciones!",
+			unlocked_power = "<ce>%s desbloqueó el poder <vp>%s<ce>.",
 			enjoy = "<d>¡Disfruta tus nuevas habilidades!",
 
 			-- Information messages
-			paused_events = "<cep><b>[¡Advertencia!]</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
-			resumed_events = "<n2>El módulo ha sido reanudado.",
-			welcome = "<n>¡Bienvenido a <t>#parkour</t>!",
-			discord = "<cs>¿Tienes alguna buena idea, reporte de bug o simplemente quieres hablar con otros jugadores? Entra a nuestro servidor de discord: <pt>%s</pt>",
-			map_submissions = "<pt>¿Quieres ver tu mapa en el módulo? Publicalo aquí: <j>%s</j>",
+			paused_events = "<j><b>¡Advertencia!</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
+			resumed_events = "<j>El módulo ha sido reanudado.",
+			welcome = "<d>¡Bienvenido a #parkour!",
+			discord = "<j>¿Tienes alguna buena idea, reporte de bug o simplemente quieres hablar con otros jugadores? Entra a nuestro servidor de discord: <d>%s</d>",
+			map_submissions = "<j>¿Quieres ver tu mapa en el módulo? Publicalo aquí: <d>%s</d>",
 			data_saved = "<vp>Datos guardados.",
 			action_within_minute = "<vp>La acción se aplicará dentro de un minuto.",
-			rank_save = "<n2>Escribe <d>!rank save</d> para aplicar los cambios.",
-			module_update = "<r><b>[¡Advertencia!]</b> <n>El módulo se actualizará en <d>%02d:%02d</d>.",
-			mapping_loaded = "<j>[INFO] <n>Sistema de mapas <t>(v%s)</t> cargado.",
-			mapper_joined = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> entró a la sala.",
-			mapper_left = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> salió de la sala.",
-			mapper_loaded = "<j>[INFO] <n><ce>%s</ce> cargó este mapa.",
-			starting_perm_change = "<j>[INFO] <n>Empezando cambio de categoría...",
-			got_map_info = "<j>[INFO] <n>Se obtuvo toda la información del mapa. Intentando cambiar la categoría...",
-			perm_changed = "<j>[INFO] <n>Se cambió la categoría del mapa <ch>@%s</ch> desde <r>P%s</r> hacia <t>P%s</t> exitosamente.",
+			rank_save = "<j>Escribe <d>!rank save</d> para aplicar los cambios.",
+			module_update = "<j><b>¡Advertencia!</b> El módulo se actualizará en <d>%02d:%02d</d>.",
+			mapping_loaded = "<j>[INFO] <d>Sistema de mapas (v%s) cargado.",
+			mapper_joined = "<j>[INFO] <d>%s (%s) entró a la sala.",
+			mapper_left = "<j>[INFO] <d>%s (%s) salió de la sala.",
+			mapper_loaded = "<j>[INFO] <d>%s cargó este mapa.",
+			starting_perm_change = "<j>[INFO] <d>Empezando cambio de categoría...",
+			got_map_info = "<j>[INFO] <d>Se obtuvo toda la información del mapa. Intentando cambiar la categoría...",
+			perm_changed = "<j>[INFO] <d>Se cambió la categoría del mapa @%s desde P%s hacia P%s exitosamente.",
 			data_migration = "Todos los datos deben migrar. Esto significa, que actualmente no tienes ningún mapa completado. Para restaurar tus datos, simplemente ve a esta sala: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 			-- Miscellaneous
@@ -3912,38 +3901,38 @@ else
 		translations.en = {
 			-- Error messages
 			corrupt_map = "<r>Corrupt map. Loading another.",
-			corrupt_map_vanilla = "<r>[ERROR] <n>Can not get information of this map.",
-			corrupt_map_mouse_start = "<r>[ERROR] <n>This map needs to have a start position (mouse spawn point).",
-			corrupt_map_needing_chair = "<r>[ERROR] <n>The map needs to have the end chair.",
-			corrupt_map_missing_checkpoints = "<r>[ERROR] <n>The map needs to have at least one checkpoint (yellow nail).",
+			corrupt_map_vanilla = "<j>[INFO] <r>Can not get information of this map.",
+			corrupt_map_mouse_start = "<j>[INFO] <r>This map needs to have a start position (mouse spawn point).",
+			corrupt_map_needing_chair = "<j>[INFO] <r>The map needs to have the end chair.",
+			corrupt_map_missing_checkpoints = "<j>[INFO] <r>The map needs to have at least one checkpoint (yellow nail).",
 			corrupt_data = "<r>Unfortunately, your data was corrupt and has been reset.",
-			min_players = "<r>To save your data, there must be at least 4 unique players in the room. <bl>[%s/%s]",
+			min_players = "<r>To save your data, there must be at least %s / %s unique players in the room.",
 			tribe_house = "<r>Data will not be saved in tribehouses.",
 			invalid_syntax = "<r>Invalid syntax.",
-			user_not_in_room = "<r>The user <n2>%s</n2> is not in the room.",
+			user_not_in_room = "<r>The user %s is not in the room.",
 			arg_must_be_id = "<r>The argument must be a valid id.",
 			cant_update = "<r>Can't update player ranks right now. Try again later.",
-			cant_edit = "<r>You can't edit <n2>%s's</n2> ranks.",
-			invalid_rank = "<r>Invalid rank: <n2>%s",
-			code_error = "<r>An error appeared: <bl>%s-%s-%s %s",
-			panic_mode = "<r>Module is now entering panic mode.",
-			public_panic = "<r>Please wait until a bot arrives and restarts the module.",
-			tribe_panic = "<r>Please type <n2>/module parkour</n2> to restart the module.",
+			cant_edit = "<r>You can't edit %s'(s) ranks.",
+			invalid_rank = "<r>Invalid rank: %s.",
+			code_error = "<r>An error appeared: %s-%s-%s %s",
+			panic_mode = "<r>Module is now entering in panic mode.",
+			public_panic = "<r>Wait until a bot comes here and restarts the module.",
+			tribe_panic = "<r>Please type <d>/module parkour</d> to restart the module.",
 			emergency_mode = "<r>Initiating emergency shutdown, no new players allowed. Please go to another #parkour room.",
 			bot_requested = "<r>The bot has been requested. It should be arriving in a moment.",
 			stream_failure = "<r>Internal stream channel failure. Can not transmit data.",
-			maps_not_available = "<r>#parkour's 'maps' submode is only available in <n2>*#parkour0maps</n2>.",
+			maps_not_available = "<r>#parkour's 'maps' submode is only available in <d>*#parkour0maps</d>.",
 			version_mismatch = "<r>Bot (<d>%s</d>) and lua (<d>%s</d>) versions do not match. Can't start the system.",
 			missing_bot = "<r>Bot missing. Wait until the bot arrives or ping @Tocu#0018 on discord: <d>%s</d>",
-			invalid_length = "<r>Your message must have between 10 and 100 characters. It has <n2>%s</n2> characters.",
+			invalid_length = "<r>Your message must have between 10 and 100 characters. It has %s characters.",
 			invalid_map = "<r>Invalid map.",
 			map_does_not_exist = "<r>The given map does not exist or can't be loaded. Try again later.",
-			invalid_map_perm = "<r>The given map is not P22 or P41.",
+			invalid_map_perm = "<r>The given map is not in P22 nor P41.",
 			invalid_map_perm_specific = "<r>The given map is not in P%s.",
 			cant_use_this_map = "<r>The given map has a small bug and can't be used.",
 			invalid_map_p41 = "<r>The given map is in P41, but is not in the module map list.",
 			invalid_map_p22 = "<r>The given map is in P22, but is in the module map list.",
-			map_already_voting = "<r>The given map already has an open votation.",
+			map_already_voting = "<r>The given map has already an open votation.",
 			not_enough_permissions = "<r>You don't have enough permissions to do this.",
 			already_depermed = "<r>The given map is already depermed.",
 			already_permed = "<r>The given map is already permed.",
@@ -3951,27 +3940,27 @@ else
 
 			-- Congratulation messages
 			reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>.",
-			finished = "<d><o>%s</o> finished the parkour in <vp>%s</vp> seconds, <fc>congratulations!",
-			unlocked_power = "<ce><d>%s</d> unlocked the <vp>%s</vp> power.",
+			finished = "<d>%s finished the parkour in %s seconds, congratulations!",
+			unlocked_power = "<ce>%s unlocked the <vp>%s<ce> power.",
 			enjoy = "<d>Enjoy your new skills!",
 
 			-- Information messages
-			paused_events = "<cep><b>[Warning!]</b> <n>The module has reached it's critical limit and is being paused.",
-			resumed_events = "<n2>The module has been resumed.",
-			welcome = "<n>Welcome to <t>#parkour</t>!",
-			discord = "<cs>Do you want to report bugs, make suggestions or just want to chat with other players? Join us on discord: <pt>%s</pt>",
-			map_submissions = "<pt>Do you want to see your map in the module? Submit them here: <j>%s</j>",
+			paused_events = "<j><b>Warning!</b> <n>The module has reached it's critical limit and is being paused.",
+			resumed_events = "<j>The module has been resumed.",
+			welcome = "<d>Welcome to #parkour!",
+			discord = "<j>Do you want to report bugs, make suggestions or just want to chat with other players? Join us on discord: <d>%s</d>",
+			map_submissions = "<j>Do you want to see your map in the module? Submit them here: <d>%s</d>",
 			data_saved = "<vp>Data saved.",
-			action_within_minute = "<vp>The action will be applied in a minute.",
-			rank_save = "<n2>Type <d>!rank save</d> to apply the changes.",
-			module_update = "<r><b>[Warning!]</b> <n>The module will update in <d>%02d:%02d</d>.",
-			mapping_loaded = "<j>[INFO] <n>Mapping system <t>(v%s)</t> loaded.",
-			mapper_joined = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> has joined the room.",
-			mapper_left = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> has left the room.",
-			mapper_loaded = "<j>[INFO] <n><ce>%s</ce> has loaded a map.",
-			starting_perm_change = "<j>[INFO] <n>Starting perm change...",
-			got_map_info = "<j>[INFO] <n>Retrieved map information. Trying to change the perm...",
-			perm_changed = "<j>[INFO] <n>Successfully changed the perm of map <ch>@%s</ch> from <r>P%s</r> to <t>P%s</t>.",
+			action_within_minute = "<vp>The action will be applied within a minute.",
+			rank_save = "<j>Type <d>!rank save</d> to apply the changes.",
+			module_update = "<j><b>Warning!</b> The module will update in <d>%02d:%02d</d>.",
+			mapping_loaded = "<j>[INFO] <d>Mapping system (v%s) loaded.",
+			mapper_joined = "<j>[INFO] <d>%s (%s) has joined the room.",
+			mapper_left = "<j>[INFO] <d>%s (%s) has left the room.",
+			mapper_loaded = "<j>[INFO] <d>%s has loaded a map.",
+			starting_perm_change = "<j>[INFO] <d>Starting perm change...",
+			got_map_info = "<j>[INFO] <d>Retrieved map information. Trying to change the perm...",
+			perm_changed = "<j>[INFO] <d>Successfully changed the perm of map @%s from P%s to P%s.",
 			data_migration = "All the data needs to be migrated. This means, you currently don't have any completed maps. To restore your data, just go to room: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 			-- Miscellaneous
@@ -4029,30 +4018,30 @@ else
 		translations.br = {
 			-- Error messages
 			corrupt_map = "<r>Mapa corrompido. Carregando outro.",
-			corrupt_map_vanilla = "<r>[ERROR] <n>Não foi possível obter informações deste mapa.",
-			corrupt_map_mouse_start = "<r>[ERROR] <n>O mapa requer um ponto de partida (spawn).",
-			corrupt_map_needing_chair = "<r>[ERROR] <n>O mapa requer a poltrona final.",
-			corrupt_map_missing_checkpoints = "<r>[ERROR] <n>O mapa requer ao menos um checkpoint (prego amarelo).",
+			corrupt_map_vanilla = "<j>[INFO] <r>Não foi possível obter informações deste mapa.",
+			corrupt_map_mouse_start = "<j>[INFO] <r>O mapa requer um ponto de partida (spawn).",
+			corrupt_map_needing_chair = "<j>[INFO] <r>O mapa requer a poltrona final.",
+			corrupt_map_missing_checkpoints = "<j>[INFO] <r>O mapa requer ao menos um checkpoint (prego amarelo).",
 			corrupt_data = "<r>Infelizmente seus dados corromperam e foram reiniciados.",
-			min_players = "<r>Para que dados sejam salvos, ao menos 4 jogadores únicos devem estar na sala. <bl>[%s/%s]",
+			min_players = "<r>Para que dados sejam salvos, ao menos %s / %s jogadores únicos devem estar na sala.",
 			tribe_house = "<r>Para que dados sejam salvos, você precisa jogar fora de um cafofo de tribo.",
 			invalid_syntax = "<r>Sintaxe inválida.",
-			user_not_in_room = "<r>O usuário <n2>%s</n2> não está na sala.",
+			user_not_in_room = "<r>O usuário %s não está na sala.",
 			arg_must_be_id = "<r>O argumento deve ser um ID válido.",
 			cant_update = "<r>Não foi possível atualizar o cargo do jogador. Tente novamente mais tarde.",
-			cant_edit = "<r>Você não pode editar o cargo do jogador <n2>%s</n2>.",
-			invalid_rank = "<r>Cargo inválido: <n2>%s",
-			code_error = "<r>Um erro aconteceu: <bl>%s-%s-%s %s",
+			cant_edit = "<r>Você não pode editar o cargo do jogador %s.",
+			invalid_rank = "<r>Cargo inválido: %s.",
+			code_error = "<r>Um erro aconteceu: %s-%s-%s %s",
 			panic_mode = "<r>Módulo entrando em Modo Pânico.",
 			public_panic = "<r>Espere um momento enquanto um bot entra na sala e reinicia o módulo.",
-			tribe_panic = "<r>Por favor, digite <n2>/module parkour</n2> para reiniciar o módulo.",
+			tribe_panic = "<r>Por favor, digite <d>/module parkour</d> para reiniciar o módulo.",
 			emergency_mode = "<r>Começando desativação de emergência, novos jogadores não serão mais permitidos. Por favor, vá para outra sala #parkour.",
 			bot_requested = "<r>O bot foi requisitado. Ele virá em poucos segundos.",
 			stream_failure = "<r>Erro interno entre canais. Não foi possível transmitir dados.",
-			maps_not_available = "<r>Submodo #parkour 'maps' só está disponível na sala <n2>*#parkour0maps</n2>.",
+			maps_not_available = "<r>Submodo #parkour 'maps' só está disponível na sala <d>*#parkour0maps</d>.",
 			version_mismatch = "<r>Versões do Bot (<d>%s</d>) e lua (<d>%s</d>) não são equivalentes. Não foi possível iniciar o sistema.",
 			missing_bot = "<r>O bot sumiu. Aguarde um minuto ou mencione @Tocu#0018 no discord: <d>%s</d>",
-			invalid_length = "<r>Sua mensagem deve ter algo entre 10 e 100 caracteres. Agora tem <n2>%s</n2> caracteres.",
+			invalid_length = "<r>Sua mensagem deve ter algo entre 10 e 100 caracteres. Agora tem %s caracteres.",
 			invalid_map = "<r>Mapa inválido.",
 			map_does_not_exist = "<r>O mapa não existe ou não pôde ser carregado. Tente novamente mais tarde.",
 			invalid_map_perm = "<r>O mapa não é nem P22, nem P41.",
@@ -4068,27 +4057,27 @@ else
 
 			-- Congratulation messages
 			reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>.",
-			finished = "<d><o>%s</o> terminou o parkour em <vp>%s</vp> segundos, <fc>parabéns!",
-			unlocked_power = "<ce><d>%s</d> desbloqueou o poder <vp>%s</vp>.",
+			finished = "<d>%s terminou o parkour em %s segundos, parabéns!",
+			unlocked_power = "<ce>%s desbloqueou o poder <vp>%s<ce>.",
 			enjoy = "<d>Aproveite suas novas habilidades!",
 
 			-- Information messages
-			paused_events = "<cep><b>[Atenção!]</b> <n>O módulo está atingindo um estado crítico e está sendo pausado.",
-			resumed_events = "<n2>O módulo está se normalizando.",
-			welcome = "<n>Bem-vindo(a) ao <t>#parkour</t>!",
-			discord = "<cs>Tendo alguma boa ideia, report de bug ou apenas querendo conversar com outros jogadores? Entre em nosso servidor no Discord: <pt>%s</pt>",
-			map_submissions = "<pt>Quer ver seu mapa no módulo? Poste-o aqui: <j>%s</j>",
+			paused_events = "<j><b>Atenção!</b> <n>O módulo está atingindo um estado crítico e está sendo pausado.",
+			resumed_events = "<j>O módulo está se normalizando.",
+			welcome = "<d>Bem-vindo(a) ao #parkour!",
+			discord = "<j>Tendo alguma boa ideia, report de bug ou apenas querendo conversar com outros jogadores? Entre em nosso servidor no Discord: <d>%s</d>",
+			map_submissions = "<j>Quer ver seu mapa no módulo? Poste-o aqui: <d>%s</d>",
 			data_saved = "<vp>Dados salvos.",
 			action_within_minute = "<vp>A ação será aplicada dentre um minuto.",
-			rank_save = "<n2>Digite <d>!rank save</d> para salvar as mudanças.",
-			module_update = "<r><b>[Atenção!]</b> <n>O módulo irá atualizar em <d>%02d:%02d</d>.",
-			mapping_loaded = "<j>[INFO] <n>Sistema de mapas <t>(v%s)</t> carregado.",
-			mapper_joined = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> entrou na sala.",
-			mapper_left = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> saiu da sala.",
-			mapper_loaded = "<j>[INFO] <n><ce>%s</ce> carregou este mapa.",
-			starting_perm_change = "<j>[INFO] <n>Iniciando mudança de categoria...",
-			got_map_info = "<j>[INFO] <n>Todas as informações do mapa foram coletadas. Tentando alterar categoria...",
-			perm_changed = "<j>[INFO] <n>Categoria do mapa <ch>@%s</ch> alterada com sucesso, de <r>P%s</r> para <t>P%s</t>.",
+			rank_save = "<j>Digite <d>!rank save</d> para salvar as mudanças.",
+			module_update = "<j><b>Atenção!</b> O módulo irá atualizar em <d>%02d:%02d</d>.",
+			mapping_loaded = "<j>[INFO] <d>Sistema de mapas (v%s) carregado.",
+			mapper_joined = "<j>[INFO] <d>%s (%s) entrou na sala.",
+			mapper_left = "<j>[INFO] <d>%s (%s) saiu da sala.",
+			mapper_loaded = "<j>[INFO] <d>%s carregou este mapa.",
+			starting_perm_change = "<j>[INFO] <d>Iniciando mudança de categoria...",
+			got_map_info = "<j>[INFO] <d>Todas as informações do mapa foram coletadas. Tentando alterar categoria...",
+			perm_changed = "<j>[INFO] <d>Categoria do mapa @%s alterada com sucesso, de P%s para P%s.",
 			data_migration = "Todos os dados precisam migrar. Isso significa que atualmente você não tem nenhum mapa completado. Para restaurar seus dados, vá até a sala: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 			-- Miscellaneous
@@ -4527,8 +4516,7 @@ else
 				delete_comments = true
 			},
 			mapper = {
-				vote_map = true,
-				change_map = true
+				vote_map = true
 			}
 		}
 		local perms = {}
@@ -5088,7 +5076,7 @@ else
 				player,
 
 				victory[player] and 0xFEFF00 -- has won
-				or ranks.admin[player] and 0xE7342A -- admin
+				or ranks.admin[player] and 0xD7342A -- admin
 				or ranks.manager[player] and 0x843DA4 -- manager
 				or ranks.mod[player] and 0xFFAAAA -- moderator
 				or ranks.mapper[player] and 0x25C059 -- mapper
@@ -5378,7 +5366,6 @@ else
 			translatedChatMessage("map_submissions", player, map_submissions)
 
 			system.bindKeyboard(player, 76, true, true)
-			system.bindKeyboard(player, 46, true, true)
 
 			if levels then
 				if is_tribe then
@@ -5577,19 +5564,12 @@ else
 
 				save_update = os.time() + 60000 * 3 -- 3 minutes
 				translatedChatMessage("action_within_minute", player)
-
-			elseif cmd == "map" then
-				if not perms[player] or not perms[player].change_map then return end
-
-				newMap()
 			end
 		end)
 
 		onEvent("Keyboard", function(player, key)
 			if key == 76 then
 				toggleLeaderboard(player)
-			elseif key == 46 then
-				tfm.exec.killPlayer(player)
 			end
 		end)
 
@@ -5601,8 +5581,6 @@ else
 			system.disableChatCommandDisplay("kill", true)
 			system.disableChatCommandDisplay("rank", true)
 			system.disableChatCommandDisplay("update", true)
-			system.disableChatCommandDisplay("map", true)
-			system.disableChatCommandDisplay("a", true)
 		end)
 		--[[ End of file modes/parkour/interface.lua ]]--
 		--[[ File modes/parkour/init.lua ]]--
@@ -6514,30 +6492,30 @@ else
 		translations.es = {
 			-- Error messages
 			corrupt_map = "<r>Mapa corrupto. Cargando otro.",
-			corrupt_map_vanilla = "<r>[ERROR] <n>No se pudo obtener información de este mapa.",
-			corrupt_map_mouse_start = "<r>[ERROR] <n>El mapa tiene que tener un punto de inicio de los ratones.",
-			corrupt_map_needing_chair = "<r>[ERROR] <n>El mapa tiene que tener el sillón del final.",
-			corrupt_map_missing_checkpoints = "<r>[ERROR] <n>El mapa tiene que tener al menos un checkpoint (anclaje amarillo).",
+			corrupt_map_vanilla = "<j>[INFO] <r>No se pudo obtener información de este mapa.",
+			corrupt_map_mouse_start = "<j>[INFO] <r>El mapa tiene que tener un punto de inicio de los ratones.",
+			corrupt_map_needing_chair = "<j>[INFO] <r>El mapa tiene que tener el sillón del final.",
+			corrupt_map_missing_checkpoints = "<j>[INFO] <r>El mapa tiene que tener al menos un checkpoint (anclaje amarillo).",
 			corrupt_data = "<r>Tristemente, tus datos estaban corruptos. Se han reiniciado.",
-			min_players = "<r>Para guardar datos, deben haber al menos 4 jugadores únicos en la sala. <bl>[%s/%s]",
+			min_players = "<r>Para guardar datos, deben haber al menos %s / %s jugadores únicos en la sala.",
 			tribe_house = "<r>Para guardar datos, debes jugar fuera de una casa de tribu.",
 			invalid_syntax = "<r>Sintaxis inválida.",
-			user_not_in_room = "<r>El usario <n2>%s</n2> no está en la sala.",
+			user_not_in_room = "<r>El usario %s no está en la sala.",
 			arg_must_be_id = "<r>El argumento debe ser una id válida.",
 			cant_update = "<r>No se pueden actualizar los rangos del jugador. Inténtalo más tarde.",
-			cant_edit = "<r>No puedes editar los rangos del jugador <n2>%s</n2>.",
-			invalid_rank = "<r>Rango inválido: <n2>%s",
-			code_error = "<r>Apareció un error: <bl>%s-%s-%s %s",
+			cant_edit = "<r>No puedes editar los rangos del jugador %s.",
+			invalid_rank = "<r>Rango inválido: %s.",
+			code_error = "<r>Apareció un error: %s-%s-%s %s",
 			panic_mode = "<r>El módulo entró en modo pánico.",
 			public_panic = "<r>Espera un minuto mientras viene un bot y reinicia el módulo.",
-			tribe_panic = "<r>Por favor, escribe <n2>/module parkour</n2> para reiniciar el módulo.",
+			tribe_panic = "<r>Por favor, escribe <d>/module parkour</d> para reiniciar el módulo.",
 			emergency_mode = "<r>Empezando apagado de emergencia, no se admiten más jugadores. Por favor ve a otra sala #parkour.",
 			bot_requested = "<r>El bot ha sido alertado. Debería venir en unos segundos.",
 			stream_failure = "<r>Fallo interno del canal de transmisión. No se pueden transmitir datos.",
-			maps_not_available = "<r>El submodo 'maps' de #parkour solo está disponible en la sala <n2>*#parkour0maps</n2>.",
+			maps_not_available = "<r>El submodo 'maps' de #parkour solo está disponible en la sala <d>*#parkour0maps</d>.",
 			version_mismatch = "<r>Las versiones del bot (<d>%s</d>) y de lua (<d>%s</d>) no coinciden. No se puede iniciar el sistema.",
 			missing_bot = "<r>Falta el bot. Espera un minuto o menciona a @Tocu#0018 en discord: <d>%s</d>",
-			invalid_length = "<r>Tu mensaje debe tener entre 10 y 100 caracteres. Tiene <n2>%s</n2>.",
+			invalid_length = "<r>Tu mensaje debe tener entre 10 y 100 caracteres. Tiene %s.",
 			invalid_map = "<r>Mapa inválido.",
 			map_does_not_exist = "<r>El mapa no existe o no puede ser cargado. Inténtalo más tarde.",
 			invalid_map_perm = "<r>El mapa no está en P22 ni en P41.",
@@ -6553,27 +6531,27 @@ else
 
 			-- Congratulation messages
 			reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>.",
-			finished = "<d><o>%s</o> completó el parkour en <vp>%s</vp> segundos, <fc>¡felicitaciones!",
-			unlocked_power = "<ce><d>%s</d> desbloqueó el poder <vp>%s<ce>.",
+			finished = "<d>%s completó el parkour en %s segundos, ¡felicitaciones!",
+			unlocked_power = "<ce>%s desbloqueó el poder <vp>%s<ce>.",
 			enjoy = "<d>¡Disfruta tus nuevas habilidades!",
 
 			-- Information messages
-			paused_events = "<cep><b>[¡Advertencia!]</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
-			resumed_events = "<n2>El módulo ha sido reanudado.",
-			welcome = "<n>¡Bienvenido a <t>#parkour</t>!",
-			discord = "<cs>¿Tienes alguna buena idea, reporte de bug o simplemente quieres hablar con otros jugadores? Entra a nuestro servidor de discord: <pt>%s</pt>",
-			map_submissions = "<pt>¿Quieres ver tu mapa en el módulo? Publicalo aquí: <j>%s</j>",
+			paused_events = "<j><b>¡Advertencia!</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
+			resumed_events = "<j>El módulo ha sido reanudado.",
+			welcome = "<d>¡Bienvenido a #parkour!",
+			discord = "<j>¿Tienes alguna buena idea, reporte de bug o simplemente quieres hablar con otros jugadores? Entra a nuestro servidor de discord: <d>%s</d>",
+			map_submissions = "<j>¿Quieres ver tu mapa en el módulo? Publicalo aquí: <d>%s</d>",
 			data_saved = "<vp>Datos guardados.",
 			action_within_minute = "<vp>La acción se aplicará dentro de un minuto.",
-			rank_save = "<n2>Escribe <d>!rank save</d> para aplicar los cambios.",
-			module_update = "<r><b>[¡Advertencia!]</b> <n>El módulo se actualizará en <d>%02d:%02d</d>.",
-			mapping_loaded = "<j>[INFO] <n>Sistema de mapas <t>(v%s)</t> cargado.",
-			mapper_joined = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> entró a la sala.",
-			mapper_left = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> salió de la sala.",
-			mapper_loaded = "<j>[INFO] <n><ce>%s</ce> cargó este mapa.",
-			starting_perm_change = "<j>[INFO] <n>Empezando cambio de categoría...",
-			got_map_info = "<j>[INFO] <n>Se obtuvo toda la información del mapa. Intentando cambiar la categoría...",
-			perm_changed = "<j>[INFO] <n>Se cambió la categoría del mapa <ch>@%s</ch> desde <r>P%s</r> hacia <t>P%s</t> exitosamente.",
+			rank_save = "<j>Escribe <d>!rank save</d> para aplicar los cambios.",
+			module_update = "<j><b>¡Advertencia!</b> El módulo se actualizará en <d>%02d:%02d</d>.",
+			mapping_loaded = "<j>[INFO] <d>Sistema de mapas (v%s) cargado.",
+			mapper_joined = "<j>[INFO] <d>%s (%s) entró a la sala.",
+			mapper_left = "<j>[INFO] <d>%s (%s) salió de la sala.",
+			mapper_loaded = "<j>[INFO] <d>%s cargó este mapa.",
+			starting_perm_change = "<j>[INFO] <d>Empezando cambio de categoría...",
+			got_map_info = "<j>[INFO] <d>Se obtuvo toda la información del mapa. Intentando cambiar la categoría...",
+			perm_changed = "<j>[INFO] <d>Se cambió la categoría del mapa @%s desde P%s hacia P%s exitosamente.",
 			data_migration = "Todos los datos deben migrar. Esto significa, que actualmente no tienes ningún mapa completado. Para restaurar tus datos, simplemente ve a esta sala: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 			-- Miscellaneous
@@ -6631,38 +6609,38 @@ else
 		translations.en = {
 			-- Error messages
 			corrupt_map = "<r>Corrupt map. Loading another.",
-			corrupt_map_vanilla = "<r>[ERROR] <n>Can not get information of this map.",
-			corrupt_map_mouse_start = "<r>[ERROR] <n>This map needs to have a start position (mouse spawn point).",
-			corrupt_map_needing_chair = "<r>[ERROR] <n>The map needs to have the end chair.",
-			corrupt_map_missing_checkpoints = "<r>[ERROR] <n>The map needs to have at least one checkpoint (yellow nail).",
+			corrupt_map_vanilla = "<j>[INFO] <r>Can not get information of this map.",
+			corrupt_map_mouse_start = "<j>[INFO] <r>This map needs to have a start position (mouse spawn point).",
+			corrupt_map_needing_chair = "<j>[INFO] <r>The map needs to have the end chair.",
+			corrupt_map_missing_checkpoints = "<j>[INFO] <r>The map needs to have at least one checkpoint (yellow nail).",
 			corrupt_data = "<r>Unfortunately, your data was corrupt and has been reset.",
-			min_players = "<r>To save your data, there must be at least 4 unique players in the room. <bl>[%s/%s]",
+			min_players = "<r>To save your data, there must be at least %s / %s unique players in the room.",
 			tribe_house = "<r>Data will not be saved in tribehouses.",
 			invalid_syntax = "<r>Invalid syntax.",
-			user_not_in_room = "<r>The user <n2>%s</n2> is not in the room.",
+			user_not_in_room = "<r>The user %s is not in the room.",
 			arg_must_be_id = "<r>The argument must be a valid id.",
 			cant_update = "<r>Can't update player ranks right now. Try again later.",
-			cant_edit = "<r>You can't edit <n2>%s's</n2> ranks.",
-			invalid_rank = "<r>Invalid rank: <n2>%s",
-			code_error = "<r>An error appeared: <bl>%s-%s-%s %s",
-			panic_mode = "<r>Module is now entering panic mode.",
-			public_panic = "<r>Please wait until a bot arrives and restarts the module.",
-			tribe_panic = "<r>Please type <n2>/module parkour</n2> to restart the module.",
+			cant_edit = "<r>You can't edit %s'(s) ranks.",
+			invalid_rank = "<r>Invalid rank: %s.",
+			code_error = "<r>An error appeared: %s-%s-%s %s",
+			panic_mode = "<r>Module is now entering in panic mode.",
+			public_panic = "<r>Wait until a bot comes here and restarts the module.",
+			tribe_panic = "<r>Please type <d>/module parkour</d> to restart the module.",
 			emergency_mode = "<r>Initiating emergency shutdown, no new players allowed. Please go to another #parkour room.",
 			bot_requested = "<r>The bot has been requested. It should be arriving in a moment.",
 			stream_failure = "<r>Internal stream channel failure. Can not transmit data.",
-			maps_not_available = "<r>#parkour's 'maps' submode is only available in <n2>*#parkour0maps</n2>.",
+			maps_not_available = "<r>#parkour's 'maps' submode is only available in <d>*#parkour0maps</d>.",
 			version_mismatch = "<r>Bot (<d>%s</d>) and lua (<d>%s</d>) versions do not match. Can't start the system.",
 			missing_bot = "<r>Bot missing. Wait until the bot arrives or ping @Tocu#0018 on discord: <d>%s</d>",
-			invalid_length = "<r>Your message must have between 10 and 100 characters. It has <n2>%s</n2> characters.",
+			invalid_length = "<r>Your message must have between 10 and 100 characters. It has %s characters.",
 			invalid_map = "<r>Invalid map.",
 			map_does_not_exist = "<r>The given map does not exist or can't be loaded. Try again later.",
-			invalid_map_perm = "<r>The given map is not P22 or P41.",
+			invalid_map_perm = "<r>The given map is not in P22 nor P41.",
 			invalid_map_perm_specific = "<r>The given map is not in P%s.",
 			cant_use_this_map = "<r>The given map has a small bug and can't be used.",
 			invalid_map_p41 = "<r>The given map is in P41, but is not in the module map list.",
 			invalid_map_p22 = "<r>The given map is in P22, but is in the module map list.",
-			map_already_voting = "<r>The given map already has an open votation.",
+			map_already_voting = "<r>The given map has already an open votation.",
 			not_enough_permissions = "<r>You don't have enough permissions to do this.",
 			already_depermed = "<r>The given map is already depermed.",
 			already_permed = "<r>The given map is already permed.",
@@ -6670,27 +6648,27 @@ else
 
 			-- Congratulation messages
 			reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>.",
-			finished = "<d><o>%s</o> finished the parkour in <vp>%s</vp> seconds, <fc>congratulations!",
-			unlocked_power = "<ce><d>%s</d> unlocked the <vp>%s</vp> power.",
+			finished = "<d>%s finished the parkour in %s seconds, congratulations!",
+			unlocked_power = "<ce>%s unlocked the <vp>%s<ce> power.",
 			enjoy = "<d>Enjoy your new skills!",
 
 			-- Information messages
-			paused_events = "<cep><b>[Warning!]</b> <n>The module has reached it's critical limit and is being paused.",
-			resumed_events = "<n2>The module has been resumed.",
-			welcome = "<n>Welcome to <t>#parkour</t>!",
-			discord = "<cs>Do you want to report bugs, make suggestions or just want to chat with other players? Join us on discord: <pt>%s</pt>",
-			map_submissions = "<pt>Do you want to see your map in the module? Submit them here: <j>%s</j>",
+			paused_events = "<j><b>Warning!</b> <n>The module has reached it's critical limit and is being paused.",
+			resumed_events = "<j>The module has been resumed.",
+			welcome = "<d>Welcome to #parkour!",
+			discord = "<j>Do you want to report bugs, make suggestions or just want to chat with other players? Join us on discord: <d>%s</d>",
+			map_submissions = "<j>Do you want to see your map in the module? Submit them here: <d>%s</d>",
 			data_saved = "<vp>Data saved.",
-			action_within_minute = "<vp>The action will be applied in a minute.",
-			rank_save = "<n2>Type <d>!rank save</d> to apply the changes.",
-			module_update = "<r><b>[Warning!]</b> <n>The module will update in <d>%02d:%02d</d>.",
-			mapping_loaded = "<j>[INFO] <n>Mapping system <t>(v%s)</t> loaded.",
-			mapper_joined = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> has joined the room.",
-			mapper_left = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> has left the room.",
-			mapper_loaded = "<j>[INFO] <n><ce>%s</ce> has loaded a map.",
-			starting_perm_change = "<j>[INFO] <n>Starting perm change...",
-			got_map_info = "<j>[INFO] <n>Retrieved map information. Trying to change the perm...",
-			perm_changed = "<j>[INFO] <n>Successfully changed the perm of map <ch>@%s</ch> from <r>P%s</r> to <t>P%s</t>.",
+			action_within_minute = "<vp>The action will be applied within a minute.",
+			rank_save = "<j>Type <d>!rank save</d> to apply the changes.",
+			module_update = "<j><b>Warning!</b> The module will update in <d>%02d:%02d</d>.",
+			mapping_loaded = "<j>[INFO] <d>Mapping system (v%s) loaded.",
+			mapper_joined = "<j>[INFO] <d>%s (%s) has joined the room.",
+			mapper_left = "<j>[INFO] <d>%s (%s) has left the room.",
+			mapper_loaded = "<j>[INFO] <d>%s has loaded a map.",
+			starting_perm_change = "<j>[INFO] <d>Starting perm change...",
+			got_map_info = "<j>[INFO] <d>Retrieved map information. Trying to change the perm...",
+			perm_changed = "<j>[INFO] <d>Successfully changed the perm of map @%s from P%s to P%s.",
 			data_migration = "All the data needs to be migrated. This means, you currently don't have any completed maps. To restore your data, just go to room: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 			-- Miscellaneous
@@ -6748,30 +6726,30 @@ else
 		translations.br = {
 			-- Error messages
 			corrupt_map = "<r>Mapa corrompido. Carregando outro.",
-			corrupt_map_vanilla = "<r>[ERROR] <n>Não foi possível obter informações deste mapa.",
-			corrupt_map_mouse_start = "<r>[ERROR] <n>O mapa requer um ponto de partida (spawn).",
-			corrupt_map_needing_chair = "<r>[ERROR] <n>O mapa requer a poltrona final.",
-			corrupt_map_missing_checkpoints = "<r>[ERROR] <n>O mapa requer ao menos um checkpoint (prego amarelo).",
+			corrupt_map_vanilla = "<j>[INFO] <r>Não foi possível obter informações deste mapa.",
+			corrupt_map_mouse_start = "<j>[INFO] <r>O mapa requer um ponto de partida (spawn).",
+			corrupt_map_needing_chair = "<j>[INFO] <r>O mapa requer a poltrona final.",
+			corrupt_map_missing_checkpoints = "<j>[INFO] <r>O mapa requer ao menos um checkpoint (prego amarelo).",
 			corrupt_data = "<r>Infelizmente seus dados corromperam e foram reiniciados.",
-			min_players = "<r>Para que dados sejam salvos, ao menos 4 jogadores únicos devem estar na sala. <bl>[%s/%s]",
+			min_players = "<r>Para que dados sejam salvos, ao menos %s / %s jogadores únicos devem estar na sala.",
 			tribe_house = "<r>Para que dados sejam salvos, você precisa jogar fora de um cafofo de tribo.",
 			invalid_syntax = "<r>Sintaxe inválida.",
-			user_not_in_room = "<r>O usuário <n2>%s</n2> não está na sala.",
+			user_not_in_room = "<r>O usuário %s não está na sala.",
 			arg_must_be_id = "<r>O argumento deve ser um ID válido.",
 			cant_update = "<r>Não foi possível atualizar o cargo do jogador. Tente novamente mais tarde.",
-			cant_edit = "<r>Você não pode editar o cargo do jogador <n2>%s</n2>.",
-			invalid_rank = "<r>Cargo inválido: <n2>%s",
-			code_error = "<r>Um erro aconteceu: <bl>%s-%s-%s %s",
+			cant_edit = "<r>Você não pode editar o cargo do jogador %s.",
+			invalid_rank = "<r>Cargo inválido: %s.",
+			code_error = "<r>Um erro aconteceu: %s-%s-%s %s",
 			panic_mode = "<r>Módulo entrando em Modo Pânico.",
 			public_panic = "<r>Espere um momento enquanto um bot entra na sala e reinicia o módulo.",
-			tribe_panic = "<r>Por favor, digite <n2>/module parkour</n2> para reiniciar o módulo.",
+			tribe_panic = "<r>Por favor, digite <d>/module parkour</d> para reiniciar o módulo.",
 			emergency_mode = "<r>Começando desativação de emergência, novos jogadores não serão mais permitidos. Por favor, vá para outra sala #parkour.",
 			bot_requested = "<r>O bot foi requisitado. Ele virá em poucos segundos.",
 			stream_failure = "<r>Erro interno entre canais. Não foi possível transmitir dados.",
-			maps_not_available = "<r>Submodo #parkour 'maps' só está disponível na sala <n2>*#parkour0maps</n2>.",
+			maps_not_available = "<r>Submodo #parkour 'maps' só está disponível na sala <d>*#parkour0maps</d>.",
 			version_mismatch = "<r>Versões do Bot (<d>%s</d>) e lua (<d>%s</d>) não são equivalentes. Não foi possível iniciar o sistema.",
 			missing_bot = "<r>O bot sumiu. Aguarde um minuto ou mencione @Tocu#0018 no discord: <d>%s</d>",
-			invalid_length = "<r>Sua mensagem deve ter algo entre 10 e 100 caracteres. Agora tem <n2>%s</n2> caracteres.",
+			invalid_length = "<r>Sua mensagem deve ter algo entre 10 e 100 caracteres. Agora tem %s caracteres.",
 			invalid_map = "<r>Mapa inválido.",
 			map_does_not_exist = "<r>O mapa não existe ou não pôde ser carregado. Tente novamente mais tarde.",
 			invalid_map_perm = "<r>O mapa não é nem P22, nem P41.",
@@ -6787,27 +6765,27 @@ else
 
 			-- Congratulation messages
 			reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>.",
-			finished = "<d><o>%s</o> terminou o parkour em <vp>%s</vp> segundos, <fc>parabéns!",
-			unlocked_power = "<ce><d>%s</d> desbloqueou o poder <vp>%s</vp>.",
+			finished = "<d>%s terminou o parkour em %s segundos, parabéns!",
+			unlocked_power = "<ce>%s desbloqueou o poder <vp>%s<ce>.",
 			enjoy = "<d>Aproveite suas novas habilidades!",
 
 			-- Information messages
-			paused_events = "<cep><b>[Atenção!]</b> <n>O módulo está atingindo um estado crítico e está sendo pausado.",
-			resumed_events = "<n2>O módulo está se normalizando.",
-			welcome = "<n>Bem-vindo(a) ao <t>#parkour</t>!",
-			discord = "<cs>Tendo alguma boa ideia, report de bug ou apenas querendo conversar com outros jogadores? Entre em nosso servidor no Discord: <pt>%s</pt>",
-			map_submissions = "<pt>Quer ver seu mapa no módulo? Poste-o aqui: <j>%s</j>",
+			paused_events = "<j><b>Atenção!</b> <n>O módulo está atingindo um estado crítico e está sendo pausado.",
+			resumed_events = "<j>O módulo está se normalizando.",
+			welcome = "<d>Bem-vindo(a) ao #parkour!",
+			discord = "<j>Tendo alguma boa ideia, report de bug ou apenas querendo conversar com outros jogadores? Entre em nosso servidor no Discord: <d>%s</d>",
+			map_submissions = "<j>Quer ver seu mapa no módulo? Poste-o aqui: <d>%s</d>",
 			data_saved = "<vp>Dados salvos.",
 			action_within_minute = "<vp>A ação será aplicada dentre um minuto.",
-			rank_save = "<n2>Digite <d>!rank save</d> para salvar as mudanças.",
-			module_update = "<r><b>[Atenção!]</b> <n>O módulo irá atualizar em <d>%02d:%02d</d>.",
-			mapping_loaded = "<j>[INFO] <n>Sistema de mapas <t>(v%s)</t> carregado.",
-			mapper_joined = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> entrou na sala.",
-			mapper_left = "<j>[INFO] <n><ce>%s</ce> <n2>(%s)</n2> saiu da sala.",
-			mapper_loaded = "<j>[INFO] <n><ce>%s</ce> carregou este mapa.",
-			starting_perm_change = "<j>[INFO] <n>Iniciando mudança de categoria...",
-			got_map_info = "<j>[INFO] <n>Todas as informações do mapa foram coletadas. Tentando alterar categoria...",
-			perm_changed = "<j>[INFO] <n>Categoria do mapa <ch>@%s</ch> alterada com sucesso, de <r>P%s</r> para <t>P%s</t>.",
+			rank_save = "<j>Digite <d>!rank save</d> para salvar as mudanças.",
+			module_update = "<j><b>Atenção!</b> O módulo irá atualizar em <d>%02d:%02d</d>.",
+			mapping_loaded = "<j>[INFO] <d>Sistema de mapas (v%s) carregado.",
+			mapper_joined = "<j>[INFO] <d>%s (%s) entrou na sala.",
+			mapper_left = "<j>[INFO] <d>%s (%s) saiu da sala.",
+			mapper_loaded = "<j>[INFO] <d>%s carregou este mapa.",
+			starting_perm_change = "<j>[INFO] <d>Iniciando mudança de categoria...",
+			got_map_info = "<j>[INFO] <d>Todas as informações do mapa foram coletadas. Tentando alterar categoria...",
+			perm_changed = "<j>[INFO] <d>Categoria do mapa @%s alterada com sucesso, de P%s para P%s.",
 			data_migration = "Todos os dados precisam migrar. Isso significa que atualmente você não tem nenhum mapa completado. Para restaurar seus dados, vá até a sala: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 			-- Miscellaneous
@@ -7246,8 +7224,7 @@ else
 				delete_comments = true
 			},
 			mapper = {
-				vote_map = true,
-				change_map = true
+				vote_map = true
 			}
 		}
 		local perms = {}
@@ -7807,7 +7784,7 @@ else
 				player,
 
 				victory[player] and 0xFEFF00 -- has won
-				or ranks.admin[player] and 0xE7342A -- admin
+				or ranks.admin[player] and 0xD7342A -- admin
 				or ranks.manager[player] and 0x843DA4 -- manager
 				or ranks.mod[player] and 0xFFAAAA -- moderator
 				or ranks.mapper[player] and 0x25C059 -- mapper
@@ -8097,7 +8074,6 @@ else
 			translatedChatMessage("map_submissions", player, map_submissions)
 
 			system.bindKeyboard(player, 76, true, true)
-			system.bindKeyboard(player, 46, true, true)
 
 			if levels then
 				if is_tribe then
@@ -8296,19 +8272,12 @@ else
 
 				save_update = os.time() + 60000 * 3 -- 3 minutes
 				translatedChatMessage("action_within_minute", player)
-
-			elseif cmd == "map" then
-				if not perms[player] or not perms[player].change_map then return end
-
-				newMap()
 			end
 		end)
 
 		onEvent("Keyboard", function(player, key)
 			if key == 76 then
 				toggleLeaderboard(player)
-			elseif key == 46 then
-				tfm.exec.killPlayer(player)
 			end
 		end)
 
@@ -8320,8 +8289,6 @@ else
 			system.disableChatCommandDisplay("kill", true)
 			system.disableChatCommandDisplay("rank", true)
 			system.disableChatCommandDisplay("update", true)
-			system.disableChatCommandDisplay("map", true)
-			system.disableChatCommandDisplay("a", true)
 		end)
 		--[[ End of file modes/parkour/interface.lua ]]--
 		--[[ File modes/parkour/init.lua ]]--
