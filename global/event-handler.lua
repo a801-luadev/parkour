@@ -96,7 +96,7 @@ do
 						_paused = false
 
 						webhooks._count = webhooks._count + 1
-						webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` has got resumed."
+						webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` got resumed."
 					end
 				elseif paused then
 					if schedule then
@@ -124,7 +124,7 @@ do
 						translatedChatMessage("paused_events")
 
 						webhooks._count = webhooks._count + 1
-						webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` has got paused."
+						webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` got paused."
 					end
 
 					runtime_check = this_check + 1
