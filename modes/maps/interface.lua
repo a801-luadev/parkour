@@ -17,8 +17,11 @@ local packets = {
 	new_votation  = bit.lshift(11, 8) + 255,
 	perm_map      = bit.lshift(12, 8) + 255,
 
-	migrate_data  = bit.lshift(13, 8) + 255 -- This packet is not related to the map system, but is here so we don't use a lot of resources.
+	migrate_data  = bit.lshift(13, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
+
+	send_webhook  = bit.lshift(14, 8) + 255 -- This packet is not related to the map system, but is here so we don't use a lot of resources.
 }
+local last_update
 local messages_cache = {}
 local system_maps = {_count = 0}
 local forum = {ongoing = {}, archived = {}, by_code = {}}
@@ -358,6 +361,23 @@ onEvent("GameDataLoaded", function(data)
 			changing_perm[code] = false
 		end
 	end
+end)
+
+onEvent("GameDataLoaded", function(data)
+	if loaded_system then
+		if data.webhooks then
+			for index = 1, #data.webhooks do
+				ui.addTextArea(packets.send_webhook, data.webhooks[index], mapper_bot)
+			end
+
+			data.webhooks = {last = os.time()}
+		end
+
+		if last_update and data.update > last_update then
+			ui.addTextArea(packets.send_webhook, "**[UPDATE]** The module is gonna be updated soon.", mapper_bot)
+		end
+	end
+	last_update = data.update
 end)
 
 onEvent("NewPlayer", function(player)

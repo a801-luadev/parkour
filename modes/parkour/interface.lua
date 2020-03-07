@@ -344,7 +344,8 @@ onEvent("GameDataLoaded", function(data)
 				to_respawn[action[2]] = true
 			end
 
-			-- TODO: Send a webhok
+			webhooks._count = webhooks._count + 1
+			webhooks[webhooks._count] = "**[BANS]** __" .. action[3] .. "__ has " .. action[1] .. "ned the player with ID __" .. action[2] .. "__."
 		end
 		ban_actions = {_count = 0}
 
@@ -628,5 +629,4 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("update", true)
 	system.disableChatCommandDisplay("map", true)
 	system.disableChatCommandDisplay("spec", true)
-
 end)

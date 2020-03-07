@@ -1,3 +1,4 @@
+local webhooks = {_count = 0}
 local translatedChatMessage
 
 runtime = 0
@@ -32,7 +33,7 @@ do
 		return true
 	end
 
-	local function emergencyShutdown(limit_players)
+	local function emergencyShutdown(limit_players, keep_webhooks)
 		if limit_players then
 			translatedChatMessage("emergency_mode")
 			tfm.exec.setRoomMaxPlayers(1)
@@ -44,8 +45,13 @@ do
 		tfm.exec.disableAutoShaman(true)
 		tfm.exec.newGame(7685178)
 		tfm.exec.setGameTime(99999)
+
 		for _, event in next, events do
 			event._count = 0
+		end
+
+		if keep_webhooks then
+			-- TODO
 		end
 	end
 
@@ -89,6 +95,9 @@ do
 					if _paused then
 						translatedChatMessage("resumed_events")
 						_paused = false
+
+						webhooks._count = webhooks._count + 1
+						webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` has got resumed."
 					end
 				elseif paused and schedule then
 					scheduled._count = scheduled._count + 1
@@ -101,7 +110,10 @@ do
 					local args = json.encode({a, b, c, d, e})
 					translatedChatMessage("code_error", nil, name, index, args, result)
 
-					return emergencyShutdown(true)
+					webhooks._count = webhooks._count + 1
+					webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` has crashed. <@212634414021214209>: `" .. name .. "`, `" .. index .. "`, `" .. result .. "`"
+
+					return emergencyShutdown(true, true)
 				end
 
 				runtime = runtime + (os_time() - start)
@@ -109,6 +121,9 @@ do
 				if runtime >= runtime_threshold then
 					if not _paused then
 						translatedChatMessage("paused_events")
+
+						webhooks._count = webhooks._count + 1
+						webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` has got paused."
 					end
 
 					runtime_check = this_check + 1

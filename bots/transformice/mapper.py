@@ -20,6 +20,8 @@ PERM_MAP      = (12 << 8) + 255
 
 MIGRATE_DATA  = (13 << 8) + 255 # This packet is not related to the map system, but is here so we don't use a lot of resources.
 
+SEND_WEBHOOK  = (14 << 8) + 255 # This packet is not related to the map system, but is here so we don't use a lot of resources.
+
 class Client(aiotfm.Client):
 	version = b"1.0.0-beta"
 	pool = None
@@ -412,3 +414,6 @@ class Client(aiotfm.Client):
 			# 			await cursor.execute("INSERT INTO `migrated` VALUES (%s)", (text.decode(),))
 
 			self.drawbattle.dispatch("migrating_data", text)
+
+		elif txt_id == SEND_WEBHOOK:
+			self.discord.dispatch("transformice_logs", text.decode())

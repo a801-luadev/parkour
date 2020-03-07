@@ -62,7 +62,36 @@ onEvent("GameDataLoaded", function(data)
 				added = rank
 			end
 
-			-- TODO: Send a webhook
+			if added > 0 then
+				local new
+				for rank, id in next, ranks_id do
+					if band(id, added) then
+						if new then
+							new = new .. "*, *parkour-" .. rank
+						else
+							new = "parkour-" .. rank
+						end
+					end
+				end
+
+				webhooks._count = webhooks._count + 1
+				webhooks[webhooks._count] = "**[RANKS]** __" .. action[3] .. "__ has got the ranks *" .. new .. "*."
+			end
+			if removed > 0 then
+				local old
+				for rank, id in next, ranks_id do
+					if band(id, removed) then
+						if old then
+							old = old .. "*, *parkour-" .. rank
+						else
+							old = "parkour-" .. rank
+						end
+					end
+				end
+
+				webhooks._count = webhooks._count + 1
+				webhooks[webhooks._count] = "**[RANKS]** __" .. player .. "__ has lost the ranks *" .. old .. "*."
+			end
 
 			if rank == 0 then
 				data.ranks[player] = nil
