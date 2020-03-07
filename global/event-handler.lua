@@ -79,7 +79,6 @@ do
 			local event_fnc
 			event_fnc = function(a, b, c, d, e)
 				local start = os_time()
-				local max_runtime = start + runtime_threshold - runtime
 				local this_check = math_floor(start / 4000)
 				if runtime_check < this_check then
 					runtime_check = this_check
@@ -99,13 +98,15 @@ do
 						webhooks._count = webhooks._count + 1
 						webhooks[webhooks._count] = "**[CODE]** The room `" .. tfm.get.room.name .. "` has got resumed."
 					end
-				elseif paused and schedule then
-					scheduled._count = scheduled._count + 1
-					scheduled[scheduled._count] = {event_fnc, a, b, c, d, e}
+				elseif paused then
+					if schedule then
+						scheduled._count = scheduled._count + 1
+						scheduled[scheduled._count] = {event_fnc, a, b, c, d, e}
+					end
 					return
 				end
 
-				done, result = pcall(caller, max_runtime, a, b, c, d, e)
+				done, result = pcall(caller, start + runtime_threshold - runtime, a, b, c, d, e)
 				if not done then
 					local args = json.encode({a, b, c, d, e})
 					translatedChatMessage("code_error", nil, name, "", args, result)
