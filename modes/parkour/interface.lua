@@ -599,11 +599,11 @@ onEvent("ChatCommand", function(player, msg)
 		if not perms[player] or not perms[player].spectate then return end
 		
 		if not spec_mode[player] then
-			tfm.exec.killPlayer(player)
 			spec_mode[player] = true
+			tfm.exec.killPlayer(player)
 		else
-			tfm.exec.respawnPlayer(player)
 			spec_mode[player] = nil
+			tfm.exec.respawnPlayer(player)
     end
       
 	end
