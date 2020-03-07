@@ -600,6 +600,14 @@ onEvent("ChatCommand", function(player, msg)
 		if not spec_mode[player] then
 			spec_mode[player] = true
 			tfm.exec.killPlayer(player)
+
+			player_count = player_count - 1
+			if victory[player] then
+				victory_count = victory_count - 1
+			elseif player_count == victory_count and not less_time then
+				tfm.exec.setGameTime(20)
+				less_time = true
+			end
 		else
 			spec_mode[player] = nil
 
@@ -609,6 +617,11 @@ onEvent("ChatCommand", function(player, msg)
 
 			tfm.exec.respawnPlayer(player)
 			tfm.exec.movePlayer(player, level.x, level.y)
+
+			player_count = player_count + 1
+			if victory[player] then
+				victory_count = victory_count + 1
+			end
 		end
 	end
 end)
