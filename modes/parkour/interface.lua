@@ -1,4 +1,5 @@
 local room = tfm.get.room
+local kill_cooldown = {}
 local save_update = false
 local update_at = 0
 local ban_actions = {_count = 0}
@@ -404,6 +405,7 @@ onEvent("NewPlayer", function(player)
 	open[player] = {
 		images = {_count = 0}
 	}
+	kill_cooldown[player] = 0
 
 	for _player in next, in_room do
 		setNameColor(_player)
@@ -615,7 +617,11 @@ onEvent("Keyboard", function(player, key)
 	if key == 76 then
 		toggleLeaderboard(player)
 	elseif key == 46 then
-		tfm.exec.killPlayer(player)
+		local now = os.time()
+		if now >= kill_cooldown[player] then
+			tfm.exec.killPlayer(player)
+			kill_cooldown[player] = now + 1000
+		end
 	end
 end)
 
