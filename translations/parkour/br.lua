@@ -101,7 +101,7 @@ translations.br = {
 	write_map = "Escreva o código do mapa abaixo",
 
 	-- Power names
-	ballon = "Balão",
+	balloon = "Balão",
 	masterBallon = "Balão Mestre",
 	bubble = "Bolha",
 	fly = "Voar",

@@ -101,8 +101,8 @@ translations.es = {
 	write_map = "Escribe el código de mapa aquí abajo",
 
 	-- Power names
-	ballon = "Globo",
-	masterBallon = "Globo Maestro",
+	balloon = "Globo",
+	masterBalloon = "Globo Maestro",
 	bubble = "Burbuja",
 	fly = "Volar",
 	snowball = "Bola de nieve",

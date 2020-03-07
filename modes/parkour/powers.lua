@@ -65,7 +65,7 @@ local powers = {
 		cooldown = 10000,
 		image = {url = '16896d0252b.png', x = 35, y = 20},
 
-		qwerty = {key = "B", keyCode = 66},	
+		qwerty = {key = "B", keyCode = 66},
 
 		fnc = function(player, key, down, x, y)
 			if players_file[player].parkour.c < 200 then
@@ -121,7 +121,7 @@ local powers = {
 		end
 	},
 	{
-		name = 'masterBallon',
+		name = 'masterBalloon',
 		maps = 200,
 		cooldown = 10000,
 		image = {url = '168ab7be931.png', x = 15, y = 20},
@@ -142,7 +142,7 @@ local powers = {
 
 		qwerty = {key = "Q", keyCode = 81},
 		azerty = {key = "A", keyCode = 65},
-		
+
 		fnc = function(player, key, down, x, y)
 			despawnableObject(4000, 59, x, y + 12)
 		end

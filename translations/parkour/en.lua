@@ -101,8 +101,8 @@ translations.en = {
 	write_map = "Write the mapcode down here",
 
 	-- Power names
-	ballon = "Balloon",
-	masterBallon = "Master Ballon",
+	balloon = "Balloon",
+	masterBalloon = "Master Ballon",
 	bubble = "Bubble",
 	fly = "Fly",
 	snowball = "Snowball",
