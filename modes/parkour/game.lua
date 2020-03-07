@@ -11,6 +11,7 @@ local bans = {}
 local in_room = {}
 local players_level = {}
 local generated_at = {}
+local spec_mode = {}
 
 local function generatePlayer(player, save_at)
 	players_level[player] = 1
@@ -57,9 +58,11 @@ onEvent("PlayerDied", function(player)
 	if (not levels) or (not players_level[player]) then return end
 
 	local level = levels[ players_level[player] ]
-
-	tfm.exec.respawnPlayer(player)
-	tfm.exec.movePlayer(player, level.x, level.y)
+	
+	if not spec_mode[player] then
+		tfm.exec.respawnPlayer(player)
+		tfm.exec.movePlayer(player, level.x, level.y)
+	end
 end)
 
 onEvent("PlayerWon", function(player, elapsed)
