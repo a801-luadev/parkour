@@ -59,7 +59,7 @@ onEvent("PlayerDied", function(player)
 	if (not levels) or (not players_level[player]) then return end
 
 	local level = levels[ players_level[player] ]
-	
+
 	if not spec_mode[player] then
 		tfm.exec.respawnPlayer(player)
 		tfm.exec.movePlayer(player, level.x, level.y)

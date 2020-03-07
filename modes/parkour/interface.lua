@@ -590,18 +590,23 @@ onEvent("ChatCommand", function(player, msg)
 		if not perms[player] or not perms[player].change_map then return end
 
 		newMap()
-	
+
 	elseif cmd == "spec" then
 		if not perms[player] or not perms[player].spectate then return end
-		
+
 		if not spec_mode[player] then
 			spec_mode[player] = true
 			tfm.exec.killPlayer(player)
 		else
 			spec_mode[player] = nil
+
+			if (not levels) or (not players_level[player]) then return end
+
+			local level = levels[ players_level[player] ]
+
 			tfm.exec.respawnPlayer(player)
-    end
-      
+			tfm.exec.movePlayer(player, level.x, level.y)
+		end
 	end
 end)
 
