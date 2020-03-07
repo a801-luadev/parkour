@@ -24,7 +24,8 @@ local ranks_permissions = {
 	mod = {
 		ban = true,
 		unban = true,
-		delete_comments = true
+		delete_comments = true,
+		spectate = true
 	},
 	mapper = {
 		vote_map = true,

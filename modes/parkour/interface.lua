@@ -381,6 +381,7 @@ end)
 
 onEvent("NewPlayer", function(player)
 	tfm.exec.lowerSyncDelay(player)
+	spec_mode[player] = nil
 	tfm.exec.addImage("16894c35340.png", ":1", 762, 32, player)
 	ui.addTextArea(0, "<a href='event:powers'><font size='50'> </font></a>", player, 762, 32, 36, 32, 0, 0, 0, true)
 
@@ -589,6 +590,18 @@ onEvent("ChatCommand", function(player, msg)
 		if not perms[player] or not perms[player].change_map then return end
 
 		newMap()
+	
+	elseif cmd == "spec" then
+		if not perms[player] or not perms[player].spectate then return end
+		
+		if not spec_mode[player] then
+			spec_mode[player] = true
+			tfm.exec.killPlayer(player)
+		else
+			spec_mode[player] = nil
+			tfm.exec.respawnPlayer(player)
+    end
+      
 	end
 end)
 
@@ -609,5 +622,6 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("rank", true)
 	system.disableChatCommandDisplay("update", true)
 	system.disableChatCommandDisplay("map", true)
-	system.disableChatCommandDisplay("a", true)
+	system.disableChatCommandDisplay("spec", true)
+
 end)
