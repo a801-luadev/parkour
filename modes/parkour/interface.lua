@@ -99,7 +99,7 @@ local function setNameColor(player)
 		player,
 
 		victory[player] and 0xFEFF00 -- has won
-		or ranks.admin[player] and 0xD7342A -- admin
+		or ranks.admin[player] and 0xE7342A -- admin
 		or ranks.manager[player] and 0x843DA4 -- manager
 		or ranks.mod[player] and 0xFFAAAA -- moderator
 		or ranks.mapper[player] and 0x25C059 -- mapper
@@ -590,9 +590,13 @@ onEvent("ChatCommand", function(player, msg)
 		translatedChatMessage("action_within_minute", player)
 			
 	elseif cmd == "map" then
-		if not perms[player] or not perms[player].show_update then return end
 		
 		newMap()
+			
+	elseif cmd == "a" and #args > 0 then
+		if not perms[player] or not perms[player].show_update then return end
+		
+		tfm.exec.chatMessage("<B><font color = '#E7342A'>[#Parkour]</font></B> <N>" .. table.concat(args, ' ', 1) .. "<N>"))
 	end
 end)
 
@@ -613,5 +617,5 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("rank", true)
 	system.disableChatCommandDisplay("update", true)
 	system.disableChatCommandDisplay("map", true)
-
+	system.disableChatCommandDisplay("a", true)
 end)
