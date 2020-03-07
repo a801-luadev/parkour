@@ -75,7 +75,7 @@ onEvent("GameDataLoaded", function(data)
 				end
 
 				webhooks._count = webhooks._count + 1
-				webhooks[webhooks._count] = "**[RANKS]** __" .. action[3] .. "__ has got the ranks *" .. new .. "*."
+				webhooks[webhooks._count] = "**[RANKS]** __" .. player .. "__ has got the ranks *" .. new .. "*."
 			end
 			if removed > 0 then
 				local old
