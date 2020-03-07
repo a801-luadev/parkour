@@ -590,7 +590,7 @@ onEvent("ChatCommand", function(player, msg)
 		translatedChatMessage("action_within_minute", player)
 			
 	elseif cmd == "map" then
-		if not ranks.mapper[player] then return end
+		if not perms[player] or not perms[player].change_map then return end
 
 		newMap()
 	end
