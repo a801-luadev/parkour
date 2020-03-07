@@ -590,13 +590,9 @@ onEvent("ChatCommand", function(player, msg)
 		translatedChatMessage("action_within_minute", player)
 			
 	elseif cmd == "map" then
-		
-		newMap()
-			
-	elseif cmd == "a" and #args > 0 then
 		if not perms[player] or not perms[player].show_update then return end
-		
-		tfm.exec.chatMessage("<B><font color = '#E7342A'>[#Parkour]</font></B> <N>" .. table.concat(args, ' ', 1) .. "<N>"))
+
+		newMap()
 	end
 end)
 
