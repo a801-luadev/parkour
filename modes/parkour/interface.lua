@@ -408,14 +408,10 @@ onEvent("NewPlayer", function(player)
 	end
 end)
 
-onEvent("PlayerWon", function(player, taken)
-	if generated_at[player] then
-		-- If the player joined the room after the map started,
-		-- eventPlayerWon's time is wrong.
-		taken = (os.time() - generated_at[player]) / 1000
-	else
-		taken = taken / 100
-	end
+onEvent("PlayerWon", function(player)
+	-- If the player joined the room after the map started,
+	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
+	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
 	translatedChatMessage("finished", nil, player, taken)
 
@@ -588,7 +584,7 @@ onEvent("ChatCommand", function(player, msg)
 
 		save_update = os.time() + 60000 * 3 -- 3 minutes
 		translatedChatMessage("action_within_minute", player)
-			
+
 	elseif cmd == "map" then
 		if not perms[player] or not perms[player].change_map then return end
 

@@ -4,6 +4,7 @@ local min_save = 4
 local check_position = 6
 local player_count = 0
 local victory_count = 0
+local map_start = 0
 local less_time = false
 local victory = {}
 local room = tfm.get.room
@@ -12,9 +13,9 @@ local in_room = {}
 local players_level = {}
 local generated_at = {}
 
-local function generatePlayer(player, save_at)
+local function generatePlayer(player, when)
 	players_level[player] = 1
-	generated_at[player] = save_at or os.time()
+	generated_at[player] = save_at
 end
 
 onEvent("NewPlayer", function(player)
@@ -34,7 +35,7 @@ onEvent("NewPlayer", function(player)
 				tfm.exec.movePlayer(player, level.x, level.y)
 			end
 		else
-			generatePlayer(player)
+			generatePlayer(player, os.time())
 		end
 		tfm.exec.setPlayerScore(player, players_level[player], false)
 	end
@@ -79,9 +80,10 @@ onEvent("NewGame", function()
 	victory = {}
 	players_level = {}
 	generated_at = {}
+	map_start = os.time()
 
 	for player in next, in_room do
-		generatePlayer(player, os.time())
+		generatePlayer(player, map_start)
 		tfm.exec.setPlayerScore(player, 1, false)
 	end
 end)
