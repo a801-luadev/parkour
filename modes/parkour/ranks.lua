@@ -65,7 +65,7 @@ onEvent("GameDataLoaded", function(data)
 			if added > 0 then
 				local new
 				for rank, id in next, ranks_id do
-					if band(id, added) then
+					if band(id, added) > 0 then
 						if new then
 							new = new .. "*, *parkour-" .. rank
 						else
@@ -80,7 +80,7 @@ onEvent("GameDataLoaded", function(data)
 			if removed > 0 then
 				local old
 				for rank, id in next, ranks_id do
-					if band(id, removed) then
+					if band(id, removed) > 0 then
 						if old then
 							old = old .. "*, *parkour-" .. rank
 						else

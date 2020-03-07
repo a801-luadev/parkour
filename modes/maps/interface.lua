@@ -366,11 +366,11 @@ end)
 onEvent("GameDataLoaded", function(data)
 	if loaded_system then
 		if data.webhooks then
-			for index = 1, #data.webhooks do
+			for index = 2, #data.webhooks do
 				ui.addTextArea(packets.send_webhook, data.webhooks[index], mapper_bot)
 			end
 
-			data.webhooks = {last = os.time()}
+			data.webhooks = {math.floor(os.time())}
 		end
 
 		if last_update and data.update > last_update then
