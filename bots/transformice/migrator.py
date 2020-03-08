@@ -1,5 +1,5 @@
 import aiotfm
-import aiotfmpatch
+import transformice.aiotfmpatch as aiotfmpatch
 import os
 
 PLAYER_DATA = (1 << 8) + 255

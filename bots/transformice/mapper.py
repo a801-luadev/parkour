@@ -1,5 +1,5 @@
 import aiotfm
-import aiotfmpatch
+import transformice.aiotfmpatch as aiotfmpatch
 import aiomysql
 import aiohttp
 import asyncio
