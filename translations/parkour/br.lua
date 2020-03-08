@@ -102,7 +102,7 @@ translations.br = {
 
 	-- Power names
 	balloon = "Balão",
-	masterBallon = "Balão Mestre",
+	masterBalloon = "Balão Mestre",
 	bubble = "Bolha",
 	fly = "Voar",
 	snowball = "Bola de Neve",
