@@ -96,7 +96,7 @@ do
 						_paused = false
 
 						webhooks._count = webhooks._count + 1
-						webhooks[webhooks._count] = "**`[CODE-R]:`** `" .. tfm.get.room.name .. "` is resumed."
+						webhooks[webhooks._count] = "**`[CODE-R]:`** `" .. tfm.get.room.name .. "` is now resumed."
 					end
 				elseif paused then
 					if schedule then
