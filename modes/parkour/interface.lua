@@ -346,7 +346,7 @@ onEvent("GameDataLoaded", function(data)
 			end
 
 			webhooks._count = webhooks._count + 1
-			webhooks[webhooks._count] = "**`[BANS]:`** **" .. action[3] .. "** has " .. action[1] .. "ned a player. (PID: **" .. action[2] .. "**)"
+			webhooks[webhooks._count] = "**`[BANS]:`** **" .. action[3] .. "** has " .. action[1] .. "ned a player. (ID: **" .. action[2] .. "**)"
 		end
 		ban_actions = {_count = 0}
 
