@@ -2,6 +2,9 @@ import transformice
 import discord_bot
 import asyncio
 
+from signal import signal, SIGPIPE, SIG_DFL
+signal(SIGPIPE,SIG_DFL)
+
 if __name__ == '__main__':
 	loop = asyncio.get_event_loop()
 
