@@ -96,7 +96,7 @@ do
 						_paused = false
 
 						webhooks._count = webhooks._count + 1
-						webhooks[webhooks._count] = "**`[CODE-R]:`** `" .. tfm.get.room.name .. "` is now resumed."
+						webhooks[webhooks._count] = "**`[CODE]:`** `" .. tfm.get.room.name .. "` is now resumed."
 					end
 				elseif paused then
 					if schedule then
@@ -112,7 +112,7 @@ do
 					translatedChatMessage("code_error", nil, name, "", args, result)
 
 					webhooks._count = webhooks._count + 1
-					webhooks[webhooks._count] = "**`[CODE-C]:`** `" .. tfm.get.room.name .. "` has crashed. <@212634414021214209>: `" .. name .. "`, `" .. result .. "`"
+					webhooks[webhooks._count] = "**`[CODE]:`** `" .. tfm.get.room.name .. "` has crashed. <@212634414021214209>: `" .. name .. "`, `" .. result .. "`"
 
 					return emergencyShutdown(true, true)
 				end
@@ -124,7 +124,7 @@ do
 						translatedChatMessage("paused_events")
 
 						webhooks._count = webhooks._count + 1
-						webhooks[webhooks._count] = "**`[CODE-P]:`** `" .. tfm.get.room.name .. "` has been paused."
+						webhooks[webhooks._count] = "**`[CODE]:`** `" .. tfm.get.room.name .. "` has been paused."
 					end
 
 					runtime_check = this_check + 1
