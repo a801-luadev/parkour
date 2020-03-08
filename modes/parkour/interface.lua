@@ -346,7 +346,7 @@ onEvent("GameDataLoaded", function(data)
 			end
 
 			webhooks._count = webhooks._count + 1
-			webhooks[webhooks._count] = "**[BANS]** __" .. action[3] .. "__ has " .. action[1] .. "ned the player with ID __" .. action[2] .. "__."
+			webhooks[webhooks._count] = "**`[BANS]:`** **" .. action[3] .. "** has " .. action[1] .. "ned a player. (PID: **" .. action[2] .. "**)"
 		end
 		ban_actions = {_count = 0}
 
@@ -592,7 +592,11 @@ onEvent("ChatCommand", function(player, msg)
 	elseif cmd == "map" then
 		if not perms[player] or not perms[player].change_map then return end
 
-		newMap()
+		if pointer > 0 then
+			tfm.exec.newGame(args[1])
+		else
+			newMap()
+		end
 
 	elseif cmd == "spec" then
 		if not perms[player] or not perms[player].spectate then return end
