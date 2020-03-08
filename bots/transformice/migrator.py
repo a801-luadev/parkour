@@ -1,9 +1,10 @@
 import aiotfm
+import aiotfmpatch
 import os
 
 PLAYER_DATA = (1 << 8) + 255
 
-class Client(aiotfm.Client):
+class Client(aiotfmpatch.Client):
 	async def handle_packet(self, conn, packet):
 		CCC = packet.readCode()
 		if CCC == (29, 20):

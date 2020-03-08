@@ -1,4 +1,5 @@
 import aiotfm
+import aiotfmpatch
 import aiomysql
 import aiohttp
 import asyncio
@@ -22,7 +23,7 @@ MIGRATE_DATA  = (13 << 8) + 255 # This packet is not related to the map system, 
 
 SEND_WEBHOOK  = (14 << 8) + 255 # This packet is not related to the map system, but is here so we don't use a lot of resources.
 
-class Client(aiotfm.Client):
+class Client(aiotfmpatch.Client):
 	version = b"1.0.0-beta"
 	pool = None
 
