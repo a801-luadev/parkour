@@ -20,6 +20,8 @@ class Client(aiotfm.Client):
 			else:
 				self.keys = keys = await get_keys(self.api_tfmid, self.api_token)
 
+			self.main = aiotfm.Connection("main", self, self.loop)
+			self.bulle = None
 			await self.connect()
 			await self.sendHandshake()
 			await self.locale.load()
