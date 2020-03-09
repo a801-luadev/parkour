@@ -11,9 +11,21 @@ local data_migrations = {
 
 		data.modules = nil
 
-		data.parkour.v = "0.1"
-		data.parkour.c = data.parkour.cm
+		data.parkour.v = "0.2" -- version
+		data.parkour.c = data.parkour.cm -- completed maps
+		data.parkour.ckpart = 1 -- particles for checkpoints (1 -> true, 0 -> false)
+		data.parkour.mort = 1 -- /mort hotkey
+		data.parkour.pcool = 1 -- power cooldowns
+		data.parkour.pbut = 1 -- powers button
+
 		data.parkour.cm = nil
+	end,
+	["0.1"] = function(player, data)
+		data.parkour.v = "0.2"
+		data.parkour.ckpart = 1
+		data.parkour.mort = 1
+		data.parkour.pcool = 1
+		data.parkour.pbut = 1
 	end
 }
 
