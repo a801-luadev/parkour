@@ -1,6 +1,7 @@
 local room = tfm.get.room
 local is_tribe = string.sub(room.name, 2, 2) == "\3"
 
+local no_powers = {}
 local facing = {}
 local despawning = {}
 local cooldowns = {}
@@ -242,7 +243,9 @@ onEvent("NewPlayer", function(player)
 	player_keys[player] = keyPowers[keyboard]
 
 	if victory[player] then
-		bindNecessary(player)
+		if not no_powers[player] then
+			bindNecessary(player)
+		end
 	else
 		unbind(player)
 	end
@@ -262,6 +265,7 @@ onEvent("NewGame", function()
 	facing = {}
 	cooldowns = {}
 	despawning = {}
+	no_powers = {}
 
 	for player in next, in_room do
 		unbind(player)

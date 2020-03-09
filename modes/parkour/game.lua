@@ -20,6 +20,7 @@ local function generatePlayer(player, when)
 end
 
 onEvent("NewPlayer", function(player)
+	spec_mode[player] = nil
 	in_room[player] = true
 	player_count = player_count + 1
 
@@ -43,8 +44,11 @@ onEvent("NewPlayer", function(player)
 end)
 
 onEvent("PlayerLeft", function(player)
-	player_count = player_count - 1
 	in_room[player] = nil
+
+	if spec_mode[player] then return end
+
+	player_count = player_count - 1
 
 	if victory[player] then
 		victory_count = victory_count - 1

@@ -383,7 +383,6 @@ end)
 
 onEvent("NewPlayer", function(player)
 	tfm.exec.lowerSyncDelay(player)
-	spec_mode[player] = nil
 	tfm.exec.addImage("16894c35340.png", ":1", 762, 32, player)
 	ui.addTextArea(0, "<a href='event:powers'><font size='50'> </font></a>", player, 762, 32, 36, 32, 0, 0, 0, true)
 
@@ -505,7 +504,7 @@ onEvent("ChatCommand", function(player, msg)
 			return translatedChatMessage("user_not_in_room", player, affected)
 		end
 
-		victory[affected] = false
+		no_powers[affected] = true
 		unbind(affected)
 
 	elseif cmd == "rank" then
