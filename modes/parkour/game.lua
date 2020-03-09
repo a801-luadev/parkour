@@ -104,16 +104,18 @@ onEvent("Loop", function()
 	else
 		local last_level = #levels
 		local level_id, next_level, player
+		local particle = math.random(21, 23)
+		local x, y = math.random(-10, 10), math.random(-10, 10)
+
 		for name in next, in_room do
-			if bans[room.playerList[name].id] then
+			player = room.playerList[name]
+			if bans[player.id] then
 				tfm.exec.killPlayer(name)
 			else
 				level_id = players_level[name] + 1
 				next_level = levels[level_id]
 
 				if next_level then
-					player = room.playerList[name]
-
 					if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_range then
 						players_level[name] = level_id
 						tfm.exec.setPlayerScore(name, level_id, false)
@@ -127,9 +129,9 @@ onEvent("Loop", function()
 						end
 					else
 						tfm.exec.displayParticle(
-							math.random(21, 23),
-							next_level.x + math.random(-10,10),
-							next_level.y + math.random(-10,10),
+							particle,
+							next_level.x + x,
+							next_level.y + y,
 							0, 0, 0, 0,
 							name
 						)
