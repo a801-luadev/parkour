@@ -125,6 +125,7 @@ end
 
 local function removeOptionsMenu(player)
 	if not open[player].options then return end
+	open[player].options = false
 
 	removeWindow(6, player)
 	removeButton(6, player)
