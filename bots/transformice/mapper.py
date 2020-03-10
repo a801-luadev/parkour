@@ -135,13 +135,16 @@ class Client(aiotfmpatch.Client):
 		start = self.loop.time()
 		while self.loop.time() - start < timeout:
 			next_one = self.loop.time() + every
-			author, code, perm = await self.getMapInfo(code, timeout=every)
+			try:
+				author, code, perm = await self.getMapInfo(code, timeout=every)
+			except: # timeout
+				continue
 
 			if perm == expected:
 				return True
 
 			now = self.loop.time()
-			if now > 0:
+			if next_one - now > 0:
 				await asyncio.sleep(next_one - now)
 		return False
 
