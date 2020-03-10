@@ -151,7 +151,7 @@ onEvent("Loop", function()
 							translatedChatMessage("reached_level", name, level_id)
 
 							if ck_particles[name] == false then
-								addCheckpointImage(name, next_level.x, next_level.y)
+								addCheckpointImage(name, levels[level_id + 1].x, levels[level_id + 1].y)
 							end
 						end
 					elseif ck_particles[name] then
