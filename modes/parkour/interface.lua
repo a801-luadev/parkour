@@ -378,6 +378,13 @@ onEvent("TextAreaCallback", function(id, player, callback)
 
 		if t_id == "1" then -- particles for checkpoints
 			players_file[player].parkour.ckpart = state and 1 or 0
+			ck_particles[player] = state
+
+			if state then
+				tfm.exec.removeImage(ck_images[player])
+			else
+				addCheckpointImage(player)
+			end
 
 		elseif t_id == "2" then -- qwerty keyboard
 			players_file[player].parkour.keyboard = state and 1 or 0

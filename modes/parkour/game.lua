@@ -13,10 +13,21 @@ local in_room = {}
 local players_level = {}
 local generated_at = {}
 local spec_mode = {}
+local ck_particles = {}
+local ck_images = {}
 
 local function generatePlayer(player, when)
 	players_level[player] = 1
 	generated_at[player] = save_at
+end
+
+local function addCheckpointImage(player, x, y)
+	if not x then
+		local level = levels[ players_level[player] + 1 ]
+		x, y = level.x, level.y
+	end
+
+	ck_images[player] = tfm.exec.addImage("150da4a0616.png", "?0", x - 20, y - 30, player)
 end
 
 onEvent("NewPlayer", function(player)
@@ -89,15 +100,23 @@ onEvent("NewGame", function()
 	generated_at = {}
 	map_start = os.time()
 
+	local start_x, start_y = levels[2].x, levels[2].y
+
 	for player in next, in_room do
 		generatePlayer(player, map_start)
 		tfm.exec.setPlayerScore(player, 1, false)
+
+		if ck_particles[player] == false then -- if it is nil, the player data has not been loaded yet
+			if ck_images[player] then
+				tfm.exec.removeImage(ck_images[player])
+			end
+			addCheckpointImage(player, start_x, start_y)
+		end
 	end
 end)
 
 onEvent("Loop", function()
 	if not levels then return end
-
 
 	if check_position > 0 then
 		check_position = check_position - 1
@@ -119,6 +138,10 @@ onEvent("Loop", function()
 					if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_range then
 						players_level[name] = level_id
 						tfm.exec.setPlayerScore(name, level_id, false)
+						if ck_particles[name] == false then
+							tfm.exec.removeImage(ck_images[player])
+						end
+
 						if level_id == last_level then
 							tfm.exec.giveCheese(name)
 							tfm.exec.playerVictory(name)
@@ -126,8 +149,12 @@ onEvent("Loop", function()
 							tfm.exec.movePlayer(name, next_level.x, next_level.y)
 						else
 							translatedChatMessage("reached_level", name, level_id)
+
+							if ck_particles[name] == false then
+								addCheckpointImage(player, next_level.x, next_level.y)
+							end
 						end
-					else
+					elseif ck_particles[name] then
 						tfm.exec.displayParticle(
 							particle,
 							next_level.x + x,
@@ -140,6 +167,10 @@ onEvent("Loop", function()
 			end
 		end
 	end
+end)
+
+onEvent("PlayerDataParsed", function(player, data)
+	ck_particles[player] = data.parkour.ckpart == 1
 end)
 
 onEvent("GameStart", function()
