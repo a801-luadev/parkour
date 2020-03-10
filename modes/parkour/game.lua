@@ -100,13 +100,16 @@ onEvent("NewGame", function()
 	generated_at = {}
 	map_start = os.time()
 
-	local start_x, start_y = levels[2].x, levels[2].y
+	local start_x, start_y
+	if levels then
+		start_x, start_y = levels[2].x, levels[2].y
+	end
 
 	for player in next, in_room do
 		generatePlayer(player, map_start)
 		tfm.exec.setPlayerScore(player, 1, false)
 
-		if ck_particles[player] == false then -- if it is nil, the player data has not been loaded yet
+		if levels and ck_particles[player] == false then -- if it is nil, the player data has not been loaded yet
 			if ck_images[player] then
 				tfm.exec.removeImage(ck_images[player])
 			end
