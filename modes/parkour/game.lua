@@ -104,18 +104,20 @@ onEvent("NewGame", function()
 	local start_x, start_y
 	if levels then
 		start_x, start_y = levels[2].x, levels[2].y
+
+		for player, particles in next, ck_particles do
+			if not particles then
+				if ck_images[player] then
+					tfm.exec.removeImage(ck_images[player])
+				end
+				addCheckpointImage(player, start_x, start_y)
+			end
+		end
 	end
 
 	for player in next, in_room do
 		generatePlayer(player, map_start)
 		tfm.exec.setPlayerScore(player, 1, false)
-
-		if levels and ck_particles[player] == false then -- if it is nil, the player data has not been loaded yet
-			if ck_images[player] then
-				tfm.exec.removeImage(ck_images[player])
-			end
-			addCheckpointImage(player, start_x, start_y)
-		end
 	end
 end)
 
