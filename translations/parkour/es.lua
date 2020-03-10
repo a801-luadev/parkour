@@ -45,6 +45,7 @@ translations.es = {
 	enjoy = "<d>¡Disfruta tus nuevas habilidades!",
 
 	-- Information messages
+	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar partículas para los checkpoints\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b>\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes",
 	paused_events = "<cep><b>[¡Advertencia!]</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
 	resumed_events = "<n2>El módulo ha sido reanudado.",
 	welcome = "<n>¡Bienvenido a <t>#parkour</t>!",

@@ -64,6 +64,7 @@ translations.en = {
 	data_migration = "All the data needs to be migrated. This means, you currently don't have any completed maps. To restore your data, just go to room: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 
 	-- Miscellaneous
+	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse particles for checkpoints\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b>\n\nShow your power cooldowns\n\nShow powers button",
 	important = "IMPORTANT",
 	unknown = "Unknown",
 	powers = "Powers",

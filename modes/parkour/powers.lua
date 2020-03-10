@@ -196,7 +196,10 @@ local function bindNecessary(player)
 end
 
 local function unbind(player)
-	for key, power in next, player_keys[player] do
+	local keys = player_keys[player]
+	if not keys then return end
+
+	for key, power in next, keys do
 		if type(key) == "number" then
 			system.bindKeyboard(player, key, true, false)
 		end
@@ -238,8 +241,10 @@ end)
 onEvent("NewPlayer", function(player)
 	system.bindKeyboard(player, 0, true, true)
 	system.bindKeyboard(player, 2, true, true)
+end)
 
-	local keyboard = room.playerList[player].community == "fr" and "azerty" or "qwerty"
+onEvent("PlayerDataParsed", function(player, data)
+	local keyboard = data.parkour.keyboard == 1 and "qwerty" or "azerty"
 	player_keys[player] = keyPowers[keyboard]
 
 	if victory[player] then

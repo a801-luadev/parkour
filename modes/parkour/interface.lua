@@ -4,6 +4,14 @@ local save_update = false
 local update_at = 0
 local ban_actions = {_count = 0}
 local open = {}
+local powers_img = {}
+local toggle_positions = {
+	[1] = 107,
+	[2] = 132,
+	[3] = 157,
+	[4] = 183,
+	[5] = 209
+}
 local community_images = {
 	xx = "1651b327097.png",
 	ar = "1651b32290a.png",
@@ -75,6 +83,37 @@ local function removeWindow(id, player)
 	for i = 1000 + id * 8, 1000 + id * 8 + 7 do
 		ui.removeTextArea(i, player)
 	end
+end
+
+local function addToggle(id, player, state)
+	local x, y = 603, toggle_positions[id]
+	local _id = id
+	id = 6000 + id * 3
+
+	ui.addTextArea(id, "", player, x, y, 20, 7, 0x232a35, 0x232a35, 1, true)
+	if not state then
+		ui.addTextArea(id + 1, "", player, x + 3, y + 3, 1, 1, 0x78462b, 0x78462b, 1, true)
+	else
+		ui.addTextArea(id + 1, "", player, x + 16, y + 3, 1, 1, 0xbeb17d, 0xbeb17d, 1, true)
+	end
+	ui.addTextArea(id + 2, "<a href='event:toggle:" .. _id .. ":" .. (state and "0" or "1") .. "'>\n\n\n", player, x - 7, y - 7, 30, 20, 1, 1, 0, true)
+end
+
+local function removeToggle(id, player)
+	for i = 6000 + id * 3, 6000 + id * 3 + 2 do
+		ui.removeTextArea(i, player)
+	end
+end
+
+local function showOptionsMenu(player)
+	addWindow(6, translatedMessage("options", player), player, 168, 46, 365, 260)
+	addButton(6, "Close", "close_options", player, 185, 346, 426, 20, false)
+
+	addToggle(1, player, players_file[player].parkour.ckpart == 1) -- particles for checkpoints
+	addToggle(2, player, players_file[player].parkour.keyboard == 1) -- qwerty keyboard
+	addToggle(3, player, players_file[player].parkour.mort == 1) -- M hotkey
+	addToggle(4, player, players_file[player].parkour.pcool == 1) -- power cooldowns
+	addToggle(5, player, players_file[player].parkour.pbut == 1) -- powers button
 end
 
 function showMigrationPopup(player)
@@ -291,6 +330,16 @@ local function toggleLeaderboard(player)
 	end
 end
 
+local function showPowersButton(player)
+	powers_img[player] = tfm.exec.addImage("16894c35340.png", ":1", 762, 32, player)
+	ui.addTextArea(0, "<a href='event:powers'><font size='50'> </font></a>", player, 762, 32, 36, 32, 0, 0, 0, true)
+end
+
+local function removePowersButton(player)
+	tfm.exec.removeImage(powers_img[player])
+	ui.removeTextArea(0, player)
+end
+
 onEvent("TextAreaCallback", function(id, player, callback)
 	if callback == "powers" then
 		if open[player].powers then
@@ -313,6 +362,52 @@ onEvent("TextAreaCallback", function(id, player, callback)
 	elseif callback == "close_migration" then
 		removeButton(5, player)
 		removeWindow(5, player)
+	elseif callback == "close_options" then
+		removeWindow(6, player)
+		removeButton(6, player)
+
+		for toggle = 1, 5 do
+			removeToggle(toggle, player)
+		end
+
+		savePlayerData(player)
+	elseif string.sub(callback, 1, 7) == "toggle:" then
+		local t_id, state = string.match(callback, "^toggle:(%d+):([01])$")
+		if not t_id then return end
+		state = state == "1"
+
+		if t_id == "1" then -- particles for checkpoints
+			players_file[player].parkour.ckpart = state and 1 or 0
+
+		elseif t_id == "2" then -- qwerty keyboard
+			players_file[player].parkour.keyboard = state and 1 or 0
+
+			if victory[player] then
+				unbind(player)
+			end
+			player_keys[player] = state and keyPowers.qwerty or keyPowers.azerty
+			if victory[player] and not no_powers[player] then
+				bindNecessary(player)
+			end
+
+		elseif t_id == "3" then -- M hotkey
+			players_file[player].parkour.mort = state and 1 or 0
+
+			system.bindKeyboard(player, 77, true, state)
+		elseif t_id == "4" then -- power cooldowns
+			players_file[player].parkour.pcool = state and 1 or 0
+
+		elseif t_id == "5" then -- powers button
+			players_file[player].parkour.pbut = state and 1 or 0
+
+			if state then
+				showPowersButton(player)
+			else
+				removePowersButton(player)
+			end
+		end
+
+		addToggle(tonumber(t_id), player, state)
 	end
 end)
 
@@ -383,15 +478,12 @@ end)
 
 onEvent("NewPlayer", function(player)
 	tfm.exec.lowerSyncDelay(player)
-	tfm.exec.addImage("16894c35340.png", ":1", 762, 32, player)
-	ui.addTextArea(0, "<a href='event:powers'><font size='50'> </font></a>", player, 762, 32, 36, 32, 0, 0, 0, true)
 
 	translatedChatMessage("welcome", player)
 	translatedChatMessage("discord", player, discord_link)
 	translatedChatMessage("map_submissions", player, map_submissions)
 
 	system.bindKeyboard(player, 76, true, true)
-	system.bindKeyboard(player, 77, true, true)
 
 	if levels then
 		if is_tribe then
@@ -408,6 +500,14 @@ onEvent("NewPlayer", function(player)
 
 	for _player in next, in_room do
 		setNameColor(_player)
+	end
+end)
+
+onEvent("PlayerDataParsed", function(player, data)
+	if data.parkour.mort == 1 then
+		system.bindKeyboard(player, 77, true, true)
+	elseif data.parkour.pbut == 1 then
+		showPowersButton(player)
 	end
 end)
 
