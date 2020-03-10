@@ -27,7 +27,7 @@ local function addCheckpointImage(player, x, y)
 		x, y = level.x, level.y
 	end
 
-	ck_images[player] = tfm.exec.addImage("150da4a0616.png", "?0", x - 20, y - 30, player)
+	ck_images[player] = tfm.exec.addImage("150da4a0616.png", "_0", x - 20, y - 30, player)
 end
 
 onEvent("NewPlayer", function(player)
