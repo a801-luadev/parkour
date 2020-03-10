@@ -106,6 +106,13 @@ local function removeToggle(id, player)
 end
 
 local function showOptionsMenu(player)
+	if open[player].leaderboard then
+		closeLeaderboard(player)
+	elseif open[player].powers then
+		closePowers(player)
+	end
+	open[player].options = true
+
 	addWindow(6, translatedMessage("options", player), player, 168, 46, 365, 260)
 	addButton(6, "Close", "close_options", player, 185, 346, 426, 20, false)
 
@@ -114,6 +121,19 @@ local function showOptionsMenu(player)
 	addToggle(3, player, players_file[player].parkour.mort == 1) -- M hotkey
 	addToggle(4, player, players_file[player].parkour.pcool == 1) -- power cooldowns
 	addToggle(5, player, players_file[player].parkour.pbut == 1) -- powers button
+end
+
+local function removeOptionsMenu(player)
+	if not open[player].options then return end
+
+	removeWindow(6, player)
+	removeButton(6, player)
+
+	for toggle = 1, 5 do
+		removeToggle(toggle, player)
+	end
+
+	savePlayerData(player)
 end
 
 function showMigrationPopup(player)
@@ -192,6 +212,8 @@ end
 local function showLeaderboard(player, page)
 	if open[player].powers then
 		closePowers(player)
+	elseif open[player].options then
+		removeOptionsMenu(player)
 	end
 	open[player].leaderboard = true
 
@@ -264,6 +286,8 @@ end
 local function showPowers(player, page)
 	if open[player].leaderboard then
 		closeLeaderboard(player)
+	elseif open[player].options then
+		removeOptionsMenu(player)
 	end
 	open[player].powers = true
 
@@ -363,14 +387,7 @@ onEvent("TextAreaCallback", function(id, player, callback)
 		removeButton(5, player)
 		removeWindow(5, player)
 	elseif callback == "close_options" then
-		removeWindow(6, player)
-		removeButton(6, player)
-
-		for toggle = 1, 5 do
-			removeToggle(toggle, player)
-		end
-
-		savePlayerData(player)
+		removeOptionsMenu(player)
 	elseif string.sub(callback, 1, 7) == "toggle:" then
 		local t_id, state = string.match(callback, "^toggle:(%d+):([01])$")
 		if not t_id then return end
@@ -751,7 +768,11 @@ onEvent("Keyboard", function(player, key)
 			kill_cooldown[player] = now + 1000
 		end
 	elseif key == 79 then
-		showOptionsMenu(player)
+		if open[player].options then
+			removeOptionsMenu(player)
+		else
+			showOptionsMenu(player)
+		end
 	end
 end)
 
