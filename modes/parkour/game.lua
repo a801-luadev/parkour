@@ -1,4 +1,4 @@
-local checkpoint_range = 450 -- radius of 20px
+local checkpoint_range = 15 ^ 2 -- radius of 15px
 local min_save = 4
 
 local check_position = 6
