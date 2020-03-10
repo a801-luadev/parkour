@@ -105,70 +105,6 @@ local function removeToggle(id, player)
 	end
 end
 
-local function showOptionsMenu(player)
-	if open[player].leaderboard then
-		closeLeaderboard(player)
-	elseif open[player].powers then
-		closePowers(player)
-	end
-	open[player].options = true
-
-	addWindow(6, translatedMessage("options", player), player, 168, 46, 365, 260)
-	addButton(6, "Close", "close_options", player, 185, 346, 426, 20, false)
-
-	addToggle(1, player, players_file[player].parkour.ckpart == 1) -- particles for checkpoints
-	addToggle(2, player, players_file[player].parkour.keyboard == 1) -- qwerty keyboard
-	addToggle(3, player, players_file[player].parkour.mort == 1) -- M hotkey
-	addToggle(4, player, players_file[player].parkour.pcool == 1) -- power cooldowns
-	addToggle(5, player, players_file[player].parkour.pbut == 1) -- powers button
-end
-
-local function removeOptionsMenu(player)
-	if not open[player].options then return end
-	open[player].options = false
-
-	removeWindow(6, player)
-	removeButton(6, player)
-
-	for toggle = 1, 5 do
-		removeToggle(toggle, player)
-	end
-
-	savePlayerData(player)
-end
-
-function showMigrationPopup(player)
-	addWindow(
-		5,
-		"<p align='center'><font size='20'><vp><b>" .. translatedMessage("important", player) .. "</b></vp>\n\n" .. translatedMessage("data_migration", player),
-		player, 168, 46, 365, 260
-	)
-	addButton(5, "Close", "close_migration", player, 185, 346, 426, 20, false)
-end
-
-local function capitalize(str)
-	local first = string.sub(str, 1, 1)
-	if first == "+" then
-		return "+" .. string.upper(string.sub(str, 2, 2)) .. string.lower(string.sub(str, 3))
-	else
-		return string.upper(first) .. string.lower(string.sub(str, 2))
-	end
-end
-
-local function setNameColor(player)
-	tfm.exec.setNameColor(
-		player,
-
-		victory[player] and 0xFEFF00 -- has won
-		or ranks.admin[player] and 0xE7342A -- admin
-		or ranks.manager[player] and 0x843DA4 -- manager
-		or ranks.mod[player] and 0xFFAAAA -- moderator
-		or ranks.mapper[player] and 0x25C059 -- mapper
-		or (room.xmlMapInfo and player == room.xmlMapInfo.author) and 0x10FFF3 -- author of the map
-		or 0x148DE6 -- default
-	)
-end
-
 local function closeLeaderboard(player)
 	if not open[player].leaderboard then return end
 
@@ -208,6 +144,71 @@ local function closePowers(player)
 	end
 
 	open[player].powers = false
+end
+
+local function removeOptionsMenu(player)
+	if not open[player].options then return end
+
+	removeWindow(6, player)
+	removeButton(6, player)
+
+	for toggle = 1, 5 do
+		removeToggle(toggle, player)
+	end
+
+	savePlayerData(player)
+
+	open[player].options = nil
+end
+
+local function showOptionsMenu(player)
+	if open[player].leaderboard then
+		closeLeaderboard(player)
+	elseif open[player].powers then
+		closePowers(player)
+	end
+	open[player].options = true
+
+	addWindow(6, translatedMessage("options", player), player, 168, 46, 365, 260)
+	addButton(6, "Close", "close_options", player, 185, 346, 426, 20, false)
+
+	addToggle(1, player, players_file[player].parkour.ckpart == 1) -- particles for checkpoints
+	addToggle(2, player, players_file[player].parkour.keyboard == 1) -- qwerty keyboard
+	addToggle(3, player, players_file[player].parkour.mort == 1) -- M hotkey
+	addToggle(4, player, players_file[player].parkour.pcool == 1) -- power cooldowns
+	addToggle(5, player, players_file[player].parkour.pbut == 1) -- powers button
+end
+
+function showMigrationPopup(player)
+	addWindow(
+		5,
+		"<p align='center'><font size='20'><vp><b>" .. translatedMessage("important", player) .. "</b></vp>\n\n" .. translatedMessage("data_migration", player),
+		player, 168, 46, 365, 260
+	)
+	addButton(5, "Close", "close_migration", player, 185, 346, 426, 20, false)
+end
+
+local function capitalize(str)
+	local first = string.sub(str, 1, 1)
+	if first == "+" then
+		return "+" .. string.upper(string.sub(str, 2, 2)) .. string.lower(string.sub(str, 3))
+	else
+		return string.upper(first) .. string.lower(string.sub(str, 2))
+	end
+end
+
+local function setNameColor(player)
+	tfm.exec.setNameColor(
+		player,
+
+		victory[player] and 0xFEFF00 -- has won
+		or ranks.admin[player] and 0xE7342A -- admin
+		or ranks.manager[player] and 0x843DA4 -- manager
+		or ranks.mod[player] and 0xFFAAAA -- moderator
+		or ranks.mapper[player] and 0x25C059 -- mapper
+		or (room.xmlMapInfo and player == room.xmlMapInfo.author) and 0x10FFF3 -- author of the map
+		or 0x148DE6 -- default
+	)
 end
 
 local function showLeaderboard(player, page)
