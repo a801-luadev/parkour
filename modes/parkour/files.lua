@@ -1,6 +1,7 @@
 local next_file_load = os.time() + 61000
 local file_id = 0
 local players_file = {}
+local room = tfm.get.room
 
 local showMigrationPopup
 
@@ -17,6 +18,7 @@ local data_migrations = {
 		data.parkour.mort = 1 -- /mort hotkey
 		data.parkour.pcool = 1 -- power cooldowns
 		data.parkour.pbut = 1 -- powers button
+		data.parkour.keyboard = room.playerList[player].community == "fr" and 0 or 1 -- 1 -> qwerty, 0 -> false
 
 		data.parkour.cm = nil
 	end,
@@ -26,6 +28,7 @@ local data_migrations = {
 		data.parkour.mort = 1
 		data.parkour.pcool = 1
 		data.parkour.pbut = 1
+		data.parkour.keyboard = room.playerList[player].community == "fr" and 0 or 1
 	end
 }
 
@@ -79,6 +82,8 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if corrupt then
 		savePlayerData(player)
 	end
+
+	eventPlayerDataParsed(player, data)
 end)
 
 onEvent("SavingFile", function(id, data)
