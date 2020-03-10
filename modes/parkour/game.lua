@@ -139,7 +139,7 @@ onEvent("Loop", function()
 						players_level[name] = level_id
 						tfm.exec.setPlayerScore(name, level_id, false)
 						if ck_particles[name] == false then
-							tfm.exec.removeImage(ck_images[player])
+							tfm.exec.removeImage(ck_images[name])
 						end
 
 						if level_id == last_level then
@@ -151,7 +151,7 @@ onEvent("Loop", function()
 							translatedChatMessage("reached_level", name, level_id)
 
 							if ck_particles[name] == false then
-								addCheckpointImage(player, next_level.x, next_level.y)
+								addCheckpointImage(name, next_level.x, next_level.y)
 							end
 						end
 					elseif ck_particles[name] then
