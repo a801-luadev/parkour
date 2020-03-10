@@ -513,7 +513,8 @@ end)
 onEvent("PlayerDataParsed", function(player, data)
 	if data.parkour.mort == 1 then
 		system.bindKeyboard(player, 77, true, true)
-	elseif data.parkour.pbut == 1 then
+	end
+	if data.parkour.pbut == 1 then
 		showPowersButton(player)
 	end
 end)
