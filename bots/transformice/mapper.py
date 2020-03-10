@@ -67,10 +67,23 @@ class Client(aiotfmpatch.Client):
 
 	async def on_login_ready(self, *args):
 		print("[MAPPER] Connected. Logging in...")
-		await self.login("Tocutoeltuco#2629", os.getenv("MAPPER_PASSWORD"), encrypted=False, room="*#parkour0maps")
+		await self.login("Tocutoeltuco#5522", os.getenv("MAPPER_PASSWORD"), encrypted=False, room="*#parkour0maps")
 
 	async def on_logged(self, *args):
 		print("[MAPPER] Logged in!")
+
+	async def on_update_ready(self, link, msg):
+		async with aiohttp.ClientSession() as session:
+			async with session.get(link) as resp:
+				await self.loadLua(await resp.read())
+
+		await asyncio.sleep(10.0)
+		await self.sendRoomMessage("!update " + msg)
+		await asyncio.sleep(3.0 * 60.0)
+		await self.sendCommand(os.getenv("UPDATE_CMD"))
+
+	async def on_lua_log(self, msg):
+		self.discord.dispatch("lua_log", msg)
 
 	async def sendLuaCallback(self, txt_id, text):
 		packet = aiotfm.Packet.new(29, 21)

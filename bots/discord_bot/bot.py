@@ -18,6 +18,28 @@ class Client(discord.Client):
 		channel = self.get_channel(self.game_logs_channel)
 		await channel.send(msg)
 
+	async def on_message(self, msg):
+		if msg.channel.id == 686932761222578201:
+			if msg.author.id == 212634414021214209:
+				args = msg.content.split(" ")
+				cmd = args.pop(0).lower()
+
+				if cmd == "!update":
+					link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/builds/latest.lua"
+
+					if len(args) > 0:
+						if args[0].startswith("http"):
+							link = args.pop(0)
+
+					msg = " ".join(args)
+
+					await msg.channel.send("Uploading script from " + link + " - Message: `" + msg + "`")
+					self.mapper.dispatch("update_ready", link, msg)
+
+	async def on_lua_log(self, msg):
+		channel = self.get_channel(686933785933381680)
+		await channel.send(msg)
+
 	async def get_reaction_role(self, payload):
 		if payload.channel_id != self.role_reaction_channel:
 			return None, None
