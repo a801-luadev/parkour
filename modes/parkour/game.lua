@@ -24,6 +24,7 @@ end
 local function addCheckpointImage(player, x, y)
 	if not x then
 		local level = levels[ players_level[player] + 1 ]
+		if not level then return end
 		x, y = level.x, level.y
 	end
 
