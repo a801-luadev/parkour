@@ -491,6 +491,7 @@ onEvent("NewPlayer", function(player)
 	translatedChatMessage("map_submissions", player, map_submissions)
 
 	system.bindKeyboard(player, 76, true, true)
+	system.bindKeyboard(player, 79, true, true)
 
 	if levels then
 		if is_tribe then
@@ -734,6 +735,9 @@ onEvent("ChatCommand", function(player, msg)
 				victory_count = victory_count + 1
 			end
 		end
+
+	elseif cmd == "op" then
+		showOptionsMenu(player)
 	end
 end)
 
@@ -746,6 +750,8 @@ onEvent("Keyboard", function(player, key)
 			tfm.exec.killPlayer(player)
 			kill_cooldown[player] = now + 1000
 		end
+	elseif key == 79 then
+		showOptionsMenu(player)
 	end
 end)
 
@@ -759,4 +765,5 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("update", true)
 	system.disableChatCommandDisplay("map", true)
 	system.disableChatCommandDisplay("spec", true)
+	system.disableChatCommandDisplay("op", true)
 end)
