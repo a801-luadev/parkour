@@ -110,6 +110,7 @@ do
 				if not done then
 					local args = json.encode({a, b, c, d, e})
 					translatedChatMessage("code_error", nil, name, "", args, result)
+					tfm.exec.chatMessage(result)
 
 					webhooks._count = webhooks._count + 1
 					webhooks[webhooks._count] = "**`[CODE]:`** `" .. tfm.get.room.name .. "` has crashed. <@212634414021214209>: `" .. name .. "`, `" .. result .. "`"
