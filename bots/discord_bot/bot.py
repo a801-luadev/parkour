@@ -31,10 +31,10 @@ class Client(discord.Client):
 						if args[0].startswith("http"):
 							link = args.pop(0)
 
-					msg = " ".join(args)
+					update_msg = " ".join(args)
 
-					await msg.channel.send("Uploading script from " + link + " - Message: `" + msg + "`")
-					self.mapper.dispatch("update_ready", link, msg)
+					await msg.channel.send("Uploading script from " + link + " - Message: `" + update_msg + "`")
+					self.mapper.dispatch("update_ready", link, update_msg)
 
 	async def on_lua_log(self, msg):
 		channel = self.get_channel(686933785933381680)
