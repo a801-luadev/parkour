@@ -416,10 +416,10 @@ onEvent("TextAreaCallback", function(id, player, callback)
 				bindNecessary(player)
 			end
 
-		elseif t_id == "3" then -- M hotkey
+		elseif t_id == "3" then -- M or DEL hotkey
 			players_file[player].parkour.mort = state and 1 or 0
 
-			system.bindKeyboard(player, 77, true, state)
+			system.bindKeyboard(player, state and 77 or 46, true, true)
 		elseif t_id == "4" then -- power cooldowns
 			players_file[player].parkour.pcool = state and 1 or 0
 
@@ -531,8 +531,9 @@ onEvent("NewPlayer", function(player)
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	if data.parkour.mort == 1 then
-		system.bindKeyboard(player, 77, true, true)
+	if data.parkour.mort then
+		system.bindKeyboard(player, data.parkour.mort == 1 and 77 or data.parkour.mort == 0 and 46, true, true)
+	end
 	end
 	if data.parkour.pbut == 1 then
 		showPowersButton(player)
@@ -763,7 +764,7 @@ end)
 onEvent("Keyboard", function(player, key)
 	if key == 76 then
 		toggleLeaderboard(player)
-	elseif key == 77 then
+	elseif key == 77 or 46 then -- M or DEL should trigger mort
 		local now = os.time()
 		if now >= kill_cooldown[player] then
 			tfm.exec.killPlayer(player)
