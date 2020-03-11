@@ -174,7 +174,7 @@ local function showOptionsMenu(player)
 
 	addToggle(1, player, players_file[player].parkour.ckpart == 1) -- particles for checkpoints
 	addToggle(2, player, players_file[player].parkour.keyboard == 1) -- qwerty keyboard
-	addToggle(3, player, players_file[player].parkour.mort == 1) -- M hotkey
+	addToggle(3, player, players_file[player].parkour.mort == 1) -- M or DEL hotkey
 	addToggle(4, player, players_file[player].parkour.pcool == 1) -- power cooldowns
 	addToggle(5, player, players_file[player].parkour.pbut == 1) -- powers button
 end
