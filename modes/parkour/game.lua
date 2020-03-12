@@ -36,6 +36,11 @@ onEvent("NewPlayer", function(player)
 	in_room[player] = true
 	player_count = player_count + 1
 
+	if player_count > 12 then
+		tfm.exec.disablePhysicalConsumables(true)
+		tfm.exec.setRoomMaxPlayers(12)
+	end
+
 	if levels then
 		tfm.exec.respawnPlayer(player)
 
