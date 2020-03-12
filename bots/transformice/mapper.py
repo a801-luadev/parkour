@@ -412,6 +412,11 @@ class Client(aiotfmpatch.Client):
 										await cursor.execute("UPDATE discussions SET permed=0 WHERE code=%s", (code,))
 
 									await self.sendLuaCallback(PERM_MAP, player + "," + _perm + ",0,1," + code + "," + author)
+									self.discord.dispatch(
+										"`[MAPS]` The map `@{}` has been {}permed (**P{}**) by __{}__.".format(
+											code, "" if perm else "de", "41" if perm else "22", player
+										)
+									)
 
 		elif txt_id == MIGRATE_DATA:
 			# if self.pool is not None:

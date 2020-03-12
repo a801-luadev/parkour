@@ -40,6 +40,10 @@ class Client(discord.Client):
 		channel = self.get_channel(686933785933381680)
 		await channel.send(msg)
 
+	async def on_map_perm(self, msg):
+		channel = self.get_channel(687804716364857401)
+		await channel.send(msg)
+
 	async def get_reaction_role(self, payload):
 		if payload.channel_id != self.role_reaction_channel:
 			return None, None
