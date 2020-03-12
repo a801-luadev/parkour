@@ -13,7 +13,7 @@ local function newMap()
 	local map
 	repeat
 		map = maps[math.random(1, maps._count)]
-	until not repeated[map]
+	until map and not repeated[map]
 	repeated[map] = true
 	repeated._count = repeated._count + 1
 
