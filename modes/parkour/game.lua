@@ -52,13 +52,6 @@ onEvent("NewPlayer", function(player)
 			generatePlayer(player, os.time())
 		end
 
-		if not ck_particles[player] then
-			local next_level = levels[players_level[player] + 1]
-			if next_level then
-				addCheckpointImage(player, next_level.x, next_level.y)
-			end
-		end
-
 		tfm.exec.setPlayerScore(player, players_level[player], false)
 	end
 end)
@@ -185,6 +178,13 @@ end)
 
 onEvent("PlayerDataParsed", function(player, data)
 	ck_particles[player] = data.parkour.ckpart == 1
+
+	if levels and not ck_particles[player] then
+		local next_level = levels[players_level[player] + 1]
+		if next_level then
+			addCheckpointImage(player, next_level.x, next_level.y)
+		end
+	end
 end)
 
 onEvent("GameStart", function()
