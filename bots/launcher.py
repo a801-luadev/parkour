@@ -1,5 +1,6 @@
 import subprocess
 import signal
+import time
 
 while True:
 	print("Launching bot...")
@@ -23,3 +24,5 @@ while True:
 		except subprocess.TimeoutExpired:
 			print("Can not stop the process with CTRL+C. Killing it.")
 			process.kill()
+
+		time.sleep(3.0)

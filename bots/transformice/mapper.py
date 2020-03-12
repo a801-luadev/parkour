@@ -197,9 +197,6 @@ class Client(aiotfmpatch.Client):
 				async with conn.cursor() as cursor:
 					await cursor.execute("REPLACE INTO user_names VALUES (%s, %s)", (data[0], data[1]))
 
-					if len(data) == 4:
-						return await self.sendLuaCallback(UNREADS, ",".join(data))
-
 					await cursor.execute(
 						"SELECT a.code as code, IFNULL(b.until, 0) as until \
 						FROM \
@@ -211,10 +208,10 @@ class Client(aiotfmpatch.Client):
 					)
 
 					for row in await cursor.fetchall():
-						data.append(code)
+						data.append(row["code"])
 						data.append(row["until"])
 
-					await self.sendLuaCallback(UNREADS, ",".join(packet))
+					await self.sendLuaCallback(UNREADS, ",".join(map(str, packet)))
 
 		elif txt_id == OPEN_VOTATION:
 			data = text.decode().split(",")
