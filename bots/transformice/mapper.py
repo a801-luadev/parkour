@@ -66,11 +66,11 @@ class Client(aiotfmpatch.Client):
 		return await self.wait_for("on_map_info", timeout=timeout)
 
 	async def on_login_ready(self, *args):
-		print("[MAPPER] Connected. Logging in...")
+		print("[MAPPER] Connected. Logging in...", flush=True)
 		await self.login("Tocutoeltuco#5522", os.getenv("MAPPER_PASSWORD"), encrypted=False, room="*#parkour0maps")
 
 	async def on_logged(self, *args):
-		print("[MAPPER] Logged in!")
+		print("[MAPPER] Logged in!", flush=True)
 
 	async def on_update_ready(self, link, msg):
 		async with aiohttp.ClientSession() as session:
@@ -218,7 +218,7 @@ class Client(aiotfmpatch.Client):
 						data.append([code, row["until"]])
 
 					for code in codes:
-						if code not in show:
+						if code not in shown:
 							data.append([code, 0])
 
 					data.sort(key=lambda val: val[1], reverse=True)

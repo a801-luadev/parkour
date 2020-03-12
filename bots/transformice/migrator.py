@@ -14,11 +14,11 @@ class Client(aiotfmpatch.Client):
 		await super().handle_packet(conn, packet)
 
 	async def on_login_ready(self, *args):
-		print("[MIGRATOR] Connected. Logging in...")
+		print("[MIGRATOR] Connected. Logging in...", flush=True)
 		await self.login("Tocutoeltuco#6919", os.getenv("MIGRATOR_PASSWORD"), encrypted=False, room="*#drawbattle0migration")
 
 	async def on_logged(self, *args):
-		print("[MIGRATOR] Logged in!")
+		print("[MIGRATOR] Logged in!", flush=True)
 
 	async def sendLuaCallback(self, txt_id, text):
 		packet = aiotfm.Packet.new(29, 21)

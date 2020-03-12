@@ -5,7 +5,7 @@ class Client(aiotfm.Client):
 	async def restart(self, keys=None):
 		"""Restarts the client.
 		:param keys:"""
-		print("Restarting transformice bot")
+		print("Restarting transformice bot", flush=True)
 
 		self.dispatch("restart")
 

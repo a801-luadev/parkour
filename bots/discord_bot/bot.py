@@ -12,7 +12,7 @@ class Client(discord.Client):
 					emoji = line.split(" ")[0]
 					await message.add_reaction(emoji)
 
-		print("[DISCORD] Ready!")
+		print("[DISCORD] Ready!", flush=True)
 
 	async def on_transformice_logs(self, msg):
 		channel = self.get_channel(self.game_logs_channel)
