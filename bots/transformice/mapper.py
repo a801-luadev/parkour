@@ -209,18 +209,24 @@ class Client(aiotfmpatch.Client):
 						[data[0]] + codes
 					)
 
+					data = []
 					shown = []
 					packet = data[:4]
 					for row in await cursor.fetchall():
 						code = str(row["code"])
 						shown.append(code)
-						packet.append(code)
-						packet.append(str(row["until"]))
+						data.append([code, row["until"]])
 
 					for code in codes:
-						if code not in shown:
-							packet.append(code)
-							packet.append("0")
+						if code not in show:
+							data.append([code, 0])
+
+					data.sort(key=lambda val: val[1], reverse=True)
+					await asyncio.sleep(0)
+
+					for val in data:
+						packet.append(val[0])
+						packet.append(str(val[1]))
 
 					await self.sendLuaCallback(UNREADS, ",".join(packet))
 
