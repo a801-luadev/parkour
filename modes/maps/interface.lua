@@ -107,6 +107,8 @@ end
 local function openVotation(player, code, page)
 	local votation = forum.by_code[code]
 
+	closeSection(player)
+
 	if not votation then
 		if (not perms[player]) or not perms[player].vote_map then
 			return translatedChatMessage("cant_open_votation", player, code)
