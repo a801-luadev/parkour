@@ -10,6 +10,7 @@ while True:
 			if not line:
 				break
 
+			print(line)
 			if "Restarting transformice bot" == line:
 				break
 	except KeyboardInterrupt:
