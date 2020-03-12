@@ -211,7 +211,7 @@ class Client(aiotfmpatch.Client):
 						data.append(row["code"])
 						data.append(row["until"])
 
-					await self.sendLuaCallback(UNREADS, ",".join(map(str, packet)))
+					await self.sendLuaCallback(UNREADS, ",".join(map(str, data)))
 
 		elif txt_id == OPEN_VOTATION:
 			data = text.decode().split(",")
