@@ -51,6 +51,14 @@ onEvent("NewPlayer", function(player)
 		else
 			generatePlayer(player, os.time())
 		end
+
+		if not ck_particles[player] then
+			local next_level = levels[players_level[player] + 1]
+			if next_level then
+				addCheckpointImage(player, next_level.x, next_level.y)
+			end
+		end
+
 		tfm.exec.setPlayerScore(player, players_level[player], false)
 	end
 end)
