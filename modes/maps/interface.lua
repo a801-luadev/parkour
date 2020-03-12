@@ -232,15 +232,10 @@ local function openVotationsMenu(player, page, archived)
 		page = math.max(math.min(page, last_page), 1) - 1
 	end
 
-	local text = room.playerList[player].id .. "," .. player .. "," .. page .. "," .. (archived and "1" or "0")
-	local votation
-	for index = page * 5 + 1, page * 5 + 5 do
-		votation = list[index]
-		if not votation then break end
-		text = text .. "," .. votation.map.code
-	end
-
-	ui.addTextArea(packets.unreads, text, mapper_bot)
+	ui.addTextArea(
+		packets.unreads,
+		room.playerList[player].id .. "," .. player .. "," .. (page * 5) .. ",5," .. (archived and "1" or "0")
+	)
 
 	local pagination_fnc = type(menu_part[player]) == "number" and updatePagination or setPagination
 	pagination_fnc(player, page + 1)

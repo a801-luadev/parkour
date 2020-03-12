@@ -200,33 +200,19 @@ class Client(aiotfmpatch.Client):
 					if len(data) == 4:
 						return await self.sendLuaCallback(UNREADS, ",".join(data))
 
-					codes = data[4:]
-					placeholders = "(" + (", ".join(["%s"] * (len(data) - 4))) + ")"
 					await cursor.execute(
-						"SELECT code, until \
-						FROM user_read \
-						WHERE user = %s AND code IN " + placeholders,
-						[data[0]] + codes
+						"SELECT a.code as code, IFNULL(b.until, 0) as until \
+						FROM \
+							discussions as a \
+							LEFT JOIN user_read as b ON user=%s AND b.code=a.code \
+						ORDER BY b.until DESC \
+						LIMIT %s,%s",
+						(data[0], int(data[2]), int(data.pop(3)))
 					)
 
-					data = []
-					shown = []
-					packet = data[:4]
 					for row in await cursor.fetchall():
-						code = str(row["code"])
-						shown.append(code)
-						data.append([code, row["until"]])
-
-					for code in codes:
-						if code not in shown:
-							data.append([code, 0])
-
-					data.sort(key=lambda val: val[1], reverse=True)
-					await asyncio.sleep(0)
-
-					for val in data:
-						packet.append(val[0])
-						packet.append(str(val[1]))
+						data.append(code)
+						data.append(row["until"])
 
 					await self.sendLuaCallback(UNREADS, ",".join(packet))
 
