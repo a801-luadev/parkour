@@ -1,8 +1,10 @@
 import discord
+import asyncio
 
 class Client(discord.Client):
 	role_reaction_channel = 683847523558883446
 	game_logs_channel = 681571711849594897
+	started = False
 
 	async def on_ready(self):
 		channel = self.get_channel(self.role_reaction_channel)
@@ -13,6 +15,15 @@ class Client(discord.Client):
 					await message.add_reaction(emoji)
 
 		print("[DISCORD] Ready!", flush=True)
+		if not self.started:
+			self.started = True
+			asyncio.ensure_future(self.restart(), loop=self.loop)
+
+	async def restart(self):
+		channel = self.get_channel(686932761222578201)
+		await channel.send("Restarting in an hour.")
+		await asyncio.sleep(3600.0)
+		print("Restarting transformice bot", flush=True)
 
 	async def on_transformice_logs(self, msg):
 		channel = self.get_channel(self.game_logs_channel)
