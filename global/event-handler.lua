@@ -74,7 +74,7 @@ do
 				end
 			end
 
-			local schedule = name ~= "Loop" -- schedule everything but eventLoop
+			local schedule = name ~= "Loop" and name ~= "Keyboard" -- schedule everything but eventLoop and eventKeyboard
 			local done, result
 			local event_fnc
 			event_fnc = function(a, b, c, d, e)
