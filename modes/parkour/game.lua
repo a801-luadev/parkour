@@ -39,6 +39,11 @@ onEvent("NewPlayer", function(player)
 	in_room[player] = true
 	player_count = player_count + 1
 
+	if player_count > 12 then
+		tfm.exec.setRoomMaxPlayers(12)
+		tfm.exec.disablePhysicalConsumables(true)
+	end
+
 	if levels then
 		tfm.exec.respawnPlayer(player)
 
@@ -122,42 +127,14 @@ onEvent("NewGame", function()
 	for player in next, in_room do
 		generatePlayer(player, map_start)
 		tfm.exec.setPlayerScore(player, 1, false)
+	end
 
-		if spec_mode[player] then
-			tfm.exec.killPlayer(player)
-		end
+	for player in next, spec_mode do
+		tfm.exec.killPlayer(player)
 	end
 end)
 
 onEvent("Loop", function()
-	if check_funcorp then
-		if submode ~= "maps" then
-			if funcorp_enabled then
-				if room.maxPlayers == 12 then
-					funcorp_enabled = false
-				end
-			elseif room.maxPlayers ~= 12 then
-				funcorp_enabled = true
-
-				local player_list
-				for name in next, in_room do
-					if player_list then
-						player_list = player_list .. "`, `" .. name
-					else
-						player_list = name
-					end
-				end
-				webhooks._count = webhooks._count + 1
-				webhooks[webhooks._count] = "**`[FUNCORP]:`** Enabled in `" .. room.name .. "`. Player list: `" .. player_list .. "`"
-
-				tfm.exec.setRoomMaxPlayers(12)
-				tfm.exec.disablePhysicalConsumables(true)
-			end
-		end
-	elseif os.time() > check_funcorp_at then
-		check_funcorp = true
-	end
-
 	if not levels then return end
 
 	if check_position > 0 then

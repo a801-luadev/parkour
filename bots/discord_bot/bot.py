@@ -28,8 +28,6 @@ class Client(discord.Client):
 	async def on_transformice_logs(self, msg):
 		if msg.startswith("**`[CODE]:`**"):
 			channel = self.game_logs_channel
-		elif msg.startswith("**`[FUNCORP]:`**"):
-			channel = 688464593357504516
 		elif msg.startswith("**`[BANS]:`**"):
 			channel = 688464365581893700
 		elif msg.startswith("**`[RANKS]:`**"):
