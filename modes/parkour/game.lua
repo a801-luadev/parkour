@@ -15,6 +15,9 @@ local generated_at = {}
 local spec_mode = {}
 local ck_particles = {}
 local ck_images = {}
+local check_funcorp = false
+local funcorp_enabled = false
+local check_funcorp_at = os.time() + 1000
 
 local function generatePlayer(player, when)
 	players_level[player] = 1
@@ -35,11 +38,6 @@ onEvent("NewPlayer", function(player)
 	spec_mode[player] = nil
 	in_room[player] = true
 	player_count = player_count + 1
-
-	if player_count > 12 then
-		tfm.exec.disablePhysicalConsumables(true)
-		tfm.exec.setRoomMaxPlayers(12)
-	end
 
 	if levels then
 		tfm.exec.respawnPlayer(player)
@@ -128,6 +126,32 @@ onEvent("NewGame", function()
 end)
 
 onEvent("Loop", function()
+	if check_funcorp then
+		if funcorp_enabled then
+			if room.maxPlayers == 12 then
+				funcorp_enabled = false
+			end
+		elseif room.maxPlayers ~= 12 then
+			funcorp_enabled = true
+
+			local player_list
+			for name in next, in_room do
+				if player_list then
+					player_list = player_list .. "`, `" .. name
+				else
+					player_list = name
+				end
+			end
+			webhooks._count = webhooks._count + 1
+			webhooks[webhooks._count] = "**`[FUNCORP]:`** Enabled in `" .. room.name .. "`. Player list: `" .. player_list .. "`"
+
+			tfm.exec.setRoomMaxPlayers(12)
+			tfm.exec.disablePhysicalConsumables(true)
+		end
+	elseif os.time() > check_funcorp_at then
+		check_funcorp = true
+	end
+
 	if not levels then return end
 
 	if check_position > 0 then
