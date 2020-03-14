@@ -26,7 +26,16 @@ class Client(discord.Client):
 		print("Restarting transformice bot", flush=True)
 
 	async def on_transformice_logs(self, msg):
-		channel = self.get_channel(self.game_logs_channel)
+		if msg.startswith("**`[CODE]:`**"):
+			channel = self.game_logs_channel
+		elif msg.startswith("**`[FUNCORP]:`**"):
+			channel = 688464593357504516
+		elif msg.startswith("**`[BANS]:`**"):
+			channel = 688464365581893700
+		elif msg.startswith("**`[RANKS]:`**"):
+			channel = 688464206315651128
+
+		channel = self.get_channel(channel)
 		await channel.send(msg)
 
 	async def on_message(self, msg):
