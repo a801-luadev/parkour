@@ -10,7 +10,7 @@ do
 		else
 			lang = translations[community]
 		end
-		local text = lang[what]
+		local text = lang and lang[what] or nil
 		if not text then
 			return "%" .. what .. "%"
 		elseif select("#", ...) > 0 then
