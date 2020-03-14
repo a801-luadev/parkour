@@ -247,6 +247,12 @@ onEvent("PlayerDataParsed", function(player, data)
 	local keyboard = data.parkour.keyboard == 1 and "qwerty" or "azerty"
 	player_keys[player] = keyPowers[keyboard]
 
+	if data.parkour.killed > os.time() then
+		no_powers[player] = true
+	else
+		no_powers[player] = nil
+	end
+
 	if victory[player] then
 		if not no_powers[player] then
 			bindNecessary(player)
@@ -267,10 +273,17 @@ onEvent("PlayerWon", function(player)
 end)
 
 onEvent("NewGame", function()
+	local now = os.time()
+
+	for player in next, no_powers do
+		if not players_file[player] or players_file[player].parkour.killed <= now then
+			no_powers[player] = nil
+		end
+	end
+
 	facing = {}
 	cooldowns = {}
 	despawning = {}
-	no_powers = {}
 
 	for player in next, in_room do
 		unbind(player)

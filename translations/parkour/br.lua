@@ -37,6 +37,7 @@ translations.br = {
 	already_depermed = "<r>O mapa já foi <i>deperm</i>.",
 	already_permed = "<r>O mapa já está <i>perm</i>.",
 	cant_perm_right_now = "<r>Não foi possível alterar a categoria deste mapa no momento. Tente novamente mais tarde.",
+	already_killed = "<r>O jogador %s já está morto.",
 
 	-- Congratulation messages
 	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>.",

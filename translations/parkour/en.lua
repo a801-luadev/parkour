@@ -37,6 +37,7 @@ translations.en = {
 	already_depermed = "<r>The given map is already depermed.",
 	already_permed = "<r>The given map is already permed.",
 	cant_perm_right_now = "<r>Can't change the perm of this map right now. Try again later.",
+	already_killed = "<r>The player %s has been already killed.",
 
 	-- Congratulation messages
 	reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>.",

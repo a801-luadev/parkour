@@ -36,7 +36,8 @@ translations.es = {
 	not_enough_permissions = "<r>No tienes permisos suficientes para hacer eso.",
 	already_depermed = "<r>El mapa ya está descategorizado.",
 	already_permed = "<r>El mapa ya está categorizado.",
-	cant_perm_right_now = "<r>No se puede cambiar la categoría de este mapa ahora mismo. Inténtalo más tarde..",
+	cant_perm_right_now = "<r>No se puede cambiar la categoría de este mapa ahora mismo. Inténtalo más tarde.",
+	already_killed = "<r>El jugador %s ya fue asesinado.",
 
 	-- Congratulation messages
 	reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>.",

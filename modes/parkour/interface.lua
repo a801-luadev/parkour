@@ -631,6 +631,20 @@ onEvent("ChatCommand", function(player, msg)
 		if not in_room[affected] then
 			return translatedChatMessage("user_not_in_room", player, affected)
 		end
+		if no_powers[affected] then
+			return translatedChatMessage("already_killed", player, affected)
+		end
+
+		if pointer > 1 then
+			local minutes = tonumber(args[2])
+
+			if not minutes then
+				return translatedChatMessage("invalid_syntax", player)
+			end
+
+			players_file[affected].parkour.killed = os.time() + minutes * 60 * 1000
+		end
+
 
 		no_powers[affected] = true
 		unbind(affected)
