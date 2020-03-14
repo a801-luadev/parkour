@@ -635,8 +635,9 @@ onEvent("ChatCommand", function(player, msg)
 			return translatedChatMessage("already_killed", player, affected)
 		end
 
+		local minutes = "-"
 		if pointer > 1 then
-			local minutes = tonumber(args[2])
+			minutes = tonumber(args[2])
 
 			if not minutes then
 				return translatedChatMessage("invalid_syntax", player)
@@ -645,6 +646,8 @@ onEvent("ChatCommand", function(player, msg)
 			players_file[affected].parkour.killed = os.time() + minutes * 60 * 1000
 		end
 
+		webhooks._count = webhooks._count + 1
+		webhooks[webhooks._count] = "**`[BANS]:`** `" .. player .. "`: `!kill " .. affected .. " " .. minutes .. "`"
 
 		no_powers[affected] = true
 		unbind(affected)
