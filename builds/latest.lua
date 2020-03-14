@@ -8532,7 +8532,7 @@ else
 
 			for player in next, no_powers do
 				if not players_file[player] or players_file[player].parkour.killed <= now then
-					no_powers[player] = nil
+					no_powers[player] = false
 				end
 			end
 
