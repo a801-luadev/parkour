@@ -97,6 +97,7 @@ class Client(aiotfmpatch.Client):
 			return
 
 		if go_maps:
+			await asyncio.sleep(3.0)
 			await self.sendCommand("room* *#parkour0maps")
 
 	async def getModuleCode(self):
