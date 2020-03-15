@@ -56,16 +56,6 @@ class Client(aiotfmpatch.Client):
 		await super().handle_packet(conn, packet)
 
 	async def on_migrating_data(self, to_send): # Acts as a bridge.
-		# if self.pool is not None and b"," in to_send:
-		# 	async with self.pool.acquire() as conn:
-		# 		async with conn.cursor() as cursor:
-		# 			player, data = to_send.split(b",", 1)
-		# 			player = player.decode()
-
-		# 			await cursor.execute("SELECT `player` FROM `migrated` WHERE `player`=%s", (player,))
-		# 			if (await cursor.fetchone()) is not None:
-		# 				return self.drawbattle.dispatch("migrating_data", player.encode())
-
 		await self.sendLuaCallback(MIGRATE_DATA, to_send)
 
 	async def getMapInfo(self, mapcode, timeout=3.0):
@@ -99,7 +89,7 @@ class Client(aiotfmpatch.Client):
 		if room != self.room.name:
 			await self.sendCommand("room* " + room)
 			try:
-				await self.wait_for("joined_room", timeout=5.0)
+				await self.wait_for("on_joined_room", timeout=5.0)
 			except:
 				return
 			if self.room.name != room:
@@ -457,11 +447,6 @@ class Client(aiotfmpatch.Client):
 									)
 
 		elif txt_id == MIGRATE_DATA:
-			# if self.pool is not None:
-			# 	async with self.pool.acquire() as conn:
-			# 		async with conn.cursor() as cursor:
-			# 			await cursor.execute("INSERT INTO `migrated` VALUES (%s)", (text.decode(),))
-
 			self.drawbattle.dispatch("migrating_data", text)
 
 		elif txt_id == SEND_WEBHOOK:
