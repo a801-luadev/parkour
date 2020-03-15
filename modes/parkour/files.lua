@@ -1,4 +1,4 @@
-local next_file_load = os.time() + 61000
+local next_file_load = os.time() + math.random(60500, 61500)
 local file_id = 0
 local players_file = {}
 local room = tfm.get.room
@@ -105,13 +105,13 @@ end)
 onEvent("Loop", function()
 	if os.time() >= next_file_load then
 		system.loadFile(file_id)
-		next_file_load = os.time() + 61000
+		next_file_load = os.time() + math.random(60500, 61500)
 	end
 end)
 
 onEvent("GameStart", function()
 	system.loadFile(file_id)
-	next_file_load = os.time() + 61000
+	next_file_load = os.time() + math.random(60500, 61500)
 end)
 
 onEvent("NewPlayer", function(player)
