@@ -647,7 +647,7 @@ onEvent("ChatCommand", function(player, msg)
 		end
 
 		webhooks._count = webhooks._count + 1
-		webhooks[webhooks._count] = "**`[BANS]:`** `" .. player .. "`: `!kill " .. affected .. " " .. minutes .. "`"
+		webhooks[webhooks._count] = "**`[BANS]:`** `" .. room.name .. "` `" .. player .. "`: `!kill " .. affected .. " " .. minutes .. "`"
 
 		no_powers[affected] = true
 		unbind(affected)
