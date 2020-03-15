@@ -142,7 +142,7 @@ onEvent("Loop", function()
 	else
 		local last_level = #levels
 		local level_id, next_level, player
-		local particle = math.random(21, 23)
+		local particle = 29--math.random(21, 23)
 		local x, y = math.random(-10, 10), math.random(-10, 10)
 
 		for name in next, in_room do
