@@ -82,6 +82,35 @@ class Client(aiotfmpatch.Client):
 		await asyncio.sleep(3.0 * 60.0)
 		await self.sendCommand(os.getenv("UPDATE_CMD"))
 
+	async def on_load_request(self, script):
+		await self.loadLua(script)
+
+	async def on_restart_request(self, room):
+		if self.room is None:
+			return
+
+		if room != self.room.name:
+			await self.sendCommand("room* " + room)
+			try:
+				await self.wait_for("joined_room", timeout=5.0)
+			except:
+				return
+			if self.room.name != room:
+				return
+
+			go_maps = True
+
+		try:
+			await self.loadLua(await self.getModuleCode())
+		except:
+			return
+
+		if go_maps:
+			await self.sendCommand("room* *#parkour0maps")
+
+	async def getModuleCode(self):
+		pass
+
 	async def on_lua_log(self, msg):
 		self.discord.dispatch("lua_log", msg)
 

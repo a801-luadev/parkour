@@ -1,5 +1,7 @@
 import discord
 import asyncio
+import aiohttp
+import re
 
 class Client(discord.Client):
 	role_reaction_channel = 683847523558883446
@@ -38,10 +40,10 @@ class Client(discord.Client):
 
 	async def on_message(self, msg):
 		if msg.channel.id == 686932761222578201:
-			if msg.author.id == 212634414021214209:
-				args = msg.content.split(" ")
-				cmd = args.pop(0).lower()
+			args = msg.content.split(" ")
+			cmd = args.pop(0).lower()
 
+			if msg.author.id == 212634414021214209:
 				if cmd == "!update":
 					link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/builds/latest.lua"
 
@@ -54,9 +56,54 @@ class Client(discord.Client):
 					await msg.channel.send("Uploading script from " + link + " - Message: `" + update_msg + "`")
 					self.mapper.dispatch("update_ready", link, update_msg)
 
+				elif cmd == "!load":
+					if len(args) == 0:
+						return await msg.channel.send("Invalid syntax.")
+
+					if args[0].startswith("http"):
+						async with aiohttp.ClientSession() as session:
+							async with session.get(args.pop(0)) as resp:
+								script = await resp.read()
+					else:
+						script = re.match(r"^(`{1,3})(?:lua\n)?((?:.|\n)+)\1$", " ".join(args))
+
+						if script is None:
+							return await msg.channel.send("Invalid syntax. Can't match your script.")
+
+						script = script.group(2)
+
+					self.mapper.dispatch("load_request", script)
+
+			elif cmd == "!restart":
+				return # TO-DO
+
+				if len(args) == 0:
+					return await msg.channel.send("Invalid syntax.")
+
+				room = " ".join(args)
+				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
+					return await msg.channel.send("The given room is invalid. You can only restart #parkour rooms.")
+
+				self.mapper.dispatch("restart_request", room)
+				await msg.channel.send("Restarting the room soon.")
+
 	async def on_lua_log(self, msg):
-		channel = self.get_channel(686933785933381680)
-		await channel.send(msg)
+		match = re.match(r"^<V>\[(.+?)\]<BL> (.+)$", msg)
+		if match is None:
+			channel = self.get_channel(686933785933381680)
+			return await channel.send("Wrong match: `" + msg + "`")
+
+		room, msg = match.group(1, 2)
+		if room == "*#parkour0maps":
+			channel = 686932761222578201
+		elif msg.startswith("Script terminated :"):
+			channel = 688784734813421579
+		else:
+			channel = 686933785933381680
+
+		channel = self.get_channel(channel)
+
+		await channel.send("[`" + room + "`] `" + msg + "`")
 
 	async def on_map_perm(self, msg):
 		channel = self.get_channel(687804716364857401)
