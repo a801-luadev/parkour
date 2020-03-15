@@ -103,7 +103,7 @@ class Client(discord.Client):
 
 		channel = self.get_channel(channel)
 
-		await channel.send("[`" + room + "`] `" + msg + "`")
+		await channel.send("`[" + room + "]` `" + msg + "`")
 
 	async def on_map_perm(self, msg):
 		channel = self.get_channel(687804716364857401)
