@@ -28,12 +28,12 @@ class Client(discord.Client):
 		print("Restarting transformice bot", flush=True)
 
 	async def on_transformice_logs(self, msg):
-		if msg.startswith("**`[CODE]:`**"):
-			channel = self.game_logs_channel
-		elif msg.startswith("**`[BANS]:`**"):
+		if msg.startswith("**`[BANS]:`**"):
 			channel = 688464365581893700
 		elif msg.startswith("**`[RANKS]:`**"):
 			channel = 688464206315651128
+		else:
+			channel = self.game_logs_channel
 
 		channel = self.get_channel(channel)
 		await channel.send(msg)
@@ -57,12 +57,14 @@ class Client(discord.Client):
 					self.mapper.dispatch("update_ready", link, update_msg)
 
 				elif cmd == "!load":
-					if len(args) == 0:
-						return await msg.channel.send("Invalid syntax.")
+					if len(args) == 0 or args[0].startswith("http"):
+						if len(args) > 0:
+							link = args.pop(0)
+						else:
+							link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/builds/latest.lua"
 
-					if args[0].startswith("http"):
 						async with aiohttp.ClientSession() as session:
-							async with session.get(args.pop(0)) as resp:
+							async with session.get(link) as resp:
 								script = await resp.read()
 					else:
 						script = re.match(r"^(`{1,3})(?:lua\n)?((?:.|\n)+)\1$", " ".join(args))
@@ -88,7 +90,7 @@ class Client(discord.Client):
 				await msg.channel.send("Restarting the room soon.")
 
 	async def on_lua_log(self, msg):
-		match = re.match(r"^<V>\[(.+?)\]<BL> (.+)$", msg)
+		match = re.match(r"^<V>\[(.+?)\]<BL> (.+)$", msg, flags=re.DOTALL)
 		if match is None:
 			channel = self.get_channel(686933785933381680)
 			return await channel.send("Wrong match: `" + msg + "`")
