@@ -45,6 +45,13 @@ class Client(aiotfmpatch.Client):
 			if match is not None:
 				self.dispatch("map_info", *match.group(1, 2), int(match.group(3)))
 
+		elif CCC == (28, 46):
+			packet.readBool()
+			packet.readBool()
+			packet.readBool()
+
+			self.dispatch("ui_log", bytes(packet.readBytes(packet.read24())))
+
 		packet.pos = 0
 		await super().handle_packet(conn, packet)
 
@@ -109,7 +116,8 @@ class Client(aiotfmpatch.Client):
 			await self.sendCommand("room* *#parkour0maps")
 
 	async def getModuleCode(self):
-		pass
+		await self.sendCommand(os.getenv("GETSCRIPT_CMD"))
+		return await self.wait_for("ui_log", timeout=10.0)
 
 	async def on_lua_log(self, msg):
 		self.discord.dispatch("lua_log", msg)

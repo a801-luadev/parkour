@@ -77,8 +77,6 @@ class Client(discord.Client):
 					self.mapper.dispatch("load_request", script)
 
 			elif cmd == "!restart":
-				return # TO-DO
-
 				if len(args) == 0:
 					return await msg.channel.send("Invalid syntax.")
 
