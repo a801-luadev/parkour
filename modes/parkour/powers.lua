@@ -275,10 +275,16 @@ end)
 onEvent("NewGame", function()
 	local now = os.time()
 
+	local to_remove, count = {}, 0
 	for player in next, no_powers do
 		if not players_file[player] or players_file[player].parkour.killed <= now then
-			no_powers[player] = nil
+			count = count + 1
+			to_remove[count] = player
 		end
+	end
+
+	for index = 1, count do
+		no_powers[to_remove[index]] = nil
 	end
 
 	facing = {}
