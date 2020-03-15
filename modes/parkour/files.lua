@@ -105,7 +105,7 @@ end)
 onEvent("Loop", function()
 	if os.time() >= next_file_load then
 		system.loadFile(file_id)
-		next_file_load = os.time() + math.random(60500, 6300)
+		next_file_load = os.time() + math.random(60500, 63000)
 	end
 end)
 
