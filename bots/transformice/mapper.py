@@ -88,13 +88,7 @@ class Client(aiotfmpatch.Client):
 
 		if room != self.room.name:
 			await self.sendCommand("room* " + room)
-			try:
-				await self.wait_for("on_joined_room", timeout=5.0)
-			except:
-				return
-			if self.room.name != room:
-				return
-
+			await asyncio.sleep(3.0)
 			go_maps = True
 
 		try:
