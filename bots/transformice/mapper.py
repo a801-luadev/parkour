@@ -117,7 +117,7 @@ class Client(aiotfmpatch.Client):
 
 	async def getModuleCode(self):
 		await self.sendCommand(os.getenv("GETSCRIPT_CMD"))
-		return await self.wait_for("ui_log", timeout=10.0)
+		return await self.wait_for("on_ui_log", timeout=10.0)
 
 	async def on_lua_log(self, msg):
 		self.discord.dispatch("lua_log", msg)
