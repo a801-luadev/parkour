@@ -30,7 +30,6 @@ local function checkPlayersPosition()
 		table.remove(leaderboard, to_remove[index])
 	end
 
-	local pointer = pointer
 	local completed, data, file
 	for player in next, in_room do
 		file = players_file[player]

@@ -439,42 +439,43 @@ end)
 
 onEvent("GameDataLoaded", function(data)
 	if data.banned then
-		local send_saved = {}
-
 		bans = {}
 		for player in next, data.banned do
 			bans[tonumber(player)] = true
 		end
 
-		local to_respawn = {}
-		local action
-		for index = 1, ban_actions._count do
-			action = ban_actions[index]
+		if ban_actions._count > 0 then
+			local send_saved = {}
+			local to_respawn = {}
+			local action
+			for index = 1, ban_actions._count do
+				action = ban_actions[index]
 
-			if not send_saved[action[3]] then
-				send_saved[action[3]] = true
-				translatedChatMessage("data_saved", action[3])
+				if not send_saved[action[3]] then
+					send_saved[action[3]] = true
+					translatedChatMessage("data_saved", action[3])
+				end
+
+				if action[1] == "ban" then
+					bans[action[2]] = true
+					data.banned[tostring(action[2])] = 1 -- 1 so it uses less space
+					to_respawn[action[2]] = nil
+				else
+					bans[action[2]] = nil
+					data.banned[tostring(action[2])] = nil
+					to_respawn[action[2]] = true
+				end
+
+				webhooks._count = webhooks._count + 1
+				webhooks[webhooks._count] = "**`[BANS]:`** **" .. action[3] .. "** has " .. action[1] .. "ned a player. (ID: **" .. action[2] .. "**)"
 			end
+			ban_actions = {_count = 0}
 
-			if action[1] == "ban" then
-				bans[action[2]] = true
-				data.banned[tostring(action[2])] = 1 -- 1 so it uses less space
-				to_respawn[action[2]] = nil
-			else
-				bans[action[2]] = nil
-				data.banned[tostring(action[2])] = nil
-				to_respawn[action[2]] = true
-			end
-
-			webhooks._count = webhooks._count + 1
-			webhooks[webhooks._count] = "**`[BANS]:`** **" .. action[3] .. "** has " .. action[1] .. "ned a player. (ID: **" .. action[2] .. "**)"
-		end
-		ban_actions = {_count = 0}
-
-		for id in next, to_respawn do
-			for player, data in next, room.playerList do
-				if data.id == id then
-					tfm.exec.respawnPlayer(player)
+			for id in next, to_respawn do
+				for player, data in next, room.playerList do
+					if data.id == id then
+						tfm.exec.respawnPlayer(player)
+					end
 				end
 			end
 		end

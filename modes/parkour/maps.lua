@@ -45,7 +45,6 @@ onEvent("GameDataLoaded", function(data)
 		else
 			maps = {_count = 1, [1] = 7171137}
 		end
-		repeated = {_count = 0}
 	else
 		maps = {_count = 1, [1] = 7171137}
 	end
