@@ -269,7 +269,9 @@ onEvent("PlayerWon", function(player)
 		savePlayerData(player)
 	end
 
-	bindNecessary(player)
+	if not no_powers[player] then
+		bindNecessary(player)
+	end
 end)
 
 onEvent("NewGame", function()
