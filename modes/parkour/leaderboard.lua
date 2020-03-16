@@ -2,8 +2,8 @@ local room = tfm.get.room
 local max_leaderboard_rows = 70
 local max_leaderboard_pages = math.ceil(max_leaderboard_rows / 14) - 1
 local leaderboard = {}
-local default_leaderboard_user = {0, nil, 0, "xx"}
 -- {id, name, completed_maps, community}
+local default_leaderboard_user = {0, nil, 0, "xx"}
 
 local function leaderboardSort(a, b)
 	return a[3] > b[3]
