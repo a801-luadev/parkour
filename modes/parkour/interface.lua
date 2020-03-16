@@ -645,6 +645,7 @@ onEvent("ChatCommand", function(player, msg)
 			end
 
 			players_file[affected].parkour.killed = os.time() + minutes * 60 * 1000
+			savePlayerData(affected)
 		end
 
 		webhooks._count = webhooks._count + 1
