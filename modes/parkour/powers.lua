@@ -3,7 +3,6 @@ local is_tribe = string.sub(room.name, 2, 2) == "\3"
 
 local no_powers = {}
 local facing = {}
-local despawning = {}
 local cooldowns = {}
 
 local function checkCooldown(player, name, long)
@@ -22,16 +21,7 @@ end
 
 local function despawnableObject(when, ...)
 	local obj = tfm.exec.addShamanObject(...)
-	if despawning[when] then
-		despawning[when]._count = despawning[when]._count + 1
-		despawning[when][despawning[when]._count] = {obj, os.time() + when}
-	else
-		despawning[when] = {
-			_count = 1,
-			_pointer = 1,
-			[1] = {obj, os.time() + when}
-		}
-	end
+	addNewTimer(when, tfm.exec.removeObject, obj)
 end
 
 local powers = {
@@ -306,7 +296,6 @@ onEvent("NewGame", function()
 
 	facing = {}
 	cooldowns = {}
-	despawning = {}
 
 	for player in next, in_room do
 		unbind(player)
@@ -350,24 +339,5 @@ onEvent("GameStart", function()
 			qwerty_keys[power] = power.qwerty.key
 			azerty_keys[power] = power.azerty.key
 		end
-	end
-end)
-
-onEvent("Loop", function()
-	local now = os.time()
-	local obj, newPointer
-	for when, despawn in next, despawning do
-		newPointer = despawn._pointer
-		for index = despawn._pointer, despawn._count do
-			obj = despawn[index]
-
-			if now >= obj[2] then
-				tfm.exec.removeObject(obj[1])
-				newPointer = index + 1
-			else
-				break
-			end
-		end
-		despawn._pointer = newPointer
 	end
 end)
