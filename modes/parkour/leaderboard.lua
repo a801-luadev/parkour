@@ -21,11 +21,11 @@ local function checkPlayersPosition()
 	for player = 1, totalRankedPlayers do
 		playerId = leaderboard[player][1]
 
-		if bans[id] then
+		if bans[playerId] then
 			counterRemoved = counterRemoved + 1
 			toRemove[counterRemoved] = index
 		else
-			cachedPlayers[id] = index
+			cachedPlayers[playerId] = index
 		end
 	end
 

@@ -1,4 +1,5 @@
 local player_langs = {}
+local room = tfm.get.room
 
 local translatedMessage
 do
@@ -48,5 +49,9 @@ do
 end
 
 onEvent("NewPlayer", function(player)
-	player_langs[player] = translations[tfm.get.room.playerList[player].community]
+	if room.playerList[player] then
+		player_langs[player] = translations[room.playerList[player].community]
+	else
+		player_langs[player] = translations[room.community]
+	end
 end)

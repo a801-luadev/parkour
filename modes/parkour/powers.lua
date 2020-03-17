@@ -223,6 +223,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		return
 	end
 
+	if not player_keys[player] then return end
 	local power = player_keys[player][key]
 	if not power then return end
 
