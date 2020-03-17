@@ -30,10 +30,11 @@ local function checkPlayersPosition()
 	end
 
 	for index = counterRemoved, 1, -1 do
-		totalRankedPlayers = totalRankedPlayers - 1
 		remove(leaderboard, toRemove[index])
 	end
 	toRemove = nil
+
+	totalRankedPlayers = totalRankedPlayers - counterRemoved
 
 	local cacheData
 	local playerFile, playerData, completedMaps
