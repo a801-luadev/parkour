@@ -10,44 +10,53 @@ local function leaderboardSort(a, b)
 end
 
 local function checkPlayersPosition()
-	local pointer = #leaderboard
-	local cache = {}
+	local totalRankedPlayers = #leaderboard
+	local cachedPlayers = {}
 
-	local to_remove, count = {}, 0
-	local id
-	for index = 1, pointer do
-		id = leaderboard[index][1]
+	local playerId
+
+	local toRemove, counterRemoved = {}, 0
+	for player = 1, totalRankedPlayers do
+		playerId = leaderboard[player][1]
+
 		if bans[id] then
-			count = count + 1
-			to_remove[count] = index
+			counterRemoved = counterRemoved + 1
+			toRemove[counterRemoved] = index
 		else
-			cache[id] = leaderboard[index]
+			cachedPlayers[id] = index
 		end
 	end
 
-	for index = count, 1, -1 do
-		pointer = pointer - 1
-		table.remove(leaderboard, to_remove[index])
+	for index = counterRemoved, 1, -1 do
+		totalRankedPlayers = totalRankedPlayers - 1
+		table.remove(leaderboard, toRemove[index])
 	end
+	toRemove = nil
 
-	local completed, data, file
+	local cacheData
+	local playerFile, playerData, completedMaps
+
 	for player in next, in_room do
-		file = players_file[player]
-		if file and file.parkour then
-			completed = players_file[player].parkour.c
-			data = room.playerList[player]
+		playerFile = players_file[player]
 
-			if not bans[data.id] then
-				if cache[data.id] then
-					cache[data.id][2] = player
-					cache[data.id][3] = completed
-					cache[data.id][4] = data.community
+		if file and file.parkour then
+			completedMaps = playerFile.parkour.c
+			playerData = room.playerList[player]
+			playerId = playerData.id
+
+			if not bans[playerId] then
+				cacheData = cachedPlayers[playerId]
+				if cacheData then
+					cacheData = leaderboard[cacheData]
+					cacheData[2] = player
+					cacheData[3] = completedMaps
+					cacheData[4] = data.community
 				else
-					pointer = pointer + 1
-					leaderboard[pointer] = {
-						data.id,
+					totalRankedPlayers = totalRankedPlayers + 1
+					leaderboard[totalRankedPlayers] = {
+						playerId,
 						player,
-						completed,
+						completedMaps,
 						data.community
 					}
 				end
@@ -57,7 +66,7 @@ local function checkPlayersPosition()
 
 	table.sort(leaderboard, leaderboardSort)
 
-	for index = max_leaderboard_rows + 1, pointer do
+	for index = max_leaderboard_rows + 1, totalRankedPlayers do
 		leaderboard[index] = nil
 	end
 end
