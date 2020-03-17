@@ -66,7 +66,8 @@ local powers = {
 		cooldown = 10000,
 		image = {url = '16896d0252b.png', x = 35, y = 20},
 
-		qwerty = {key = "B", keyCode = 66},
+		qwerty = {key = "Q", keyCode = 81},
+		azerty = {key = "A", keyCode = 65},
 
 		fnc = function(player, key, down, x, y)
 			if players_file[player].parkour.c < 200 then
@@ -127,7 +128,8 @@ local powers = {
 		cooldown = 10000,
 		image = {url = '168ab7be931.png', x = 15, y = 20},
 
-		qwerty = {key = "C", keyCode = 67},
+		qwerty = {key = "Q", keyCode = 81},
+		azerty = {key = "A", keyCode = 65},
 
 		fnc = function(player, key, down, x, y)
 			if players_file[player].parkour.c < 400 then
@@ -181,9 +183,13 @@ local keyPowers, clickPowers = {
 local player_keys = {}
 
 local function bindNecessary(player)
-	for key, power in next, player_keys[player] do
-		if type(key) == "number" and players_file[player].parkour.c >= power.maps then
-			system.bindKeyboard(player, key, true, true)
+	for key, powers in next, player_keys[player] do
+		if powers._count then
+			for index = 1, powers._count do
+				if players_file[player].parkour.c >= powers[index].maps then
+					system.bindKeyboard(player, key, true, true)
+				end
+			end
 		end
 	end
 
@@ -300,6 +306,10 @@ end)
 
 onEvent("GameStart", function()
 	local clickPointer = 0
+	local qwerty_keys = keyPowers.qwerty
+	local azerty_keys = keyPowers.azerty
+	local qwerty_keyCode, azerty_keyCode
+
 	local power
 	for index = 1, #powers do
 		power = powers[index]
@@ -311,11 +321,25 @@ onEvent("GameStart", function()
 				power.azerty = power.qwerty
 			end
 
-			keyPowers.qwerty[power.qwerty.keyCode] = power
-			keyPowers.azerty[power.azerty.keyCode] = power
+			qwerty_keyCode = power.qwerty.keyCode
+			azerty_keyCode = power.azerty.keyCode
 
-			keyPowers.qwerty[power] = power.qwerty.key
-			keyPowers.azerty[power] = power.azerty.key
+			if qwerty_keys[qwerty_keyCode] then
+				qwerty_keys[qwerty_keyCode]._count = qwerty_keys[qwerty_keyCode]._count + 1
+				qwerty_keys[qwerty_keyCode][qwerty_keys[qwerty_keyCode]._count] = power
+			else
+				qwerty_keys[qwerty_keyCode] = {_count = 1, [1] = power}
+			end
+
+			if azerty_keys[azerty_keyCode] then
+				azerty_keys[azerty_keyCode]._count = azerty_keys[azerty_keyCode]._count + 1
+				azerty_keys[azerty_keyCode][azerty_keys[azerty_keyCode]._count] = power
+			else
+				azerty_keys[azerty_keyCode] = {_count = 1, [1] = power}
+			end
+
+			qwerty_keys[power] = power.qwerty.key
+			azerty_keys[power] = power.azerty.key
 		end
 	end
 end)
