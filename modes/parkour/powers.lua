@@ -236,7 +236,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	if not powers then return end
 
 	local file = players_file[player].parkour
-	local maps, show_cooldowns = file.maps, file.pcool
+	local maps, show_cooldowns = file.c, file.pcool == 1
 	local power
 	for index = powers._count, 1, -1 do
 		power = powers[index]
@@ -250,13 +250,14 @@ onEvent("Keyboard", function(player, key, down, x, y)
 end)
 
 onEvent("Mouse", function(player, x, y)
+	local file = players_file[player].parkour
+	local maps, show_cooldowns = file.c, file.pcool == 1
 	local power, cooldown
 	for index = 1, #clickPowers do
 		power = clickPowers[index]
-		cooldown = (not power.cooldown) or checkCooldown(player, power.name, power.cooldown)
-		if players_file[player] and players_file[player].parkour.c >= power.maps and cooldown then
-			if power.fnc(player, x, y) == "break" then
-				break
+		if maps >= power.maps then
+			if cooldown = (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_img, power.index * 20, show_cooldowns) then
+				power.fnc(player, x, y)
 			end
 		end
 	end
@@ -330,6 +331,7 @@ onEvent("GameStart", function()
 	local power
 	for index = 1, #powers do
 		power = powers[index]
+		power.index = index
 		if power.click then
 			clickPointer = clickPointer + 1
 			clickPowers[clickPointer] = power
