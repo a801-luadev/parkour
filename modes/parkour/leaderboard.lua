@@ -9,6 +9,8 @@ local function leaderboardSort(a, b)
 	return a[3] > b[3]
 end
 
+local remove, sort = table.remove, table.sort
+
 local function checkPlayersPosition()
 	local totalRankedPlayers = #leaderboard
 	local cachedPlayers = {}
@@ -29,7 +31,7 @@ local function checkPlayersPosition()
 
 	for index = counterRemoved, 1, -1 do
 		totalRankedPlayers = totalRankedPlayers - 1
-		table.remove(leaderboard, toRemove[index])
+		remove(leaderboard, toRemove[index])
 	end
 	toRemove = nil
 
@@ -64,7 +66,7 @@ local function checkPlayersPosition()
 		end
 	end
 
-	table.sort(leaderboard, leaderboardSort)
+	sort(leaderboard, leaderboardSort)
 
 	for index = max_leaderboard_rows + 1, totalRankedPlayers do
 		leaderboard[index] = nil
