@@ -278,7 +278,7 @@ onEvent("PlayerDataParsed", function(player, data)
 end)
 
 onEvent("PlayerWon", function(player)
-	if room.uniquePlayers >= min_save and not is_tribe and submode ~= "maps" then
+	if room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and not is_tribe then
 		completed = players_file[player].parkour.c + 1
 		players_file[player].parkour.c = completed
 		savePlayerData(player)
