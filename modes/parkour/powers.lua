@@ -256,7 +256,7 @@ onEvent("Mouse", function(player, x, y)
 	for index = 1, #clickPowers do
 		power = clickPowers[index]
 		if maps >= power.maps then
-			if cooldown = (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_img, power.index * 20, show_cooldowns) then
+			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_img, power.index * 20, show_cooldowns) then
 				power.fnc(player, x, y)
 			end
 		end
