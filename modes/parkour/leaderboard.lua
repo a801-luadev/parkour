@@ -15,17 +15,18 @@ local function checkPlayersPosition()
 	local totalRankedPlayers = #leaderboard
 	local cachedPlayers = {}
 
-	local playerId
+	local playerId, position
 
 	local toRemove, counterRemoved = {}, 0
 	for player = 1, totalRankedPlayers do
-		playerId = leaderboard[player][1]
+		position = leaderboard[player]
+		playerId = position[1]
 
 		if bans[playerId] then
 			counterRemoved = counterRemoved + 1
 			toRemove[counterRemoved] = index
 		else
-			cachedPlayers[playerId] = index
+			cachedPlayers[playerId] = position
 		end
 	end
 
@@ -50,7 +51,6 @@ local function checkPlayersPosition()
 			if not bans[playerId] then
 				cacheData = cachedPlayers[playerId]
 				if cacheData then
-					cacheData = leaderboard[cacheData]
 					cacheData[2] = player
 					cacheData[3] = completedMaps
 					cacheData[4] = data.community
