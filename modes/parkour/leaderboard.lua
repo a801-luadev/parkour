@@ -43,7 +43,7 @@ local function checkPlayersPosition()
 	for player in next, in_room do
 		playerFile = players_file[player]
 
-		if file and file.parkour then
+		if playerFile then
 			completedMaps = playerFile.parkour.c
 			playerData = room.playerList[player]
 			playerId = playerData.id
@@ -53,14 +53,14 @@ local function checkPlayersPosition()
 				if cacheData then
 					cacheData[2] = player
 					cacheData[3] = completedMaps
-					cacheData[4] = data.community
+					cacheData[4] = playerData.community
 				else
 					totalRankedPlayers = totalRankedPlayers + 1
 					leaderboard[totalRankedPlayers] = {
 						playerId,
 						player,
 						completedMaps,
-						data.community
+						playerData.community
 					}
 				end
 			end
