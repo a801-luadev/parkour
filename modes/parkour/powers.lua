@@ -92,7 +92,7 @@ local powers = {
 		name = 'teleport',
 		maps = 25,
 		cooldown = 10000,
-		cooldown_img = "170e9ca1ddc.png",
+		cooldown_img = "170f01b4bfc.png",
 		image = {url = '16896d00614.png', x = 30, y = 20},
 
 		click = true,
@@ -173,7 +173,7 @@ local powers = {
 		name = 'choco',
 		maps = 1500,
 		cooldown = 25000,
-		cooldown_img = "170e9cdf222.png",
+		cooldown_img = "170f01bfc7e.png",
 		image = {url = '16d2ce46c57.png', x = 20, y = 56},
 
 		qwerty = {key = "CTRL", keyCode = 17},
