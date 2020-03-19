@@ -17,7 +17,7 @@ local function checkCooldown(player, name, long, img, y, show)
 		}
 	end
 
-	if show then
+	if show and room.name == "*#parkour0maps" then
 		addNewTimer(
 			long, tfm.exec.removeImage,
 			tfm.exec.addImage(img, ":1", 5, y, player)
