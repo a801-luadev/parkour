@@ -37,7 +37,7 @@ onEvent("NewGame", function()
 	local timer
 	for delay, list in next, timers do
 		for index = list._pointer, list._count do
-			imter = list[index]
+			timer = list[index]
 			timer[2](timer[3])
 		end
 	end
