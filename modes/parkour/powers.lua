@@ -240,7 +240,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	local power
 	for index = powers._count, 1, -1 do
 		power = powers[index]
-		if maps >= power.maps then
+		if maps >= power.maps or room.name == "*#parkour0maps" then
 			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_img, power.index * 22, show_cooldowns) then
 				power.fnc(player, key, down, x, y)
 			end
@@ -255,7 +255,7 @@ onEvent("Mouse", function(player, x, y)
 	local power, cooldown
 	for index = 1, #clickPowers do
 		power = clickPowers[index]
-		if maps >= power.maps then
+		if maps >= power.maps or room.name == "*#parkour0maps" then
 			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_img, power.index * 22, show_cooldowns) then
 				power.fnc(player, x, y)
 			end
