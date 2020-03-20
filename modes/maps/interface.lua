@@ -19,7 +19,9 @@ local packets = {
 
 	migrate_data  = bit.lshift(13, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
 
-	send_webhook  = bit.lshift(14, 8) + 255 -- This packet is not related to the map system, but is here so we don't use a lot of resources.
+	send_webhook  = bit.lshift(14, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
+
+	room_crash    = bit.lshift(15, 8) + 255
 }
 local last_update
 local messages_cache = {}
@@ -27,7 +29,7 @@ local system_maps = {_count = 0}
 local forum = {ongoing = {}, archived = {}, by_code = {}}
 local loaded_data = false
 local loaded_system = false
-local lua_version = "1.0.0-beta-pool"
+local lua_version = "1.1.0-pool"
 local bot_version = nil
 local changing_perm = {}
 local menu_part = {}
@@ -36,6 +38,13 @@ local decoder = {
 	["&1"] = ","
 }
 local room = room
+
+function send_bot_room_crash()
+	for index = 1, webhooks._count do
+		ui.addTextArea(packets.send_webhook, webhooks[index], mapper_bot)
+	end
+	ui.addTextArea(packets.room_crash, "", mapper_bot)
+end
 
 local function decodePacketString(str)
 	return string.gsub(str, "&[01]", decoder)
@@ -234,7 +243,8 @@ local function openVotationsMenu(player, page, archived)
 
 	ui.addTextArea(
 		packets.unreads,
-		room.playerList[player].id .. "," .. player .. "," .. (page * 5) .. ",5," .. (archived and "1" or "0")
+		room.playerList[player].id .. "," .. player .. "," .. (page * 5) .. ",5," .. (archived and "1" or "0"),
+		mapper_bot
 	)
 
 	local pagination_fnc = type(menu_part[player]) == "number" and updatePagination or setPagination

@@ -1,5 +1,5 @@
-local next_file_load = os.time() + math.random(60500, 90500)
-local file_id = 0
+next_file_load = os.time() + math.random(60500, 90500)
+file_id = 0
 local players_file = {}
 local room = tfm.get.room
 

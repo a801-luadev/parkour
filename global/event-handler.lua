@@ -1,7 +1,11 @@
-local webhooks = {_count = 0}
 local translatedChatMessage
+local next_file_load
+local send_bot_room_crash
+local file_id
 
-runtime = 0
+local webhooks = {_count = 0}
+local runtime = 0
+local room = tfm.get.room
 local onEvent
 do
 	local os_time = os.time
@@ -50,8 +54,41 @@ do
 			event._count = 0
 		end
 
-		if keep_webhooks then
-			-- TODO
+		if keep_webhooks and next_file_load then
+			if room.name == "*#parkour0maps" then
+				send_bot_room_crash()
+			else
+				events.Loop._count = 1
+				events.Loop[1] = function()
+					if os.time() >= next_file_load then
+						system.loadFile(file_id)
+						next_file_load = os.time() + math.random(60500, 63000)
+					end
+				end
+
+				events.FileLoaded._count = 1 -- There's already a decode/encode.
+				events.SavingFile._count = 2
+				events.SavingFile[2] = function()
+					events.Loop._count = 0
+					events.FileLoaded._count = 0
+					events.SavingFile._count = 0
+					events.GameDataLoaded._count = 0
+				end
+
+				events.GameDataLoaded._count = 1
+				events.GameDataLoaded[1] = function(data)
+					local now = os.time()
+					if not data.webhooks or os.time() - data.webhooks[1] > 300000 then -- 5 minutes
+						data.webhooks = {math.floor(os.time())}
+					end
+
+					local last = #data.webhooks
+					for index = 1, webhooks._count do
+						data.webhooks[last + index] = webhooks[index]
+					end
+					webhooks._count = 0
+				end
+			end
 		end
 	end
 
@@ -113,7 +150,7 @@ do
 					tfm.exec.chatMessage(result)
 
 					webhooks._count = webhooks._count + 1
-					webhooks[webhooks._count] = "**`[CODE]:`** `" .. tfm.get.room.name .. "` has crashed. <@212634414021214209>: `" .. name .. "`, `" .. result .. "`"
+					webhooks[webhooks._count] = "**`[CRASH]:`** `" .. tfm.get.room.name .. "` has crashed. <@212634414021214209>: `" .. name .. "`, `" .. result .. "`"
 
 					return emergencyShutdown(true, true)
 				end

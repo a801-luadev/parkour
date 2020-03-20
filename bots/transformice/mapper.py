@@ -3,6 +3,7 @@ import transformice.aiotfmpatch as aiotfmpatch
 import aiomysql
 import aiohttp
 import asyncio
+import hashlib
 import re
 import os
 
@@ -23,9 +24,12 @@ MIGRATE_DATA  = (13 << 8) + 255 # This packet is not related to the map system, 
 
 SEND_WEBHOOK  = (14 << 8) + 255 # This packet is not related to the map system, but is here so we don't use a lot of resources.
 
+ROOM_CRASH    = (15 << 8) + 255
+
 class Client(aiotfmpatch.Client):
-	version = b"1.0.0-beta"
+	version = b"1.1.0"
 	pool = None
+	code_hash = b""
 
 	async def handle_packet(self, conn, packet):
 		CCC = packet.readCode()
@@ -69,15 +73,22 @@ class Client(aiotfmpatch.Client):
 	async def on_logged(self, *args):
 		print("[MAPPER] Logged in!", flush=True)
 
+		await asyncio.sleep(3.0)
+		self.code_hash = hashlib.blake2s(await self.getModuleCode(), digest_size=32).hexdigest()
+
 	async def on_update_ready(self, link, msg):
 		async with aiohttp.ClientSession() as session:
 			async with session.get(link) as resp:
-				await self.loadLua(await resp.read())
+				code = await resp.read()
+				code_hash = hashlib.blake2s(code, digest_size=32).hexdigest()
+				await self.loadLua(code)
+				del code
 
 		await asyncio.sleep(10.0)
 		await self.sendRoomMessage("!update " + msg)
 		await asyncio.sleep(3.0 * 60.0)
 		await self.sendCommand(os.getenv("UPDATE_CMD"))
+		self.code_hash = code_hash
 
 	async def on_load_request(self, script):
 		await self.loadLua(script)
@@ -446,3 +457,6 @@ class Client(aiotfmpatch.Client):
 
 		elif txt_id == SEND_WEBHOOK:
 			self.discord.dispatch("transformice_logs", text.decode())
+
+		elif txt_id == ROOM_CRASH:
+			self.dispatch("restart_request", self.room.name)
