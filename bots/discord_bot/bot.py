@@ -82,7 +82,7 @@ class Client(discord.Client):
 
 				room = " ".join(args)
 				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
-					return await msg.channel.send("The given room is invalid. You can only restart #parkour rooms.")
+					return await msg.channel.send("The given room is invalid. I can only restart #parkour rooms.")
 
 				self.mapper.dispatch("restart_request", room)
 				await msg.channel.send("Restarting the room soon.")

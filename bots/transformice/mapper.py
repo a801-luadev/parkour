@@ -56,6 +56,9 @@ class Client(aiotfmpatch.Client):
 
 			self.dispatch("ui_log", bytes(packet.readBytes(packet.read24())))
 
+		elif CCC == (6, 10):
+			self.dispatch("special_chat_msg", packet.read8(), packet.readUTF(), packet.readUTF())
+
 		packet.pos = 0
 		await super().handle_packet(conn, packet)
 
@@ -110,6 +113,21 @@ class Client(aiotfmpatch.Client):
 		if go_maps:
 			await asyncio.sleep(3.0)
 			await self.sendCommand("room* *#parkour0maps")
+
+	async def sendSpecialChatMsg(self, chat, msg):
+		return await self.main.send(aiotfm.Packet.new(6, 10).write8(chat).writeString(msg))
+
+	async def on_special_chat_msg(self, chat, author, msg):
+		args = msg.split(" ")
+		cmd = args.pop(0).lower()
+
+		if cmd == "!restart":
+			room = " ".join(args)
+			if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
+				return await self.sendSpecialChatMsg(chat, "The given room is invalid. I can only restart #parkour rooms.")
+
+			self.dispatch("restart_request", room)
+			await self.sendSpecialChatMsg(chat, "Restarting the room soon.")
 
 	async def getModuleCode(self):
 		await self.sendCommand(os.getenv("GETSCRIPT_CMD"))
