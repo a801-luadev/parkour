@@ -80,6 +80,7 @@ onEvent("PlayerLeft", function(player)
 end)
 
 onEvent("PlayerDied", function(player)
+	if room.playerList[player] then return end
 	if bans[room.playerList[player].id] then return end
 	if (not levels) or (not players_level[player]) then return end
 

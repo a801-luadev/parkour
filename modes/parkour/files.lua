@@ -18,7 +18,7 @@ local data_migrations = {
 		data.parkour.mort = 1 -- /mort hotkey
 		data.parkour.pcool = 1 -- power cooldowns
 		data.parkour.pbut = 1 -- powers button
-		data.parkour.keyboard = room.playerList[player].community == "fr" and 0 or 1 -- 1 -> qwerty, 0 -> false
+		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1 -- 1 -> qwerty, 0 -> false
 		data.parkour.killed = 0
 
 		data.parkour.cm = nil
@@ -29,7 +29,7 @@ local data_migrations = {
 		data.parkour.mort = 1
 		data.parkour.pcool = 1
 		data.parkour.pbut = 1
-		data.parkour.keyboard = room.playerList[player].community == "fr" and 0 or 1
+		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1
 		data.parkour.killed = 0
 	end,
 	["0.2"] = function(player, data)
