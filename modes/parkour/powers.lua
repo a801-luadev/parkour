@@ -231,7 +231,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		return
 	end
 
-	if not player_keys[player] then return end
+	if not player_keys[player] or not victory[player] then return end
 	local powers = player_keys[player][key]
 	if not powers then return end
 
@@ -250,6 +250,8 @@ onEvent("Keyboard", function(player, key, down, x, y)
 end)
 
 onEvent("Mouse", function(player, x, y)
+	if not players_file[player] or not victory[player] then return end
+
 	local file = players_file[player].parkour
 	local maps, show_cooldowns = file.c, file.pcool == 1
 	local power, cooldown
