@@ -378,11 +378,11 @@ onEvent("GameDataLoaded", function(data)
 			data.webhooks = {math.floor(os.time()) + 300000}
 		end
 
+	end
+	if data.update then
 		if last_update and data.update > last_update then
 			ui.addTextArea(packets.send_webhook, "**[UPDATE]** The module is gonna be updated soon.", mapper_bot)
 		end
-	end
-	if data.update then
 		last_update = data.update
 	end
 end)
