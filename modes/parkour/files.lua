@@ -1,6 +1,6 @@
 next_file_load = os.time() + math.random(60500, 90500)
 file_id = 0
-local players_file = {}
+players_file = {}
 local room = tfm.get.room
 
 local showMigrationPopup
@@ -12,29 +12,60 @@ local data_migrations = {
 
 		data.modules = nil
 
-		data.parkour.v = "0.3" -- version
+		data.parkour.v = "0.4" -- version
 		data.parkour.c = data.parkour.cm -- completed maps
 		data.parkour.ckpart = 1 -- particles for checkpoints (1 -> true, 0 -> false)
 		data.parkour.mort = 1 -- /mort hotkey
 		data.parkour.pcool = 1 -- power cooldowns
 		data.parkour.pbut = 1 -- powers button
 		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1 -- 1 -> qwerty, 0 -> false
-		data.parkour.killed = 0
+		data.parkour.killed = 0 -- !kill
+		data.parkour.suspect = {
+			win = 0,
+			follow = 0,
+			vpn = 0,
+			farm = 0,
+			time = 0
+		}
 
 		data.parkour.cm = nil
 	end,
 	["0.1"] = function(player, data)
-		data.parkour.v = "0.3"
+		data.parkour.v = "0.4"
 		data.parkour.ckpart = 1
 		data.parkour.mort = 1
 		data.parkour.pcool = 1
 		data.parkour.pbut = 1
 		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1
 		data.parkour.killed = 0
+		data.parkour.suspect = {
+			win = 0,
+			follow = 0,
+			vpn = 0,
+			farm = 0,
+			time = 0
+		}
 	end,
 	["0.2"] = function(player, data)
-		data.parkour.v = "0.3"
+		data.parkour.v = "0.4"
 		data.parkour.killed = 0
+		data.parkour.suspect = {
+			win = 0,
+			follow = 0,
+			vpn = 0,
+			farm = 0,
+			time = 0
+		}
+	end,
+	["0.3"] = function(player, data)
+		data.parkour.v = "0.4"
+		data.parkour.suspect = {
+			win = 0,
+			follow = 0,
+			vpn = 0,
+			farm = 0,
+			time = 0
+		}
 	end
 }
 
@@ -116,4 +147,8 @@ end)
 
 onEvent("NewPlayer", function(player)
 	system.loadPlayerData(player)
+end)
+
+onEvent("PlayerLeft", function(player)
+	savePlayerData(player)
 end)

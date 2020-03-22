@@ -4,20 +4,20 @@ local min_save = 4
 local check_position = 6
 local player_count = 0
 local victory_count = 0
-local map_start = 0
 local less_time = false
 local victory = {}
 local room = tfm.get.room
 local bans = {}
 local in_room = {}
-local players_level = {}
-local generated_at = {}
 local spec_mode = {}
 local ck_particles = {}
 local ck_images = {}
 local check_funcorp = false
 local funcorp_enabled = false
 local check_funcorp_at = os.time() + 1000
+generated_at = {}
+map_start = 0
+players_level = {}
 
 local function generatePlayer(player, when)
 	players_level[player] = 1
@@ -113,6 +113,7 @@ onEvent("NewGame", function()
 
 	local start_x, start_y
 	if levels then
+		last_level = #levels
 		start_x, start_y = levels[2].x, levels[2].y
 
 		for player, particles in next, ck_particles do
@@ -141,7 +142,6 @@ onEvent("Loop", function()
 	if check_position > 0 then
 		check_position = check_position - 1
 	else
-		local last_level = #levels
 		local level_id, next_level, player
 		local particle = 29--math.random(21, 23)
 		local x, y = math.random(-10, 10), math.random(-10, 10)

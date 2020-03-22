@@ -10,6 +10,10 @@
 	},
 	{
 		"type": "require-file",
+		"file": "modes/parkour/cheats-suspect.lua"
+	},
+	{
+		"type": "require-file",
 		"file": "modes/parkour/maps.lua"
 	},
 	{
