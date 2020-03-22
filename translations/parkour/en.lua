@@ -38,6 +38,7 @@ translations.en = {
 	already_permed = "<r>The given map is already permed.",
 	cant_perm_right_now = "<r>Can't change the perm of this map right now. Try again later.",
 	already_killed = "<r>The player %s has been already killed.",
+	leaderboard_not_loaded = "<r>The leaderboard has not been loaded yet. Wait a minute.",
 
 	-- Congratulation messages
 	reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>.",
@@ -63,6 +64,7 @@ translations.en = {
 	got_map_info = "<j>[INFO] <n>Retrieved map information. Trying to change the perm...",
 	perm_changed = "<j>[INFO] <n>Successfully changed the perm of map <ch>@%s</ch> from <r>P%s</r> to <t>P%s</t>.",
 	data_migration = "All the data needs to be migrated. This means, you currently don't have any completed maps. To restore your data, just go to room: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
+	leaderboard_loaded = "<j>The leaderboard has been loaded. Press L to open it.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse particles for checkpoints\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b>\n\nShow your power cooldowns\n\nShow powers button",

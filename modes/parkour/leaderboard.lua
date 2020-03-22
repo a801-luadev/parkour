@@ -1,6 +1,7 @@
 local room = tfm.get.room
 local max_leaderboard_rows = 70
 local max_leaderboard_pages = math.ceil(max_leaderboard_rows / 14) - 1
+local loaded_leaderboard = false
 local leaderboard = {}
 -- {id, name, completed_maps, community}
 local default_leaderboard_user = {0, nil, 0, "xx"}
@@ -76,6 +77,12 @@ end
 
 onEvent("GameDataLoaded", function(data)
 	if data.ranking then
+		if not loaded_leaderboard then
+			loaded_leaderboard = true
+
+			translatedChatMessage("leaderboard_loaded")
+		end
+
 		leaderboard = data.ranking
 
 		checkPlayersPosition()

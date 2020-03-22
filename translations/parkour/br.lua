@@ -38,6 +38,7 @@ translations.br = {
 	already_permed = "<r>O mapa já está <i>perm</i>.",
 	cant_perm_right_now = "<r>Não foi possível alterar a categoria deste mapa no momento. Tente novamente mais tarde.",
 	already_killed = "<r>O jogador %s já está morto.",
+	leaderboard_not_loaded = "<r>O ranking ainda não foi carregado. Aguarde um minuto.",
 
 	-- Congratulation messages
 	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>.",
@@ -64,6 +65,7 @@ translations.br = {
 	got_map_info = "<j>[INFO] <n>Todas as informações do mapa foram coletadas. Tentando alterar categoria...",
 	perm_changed = "<j>[INFO] <n>Categoria do mapa <ch>@%s</ch> alterada com sucesso, de <r>P%s</r> para <t>P%s</t>.",
 	data_migration = "Todos os dados precisam migrar. Isso significa que atualmente você não tem nenhum mapa completado. Para restaurar seus dados, vá até a sala: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
+	leaderboard_loaded = "<j>O ranking foi carregado. Aperte L para abri-lo.",
 
 	-- Miscellaneous
 	important = "IMPORTANTE",
