@@ -1,7 +1,26 @@
 next_file_load = os.time() + math.random(60500, 90500)
-file_id = 0
+local files = {
+	--[[
+		File values:
+
+		- maps     (1)
+		- webhooks (1 and 2)
+		- update   (1)
+		- ranks    (1)
+
+		- banned   (2)
+		- ranking  (2)
+		- suspects (2)
+	]]
+
+	[1] = 1, -- maps, update, ranks
+	[2] = 2  -- ranking, banned, suspects
+}
+local total_files = 2
 local players_file = {}
 local room = tfm.get.room
+local file_index = 1
+file_id = files[file_index]
 
 local showMigrationPopup
 
@@ -106,6 +125,8 @@ onEvent("Loop", function()
 	if os.time() >= next_file_load then
 		system.loadFile(file_id)
 		next_file_load = os.time() + math.random(60500, 63000)
+		file_index = file_index % total_files + 1
+		file_id = files[file_index]
 	end
 end)
 
