@@ -100,6 +100,7 @@ class Client(aiotfmpatch.Client):
 		if self.room is None:
 			return
 
+		go_maps = False
 		if room != self.room.name:
 			await self.sendCommand("room* " + room)
 			await asyncio.sleep(3.0)
