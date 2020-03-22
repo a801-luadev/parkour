@@ -45,13 +45,10 @@ onEvent("GameDataLoaded", function(data)
 		else
 			maps = {_count = 1, [1] = 7171137}
 		end
-	else
-		maps = {_count = 1, [1] = 7171137}
-	end
-
-	if first_data_load then
-		newMap()
-		first_data_load = false
+		if first_data_load then
+			newMap()
+			first_data_load = false
+		end
 	end
 end)
 

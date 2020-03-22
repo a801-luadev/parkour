@@ -338,34 +338,32 @@ onEvent("GameDataLoaded", function(data)
 		end
 	end
 
-	if not data.maps then
-		data.maps = {}
-	end
-
-	local countA, countB = #data.maps, #removing_maps
-	for index = countA, 1, -1 do
-		for _index = 1, countB do
-			if removing_maps[_index] == data.maps[index] then
-				table.remove(removing_maps, _index)
-				table.remove(data.maps, index)
-				countB = countB - 1
-				countA = countA - 1
-				break
+	if data.maps then
+		local countA, countB = #data.maps, #removing_maps
+		for index = countA, 1, -1 do
+			for _index = 1, countB do
+				if removing_maps[_index] == data.maps[index] then
+					table.remove(removing_maps, _index)
+					table.remove(data.maps, index)
+					countB = countB - 1
+					countA = countA - 1
+					break
+				end
 			end
 		end
-	end
 
-	for index = 1, #adding_maps do
-		countA = countA + 1
-		data.maps[countA] = adding_maps[index]
-	end
+		for index = 1, #adding_maps do
+			countA = countA + 1
+			data.maps[countA] = adding_maps[index]
+		end
 
-	removing_maps = {}
-	adding_maps = {}
+		removing_maps = {}
+		adding_maps = {}
 
-	for code, status in next, changing_perm do
-		if status == "" then
-			changing_perm[code] = false
+		for code, status in next, changing_perm do
+			if status == "" then
+				changing_perm[code] = false
+			end
 		end
 	end
 end)
@@ -377,14 +375,16 @@ onEvent("GameDataLoaded", function(data)
 				ui.addTextArea(packets.send_webhook, data.webhooks[index], mapper_bot)
 			end
 
-			data.webhooks = {math.floor(os.time())}
+			data.webhooks = {math.floor(os.time()) + 300000}
 		end
 
 		if last_update and data.update > last_update then
 			ui.addTextArea(packets.send_webhook, "**[UPDATE]** The module is gonna be updated soon.", mapper_bot)
 		end
 	end
-	last_update = data.update
+	if data.update then
+		last_update = data.update
+	end
 end)
 
 onEvent("NewPlayer", function(player)

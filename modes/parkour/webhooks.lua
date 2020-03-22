@@ -2,8 +2,8 @@ webhooks = {_count = 0}
 
 onEvent("GameDataLoaded", function(data)
 	local now = os.time()
-	if not data.webhooks or os.time() - data.webhooks[1] > 300000 then -- 5 minutes
-		data.webhooks = {math.floor(os.time())}
+	if not data.webhooks or os.time() >= data.webhooks[1] then
+		data.webhooks = {math.floor(os.time()) + 300000} -- 5 minutes
 	end
 
 	local last = #data.webhooks

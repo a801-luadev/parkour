@@ -46,67 +46,63 @@ for rank, perms in next, ranks_permissions do
 end
 
 onEvent("GameDataLoaded", function(data)
-	if saving_ranks then
-		if not data.ranks then
-			data.ranks = {}
-		end
-
-		local added, removed, not_changed
-		for player, rank in next, ranks_update do
-			if data.ranks[player] then
-				not_changed = band(data.ranks[player], rank)
-				removed = bxor(not_changed, data.ranks[player])
-				added = bxor(not_changed, rank)
-			else
-				removed = 0
-				added = rank
-			end
-
-			if added > 0 then
-				local new
-				for rank, id in next, ranks_id do
-					if band(id, added) > 0 then
-						if new then
-							new = new .. "*, *parkour-" .. rank
-						else
-							new = "parkour-" .. rank
-						end
-					end
-				end
-
-				webhooks._count = webhooks._count + 1
-				webhooks[webhooks._count] = "**`[RANKS]:`** **" .. player .. "** is now a **" .. new .. "**."
-			end
-			if removed > 0 then
-				local old
-				for rank, id in next, ranks_id do
-					if band(id, removed) > 0 then
-						if old then
-							old = old .. "*, *parkour-" .. rank
-						else
-							old = "parkour-" .. rank
-						end
-					end
-				end
-
-				webhooks._count = webhooks._count + 1
-				webhooks[webhooks._count] = "**`[RANKS]:`** **" .. player .. "** is no longer a **" .. old .. "**."
-			end
-
-			if rank == 0 then
-				data.ranks[player] = nil
-			else
-				data.ranks[player] = rank
-			end
-		end
-
-		translatedChatMessage("data_saved", updater)
-		ranks_update = nil
-		updater = nil
-		saving_ranks = false
-	end
-
 	if data.ranks then
+		if saving_ranks then
+			local added, removed, not_changed
+			for player, rank in next, ranks_update do
+				if data.ranks[player] then
+					not_changed = band(data.ranks[player], rank)
+					removed = bxor(not_changed, data.ranks[player])
+					added = bxor(not_changed, rank)
+				else
+					removed = 0
+					added = rank
+				end
+
+				if added > 0 then
+					local new
+					for rank, id in next, ranks_id do
+						if band(id, added) > 0 then
+							if new then
+								new = new .. "*, *parkour-" .. rank
+							else
+								new = "parkour-" .. rank
+							end
+						end
+					end
+
+					webhooks._count = webhooks._count + 1
+					webhooks[webhooks._count] = "**`[RANKS]:`** **" .. player .. "** is now a **" .. new .. "**."
+				end
+				if removed > 0 then
+					local old
+					for rank, id in next, ranks_id do
+						if band(id, removed) > 0 then
+							if old then
+								old = old .. "*, *parkour-" .. rank
+							else
+								old = "parkour-" .. rank
+							end
+						end
+					end
+
+					webhooks._count = webhooks._count + 1
+					webhooks[webhooks._count] = "**`[RANKS]:`** **" .. player .. "** is no longer a **" .. old .. "**."
+				end
+
+				if rank == 0 then
+					data.ranks[player] = nil
+				else
+					data.ranks[player] = rank
+				end
+			end
+
+			translatedChatMessage("data_saved", updater)
+			ranks_update = nil
+			updater = nil
+			saving_ranks = false
+		end
+
 		ranks, perms = {
 			admin = {_count = 0},
 			manager = {_count = 0},

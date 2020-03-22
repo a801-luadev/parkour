@@ -481,12 +481,14 @@ onEvent("GameDataLoaded", function(data)
 		end
 	end
 
-	if save_update then
-		data.update = save_update
-		save_update = nil
-	end
+	if data.update then
+		if save_update then
+			data.update = save_update
+			save_update = nil
+		end
 
-	update_at = data.update or 0
+		update_at = data.update or 0
+	end
 end)
 
 onEvent("PlayerRespawn", setNameColor)
