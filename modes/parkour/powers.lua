@@ -191,10 +191,11 @@ local keyPowers, clickPowers = {
 local player_keys = {}
 
 local function bindNecessary(player)
+	local maps = players_file[player].parkour.c
 	for key, powers in next, player_keys[player] do
 		if powers._count then
 			for index = 1, powers._count do
-				if players_file[player].parkour.c >= powers[index].maps then
+				if maps >= powers[index].maps then
 					system.bindKeyboard(player, key, true, true)
 				end
 			end
@@ -202,7 +203,7 @@ local function bindNecessary(player)
 	end
 
 	for index = 1, #clickPowers do
-		if players_file[player].parkour.c >= clickPowers[index].maps then
+		if maps >= clickPowers[index].maps then
 			system.bindMouse(player, true)
 			break
 		end

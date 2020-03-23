@@ -195,6 +195,9 @@ onEvent("PlayerDataParsed", function(player, data)
 	if levels and not ck_particles[player] then
 		local next_level = levels[players_level[player] + 1]
 		if next_level then
+			if ck_images[player] then
+				tfm.exec.removeImage(ck_images[player])
+			end
 			addCheckpointImage(player, next_level.x, next_level.y)
 		end
 	end

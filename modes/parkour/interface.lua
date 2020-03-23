@@ -285,8 +285,8 @@ local function showLeaderboard(player, page)
 	ui.addTextArea(6, "<font size='12'><p align='center'><t>" .. names     , player, 246, 130, 176, 235, 0x203F43, 0x193E46, 1, true)
 	ui.addTextArea(8, "<font size='12'><p align='center'><vp>" .. completed, player, 518, 130, 100, 235, 0x203F43, 0x193E46, 1, true)
 
-	addButton(1, "&lt;                       ", "leaderboard_" .. page - 1, player, 185, 346, 210, 20, not (page > 0)                    )
-	addButton(2, "&gt;                       ", "leaderboard_" .. page + 1, player, 410, 346, 210, 20, not (page < max_leaderboard_pages))
+	addButton(1, "&lt;                       ", "leaderboard:" .. page - 1, player, 185, 346, 210, 20, not (page > 0)                    )
+	addButton(2, "&gt;                       ", "leaderboard:" .. page + 1, player, 410, 346, 210, 20, not (page < max_leaderboard_pages))
 end
 
 local function showPowers(player, page)
@@ -348,8 +348,8 @@ local function showPowers(player, page)
 
 	ui.addTextArea(2, translatedMessage("completed_maps", player, completed), player, 230, 300, 340, 20, 0x1c3a3e, 0x193E46, 1, true)
 
-	addButton(1, "&lt;   ", "power_" .. page - 1, player, 170, 300, 40, 20, not (page > 0)          )
-	addButton(2, "&gt;   ", "power_" .. page + 1, player, 590, 300, 40, 20, not powers[page * 3 + 3])
+	addButton(1, "&lt;   ", "power:" .. page - 1, player, 170, 300, 40, 20, not (page > 0)          )
+	addButton(2, "&gt;   ", "power:" .. page + 1, player, 590, 300, 40, 20, not powers[page * 3 + 3])
 end
 
 local function toggleLeaderboard(player)
@@ -371,31 +371,40 @@ local function removePowersButton(player)
 end
 
 onEvent("TextAreaCallback", function(id, player, callback)
-	if callback == "powers" then
+	local position = string.find(callback, ":", 1, true)
+	local action, args
+	if not position then
+		action = callback
+	else
+		action = string.sub(callback, 1, position - 1)
+		args = string.sub(callback, position + 1)
+	end
+
+	if action == "powers" then
 		if open[player].powers then
 			closePowers(player)
 		else
 			showPowers(player, 0)
 		end
-	elseif callback == "leaderboard" then
+	elseif action == "leaderboard" then
 		if open[player].leaderboard then
 			closeLeaderboard(player)
 		else
 			showLeaderboard(player, 0)
 		end
-	elseif string.sub(callback, 1, 6) == "power_" then
-		showPowers(player, tonumber(string.sub(callback, 7)) or 0)
-	elseif string.sub(callback, 1, 12) == "leaderboard_" then
-		showLeaderboard(player, tonumber(string.sub(callback, 13)) or 0)
-	elseif callback == "migration" then
+	elseif action == "power" then
+		showPowers(player, tonumber(args) or 0)
+	elseif action == "leaderboard" then
+		showLeaderboard(player, tonumber(args) or 0)
+	elseif action == "migration" then
 		tfm.exec.chatMessage("<rose>/room *#drawbattle0migration", player)
-	elseif callback == "close_migration" then
+	elseif action == "close_migration" then
 		removeButton(5, player)
 		removeWindow(5, player)
-	elseif callback == "close_options" then
+	elseif action == "close_options" then
 		removeOptionsMenu(player)
-	elseif string.sub(callback, 1, 7) == "toggle:" then
-		local t_id, state = string.match(callback, "^toggle:(%d+):([01])$")
+	elseif action == "toggle" then
+		local t_id, state = string.match(args, "^(%d+):([01])$")
 		if not t_id then return end
 		state = state == "1"
 
@@ -404,7 +413,9 @@ onEvent("TextAreaCallback", function(id, player, callback)
 			ck_particles[player] = state
 
 			if state then
-				tfm.exec.removeImage(ck_images[player])
+				if ck_images[player] then
+					tfm.exec.removeImage(ck_images[player])
+				end
 			else
 				addCheckpointImage(player)
 			end
