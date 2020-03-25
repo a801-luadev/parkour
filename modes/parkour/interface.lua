@@ -285,8 +285,8 @@ local function showLeaderboard(player, page)
 	ui.addTextArea(6, "<font size='12'><p align='center'><t>" .. names     , player, 246, 130, 176, 235, 0x203F43, 0x193E46, 1, true)
 	ui.addTextArea(8, "<font size='12'><p align='center'><vp>" .. completed, player, 518, 130, 100, 235, 0x203F43, 0x193E46, 1, true)
 
-	addButton(1, "&lt;                       ", "leaderboard:" .. page - 1, player, 185, 346, 210, 20, not (page > 0)                    )
-	addButton(2, "&gt;                       ", "leaderboard:" .. page + 1, player, 410, 346, 210, 20, not (page < max_leaderboard_pages))
+	addButton(1, "&lt;                       ", "leaderboard_p:" .. page - 1, player, 185, 346, 210, 20, not (page > 0)                    )
+	addButton(2, "&gt;                       ", "leaderboard_p:" .. page + 1, player, 410, 346, 210, 20, not (page < max_leaderboard_pages))
 end
 
 local function showPowers(player, page)
@@ -394,7 +394,7 @@ onEvent("TextAreaCallback", function(id, player, callback)
 		end
 	elseif action == "power" then
 		showPowers(player, tonumber(args) or 0)
-	elseif action == "leaderboard" then
+	elseif action == "leaderboard_p" then
 		showLeaderboard(player, tonumber(args) or 0)
 	elseif action == "migration" then
 		tfm.exec.chatMessage("<rose>/room *#drawbattle0migration", player)
