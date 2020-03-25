@@ -25,7 +25,7 @@ local function checkPlayersPosition()
 
 		if bans[playerId] then
 			counterRemoved = counterRemoved + 1
-			toRemove[counterRemoved] = index
+			toRemove[counterRemoved] = player
 		else
 			cachedPlayers[playerId] = position
 		end
