@@ -1,5 +1,6 @@
 import aiotfm
 import asyncio
+import random
 
 class Client(aiotfm.Client):
 	async def connect(self):
@@ -15,7 +16,7 @@ class Client(aiotfm.Client):
 			else:
 				break
 		else:
-			raise ServerUnreachable('Unable to connect to the server.')
+			raise aiotfm.errors.ServerUnreachable('Unable to connect to the server.')
 
 		while not self.main.open:
 			await asyncio.sleep(.1)
