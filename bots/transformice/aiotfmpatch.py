@@ -2,6 +2,24 @@ import aiotfm
 import asyncio
 
 class Client(aiotfm.Client):
+	async def connect(self):
+		"""|coro|
+		Creates a connection with the main server.
+		"""
+
+		for port in random.sample([13801, 11801, 12801, 14801], 4):
+			try:
+				await self.main.connect('51.75.130.180', port)
+			except Exception:
+				pass
+			else:
+				break
+		else:
+			raise ServerUnreachable('Unable to connect to the server.')
+
+		while not self.main.open:
+			await asyncio.sleep(.1)
+	
 	async def restart(self, keys=None):
 		"""Restarts the client.
 		:param keys:"""
