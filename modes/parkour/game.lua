@@ -103,6 +103,7 @@ end)
 onEvent("PlayerWon", function(player, elapsed)
 	victory_count = victory_count + 1
 	victory[player] = true
+	has_cheese[player] = false -- removes when joins the hole
 
 	if victory_count == player_count then
 		tfm.exec.setGameTime(20)
