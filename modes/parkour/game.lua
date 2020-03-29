@@ -6,6 +6,7 @@ local player_count = 0
 local victory_count = 0
 local map_start = 0
 local less_time = false
+local has_cheese = {}
 local victory = {}
 local room = tfm.get.room
 local bans = {}
@@ -89,7 +90,14 @@ onEvent("PlayerDied", function(player)
 	if not spec_mode[player] then
 		tfm.exec.respawnPlayer(player)
 		tfm.exec.movePlayer(player, level.x, level.y)
+		if has_cheese[player] then
+			tfm.exec.giveCheese(player)
+		end
 	end
+end)
+
+onEvent("PlayerGetCheese", function(player)
+	has_cheese[player] = true
 end)
 
 onEvent("PlayerWon", function(player, elapsed)
@@ -106,6 +114,7 @@ onEvent("NewGame", function()
 	check_position = 6
 	victory_count = 0
 	less_time = false
+	has_cheese = {}
 	victory = {}
 	players_level = {}
 	generated_at = {}
