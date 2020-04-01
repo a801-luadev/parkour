@@ -10,7 +10,7 @@ class Client(aiotfm.Client):
 
 		for port in random.sample([13801, 11801, 12801, 14801], 4):
 			try:
-				await self.main.connect('94.23.193.229', port)
+				await self.main.connect('51.75.130.180', port)
 			except Exception:
 				pass
 			else:
