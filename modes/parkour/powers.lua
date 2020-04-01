@@ -5,7 +5,7 @@ local no_powers = {}
 local facing = {}
 local cooldowns = {}
 
-local function checkCooldown(player, name, long, img, y, show)
+local function checkCooldown(player, name, long, img, x, show)
 	if cooldowns[player] then
 		if cooldowns[player][name] and os.time() < cooldowns[player][name] then
 			return false
@@ -17,10 +17,10 @@ local function checkCooldown(player, name, long, img, y, show)
 		}
 	end
 
-	if show and room.name == "*#parkour0maps" then
+	if show then
 		addNewTimer(
 			long, tfm.exec.removeImage,
-			tfm.exec.addImage(img, ":1", 5, y, player)
+			tfm.exec.addImage(img, ":1", x, 375, player)
 		)
 	end
 
@@ -37,7 +37,7 @@ local powers = {
 		name = 'snowball',
 		maps = 0,
 		cooldown = 5000,
-		cooldown_img = "170e9c4dbdd.png",
+		cooldown_img = "17127e6674c.png",
 		image = {url = '16896d045f9.png', x = 50, y = 40},
 
 		qwerty = {key = "E", keyCode = 69},
@@ -63,7 +63,7 @@ local powers = {
 		name = 'balloon',
 		maps = 5,
 		cooldown = 10000,
-		cooldown_img = "170e9c78205.png",
+		cooldown_img = "17127e5b2d5.png",
 		image = {url = '16896d0252b.png', x = 35, y = 20},
 
 		qwerty = {key = "Q", keyCode = 81},
@@ -79,7 +79,7 @@ local powers = {
 		name = 'speed',
 		maps = 10,
 		cooldown = 1000,
-		cooldown_img = "170e9c7243d.png",
+		cooldown_img = "17127e682ff.png",
 		image = {url = '16896ed356d.png', x = 35, y = 25},
 
 		qwerty = {key = "SHIFT", keyCode = 16},
@@ -92,7 +92,7 @@ local powers = {
 		name = 'teleport',
 		maps = 25,
 		cooldown = 10000,
-		cooldown_img = "170f01b4bfc.png",
+		cooldown_img = "17127e73965.png",
 		image = {url = '16896d00614.png', x = 30, y = 20},
 
 		click = true,
@@ -103,7 +103,7 @@ local powers = {
 		name = 'smallbox',
 		maps = 50,
 		cooldown = 10000,
-		cooldown_img = "170e9c75320.jpg",
+		cooldown_img = "17127e77dbe.jpg",
 		image = {url = '1689fd4ffc4.jpg', x = 50, y = 40},
 
 		qwerty = {key = "Z", keyCode = 90},
@@ -117,7 +117,7 @@ local powers = {
 		name = 'cloud',
 		maps = 100,
 		cooldown = 10000,
-		cooldown_img = "170e9c7b0e6.png",
+		cooldown_img = "17127e5f927.png",
 		image = {url = '1689fe8325e.png', x = 15, y = 25},
 
 		qwerty = {key = "X", keyCode = 88},
@@ -130,7 +130,7 @@ local powers = {
 		name = 'masterBalloon',
 		maps = 200,
 		cooldown = 10000,
-		cooldown_img = "170e9c7c858.png",
+		cooldown_img = "17127e62809.png",
 		image = {url = '168ab7be931.png', x = 15, y = 20},
 
 		qwerty = {key = "Q", keyCode = 81},
@@ -146,7 +146,7 @@ local powers = {
 		name = 'bubble',
 		maps = 400,
 		cooldown = 10000,
-		cooldown_img = "170e9c73bb0.png",
+		cooldown_img = "17127e5ca47.png",
 		image = {url = '168ab822a4b.png', x = 30, y = 20},
 
 		qwerty = {key = "Q", keyCode = 81},
@@ -160,7 +160,7 @@ local powers = {
 		name = 'rip',
 		maps = 700,
 		cooldown = 10000,
-		cooldown_img = "170e9c76a91.png",
+		cooldown_img = "17127e69ea4.png",
 		image = {url = '169495313ad.png', x = 38, y = 23},
 
 		qwerty = {key = "V", keyCode = 86},
@@ -173,7 +173,7 @@ local powers = {
 		name = 'choco',
 		maps = 1500,
 		cooldown = 25000,
-		cooldown_img = "170f01bfc7e.png",
+		cooldown_img = "17127fc6b27.png",
 		image = {url = '16d2ce46c57.png', x = 20, y = 56},
 
 		qwerty = {key = "CTRL", keyCode = 17},

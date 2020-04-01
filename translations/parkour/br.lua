@@ -40,6 +40,16 @@ translations.br = {
 	already_killed = "<r>O jogador %s já está morto.",
 	leaderboard_not_loaded = "<r>O ranking ainda não foi carregado. Aguarde um minuto.",
 
+	-- Help window
+	help = "Ajuda",
+	staff = "Staff",
+	rules = "Regras",
+	contribute = "Contribuir",
+	help_help = "<p align = 'center'><font size = '14'>Bem-vindo ao <T>#parkour!</T></font>\n\n<font size = '12'><J>Seu objetivo é chegar em todos os checkpoints até que você complete o mapa.</J></font></p>\n\n<font size = '11'><N>• Aperte <O>O</O>, digite <O>!op</O> ou clique no <O>botão de configuração</O> para abrir o <T>menu de opções</T>.\n• Aperte <O>P</O> ou clique no <O>ícone de mão</O> no parte superior direita para abrir o <T>menu de poderes</T>.\n• Aperte <O>L</O> ou digite <O>!lb</O> parar abrir o <T>ranking</T>.\n• Aperte <O>M</O> ou a tecla <O>Delete</O> para <T>/mort</T>, você pode alterar as teclas no moenu de <J>Opções</J>.\n• Para saber mais sobre nossa <O>staff</O> e as <O>regras do parkour</O>, clique nas abas <T>Staff</T> e <T>Regras</T>, respectivamente.</font>\n\n<p align = 'center'><font size = '13'><T>Contribuições agora estão disponíveis! Para mais detalhes, clique na aba <O>Contribuir</O>!</T></font></p>",
+	help_staff = "<p align = 'center'><font size = '13'><r>AVISO: A staff do Parkour não faz parte da staff do Transformice e não tem nenhum poder no jogo em si, apenas no módulo.</r>\nStaff do Parkour assegura que o módulo rode com problemas mínimos, e estão sempre disponíveis para dar assistência aos jogadores quando necessário.</font></p>\nVocê pode digitar <D>!staff</D> no chat para ver a lista de staff.\n\n<font color = '#E7342A'>Administradores:</font> São responsáveis por manter o módulo propriamente dito, atualizando-o e corrigindo bugs.\n\n<font color = '#843DA4'>Gerenciadores das Equipes:</font> Observam as equipes de Moderação e de Mapas, assegurando que todos estão fazendo um bom tarbalho. Também são responsáveis por recrutar novos membros para a staff.\n\n<font color = '#FFAAAA'>Moderadores:</font> São responsáveis por aplicar as regras no módulo e punir aqueles que não as seguem.\n\n<font color = '#25C059'>Mappers:</font> São responsáveis por avaliar, adicionar e remover mapas do módulo para assegurar que você tenha uma jogatina divertida.",
+	help_rules = "<font size = '13'><B><J>Todas as regras nos Termos e Condições de Uso do Transformice também se aplicam no #parkour</J></B></font>\n\nSe você encontrar algum jogador quebrando-as, cochiche com um moderador do #parkour no jogo. Se os moderadores não estiverem online, recomendamos que reporte em nosso servidor no Discord.\nAo reportar, por favor inclua a comunidade, o nome da sala e o nome do jogador.\n• Ex: en-#parkour10 Blank#3495 trolling\nEvidências, como prints, vídeos e gifs são úteis e apreciados, mas não necessários.\n\n<font size = '11'>• Uso de <font color = '#ef1111'>hacks, glitches ou bugs</font> são proibidos em salas #parkour\n• <font color = '#ef1111'>Farm VPN</font> será considerado um <B>abuso</B> e não é permitido. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nQualquer um pego quebrando as regras será banido imediatamente.</B></font></p>\n\n<font size = '12'>Transformice permite trollar. No entanto, <font color='#cc2222'><B>não permitiremos isso no parkour.</B></font></font>\n\n<p align = 'center'><J>Trollar é quando um jogador usa seus poderes de forma intencional para fazer com que os outros jogadores não terminem o mapa.</j></p>\n• Trollar por vingança <B>não é um motivo válido</B> e você ainda será punido.\n• Insistir em ajudar jogadores que estão tentando terminar o mapa sozinhos e se recusando a parar quando pedido também será considerado trollar.\n• <J>Se um jogador não quer ajuda e prefere completar o mapa sozinho, dê seu melhor para ajudar os outros jogadores</J>. No entanto, se outro jogador que precisa de ajuda estiver no mesmo checkpoint daquele que quer completar sozinho, você pode ajudar ambos sem receber punição.\n\nSe um jogador for pego trollando, serão punidos por um tempo determinado ou por algumas partidas. Note que trollar repetidamente irá fazer com que você receba punições gradativamente mais longas e/ou severas.",
+	help_contribute = "<font size='14'>A equipe de gerenciamento do parkour ama código-fonte aberto, porque isso ajuda a comunidaed. Você pode ver e modificar o código do módulo no github <a href='event:github'><u>(clicando aqui)</u></a>.\n\nNote que estamos mantendo o módulo de graça, então qualquer ajuda (seja código, report de bugs, sugestões) é bem-vinda. Também podemos receber doações, que podem ser feitas <a href='event:donate'><u>clicando aqui</u></a>. Qualquer valor é apreciado e será usado para melhorar o #parkour.",
+
 	-- Congratulation messages
 	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>.",
 	finished = "<d><o>%s</o> terminou o parkour em <vp>%s</vp> segundos, <fc>parabéns!",
@@ -47,12 +57,13 @@ translations.br = {
 	enjoy = "<d>Aproveite suas novas habilidades!",
 
 	-- Information messages
-	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar partículas para os checkpoints\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b>\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes",
+	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar partículas para os checkpoints\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes",
 	paused_events = "<cep><b>[Atenção!]</b> <n>O módulo está atingindo um estado crítico e está sendo pausado.",
 	resumed_events = "<n2>O módulo está se normalizando.",
 	welcome = "<n>Bem-vindo(a) ao <t>#parkour</t>!",
 	discord = "<cs>Tendo alguma boa ideia, report de bug ou apenas querendo conversar com outros jogadores? Entre em nosso servidor no Discord: <pt>%s</pt>",
 	map_submissions = "<bv>Quer ver seu mapa no módulo? Poste-o aqui: <j>%s</j>",
+	type_help = "<pt>Recomendamos que você digite <d>!help</d> para informações úteis!",
 	data_saved = "<vp>Dados salvos.",
 	action_within_minute = "<vp>A ação será aplicada dentre um minuto.",
 	rank_save = "<n2>Digite <d>!rank save</d> para salvar as mudanças.",

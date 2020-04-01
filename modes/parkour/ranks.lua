@@ -32,10 +32,12 @@ local ranks_permissions = {
 		change_map = true,
 	}
 }
+local player_ranks = {}
 local perms = {}
 local saving_ranks = false
 local ranks_update
 local updater
+local ranks_order = {"admin", "manager", "mod", "mapper"}
 
 for rank, perms in next, ranks_permissions do
 	if rank ~= "admin" then
@@ -103,17 +105,18 @@ onEvent("GameDataLoaded", function(data)
 			saving_ranks = false
 		end
 
-		ranks, perms = {
+		ranks, perms, player_ranks = {
 			admin = {_count = 0},
 			manager = {_count = 0},
 			mod = {_count = 0},
 			mapper = {_count = 0}
-		}, {}
-		local player_perms
+		}, {}, {}
+		local player_perms, _player_ranks
 		for player, rank in next, data.ranks do
-			player_perms = {}
+			player_perms, _player_ranks = {}, {}
 			for name, id in next, ranks_id do
 				if band(rank, id) > 0 then
+					_player_ranks[name] = true
 					ranks[name][player] = true
 					ranks[name]._count = ranks[name]._count + 1
 					for perm, enabled in next, ranks_permissions[name] do
@@ -121,6 +124,7 @@ onEvent("GameDataLoaded", function(data)
 					end
 				end
 			end
+			player_ranks[player] = _player_ranks
 			perms[player] = player_perms
 		end
 	end

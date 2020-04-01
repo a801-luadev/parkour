@@ -23,6 +23,10 @@
 -- SOFTWARE.
 
 
+local donation_links = {
+	parkour = "https://a801-luadev.github.io/?redirect=parkour"
+}
+local github_link = "https://github.com/a801-luadev/parkour"
 local discord_link = "https://discord.gg/RXaCyWz"
 local map_submissions = "https://atelier801.com/topic?f=6&t=880520"
 

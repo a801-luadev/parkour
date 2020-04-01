@@ -42,12 +42,14 @@ local community_images = {
 	vk = "1651b3258b3.png"
 }
 
-local function addButton(id, text, action, player, x, y, width, height, disabled)
+local function addButton(id, text, action, player, x, y, width, height, disabled, left)
 	id = 2000 + id * 3
 	if not disabled then
 		text = "<a href='event:" .. action .. "'>" .. text .. "</a>"
 	end
-	text = "<p align='center'>" .. text .. "</p>"
+	if not left then
+		text = "<p align='center'>" .. text .. "</p>"
+	end
 	local color = disabled and 0x2a424b or 0x314e57
 
 	ui.addTextArea(id    , ""  , player, x-1, y-1, width, height, 0x7a8d93, 0x7a8d93, 1, true)
@@ -161,11 +163,27 @@ local function removeOptionsMenu(player)
 	open[player].options = nil
 end
 
+local function removeHelpMenu(player)
+	if not open[player].help then return end
+
+	removeWindow(7, player)
+
+	ui.removeTextArea(10000, player)
+
+	for button = 7, 11 do
+		removeButton(button, player)
+	end
+
+	open[player].help = nil
+end
+
 local function showOptionsMenu(player)
 	if open[player].leaderboard then
 		closeLeaderboard(player)
 	elseif open[player].powers then
 		closePowers(player)
+	elseif open[player].help then
+		removeHelpMenu(player)
 	end
 	open[player].options = true
 
@@ -174,9 +192,31 @@ local function showOptionsMenu(player)
 
 	addToggle(1, player, players_file[player].parkour.ckpart == 1) -- particles for checkpoints
 	addToggle(2, player, players_file[player].parkour.keyboard == 1) -- qwerty keyboard
-	addToggle(3, player, players_file[player].parkour.mort == 1) -- M hotkey
+	addToggle(3, player, players_file[player].parkour.mort == 1) -- M or DEL hotkey
 	addToggle(4, player, players_file[player].parkour.pcool == 1) -- power cooldowns
 	addToggle(5, player, players_file[player].parkour.pbut == 1) -- powers button
+end
+
+local function showHelpMenu(player, tab)
+	if open[player].leaderboard then
+		closeLeaderboard(player)
+	elseif open[player].powers then
+		closePowers(player)
+	elseif open[player].options then
+		removeOptionsMenu(player)
+	end
+	open[player].help = true
+
+	addWindow(7, "\n\n\n" .. translatedMessage("help_" .. tab, player) .. "\n\n\n", player, 200, 50, 300, 260)
+
+	ui.addTextArea(10000, "", player, 210, 60, 390, 30, 0x1c3a3e, 0x1c3a3e, 1, true)
+
+	addButton(7, translatedMessage("help", player), "help:help", player, 210, 60, 80, 18, tab == "help")
+	addButton(8, translatedMessage("staff", player), "help:staff", player, 310, 60, 80, 18, tab == "staff")
+	addButton(9, translatedMessage("rules", player), "help:rules", player, 410, 60, 80, 18, tab == "rules")
+	addButton(10, translatedMessage("contribute", player), "help:contribute", player, 510, 60, 80, 18, tab == "contribute")
+
+	addButton(11, "Close", "close_help", player, 210, 352, 380, 18, false)
 end
 
 function showMigrationPopup(player)
@@ -216,6 +256,8 @@ local function showLeaderboard(player, page)
 		closePowers(player)
 	elseif open[player].options then
 		removeOptionsMenu(player)
+	elseif open[player].help then
+		removeHelpMenu(player)
 	end
 	open[player].leaderboard = true
 
@@ -290,10 +332,14 @@ local function showLeaderboard(player, page)
 end
 
 local function showPowers(player, page)
+	if not players_file[player] then return end
+
 	if open[player].leaderboard then
 		closeLeaderboard(player)
 	elseif open[player].options then
 		removeOptionsMenu(player)
+	elseif open[player].help then
+		removeHelpMenu(player)
 	end
 	open[player].powers = true
 
@@ -361,8 +407,8 @@ local function toggleLeaderboard(player)
 end
 
 local function showPowersButton(player)
-	powers_img[player] = tfm.exec.addImage("16894c35340.png", ":1", 762, 32, player)
-	ui.addTextArea(0, "<a href='event:powers'><font size='50'> </font></a>", player, 762, 32, 36, 32, 0, 0, 0, true)
+	powers_img[player] = tfm.exec.addImage("17127e63f7d.png", ":1", 742, 32, player)
+	ui.addTextArea(0, "<a href='event:powers'><font size='50'>  </font></a>", player, 737, 32, 30, 32, 0, 0, 0, true)
 end
 
 local function removePowersButton(player)
@@ -401,8 +447,23 @@ onEvent("TextAreaCallback", function(id, player, callback)
 	elseif action == "close_migration" then
 		removeButton(5, player)
 		removeWindow(5, player)
+	elseif action == "settings" then
+		if open[player].options then
+			removeOptionsMenu(player)
+		else
+			showOptionsMenu(player)
+		end
 	elseif action == "close_options" then
 		removeOptionsMenu(player)
+	elseif action == "close_help" then
+		removeHelpMenu(player)
+	elseif action == "help" then
+		if args ~= "help" and args ~= "staff" and args ~= "rules" and args ~= "contribute" then return end
+		showHelpMenu(player, args)
+	elseif action == "donate" then
+		tfm.exec.chatMessage("<rose>" .. donation_links.parkour, player)
+	elseif action == "github" then
+		tfm.exec.chatMessage("<rose>" .. github_link, player)
 	elseif action == "toggle" then
 		local t_id, state = string.match(args, "^(%d+):([01])$")
 		if not t_id then return end
@@ -431,10 +492,16 @@ onEvent("TextAreaCallback", function(id, player, callback)
 				bindNecessary(player)
 			end
 
-		elseif t_id == "3" then -- M hotkey
+		elseif t_id == "3" then -- M or DEL hotkey
 			players_file[player].parkour.mort = state and 1 or 0
 
-			system.bindKeyboard(player, 77, true, state)
+			if state then
+				system.bindKeyboard(player, 77, true, true)
+				system.bindKeyboard(player, 46, true, false)
+			else
+				system.bindKeyboard(player, 77, true, false)
+				system.bindKeyboard(player, 46, true, true)
+			end
 		elseif t_id == "4" then -- power cooldowns
 			players_file[player].parkour.pcool = state and 1 or 0
 
@@ -526,9 +593,15 @@ onEvent("NewPlayer", function(player)
 	translatedChatMessage("welcome", player)
 	translatedChatMessage("discord", player, discord_link)
 	translatedChatMessage("map_submissions", player, map_submissions)
+	translatedChatMessage("type_help", player)
 
 	system.bindKeyboard(player, 76, true, true)
 	system.bindKeyboard(player, 79, true, true)
+	system.bindKeyboard(player, 72, true, true)
+	system.bindKeyboard(player, 80, true, true)
+
+	tfm.exec.addImage("17127e61098.png", ":1", 772, 32, player)
+	ui.addTextArea(-1, "<a href='event:settings'><font size='50'>  </font></a>", player, 767, 32, 30, 32, 0, 0, 0, true)
 
 	if levels then
 		if is_tribe then
@@ -549,9 +622,7 @@ onEvent("NewPlayer", function(player)
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	if data.parkour.mort == 1 then
-		system.bindKeyboard(player, 77, true, true)
-	end
+	system.bindKeyboard(player, data.parkour.mort == 1 and 77 or 46, true, true)
 	if data.parkour.pbut == 1 then
 		showPowersButton(player)
 	end
@@ -605,6 +676,12 @@ onEvent("ChatCommand", function(player, msg)
 
 	if cmd == "lb" then
 		toggleLeaderboard(player)
+
+	elseif cmd == "donate" then
+		tfm.exec.chatMessage("<rose>" .. donation_links.parkour, player)
+
+	elseif cmd == "help" then
+		showHelpMenu(player, "help")
 
 	elseif cmd == "ban" then
 		if not perms[player] or not perms[player].ban then return end
@@ -746,6 +823,38 @@ onEvent("ChatCommand", function(player, msg)
 			return translatedChatMessage("invalid_syntax", player)
 		end
 
+	elseif cmd == "staff" then
+		local texts = {}
+		local text, _first
+		for player, ranks in next, player_ranks do
+			if player ~= "Tocutoeltuco#5522" then
+				text = "\n- <v>" .. player .. "</v> ("
+				_first = true
+				for rank in next, ranks do
+					if _first then
+						text = text .. rank
+						_first = false
+					else
+						text = text .. ", " .. rank
+					end
+				end
+				texts[player] = text .. ")"
+			end
+		end
+
+		text = "<v>[#]<n> <d>Parkour staff:</d>"
+
+		for i = 1, #ranks_order do
+			for player in next, ranks[ranks_order[i]] do
+				if texts[player] then
+					text = text .. texts[player]
+					texts[player] = nil
+				end
+			end
+		end
+
+		tfm.exec.chatMessage(text, player)
+
 	elseif cmd == "update" then
 		if not perms[player] or not perms[player].show_update then return end
 
@@ -799,9 +908,9 @@ end)
 onEvent("Keyboard", function(player, key)
 	if key == 76 then
 		toggleLeaderboard(player)
-	elseif key == 77 then
+	elseif key == 77 or key == 46 then
 		local now = os.time()
-		if now >= kill_cooldown[player] then
+		if now >= (kill_cooldown[player] or os.time()) then
 			tfm.exec.killPlayer(player)
 			kill_cooldown[player] = now + 1000
 		end
@@ -810,6 +919,18 @@ onEvent("Keyboard", function(player, key)
 			removeOptionsMenu(player)
 		else
 			showOptionsMenu(player)
+		end
+	elseif key == 72 then
+		if open[player].help then
+			removeHelpMenu(player)
+		else
+			showHelpMenu(player, "help")
+		end
+	elseif key == 80 then
+		if open[player].powers then
+			closePowers(player)
+		else
+			showPowers(player, 0)
 		end
 	end
 end)
@@ -825,4 +946,7 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("map", true)
 	system.disableChatCommandDisplay("spec", true)
 	system.disableChatCommandDisplay("op", true)
+	system.disableChatCommandDisplay("donate", true)
+	system.disableChatCommandDisplay("help", true)
+	system.disableChatCommandDisplay("staff", true)
 end)

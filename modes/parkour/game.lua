@@ -21,7 +21,7 @@ local check_funcorp_at = os.time() + 1000
 
 local function generatePlayer(player, when)
 	players_level[player] = 1
-	generated_at[player] = save_at
+	generated_at[player] = when
 end
 
 local function addCheckpointImage(player, x, y)
@@ -126,7 +126,7 @@ onEvent("NewGame", function()
 	end
 
 	for player in next, in_room do
-		generatePlayer(player, map_start)
+		players_level[player] = 1
 		tfm.exec.setPlayerScore(player, 1, false)
 	end
 
