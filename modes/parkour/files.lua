@@ -31,7 +31,7 @@ local data_migrations = {
 
 		data.modules = nil
 
-		data.parkour.v = "0.3" -- version
+		data.parkour.v = "0.4" -- version
 		data.parkour.c = data.parkour.cm -- completed maps
 		data.parkour.ckpart = 1 -- particles for checkpoints (1 -> true, 0 -> false)
 		data.parkour.mort = 1 -- /mort hotkey
@@ -39,21 +39,31 @@ local data_migrations = {
 		data.parkour.pbut = 1 -- powers button
 		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1 -- 1 -> qwerty, 0 -> false
 		data.parkour.killed = 0
+		data.parkour.hbut = 1 -- help button
+		data.parkour.congrats = 1 -- contratulations message
 
 		data.parkour.cm = nil
 	end,
 	["0.1"] = function(player, data)
-		data.parkour.v = "0.3"
+		data.parkour.v = "0.4"
 		data.parkour.ckpart = 1
 		data.parkour.mort = 1
 		data.parkour.pcool = 1
 		data.parkour.pbut = 1
 		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1
 		data.parkour.killed = 0
+		data.parkour.congrats = 1
 	end,
 	["0.2"] = function(player, data)
-		data.parkour.v = "0.3"
+		data.parkour.v = "0.4"
 		data.parkour.killed = 0
+		data.parkour.hbut = 1
+		data.parkour.congrats = 1
+	end,
+	["0.3"] = function(player, data)
+		data.parkour.v = "0.4"
+		data.parkour.hbut = 1
+		data.parkour.congrats = 1
 	end
 }
 

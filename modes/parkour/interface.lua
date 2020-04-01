@@ -5,12 +5,15 @@ local update_at = 0
 local ban_actions = {_count = 0}
 local open = {}
 local powers_img = {}
+local help_img = {}
 local toggle_positions = {
 	[1] = 107,
 	[2] = 132,
 	[3] = 157,
 	[4] = 183,
-	[5] = 209
+	[5] = 209,
+	[6] = 236,
+	[7] = 262
 }
 local community_images = {
 	xx = "1651b327097.png",
@@ -154,7 +157,7 @@ local function removeOptionsMenu(player)
 	removeWindow(6, player)
 	removeButton(6, player)
 
-	for toggle = 1, 5 do
+	for toggle = 1, 7 do
 		removeToggle(toggle, player)
 	end
 
@@ -195,6 +198,8 @@ local function showOptionsMenu(player)
 	addToggle(3, player, players_file[player].parkour.mort == 1) -- M or DEL hotkey
 	addToggle(4, player, players_file[player].parkour.pcool == 1) -- power cooldowns
 	addToggle(5, player, players_file[player].parkour.pbut == 1) -- powers button
+	addToggle(6, player, players_file[player].parkour.hbut == 1) -- help button
+	addToggle(7, player, players_file[player].parkour.congrats == 1) -- congratulations message
 end
 
 local function showHelpMenu(player, tab)
@@ -407,13 +412,23 @@ local function toggleLeaderboard(player)
 end
 
 local function showPowersButton(player)
-	powers_img[player] = tfm.exec.addImage("17127e63f7d.png", ":1", 742, 32, player)
-	ui.addTextArea(0, "<a href='event:powers'><font size='50'>  </font></a>", player, 737, 32, 30, 32, 0, 0, 0, true)
+	powers_img[player] = tfm.exec.addImage("17136ef539e.png", ":1", 774, 62, player)
+	ui.addTextArea(0, "<a href='event:powers'><font size='50'>  </font></a>", player, 769, 62, 30, 32, 0, 0, 0, true)
+end
+
+local function showHelpButton(player, y)
+	help_img[player] = tfm.exec.addImage("17136f9eefd.png", ":1", 772, y, player)
+	ui.addTextArea(-2, "<a href='event:help_button'><font size='50'>  </font></a>", player, 767, y, 30, 32, 0, 0, 0, true)
 end
 
 local function removePowersButton(player)
 	tfm.exec.removeImage(powers_img[player])
 	ui.removeTextArea(0, player)
+end
+
+local function removeHelpButton(player)
+	tfm.exec.removeImage(help_img[player])
+	ui.removeTextArea(-2, player)
 end
 
 onEvent("TextAreaCallback", function(id, player, callback)
@@ -431,6 +446,12 @@ onEvent("TextAreaCallback", function(id, player, callback)
 			closePowers(player)
 		else
 			showPowers(player, 0)
+		end
+	elseif action == "help_button" then
+		if open[player].help then
+			removeHelpMenu(player)
+		else
+			showHelpMenu(player, "help")
 		end
 	elseif action == "leaderboard" then
 		if open[player].leaderboard then
@@ -510,9 +531,29 @@ onEvent("TextAreaCallback", function(id, player, callback)
 
 			if state then
 				showPowersButton(player)
+				if players_file[player].parkour.hbut == 1 then
+					removeHelpButton(player)
+					showHelpButton(player, 92)
+				end
 			else
 				removePowersButton(player)
+				if players_file[player].parkour.hbut == 1 then
+					removeHelpButton(player)
+					showHelpButton(player, 62)
+				end
 			end
+
+		elseif t_id == "6" then -- help button
+			players_file[player].parkour.hbut = state and 1 or 0
+
+			if state then
+				showHelpButton(player, players_file[player].parkour.pbut == 1 and 92 or 62)
+			else
+				removeHelpButton(player)
+			end
+
+		elseif t_id == "7" then -- congratulations message
+			players_file[player].parkour.congrats = state and 1 or 0
 		end
 
 		addToggle(tonumber(t_id), player, state)
@@ -600,7 +641,7 @@ onEvent("NewPlayer", function(player)
 	system.bindKeyboard(player, 72, true, true)
 	system.bindKeyboard(player, 80, true, true)
 
-	tfm.exec.addImage("17127e61098.png", ":1", 772, 32, player)
+	tfm.exec.addImage("1713705576b.png", ":1", 772, 32, player)
 	ui.addTextArea(-1, "<a href='event:settings'><font size='50'>  </font></a>", player, 767, 32, 30, 32, 0, 0, 0, true)
 
 	if levels then
@@ -626,6 +667,9 @@ onEvent("PlayerDataParsed", function(player, data)
 	if data.parkour.pbut == 1 then
 		showPowersButton(player)
 	end
+	if data.parkour.hbut == 1 then
+		showHelpButton(player, data.parkour.pbut == 1 and 92 or 62)
+	end
 end)
 
 onEvent("PlayerWon", function(player)
@@ -633,7 +677,15 @@ onEvent("PlayerWon", function(player)
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
-	translatedChatMessage("finished", nil, player, taken)
+	if players_file[player].parkour.congrats == 0 then
+		translatedChatMessage("finished", player, player, taken)
+	end
+
+	for _player in next, in_room do
+		if players_file[_player] and players_file[_player].parkour.congrats == 1 then
+			translatedChatMessage("finished", _player, player, taken)
+		end
+	end
 
 	if is_tribe then
 		translatedChatMessage("tribe_house", player)
