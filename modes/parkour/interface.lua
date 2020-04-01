@@ -412,13 +412,13 @@ local function toggleLeaderboard(player)
 end
 
 local function showPowersButton(player)
-	powers_img[player] = tfm.exec.addImage("17136ef539e.png", ":1", 774, 62, player)
-	ui.addTextArea(0, "<a href='event:powers'><font size='50'>  </font></a>", player, 769, 62, 30, 32, 0, 0, 0, true)
+	powers_img[player] = tfm.exec.addImage("17136ef539e.png", ":1", 744, 32, player)
+	ui.addTextArea(0, "<a href='event:powers'><font size='50'>  </font></a>", player, 739, 32, 30, 32, 0, 0, 0, true)
 end
 
-local function showHelpButton(player, y)
-	help_img[player] = tfm.exec.addImage("17136f9eefd.png", ":1", 772, y, player)
-	ui.addTextArea(-2, "<a href='event:help_button'><font size='50'>  </font></a>", player, 767, y, 30, 32, 0, 0, 0, true)
+local function showHelpButton(player, x)
+	help_img[player] = tfm.exec.addImage("17136f9eefd.png", ":1", x, 32, player)
+	ui.addTextArea(-2, "<a href='event:help_button'><font size='50'>  </font></a>", player, x - 5, 32, 30, 32, 0, 0, 0, true)
 end
 
 local function removePowersButton(player)
@@ -533,13 +533,13 @@ onEvent("TextAreaCallback", function(id, player, callback)
 				showPowersButton(player)
 				if players_file[player].parkour.hbut == 1 then
 					removeHelpButton(player)
-					showHelpButton(player, 92)
+					showHelpButton(player, 714)
 				end
 			else
 				removePowersButton(player)
 				if players_file[player].parkour.hbut == 1 then
 					removeHelpButton(player)
-					showHelpButton(player, 62)
+					showHelpButton(player, 744)
 				end
 			end
 
@@ -547,7 +547,7 @@ onEvent("TextAreaCallback", function(id, player, callback)
 			players_file[player].parkour.hbut = state and 1 or 0
 
 			if state then
-				showHelpButton(player, players_file[player].parkour.pbut == 1 and 92 or 62)
+				showHelpButton(player, players_file[player].parkour.pbut == 1 and 714 or 744)
 			else
 				removeHelpButton(player)
 			end
@@ -668,7 +668,7 @@ onEvent("PlayerDataParsed", function(player, data)
 		showPowersButton(player)
 	end
 	if data.parkour.hbut == 1 then
-		showHelpButton(player, data.parkour.pbut == 1 and 92 or 62)
+		showHelpButton(player, data.parkour.pbut == 1 and 714 or 744)
 	end
 end)
 
