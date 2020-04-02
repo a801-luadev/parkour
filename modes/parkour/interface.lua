@@ -673,6 +673,8 @@ onEvent("PlayerDataParsed", function(player, data)
 end)
 
 onEvent("PlayerWon", function(player)
+	if bans[ room.playerList[player].id ] then return end
+
 	-- If the player joined the room after the map started,
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
