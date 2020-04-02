@@ -224,6 +224,8 @@ local function unbind(player)
 end
 
 onEvent("Keyboard", function(player, key, down, x, y)
+	if bans[ room.playerList[player].id ] then return end
+
 	if key == 0 then
 		facing[player] = false
 		return
@@ -251,6 +253,8 @@ onEvent("Keyboard", function(player, key, down, x, y)
 end)
 
 onEvent("Mouse", function(player, x, y)
+	if bans[ room.playerList[player].id ] then return end
+
 	if not players_file[player] or not victory[player] then return end
 
 	local file = players_file[player].parkour
@@ -291,6 +295,8 @@ onEvent("PlayerDataParsed", function(player, data)
 end)
 
 onEvent("PlayerWon", function(player)
+	if bans[ room.playerList[player].id ] then return end
+
 	if room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and not is_tribe then
 		completed = players_file[player].parkour.c + 1
 		players_file[player].parkour.c = completed
