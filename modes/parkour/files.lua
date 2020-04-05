@@ -22,8 +22,6 @@ local room = tfm.get.room
 local file_index = 1
 file_id = files[file_index]
 
-local showMigrationPopup
-
 local data_migrations = {
 	["0.0"] = function(player, data)
 		data.parkour = data.modules.parkour
@@ -82,7 +80,6 @@ onEvent("PlayerDataLoaded", function(player, data)
 	local corrupt
 	if data == "" then
 		data = {}
-		showMigrationPopup(player)
 	else
 		local done
 		done, data = pcall(json.decode, data)

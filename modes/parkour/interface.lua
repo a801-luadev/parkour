@@ -224,15 +224,6 @@ local function showHelpMenu(player, tab)
 	addButton(11, "Close", "close_help", player, 210, 352, 380, 18, false)
 end
 
-function showMigrationPopup(player)
-	addWindow(
-		5,
-		"<p align='center'><font size='20'><vp><b>" .. translatedMessage("important", player) .. "</b></vp>\n\n" .. translatedMessage("data_migration", player),
-		player, 168, 46, 365, 260
-	)
-	addButton(5, "Close", "close_migration", player, 185, 346, 426, 20, false)
-end
-
 local function capitalize(str)
 	local first = string.sub(str, 1, 1)
 	if first == "+" then
@@ -463,11 +454,6 @@ onEvent("TextAreaCallback", function(id, player, callback)
 		showPowers(player, tonumber(args) or 0)
 	elseif action == "leaderboard_p" then
 		showLeaderboard(player, tonumber(args) or 0)
-	elseif action == "migration" then
-		tfm.exec.chatMessage("<rose>/room *#drawbattle0migration", player)
-	elseif action == "close_migration" then
-		removeButton(5, player)
-		removeWindow(5, player)
 	elseif action == "settings" then
 		if open[player].options then
 			removeOptionsMenu(player)

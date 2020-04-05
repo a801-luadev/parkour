@@ -57,7 +57,6 @@ translations.es = {
 	enjoy = "<d>¡Disfruta tus nuevas habilidades!",
 
 	-- Information messages
-	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar partículas para los checkpoints\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa",
 	paused_events = "<cep><b>[¡Advertencia!]</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
 	resumed_events = "<n2>El módulo ha sido reanudado.",
 	welcome = "<n>¡Bienvenido a <t>#parkour</t>!",
@@ -75,11 +74,10 @@ translations.es = {
 	starting_perm_change = "<j>[INFO] <n>Empezando cambio de categoría...",
 	got_map_info = "<j>[INFO] <n>Se obtuvo toda la información del mapa. Intentando cambiar la categoría...",
 	perm_changed = "<j>[INFO] <n>Se cambió la categoría del mapa <ch>@%s</ch> desde <r>P%s</r> hacia <t>P%s</t> exitosamente.",
-	data_migration = "Todos los datos deben migrar. Esto significa, que actualmente no tienes ningún mapa completado. Para restaurar tus datos, simplemente ve a esta sala: <a href='event:migration'><b>*#drawbattle0migration</b></a>.",
 	leaderboard_loaded = "<j>La tabla de clasificación ha sido cargada. Presiona L para abrirla.",
 
 	-- Miscellaneous
-	important = "IMPORTANTE",
+	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar partículas para los checkpoints\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa",
 	unknown = "Desconocido",
 	powers = "Poderes",
 	press = "<vp>Presiona %s",
