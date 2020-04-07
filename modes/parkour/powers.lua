@@ -173,7 +173,7 @@ local powers = {
 		name = 'choco',
 		maps = 1500,
 		cooldown = 25000,
-		cooldown_icon = {img= "17127fc6b27.png", x = 201, y = 374}
+		cooldown_icon = {img= "17127fc6b27.png", x = 201, y = 374},
 		image = {url = '16d2ce46c57.png', x = 20, y = 56},
 
 		qwerty = {key = "CTRL", keyCode = 17},
