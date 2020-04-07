@@ -5,7 +5,7 @@ local no_powers = {}
 local facing = {}
 local cooldowns = {}
 
-local function checkCooldown(player, name, long, img, x, show)
+local function checkCooldown(player, name, long, img, x, y, show)
 	if cooldowns[player] then
 		if cooldowns[player][name] and os.time() < cooldowns[player][name] then
 			return false
@@ -34,22 +34,8 @@ end
 
 local powers = {
 	{
-		name = 'snowball',
-		maps = 0,
-		cooldown = 5000,
-		cooldown_img = "17127e6674c.png",
-		image = {url = '16896d045f9.png', x = 50, y = 40},
-
-		qwerty = {key = "E", keyCode = 69},
-
-		fnc = function(player, key, down, x, y)
-			local right = facing[player]
-			despawnableObject(5000, 34, x + (right and 20 or -20), y, 0, right and 10 or -10)
-		end
-	},
-	{
 		name = 'fly',
-		maps = 3,
+		maps = 5,
 		cooldown = nil,
 		image = {url = '16896d06614.png', x = 47, y = 33},
 
@@ -60,10 +46,37 @@ local powers = {
 		end
 	},
 	{
+		name = 'snowball',
+		maps = 15,
+		cooldown = 5000,
+		cooldown_icon = {img = "17127e6674c.png", x = 8, y = 374},
+		image = {url = '16896d045f9.png', x = 50, y = 40},
+
+		qwerty = {key = "E", keyCode = 69},
+
+		fnc = function(player, key, down, x, y)
+			local right = facing[player]
+			despawnableObject(5000, 34, x + (right and 20 or -20), y, 0, right and 10 or -10)
+		end
+	},
+	{
+		name = 'speed',
+		maps = 10,
+		cooldown = 1000,
+		cooldown_icon = {img = "17127e682ff.png", x = 30, y = 373},
+		image = {url = '16896ed356d.png', x = 35, y = 25},
+
+		qwerty = {key = "SHIFT", keyCode = 16},
+
+		fnc = function(player, key, down, x, y)
+			tfm.exec.movePlayer(player, 0, 0, true, facing[player] and 60 or -60, 0, true)
+		end
+	},
+	{
 		name = 'balloon',
-		maps = 5,
+		maps = 20,
 		cooldown = 10000,
-		cooldown_img = "17127e5b2d5.png",
+		cooldown_icon = {img = "17127e5b2d5.png", x = 52, y = 372},
 		image = {url = '16896d0252b.png', x = 35, y = 20},
 
 		qwerty = {key = "Q", keyCode = 81},
@@ -76,23 +89,10 @@ local powers = {
 		end
 	},
 	{
-		name = 'speed',
-		maps = 10,
-		cooldown = 1000,
-		cooldown_img = "17127e682ff.png",
-		image = {url = '16896ed356d.png', x = 35, y = 25},
-
-		qwerty = {key = "SHIFT", keyCode = 16},
-
-		fnc = function(player, key, down, x, y)
-			tfm.exec.movePlayer(player, 0, 0, true, facing[player] and 60 or -60, 0, true)
-		end
-	},
-	{
 		name = 'teleport',
-		maps = 25,
+		maps = 35,
 		cooldown = 10000,
-		cooldown_img = "17127e73965.png",
+		cooldown_icon = {img = "17127e73965.png", x = 74, y = 373},
 		image = {url = '16896d00614.png', x = 30, y = 20},
 
 		click = true,
@@ -103,7 +103,7 @@ local powers = {
 		name = 'smallbox',
 		maps = 50,
 		cooldown = 10000,
-		cooldown_img = "17127e77dbe.jpg",
+		cooldown_icon = {img ="17127e77dbe.jpg", x = 98, y = 373},
 		image = {url = '1689fd4ffc4.jpg', x = 50, y = 40},
 
 		qwerty = {key = "Z", keyCode = 90},
@@ -117,7 +117,7 @@ local powers = {
 		name = 'cloud',
 		maps = 100,
 		cooldown = 10000,
-		cooldown_img = "17127e5f927.png",
+		cooldown_icon = {img= "17127e5f927.png", x = 121, y = 377},
 		image = {url = '1689fe8325e.png', x = 15, y = 25},
 
 		qwerty = {key = "X", keyCode = 88},
@@ -130,7 +130,7 @@ local powers = {
 		name = 'masterBalloon',
 		maps = 200,
 		cooldown = 10000,
-		cooldown_img = "17127e62809.png",
+		cooldown_icon = {img = "17127e62809.png", x = 142, y = 376},
 		image = {url = '168ab7be931.png', x = 15, y = 20},
 
 		qwerty = {key = "Q", keyCode = 81},
@@ -146,7 +146,7 @@ local powers = {
 		name = 'bubble',
 		maps = 400,
 		cooldown = 10000,
-		cooldown_img = "17127e5ca47.png",
+		cooldown_icon = {img= "17127e5ca47.png", x = 161, y = 373},
 		image = {url = '168ab822a4b.png', x = 30, y = 20},
 
 		qwerty = {key = "Q", keyCode = 81},
@@ -160,7 +160,7 @@ local powers = {
 		name = 'rip',
 		maps = 700,
 		cooldown = 10000,
-		cooldown_img = "17127e69ea4.png",
+		cooldown_icon = { img = "17127e69ea4.png", x = 181, y = 373},
 		image = {url = '169495313ad.png', x = 38, y = 23},
 
 		qwerty = {key = "V", keyCode = 86},
@@ -173,7 +173,7 @@ local powers = {
 		name = 'choco',
 		maps = 1500,
 		cooldown = 25000,
-		cooldown_img = "17127fc6b27.png",
+		cooldown_icon = {img= "17127fc6b27.png", x = 201, y = 374}
 		image = {url = '16d2ce46c57.png', x = 20, y = 56},
 
 		qwerty = {key = "CTRL", keyCode = 17},
@@ -244,7 +244,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	for index = powers._count, 1, -1 do
 		power = powers[index]
 		if maps >= power.maps or room.name == "*#parkour0maps" then
-			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_img, power.index * 22, show_cooldowns) then
+			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_icon.img, power.cooldown_icon.x, power.cooldown_icon.y, show_cooldowns) then
 				power.fnc(player, key, down, x, y)
 			end
 			break
@@ -263,7 +263,7 @@ onEvent("Mouse", function(player, x, y)
 	for index = 1, #clickPowers do
 		power = clickPowers[index]
 		if maps >= power.maps or room.name == "*#parkour0maps" then
-			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_img, power.index * 22, show_cooldowns) then
+			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_icon.img, power.cooldown_icon.x, power.cooldown_icon.y, show_cooldowns) then
 				power.fnc(player, x, y)
 			end
 		end
