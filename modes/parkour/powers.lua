@@ -20,7 +20,7 @@ local function checkCooldown(player, name, long, img, x, y, show)
 	if show then
 		addNewTimer(
 			long, tfm.exec.removeImage,
-			tfm.exec.addImage(img, ":1", x, 375, player)
+			tfm.exec.addImage(img, ":1", x, y, player)
 		)
 	end
 
