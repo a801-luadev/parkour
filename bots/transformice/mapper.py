@@ -221,6 +221,7 @@ class Client(aiotfmpatch.Client):
 		return await self.watchMap(code, int(perm), every=1.0, timeout=timeout)
 
 	async def on_join_request(self, room):
+		print("send join request", room)
 		await self.sendLuaCallback(JOIN_REQUEST, room)
 
 	async def on_lua_textarea(self, txt_id, text):
@@ -488,6 +489,7 @@ class Client(aiotfmpatch.Client):
 
 		elif txt_id == JOIN_REQUEST:
 			data = text.decode().split("\x01")
+			print("recv", data)
 
 			if data[0] == "requested":
 				self.discord.dispatch("join_request_sent")
