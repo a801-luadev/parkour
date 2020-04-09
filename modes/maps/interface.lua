@@ -1,39 +1,44 @@
 local mapper_bot = "Tocutoeltuco#5522"
 
 local join_epoch = os.time({year=2020, month=1, day=1, hour=0})
-local removing_maps = {}
-local adding_maps = {}
-local bit = bit or bit32
+local map_changes = {
+	removing = {},
+	adding = {}
+}
 local packets = {
-	handshake     = bit.lshift( 1, 8) + 255,
-	list_forum    = bit.lshift( 2, 8) + 255,
-	list_maps     = bit.lshift( 3, 8) + 255,
-	unreads       = bit.lshift( 4, 8) + 255,
-	open_votation = bit.lshift( 5, 8) + 255,
-	new_comment   = bit.lshift( 6, 8) + 255,
-	new_map_vote  = bit.lshift( 7, 8) + 255,
-	delete_msg    = bit.lshift( 8, 8) + 255,
-	restore_msg   = bit.lshift( 9, 8) + 255,
-	change_status = bit.lshift(10, 8) + 255,
-	new_votation  = bit.lshift(11, 8) + 255,
-	perm_map      = bit.lshift(12, 8) + 255,
+	handshake     = bit32.lshift( 1, 8) + 255,
+	list_forum    = bit32.lshift( 2, 8) + 255,
+	list_maps     = bit32.lshift( 3, 8) + 255,
+	unreads       = bit32.lshift( 4, 8) + 255,
+	open_votation = bit32.lshift( 5, 8) + 255,
+	new_comment   = bit32.lshift( 6, 8) + 255,
+	new_map_vote  = bit32.lshift( 7, 8) + 255,
+	delete_msg    = bit32.lshift( 8, 8) + 255,
+	restore_msg   = bit32.lshift( 9, 8) + 255,
+	change_status = bit32.lshift(10, 8) + 255,
+	new_votation  = bit32.lshift(11, 8) + 255,
+	perm_map      = bit32.lshift(12, 8) + 255,
 
-	migrate_data  = bit.lshift(13, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
+	migrate_data  = bit32.lshift(13, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
 
-	send_webhook  = bit.lshift(14, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
+	send_webhook  = bit32.lshift(14, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
 
-	room_crash    = bit.lshift(15, 8) + 255,
+	room_crash    = bit32.lshift(15, 8) + 255,
 
-	join_request  = bit.lshift(16, 8) + 255
+	join_request  = bit32.lshift(16, 8) + 255
 }
 local last_update
 local messages_cache = {}
 local system_maps = {_count = 0}
 local forum = {ongoing = {}, archived = {}, by_code = {}}
-local loaded_data = false
-local loaded_system = false
-local lua_version = "1.1.0-pool"
-local bot_version = nil
+local loaded = {
+	data = false,
+	system = false
+}
+local version = {
+	lua = "1.1.0-pool"
+	bot = nil
+}
 local changing_perm = {}
 local menu_part = {}
 local decoder = {
@@ -332,22 +337,22 @@ local function openMapsMenu(player, where)
 end
 
 onEvent("GameDataLoaded", function(data)
-	if not loaded_data then
-		loaded_data = true
+	if not loaded.data then
+		loaded.data = true
 
 		if room.playerList[mapper_bot] then
 			eventNewPlayer(mapper_bot)
 		else
-			translatedChatMessage("missing_bot", nil, discord_link)
+			translatedChatMessage("missing_bot", nil, links.discord)
 		end
 	end
 
 	if data.maps then
-		local countA, countB = #data.maps, #removing_maps
+		local countA, countB = #data.maps, #map_changes.removing
 		for index = countA, 1, -1 do
 			for _index = 1, countB do
-				if removing_maps[_index] == data.maps[index] then
-					table.remove(removing_maps, _index)
+				if map_changes.removing[_index] == data.maps[index] then
+					table.remove(map_changes.removing, _index)
 					table.remove(data.maps, index)
 					countB = countB - 1
 					countA = countA - 1
@@ -356,13 +361,13 @@ onEvent("GameDataLoaded", function(data)
 			end
 		end
 
-		for index = 1, #adding_maps do
+		for index = 1, #map_changes.adding do
 			countA = countA + 1
-			data.maps[countA] = adding_maps[index]
+			data.maps[countA] = map_changes.adding[index]
 		end
 
-		removing_maps = {}
-		adding_maps = {}
+		map_changes.removing = {}
+		map_changes.adding = {}
 
 		for code, status in next, changing_perm do
 			if status == "" then
@@ -373,7 +378,7 @@ onEvent("GameDataLoaded", function(data)
 end)
 
 onEvent("GameDataLoaded", function(data)
-	if loaded_system then
+	if loaded.system then
 		if data.webhooks then
 			for index = 2, #data.webhooks do
 				ui.addTextArea(packets.send_webhook, data.webhooks[index], mapper_bot)
@@ -392,18 +397,18 @@ onEvent("GameDataLoaded", function(data)
 end)
 
 onEvent("NewPlayer", function(player)
-	if not loaded_data then return end
+	if not loaded.data then return end
 
-	if player == mapper_bot and not loaded_system then
-		ui.addTextArea(packets.handshake, lua_version, mapper_bot)
-		bot_version = nil
+	if player == mapper_bot and not loaded.system then
+		ui.addTextArea(packets.handshake, version.lua, mapper_bot)
+		version.bot = nil
 	end
 
-	if bot_version and not loaded_system then
-		translatedChatMessage("version_mismatch", player, bot_version, lua_version)
+	if version.bot and not loaded.system then
+		translatedChatMessage("version_mismatch", player, version.bot, version.lua)
 	end
 
-	if not loaded_system then return end
+	if not loaded.system then return end
 
 	if player == mapper_bot then
 		translatedChatMessage("mapper_joined", nil, player, "bot")
@@ -426,12 +431,12 @@ onEvent("NewPlayer", function(player)
 end)
 
 onEvent("PlayerLeft", function(player)
-	if not loaded_system then return end
+	if not loaded.system then return end
 
 	if player == mapper_bot then
 		translatedChatMessage("mapper_left", nil, player, "bot")
-		loaded_system = false
-		bot_version = nil
+		loaded.system = false
+		version.bot = nil
 		for affected in next, menu_part do
 			closeMapsMenu(affected)
 			menu_part[affected] = 1
@@ -456,7 +461,7 @@ onEvent("PlayerLeft", function(player)
 end)
 
 onEvent("TextAreaCallback", function(id, player, cb)
-	if player == mapper_bot or not loaded_system then return end
+	if player == mapper_bot or not loaded.system then return end
 
 	local position = string.find(cb, ":", 1, true)
 	local action, args
@@ -633,15 +638,15 @@ onEvent("TextAreaCallback", function(id, player, cb)
 
 	if id == packets.handshake then
 		if cb == "ok" then
-			loaded_system = true
+			loaded.system = true
 			changing_perm = {}
 
-			translatedChatMessage("mapping_loaded", nil, lua_version)
+			translatedChatMessage("mapping_loaded", nil, version.lua)
 			for player in next, in_room do
 				eventNewPlayer(player)
 			end
 		elseif string.sub(cb, 1, 7) == "not ok;" then
-			bot_version = string.sub(cb, 8)
+			version.bot = string.sub(cb, 8)
 
 			for player in next, in_room do
 				if player ~= mapper_bot then
@@ -650,7 +655,7 @@ onEvent("TextAreaCallback", function(id, player, cb)
 			end
 		end
 
-	elseif loaded_system then
+	elseif loaded.system then
 		if id == packets.list_forum then
 			forum = {ongoing = {}, archived = {}, by_code = {}}
 			local ongoing_count, archived_count = 0, 0
@@ -837,7 +842,7 @@ onEvent("TextAreaCallback", function(id, player, cb)
 						author = author,
 						code = code
 					}
-					adding_maps[#adding_maps + 1] = tonumber(code)
+					map_changes.adding[#map_changes.adding + 1] = tonumber(code)
 				else
 					from, to = "41", "22"
 					for index = 1, system_maps._count do
@@ -847,7 +852,7 @@ onEvent("TextAreaCallback", function(id, player, cb)
 							break
 						end
 					end
-					removing_maps[#removing_maps + 1] = tonumber(code)
+					map_changes.removing[#map_changes.removing + 1] = tonumber(code)
 				end
 
 				translatedChatMessage("perm_changed", player, code, from, to)
@@ -882,7 +887,7 @@ onEvent("TextAreaCallback", function(id, player, cb)
 end)
 
 onEvent("PopupAnswer", function(id, player, answer)
-	if not loaded_system then return end
+	if not loaded.system then return end
 
 	if id == 0 then -- create new votation
 		if not perms[player] or not perms[player].vote_map then return end
@@ -919,7 +924,6 @@ onEvent("PopupAnswer", function(id, player, answer)
 	openVotation(player, code, 1)
 end)
 
-local _join_to_delete = {_count = 0}
 onEvent("JoinSystemDataLoaded", function(bot, data)
 	local now = os.time() - join_epoch
 	for idx = 1, join_requests._count do
@@ -934,16 +938,16 @@ onEvent("JoinSystemDataLoaded", function(bot, data)
 	for room_name, expire in next, data do
 		if expire[1] then
 			recv = recv .. "\001" .. room_name .. "\002" .. (expire[2] + join_epoch) .. "\002" .. expire[3]
-			_join_to_delete._count = _join_to_delete._count + 1
-			_join_to_delete[_join_to_delete._count] = room_name
+			join_to_delete._count = join_to_delete._count + 1
+			join_to_delete[join_to_delete._count] = room_name
 		end
 	end
 	if recv ~= "" then
 		ui.addTextArea(packets.join_requests, "received" .. recv, mapper_bot)
 	end
 
-	for idx = 1, _join_to_delete._count do
-		data[_join_to_delete[idx]] = nil
+	for idx = 1, join_to_delete._count do
+		data[join_to_delete[idx]] = nil
 	end
 
 	local enc = json.encode(data)

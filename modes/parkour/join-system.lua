@@ -6,8 +6,6 @@ local A, Z, a, z = string.byte("AZaz", 1, 4)
 local next_join_check = os.time() + 15000
 local waiting_mod_timeout = 0
 
-local room = tfm.get.room
-
 local function generatePassword(length)
 	local characters = {}
 

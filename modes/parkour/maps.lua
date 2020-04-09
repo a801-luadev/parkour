@@ -1,5 +1,4 @@
 local first_data_load = true
-local room = tfm.get.room
 local repeated = {_count = 0}
 local maps = {_count = 0}
 local is_invalid = false

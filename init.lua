@@ -23,13 +23,13 @@
 -- SOFTWARE.
 --
 
-
-local donation_links = {
-	parkour = "https://a801-luadev.github.io/?redirect=parkour"
+local room = tfm.get.room
+local links = {
+	donation = "https://a801-luadev.github.io/?redirect=parkour",
+	github = "https://github.com/a801-luadev/parkour",
+	discord = "https://discord.gg/RXaCyWz",
+	maps = "https://atelier801.com/topic?f=6&t=880520"
 }
-local github_link = "https://github.com/a801-luadev/parkour"
-local discord_link = "https://discord.gg/RXaCyWz"
-local map_submissions = "https://atelier801.com/topic?f=6&t=880520"
 
 local starting = string.sub(tfm.get.room.name, 1, 2)
 

@@ -5,7 +5,6 @@ local file_id
 
 local webhooks = {_count = 0}
 local runtime = 0
-local room = tfm.get.room
 local onEvent
 do
 	local os_time = os.time

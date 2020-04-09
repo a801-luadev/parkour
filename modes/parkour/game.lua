@@ -7,17 +7,15 @@ local victory_count = 0
 local map_start = 0
 local less_time = false
 local victory = {}
-local room = tfm.get.room
 local bans = {}
 local in_room = {}
 local players_level = {}
 local generated_at = {}
 local spec_mode = {}
-local ck_particles = {}
-local ck_images = {}
-local check_funcorp = false
-local funcorp_enabled = false
-local check_funcorp_at = os.time() + 1000
+local ck = {
+	particles = {}
+	images = {}
+}
 
 local function generatePlayer(player, when)
 	players_level[player] = 1
@@ -31,7 +29,7 @@ local function addCheckpointImage(player, x, y)
 		x, y = level.x, level.y
 	end
 
-	ck_images[player] = tfm.exec.addImage("150da4a0616.png", "_51", x - 20, y - 30, player)
+	ck.images[player] = tfm.exec.addImage("150da4a0616.png", "_51", x - 20, y - 30, player)
 end
 
 onEvent("NewPlayer", function(player)
@@ -110,10 +108,10 @@ onEvent("NewGame", function()
 	if levels then
 		start_x, start_y = levels[2].x, levels[2].y
 
-		for player, particles in next, ck_particles do
+		for player, particles in next, ck.particles do
 			if not particles then
-				if ck_images[player] then
-					tfm.exec.removeImage(ck_images[player])
+				if ck.images[player] then
+					tfm.exec.removeImage(ck.images[player])
 				end
 				addCheckpointImage(player, start_x, start_y)
 			end
@@ -153,8 +151,8 @@ onEvent("Loop", function()
 					if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_range then
 						players_level[name] = level_id
 						tfm.exec.setPlayerScore(name, level_id, false)
-						if ck_particles[name] == false then
-							tfm.exec.removeImage(ck_images[name])
+						if ck.particles[name] == false then
+							tfm.exec.removeImage(ck.images[name])
 						end
 
 						if level_id == last_level then
@@ -165,11 +163,11 @@ onEvent("Loop", function()
 						else
 							translatedChatMessage("reached_level", name, level_id)
 
-							if ck_particles[name] == false then
+							if ck.particles[name] == false then
 								addCheckpointImage(name, levels[level_id + 1].x, levels[level_id + 1].y)
 							end
 						end
-					elseif ck_particles[name] then
+					elseif ck.particles[name] then
 						tfm.exec.displayParticle(
 							particle,
 							next_level.x + x,
@@ -185,13 +183,13 @@ onEvent("Loop", function()
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	ck_particles[player] = data.parkour.ckpart == 1
+	ck.particles[player] = data.parkour.ckpart == 1
 
-	if levels and not ck_particles[player] then
+	if levels and not ck.particles[player] then
 		local next_level = levels[players_level[player] + 1]
 		if next_level then
-			if ck_images[player] then
-				tfm.exec.removeImage(ck_images[player])
+			if ck.images[player] then
+				tfm.exec.removeImage(ck.images[player])
 			end
 			addCheckpointImage(player, next_level.x, next_level.y)
 		end

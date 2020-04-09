@@ -1,4 +1,3 @@
-local room = tfm.get.room
 local is_tribe = string.sub(room.name, 2, 2) == "\3"
 
 local no_powers = {}

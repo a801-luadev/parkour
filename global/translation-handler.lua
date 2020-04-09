@@ -1,5 +1,4 @@
 local player_langs = {}
-local room = tfm.get.room
 
 local translatedMessage
 do

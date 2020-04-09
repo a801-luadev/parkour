@@ -1,4 +1,3 @@
-local room = tfm.get.room
 local kill_cooldown = {}
 local save_update = false
 local update_at = 0
@@ -468,9 +467,9 @@ onEvent("TextAreaCallback", function(id, player, callback)
 		if args ~= "help" and args ~= "staff" and args ~= "rules" and args ~= "contribute" then return end
 		showHelpMenu(player, args)
 	elseif action == "donate" then
-		tfm.exec.chatMessage("<rose>" .. donation_links.parkour, player)
+		tfm.exec.chatMessage("<rose>" .. links.donation, player)
 	elseif action == "github" then
-		tfm.exec.chatMessage("<rose>" .. github_link, player)
+		tfm.exec.chatMessage("<rose>" .. links.github, player)
 	elseif action == "toggle" then
 		local t_id, state = string.match(args, "^(%d+):([01])$")
 		if not t_id then return end
@@ -478,11 +477,11 @@ onEvent("TextAreaCallback", function(id, player, callback)
 
 		if t_id == "1" then -- particles for checkpoints
 			players_file[player].parkour.ckpart = state and 1 or 0
-			ck_particles[player] = state
+			ck.particles[player] = state
 
 			if state then
-				if ck_images[player] then
-					tfm.exec.removeImage(ck_images[player])
+				if ck.images[player] then
+					tfm.exec.removeImage(ck.images[player])
 				end
 			else
 				addCheckpointImage(player)
@@ -618,8 +617,8 @@ onEvent("NewPlayer", function(player)
 	tfm.exec.lowerSyncDelay(player)
 
 	translatedChatMessage("welcome", player)
-	translatedChatMessage("discord", player, discord_link)
-	translatedChatMessage("map_submissions", player, map_submissions)
+	translatedChatMessage("discord", player, links.discord)
+	translatedChatMessage("map_submissions", player, links.maps)
 	translatedChatMessage("type_help", player)
 
 	system.bindKeyboard(player, 76, true, true)
@@ -718,7 +717,7 @@ onEvent("ChatCommand", function(player, msg)
 		toggleLeaderboard(player)
 
 	elseif cmd == "donate" then
-		tfm.exec.chatMessage("<rose>" .. donation_links.parkour, player)
+		tfm.exec.chatMessage("<rose>" .. links.donation, player)
 
 	elseif cmd == "help" then
 		showHelpMenu(player, "help")

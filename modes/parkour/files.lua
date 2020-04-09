@@ -18,7 +18,6 @@ local files = {
 }
 local total_files = 2
 local players_file = {}
-local room = tfm.get.room
 local file_index = 1
 file_id = files[file_index]
 

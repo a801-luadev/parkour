@@ -1,4 +1,3 @@
-local room = tfm.get.room
 local max_leaderboard_rows = 70
 local max_leaderboard_pages = math.ceil(max_leaderboard_rows / 14) - 1
 local loaded_leaderboard = false
