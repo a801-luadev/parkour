@@ -36,7 +36,7 @@ local loaded = {
 	system = false
 }
 local version = {
-	lua = "1.1.0-pool"
+	lua = "1.1.0-pool",
 	bot = nil
 }
 local changing_perm = {}
