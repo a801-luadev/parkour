@@ -4,6 +4,7 @@ import aiomysql
 import aiohttp
 import asyncio
 import hashlib
+import time
 import re
 import os
 
@@ -25,6 +26,8 @@ MIGRATE_DATA  = (13 << 8) + 255 # This packet is not related to the map system, 
 SEND_WEBHOOK  = (14 << 8) + 255 # This packet is not related to the map system, but is here so we don't use a lot of resources.
 
 ROOM_CRASH    = (15 << 8) + 255
+
+JOIN_REQUEST  = (16 << 8) + 255
 
 class Client(aiotfmpatch.Client):
 	version = b"1.1.0"
@@ -216,6 +219,9 @@ class Client(aiotfmpatch.Client):
 	async def changeMapPerm(self, code, perm, timeout=15.0):
 		await self.whisper("Sharpiebot#0000", "p" + perm + " " + code)
 		return await self.watchMap(code, int(perm), every=1.0, timeout=timeout)
+
+	async def on_join_request(self, room):
+		await self.sendLuaCallback(JOIN_REQUEST, room)
 
 	async def on_lua_textarea(self, txt_id, text):
 		if txt_id & 255 != 255:
@@ -479,3 +485,21 @@ class Client(aiotfmpatch.Client):
 
 		elif txt_id == ROOM_CRASH:
 			self.dispatch("restart_request", self.room.name)
+
+		elif txt_id == JOIN_REQUEST:
+			data = text.decode().split("\x01")
+
+			if data[0] == "requested":
+				self.discord.dispatch("join_request_sent")
+
+			elif data[0] == "received":
+				now = os.time()
+
+				for index, room in enumerate(data):
+					if index < 1:
+						continue
+
+					name, expire, password = room.split("\x02")
+					expire = int(expire) // 1000
+
+					self.discord.dispatch("join_request_activated", name, expire - now, password)

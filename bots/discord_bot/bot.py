@@ -87,6 +87,24 @@ class Client(discord.Client):
 				self.mapper.dispatch("restart_request", room)
 				await msg.channel.send("Restarting the room soon.")
 
+			elif cmd == "!join":
+				if len(args) == 0:
+					return await msg.channel.send("Invalid syntax.")
+
+				room = " ".join(args)
+				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
+					return await msg.channel.send("The given room is invalid. You can only join #parkour rooms.")
+
+				self.mapper.dispatch("join_request", room)
+
+	async def on_join_request_sent(self):
+		channel = self.get_channel(694270110172446781)
+		await channel.send("Room join requests have been sent.")
+
+	async def on_join_request_activated(self, room, expire, password):
+		channel = self.get_channel(694270110172446781)
+		await channel.send(f"Room join request for room `{room}` activated. Disabling it in **{expire}** seconds. Room password: `{password}`.")
+
 	async def on_lua_log(self, msg):
 		match = re.match(r"^<V>\[(.+?)\]<BL> (.+)$", msg, flags=re.DOTALL)
 		if match is None:

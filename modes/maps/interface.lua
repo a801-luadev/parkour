@@ -1,5 +1,6 @@
 local mapper_bot = "Tocutoeltuco#5522"
 
+local join_epoch = os.time({year=2020, month=1, day=1, hour=0})
 local removing_maps = {}
 local adding_maps = {}
 local bit = bit or bit32
@@ -21,7 +22,9 @@ local packets = {
 
 	send_webhook  = bit.lshift(14, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
 
-	room_crash    = bit.lshift(15, 8) + 255
+	room_crash    = bit.lshift(15, 8) + 255,
+
+	join_request  = bit.lshift(16, 8) + 255
 }
 local last_update
 local messages_cache = {}
@@ -37,6 +40,7 @@ local decoder = {
 	["&0"] = "&",
 	["&1"] = ","
 }
+local join_requests = {_count = 0}
 local room = room
 
 function send_bot_room_crash()
@@ -868,6 +872,10 @@ onEvent("TextAreaCallback", function(id, player, cb)
 			local player, data = string.match(cb, "^([^,]+),(.*)$")
 			system.savePlayerData(player, data)
 			ui.addTextArea(packets.migrate_data, player, mapper_bot)
+
+		elseif id == packets.join_request then
+			join_requests._count = join_requests._count + 1
+			join_requests[join_requests._count] = cb
 		end
 	end
 end)
@@ -908,4 +916,34 @@ onEvent("PopupAnswer", function(id, player, answer)
 
 	ui.addTextArea(packets.new_comment, id .. "," .. room.playerList[player].id .. "," .. answer, mapper_bot)
 	openVotation(player, code, 1)
+end)
+
+local _join_to_delete = {_count = 0}
+onEvent("JoinSystemDataLoaded", function(bot, data)
+	local now = os.time() - join_epoch
+	for idx = 1, join_requests._count do
+		data[join_requests[idx]] = {false, now + 45000}
+	end
+	if join_requests._count > 0 then
+		join_requests._count = 0
+		ui.addTextArea(packets.join_request, "requested", mapper_bot)
+	end
+
+	local recv = ""
+	for room_name, expire in next, data do
+		if expire[1] then
+			recv = recv .. "\001" .. room_name .. "\002" .. (expire[2] + join_epoch) .. "\002" .. expire[3]
+			_join_to_delete._count = _join_to_delete._count + 1
+			_join_to_delete[_join_to_delete._count] = room_name
+		end
+	end
+	if recv ~= "" then
+		ui.addTextArea(packets.join_requests, "received" .. recv, mapper_bot)
+	end
+
+	for idx = 1, _join_to_delete._count do
+		data[_join_to_delete[idx]] = nil
+	end
+
+	system.savePlayerData(bot, json.encode(data))
 end)

@@ -75,7 +75,8 @@ local function savePlayerData(player)
 end
 
 onEvent("PlayerDataLoaded", function(player, data)
-	if player == stream_bot then return end
+	if not in_room[player] then return end
+	if player == stream_bot or player == join_bot then return end
 
 	local corrupt
 	if data == "" then
