@@ -952,5 +952,5 @@ onEvent("JoinSystemDataLoaded", function(bot, data)
 
 	local enc = json.encode(data)
 	print(enc)
-	system.savePlayerData(bot, data)
+	system.savePlayerData(bot, enc)
 end)
