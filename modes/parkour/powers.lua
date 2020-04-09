@@ -224,7 +224,7 @@ local function unbind(player)
 end
 
 onEvent("Keyboard", function(player, key, down, x, y)
-	if bans[ room.playerList[player].id ] then return end
+	if not room.playerList[player] or bans[ room.playerList[player].id ] then return end
 
 	if key == 0 then
 		facing[player] = false
@@ -253,7 +253,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 end)
 
 onEvent("Mouse", function(player, x, y)
-	if bans[ room.playerList[player].id ] then return end
+	if not room.playerList[player] or bans[ room.playerList[player].id ] then return end
 
 	if not players_file[player] or not victory[player] then return end
 
