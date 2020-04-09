@@ -13,7 +13,7 @@ local function generatePassword(length)
 		characters[index] = math.random(0, 1) == 0 and math.random(A, Z) or math.random(a, z)
 	end
 
-	return string.char(table.unpack(characters))
+	return string.char(table.unpack(characters, 1, #characters)) -- transformice's table.unpack is glitchy!
 end
 
 onEvent("PlayerDataLoaded", function(player, data)
