@@ -13,7 +13,7 @@ local players_level = {}
 local generated_at = {}
 local spec_mode = {}
 local ck = {
-	particles = {}
+	particles = {},
 	images = {}
 }
 
