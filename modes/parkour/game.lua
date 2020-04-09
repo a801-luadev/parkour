@@ -2,7 +2,6 @@ local checkpoint_range = 15 ^ 2 -- radius of 15px
 local min_save = 4
 
 local check_position = 6
-local player_count = 0
 local victory_count = 0
 local map_start = 0
 local less_time = false
@@ -16,6 +15,7 @@ local ck = {
 	particles = {},
 	images = {}
 }
+player_count = 0
 
 local function generatePlayer(player, when)
 	players_level[player] = 1

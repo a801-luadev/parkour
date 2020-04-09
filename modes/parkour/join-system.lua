@@ -5,6 +5,7 @@ local waiting_mod = false
 local A, Z, a, z = string.byte("AZaz", 1, 4)
 local next_join_check = os.time() + 15000
 local waiting_mod_timeout = 0
+local player_count
 
 local function generatePassword(length)
 	local characters = {}
@@ -13,7 +14,7 @@ local function generatePassword(length)
 		characters[index] = math.random(0, 1) == 0 and math.random(A, Z) or math.random(a, z)
 	end
 
-	return string.char(table.unpack(characters, 1, #characters)) -- transformice's table.unpack is glitchy!
+	return string.char(table.unpack(characters, 1, length)) -- transformice's table.unpack is glitchy!
 end
 
 onEvent("PlayerDataLoaded", function(player, data)

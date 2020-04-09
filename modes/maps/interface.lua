@@ -879,7 +879,6 @@ onEvent("TextAreaCallback", function(id, player, cb)
 			ui.addTextArea(packets.migrate_data, player, mapper_bot)
 
 		elseif id == packets.join_request then
-			print("recv request " .. cb)
 			join_requests._count = join_requests._count + 1
 			join_requests[join_requests._count] = cb
 		end
@@ -950,7 +949,5 @@ onEvent("JoinSystemDataLoaded", function(bot, data)
 		data[join_to_delete[idx]] = nil
 	end
 
-	local enc = json.encode(data)
-	print(enc)
-	system.savePlayerData(bot, enc)
+	system.savePlayerData(bot, json.encode(data))
 end)
