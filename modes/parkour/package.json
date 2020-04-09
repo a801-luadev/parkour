@@ -14,6 +14,10 @@
 	},
 	{
 		"type": "require-file",
+		"file": "modes/parkour/join-system.lua"
+	},
+	{
+		"type": "require-file",
 		"file": "modes/parkour/game.lua"
 	},
 	{
