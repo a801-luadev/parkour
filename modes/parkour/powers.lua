@@ -45,6 +45,19 @@ local powers = {
 		end
 	},
 	{
+		name = 'speed',
+		maps = 10,
+		cooldown = 1000,
+		cooldown_icon = {img = "17127e682ff.png", x = 30, y = 373},
+		image = {url = '16896ed356d.png', x = 35, y = 25},
+
+		qwerty = {key = "SHIFT", keyCode = 16},
+
+		fnc = function(player, key, down, x, y)
+			tfm.exec.movePlayer(player, 0, 0, true, facing[player] and 60 or -60, 0, true)
+		end
+	},
+	{
 		name = 'snowball',
 		maps = 15,
 		cooldown = 5000,
@@ -56,19 +69,6 @@ local powers = {
 		fnc = function(player, key, down, x, y)
 			local right = facing[player]
 			despawnableObject(5000, 34, x + (right and 20 or -20), y, 0, right and 10 or -10)
-		end
-	},
-	{
-		name = 'speed',
-		maps = 10,
-		cooldown = 1000,
-		cooldown_icon = {img = "17127e682ff.png", x = 30, y = 373},
-		image = {url = '16896ed356d.png', x = 35, y = 25},
-
-		qwerty = {key = "SHIFT", keyCode = 16},
-
-		fnc = function(player, key, down, x, y)
-			tfm.exec.movePlayer(player, 0, 0, true, facing[player] and 60 or -60, 0, true)
 		end
 	},
 	{
