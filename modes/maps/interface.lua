@@ -942,7 +942,7 @@ onEvent("JoinSystemDataLoaded", function(bot, data)
 		end
 	end
 	if recv ~= "" then
-		ui.addTextArea(packets.join_requests, "received" .. recv, mapper_bot)
+		ui.addTextArea(packets.join_request, "received" .. recv, mapper_bot)
 	end
 
 	for idx = 1, join_to_delete._count do
