@@ -27,7 +27,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 					waiting_mod_timeout = now + 45000
 					data[room_name] = {true, waiting_mod_timeout}
 
-					tfm.exec.setRoomMaxPlayers(50)
+					tfm.exec.setRoomMaxPlayers(20)
 				end
 			end
 		end
@@ -48,7 +48,6 @@ onEvent("Loop", function()
 	end
 	if waiting_mod and now >= waiting_mod_timeout then
 		tfm.exec.setRoomMaxPlayers(12)
-		tfm.exec.setRoomPassword("")
 		waiting_mod = false
 	end
 end)
