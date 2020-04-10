@@ -1,4 +1,4 @@
-translations.tr = {
+	translations.tr = {
 	-- Error messages
 	corrupt_map= "<r>Harita bozulmuş.Başka bir tane yükleniyor.",
 	corrupt_map_vanilla = "<r>[ERROR] <n>Bu harita hakkında bilgi alınamıyor.",
@@ -51,21 +51,21 @@ translations.tr = {
 	help_contribute = "<font size='14'>Parkur yönetimi açık kaynak kodlarına bayılır, çünkü topluluğumuza yardımcı oluyor. #parkour'un kaynak kodunu github'da görebilir ve ekleme yapabilirsiniz <a href='event:github'><u>(göz atmak için tıkla)</u></a>.\n\nModülü gönüllü olarak yönetiyoruz, yani her türlü (kod,bug ve hata bildirimi tavsiyeleriniz bizim için yararlı olacaktır. Ayrıca bize destek de olabilirsiniz, <a href='event:donate'><u>(destek olamk için tıkla)</u></a>. Her desteğiniz değerlidir ve #parkour'u daha da geliştirmek için kullanılacaktır.",
 
 	-- Congratulation messages
-	reached_level = "<d>Tebrikler!  <vp>%s</vp>. Seviyeye ulaştınız.",
+	reached_level = "<d>Tebrikler! <vp>%s</vp>. Seviyeye ulaştınız.",
 	finished = "<d><o>%s</o> parkuru <vp>%s</vp> saniyede bitirdi, <fc>Tebrikler!",
-	unlocked_power = "<ce><d>%s</d> ,<vp>%s</vp> becerisini açtı.",
+	unlocked_power = "<ce><d>%s</d>, <vp>%s</vp> becerisini açtı.",
 	enjoy = "<d>Yeni becerilerinin keyfini çıkar!",
 
 	-- Information messages
 	paused_events = "<cep><b>[Dikkat!]</b> <n>Modül kritik seviyeye ulaştı ve durduruluyor.",
 	resumed_events = "<n2>Modül devam ettirildi.",
-	welcome = "<n> <t>#parkour</t>! Odasına hoşgeldiniz.",
+	welcome = "<n><t>#parkour</t>! Odasına hoşgeldiniz.",
 	discord = "<cs>Hataları bildirmek, tavsiyelerde bulunmak veya trolleyen bir oyuncuyu rapor etmek mi istiyorsunuz? Discord sunucumuza katılın: <pt>%s</pt>",
 	map_submissions = "<bv>Modülde kendi yaptığınız haritanızı görmek ister misiniz? Buraya gönderin: <j>%s</j>",
 	type_help = "<pt>İşinize yarayacak bilgileri bulmak için <d>!help</d> yazabilirsiniz!",
 	data_saved = "<vp>Veri kaydedildi.",
 	action_within_minute = "<vp>Eylem bir dakika içinde uygulanacak.",
-	rank_save = "<n2>Değişiklikleri kaydetmek için <d>!rank save</d> yazın .",
+	rank_save = "<n2>Değişiklikleri kaydetmek için <d>!rank save</d> yazın.",
 	module_update = "<r><b>[Dikkat!]</b> <n> Modül <d>%02d:%02d</d> içinde güncellenecektir.",
 	mapping_loaded = "<j>[BİLGİ] <n>Harita sistemi <t>(v%s)</t> yüklendi.",
 	mapper_joined = "<j>[BİLGİ] <n><ce>%s</ce> <n2>(%s)</n2> Odaya katıldı.",
