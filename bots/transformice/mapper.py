@@ -499,7 +499,7 @@ class Client(aiotfmpatch.Client):
 					if index < 1:
 						continue
 
-					name, expire, password = room.split("\x02")
+					name, expire = room.split("\x02")
 					expire = int(expire) // 1000
 
-					self.discord.dispatch("join_request_activated", name, expire - now, password)
+					self.discord.dispatch("join_request_activated", name, expire - now)

@@ -2,20 +2,8 @@ local join_bot = "Tocutoeltuco#6919"
 local join_epoch = os.time({year=2020, month=1, day=1, hour=0})
 local join_to_delete = {_count = 0}
 local waiting_mod = false
-local A, Z, a, z = string.byte("AZaz", 1, 4)
 local next_join_check = os.time() + 15000
 local waiting_mod_timeout = 0
-local player_count
-
-local function generatePassword(length)
-	local characters = {}
-
-	for index = 1, length do
-		characters[index] = math.random(0, 1) == 0 and math.random(A, Z) or math.random(a, z)
-	end
-
-	return string.char(table.unpack(characters, 1, length)) -- transformice's table.unpack is glitchy!
-end
 
 onEvent("PlayerDataLoaded", function(player, data)
 	if player ~= join_bot then return end
@@ -35,13 +23,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 					join_to_delete[join_to_delete._count] = room_name
 
 				elseif room_name == room.name then
-					local password = generatePassword(15)
 					waiting_mod = true
 					waiting_mod_timeout = now + 45000
-					data[room_name] = {true, waiting_mod_timeout, password}
+					data[room_name] = {true, waiting_mod_timeout}
 
-					tfm.exec.setRoomPassword(password)
-					tfm.exec.setRoomMaxPlayers(math.max(13, player_count + 1))
+					tfm.exec.setRoomMaxPlayers(50)
 				end
 			end
 		end
@@ -51,14 +37,6 @@ onEvent("PlayerDataLoaded", function(player, data)
 		end
 
 		system.savePlayerData(join_bot, json.encode(data))
-	end
-end)
-
-onEvent("NewPlayer", function()
-	if waiting_mod then
-		tfm.exec.setRoomMaxPlayers(12)
-		tfm.exec.setRoomPassword("")
-		waiting_mod = false
 	end
 end)
 

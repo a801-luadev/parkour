@@ -103,7 +103,7 @@ class Client(discord.Client):
 
 	async def on_join_request_activated(self, room, expire, password):
 		channel = self.get_channel(694270110172446781)
-		await channel.send(f"Room join request for room `{room}` activated. Disabling it in **{expire}** seconds. Room password: `{password}`.")
+		await channel.send(f"Room join request for room `{room}` activated. Disabling it in **{round(expire)}** seconds.")
 
 	async def on_lua_log(self, msg):
 		match = re.match(r"^<V>\[(.+?)\]<BL> (.+)$", msg, flags=re.DOTALL)

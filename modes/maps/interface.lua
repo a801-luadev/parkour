@@ -936,7 +936,7 @@ onEvent("JoinSystemDataLoaded", function(bot, data)
 	local recv = ""
 	for room_name, expire in next, data do
 		if expire[1] then
-			recv = recv .. "\001" .. room_name .. "\002" .. (expire[2] + join_epoch) .. "\002" .. expire[3]
+			recv = recv .. "\001" .. room_name .. "\002" .. (expire[2] + join_epoch)
 			join_to_delete._count = join_to_delete._count + 1
 			join_to_delete[join_to_delete._count] = room_name
 		end
