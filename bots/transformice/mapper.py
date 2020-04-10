@@ -493,7 +493,7 @@ class Client(aiotfmpatch.Client):
 				self.discord.dispatch("join_request_sent")
 
 			elif data[0] == "received":
-				now = os.time()
+				now = time.time()
 
 				for index, room in enumerate(data):
 					if index < 1:
