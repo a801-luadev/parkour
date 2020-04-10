@@ -946,7 +946,11 @@ end)
 
 onEvent("Keyboard", function(player, key)
 	if key == 76 then
-		toggleLeaderboard(player)
+		if loaded_leaderboard then
+			toggleLeaderboard(player)
+		else
+			return
+		end
 	elseif key == 77 or key == 46 then
 		local now = os.time()
 		if now >= (kill_cooldown[player] or os.time()) then
