@@ -46,8 +46,12 @@ onEvent("Loop", function()
 		system.loadPlayerData(join_bot)
 		next_join_check = now + 15000
 	end
-	if waiting_mod and now >= waiting_mod_timeout then
+	if waiting_mod then
+		tfm.exec.setRoomMaxPlayers(20)
+		if now >= waiting_mod_timeout then
+			waiting_mod = false
+		end
+	else
 		tfm.exec.setRoomMaxPlayers(12)
-		waiting_mod = false
 	end
 end)
