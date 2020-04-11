@@ -75,6 +75,8 @@ translations.br = {
 	got_map_info = "<j>[INFO] <n>Todas as informações do mapa foram coletadas. Tentando alterar categoria...",
 	perm_changed = "<j>[INFO] <n>Categoria do mapa <ch>@%s</ch> alterada com sucesso, de <r>P%s</r> para <t>P%s</t>.",
 	leaderboard_loaded = "<j>O ranking foi carregado. Aperte L para abri-lo.",
+	kill_minutes = "<R>Seus poderes foram desativados por %s minutos.",
+	kill_map = "<R>Seus poderes foram desativados até o próximo mapa.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar partículas para os checkpoints\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado",
