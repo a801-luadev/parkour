@@ -75,6 +75,8 @@
 	got_map_info = "<j>[BİLGİ] <n>Harita bilgisi alındı. Trying to change the perm...",
 	perm_changed = "<j>[BİLGİ] <n>Successfully changed the perm of map <ch>@%s</ch> from <r>P%s</r> to <t>P%s</t>.",
 	leaderboard_loaded = "<j>Lider tablosu güncellendi. Görüntülemek için klavyeden L tuşuna basın.",
+	kill_minutes = "<R>Becerilerin %s dakika boyunca devre dışı bırakılmıştır.",
+	kill_map = "<R>Yeni haritaya geçene kadar becerileriniz devre dışı bırakdı.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\nKontrol noktaları için parçacıkları kullan\n\n<b>QWERTY</b> klavye kullan (Kapatıldığnda <b>AZERTY</b> klavye kullanılır)\n\nÖlmek için klavyeden <b>M</b> tuşuna bas veya <b>/mort</b> komutunu kullan. (Kapattığında <b>DELETE</b> tuşuna basarak ölebilirsin.)\n\nBeceri bekleme sürelerini göster\n\nBeceriler simgesini göster\n\nYardım butonunu göster\n\nHarita bitirme duyurularını göster",
