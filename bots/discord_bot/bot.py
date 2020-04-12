@@ -118,12 +118,12 @@ class Client(discord.Client):
 						script = script.group(2).encode()
 
 					try:
-						exec(b"async def evaluate():\n\t" + (script.replace(b"\n", b"\n\t")))
+						exec(b"async def evaluate(self, msg):\n\t" + (script.replace(b"\n", b"\n\t")))
 					except:
 						return await msg.channel.send("Syntax error: ```python\n" + traceback.format_exc() + "```")
 
 					try:
-						await locals()["evaluate"]()
+						await locals()["evaluate"](self, msg)
 					except:
 						return await msg.channel.send("Runtime error: ```python\n" + traceback.format_exc() + "```")
 
