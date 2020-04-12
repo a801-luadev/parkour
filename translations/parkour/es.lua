@@ -75,8 +75,8 @@ translations.es = {
 	got_map_info = "<j>[INFO] <n>Se obtuvo toda la información del mapa. Intentando cambiar la categoría...",
 	perm_changed = "<j>[INFO] <n>Se cambió la categoría del mapa <ch>@%s</ch> desde <r>P%s</r> hacia <t>P%s</t> exitosamente.",
 	leaderboard_loaded = "<j>La tabla de clasificación ha sido cargada. Presiona L para abrirla.",
-	kill_minutes = "<R> Tus poderes fueron desactivados por %s minutos.",
-  	kill_map = "<R>Tus poderes fueron desactivados hasta el siguiente mapa.",
+	kill_minutes = "<R>Tus poderes fueron desactivados por %s minutos.",
+	kill_map = "<R>Tus poderes fueron desactivados hasta el siguiente mapa.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar partículas para los checkpoints\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa",

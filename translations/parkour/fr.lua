@@ -75,6 +75,8 @@ translations.fr = {
 	got_map_info = "<j>[INFO] <n>Informations de la carte récupérées. Essaie de changement de permissions...",
 	perm_changed = "<j>[INFO] <n>Réussite du changement de permission de la carte<ch>@%s</ch> from <r>P%s</r> to <t>P%s</t>.",
 	leaderboard_loaded = "<j>Le tableau des scores a été chargé. Appuyer sur L pour l'ouvrir.",
+	kill_minutes = "<R>Vos pouvoirs ont été désactivés pour %s minutes.",
+	kill_map = "<R>Vos pouvoirs ont été désactivés jusqu'à la prochaine carte.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtilisez les particules comme points de sauvegarde\n\nUtilisez le clavier <b>QWERTY</b> (désactivez si votre clavier et en <b>AZERTY</b>)\n\nUtilisez <b>M</b> touche chaude pour <b>/mort</b> (désactivez pour <b>DEL</b>)\n\nMontre le cooldown de vos compétences\n\nMontre les boutons pour utiiser les compétences\n\nMontre le bouton d'aide\n\nMontre les annonces des cartes achevées",
