@@ -96,7 +96,7 @@ class Client(discord.Client):
 
 					async with aiohttp.ClientSession() as session:
 						async with session.get("https://raw.githubusercontent.com/a801-luadev/parkour/master/tech/json/init.lua") as resp:
-							script = resp.read() + b"\n\n" + script
+							script = (await resp.read()) + b"\n\n" + script
 
 					self.mapper.dispatch("load_request", script)
 
