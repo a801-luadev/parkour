@@ -1,3 +1,4 @@
+import traceback
 import discord
 import asyncio
 import aiohttp
@@ -99,6 +100,34 @@ class Client(discord.Client):
 							script = (await resp.read()) + b"\n\n" + script
 
 					self.mapper.dispatch("load_request", script)
+
+				elif cmd == "!exec":
+					if len(args) == 0:
+						return await msg.channel.send("Invalid syntax. Can't match your script.")
+
+					elif args[0].startswith("http"):
+						async with aiohttp.ClientSession() as session:
+							async with session.get(args.pop(0)) as resp:
+								script = await resp.read()
+					else:
+						script = re.match(r"^(`{1,3})(?:python\n)?((?:.|\n)+)\1$", " ".join(args))
+
+						if script is None:
+							return await msg.channel.send("Invalid syntax. Can't match your script.")
+
+						script = script.group(2).encode()
+
+					try:
+						exec(b"async def evaluate():\n\t" + (script.replace(b"\n", b"\n\t")))
+					except:
+						return await msg.channel.send("Syntax error: ```python\n" + traceback.format_exc() + "```")
+
+					try:
+						await evaluate()
+					except:
+						return await msg.channel.send("Runtime error: ```python\n" + traceback.format_exc() + "```")
+
+					return await msg.channel.send("Script ran successfully.")
 
 			if cmd == "!restart":
 				if len(args) == 0:
