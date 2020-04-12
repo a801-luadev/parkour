@@ -76,6 +76,30 @@ class Client(discord.Client):
 
 					self.mapper.dispatch("load_request", script)
 
+				elif cmd == "!loadjson":
+					if len(args) == 0 or args[0].startswith("http"):
+						if len(args) > 0:
+							link = args.pop(0)
+						else:
+							link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/builds/latest.lua"
+
+						async with aiohttp.ClientSession() as session:
+							async with session.get(link) as resp:
+								script = await resp.read()
+					else:
+						script = re.match(r"^(`{1,3})(?:lua\n)?((?:.|\n)+)\1$", " ".join(args))
+
+						if script is None:
+							return await msg.channel.send("Invalid syntax. Can't match your script.")
+
+						script = script.group(2).encode()
+
+					async with aiohttp.ClientSession() as session:
+						async with session.get("https://raw.githubusercontent.com/a801-luadev/parkour/master/tech/json/init.lua") as resp:
+							script = resp + b"\n\n" + script
+
+					self.mapper.dispatch("load_request", script)
+
 			if cmd == "!restart":
 				if len(args) == 0:
 					return await msg.channel.send("Invalid syntax.")
