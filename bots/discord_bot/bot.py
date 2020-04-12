@@ -123,7 +123,7 @@ class Client(discord.Client):
 						return await msg.channel.send("Syntax error: ```python\n" + traceback.format_exc() + "```")
 
 					try:
-						await evaluate()
+						await locals()["evaluate"]()
 					except:
 						return await msg.channel.send("Runtime error: ```python\n" + traceback.format_exc() + "```")
 
