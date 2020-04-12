@@ -776,19 +776,20 @@ onEvent("ChatCommand", function(player, msg)
 			if not minutes then
 				return translatedChatMessage("invalid_syntax", player)
 			end
-			
+
 			translatedChatMessage("kill_minutes", affected, minutes)
 			players_file[affected].parkour.killed = os.time() + minutes * 60 * 1000
 			savePlayerData(affected)
+		else
+			translatedChatMessage("kill_map", affected)
 		end
 
 		webhooks._count = webhooks._count + 1
 		webhooks[webhooks._count] = "**`[BANS]:`** `" .. room.name .. "` `" .. player .. "`: `!kill " .. affected .. " " .. minutes .. "`"
 
-		translatedChatMessage("kill_map", affected)
 		no_powers[affected] = true
 		unbind(affected)
-		
+
 	elseif cmd == "rank" then
 		if not perms[player] or not perms[player].set_player_rank then return end
 
