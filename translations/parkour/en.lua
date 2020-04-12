@@ -75,7 +75,9 @@ translations.en = {
 	got_map_info = "<j>[INFO] <n>Retrieved map information. Trying to change the perm...",
 	perm_changed = "<j>[INFO] <n>Successfully changed the perm of map <ch>@%s</ch> from <r>P%s</r> to <t>P%s</t>.",
 	leaderboard_loaded = "<j>The leaderboard has been loaded. Press L to open it.",
-
+	kill_minutes = "<R>Your powers have been disabled for %s minutes.",
+	kill_map = "<R>Your powers have been disabled until next map.",
+	
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse particles for checkpoints\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements",
 	unknown = "Unknown",
