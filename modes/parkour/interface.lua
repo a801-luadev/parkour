@@ -256,10 +256,6 @@ local function showLeaderboard(player, page)
 	end
 	open[player].leaderboard = true
 
-	if not loaded_leaderboard then
-		translatedChatMessage("leaderboard_not_loaded", player)
-	end
-
 	local images = open[player].images
 	for index = 1, images._count do
 		tfm.exec.removeImage(images[index])
@@ -952,7 +948,7 @@ onEvent("Keyboard", function(player, key)
 		if loaded_leaderboard then
 			toggleLeaderboard(player)
 		else
-			return
+			return translatedChatMessage("leaderboard_not_loaded", player)
 		end
 	elseif key == 77 or key == 46 then
 		local now = os.time()
