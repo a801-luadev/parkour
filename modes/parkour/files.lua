@@ -171,6 +171,7 @@ onEvent("Loop", function()
 		if now >= data[2] then
 			count = count + 1
 			to_remove[count] = player
+			tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n> is offline.", data[1])
 		end
 	end
 
