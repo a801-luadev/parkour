@@ -16,6 +16,7 @@ local ck = {
 	particles = {},
 	images = {}
 }
+local players_file
 
 local function generatePlayer(player, when)
 	players_level[player] = 1

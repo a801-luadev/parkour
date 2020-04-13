@@ -17,7 +17,7 @@ local files = {
 	[2] = 2  -- ranking, banned, suspects
 }
 local total_files = 2
-local players_file = {}
+players_file = {}
 local file_index = 1
 local fetching_player_room = {}
 file_id = files[file_index]
