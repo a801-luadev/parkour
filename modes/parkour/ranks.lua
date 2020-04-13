@@ -26,10 +26,12 @@ local ranks_permissions = {
 		unban = true,
 		delete_comments = true,
 		spectate = true,
+		get_player_room = true,
+		change_map = true
 	},
 	mapper = {
 		vote_map = true,
-		change_map = true,
+		change_map = true
 	}
 }
 local player_ranks = {}

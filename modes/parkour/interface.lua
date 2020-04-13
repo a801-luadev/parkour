@@ -941,6 +941,17 @@ onEvent("ChatCommand", function(player, msg)
 			end
 		end
 
+	elseif cmd == "room" then
+		if not perms[player] or not perms[player].get_player_room then return end
+
+		if pointer == 0 then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		local fetching = capitalize(args[1])
+		fetching_player_room[fetching] = {player, os.time() + 1000}
+		system.loadPlayerData(fetching)
+
 	elseif cmd == "op" then
 		showOptionsMenu(player)
 	end
@@ -994,4 +1005,5 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("donate", true)
 	system.disableChatCommandDisplay("help", true)
 	system.disableChatCommandDisplay("staff", true)
+	system.disableChatCommandDisplay("room", true)
 end)

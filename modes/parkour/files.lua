@@ -19,6 +19,7 @@ local files = {
 local total_files = 2
 local players_file = {}
 local file_index = 1
+local fetching_player_room = {}
 file_id = files[file_index]
 
 local data_migrations = {
@@ -74,6 +75,27 @@ local function savePlayerData(player)
 end
 
 onEvent("PlayerDataLoaded", function(player, data)
+	if in_room[player] then return end
+
+	if data == "" then
+		data = {}
+	else
+		local done
+		done, data = pcall(json.decode, data)
+
+		if not done then
+			data = {}
+		end
+	end
+
+	local fetch = fetching_player_room[player]
+	if fetch then
+		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. (data.room or "unknown"), fetch[1])
+		fetching_player_room[player] = nil
+	end
+end)
+
+onEvent("PlayerDataLoaded", function(player, data)
 	if not in_room[player] then return end
 	if player == stream_bot or player == join_bot then return end
 
@@ -109,11 +131,18 @@ onEvent("PlayerDataLoaded", function(player, data)
 		migration = data_migrations[data.parkour.v]
 	end
 
+	local fetch = fetching_player_room[player]
+	if fetch then
+		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. (data.room or "unknown"), fetch[1])
+		fetching_player_room[player] = nil
+	end
+
+	if players_file[player] then return end
+
 	players_file[player] = data
 
-	if corrupt then
-		savePlayerData(player)
-	end
+	players_file[player].room = room.name
+	savePlayerData(player)
 
 	eventPlayerDataParsed(player, data)
 end)
@@ -129,11 +158,24 @@ onEvent("FileLoaded", function(id, data)
 end)
 
 onEvent("Loop", function()
-	if os.time() >= next_file_load then
+	local now = os.time()
+	if now >= next_file_load then
 		system.loadFile(file_id)
-		next_file_load = os.time() + math.random(60500, 63000)
+		next_file_load = now + math.random(60500, 63000)
 		file_index = file_index % total_files + 1
 		file_id = files[file_index]
+	end
+
+	local to_remove, count = {}, 0
+	for player, data in next, fetching_player_room do
+		if now >= data[2] then
+			count = count + 1
+			to_remove[count] = player
+		end
+	end
+
+	for idx = 1, count do
+		fetching_player_room[to_remove[idx]] = nil
 	end
 end)
 
