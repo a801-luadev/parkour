@@ -44,7 +44,7 @@ class Client(discord.Client):
 			args = msg.content.split(" ")
 			cmd = args.pop(0).lower()
 
-			if msg.author.id == 212634414021214209:
+			if msg.author.id == 212634414021214209 or msg.author.id == 436703225140346881:
 				if cmd == "!update":
 					link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/builds/latest.lua"
 
