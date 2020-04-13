@@ -730,8 +730,10 @@ onEvent("ChatCommand", function(player, msg)
 			return translatedChatMessage("user_not_in_room", player, affected)
 		end
 
+		local id = room.playerList[affected].id
 		ban_actions._count = ban_actions._count + 1
-		ban_actions[ban_actions._count] = {"ban", room.playerList[affected].id, player}
+		ban_actions[ban_actions._count] = {"ban", id, player}
+		bans[id] = true
 		translatedChatMessage("action_within_minute", player)
 
 	elseif cmd == "unban" then
@@ -748,6 +750,7 @@ onEvent("ChatCommand", function(player, msg)
 
 		ban_actions._count = ban_actions._count + 1
 		ban_actions[ban_actions._count] = {"unban", id, player}
+		bans[id] = nil
 		translatedChatMessage("action_within_minute", player)
 
 	elseif cmd == "kill" then

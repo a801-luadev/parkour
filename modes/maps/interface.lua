@@ -362,8 +362,7 @@ onEvent("GameDataLoaded", function(data)
 		end
 
 		for index = 1, #map_changes.adding do
-			countA = countA + 1
-			data.maps[countA] = map_changes.adding[index]
+			data.maps[countA + index] = map_changes.adding[index]
 		end
 
 		map_changes.removing = {}
