@@ -58,6 +58,7 @@ onEvent("NewPlayer", function(player)
 end)
 
 onEvent("PlayerLeft", function(player)
+	players_file[player] = nil
 	in_room[player] = nil
 
 	if spec_mode[player] then return end
