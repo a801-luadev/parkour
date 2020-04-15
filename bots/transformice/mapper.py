@@ -180,7 +180,7 @@ class Client(aiotfmpatch.Client):
 				str(row["comments"])
 			])
 
-		await self.sendLuaCallback(LIST_FORUM, ",".join(map(str, data)))
+		#await self.sendLuaCallback(LIST_FORUM, ",".join(map(str, data)))
 
 	async def sendMapList(self, cursor):
 		await cursor.execute(
@@ -197,7 +197,7 @@ class Client(aiotfmpatch.Client):
 			)
 		)
 
-		await self.sendLuaCallback(LIST_MAPS, packet)
+		#await self.sendLuaCallback(LIST_MAPS, packet)
 
 	async def watchMap(self, code, expected, every=1.0, timeout=15.0):
 		start = self.loop.time()

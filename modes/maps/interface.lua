@@ -472,6 +472,8 @@ onEvent("TextAreaCallback", function(id, player, cb)
 	end
 
 	if action == "maps_menu" then
+		if true then return end
+
 		local where = tonumber(args)
 		if (not where) or where < 1 or where > 3 then return end -- just a bot trying to break the module
 
@@ -481,6 +483,8 @@ onEvent("TextAreaCallback", function(id, player, cb)
 		closeMapsMenu(player)
 
 	elseif action == "view" or action == "0_view" then
+		if true then return end
+
 		if not args then return end -- just a bot trying to break the module
 
 		if action == "0_view" then
