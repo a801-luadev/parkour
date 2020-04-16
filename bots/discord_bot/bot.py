@@ -40,7 +40,11 @@ class Client(discord.Client):
 		await channel.send(msg)
 
 	async def on_message(self, msg):
-		if msg.channel.id == 686932761222578201 or msg.channel.id == 694270110172446781:
+		if msg.channel.id == 700443631135359016:
+			await msg.add_reaction("👎")
+			await msg.add_reaction("👍")
+
+		elif msg.channel.id == 686932761222578201 or msg.channel.id == 694270110172446781:
 			args = msg.content.split(" ")
 			cmd = args.pop(0).lower()
 
