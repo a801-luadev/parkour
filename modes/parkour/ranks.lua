@@ -15,7 +15,8 @@ local ranks_id = {
 }
 local ranks_permissions = {
 	admin = {
-		show_update = true
+		show_update = true,
+		announce = true
 	},
 	manager = {
 		set_player_rank = true,

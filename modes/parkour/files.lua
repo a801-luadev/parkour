@@ -2,6 +2,9 @@ next_file_load = os.time() + math.random(60500, 90500)
 local no_powers
 local unbind
 local next_player_load
+local announce_bot = "Holybot#0000"
+local last_announcement = os.time()
+local next_announce_load = 0
 local killing = {}
 local to_save = {}
 local files = {
@@ -79,6 +82,17 @@ end
 
 onEvent("PlayerDataLoaded", function(player, data)
 	if in_room[player] then return end
+	if player == join_bot then return end
+	if player == announce_bot then
+		local when, txt = string.match(data, "^(%d+);(.+)$")
+
+		when = tonumber(when)
+		if when > last_announcement then
+			last_announcement = when
+			tfm.exec.chatMessage("<vi>[#parkour] <d>" .. txt)
+		end
+		return
+	end
 
 	if data == "" then
 		data = {}
@@ -114,7 +128,7 @@ end)
 
 onEvent("PlayerDataLoaded", function(player, data)
 	if not in_room[player] then return end
-	if player == stream_bot or player == join_bot then return end
+	if player == announce_bot or player == join_bot then return end
 
 	local corrupt
 	if data == "" then
@@ -210,6 +224,11 @@ onEvent("Loop", function()
 		end
 	end
 
+	if now >= next_announce_load then
+		next_announce_load = now + 5000
+		system.loadPlayerData(announce_bot)
+	end
+
 	local to_remove, count = {}, 0
 	for player, data in next, fetching_player_room do
 		if now >= data[2] then
@@ -232,4 +251,6 @@ end)
 
 onEvent("NewPlayer", function(player)
 	system.loadPlayerData(player)
+
+
 end)

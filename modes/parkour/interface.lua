@@ -828,6 +828,11 @@ onEvent("ChatCommand", function(player, msg)
 			end
 		end
 
+	elseif cmd == "announce" then
+		if not perms[player] or not perms[player].announce then return end
+
+		system.savePlayerData(announce_bot, os.time() .. ";" .. table.concat(args, " "))
+
 	elseif cmd == "rank" then
 		if not perms[player] or not perms[player].set_player_rank then return end
 
@@ -1047,4 +1052,5 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("room", true)
 	system.disableChatCommandDisplay("review", true)
 	system.disableChatCommandDisplay("cp", true)
+	system.disableChatCommandDisplay("announce", true)
 end)
