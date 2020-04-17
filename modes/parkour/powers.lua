@@ -1,6 +1,6 @@
 local is_tribe = string.sub(room.name, 2, 2) == "\3"
 
-local no_powers = {}
+no_powers = {}
 local facing = {}
 local cooldowns = {}
 
@@ -209,7 +209,7 @@ local function bindNecessary(player)
 	end
 end
 
-local function unbind(player)
+function unbind(player)
 	local keys = player_keys[player]
 	if not keys then return end
 
@@ -296,9 +296,8 @@ end)
 onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
 
-	if room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and not is_tribe then
-		completed = players_file[player].parkour.c + 1
-		players_file[player].parkour.c = completed
+	if room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and not is_tribe and not review_mode then
+		players_file[player].parkour.c = players_file[player].parkour.c + 1
 		savePlayerData(player)
 	end
 

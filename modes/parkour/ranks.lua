@@ -31,7 +31,8 @@ local ranks_permissions = {
 	},
 	mapper = {
 		vote_map = true,
-		change_map = true
+		change_map = true,
+		enable_review = true
 	}
 }
 local player_ranks = {}

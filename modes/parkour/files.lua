@@ -1,4 +1,9 @@
 next_file_load = os.time() + math.random(60500, 90500)
+local no_powers
+local unbind
+local next_player_load
+local killing = {}
+local to_save = {}
 local files = {
 	--[[
 		File values:
@@ -68,10 +73,8 @@ local data_migrations = {
 local function savePlayerData(player)
 	if not players_file[player] then return end
 
-	system.savePlayerData(
-		player,
-		json.encode(players_file[player])
-	)
+	to_save[player] = true
+	system.loadPlayerData(player)
 end
 
 onEvent("PlayerDataLoaded", function(player, data)
@@ -88,10 +91,24 @@ onEvent("PlayerDataLoaded", function(player, data)
 		end
 	end
 
+	local save = false
+
 	local fetch = fetching_player_room[player]
 	if fetch then
 		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. (data.room or "unknown"), fetch[1])
 		fetching_player_room[player] = nil
+	end
+
+	if killing[player] and data.parkour then
+		webhooks._count = webhooks._count + 1
+		webhooks[webhooks._count] = "**`[BANS]:`** `" .. room.name .. "` (remotely) `" .. killing[player][1] .. "`: `!kill " .. player .. " " .. killing[player][2] .. "`"
+
+		data.parkour.killed = os.time() + killing[player][2] * 60 * 1000
+		save = true
+	end
+
+	if save then
+		system.savePlayerData(player, json.encode(data))
 	end
 end)
 
@@ -137,12 +154,30 @@ onEvent("PlayerDataLoaded", function(player, data)
 		fetching_player_room[player] = nil
 	end
 
-	if players_file[player] then return end
+	if players_file[player] then
+		local old = players_file[player]
+		if old.parkour.killed ~= data.parkour.killed then
+			old.parkour.killed = data.parkour.killed
+			if os.time() >= data.parkour.killed then
+				no_powers[player] = true
+				unbind(player)
+			end
+		end
+
+		if to_save[player] then
+			to_save[player] = false
+			system.savePlayerData(player, json.encode(old))
+		end
+		return
+	end
 
 	players_file[player] = data
 
 	players_file[player].room = room.name
-	savePlayerData(player)
+	system.savePlayerData(
+		player,
+		json.encode(players_file[player])
+	)
 
 	eventPlayerDataParsed(player, data)
 end)
@@ -164,6 +199,15 @@ onEvent("Loop", function()
 		next_file_load = now + math.random(60500, 63000)
 		file_index = file_index % total_files + 1
 		file_id = files[file_index]
+
+		next_player_load = now + 5000
+	end
+	if next_player_load and now >= next_player_load then
+		next_player_load = nil
+
+		for player in next, in_room do
+			system.loadPlayerData(player)
+		end
 	end
 
 	local to_remove, count = {}, 0
@@ -183,6 +227,7 @@ end)
 onEvent("GameStart", function()
 	system.loadFile(file_id)
 	next_file_load = os.time() + math.random(60500, 90500)
+	next_player_load = os.time() + 5000
 end)
 
 onEvent("NewPlayer", function(player)

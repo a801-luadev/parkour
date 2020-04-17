@@ -725,12 +725,16 @@ onEvent("ChatCommand", function(player, msg)
 			return translatedChatMessage("invalid_syntax", player)
 		end
 
-		local affected = capitalize(args[1])
-		if not in_room[affected] then
-			return translatedChatMessage("user_not_in_room", player, affected)
+		local id = tonumber(args[1])
+		if not id then
+			local affected = capitalize(args[1])
+			if not in_room[affected] then
+				return translatedChatMessage("user_not_in_room", player, affected)
+			end
+
+			id = room.playerList[affected].id
 		end
 
-		local id = room.playerList[affected].id
 		ban_actions._count = ban_actions._count + 1
 		ban_actions[ban_actions._count] = {"ban", id, player}
 		bans[id] = true
@@ -760,22 +764,26 @@ onEvent("ChatCommand", function(player, msg)
 			return translatedChatMessage("invalid_syntax", player)
 		end
 
-		local affected = capitalize(args[1])
-		if not in_room[affected] then
-			return translatedChatMessage("user_not_in_room", player, affected)
-		end
-		if no_powers[affected] then
-			return translatedChatMessage("already_killed", player, affected)
-		end
-
-		local minutes = "-"
+		local minutes
 		if pointer > 1 then
 			minutes = tonumber(args[2])
 
 			if not minutes then
 				return translatedChatMessage("invalid_syntax", player)
 			end
+		end
 
+		local affected = capitalize(args[1])
+		if not in_room[affected] then
+			if not minutes then
+				return translatedChatMessage("user_not_in_room", player)
+			end
+
+			killing[affected] = {player, minutes}
+			return system.loadPlayerData(affected)
+		end
+
+		if minutes then
 			translatedChatMessage("kill_minutes", affected, minutes)
 			players_file[affected].parkour.killed = os.time() + minutes * 60 * 1000
 			savePlayerData(affected)
@@ -788,6 +796,37 @@ onEvent("ChatCommand", function(player, msg)
 
 		no_powers[affected] = true
 		unbind(affected)
+
+	elseif cmd == "review" then
+		if not perms[player] or not perms[player].enable_review then return end
+
+		if string.find(room.name, "review") then
+			review_mode = true
+			return tfm.exec.chatMessage("<v>[#] <d>Review mode enabled.")
+		end
+		tfm.exec.chatMessage("<v>[#] <r>You can't enable review mode in this room.", player)
+
+	elseif cmd == "cp" then
+		if not review_mode then return end
+
+		local checkpoint = tonumber(args[1])
+		if not checkpoint then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		if not levels[checkpoint] then return end
+
+		players_level[player] = checkpoint
+		tfm.exec.setPlayerScore(player, checkpoint, false)
+		tfm.exec.killPlayer(player)
+
+		if ck.particles[player] == false then
+			tfm.exec.removeImage(ck.images[player])
+			local next_level = levels[checkpoint + 1]
+			if next_level then
+				addCheckpointImage(player, next_level.x, next_level.y)
+			end
+		end
 
 	elseif cmd == "rank" then
 		if not perms[player] or not perms[player].set_player_rank then return end
@@ -1006,4 +1045,6 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("help", true)
 	system.disableChatCommandDisplay("staff", true)
 	system.disableChatCommandDisplay("room", true)
+	system.disableChatCommandDisplay("review", true)
+	system.disableChatCommandDisplay("cp", true)
 end)

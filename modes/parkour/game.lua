@@ -17,6 +17,7 @@ local ck = {
 	images = {}
 }
 local players_file
+local review_mode = false
 
 local function generatePlayer(player, when)
 	players_level[player] = 1
