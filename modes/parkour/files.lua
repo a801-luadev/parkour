@@ -172,7 +172,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 		local old = players_file[player]
 		if old.parkour.killed ~= data.parkour.killed then
 			old.parkour.killed = data.parkour.killed
-			if os.time() >= data.parkour.killed then
+			if os.time() < data.parkour.killed then
 				no_powers[player] = true
 				unbind(player)
 			end
