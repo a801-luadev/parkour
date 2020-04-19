@@ -85,6 +85,10 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if player == join_bot then return end
 	if player == announce_bot then
 		local when, txt = string.match(data, "^(%d+);(.+)$")
+		if not when then
+			system.savePlayerData(player, "0;a")
+			when = "0"
+		end
 
 		when = tonumber(when)
 		if when > last_announcement then

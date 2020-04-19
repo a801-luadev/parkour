@@ -8,7 +8,11 @@ local waiting_mod_timeout = 0
 onEvent("PlayerDataLoaded", function(player, data)
 	if player ~= join_bot then return end
 
-	data = json.decode(data)
+	local done
+	done, data = pcall(json.decode, data)
+	if not done then
+		system.savePlayerData(player, "{}")
+	end
 
 	if room.name == "*#parkour0maps" then
 		eventJoinSystemDataLoaded(join_bot, data)
