@@ -63,7 +63,7 @@ class Client(discord.Client):
 
 					if len(args) > 2:
 						await asyncio.sleep(3.0)
-						self.mapper.dispatch("restart_request", room)
+						self.mapper.dispatch("restart_request", "*#parkour0maps")
 						await msg.channel.send("Restarting the room soon.")
 
 				elif cmd == "!update":
