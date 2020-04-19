@@ -49,7 +49,24 @@ class Client(discord.Client):
 			cmd = args.pop(0).lower()
 
 			if msg.author.id == 212634414021214209 or msg.author.id == 436703225140346881:
-				if cmd == "!update":
+				if cmd == "!copyfile":
+					if len(args) < 2 or (not args[0].isdigit()) or (not args[1].isdigit()):
+						await msg.channel.send("Invalid syntax. Syntax: `!copyfile [original] [destination] (restart)`")
+
+					await self.mapper.loadLua(f"""
+						system.loadFile({args[0]})
+						function eventFileLoaded(file, data)
+							system.saveFile(data, {args[1]})
+							print("Copied " .. #data .. " bytes.")
+						end
+					""")
+
+					if len(args) > 2:
+						await asyncio.sleep(3.0)
+						self.mapper.dispatch("restart_request", room)
+						await msg.channel.send("Restarting the room soon.")
+
+				elif cmd == "!update":
 					link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/builds/latest.lua"
 
 					if len(args) > 0:
