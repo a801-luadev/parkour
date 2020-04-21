@@ -28,7 +28,7 @@ local links = {
 	donation = "https://a801-luadev.github.io/?redirect=parkour",
 	github = "https://github.com/a801-luadev/parkour",
 	discord = "https://discord.gg/RXaCyWz",
-	maps = "https://atelier801.com/topic?f=6&t=880520"
+	maps = "https://atelier801.com/topic?f=6&t=887284"
 }
 
 local starting = string.sub(tfm.get.room.name, 1, 2)
