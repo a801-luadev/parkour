@@ -757,7 +757,7 @@ onEvent("ChatCommand", function(player, msg)
 		translatedChatMessage("action_within_minute", player)
 
 	elseif cmd == "kill" then
-		if not perms[player] or not perms[player].ban then return end
+		if not perms[player] or not perms[player].kill then return end
 
 		if pointer < 1 then
 			return translatedChatMessage("invalid_syntax", player)
