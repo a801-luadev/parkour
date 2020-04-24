@@ -18,8 +18,7 @@ local ranks_id = {
 local ranks_permissions = {
 	admin = {
 		show_update = true,
-		announce = true,
-		overkill = true
+		announce = true
 	},
 	manager = {
 		set_player_rank = true,
@@ -32,7 +31,8 @@ local ranks_permissions = {
 		spectate = true,
 		get_player_room = true,
 		change_map = true,
-		kill = true
+		kill = true,
+		overkill = true
 	},
 	mapper = {
 		vote_map = true,
