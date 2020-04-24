@@ -53,7 +53,7 @@ translations.fr = {
 	-- Congratulation messages
 	reached_level = "<d>Bravo! Vous avez atteint le niveau <vp>%s</vp>.",
 	finished = "<d><o>%s</o> a finis le parcour en <vp>%s</vp> secondes, <fc>congratulations!",
-	unlocked_power = "<ce><d>%s</d> a débloqué le pouvoir<vp>%s</vp>.",
+	unlocked_power = "<ce><d>%s</d> a débloqué le pouvoir <vp>%s</vp>.",
 	enjoy = "<d>Profite de tes nouvelles compétences!",
 
 	-- Information messages
