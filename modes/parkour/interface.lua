@@ -614,7 +614,6 @@ onEvent("NewPlayer", function(player)
 
 	translatedChatMessage("welcome", player)
 	translatedChatMessage("discord", player, links.discord)
-	translatedChatMessage("map_submissions", player, links.maps)
 	translatedChatMessage("type_help", player)
 
 	system.bindKeyboard(player, 76, true, true)
