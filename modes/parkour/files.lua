@@ -130,7 +130,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if killing[player] and data.parkour then
 		webhooks._count = webhooks._count + 1
-		webhooks[webhooks._count] = "**`[KILLS]:`** `" .. room.name .. "` (remotely) `" .. killing[player][1] .. "`: `!kill " .. player .. " " .. killing[player][2] .. "`"
+		webhooks[webhooks._count] = "**`[KILL]:`** `" .. room.name .. "` (remotely) `" .. killing[player][1] .. "`: `!kill " .. player .. " " .. killing[player][2] .. "`"
 
 		data.parkour.killed = os.time() + killing[player][2] * 60 * 1000
 		save = true
