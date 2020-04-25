@@ -925,8 +925,8 @@ onEvent("ChatCommand", function(player, msg)
 					end
 				end
 				if not first then
-                  			texts[player] = text .. ")"
-                		end
+                	texts[player] = text .. ")"
+                end
 			end
 		end
 
