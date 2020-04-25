@@ -29,7 +29,8 @@ local links = {
 	donation = "https://bit.ly/parkour-donate",
 	github = "https://bit.ly/tfm-parkour",
 	discord = "https://bit.ly/parkour-discord",
-	maps = "https://bit.ly/submit-parkour-maps"
+	maps = "https://bit.ly/submit-parkour-maps",
+	modapps = "https://bit.ly/parkourmod"
 }
 
 local starting = string.sub(tfm.get.room.name, 1, 2)

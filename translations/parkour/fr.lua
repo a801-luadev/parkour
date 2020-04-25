@@ -64,6 +64,7 @@ translations.fr = {
 	paused_events = "<cep><b>[Attention!]</b> <n>Le module a atteint sa limite critique et est en pause.",
 	resumed_events = "<n2>Le module n'est plus en pause.",
 	welcome = "<n>Bienvenue à <t>#parkour</t>!",
+	mod_apps = "<j>L'application de modération de parkour est maintenant ouverte ! Utilisez ce lien : <rose>%s",
 	type_help = "<pt>Nous vous recommandons d'utiliser la commande <d>!help</d> pour voir des informations utiles !",
 	data_saved = "<vp>Données enregistrées.",
 	action_within_minute = "<vp>Cette action sera réalisée dans quelque minutes.",

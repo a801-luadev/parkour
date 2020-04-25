@@ -64,6 +64,7 @@ translations.es = {
 	paused_events = "<cep><b>[¡Advertencia!]</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
 	resumed_events = "<n2>El módulo ha sido reanudado.",
 	welcome = "<n>¡Bienvenido a <t>#parkour</t>!",
+	mod_apps = "<j>¡Las aplicaciones para moderador de parkour están abiertas! Usa este link: <rose>%s",
 	type_help = "<pt>¡Te recomendamos que escribas <d>!help</d> para ver información util!",
 	data_saved = "<vp>Datos guardados.",
 	action_within_minute = "<vp>La acción se aplicará dentro de un minuto.",
