@@ -1,4 +1,6 @@
 translations.en = {
+	name = "en",
+
 	-- Error messages
 	corrupt_map = "<r>Corrupt map. Loading another.",
 	corrupt_map_vanilla = "<r>[ERROR] <n>Can not get information of this map.",

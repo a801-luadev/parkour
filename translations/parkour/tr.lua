@@ -1,4 +1,6 @@
-	translations.tr = {
+translations.tr = {
+	name = "tr",
+
 	-- Error messages
 	corrupt_map= "<r>Harita bozulmuş.Başka bir tane yükleniyor.",
 	corrupt_map_vanilla = "<r>[ERROR] <n>Bu harita hakkında bilgi alınamıyor.",
