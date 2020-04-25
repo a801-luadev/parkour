@@ -1010,7 +1010,7 @@ onEvent("ChatCommand", function(player, msg)
 		end
 
 		tfm.exec.chatMessage(text, player)
-			
+
 	elseif cmd == "update" then
 		if not perms[player] or not perms[player].show_update then return end
 
@@ -1135,7 +1135,7 @@ onEvent("GameStart", function()
 					break
 				end
 			end
-			if #text < 1100 or help_texts[index] == "help_help" then
+			if #text < 1100 or help_texts[index] == "help_help" or help_texts[index] == "help_contribute" then
 				scrolldata.texts[key] = string.sub(text, 2)
 			end
 		end
