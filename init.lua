@@ -26,9 +26,10 @@
 
 local room = tfm.get.room
 local links = {
-	donation = "https://a801-luadev.github.io/?redirect=parkour",
-	github = "https://github.com/a801-luadev/parkour",
-	discord = "https://discord.gg/RXaCyWz",
+	donation = "https://bit.ly/parkour-donate",
+	github = "https://bit.ly/tfm-parkour",
+	discord = "https://bit.ly/parkour-discord",
+	maps = "https://bit.ly/submit-parkour-maps"
 }
 
 local starting = string.sub(tfm.get.room.name, 1, 2)
