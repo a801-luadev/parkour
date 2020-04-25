@@ -1,20 +1,32 @@
 local first_data_load = true
-local repeated = {_count = 0}
-local maps = {_count = 0}
+local repeated = {_count = 0, low = {_count = 0}}
+local maps = {_count = 1, [1] = 7171137, low = {_count = 1, [1] = 7171137}, _rotation = -1}
 local is_invalid = false
 local levels
 
 local function newMap()
-	if repeated._count == maps._count then
-		repeated = {_count = 0}
+	local rep, _maps
+	maps._rotation = (maps._rotation + 1) % 4
+	if maps._rotation == 3 then
+		rep, _maps = repeated.low, maps.low
+	else
+		rep, _maps = repeated, maps
+	end
+
+	if rep._count == _maps._count then
+		if rep == repeated then
+			repeated = {_count = 0, low = repeated.low}
+		else
+			repeated.low = {_count = 0}
+		end
 	end
 
 	local map
 	repeat
-		map = maps[math.random(1, maps._count)]
-	until map and not repeated[map]
-	repeated[map] = true
-	repeated._count = repeated._count + 1
+		map = _maps[math.random(1, _maps._count)]
+	until map and not rep[map]
+	rep[map] = true
+	rep._count = rep._count + 1
 
 	tfm.exec.newGame(map)
 end
@@ -42,11 +54,20 @@ onEvent("GameDataLoaded", function(data)
 				maps[index] = data.maps[index]
 			end
 		else
-			maps = {_count = 1, [1] = 7171137}
+			maps = {_count = 1, [1] = 7171137, low = maps.low, _rotation = -1}
 		end
 		if first_data_load then
 			newMap()
 			first_data_load = false
+		end
+	elseif data.lowmaps then
+		if #data.lowmaps > 0 then
+			maps.low._count = #data.lowmaps
+			for index = 1, maps.low._count do
+				maps.low[index] = data.lowmaps[index]
+			end
+		else
+			maps.low = {_count = 1, [1] = 7171137}
 		end
 	end
 end)
