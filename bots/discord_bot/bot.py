@@ -29,7 +29,7 @@ class Client(discord.Client):
 		print("Restarting transformice bot", flush=True)
 
 	async def on_transformice_logs(self, msg):
-		if msg.startswith("**`[BANS]:`**"):
+		if msg.startswith("**`[BANS]:`**") or msg.startswith("**`[KILL]:`**"):
 			channel = 688464365581893700
 		elif msg.startswith("**`[RANKS]:`**"):
 			channel = 688464206315651128

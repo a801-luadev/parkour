@@ -5,13 +5,15 @@ local ranks = {
 	admin = {_count = 0},
 	manager = {_count = 0},
 	mod = {_count = 0},
-	mapper = {_count = 0}
+	mapper = {_count = 0},
+	trainee = {_count = 0}
 }
 local ranks_id = {
 	admin = 2 ^ 0,
 	manager = 2 ^ 1,
 	mod = 2 ^ 2,
-	mapper = 2 ^ 3
+	mapper = 2 ^ 3,
+	trainee = 2 ^ 4
 }
 local ranks_permissions = {
 	admin = {
@@ -28,12 +30,17 @@ local ranks_permissions = {
 		delete_comments = true,
 		spectate = true,
 		get_player_room = true,
-		change_map = true
+		change_map = true,
+		kill = true,
+		overkill = true
 	},
 	mapper = {
 		vote_map = true,
 		change_map = true,
 		enable_review = true
+	},
+	trainee = {
+		kill = true
 	}
 }
 local player_ranks = {}
@@ -41,7 +48,7 @@ local perms = {}
 local saving_ranks = false
 local ranks_update
 local updater
-local ranks_order = {"admin", "manager", "mod", "mapper"}
+local ranks_order = {"admin", "manager", "mod", "mapper", "trainee"}
 
 for rank, perms in next, ranks_permissions do
 	if rank ~= "admin" then
@@ -113,7 +120,8 @@ onEvent("GameDataLoaded", function(data)
 			admin = {_count = 0},
 			manager = {_count = 0},
 			mod = {_count = 0},
-			mapper = {_count = 0}
+			mapper = {_count = 0},
+			trainee = {_count = 0}
 		}, {}, {}
 		local player_perms, _player_ranks
 		for player, rank in next, data.ranks do

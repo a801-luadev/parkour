@@ -825,7 +825,7 @@ onEvent("ChatCommand", function(player, msg)
 		translatedChatMessage("action_within_minute", player)
 
 	elseif cmd == "kill" then
-		if not perms[player] or not perms[player].ban then return end
+		if not perms[player] or not perms[player].kill then return end
 
 		if pointer < 1 then
 			return translatedChatMessage("invalid_syntax", player)
@@ -859,7 +859,7 @@ onEvent("ChatCommand", function(player, msg)
 		end
 
 		webhooks._count = webhooks._count + 1
-		webhooks[webhooks._count] = "**`[BANS]:`** `" .. room.name .. "` `" .. player .. "`: `!kill " .. affected .. " " .. (minutes or "-") .. "`"
+		webhooks[webhooks._count] = "**`[KILL]:`** `" .. room.name .. "` `" .. player .. "`: `!kill " .. affected .. " " .. (minutes or "-") .. "`"
 
 		no_powers[affected] = true
 		unbind(affected)
@@ -977,20 +977,24 @@ onEvent("ChatCommand", function(player, msg)
 
 	elseif cmd == "staff" then
 		local texts = {}
-		local text, _first
+		local text, first
 		for player, ranks in next, player_ranks do
 			if player ~= "Tocutoeltuco#5522" then
 				text = "\n- <v>" .. player .. "</v> ("
-				_first = true
+				first = true
 				for rank in next, ranks do
-					if _first then
-						text = text .. rank
-						_first = false
-					else
-						text = text .. ", " .. rank
+					if rank ~= "trainee" then
+						if first then
+							text = text .. rank
+							first = false
+						else
+							text = text .. ", " .. rank
+						end
 					end
 				end
-				texts[player] = text .. ")"
+				if not first then
+					texts[player] = text .. ")"
+				end
 			end
 		end
 
@@ -1006,7 +1010,7 @@ onEvent("ChatCommand", function(player, msg)
 		end
 
 		tfm.exec.chatMessage(text, player)
-
+			
 	elseif cmd == "update" then
 		if not perms[player] or not perms[player].show_update then return end
 

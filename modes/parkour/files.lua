@@ -40,7 +40,7 @@ local data_migrations = {
 
 		data.modules = nil
 
-		data.parkour.v = "0.4" -- version
+		data.parkour.v = "0.5" -- version
 		data.parkour.c = data.parkour.cm -- completed maps
 		data.parkour.ckpart = 1 -- particles for checkpoints (1 -> true, 0 -> false)
 		data.parkour.mort = 1 -- /mort hotkey
@@ -50,11 +50,12 @@ local data_migrations = {
 		data.parkour.killed = 0
 		data.parkour.hbut = 1 -- help button
 		data.parkour.congrats = 1 -- contratulations message
+		data.parkour.troll = 0
 
 		data.parkour.cm = nil
 	end,
 	["0.1"] = function(player, data)
-		data.parkour.v = "0.4"
+		data.parkour.v = "0.5"
 		data.parkour.ckpart = 1
 		data.parkour.mort = 1
 		data.parkour.pcool = 1
@@ -62,17 +63,27 @@ local data_migrations = {
 		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1
 		data.parkour.killed = 0
 		data.parkour.congrats = 1
+		data.parkour.troll = 0
+
 	end,
 	["0.2"] = function(player, data)
-		data.parkour.v = "0.4"
+		data.parkour.v = "0.5"
 		data.parkour.killed = 0
 		data.parkour.hbut = 1
 		data.parkour.congrats = 1
+		data.parkour.troll = 0
+
 	end,
 	["0.3"] = function(player, data)
-		data.parkour.v = "0.4"
+		data.parkour.v = "0.5"
 		data.parkour.hbut = 1
 		data.parkour.congrats = 1
+		data.parkour.troll = 0
+
+	end,
+	["0.4"] = function(player, data)
+		data.parkour.v = "0.5"
+		data.parkour.troll = 0
 	end
 }
 
@@ -122,7 +133,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if killing[player] and data.parkour then
 		webhooks._count = webhooks._count + 1
-		webhooks[webhooks._count] = "**`[BANS]:`** `" .. room.name .. "` (remotely) `" .. killing[player][1] .. "`: `!kill " .. player .. " " .. killing[player][2] .. "`"
+		webhooks[webhooks._count] = "**`[KILL]:`** `" .. room.name .. "` (remotely) `" .. killing[player][1] .. "`: `!kill " .. player .. " " .. killing[player][2] .. "`"
 
 		data.parkour.killed = os.time() + killing[player][2] * 60 * 1000
 		save = true
