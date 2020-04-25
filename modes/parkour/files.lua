@@ -12,17 +12,20 @@ local files = {
 		File values:
 
 		- maps     (1)
-		- webhooks (1 and 2)
+		- webhooks (1, 2 and 3)
 		- update   (1)
 		- ranks    (1)
 
 		- banned   (2)
 		- ranking  (2)
 		- suspects (2)
+
+		- lowmaps  (3)
 	]]
 
 	[1] = 1, -- maps, update, ranks
-	[2] = 2  -- ranking, banned, suspects
+	[2] = 2, -- ranking, banned, suspects
+	[3] = 10, -- lowmaps
 }
 local total_files = 2
 players_file = {}
@@ -262,10 +265,10 @@ onEvent("GameStart", function()
 	system.loadFile(file_id)
 	next_file_load = os.time() + math.random(60500, 90500)
 	next_player_load = os.time() + 5000
+	file_index = file_index % total_files + 1
+	file_id = files[file_index]
 end)
 
 onEvent("NewPlayer", function(player)
 	system.loadPlayerData(player)
-
-
 end)

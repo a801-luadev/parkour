@@ -5,6 +5,10 @@ local ban_actions = {_count = 0}
 local open = {}
 local powers_img = {}
 local help_img = {}
+local scrolldata = {
+	players = {},
+	texts = {}
+}
 local toggle_positions = {
 	[1] = 107,
 	[2] = 132,
@@ -65,26 +69,62 @@ local function removeButton(id, player)
 	end
 end
 
-local function addWindow(id, text, player, x, y, width, height)
+local function scrollWindow(id, player, up, force)
+	local data = scrolldata.players[player]
+	if not data then return end
+
+	local old = data[2]
+	data[2] = up and math.max(data[2] - 1, 1) or math.min(data[2] + 1, data[3])
+	if data[2] == old and not force then return end
+
+	ui.addTextArea(1008 + id * 9, data[1][data[2]], player, data[4], data[5], data[6], data[7], 0, 0, 0, true)
+
+	if not data.behind_img then
+		data.behind_img = tfm.exec.addImage("1719e0e550a.png", "&1", data[8], data[9], player)
+	end
+	if data.img then
+		tfm.exec.removeImage(data.img)
+	end
+	data.img = tfm.exec.addImage("1719e173ac6.png", "&2", data[8], data[9] + (125 / (data[3] - 1)) * (data[2] - 1), player)
+end
+
+local function addWindow(id, text, player, x, y, width, height, isHelp)
 	if width < 0 or height and height < 0 then
 		return
 	elseif not height then
 		height = width/2
 	end
-	id = 1000 + id * 8
+	local _id = id
+	id = 1000 + id * 9
 
-	ui.addTextArea(id    , ""  , player, x              , y               , width+100   , height+70, 0x78462b, 0x78462b, 1, true)
-	ui.addTextArea(id + 1, ""  , player, x              , y+(height+140)/4, width+100   , height/2 , 0x9d7043, 0x9d7043, 1, true)
-	ui.addTextArea(id + 2, ""  , player, x+(width+180)/4, y               , (width+10)/2, height+70, 0x9d7043, 0x9d7043, 1, true)
-	ui.addTextArea(id + 3, ""  , player, x              , y               , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
-	ui.addTextArea(id + 4, ""  , player, x+width+80     , y               , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
-	ui.addTextArea(id + 5, ""  , player, x              , y+height+50     , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
-	ui.addTextArea(id + 6, ""  , player, x+width+80     , y+height+50     , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
-	ui.addTextArea(id + 7, text, player, x+3            , y+3             , width+94    , height+64, 0x1c3a3e, 0x232a35, 1, true)
+	ui.addTextArea(id    , "", player, x              , y               , width+100   , height+70, 0x78462b, 0x78462b, 1, true)
+	ui.addTextArea(id + 1, "", player, x              , y+(height+140)/4, width+100   , height/2 , 0x9d7043, 0x9d7043, 1, true)
+	ui.addTextArea(id + 2, "", player, x+(width+180)/4, y               , (width+10)/2, height+70, 0x9d7043, 0x9d7043, 1, true)
+	ui.addTextArea(id + 3, "", player, x              , y               , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
+	ui.addTextArea(id + 4, "", player, x+width+80     , y               , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
+	ui.addTextArea(id + 5, "", player, x              , y+height+50     , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
+	ui.addTextArea(id + 6, "", player, x+width+80     , y+height+50     , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
+
+	if text[1] then -- it is a table
+		if scrolldata.players[player] and scrolldata.players[player].img then
+			tfm.exec.removeImage(scrolldata.players[player].img)
+			tfm.exec.removeImage(scrolldata.players[player].behind_img)
+		end
+		scrolldata.players[player] = {text, 1, #text, x+3, y+40, width+70, height, x+width+85, y+40, _id}
+		ui.addTextArea(id + 7, "", player, x+3, y+3, width+94, height+64, 0x1c3a3e, 0x232a35, 1, true)
+		scrollWindow(_id, player, true, true)
+	else
+		ui.addTextArea(id + 7, (isHelp and "\n\n\n" or "") .. text, player, x+3, y+3, width+94, height+64, 0x1c3a3e, 0x232a35, 1, true)
+	end
 end
 
 local function removeWindow(id, player)
-	for i = 1000 + id * 8, 1000 + id * 8 + 7 do
+	if scrolldata.players[player] and scrolldata.players[player].img then
+		tfm.exec.removeImage(scrolldata.players[player].img)
+		tfm.exec.removeImage(scrolldata.players[player].behind_img)
+	end
+	scrolldata.players[player] = nil
+	for i = 1000 + id * 9, 1000 + id * 9 + 8 do
 		ui.removeTextArea(i, player)
 	end
 end
@@ -170,9 +210,11 @@ local function removeHelpMenu(player)
 
 	removeWindow(7, player)
 
-	ui.removeTextArea(10000, player)
+	for index = 10000, 10002 do
+		ui.removeTextArea(index, player)
+	end
 
-	for button = 7, 11 do
+	for button = 7, 12 do
 		removeButton(button, player)
 	end
 
@@ -211,16 +253,25 @@ local function showHelpMenu(player, tab)
 	end
 	open[player].help = true
 
-	addWindow(7, "\n\n\n" .. translatedMessage("help_" .. tab, player) .. "\n\n\n", player, 200, 50, 300, 260)
+	if scrolldata.players[player] and scrolldata.players[player].img then
+		tfm.exec.removeImage(scrolldata.players[player].img)
+		tfm.exec.removeImage(scrolldata.players[player].behind_img)
+	end
+	scrolldata.players[player] = nil
 
-	ui.addTextArea(10000, "", player, 210, 60, 390, 30, 0x1c3a3e, 0x1c3a3e, 1, true)
+	addWindow(7, scrolldata.texts[player_langs[player].name .. "_help_" .. tab], player, 100, 50, 500, 260, true)
 
-	addButton(7, translatedMessage("help", player), "help:help", player, 210, 60, 80, 18, tab == "help")
-	addButton(8, translatedMessage("staff", player), "help:staff", player, 310, 60, 80, 18, tab == "staff")
-	addButton(9, translatedMessage("rules", player), "help:rules", player, 410, 60, 80, 18, tab == "rules")
-	addButton(10, translatedMessage("contribute", player), "help:contribute", player, 510, 60, 80, 18, tab == "contribute")
+	ui.addTextArea(10000, "", player, 155, 55, 490, 30, 0x1c3a3e, 0x1c3a3e, 1, true)
+	ui.addTextArea(10001, "", player, 155, 358, 490, 17, 0x1c3a3e, 0x1c3a3e, 1, true)
 
-	addButton(11, "Close", "close_help", player, 210, 352, 380, 18, false)
+	addButton(7, translatedMessage("help", player), "help:help", player, 160, 60, 80, 18, tab == "help")
+	addButton(8, translatedMessage("staff", player), "help:staff", player, 260, 60, 80, 18, tab == "staff")
+	addButton(9, translatedMessage("rules", player), "help:rules", player, 360, 60, 80, 18, tab == "rules")
+	addButton(10, translatedMessage("contribute", player), "help:contribute", player, 460, 60, 80, 18, tab == "contribute")
+	addButton(11, translatedMessage("changelog", player), "help:changelog", player, 560, 60, 80, 18, tab == "changelog")
+
+	addButton(12, "", "close_help", player, 160, 362, 480, 10, false)
+	ui.addTextArea(10002, "<a href='event:close_help'><p align='center'>Close\n", player, 160, 358, 480, 15, 0, 0, 0, true)
 end
 
 local function capitalize(str)
@@ -460,8 +511,12 @@ onEvent("TextAreaCallback", function(id, player, callback)
 	elseif action == "close_help" then
 		removeHelpMenu(player)
 	elseif action == "help" then
-		if args ~= "help" and args ~= "staff" and args ~= "rules" and args ~= "contribute" then return end
+		if args ~= "help" and args ~= "staff" and args ~= "rules" and args ~= "contribute" and args ~= "changelog" then return end
 		showHelpMenu(player, args)
+	elseif action == "discord" then
+		tfm.exec.chatMessage("<rose>" .. links.discord, player)
+	elseif action == "map_submission" then
+		tfm.exec.chatMessage("<rose>" .. links.maps, player)
 	elseif action == "donate" then
 		tfm.exec.chatMessage("<rose>" .. links.donation, player)
 	elseif action == "github" then
@@ -547,6 +602,11 @@ onEvent("GameDataLoaded", function(data)
 		for player in next, data.banned do
 			bans[tonumber(player)] = true
 		end
+		for player, data in next, players_file do
+			if data.banned and (data.banned == 1 or os.time() < data.banned) then
+				bans[room.playerList[player].id] = true
+			end
+		end
 
 		if ban_actions._count > 0 then
 			local send_saved = {}
@@ -575,11 +635,14 @@ onEvent("GameDataLoaded", function(data)
 			end
 			ban_actions = {_count = 0}
 
-			for id in next, to_respawn do
-				for player, data in next, room.playerList do
-					if data.id == id then
-						tfm.exec.respawnPlayer(player)
-					end
+			local id
+			for player, data in next, room.playerList do
+				id = tostring(data.id)
+				if to_respawn[data.id] then
+					tfm.exec.respawnPlayer(player)
+				elseif id ~= 0 and data.banned[id] and players_file[player] then
+					players_file[player].banned = data.banned[id]
+					data.banned[id] = nil
 				end
 			end
 		end
@@ -613,9 +676,10 @@ onEvent("NewPlayer", function(player)
 	tfm.exec.lowerSyncDelay(player)
 
 	translatedChatMessage("welcome", player)
-	translatedChatMessage("discord", player, links.discord)
 	translatedChatMessage("type_help", player)
 
+	system.bindKeyboard(player, 38, true, true)
+	system.bindKeyboard(player, 40, true, true)
 	system.bindKeyboard(player, 76, true, true)
 	system.bindKeyboard(player, 79, true, true)
 	system.bindKeyboard(player, 72, true, true)
@@ -649,6 +713,10 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 	if data.parkour.hbut == 1 then
 		showHelpButton(player, data.parkour.pbut == 1 and 714 or 744)
+	end
+
+	if data.banned and (data.banned == 1 or os.time() < data.banned) then
+		bans[room.playerList[player].id] = true
 	end
 end)
 
@@ -1005,7 +1073,11 @@ onEvent("ChatCommand", function(player, msg)
 end)
 
 onEvent("Keyboard", function(player, key)
-	if key == 76 then
+	if key == 38 or key == 40 then
+		if open[player].help then
+			scrollWindow(7, player, key == 38)
+		end
+	elseif key == 76 then
 		if loaded_leaderboard then
 			toggleLeaderboard(player)
 		else
@@ -1039,6 +1111,36 @@ onEvent("Keyboard", function(player, key)
 end)
 
 onEvent("GameStart", function()
+	local help_texts = {"help_help", "help_staff", "help_rules", "help_contribute", "help_changelog"}
+
+	local count, page, newline, key, text
+	for name, translation in next, translations do
+		for index = 1, #help_texts do
+			key = name .. "_" .. help_texts[index]
+			text = translation[help_texts[index]]
+			count = 0
+			scrolldata.texts[key] = {}
+			text = "\n" .. text
+			for slice = 1, #text, (help_texts[index] == "help_staff" and 700 or 800) + (name == "ru" and 250 or 0) do
+				page = string.sub(text, slice)
+				newline = string.find(page, "\n")
+				if newline then
+					page = string.sub(page, newline)
+					while string.sub(page, 1, 1) == "\n" do
+						page = string.sub(page, 2)
+					end
+					count = count + 1
+					scrolldata.texts[key][count] = page
+				else
+					break
+				end
+			end
+			if #text < 1100 or help_texts[index] == "help_help" then
+				scrolldata.texts[key] = string.sub(text, 2)
+			end
+		end
+	end
+
 	tfm.exec.disableMinimalistMode(true)
 	system.disableChatCommandDisplay("lb", true)
 	system.disableChatCommandDisplay("ban", true)

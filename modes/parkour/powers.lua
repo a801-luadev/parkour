@@ -233,7 +233,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		return
 	end
 
-	if not player_keys[player] or not victory[player] then return end
+	if not players_file[player] or not player_keys[player] or not victory[player] then return end
 	local powers = player_keys[player][key]
 	if not powers then return end
 
