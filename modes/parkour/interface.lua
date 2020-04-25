@@ -547,6 +547,11 @@ onEvent("GameDataLoaded", function(data)
 		for player in next, data.banned do
 			bans[tonumber(player)] = true
 		end
+		for player, data in next, players_file do
+			if data.banned and (data.banned == 1 or os.time() < data.banned) then
+				bans[room.playerList[player].id] = true
+			end
+		end
 
 		if ban_actions._count > 0 then
 			local send_saved = {}
@@ -575,11 +580,14 @@ onEvent("GameDataLoaded", function(data)
 			end
 			ban_actions = {_count = 0}
 
-			for id in next, to_respawn do
-				for player, data in next, room.playerList do
-					if data.id == id then
-						tfm.exec.respawnPlayer(player)
-					end
+			local id
+			for player, data in next, room.playerList do
+				id = tostring(data.id)
+				if to_respawn[data.id] then
+					tfm.exec.respawnPlayer(player)
+				elseif id ~= 0 and data.banned[id] and players_file[player] then
+					players_file[player].banned = data.banned[id]
+					data.banned[id] = nil
 				end
 			end
 		end
@@ -650,6 +658,10 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 	if data.parkour.hbut == 1 then
 		showHelpButton(player, data.parkour.pbut == 1 and 714 or 744)
+	end
+
+	if data.banned and (data.banned == 1 or os.time() < data.banned) then
+		bans[room.playerList[player].id] = true
 	end
 end)
 
