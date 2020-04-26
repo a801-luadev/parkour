@@ -158,6 +158,7 @@ class Client(discord.Client):
 
 				changes = await self.check_maps(msg, args[1:], True)
 				if changes is None:
+					self.busy = False
 					return
 
 				await self.mapper.loadLua(
@@ -193,6 +194,7 @@ class Client(discord.Client):
 
 				changes = await self.check_maps(msg, args, False)
 				if changes is None:
+					self.busy = False
 					return
 
 				await self.mapper.loadLua(
