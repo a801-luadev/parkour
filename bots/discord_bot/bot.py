@@ -162,11 +162,11 @@ class Client(discord.Client):
 					return
 
 				await self.mapper.loadLua(
-					self.json_script + (MAPCHANGE_SCRIPT.format("{}", json.dumps(changes), 10 if args[0] == "high" else 1).encode())
+					self.json_script + (MAPCHANGE_SCRIPT.format("'{}'", json.dumps(json.dumps(changes)), 10 if args[0] == "high" else 1).encode())
 				) # Remove maps from the other rotation
 				await asyncio.sleep(3.0)
 				await self.mapper.loadLua(
-					self.json_script + (MAPCHANGE_SCRIPT.format(json.dumps(changes), "{}", 1 if args[0] == "high" else 10).encode())
+					self.json_script + (MAPCHANGE_SCRIPT.format(json.dumps(json.dumps(changes)), "'{}'", 1 if args[0] == "high" else 10).encode())
 				) # Add maps
 
 				await asyncio.sleep(3.0)
@@ -198,7 +198,7 @@ class Client(discord.Client):
 					return
 
 				await self.mapper.loadLua(
-					self.json_script + (MAPCHANGE_SCRIPT.format("{}", json.dumps(changes), 1 if args[0] == "high" else 10).encode())
+					self.json_script + (MAPCHANGE_SCRIPT.format("'{}'", json.dumps(json.dumps(changes)), 1 if args[0] == "high" else 10).encode())
 				) # Remove maps
 
 				await asyncio.sleep(3.0)
