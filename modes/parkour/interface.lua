@@ -636,13 +636,14 @@ onEvent("GameDataLoaded", function(data)
 			ban_actions = {_count = 0}
 
 			local id
-			for player, data in next, room.playerList do
-				id = tostring(data.id)
-				if to_respawn[data.id] then
+			for player, pdata in next, room.playerList do
+				id = tostring(pdata.id)
+				if to_respawn[pdata.id] then
 					tfm.exec.respawnPlayer(player)
 				elseif id ~= 0 and data.banned[id] and players_file[player] then
 					players_file[player].banned = data.banned[id]
 					data.banned[id] = nil
+					savePlayerData(player)
 				end
 			end
 		end
@@ -722,11 +723,25 @@ onEvent("PlayerDataParsed", function(player, data)
 end)
 
 onEvent("PlayerWon", function(player)
-	if bans[ room.playerList[player].id ] then return end
+	local id = room.playerList[player].id
+	if bans[id] then return end
 
 	-- If the player joined the room after the map started,
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
+
+	if taken <= 40 then
+		if taken <= 27 then
+			ban_actions._count = ban_actions._count + 1
+			ban_actions[ban_actions._count] = {"ban", id, "AnticheatSystem"}
+			bans[id] = true
+
+			webhooks[#webhooks + 1] = "**`[SUS]:`** " .. player .. " has completed the map " .. room.currentMap .. " in " .. taken .. " seconds. (auto-banned)"
+		else
+			webhooks[#webhooks + 1] = "**`[SUS]:`** " .. player .. " has completed the map " .. room.currentMap .. " in " .. taken .. " seconds."
+		end
+		return
+	end
 
 	if players_file[player].parkour.congrats == 0 then
 		translatedChatMessage("finished", player, player, taken)
