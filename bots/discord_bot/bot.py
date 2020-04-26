@@ -156,7 +156,7 @@ class Client(discord.Client):
 
 				await msg.channel.send(msg.author.mention + ": " + msg.content)
 
-				changes = await self.check_maps(msg, args, True)
+				changes = await self.check_maps(msg, args[1:], True)
 				if changes is None:
 					return
 
