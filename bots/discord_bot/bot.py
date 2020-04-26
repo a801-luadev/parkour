@@ -128,7 +128,7 @@ class Client(discord.Client):
 						await msg.channel.send("Could not change the perm of " + code + ".")
 						return
 
-			changes[code] = True
+			changes[code[1:]] = True
 
 		return changes
 
