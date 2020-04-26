@@ -9,6 +9,7 @@ local less_time = false
 local victory = {}
 local bans = {}
 local in_room = {}
+local online = {}
 local players_level = {}
 local generated_at = {}
 local spec_mode = {}

@@ -1,4 +1,5 @@
 next_file_load = os.time() + math.random(60500, 90500)
+local player_ranks
 local no_powers
 local unbind
 local next_player_load
@@ -111,6 +112,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 		end
 		return
 	end
+	online[player] = true
 
 	if data == "" then
 		data = {}
@@ -147,6 +149,7 @@ end)
 onEvent("PlayerDataLoaded", function(player, data)
 	if not in_room[player] then return end
 	if player == announce_bot or player == join_bot then return end
+	online[player] = true
 
 	local corrupt
 	if data == "" then
@@ -236,9 +239,16 @@ onEvent("Loop", function()
 	end
 	if next_player_load and now >= next_player_load then
 		next_player_load = nil
+		online = {}
 
 		for player in next, in_room do
 			system.loadPlayerData(player)
+		end
+
+		for player in next, player_ranks do
+			if not in_room[player] then
+				system.loadPlayerData(player)
+			end
 		end
 	end
 

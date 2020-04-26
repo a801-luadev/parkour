@@ -43,7 +43,7 @@ local ranks_permissions = {
 		kill = true
 	}
 }
-local player_ranks = {}
+player_ranks = {}
 local perms = {}
 local saving_ranks = false
 local ranks_update
