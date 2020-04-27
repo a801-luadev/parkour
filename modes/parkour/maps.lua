@@ -16,8 +16,10 @@ local function newMap()
 	if rep._count == _maps._count then
 		if rep == repeated then
 			repeated = {_count = 0, low = repeated.low}
+			rep = repeated
 		else
 			repeated.low = {_count = 0}
+			rep = repeated.low
 		end
 	end
 
