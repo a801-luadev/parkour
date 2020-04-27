@@ -213,16 +213,16 @@ class Client(discord.Client):
 			cmd = args.pop(0).lower()
 
 			if cmd == "!join":
-				if self.busy:
-					return await msg.channel.send("The bot is busy right now.")
-				self.busy = True
-
 				if len(args) == 0:
 					return await msg.channel.send("Invalid syntax.")
 
 				room = " ".join(args)
 				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
 					return await msg.channel.send("The given room is invalid. You can only join #parkour rooms.")
+
+				if self.busy:
+					return await msg.channel.send("The bot is busy right now.")
+				self.busy = True
 
 				self.mapper.dispatch("join_request", room)
 
@@ -234,16 +234,16 @@ class Client(discord.Client):
 			cmd = args.pop(0).lower()
 
 			if cmd == "!restart":
-				if self.busy:
-					return await msg.channel.send("The bot is busy right now.")
-				self.busy = True
-
 				if len(args) == 0:
 					return await msg.channel.send("Invalid syntax.")
 
 				room = " ".join(args)
 				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
 					return await msg.channel.send("The given room is invalid. I can only restart #parkour rooms.")
+
+				if self.busy:
+					return await msg.channel.send("The bot is busy right now.")
+				self.busy = True
 
 				self.mapper.dispatch("restart_request", room)
 				await msg.channel.send("Restarting the room soon.")
