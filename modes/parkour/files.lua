@@ -28,7 +28,7 @@ local files = {
 	[2] = 2, -- ranking, banned, suspects
 	[3] = 10, -- lowmaps
 }
-local total_files = 2
+local total_files = 3
 players_file = {}
 local file_index = 1
 local fetching_player_room = {}
