@@ -208,11 +208,50 @@ class Client(discord.Client):
 				await asyncio.sleep(3.0)
 				self.busy = False
 
+		elif msg.channel.id == 704130876426158242:
+			args = msg.content.split(" ")
+			cmd = args.pop(0).lower()
+
+			if cmd == "!join":
+				if self.busy:
+					return await msg.channel.send("The bot is busy right now.")
+				self.busy = True
+
+				if len(args) == 0:
+					return await msg.channel.send("Invalid syntax.")
+
+				room = " ".join(args)
+				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
+					return await msg.channel.send("The given room is invalid. You can only join #parkour rooms.")
+
+				self.mapper.dispatch("join_request", room)
+
+				await asyncio.sleep(3.0)
+				self.busy = False
+
 		elif msg.channel.id == 686932761222578201 or msg.channel.id == 694270110172446781:
 			args = msg.content.split(" ")
 			cmd = args.pop(0).lower()
 
-			if msg.author.id == 212634414021214209 or msg.author.id == 436703225140346881:
+			if cmd == "!restart":
+				if self.busy:
+					return await msg.channel.send("The bot is busy right now.")
+				self.busy = True
+
+				if len(args) == 0:
+					return await msg.channel.send("Invalid syntax.")
+
+				room = " ".join(args)
+				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
+					return await msg.channel.send("The given room is invalid. I can only restart #parkour rooms.")
+
+				self.mapper.dispatch("restart_request", room)
+				await msg.channel.send("Restarting the room soon.")
+
+				await asyncio.sleep(3.0)
+				self.busy = False
+
+			elif msg.author.id == 212634414021214209 or msg.author.id == 436703225140346881:
 				if cmd == "!copyfile":
 					if len(args) < 2 or (not args[0].isdigit()) or (not args[1].isdigit()):
 						await msg.channel.send("Invalid syntax. Syntax: `!copyfile [original] [destination] (restart)`")
@@ -336,41 +375,6 @@ class Client(discord.Client):
 						return await msg.channel.send("Runtime error: ```python\n" + traceback.format_exc() + "```")
 
 					return await msg.channel.send("Script ran successfully.")
-
-			if cmd == "!restart":
-				if self.busy:
-					return await msg.channel.send("The bot is busy right now.")
-				self.busy = True
-
-				if len(args) == 0:
-					return await msg.channel.send("Invalid syntax.")
-
-				room = " ".join(args)
-				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
-					return await msg.channel.send("The given room is invalid. I can only restart #parkour rooms.")
-
-				self.mapper.dispatch("restart_request", room)
-				await msg.channel.send("Restarting the room soon.")
-
-				await asyncio.sleep(3.0)
-				self.busy = False
-
-			elif cmd == "!join":
-				if self.busy:
-					return await msg.channel.send("The bot is busy right now.")
-				self.busy = True
-
-				if len(args) == 0:
-					return await msg.channel.send("Invalid syntax.")
-
-				room = " ".join(args)
-				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
-					return await msg.channel.send("The given room is invalid. You can only join #parkour rooms.")
-
-				self.mapper.dispatch("join_request", room)
-
-				await asyncio.sleep(3.0)
-				self.busy = False
 
 	async def on_join_request_sent(self):
 		channel = self.get_channel(694270110172446781)
