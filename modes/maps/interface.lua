@@ -936,21 +936,5 @@ onEvent("JoinSystemDataLoaded", function(bot, data)
 		ui.addTextArea(packets.join_request, "requested", mapper_bot)
 	end
 
-	local recv = ""
-	for room_name, expire in next, data do
-		if expire[1] then
-			recv = recv .. "\001" .. room_name .. "\002" .. (expire[2] + join_epoch)
-			join_to_delete._count = join_to_delete._count + 1
-			join_to_delete[join_to_delete._count] = room_name
-		end
-	end
-	if recv ~= "" then
-		ui.addTextArea(packets.join_request, "received" .. recv, mapper_bot)
-	end
-
-	for idx = 1, join_to_delete._count do
-		data[join_to_delete[idx]] = nil
-	end
-
 	system.savePlayerData(bot, json.encode(data))
 end)
