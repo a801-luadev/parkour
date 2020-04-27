@@ -377,11 +377,11 @@ class Client(discord.Client):
 					return await msg.channel.send("Script ran successfully.")
 
 	async def on_join_request_sent(self):
-		channel = self.get_channel(694270110172446781)
+		channel = self.get_channel(704130876426158242)
 		await channel.send("Room join requests have been sent.")
 
 	async def on_join_request_activated(self, room, expire):
-		channel = self.get_channel(694270110172446781)
+		channel = self.get_channel(704130876426158242)
 		await channel.send(f"Room join request for room `{room}` activated. Disabling it in **{round(expire)}** seconds.")
 
 	async def on_lua_log(self, msg):
