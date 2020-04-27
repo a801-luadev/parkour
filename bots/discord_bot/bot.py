@@ -292,6 +292,10 @@ class Client(discord.Client):
 					await msg.channel.send("Uploading script from " + link + " - Message: `" + update_msg + "`")
 					self.mapper.dispatch("update_ready", link, update_msg)
 
+					await asyncio.sleep(310.0)
+					await msg.channel.send("Updated.")
+					self.busy = False
+
 				elif cmd == "!load":
 					if self.busy:
 						return await msg.channel.send("The bot is busy right now.")
@@ -379,10 +383,6 @@ class Client(discord.Client):
 	async def on_join_request_sent(self):
 		channel = self.get_channel(704130876426158242)
 		await channel.send("Room join requests have been sent.")
-
-	async def on_join_request_activated(self, room, expire):
-		channel = self.get_channel(704130876426158242)
-		await channel.send(f"Room join request for room `{room}` activated. Disabling it in **{round(expire)}** seconds.")
 
 	async def on_lua_log(self, msg):
 		match = re.match(r"^<V>\[(.+?)\]<BL> (.+)$", msg, flags=re.DOTALL)

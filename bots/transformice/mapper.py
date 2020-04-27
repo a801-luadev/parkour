@@ -491,15 +491,3 @@ class Client(aiotfmpatch.Client):
 
 			if data[0] == "requested":
 				self.discord.dispatch("join_request_sent")
-
-			elif data[0] == "received":
-				now = time.time()
-
-				for index, room in enumerate(data):
-					if index < 1:
-						continue
-
-					name, expire = room.split("\x02")
-					expire = int(expire) // 1000
-
-					self.discord.dispatch("join_request_activated", name, expire - now)
