@@ -168,9 +168,9 @@ onEvent("Loop", function()
 						if ck.particles[name] == false then
 							tfm.exec.removeImage(ck.images[name])
 						end
-						victory._last_level[name] = true
 
 						if level_id == last_level then
+							victory._last_level[name] = true
 							tfm.exec.giveCheese(name)
 							tfm.exec.playerVictory(name)
 							tfm.exec.respawnPlayer(name)

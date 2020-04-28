@@ -603,7 +603,7 @@ onEvent("GameDataLoaded", function(data)
 			bans[tonumber(player)] = true
 		end
 		for player, data in next, players_file do
-			if data.banned and (data.banned == 1 or os.time() < data.banned) then
+			if data.banned and (data.banned == 2 or os.time() < data.banned) then
 				bans[room.playerList[player].id] = true
 			end
 		end
@@ -641,7 +641,7 @@ onEvent("GameDataLoaded", function(data)
 				if to_respawn[pdata.id] then
 					tfm.exec.respawnPlayer(player)
 				elseif id ~= 0 and data.banned[id] and players_file[player] then
-					players_file[player].banned = data.banned[id]
+					players_file[player].banned = data.banned[id] == 1 and 2 or data.banned[id]
 					data.banned[id] = nil
 					savePlayerData(player)
 				end
@@ -717,7 +717,7 @@ onEvent("PlayerDataParsed", function(player, data)
 		showHelpButton(player, data.parkour.pbut == 1 and 714 or 744)
 	end
 
-	if data.banned and (data.banned == 1 or os.time() < data.banned) then
+	if data.banned and (data.banned == 2 or os.time() < data.banned) then
 		bans[room.playerList[player].id] = true
 	end
 end)
