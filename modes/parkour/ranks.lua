@@ -40,7 +40,8 @@ local ranks_permissions = {
 		enable_review = true
 	},
 	trainee = {
-		kill = true
+		kill = true,
+		spec = true
 	}
 }
 player_ranks = {}
