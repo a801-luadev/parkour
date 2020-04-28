@@ -41,7 +41,7 @@ local ranks_permissions = {
 	},
 	trainee = {
 		kill = true,
-		spec = true,
+		spectate = true,
 		get_player_room = true
 	}
 }
