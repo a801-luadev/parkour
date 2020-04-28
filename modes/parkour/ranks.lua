@@ -41,7 +41,8 @@ local ranks_permissions = {
 	},
 	trainee = {
 		kill = true,
-		spec = true
+		spec = true,
+		get_player_room = true
 	}
 }
 player_ranks = {}
