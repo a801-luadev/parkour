@@ -6,7 +6,7 @@ local player_count = 0
 local victory_count = 0
 local map_start = 0
 local less_time = false
-local victory = {}
+local victory = {_last_level = {}}
 local bans = {}
 local in_room = {}
 local online = {}
@@ -92,6 +92,7 @@ end)
 onEvent("PlayerWon", function(player, elapsed)
 	victory_count = victory_count + 1
 	victory[player] = true
+	victory._last_level[player] = nil
 
 	if victory_count == player_count then
 		tfm.exec.setGameTime(20)
@@ -103,7 +104,7 @@ onEvent("NewGame", function()
 	check_position = 6
 	victory_count = 0
 	less_time = false
-	victory = {}
+	victory = {_last_level = {}}
 	players_level = {}
 	generated_at = {}
 	map_start = os.time()
@@ -138,6 +139,15 @@ onEvent("Loop", function()
 	if check_position > 0 then
 		check_position = check_position - 1
 	else
+		for player in next, victory._last_level do
+			if not victory[player] then
+				tfm.exec.giveCheese(player)
+				tfm.exec.playerVictory(player)
+				tfm.exec.respawnPlayer(player)
+				tfm.exec.movePlayer(player, levels[players_level[player]].x, levels[players_level[player]].y)
+			end
+		end
+
 		local last_level = #levels
 		local level_id, next_level, player
 		local particle = 29--math.random(21, 23)
@@ -158,6 +168,7 @@ onEvent("Loop", function()
 						if ck.particles[name] == false then
 							tfm.exec.removeImage(ck.images[name])
 						end
+						victory._last_level[name] = true
 
 						if level_id == last_level then
 							tfm.exec.giveCheese(name)
