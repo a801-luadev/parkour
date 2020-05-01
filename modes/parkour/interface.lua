@@ -635,7 +635,7 @@ onEvent("GameDataLoaded", function(data)
 					to_respawn[action[2]] = nil
 				else
 					bans[action[2]] = nil
-					data.banned[tostring(action[2])] = nil
+					data.banned[tostring(action[2])] = 0
 					to_respawn[action[2]] = true
 				end
 
