@@ -739,7 +739,7 @@ onEvent("PlayerWon", function(player)
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
-	if taken <= 40 and room.name ~= "*#parkour0maps" and not review_mode then
+	if taken <= 40 and room.name ~= "*#parkour0maps" and not review_mode and not is_tribe then
 		if taken <= 27 then
 			ban_actions._count = ban_actions._count + 1
 			ban_actions[ban_actions._count] = {"ban", id, "AnticheatSystem"}
