@@ -6,8 +6,8 @@ local levels
 
 local function newMap()
 	local rep, _maps
-	maps._rotation = (maps._rotation + 1) % 4
-	if maps._rotation == 3 then
+	maps._rotation = (maps._rotation + 1) % 11
+	if maps._rotation == 10 then
 		rep, _maps = repeated.low, maps.low
 	else
 		rep, _maps = repeated, maps
