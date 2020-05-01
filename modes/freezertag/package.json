@@ -1,14 +1,5 @@
 [
 	{
-		"type": "require-dir",
-		"dir": "translations/freezertag",
-		"recursive": false
-	},
-	{
-		"type": "require-package",
-		"package": "tech/require-lib"
-	},
-	{
 		"type": "require-file",
 		"file": "modes/freezertag/init.lua"
 	}
