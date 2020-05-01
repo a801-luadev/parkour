@@ -87,6 +87,7 @@ translations.tr = {
 	powers = "Beceriler",
 	press = "<vp>%s Tuşuna Bas",
 	click = "<vp>Sol tık",
+	ranking_pos = "Sıralama #%s",
 	completed_maps = "<p align='center'><BV><B>Tamamlanan haritalar: %s</B></p></BV>",
 	leaderboard = "Lider sıralaması",
 	position = "Sıralama",
@@ -130,4 +131,7 @@ translations.tr = {
 	cloud = "Bulut",
 	rip = "Mezar taşı",
 	choco = "Çukulata Tahta",
+	bigBox = "Büyük Kutu",
+	trampoline = "Trambolin",
+	toilet = "Tuvalet"
 }

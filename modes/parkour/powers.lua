@@ -3,6 +3,8 @@ local is_tribe = string.sub(room.name, 2, 2) == "\3"
 no_powers = {}
 local facing = {}
 local cooldowns = {}
+local max_leaderboard_rows
+local leaderboard
 
 local function checkCooldown(player, name, long, img, x, y, show)
 	if cooldowns[player] then
@@ -30,6 +32,29 @@ local function despawnableObject(when, ...)
 	local obj = tfm.exec.addShamanObject(...)
 	addNewTimer(when, tfm.exec.removeObject, obj)
 end
+
+local toilet
+toilet = {
+	water = function(img, id, x, y)
+		tfm.exec.removeImage(img)
+
+		local obj = tfm.exec.addShamanObject(63, x, y)
+		tfm.exec.addPhysicObject(id, x, y - 20, {
+			type = 9,
+			width = 30,
+			height = 60,
+			miceCollision = false,
+			groundCollision = false,
+			foreground = true
+		})
+
+		addNewTimer(5000, toilet.despawn, id, obj)
+	end,
+	despawn = function(id, obj)
+		tfm.exec.removePhysicObject(id)
+		tfm.exec.removeObject(obj)
+	end
+}
 
 local powers = {
 	{
@@ -180,7 +205,54 @@ local powers = {
 		fnc = function(player, key, down, x, y)
 			despawnableObject(4000, 46, x + (facing[player] and 20 or -20), y - 30, 90)
 		end
-	}
+	},
+	{
+		name = 'bigBox',
+		maps = 2500,
+		cooldown = 25000,
+		cooldown_icon = {img= "17127e77dbe.jpg", x = 221, y = 374},
+		image = {url = '1689fd4ffc4.jpg', x = 50, y = 40},
+
+		qwerty = {key = "B", keyCode = 66},
+
+		fnc = function(player, key, down, x, y)
+			despawnableObject(4000, 2, x, y + 10, 0)
+		end
+	},
+	{
+		name = 'trampoline',
+		maps = 4000,
+		cooldown = 25000,
+		cooldown_icon = {img= "171cd9f5188.png", x = 241, y = 374},
+		image = {url = '171cd98ed22.png', x = 20, y = 56},
+
+		qwerty = {key = "N", keyCode = 78},
+
+		fnc = function(player, key, down, x, y)
+			despawnableObject(4000, 701, x, y + 10, 0)
+		end
+	},
+	{
+		name = 'toilet',
+		ranking = 70,
+		cooldown = 30000,
+		cooldown_icon = {img= "171cd9e02d3.png", x = 261, y = 374},
+		image = {url = "171cd3eddf1.png", x = 50, y = 40},
+
+		qwerty = {key = "C", keyCode = 67},
+
+		fnc = function(player, key, down, x, y)
+			local id = room.playerList[player].id
+			local img = tfm.exec.addImage("171cd3eddf1.png", "_51", x - 20, y - 20)
+			tfm.exec.addPhysicObject(id, x, y + 13, {
+				type = 14,
+				friction = 0.3,
+				width = 30
+			})
+
+			addNewTimer(5000, toilet.water, img, id, x, y)
+		end
+	},
 }
 
 local keyPowers, clickPowers = {
@@ -190,11 +262,19 @@ local keyPowers, clickPowers = {
 local player_keys = {}
 
 local function bindNecessary(player)
+	local player_pos = leaderboard[player] or max_leaderboard_rows + 1
 	local maps = players_file[player].parkour.c
+	local power, cond
 	for key, powers in next, player_keys[player] do
 		if powers._count then
 			for index = 1, powers._count do
-				if maps >= powers[index].maps then
+				power = powers[index]
+				if power.ranking then
+					cond = player_pos <= power.ranking
+				else
+					cond = maps >= power.maps
+				end
+				if cond or room.name == "*#parkour0maps" then
 					system.bindKeyboard(player, key, true, true)
 				end
 			end
@@ -202,7 +282,13 @@ local function bindNecessary(player)
 	end
 
 	for index = 1, #clickPowers do
-		if maps >= clickPowers[index].maps then
+		power = clickPowers[index]
+		if power.ranking then
+			cond = player_pos <= power.ranking
+		else
+			cond = maps >= power.maps
+		end
+		if cond or room.name == "*#parkour0maps" then
 			system.bindMouse(player, true)
 			break
 		end
@@ -237,12 +323,18 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	local powers = player_keys[player][key]
 	if not powers then return end
 
+	local player_pos = leaderboard[player] or max_leaderboard_rows + 1
 	local file = players_file[player].parkour
 	local maps, show_cooldowns = file.c, file.pcool == 1
-	local power
+	local power, cond
 	for index = powers._count, 1, -1 do
 		power = powers[index]
-		if maps >= power.maps or room.name == "*#parkour0maps" then
+		if power.ranking then
+			cond = player_pos <= power.ranking
+		else
+			cond = maps >= power.maps
+		end
+		if cond or room.name == "*#parkour0maps" then
 			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_icon.img, power.cooldown_icon.x, power.cooldown_icon.y, show_cooldowns) then
 				power.fnc(player, key, down, x, y)
 			end
@@ -256,12 +348,18 @@ onEvent("Mouse", function(player, x, y)
 
 	if not players_file[player] or not victory[player] then return end
 
+	local player_pos = leaderboard[player] or max_leaderboard_rows + 1
 	local file = players_file[player].parkour
 	local maps, show_cooldowns = file.c, file.pcool == 1
-	local power, cooldown
+	local power, cond
 	for index = 1, #clickPowers do
 		power = clickPowers[index]
-		if maps >= power.maps or room.name == "*#parkour0maps" then
+		if power.ranking then
+			cond = player_pos <= power.ranking
+		else
+			cond = maps >= power.maps
+		end
+		if cond or room.name == "*#parkour0maps" then
 			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_icon.img, power.cooldown_icon.x, power.cooldown_icon.y, show_cooldowns) then
 				power.fnc(player, x, y)
 			end

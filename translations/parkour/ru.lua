@@ -87,6 +87,7 @@ translations.ru = {
 	powers = "Способности",
 	press = "<vp>Нажмите %s",
 	click = "<vp>Щелчок левой кнопкой мыши",
+	ranking_pos = "Рейтинг #%s",
 	completed_maps = "<p align='center'><BV><B>Пройденные карты: %s</B></p></BV>",
 	leaderboard = "Таблица лидеров",
 	position = "Должность",
@@ -130,4 +131,7 @@ translations.ru = {
 	cloud = "Облако",
 	rip = "Могила",
 	choco = "Шоколадная палка",
+	bigBox = "Большая коробка",
+	trampoline = "Батут",
+	toilet = "Туалет"
 }

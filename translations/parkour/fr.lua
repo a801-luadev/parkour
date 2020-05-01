@@ -87,6 +87,7 @@ translations.fr = {
 	powers = "Pouvoirs",
 	press = "<vp>Appuyer sur %s",
 	click = "<vp>Clique gauche",
+	ranking_pos = "Classement #%s",
 	completed_maps = "<p align='center'><BV><B>Cartes complétées: %s</B></p></BV>",
 	leaderboard = "Tableau des scores",
 	position = "Position",
@@ -130,4 +131,7 @@ translations.fr = {
 	cloud = "Nuage",
 	rip = "Tombe",
 	choco = "Planche de chocolat",
+	bigBox = "Grande boîte",
+	trampoline = "Trampoline",
+	toilet = "Toilettes"
 }

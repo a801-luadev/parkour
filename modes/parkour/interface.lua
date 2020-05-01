@@ -395,11 +395,16 @@ local function showPowers(player, page)
 	ui.addTextArea(1, "", player, 160, 140, 480, 195, 0x1D464F, 0x193E46, 1, true)
 
 	local completed = players_file[player].parkour.c
+	local player_pos = leaderboard[player] or max_leaderboard_rows + 1
 	local power, canUse
 	for index = page * 3, page * 3 + 2 do
 		power = powers[index + 1]
 		if power then
-			canUse = completed >= power.maps
+			if power.ranking then
+				canUse = player_pos <= power.ranking
+			else
+				canUse = completed >= power.maps
+			end
 			ui.addTextArea(
 				3000 + index,
 				string.format(
@@ -409,7 +414,11 @@ local function showPowers(player, page)
 						power.click and
 						translatedMessage("click", player) or
 						translatedMessage("press", player, player_keys[player][power])
-					) or completed .. "/" .. power.maps
+					) or (
+						power.ranking and
+						translatedMessage("ranking_pos", player, power.ranking) or
+						completed .. "/" .. power.maps
+					)
 				),
 				player,
 				170 + (index - page * 3) * 160,
@@ -730,7 +739,7 @@ onEvent("PlayerWon", function(player)
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
-	if taken <= 40 then
+	if taken <= 40 and room.name ~= "*#parkour0maps" and not review_mode then
 		if taken <= 27 then
 			ban_actions._count = ban_actions._count + 1
 			ban_actions[ban_actions._count] = {"ban", id, "AnticheatSystem"}
