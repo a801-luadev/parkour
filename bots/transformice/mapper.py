@@ -99,7 +99,7 @@ class Client(aiotfmpatch.Client):
 	async def on_load_request(self, script):
 		await self.loadLua(script)
 
-	async def on_restart_request(self, room):
+	async def on_restart_request(self, room, channel):
 		if self.room is None:
 			return
 
@@ -109,14 +109,30 @@ class Client(aiotfmpatch.Client):
 			await asyncio.sleep(3.0)
 			go_maps = True
 
-		try:
-			await self.loadLua(await self.getModuleCode())
-		except:
-			return
+		for attempt in range(6):
+			try:
+				code = await self.getModuleCode()
+			except:
+				continue
+			await self.loadLua(code)
+
+			if isintance(channel, int):
+				await self.sendSpecialChatMsg(channel, "Room restarted.")
+			elif channel is not None:
+				await channel.send("Room restarted.")
+			break
+		else:
+			if isintance(channel, int):
+				await self.sendSpecialChatMsg(channel, "Could not restart the room.")
+			elif channel is not None:
+				await channel.send("Could not restart the room.")
 
 		if go_maps:
 			await asyncio.sleep(3.0)
 			await self.sendCommand("room* *#parkour0maps")
+
+		await asyncio.sleep(3.0)
+		self.discord.busy = False
 
 	async def sendSpecialChatMsg(self, chat, msg):
 		return await self.main.send(aiotfm.Packet.new(6, 10).write8(chat).writeString(msg))
@@ -130,7 +146,11 @@ class Client(aiotfmpatch.Client):
 			if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
 				return await self.sendSpecialChatMsg(chat, "The given room is invalid. I can only restart #parkour rooms.")
 
-			self.dispatch("restart_request", room)
+			if self.discord.busy:
+				return await self.sendSpecialChatMsg(chat, "The bot is busy right now. Try again later.")
+			self.discord.busy = True
+
+			self.dispatch("restart_request", room, chat)
 			await self.sendSpecialChatMsg(chat, "Restarting the room soon.")
 
 	async def getModuleCode(self):
@@ -484,7 +504,7 @@ class Client(aiotfmpatch.Client):
 			self.discord.dispatch("transformice_logs", text.decode())
 
 		elif txt_id == ROOM_CRASH:
-			self.dispatch("restart_request", self.room.name)
+			self.dispatch("restart_request", self.room.name, None)
 
 		elif txt_id == JOIN_REQUEST:
 			data = text.decode().split("\x01")

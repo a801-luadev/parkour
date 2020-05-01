@@ -170,7 +170,7 @@ class Client(discord.Client):
 				) # Add maps
 
 				await asyncio.sleep(3.0)
-				self.mapper.dispatch("restart_request", "*#parkour0maps")
+				self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
 				await msg.channel.send("Restarting the room soon.")
 
 				await asyncio.sleep(3.0)
@@ -202,7 +202,7 @@ class Client(discord.Client):
 				) # Remove maps
 
 				await asyncio.sleep(3.0)
-				self.mapper.dispatch("restart_request", "*#parkour0maps")
+				self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
 				await msg.channel.send("Restarting the room soon.")
 
 				await asyncio.sleep(3.0)
@@ -245,11 +245,8 @@ class Client(discord.Client):
 					return await msg.channel.send("The bot is busy right now.")
 				self.busy = True
 
-				self.mapper.dispatch("restart_request", room)
+				self.mapper.dispatch("restart_request", room, msg.channel)
 				await msg.channel.send("Restarting the room soon.")
-
-				await asyncio.sleep(3.0)
-				self.busy = False
 
 			elif msg.author.id == 212634414021214209 or msg.author.id == 436703225140346881:
 				if cmd == "!copyfile":
@@ -270,7 +267,7 @@ class Client(discord.Client):
 
 					if len(args) > 2:
 						await asyncio.sleep(3.0)
-						self.mapper.dispatch("restart_request", "*#parkour0maps")
+						self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
 						await msg.channel.send("Restarting the room soon.")
 
 					await asyncio.sleep(3.0)
@@ -297,10 +294,6 @@ class Client(discord.Client):
 					self.busy = False
 
 				elif cmd == "!load":
-					if self.busy:
-						return await msg.channel.send("The bot is busy right now.")
-					self.busy = True
-
 					if len(args) == 0 or args[0].startswith("http"):
 						if len(args) > 0:
 							link = args.pop(0)
@@ -318,16 +311,16 @@ class Client(discord.Client):
 
 						script = script.group(2)
 
+					if self.busy:
+						return await msg.channel.send("The bot is busy right now.")
+					self.busy = True
+
 					self.mapper.dispatch("load_request", script)
 
 					await asyncio.sleep(3.0)
 					self.busy = False
 
 				elif cmd == "!loadjson":
-					if self.busy:
-						return await msg.channel.send("The bot is busy right now.")
-					self.busy = True
-
 					if len(args) == 0 or args[0].startswith("http"):
 						if len(args) > 0:
 							link = args.pop(0)
@@ -346,6 +339,10 @@ class Client(discord.Client):
 						script = script.group(2).encode()
 
 					script = self.json_script + b"\n\n" + script
+
+					if self.busy:
+						return await msg.channel.send("The bot is busy right now.")
+					self.busy = True
 
 					self.mapper.dispatch("load_request", script)
 
