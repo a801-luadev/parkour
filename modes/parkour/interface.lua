@@ -736,9 +736,11 @@ onEvent("PlayerWon", function(player)
 			ban_actions[ban_actions._count] = {"ban", id, "AnticheatSystem"}
 			bans[id] = true
 
-			webhooks[#webhooks + 1] = "**`[SUS]:`** " .. player .. " has completed the map " .. room.currentMap .. " in " .. taken .. " seconds. (auto-banned)"
+			webhooks._count = webhooks._count + 1
+			webhooks[webhooks._count] = "**`[SUS]:`** " .. player .. " has completed the map " .. room.currentMap .. " in " .. taken .. " seconds. (auto-banned)"
 		else
-			webhooks[#webhooks + 1] = "**`[SUS]:`** " .. player .. " has completed the map " .. room.currentMap .. " in " .. taken .. " seconds."
+			webhooks._count = webhooks._count + 1
+			webhooks[webhooks._count] = "**`[SUS]:`** " .. player .. " has completed the map " .. room.currentMap .. " in " .. taken .. " seconds."
 		end
 		return
 	end
