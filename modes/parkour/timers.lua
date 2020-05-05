@@ -58,5 +58,7 @@ onEvent("NewGame", function()
 				end
 			end
 		end
+		timers = {}
+		aliveTimers = false
 	end
 end)
