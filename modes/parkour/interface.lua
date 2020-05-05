@@ -1,7 +1,5 @@
 local kill_cooldown = {}
-local save_update = false
 local update_at = 0
-local ban_actions = {_count = 0}
 local open = {}
 local powers_img = {}
 local help_img = {}
@@ -607,64 +605,34 @@ end)
 
 onEvent("GameDataLoaded", function(data)
 	if data.banned then
-		bans = {}
-		for player in next, data.banned do
-			bans[tonumber(player)] = true
-		end
-		for player, data in next, players_file do
-			if data.banned and (data.banned == 2 or os.time() < data.banned) then
-				bans[room.playerList[player].id] = true
+		bans = {[0] = true}
+		for id, value in next, data.banned do
+			if value == 1 or os.time() < value then
+				bans[tonumber(player)] = true
 			end
 		end
 
-		if ban_actions._count > 0 then
-			local send_saved = {}
-			local to_respawn = {}
-			local action
-			for index = 1, ban_actions._count do
-				action = ban_actions[index]
+		local id, ban
+		for player, pdata in next, players_file do
+			if room.playerList[player] and in_room[player] then
+				id = room.playerList[player].id
+				ban = data.banned[tostring(id)]
 
-				if not send_saved[action[3]] then
-					send_saved[action[3]] = true
-					translatedChatMessage("data_saved", action[3])
-				end
-
-				if action[1] == "ban" then
-					bans[action[2]] = true
-					data.banned[tostring(action[2])] = 1 -- 1 so it uses less space
-					to_respawn[action[2]] = nil
-				else
-					bans[action[2]] = nil
-					data.banned[tostring(action[2])] = 0
-					to_respawn[action[2]] = true
-				end
-
-				webhooks._count = webhooks._count + 1
-				webhooks[webhooks._count] = "**`[BANS]:`** **" .. action[3] .. "** has " .. action[1] .. "ned a player. (ID: **" .. action[2] .. "**)"
-			end
-			ban_actions = {_count = 0}
-
-			local id
-			for player, pdata in next, room.playerList do
-				id = tostring(pdata.id)
-				if to_respawn[pdata.id] then
-					tfm.exec.respawnPlayer(player)
-				elseif id ~= 0 and data.banned[id] and players_file[player] then
-					players_file[player].banned = data.banned[id] == 1 and 2 or data.banned[id]
-					data.banned[id] = nil
+				if ban then
+					if ban == 1 then
+						pdata.banned = 2
+					else
+						pdata.banned = ban
+					end
 					savePlayerData(player)
+					sendPacket(2, player .. "\000" .. ban)
+				end
+
+				if pdata.banned and (pdata.banned == 2 or os.time() < pdata.banned) then
+					bans[id] = true
 				end
 			end
 		end
-	end
-
-	if data.update then
-		if save_update then
-			data.update = save_update
-			save_update = nil
-		end
-
-		update_at = data.update or 0
 	end
 end)
 
@@ -740,18 +708,7 @@ onEvent("PlayerWon", function(player)
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
 	if taken <= 40 and room.name ~= "*#parkour0maps" and not review_mode and not is_tribe then
-		if taken <= 27 then
-			ban_actions._count = ban_actions._count + 1
-			ban_actions[ban_actions._count] = {"ban", id, "AnticheatSystem"}
-			bans[id] = true
-
-			webhooks._count = webhooks._count + 1
-			webhooks[webhooks._count] = "**`[SUS]:`** " .. player .. " has completed the map " .. room.currentMap .. " in " .. taken .. " seconds. (auto-banned)"
-		else
-			webhooks._count = webhooks._count + 1
-			webhooks[webhooks._count] = "**`[SUS]:`** " .. player .. " has completed the map " .. room.currentMap .. " in " .. taken .. " seconds."
-		end
-		return
+		return sendPacket(1, room.name .. "\000" .. player .. "\000" .. id .. "\000" .. room.currentMap .. "\000" .. taken)
 	end
 
 	if players_file[player].parkour.congrats == 0 then
@@ -812,85 +769,6 @@ onEvent("ChatCommand", function(player, msg)
 	elseif cmd == "help" then
 		showHelpMenu(player, "help")
 
-	elseif cmd == "ban" then
-		if not perms[player] or not perms[player].ban then return end
-
-		if pointer < 1 then
-			return translatedChatMessage("invalid_syntax", player)
-		end
-
-		local id = tonumber(args[1])
-		if not id then
-			local affected = capitalize(args[1])
-			if not in_room[affected] then
-				return translatedChatMessage("user_not_in_room", player, affected)
-			end
-
-			id = room.playerList[affected].id
-		end
-
-		ban_actions._count = ban_actions._count + 1
-		ban_actions[ban_actions._count] = {"ban", id, player}
-		bans[id] = true
-		translatedChatMessage("action_within_minute", player)
-
-	elseif cmd == "unban" then
-		if not perms[player] or not perms[player].unban then return end
-
-		if pointer < 1 then
-			return translatedChatMessage("invalid_syntax", player)
-		end
-
-		local id = tonumber(args[1])
-		if (not id) or (not bans[id]) then
-			return translatedChatMessage("arg_must_be_id", player)
-		end
-
-		ban_actions._count = ban_actions._count + 1
-		ban_actions[ban_actions._count] = {"unban", id, player}
-		bans[id] = nil
-		translatedChatMessage("action_within_minute", player)
-
-	elseif cmd == "kill" then
-		if not perms[player] or not perms[player].kill then return end
-
-		if pointer < 1 then
-			return translatedChatMessage("invalid_syntax", player)
-		end
-
-		local minutes
-		if pointer > 1 then
-			minutes = tonumber(args[2])
-
-			if not minutes then
-				return translatedChatMessage("invalid_syntax", player)
-			end
-		end
-
-		local affected = capitalize(args[1])
-		if not in_room[affected] then
-			if not minutes then
-				return translatedChatMessage("user_not_in_room", player)
-			end
-
-			killing[affected] = {player, minutes}
-			return system.loadPlayerData(affected)
-		end
-
-		if minutes then
-			translatedChatMessage("kill_minutes", affected, minutes)
-			players_file[affected].parkour.killed = os.time() + minutes * 60 * 1000
-			savePlayerData(affected)
-		else
-			translatedChatMessage("kill_map", affected)
-		end
-
-		webhooks._count = webhooks._count + 1
-		webhooks[webhooks._count] = "**`[KILL]:`** `" .. room.name .. "` `" .. player .. "`: `!kill " .. affected .. " " .. (minutes or "-") .. "`"
-
-		no_powers[affected] = true
-		unbind(affected)
-
 	elseif cmd == "review" then
 		if not perms[player] or not perms[player].enable_review then return end
 
@@ -920,86 +798,6 @@ onEvent("ChatCommand", function(player, msg)
 			if next_level then
 				addCheckpointImage(player, next_level.x, next_level.y)
 			end
-		end
-
-	elseif cmd == "announce" then
-		if not perms[player] or not perms[player].announce then return end
-
-		system.savePlayerData(announce_bot, os.time() .. ";" .. table.concat(args, " "))
-
-	elseif cmd == "rank" then
-		if not perms[player] or not perms[player].set_player_rank then return end
-
-		if pointer < 1 then
-			return translatedChatMessage("invalid_syntax", player)
-		end
-		args[1] = string.lower(args[1])
-
-		if args[1] == "add" or args[1] == "rem" then
-			if pointer < 2 then
-				return translatedChatMessage("invalid_syntax", player)
-			end
-			if updater and updater ~= player then
-				return translatedChatMessage("cant_update", player)
-			end
-
-			local rank_name = string.lower(args[3])
-			if not ranks[rank_name] then
-				return translatedChatMessage("invalid_rank", player, rank_name)
-			end
-
-			if not ranks_update then
-				ranks_update = {}
-				updater = player
-			end
-
-			local affected = capitalize(args[2])
-			if not ranks.admin[player] then
-				if ranks.admin[affected] or ranks.manager[affected] then
-					return translatedChatMessage("cant_edit", player)
-				end
-			end
-
-			if args[1] == "add" and ranks[rank_name][affected] then
-				return translatedChatMessage("has_rank", player, affected, rank_name)
-			elseif args[1] == "rem" and not ranks[rank_name][affected] then
-				return translatedChatMessage("doesnt_have_rank", player, affected, rank_name)
-			end
-
-			if not ranks_update[affected] then
-				rank_id = 0
-				for rank, id in next, ranks_id do
-					if ranks[rank][affected] then
-						rank_id = rank_id + id
-					end
-				end
-				ranks_update[affected] = rank_id
-			end
-
-			if args[1] == "add" then
-				ranks_update[affected] = ranks_update[affected] + ranks_id[rank_name]
-			else
-				ranks_update[affected] = ranks_update[affected] - ranks_id[rank_name]
-			end
-
-			translatedChatMessage("rank_save", player)
-
-		elseif args[1] == "save" then
-			saving_ranks = true
-			translatedChatMessage("action_within_minute", player)
-
-		elseif args[1] == "list" then
-			local msg
-			for rank, players in next, ranks do
-				msg = "Users with the rank " .. rank .. ":"
-				for player in next, players do
-					msg = msg .. "\n - " .. player
-				end
-				tfm.exec.chatMessage(msg, player)
-			end
-
-		else
-			return translatedChatMessage("invalid_syntax", player)
 		end
 
 	elseif cmd == "staff" then
@@ -1036,12 +834,6 @@ onEvent("ChatCommand", function(player, msg)
 		end
 
 		tfm.exec.chatMessage(text, player)
-
-	elseif cmd == "update" then
-		if not perms[player] or not perms[player].show_update then return end
-
-		save_update = os.time() + 60000 * 3 -- 3 minutes
-		translatedChatMessage("action_within_minute", player)
 
 	elseif cmd == "map" then
 		if not perms[player] or not perms[player].change_map then return end
@@ -1169,11 +961,6 @@ onEvent("GameStart", function()
 
 	tfm.exec.disableMinimalistMode(true)
 	system.disableChatCommandDisplay("lb", true)
-	system.disableChatCommandDisplay("ban", true)
-	system.disableChatCommandDisplay("unban", true)
-	system.disableChatCommandDisplay("kill", true)
-	system.disableChatCommandDisplay("rank", true)
-	system.disableChatCommandDisplay("update", true)
 	system.disableChatCommandDisplay("map", true)
 	system.disableChatCommandDisplay("spec", true)
 	system.disableChatCommandDisplay("op", true)
@@ -1183,5 +970,26 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("room", true)
 	system.disableChatCommandDisplay("review", true)
 	system.disableChatCommandDisplay("cp", true)
-	system.disableChatCommandDisplay("announce", true)
+end)
+
+onEvent("PacketReceived", function(packet_id, packet)
+	if packet_id == 1 then -- game update
+		update_at = os.time() + 300000
+	elseif packet_id == 2 then -- !kill
+		local player = string.match(packet, "^([^\000]+)\000[^\000]+$")
+		if in_room[player] then
+			system.loadPlayerData(player)
+		end
+	elseif packet_id == 3 then -- !ban
+		local player, val = string.match(packet, "^([^\000]+)\000([^\000]+)$")
+		local file, data = players_file[player], room.playerList[player]
+		if in_room[player] and data and file then
+			file.banned = val == "1" and 2 or tonumber(val)
+			bans[data.id] = file.banned = 2 or os.time() < file.banned
+			savePlayerData(player)
+			sendPacket(2, packet)
+		end
+	elseif packet_id == 4 then -- !announcement
+		tfm.exec.chatMessage("<vi>[#parkour] <d>" .. packet)
+	end
 end)

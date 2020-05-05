@@ -1,14 +1,7 @@
 webhooks = {_count = 0}
 
-onEvent("GameDataLoaded", function(data)
-	local now = os.time()
-	if not data.webhooks or os.time() >= data.webhooks[1] then
-		data.webhooks = {math.floor(os.time()) + 360000} -- 6 minutes
-	end
-
-	local last = #data.webhooks
+onEvent("ChannelLoad", function()
 	for index = 1, webhooks._count do
-		data.webhooks[last + index] = webhooks[index]
+		sendPacket(1, webhooks[index])
 	end
-	webhooks._count = 0
 end)

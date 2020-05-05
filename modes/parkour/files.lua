@@ -1,11 +1,7 @@
-next_file_load = os.time() + math.random(60500, 90500)
+local next_file_load = os.time() + math.random(60500, 90500)
 local player_ranks
 local no_powers
 local unbind
-local next_player_load
-local announce_bot = "Holybot#0000"
-local last_announcement = os.time()
-local next_announce_load = 0
 local killing = {}
 local to_save = {}
 local files = {
@@ -13,26 +9,23 @@ local files = {
 		File values:
 
 		- maps     (1)
-		- webhooks (1, 2 and 3)
-		- update   (1)
 		- ranks    (1)
 
 		- banned   (2)
 		- ranking  (2)
-		- suspects (2)
 
 		- lowmaps  (3)
 	]]
 
-	[1] = 1, -- maps, update, ranks
-	[2] = 2, -- ranking, banned, suspects
+	[1] = 1, -- maps, ranks
+	[2] = 2, -- ranking, banned
 	[3] = 10, -- lowmaps
 }
 local total_files = 3
-players_file = {}
 local file_index = 1
 local fetching_player_room = {}
-file_id = files[file_index]
+local file_id = files[file_index]
+players_file = {}
 
 local data_migrations = {
 	["0.0"] = function(player, data)
@@ -91,27 +84,15 @@ local data_migrations = {
 local function savePlayerData(player)
 	if not players_file[player] then return end
 
-	to_save[player] = true
-	system.loadPlayerData(player)
+	if not to_save[player] then
+		to_save[player] = true
+		system.loadPlayerData(player)
+	end
 end
 
 onEvent("PlayerDataLoaded", function(player, data)
+	if player == send_channel or player == recv_channel then return end
 	if in_room[player] then return end
-	if player == join_bot then return end
-	if player == announce_bot then
-		local when, txt = string.match(data, "^(%d+);(.+)$")
-		if not when then
-			system.savePlayerData(player, "0;a")
-			when = "0"
-		end
-
-		when = tonumber(when)
-		if when > last_announcement then
-			last_announcement = when
-			tfm.exec.chatMessage("<vi>[#parkour] <d>" .. txt)
-		end
-		return
-	end
 	online[player] = true
 
 	if data == "" then
@@ -125,8 +106,6 @@ onEvent("PlayerDataLoaded", function(player, data)
 		end
 	end
 
-	local save = false
-
 	local fetch = fetching_player_room[player]
 	if fetch then
 		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. (data.room or "unknown"), fetch[1])
@@ -134,21 +113,14 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	if killing[player] and data.parkour then
-		webhooks._count = webhooks._count + 1
-		webhooks[webhooks._count] = "**`[KILL]:`** `" .. room.name .. "` (remotely) `" .. killing[player][1] .. "`: `!kill " .. player .. " " .. killing[player][2] .. "`"
-
-		data.parkour.killed = os.time() + killing[player][2] * 60 * 1000
-		save = true
-	end
-
-	if save then
+		data.parkour.killed = os.time() + killing[player] * 60 * 1000
 		system.savePlayerData(player, json.encode(data))
 	end
 end)
 
 onEvent("PlayerDataLoaded", function(player, data)
+	if player == send_channel or player == recv_channel then return end
 	if not in_room[player] then return end
-	if player == announce_bot or player == join_bot then return end
 	online[player] = true
 
 	local corrupt
@@ -185,7 +157,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	local fetch = fetching_player_room[player]
 	if fetch then
-		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. (data.room or "unknown"), fetch[1])
+		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. room.name, fetch[1])
 		fetching_player_room[player] = nil
 	end
 
@@ -218,7 +190,9 @@ onEvent("PlayerDataLoaded", function(player, data)
 end)
 
 onEvent("SavingFile", function(id, data)
-	system.saveFile(json.encode(data), id)
+	if data.ranking then -- the only file that can get written by rooms
+		system.saveFile(json.encode(data), id)
+	end
 end)
 
 onEvent("FileLoaded", function(id, data)
@@ -234,27 +208,6 @@ onEvent("Loop", function()
 		next_file_load = now + math.random(60500, 63000)
 		file_index = file_index % total_files + 1
 		file_id = files[file_index]
-
-		next_player_load = now + 5000
-	end
-	if next_player_load and now >= next_player_load then
-		next_player_load = nil
-		online = {}
-
-		for player in next, in_room do
-			system.loadPlayerData(player)
-		end
-
-		for player in next, player_ranks do
-			if not in_room[player] then
-				system.loadPlayerData(player)
-			end
-		end
-	end
-
-	if now >= next_announce_load then
-		next_announce_load = now + 5000
-		system.loadPlayerData(announce_bot)
 	end
 
 	local to_remove, count = {}, 0
@@ -274,7 +227,6 @@ end)
 onEvent("GameStart", function()
 	system.loadFile(file_id)
 	next_file_load = os.time() + math.random(60500, 90500)
-	next_player_load = os.time() + 5000
 	file_index = file_index % total_files + 1
 	file_id = files[file_index]
 end)

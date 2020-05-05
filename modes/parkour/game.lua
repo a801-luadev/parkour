@@ -7,7 +7,7 @@ local victory_count = 0
 local map_start = 0
 local less_time = false
 local victory = {_last_level = {}}
-local bans = {}
+local bans = {[0] = true} -- souris banned
 local in_room = {}
 local online = {}
 local players_level = {}

@@ -1,13 +1,13 @@
 local first_data_load = true
 local repeated = {_count = 0, low = {_count = 0}}
-local maps = {_count = 1, [1] = 7171137, low = {_count = 1, [1] = 7171137}, _rotation = -1}
+local maps = {_count = 1, [1] = 7171137, low = {_count = 1, [1] = 7171137}}
 local is_invalid = false
 local levels
 
 local function newMap()
 	local rep, _maps
-	maps._rotation = (maps._rotation + 1) % 11
-	if maps._rotation == 10 then
+	-- Maps with low priority get played with a half the probabilities of normal maps.
+	if math.random(1000 * (maps._count * 2 / maps.low._count + 0.5)) <= 1000 then
 		rep, _maps = repeated.low, maps.low
 	else
 		rep, _maps = repeated, maps
@@ -25,7 +25,7 @@ local function newMap()
 
 	local map
 	repeat
-		map = _maps[math.random(1, _maps._count)]
+		map = _maps[math.random(_maps._count)]
 	until map and not rep[map]
 	rep[map] = true
 	rep._count = rep._count + 1
@@ -56,7 +56,7 @@ onEvent("GameDataLoaded", function(data)
 				maps[index] = data.maps[index]
 			end
 		else
-			maps = {_count = 1, [1] = 7171137, low = maps.low, _rotation = -1}
+			maps = {_count = 1, [1] = 7171137, low = maps.low}
 		end
 		if first_data_load then
 			newMap()
