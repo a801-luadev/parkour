@@ -28,7 +28,8 @@ local packets = {
 local mod_packets = {
 	send_packet   = bit32.lshift( 1, 8) + 255,
 	send_webhook  = bit32.lshift( 2, 8) + 255,
-	modify_rank   = bit32.lshift( 3, 8) + 255
+	modify_rank   = bit32.lshift( 3, 8) + 255,
+	rank_data     = bit32.lshift( 4, 8) + 255
 }
 local last_update
 local messages_cache = {}
@@ -360,6 +361,21 @@ onEvent("GameDataLoaded", function(data)
 		end
 		ban_changes = {}
 	end
+
+	if data.ranks then
+		local packet = ""
+		for rank in next, ranks_id do
+			packet = packet .. "\001" .. rank
+		end
+
+		for player, ranks in next, player_ranks do
+			packet = packet .. "\000" .. player
+			for rank in next, ranks do
+				packet = packet .. "\001" .. rank
+			end
+		end
+		ui.addTextArea(mod_packets.rank_data, string.sub(packet, 2), mod_bot)
+	end
 end)
 
 onEvent("PacketReceived", function(id, packet)
@@ -379,6 +395,7 @@ onEvent("PacketReceived", function(id, packet)
 			mod_bot
 		)
 		if tonumber(taken) <= 27 then -- autoban!
+			ban_changes[#ban_changes + 1] = {player, 1}
 		end
 
 	elseif id == 2 then
