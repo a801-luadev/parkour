@@ -56,13 +56,11 @@ if not is_tribe then
 			end
 
 			local now = os.time()
-			if now >= send_id + 10000 then
-				send_id = now
-			else
+			if now < send_id + 10000 then
 				buffer = data .. buffer
 			end
 
-			system.savePlayerData(player, send_id .. buffer)
+			system.savePlayerData(player, now .. buffer)
 			buffer = nil
 			if eventPacketSent then
 				eventPacketSent()
@@ -87,14 +85,6 @@ if not is_tribe then
 		end
 	end
 	onEvent("PlayerDataLoaded", packet_handler)
-	onEvent("ChannelLoad", function()
-		if add_packet_data then
-			buffer = add_packet_data
-			add_packet_data = nil
-			system.loadPlayerData(send_channel)
-		end
-		system.loadPlayerData(recv_channel)
-	end)
 
 	onEvent("Loop", function()
 		local now = os.time()
@@ -102,6 +92,12 @@ if not is_tribe then
 			next_channel_load = now + 10000
 
 			eventChannelLoad()
+			if add_packet_data then
+				buffer = add_packet_data
+				add_packet_data = nil
+				system.loadPlayerData(send_channel)
+			end
+			system.loadPlayerData(recv_channel)
 		end
 	end)
 end

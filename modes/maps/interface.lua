@@ -23,13 +23,17 @@ local packets = {
 
 	migrate_data  = bit32.lshift(13, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
 
-	room_crash    = bit32.lshift(14, 8) + 255
+	room_crash    = bit32.lshift(14, 8) + 255,
+
+	fetch_id      = bit32.lshift(15, 8) + 255
 }
 local mod_packets = {
 	send_packet   = bit32.lshift( 1, 8) + 255,
 	send_webhook  = bit32.lshift( 2, 8) + 255,
 	modify_rank   = bit32.lshift( 3, 8) + 255,
-	rank_data     = bit32.lshift( 4, 8) + 255
+	rank_data     = bit32.lshift( 4, 8) + 255,
+	fetch_id      = bit32.lshift( 5, 8) + 255,
+	time_sync     = bit32.lshift( 6, 8) + 255
 }
 local last_update
 local messages_cache = {}
@@ -395,7 +399,12 @@ onEvent("PacketReceived", function(id, packet)
 			mod_bot
 		)
 		if tonumber(taken) <= 27 then -- autoban!
-			ban_changes[#ban_changes + 1] = {player, 1}
+			ban_changes[#ban_changes + 1] = {id, 1}
+			ui.addTextArea(
+				mod_packets.send_webhook,
+				"**`[BANS]:`** `AntiCheatSystem` has permbanned the player `" .. player .. "` (`" .. id .. "`)",
+				mod_bot
+			)
 		end
 
 	elseif id == 2 then
@@ -405,6 +414,10 @@ onEvent("PacketReceived", function(id, packet)
 end)
 
 onEvent("NewPlayer", function(player)
+	if player == mod_bot then
+		ui.addTextArea(mod_packets.time_sync, os.time(), mod_bot)
+	end
+
 	if not loaded.data then return end
 
 	if player == mapper_bot and not loaded.system then
@@ -666,8 +679,8 @@ onEvent("TextAreaCallback", function(id, player, cb)
 				system.loadPlayerData(player)
 			end
 		elseif packet_id == 3 then -- !ban
-			local player, ban_time = string.match(cb, "^(([^\000]+)\000([^\000]+)$")
-			ban_changes[#ban_changes + 1] = {player, tonumber(ban_time)}
+			local id, ban_time = string.match(cb, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
+			ban_changes[#ban_changes + 1] = {id, tonumber(ban_time)}
 		elseif packet_id == 4 then -- !announcement
 			tfm.exec.chatMessage("<vi>[#parkour] <d>" .. packet)
 		end
@@ -685,6 +698,12 @@ onEvent("TextAreaCallback", function(id, player, cb)
 			end
 		elseif player_ranks[player] then
 			player_ranks[player][rank] = nil
+		end
+	elseif id == mod_packets.fetch_id then
+		if in_room[mapper_bot] then
+			ui.addTextArea(packets.fetch_id, cb, mapper_bot)
+		else
+			return ui.addTextArea(mod_packets.fetch_id, cb, mod_bot)
 		end
 	end
 end)
@@ -710,6 +729,9 @@ onEvent("TextAreaCallback", function(id, player, cb)
 				end
 			end
 		end
+
+	elseif id == packets.fetch_id then
+		ui.addTextArea(mod_packets.fetch_id, cb, mod_bot)
 
 	elseif loaded.system then
 		if id == packets.list_forum then

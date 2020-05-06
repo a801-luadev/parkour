@@ -625,7 +625,7 @@ onEvent("GameDataLoaded", function(data)
 						pdata.banned = ban
 					end
 					savePlayerData(player)
-					sendPacket(2, player .. "\000" .. ban)
+					sendPacket(2, id .. "\000" .. ban)
 				end
 
 				if pdata.banned and (pdata.banned == 2 or os.time() < pdata.banned) then
@@ -981,13 +981,13 @@ onEvent("PacketReceived", function(packet_id, packet)
 			system.loadPlayerData(player)
 		end
 	elseif packet_id == 3 then -- !ban
-		local player, val = string.match(packet, "^([^\000]+)\000([^\000]+)$")
+		local player, val = string.match(packet, "^([^\000]+)\000[^\000]+\000([^\000]+)$")
 		local file, data = players_file[player], room.playerList[player]
 		if in_room[player] and data and file then
 			file.banned = val == "1" and 2 or tonumber(val)
 			bans[data.id] = file.banned = 2 or os.time() < file.banned
 			savePlayerData(player)
-			sendPacket(2, packet)
+			sendPacket(2, data.id .. "\000" .. val)
 		end
 	elseif packet_id == 4 then -- !announcement
 		tfm.exec.chatMessage("<vi>[#parkour] <d>" .. packet)

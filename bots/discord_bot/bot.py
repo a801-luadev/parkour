@@ -73,6 +73,8 @@ class Client(discord.Client):
 			self.started = True
 			asyncio.ensure_future(self.restart(), loop=self.loop)
 
+		self.to_delete = {}
+
 	async def restart(self):
 		channel = self.get_channel(686932761222578201)
 		await channel.send("Restarting in an hour.")
@@ -132,9 +134,26 @@ class Client(discord.Client):
 
 		return changes
 
+	async def on_whois_request(self, player):
+		channel = self.get_channel(707358868090519632)
+		msg = await channel.send(player)
+		self.to_delete[player] = msg.id
+
 	async def on_message(self, msg):
-		if msg.author.bot:
+		if msg.author.id == 683839314526077066:
 			return
+
+		if msg.channel.id == 707358868090519632:
+			data = msg.content.split(" ")
+			if len(data) == 1:
+				self.mapper.dispatch("whois_response", msg.content)
+			else:
+				self.mapper.dispatch("whois_response", msg.content)
+
+			if data[0] in self.to_delete:
+				req_msg = await channel.fetch_message(self.to_delete[data[0]])
+				await req_msg.delete()
+				del self.to_delete[data[0]]
 
 		if msg.channel.id == 703701422910472192:
 			args = msg.content.split(" ")
@@ -204,27 +223,6 @@ class Client(discord.Client):
 				await asyncio.sleep(3.0)
 				self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
 				await msg.channel.send("Restarting the room soon.")
-
-				await asyncio.sleep(3.0)
-				self.busy = False
-
-		elif msg.channel.id == 704130876426158242:
-			args = msg.content.split(" ")
-			cmd = args.pop(0).lower()
-
-			if cmd == "!join":
-				if len(args) == 0:
-					return await msg.channel.send("Invalid syntax.")
-
-				room = " ".join(args)
-				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
-					return await msg.channel.send("The given room is invalid. You can only join #parkour rooms.")
-
-				if self.busy:
-					return await msg.channel.send("The bot is busy right now.")
-				self.busy = True
-
-				self.mapper.dispatch("join_request", room)
 
 				await asyncio.sleep(3.0)
 				self.busy = False

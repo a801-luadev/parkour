@@ -23,14 +23,12 @@ PERM_MAP      = (12 << 8) + 255
 
 MIGRATE_DATA  = (13 << 8) + 255 # This packet is not related to the map system, but is here so we don't use a lot of resources.
 
-SEND_WEBHOOK  = (14 << 8) + 255 # This packet is not related to the map system, but is here so we don't use a lot of resources.
+ROOM_CRASH    = (14 << 8) + 255
 
-ROOM_CRASH    = (15 << 8) + 255
-
-JOIN_REQUEST  = (16 << 8) + 255
+FETCH_ID      = (15 << 8) + 255
 
 class Client(aiotfmpatch.Client):
-	version = b"1.1.0"
+	version = b"1.2.0"
 	pool = None
 	code_hash = b""
 
@@ -500,14 +498,11 @@ class Client(aiotfmpatch.Client):
 		elif txt_id == MIGRATE_DATA:
 			self.drawbattle.dispatch("migrating_data", text)
 
-		elif txt_id == SEND_WEBHOOK:
-			self.discord.dispatch("transformice_logs", text.decode())
-
 		elif txt_id == ROOM_CRASH:
 			self.dispatch("restart_request", self.room.name, None)
 
-		elif txt_id == JOIN_REQUEST:
-			data = text.decode().split("\x01")
+		elif txt_id == FETCH_ID:
+			self.discord.dispatch("whois_request", text.decode())
 
-			if data[0] == "requested":
-				self.discord.dispatch("join_request_sent")
+	async def on_whois_response(self, response):
+		await self.sendLuaCallback(FETCH_ID, response)
