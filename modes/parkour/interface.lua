@@ -654,7 +654,6 @@ onEvent("NewPlayer", function(player)
 	tfm.exec.lowerSyncDelay(player)
 
 	translatedChatMessage("welcome", player)
-	translatedChatMessage("mod_apps", player, links.modapps)
 	translatedChatMessage("type_help", player)
 
 	system.bindKeyboard(player, 38, true, true)
