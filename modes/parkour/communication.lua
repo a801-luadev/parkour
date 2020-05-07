@@ -20,7 +20,7 @@ if not is_tribe then
 			2 - ban field set to playerdata
 	]]
 
-	local last_id = -1
+	local last_id = os.time() - 10000
 	local next_channel_load = 0
 	local add_packet_data
 	local buffer
@@ -72,7 +72,8 @@ if not is_tribe then
 
 			local send_id
 			send_id, data = string.match(data, "^(%d+)(.*)$")
-			if send_id == last_id then return end
+			send_id = tonumber(send_id)
+			if send_id <= last_id then return end
 			last_id = send_id
 
 			if eventPacketReceived then

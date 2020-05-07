@@ -1,6 +1,7 @@
 local mapper_bot = "Tocutoeltuco#5522"
 local mod_bot = "Parkour#8558"
 
+local bot_rank_data
 local join_epoch = os.time({year=2020, month=1, day=1, hour=0})
 local ban_changes = {}
 local map_changes = {
@@ -378,7 +379,8 @@ onEvent("GameDataLoaded", function(data)
 				packet = packet .. "\001" .. rank
 			end
 		end
-		ui.addTextArea(mod_packets.rank_data, string.sub(packet, 2), mod_bot)
+		bot_rank_data = string.sub(packet, 2)
+		ui.addTextArea(mod_packets.rank_data, bot_rank_data, mod_bot)
 	end
 end)
 
@@ -417,6 +419,10 @@ end)
 onEvent("NewPlayer", function(player)
 	if player == mod_bot then
 		ui.addTextArea(mod_packets.time_sync, os.time(), mod_bot)
+
+		if bot_rank_data then
+			ui.addTextArea(mod_packets.rank_data, bot_rank_data, mod_bot)
+		end
 	end
 
 	if not loaded.data then return end
