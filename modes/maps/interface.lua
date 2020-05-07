@@ -359,7 +359,7 @@ onEvent("GameDataLoaded", function(data)
 		local change
 		for index = 1, #ban_changes do
 			change = ban_changes[index]
-			if change[3] and data.banned[change[1]] == change[3] then
+			if (not change[3]) or (change[3] and data.banned[change[1]] == change[3]) then
 				data.banned[change[1]] = change[2]
 			end
 		end
@@ -400,6 +400,7 @@ onEvent("PacketReceived", function(id, packet)
 		)
 		if tonumber(taken) <= 27 then -- autoban!
 			ban_changes[#ban_changes + 1] = {id, 1}
+			sendPacket(3, player .. "\000" .. id .. "\0001")
 			ui.addTextArea(
 				mod_packets.send_webhook,
 				"**`[BANS]:`** `AntiCheatSystem` has permbanned the player `" .. player .. "` (`" .. id .. "`)",

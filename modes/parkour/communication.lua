@@ -41,7 +41,7 @@ if not is_tribe then
 			add_packet_data = ""
 		end
 
-		add_packet_data = add_packet_data .. ";" .. packet_id .. "," .. string.gsub(packet, common_encoder)
+		add_packet_data = add_packet_data .. ";" .. packet_id .. "," .. string.gsub(packet, "[&;,]", common_encoder)
 	end
 
 	packet_handler = function(player, data)
@@ -77,7 +77,7 @@ if not is_tribe then
 
 			if eventPacketReceived then
 				for packet_id, packet in string.gmatch(data, ";(%d+),([^;]+)") do
-					packet = string.gsub(packet, common_decoder)
+					packet = string.gsub(packet, "&[012]", common_decoder)
 
 					eventPacketReceived(tonumber(packet_id), packet)
 				end

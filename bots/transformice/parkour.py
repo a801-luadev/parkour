@@ -98,7 +98,7 @@ class Client(aiotfmpatch.Client):
 			except:
 				return
 
-			await self.sendLuaCallback(FETCH_ID, player_name)
+			await self.sendLuaCallback(FETCH_ID, player_name.replace("#", "%23"))
 
 		try:
 			n, i = await self.wait_for("on_player_id_response", lambda n, i: n == player_name, timeout=10.0)
@@ -110,7 +110,7 @@ class Client(aiotfmpatch.Client):
 		async with aiohttp.ClientSession() as session:
 			async with session.get("https://atelier801.com/profile?pr={}".format(player_id)) as resp:
 				match = re.search(
-					rb'\<img\ src\=\"\/img\/icones\/roue\-dentee\.png\"\ class\=\"img20\ espace\-2\-2\"\>([^<]+)\<span\ class\=\"couleur\-hashtag\-pseudo\ font\-l\"\>\ (\#\d{4})\<\/span\>',
+					rb'> ([^<]+)<span class="nav-header-hashtag">(#\d{4})<\/span>',
 					await resp.read()
 				)
 				if match is None:
@@ -227,7 +227,7 @@ class Client(aiotfmpatch.Client):
 				minutes *= 60 * 1000 # make it milliseconds
 				minutes += self.tfm_time() # sync it with transformice
 
-			await self.sendLuaCallback(3, "\x00".join((name, str(id), str(minutes))))
+			await self.sendLuaPacket(3, "\x00".join((name, str(id), str(minutes))))
 			await whisper.reply("Action applied.")
 
 		elif cmd == "kill":
@@ -259,7 +259,7 @@ class Client(aiotfmpatch.Client):
 				return await whisper.reply("That player is not online.")
 
 			self.dispatch("send_webhook", "**`[KILL]:`** `{}` has killed `{}` (ID: `{}`) for `{}` minutes.".format(author, name, id, minutes))
-			await self.sendLuaCallback(2, "\x00".join((name, str(minutes))))
+			await self.sendLuaPacket(2, "\x00".join((name, str(minutes))))
 			await whisper.reply("Action applied.")
 
 		elif cmd == "whois":

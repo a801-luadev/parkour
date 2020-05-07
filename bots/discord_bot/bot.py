@@ -73,8 +73,6 @@ class Client(discord.Client):
 			self.started = True
 			asyncio.ensure_future(self.restart(), loop=self.loop)
 
-		self.to_delete = {}
-
 	async def restart(self):
 		channel = self.get_channel(686932761222578201)
 		await channel.send("Restarting in an hour.")
@@ -136,8 +134,7 @@ class Client(discord.Client):
 
 	async def on_whois_request(self, player):
 		channel = self.get_channel(707358868090519632)
-		msg = await channel.send(player)
-		self.to_delete[player] = msg.id
+		await channel.send(player)
 
 	async def on_message(self, msg):
 		if msg.author.id == 683839314526077066:
@@ -150,10 +147,7 @@ class Client(discord.Client):
 			else:
 				self.mapper.dispatch("whois_response", msg.content)
 
-			if data[0] in self.to_delete:
-				req_msg = await channel.fetch_message(self.to_delete[data[0]])
-				await req_msg.delete()
-				del self.to_delete[data[0]]
+			await msg.delete()
 
 		if msg.channel.id == 703701422910472192:
 			args = msg.content.split(" ")

@@ -608,7 +608,7 @@ onEvent("GameDataLoaded", function(data)
 		bans = {[0] = true}
 		for id, value in next, data.banned do
 			if value == 1 or os.time() < value then
-				bans[tonumber(player)] = true
+				bans[tonumber(id)] = true
 			end
 		end
 
@@ -985,7 +985,7 @@ onEvent("PacketReceived", function(packet_id, packet)
 		local file, data = players_file[player], room.playerList[player]
 		if in_room[player] and data and file then
 			file.banned = val == "1" and 2 or tonumber(val)
-			bans[data.id] = file.banned = 2 or os.time() < file.banned
+			bans[data.id] = file.banned == 2 or os.time() < file.banned
 			savePlayerData(player)
 			sendPacket(2, data.id .. "\000" .. val)
 		end
