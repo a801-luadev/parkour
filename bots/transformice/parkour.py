@@ -96,6 +96,7 @@ class Client(aiotfm.Client):
 					continue
 
 				player, *ranks = part.split("\x01")
+				player = player.capitalize()
 				self.player_ranks[player] = self.ranks.copy()
 				for rank in ranks:
 					self.player_ranks[player][rank] = True
