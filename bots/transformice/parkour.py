@@ -39,7 +39,8 @@ class Client(aiotfm.Client):
 			"**`[SUS]:`**": "https://discordapp.com/api/webhooks/707625625476661339/v5uDbY4nAhmR7CG43Ll6HJIAy8hrC0q4fnyt-HTVMsMiIzagB18xhj-3APB1LXZMBzzf",
 			"**`[BANS]:`**": "https://discordapp.com/api/webhooks/707625542303744030/HMGXuZoXpHaI56pm7t6tzWNPR9fBy6zcmG0ob07O6IWINPqTr9kx_dKgLKGP5ZrLXww-",
 			"**`[KILL]:`**": "https://discordapp.com/api/webhooks/707625542303744030/HMGXuZoXpHaI56pm7t6tzWNPR9fBy6zcmG0ob07O6IWINPqTr9kx_dKgLKGP5ZrLXww-",
-			"**`[RANKS]:`**": "https://discordapp.com/api/webhooks/707625380873240653/r8Byi2JWyFeCD7ulB2XUrJPIawlhUV6EeyM1yIzpqkZ9FpagpuEOHMeMja_hoo5-uCCS"
+			"**`[RANKS]:`**": "https://discordapp.com/api/webhooks/707625380873240653/r8Byi2JWyFeCD7ulB2XUrJPIawlhUV6EeyM1yIzpqkZ9FpagpuEOHMeMja_hoo5-uCCS",
+			"**`[JOIN]:`**": "https://discordapp.com/api/webhooks/708397163385978931/SYt_p4ztX3QavIk7FB2zZCkvjvOkn9jZ9uxDNMDN2d4CrNpKmUcA-1yeUoRZpMsC0v1i"
 		}
 
 	def tfm_time(self):
@@ -306,3 +307,17 @@ class Client(aiotfm.Client):
 				if id is None:
 					return await whisper.reply("Could not get the ID of the player.")
 				await whisper.reply(str(id))
+
+		elif cmd == "join":
+			if not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]:
+				return
+			if not args:
+				return await whisper.reply("Invalid syntax.")
+
+			room = " ".join(args)
+			if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
+				return await whisper.reply("The given room is invalid. You can only join #parkour rooms.")
+
+			self.dispatch("send_webhook", "**`[JOIN]:`** `{}` requested to join `{}`.".format(author, room))
+			await self.sendLuaPacket(0, room)
+			await whisper.reply("Room join request has been sent.")
