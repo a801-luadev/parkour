@@ -114,7 +114,7 @@ class Client(aiotfm.Client):
 			self.time_diff = int(text) // 1000 - now
 
 	async def get_player_id(self, player_name):
-		player_name = player_name.replace("#", "%23")
+		player_name = player_name.replace("#", "%23").replace("+", "%2B")
 		if player_name not in self.waiting_ids:
 			self.waiting_ids.append(player_name)
 
@@ -236,7 +236,7 @@ class Client(aiotfm.Client):
 				name = await self.get_player_name(id)
 				if name is None:
 					return await whisper.reply("Could not find that player.")
-			elif re.match(r"^[a-z0-9_]+(?:#\d{4})", args[0].lower()) is None:
+			elif re.match(r"^\+?[a-z0-9_]+(?:#\d{4})?", args[0].lower()) is None:
 				return await whisper.reply("Invalid name.")
 			else:
 				name = args[0].capitalize()
@@ -270,7 +270,7 @@ class Client(aiotfm.Client):
 				name = await self.get_player_name(id)
 				if name is None:
 					return await whisper.reply("Could not find that player.")
-			elif re.match(r"^[a-z0-9_]+(?:#\d{4})", args[0].lower()) is None:
+			elif re.match(r"^\+?[a-z0-9_]+(?:#\d{4})?", args[0].lower()) is None:
 				return await whisper.reply("Invalid name.")
 			else:
 				name = args[0].capitalize()
@@ -301,7 +301,7 @@ class Client(aiotfm.Client):
 				await whisper.reply(name)
 
 			else:
-				if re.match(r"^[a-z0-9_]+(?:#\d{4})", args[0].lower()) is None:
+				if re.match(r"^\+?[a-z0-9_]+(?:#\d{4})?", args[0].lower()) is None:
 					return await whisper.reply("Invalid name.")
 
 				id = await self.get_player_id(args[0].capitalize())
