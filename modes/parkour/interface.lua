@@ -1,5 +1,6 @@
 local kill_cooldown = {}
 local update_at = 0
+local staff_people = {next_check = 0, texts = {}, to_send = {}, timeout = 0}
 local open = {}
 local powers_img = {}
 local help_img = {}
@@ -144,6 +145,28 @@ end
 local function removeToggle(id, player)
 	for i = 6000 + id * 3, 6000 + id * 3 + 2 do
 		ui.removeTextArea(i, player)
+	end
+end
+
+local function sendStaffList(player)
+	text = "<v>[#]<n> <d>Online parkour staff:</d>"
+
+	local sent = {}
+	local any_online = false
+	for i = 1, #ranks_order do
+		for player in next, ranks[ranks_order[i]] do
+			if staff_people.texts[player] and online[player] and not sent[player] then
+				text = text .. staff_people.texts[player]
+				sent[player] = true
+				any_online = true
+			end
+		end
+	end
+
+	if any_online then
+		tfm.exec.chatMessage(text, player)
+	else
+		tfm.exec.chatMessage("<v>[#] <r>No parkour staff is online right now.", player)
 	end
 end
 
@@ -746,6 +769,12 @@ onEvent("Loop", function()
 			ui.addTextArea(100000, translatedMessage("module_update", player, minutes, seconds), player, 0, 380, 800, 20, 1, 1, 0.7, true)
 		end
 	end
+	if staff_people.timeout > 0 and now >= staff_people.timeout then
+		for index = 1, #staff_people.to_send do
+			sendStaffList(staff_people.to_send[index])
+		end
+		staff_people.timeout = 0
+	end
 end)
 
 onEvent("ChatCommand", function(player, msg)
@@ -800,39 +829,47 @@ onEvent("ChatCommand", function(player, msg)
 		end
 
 	elseif cmd == "staff" then
-		local texts = {}
-		local text, first
-		for player, ranks in next, player_ranks do
-			if player ~= "Tocutoeltuco#5522" then
-				text = "\n- <v>" .. player .. "</v> ("
-				first = true
-				for rank in next, ranks do
-					rank = rank == "trainee" and "mod trainee" or rank
-					if first then
-						text = text .. rank
-						first = false
-					else
-						text = text .. ", " .. rank
+		local now = os.time()
+		if now >= staff_people.next_check then
+			staff_people.timeout = now + 1000
+			staff_people.next_check = now + 61000
+			staff_people.to_send = {player}
+			staff_people.texts = {}
+
+			local texts = staff_people.texts
+			local text, first
+			for player, ranks in next, player_ranks do
+				if player ~= "Tocutoeltuco#5522" then
+					text = "\n- <v>" .. player .. "</v> ("
+					first = true
+					for rank in next, ranks do
+						rank = rank == "trainee" and "mod trainee" or rank
+						if first then
+							text = text .. rank
+							first = false
+						else
+							text = text .. ", " .. rank
+						end
+					end
+					if not first then
+						texts[player] = text .. ")"
 					end
 				end
-				if not first then
-					texts[player] = text .. ")"
+			end
+
+			online = {}
+			for player in next, texts do
+				if in_room[player] then
+					online[player] = true
+				else
+					system.loadPlayerData(player)
 				end
 			end
+		elseif now < staff_people.timeout then
+			staff_people.to_send[#staff_people.to_send + 1] = player
+		else
+			sendStaffList(player)
 		end
-
-		text = "<v>[#]<n> <d>Parkour staff:</d>"
-
-		for i = 1, #ranks_order do
-			for player in next, ranks[ranks_order[i]] do
-				if texts[player] and online[player] then
-					text = text .. texts[player]
-					texts[player] = nil
-				end
-			end
-		end
-
-		tfm.exec.chatMessage(text, player)
 
 	elseif cmd == "map" then
 		if not perms[player] or not perms[player].change_map then return end
