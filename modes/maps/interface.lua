@@ -1,6 +1,9 @@
 local mapper_bot = "Tocutoeltuco#5522"
+local mod_bot = "Parkour#8558"
 
+local bot_rank_data
 local join_epoch = os.time({year=2020, month=1, day=1, hour=0})
+local ban_changes = {}
 local map_changes = {
 	removing = {},
 	adding = {}
@@ -21,11 +24,17 @@ local packets = {
 
 	migrate_data  = bit32.lshift(13, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
 
-	send_webhook  = bit32.lshift(14, 8) + 255, -- This packet is not related to the map system, but is here so we don't use a lot of resources.
+	room_crash    = bit32.lshift(14, 8) + 255,
 
-	room_crash    = bit32.lshift(15, 8) + 255,
-
-	join_request  = bit32.lshift(16, 8) + 255
+	fetch_id      = bit32.lshift(15, 8) + 255
+}
+local mod_packets = {
+	send_packet   = bit32.lshift( 1, 8) + 255,
+	send_webhook  = bit32.lshift( 2, 8) + 255,
+	modify_rank   = bit32.lshift( 3, 8) + 255,
+	rank_data     = bit32.lshift( 4, 8) + 255,
+	fetch_id      = bit32.lshift( 5, 8) + 255,
+	time_sync     = bit32.lshift( 6, 8) + 255
 }
 local last_update
 local messages_cache = {}
@@ -36,7 +45,7 @@ local loaded = {
 	system = false
 }
 local version = {
-	lua = "1.1.0-pool",
+	lua = "1.2.0-pool",
 	bot = nil
 }
 local changing_perm = {}
@@ -50,7 +59,7 @@ local room = room
 
 function send_bot_room_crash()
 	for index = 1, webhooks._count do
-		ui.addTextArea(packets.send_webhook, webhooks[index], mapper_bot)
+		ui.addTextArea(mod_packets.send_webhook, webhooks[index], mod_bot)
 	end
 	ui.addTextArea(packets.room_crash, "", mapper_bot)
 end
@@ -347,55 +356,75 @@ onEvent("GameDataLoaded", function(data)
 		end
 	end
 
-	if data.maps then
-		local countA, countB = #data.maps, #map_changes.removing
-		for index = countA, 1, -1 do
-			for _index = 1, countB do
-				if map_changes.removing[_index] == data.maps[index] then
-					table.remove(map_changes.removing, _index)
-					table.remove(data.maps, index)
-					countB = countB - 1
-					countA = countA - 1
-					break
-				end
+	if data.banned then
+		local change
+		for index = 1, #ban_changes do
+			change = ban_changes[index]
+			if (not change[3]) or (change[3] and data.banned[change[1]] == change[3]) then
+				data.banned[change[1]] = change[2]
 			end
 		end
+		ban_changes = {}
+	end
 
-		for index = 1, #map_changes.adding do
-			data.maps[countA + index] = map_changes.adding[index]
+	if data.ranks then
+		local packet = ""
+		for rank in next, ranks_id do
+			packet = packet .. "\001" .. rank
 		end
 
-		map_changes.removing = {}
-		map_changes.adding = {}
-
-		for code, status in next, changing_perm do
-			if status == "" then
-				changing_perm[code] = false
+		for player, ranks in next, player_ranks do
+			packet = packet .. "\000" .. player
+			for rank in next, ranks do
+				packet = packet .. "\001" .. rank
 			end
 		end
+		bot_rank_data = string.sub(packet, 2)
+		ui.addTextArea(mod_packets.rank_data, bot_rank_data, mod_bot)
 	end
 end)
 
-onEvent("GameDataLoaded", function(data)
-	if loaded.system then
-		if data.webhooks then
-			for index = 2, #data.webhooks do
-				ui.addTextArea(packets.send_webhook, data.webhooks[index], mapper_bot)
-			end
+onEvent("PacketReceived", function(id, packet)
+	if id == 0 then
+		local _room, event, errormsg = string.match(packet, "^([^\000]+)\000([^\000]+)\000([^\000]+)$")
+		ui.addTextArea(
+			mod_packets.send_webhook,
+			"**`[CRASH]:`** `" .. _room .. "` has crashed. <@212634414021214209>: `" .. event .. "`, `" .. errormsg .. "`",
+			mod_bot
+		)
 
-			data.webhooks = {math.floor(os.time()) + 300000}
+	elseif id == 1 then
+		local _room, player, id, map, taken = string.match(packet, "^([^\000]+)\000([^\000]+)\000([^\000]+)\000([^\000]+)\000([^\000]+)$")
+		ui.addTextArea(
+			mod_packets.send_webhook,
+			"**`[SUS]:`** `" .. player .. "` (`" .. id .. "`) completed the map `" .. map .. "` in the room `" .. _room .. "` in `" .. taken .. "` seconds.",
+			mod_bot
+		)
+		if tonumber(taken) <= 27 then -- autoban!
+			ban_changes[#ban_changes + 1] = {id, 1}
+			sendPacket(3, player .. "\000" .. id .. "\0001")
+			ui.addTextArea(
+				mod_packets.send_webhook,
+				"**`[BANS]:`** `AntiCheatSystem` has permbanned the player `" .. player .. "` (`" .. id .. "`)",
+				mod_bot
+			)
 		end
 
-	end
-	if data.update then
-		if last_update and data.update > last_update then
-			ui.addTextArea(packets.send_webhook, "**[UPDATE]** The module is gonna be updated soon.", mapper_bot)
-		end
-		last_update = data.update
+	elseif id == 2 then
+		local player, ban = string.match(packet, "^([^\000]+)\000([^\000]+)$")
+		ban_changes[#ban_changes + 1] = {player, nil, tonumber(ban)}
 	end
 end)
 
 onEvent("NewPlayer", function(player)
+	if player == mod_bot then
+		ui.addTextArea(mod_packets.time_sync, os.time(), mod_bot)
+
+		if bot_rank_data then
+			ui.addTextArea(mod_packets.rank_data, bot_rank_data, mod_bot)
+		end
+	end
+
 	if not loaded.data then return end
 
 	if player == mapper_bot and not loaded.system then
@@ -637,6 +666,56 @@ onEvent("TextAreaCallback", function(id, player, cb)
 end)
 
 onEvent("TextAreaCallback", function(id, player, cb)
+	if player ~= mod_bot then return end
+
+	if id == mod_packets.send_packet then
+		local packet_id, packet = string.match(cb, "^(%d+),(.*)")
+		packet_id = tonumber(packet_id)
+		if not packet_id then return end
+
+		if packet_id == 1 then -- game update
+			update_at = os.time() + 300000
+		elseif packet_id == 2 then -- !kill
+			local player, minutes = string.match(packet, "^([^\000]+)\000([^\000]+)$")
+			minutes = tonumber(minutes)
+			if in_room[player] and players_file[player] then
+				player_file[player].parkour.killed = os.time() + minutes * 60 * 1000
+				savePlayerData(player)
+			else
+				killing[player] = minutes
+				system.loadPlayerData(player)
+			end
+		elseif packet_id == 3 then -- !ban
+			local id, ban_time = string.match(cb, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
+			ban_changes[#ban_changes + 1] = {id, tonumber(ban_time)}
+		elseif packet_id == 4 then -- !announcement
+			tfm.exec.chatMessage("<vi>[#parkour] <d>" .. packet)
+		end
+		sendPacket(packet_id, packet)
+	elseif id == mod_packets.modify_rank then
+		local rank, add, player = string.match(cb, "^([^,]+),([10]),([^,]+)$")
+		saving_ranks = true
+		if add == "1" then
+			if not player_ranks[player] then
+				player_ranks[player] = {
+					[rank] = true
+				}
+			else
+				player_ranks[player][rank] = true
+			end
+		elseif player_ranks[player] then
+			player_ranks[player][rank] = nil
+		end
+	elseif id == mod_packets.fetch_id then
+		if in_room[mapper_bot] then
+			ui.addTextArea(packets.fetch_id, cb, mapper_bot)
+		else
+			return ui.addTextArea(mod_packets.fetch_id, cb, mod_bot)
+		end
+	end
+end)
+
+onEvent("TextAreaCallback", function(id, player, cb)
 	if player ~= mapper_bot then return end
 
 	if id == packets.handshake then
@@ -657,6 +736,9 @@ onEvent("TextAreaCallback", function(id, player, cb)
 				end
 			end
 		end
+
+	elseif id == packets.fetch_id then
+		ui.addTextArea(mod_packets.fetch_id, cb, mod_bot)
 
 	elseif loaded.system then
 		if id == packets.list_forum then
@@ -924,17 +1006,4 @@ onEvent("PopupAnswer", function(id, player, answer)
 
 	ui.addTextArea(packets.new_comment, id .. "," .. room.playerList[player].id .. "," .. answer, mapper_bot)
 	openVotation(player, code, 1)
-end)
-
-onEvent("JoinSystemDataLoaded", function(bot, data)
-	local now = os.time() - join_epoch
-	for idx = 1, join_requests._count do
-		data[join_requests[idx]] = {false, now + 45000}
-	end
-	if join_requests._count > 0 then
-		join_requests._count = 0
-		ui.addTextArea(packets.join_request, "requested", mapper_bot)
-	end
-
-	system.savePlayerData(bot, json.encode(data))
 end)

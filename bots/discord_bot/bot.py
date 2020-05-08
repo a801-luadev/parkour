@@ -132,9 +132,22 @@ class Client(discord.Client):
 
 		return changes
 
+	async def on_whois_request(self, player):
+		channel = self.get_channel(707358868090519632)
+		await channel.send(player)
+
 	async def on_message(self, msg):
-		if msg.author.bot:
+		if msg.author.id == 683839314526077066:
 			return
+
+		if msg.channel.id == 707358868090519632:
+			data = msg.content.split(" ")
+			if len(data) == 1:
+				self.mapper.dispatch("whois_response", msg.content)
+			else:
+				self.mapper.dispatch("whois_response", msg.content)
+
+			await msg.delete()
 
 		if msg.channel.id == 703701422910472192:
 			args = msg.content.split(" ")
@@ -170,7 +183,7 @@ class Client(discord.Client):
 				) # Add maps
 
 				await asyncio.sleep(3.0)
-				self.mapper.dispatch("restart_request", "*#parkour0maps")
+				self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
 				await msg.channel.send("Restarting the room soon.")
 
 				await asyncio.sleep(3.0)
@@ -202,29 +215,8 @@ class Client(discord.Client):
 				) # Remove maps
 
 				await asyncio.sleep(3.0)
-				self.mapper.dispatch("restart_request", "*#parkour0maps")
+				self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
 				await msg.channel.send("Restarting the room soon.")
-
-				await asyncio.sleep(3.0)
-				self.busy = False
-
-		elif msg.channel.id == 704130876426158242:
-			args = msg.content.split(" ")
-			cmd = args.pop(0).lower()
-
-			if cmd == "!join":
-				if len(args) == 0:
-					return await msg.channel.send("Invalid syntax.")
-
-				room = " ".join(args)
-				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
-					return await msg.channel.send("The given room is invalid. You can only join #parkour rooms.")
-
-				if self.busy:
-					return await msg.channel.send("The bot is busy right now.")
-				self.busy = True
-
-				self.mapper.dispatch("join_request", room)
 
 				await asyncio.sleep(3.0)
 				self.busy = False
@@ -245,11 +237,8 @@ class Client(discord.Client):
 					return await msg.channel.send("The bot is busy right now.")
 				self.busy = True
 
-				self.mapper.dispatch("restart_request", room)
+				self.mapper.dispatch("restart_request", room, msg.channel)
 				await msg.channel.send("Restarting the room soon.")
-
-				await asyncio.sleep(3.0)
-				self.busy = False
 
 			elif msg.author.id == 212634414021214209 or msg.author.id == 436703225140346881:
 				if cmd == "!copyfile":
@@ -270,7 +259,7 @@ class Client(discord.Client):
 
 					if len(args) > 2:
 						await asyncio.sleep(3.0)
-						self.mapper.dispatch("restart_request", "*#parkour0maps")
+						self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
 						await msg.channel.send("Restarting the room soon.")
 
 					await asyncio.sleep(3.0)
@@ -297,10 +286,6 @@ class Client(discord.Client):
 					self.busy = False
 
 				elif cmd == "!load":
-					if self.busy:
-						return await msg.channel.send("The bot is busy right now.")
-					self.busy = True
-
 					if len(args) == 0 or args[0].startswith("http"):
 						if len(args) > 0:
 							link = args.pop(0)
@@ -318,16 +303,16 @@ class Client(discord.Client):
 
 						script = script.group(2)
 
+					if self.busy:
+						return await msg.channel.send("The bot is busy right now.")
+					self.busy = True
+
 					self.mapper.dispatch("load_request", script)
 
 					await asyncio.sleep(3.0)
 					self.busy = False
 
 				elif cmd == "!loadjson":
-					if self.busy:
-						return await msg.channel.send("The bot is busy right now.")
-					self.busy = True
-
 					if len(args) == 0 or args[0].startswith("http"):
 						if len(args) > 0:
 							link = args.pop(0)
@@ -346,6 +331,10 @@ class Client(discord.Client):
 						script = script.group(2).encode()
 
 					script = self.json_script + b"\n\n" + script
+
+					if self.busy:
+						return await msg.channel.send("The bot is busy right now.")
+					self.busy = True
 
 					self.mapper.dispatch("load_request", script)
 

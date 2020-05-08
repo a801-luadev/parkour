@@ -1,7 +1,7 @@
-local max_leaderboard_rows = 70
+max_leaderboard_rows = 70
 local max_leaderboard_pages = math.ceil(max_leaderboard_rows / 14) - 1
 local loaded_leaderboard = false
-local leaderboard = {}
+leaderboard = {}
 -- {id, name, completed_maps, community}
 local default_leaderboard_user = {0, nil, 0, "xx"}
 
@@ -71,6 +71,10 @@ local function checkPlayersPosition()
 
 	for index = max_leaderboard_rows + 1, totalRankedPlayers do
 		leaderboard[index] = nil
+	end
+
+	for index = 1, #leaderboard do
+		leaderboard[leaderboard[index][2]] = index
 	end
 end
 
