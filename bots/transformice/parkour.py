@@ -161,6 +161,15 @@ class Client(aiotfm.Client):
 				"Content-Type": "application/json"
 			})
 
+	def normalize_name(self, name):
+		if name[0] == "+":
+			name = "+" + (name[1:].capitalize())
+		else:
+			name = name.capitalize()
+		if "#" not in name:
+			name += "#0000"
+		return name
+
 	async def on_whisper(self, whisper):
 		args = whisper.content.split(" ")
 		cmd = args.pop(0).lower()
@@ -245,6 +254,7 @@ class Client(aiotfm.Client):
 				if id is None:
 					return await whisper.reply("Could not get the ID of the player.")
 
+			name = self.normalize_name(name)
 			if minutes == 0:
 				self.dispatch("send_webhook", "**`[BANS]:`** `{}` has unbanned `{}` (ID: `{}`)".format(author, name, id))
 			elif minutes == 1:
@@ -279,18 +289,12 @@ class Client(aiotfm.Client):
 				if id is None:
 					id = "unknown"
 
-			if "#" not in name:
-				name += "#0000"
+			name = self.normalize_name(name)
 			await self.sendCommand("profile " + name)
 			try:
-				profile = await self.wait_for("on_profile", lambda p: p.username.lower() == name.lower(), timeout=3.0)
+				profile = await self.wait_for("on_profile", lambda p: self.normalize_name(p.username) == name.lower(), timeout=3.0)
 			except:
 				return await whisper.reply("That player is not online.")
-
-			if name[0] == "+":
-				name = "+" + (name[1:].capitalize())
-			else:
-				name = name.capitalize()
 
 			self.dispatch("send_webhook", "**`[KILL]:`** `{}` has killed `{}` (ID: `{}`) for `{}` minutes.".format(author, name, id, minutes))
 			await self.sendLuaPacket(2, "\x00".join((name, str(minutes))))
