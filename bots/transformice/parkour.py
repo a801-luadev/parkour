@@ -1,6 +1,7 @@
+from aiotfm.connection import TFMProtocol
+
 import aiohttp
 import aiotfm
-import transformice.aiotfmpatch as aiotfmpatch
 import time
 import re
 import os
@@ -12,7 +13,19 @@ RANK_DATA    = (4 << 8) + 255
 FETCH_ID     = (5 << 8) + 255
 TIME_SYNC    = (6 << 8) + 255
 
-class Client(aiotfmpatch.Client):
+class CustomProtocol(TFMProtocol):
+	def connection_lost(self, exc):
+		super().connection_lost(exc)
+		if self.client.auto_restart and exc is None:
+			self.client.loop.create_task(self.client.restart_soon())
+
+class Connection(aiotfm.Connection):
+	PROTOCOL = CustomProtocol
+
+	def _factory(self):
+		return Connection.PROTOCOL(self)
+
+class Client(aiotfm.Client):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 
@@ -31,6 +44,12 @@ class Client(aiotfmpatch.Client):
 
 	def tfm_time(self):
 		return (time.time() + self.time_diff) * 1000
+
+	async def restart(self, *args):
+		self.close()
+		self.restarting = True
+		self.main = Connection("main", self, self.loop)
+		return await super().restart(*args)
 
 	async def handle_packet(self, conn, packet):
 		CCC = packet.readCode()
