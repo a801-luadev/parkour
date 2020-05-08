@@ -279,9 +279,12 @@ class Client(aiotfm.Client):
 				if id is None:
 					id = "unknown"
 
+			name = name.lower()
+			if "#" not in name:
+				name += "#0000"
 			await self.sendCommand("profile " + name)
 			try:
-				profile = await self.wait_for("on_profile", lambda p: p.username == name, timeout=3.0)
+				profile = await self.wait_for("on_profile", lambda p: p.username.lower() == name, timeout=3.0)
 			except:
 				return await whisper.reply("That player is not online.")
 
