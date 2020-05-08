@@ -730,7 +730,7 @@ onEvent("PlayerWon", function(player)
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
 	if taken <= 40 and room.name ~= "*#parkour0maps" and not review_mode and not is_tribe then
-		return sendPacket(1, room.name .. "\000" .. player .. "\000" .. id .. "\000" .. room.currentMap .. "\000" .. taken)
+		sendPacket(1, room.name .. "\000" .. player .. "\000" .. id .. "\000" .. room.currentMap .. "\000" .. taken)
 	end
 
 	if players_file[player].parkour.congrats == 0 then
