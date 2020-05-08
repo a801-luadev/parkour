@@ -279,14 +279,18 @@ class Client(aiotfm.Client):
 				if id is None:
 					id = "unknown"
 
-			name = name.lower()
 			if "#" not in name:
 				name += "#0000"
 			await self.sendCommand("profile " + name)
 			try:
-				profile = await self.wait_for("on_profile", lambda p: p.username.lower() == name, timeout=3.0)
+				profile = await self.wait_for("on_profile", lambda p: p.username.lower() == name.lower(), timeout=3.0)
 			except:
 				return await whisper.reply("That player is not online.")
+
+			if name[0] == "+":
+				name = "+" + (name[1:].capitalize())
+			else:
+				name = name.capitalize()
 
 			self.dispatch("send_webhook", "**`[KILL]:`** `{}` has killed `{}` (ID: `{}`) for `{}` minutes.".format(author, name, id, minutes))
 			await self.sendLuaPacket(2, "\x00".join((name, str(minutes))))
