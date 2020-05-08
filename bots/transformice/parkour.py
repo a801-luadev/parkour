@@ -114,6 +114,7 @@ class Client(aiotfm.Client):
 			self.time_diff = int(text) // 1000 - now
 
 	async def get_player_id(self, player_name):
+		player_name = player_name.replace("#", "%23")
 		if player_name not in self.waiting_ids:
 			self.waiting_ids.append(player_name)
 
@@ -123,7 +124,7 @@ class Client(aiotfm.Client):
 			except:
 				return
 
-			await self.sendLuaCallback(FETCH_ID, player_name.replace("#", "%23"))
+			await self.sendLuaCallback(FETCH_ID, player_name)
 
 		try:
 			n, i = await self.wait_for("on_player_id_response", lambda n, i: n == player_name, timeout=10.0)
