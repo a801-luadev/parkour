@@ -45,6 +45,11 @@ class Client(aiotfm.Client):
 	def tfm_time(self):
 		return (time.time() + self.time_diff) * 1000
 
+	def close(self, *args):
+		if not self.restarting:
+			return super().close(*args)
+		self.restarting = False
+
 	async def restart(self, *args):
 		self.close()
 		self.restarting = True
