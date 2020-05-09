@@ -56,7 +56,7 @@ translations.fr = {
 
 	-- Congratulation messages
 	reached_level = "<d>Bravo! Vous avez atteint le niveau <vp>%s</vp>.",
-	finished = "<d><o>%s</o> a fini le parkour en <vp>%s</vp> secondes, <fc>félicitation!",
+	finished = "<d><o>%s</o> a fini le parkour en <vp>%s</vp> secondes, <fc>félicitations !",
 	unlocked_power = "<ce><d>%s</d> a débloqué le pouvoir <vp>%s</vp>.",
 	enjoy = "<d>Profite de tes nouvelles compétences!",
 
@@ -86,7 +86,7 @@ translations.fr = {
 	unknown = "Inconnu",
 	powers = "Pouvoirs",
 	press = "<vp>Appuyer sur %s",
-	click = "<vp>Clic gauche",
+	click = "<vp>Clique gauche",
 	ranking_pos = "Classement #%s",
 	completed_maps = "<p align='center'><BV><B>Cartes complétées: %s</B></p></BV>",
 	leaderboard = "Tableau des scores",
