@@ -338,7 +338,7 @@ class Client(aiotfm.Client):
 			await self.sendLuaPacket(0, room)
 			await whisper.reply("Room join request has been sent.")
 
-		elif cmd == "restart":
+		elif cmd == "reboot":
 			if ranks["admin"]:
 				pass
 			elif not ranks["mod"] and not ranks["trainee"]:
