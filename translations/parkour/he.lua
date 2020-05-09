@@ -38,7 +38,7 @@ translations.he = {
 	not_enough_permissions = "<r>אין לך מספיק הרשאות בכדי לעשות זאת.",
 	already_depermed = "<r>המפה שניתנה כבר הוסרה.",
 	already_permed = "<r>המפה שניתנה כבר נוספה.",
-   cant_perm_right_now = "<r>לא ניתן לשנות את מסלול מפה זו כרגע. נסה שוב מאוחר יותר.",
+	cant_perm_right_now = "<r>לא ניתן לשנות את מסלול מפה זו כרגע. נסה שוב מאוחר יותר.",
 	already_killed = "<r>השחקן %s כבר נהרג.",
 	leaderboard_not_loaded = "<r>הלוח תוצאות עדיין לא נטען, המתן דקה.",
 
