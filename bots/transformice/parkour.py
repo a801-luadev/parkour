@@ -42,6 +42,8 @@ class Client(aiotfm.Client):
 			"**`[RANKS]:`**": "https://discordapp.com/api/webhooks/707625380873240653/r8Byi2JWyFeCD7ulB2XUrJPIawlhUV6EeyM1yIzpqkZ9FpagpuEOHMeMja_hoo5-uCCS",
 			"**`[JOIN]:`**": "https://discordapp.com/api/webhooks/708397163385978931/SYt_p4ztX3QavIk7FB2zZCkvjvOkn9jZ9uxDNMDN2d4CrNpKmUcA-1yeUoRZpMsC0v1i"
 		}
+		self.next_available_restart = 0
+		self.restarting = False
 
 	def tfm_time(self):
 		return (time.time() + self.time_diff) * 1000
@@ -71,6 +73,7 @@ class Client(aiotfm.Client):
 
 	async def on_logged(self, *args):
 		print("[PARKOUR] Logged in!", flush=True)
+		self.next_available_restart = time.time() + 600
 
 	async def sendLuaCallback(self, txt_id, text):
 		packet = aiotfm.Packet.new(29, 21)
