@@ -114,13 +114,13 @@ class Client(aiotfmpatch.Client):
 				continue
 			await self.loadLua(code)
 
-			if isintance(channel, int):
+			if isinstance(channel, int):
 				await self.sendSpecialChatMsg(channel, "Room restarted.")
 			elif channel is not None:
 				await channel.send("Room restarted.")
 			break
 		else:
-			if isintance(channel, int):
+			if isinstance(channel, int):
 				await self.sendSpecialChatMsg(channel, "Could not restart the room.")
 			elif channel is not None:
 				await channel.send("Could not restart the room.")
