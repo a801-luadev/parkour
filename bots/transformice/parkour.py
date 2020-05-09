@@ -96,6 +96,7 @@ class Client(aiotfm.Client):
 					continue
 
 				player, *ranks = part.split("\x01")
+				player = player.capitalize()
 				self.player_ranks[player] = self.ranks.copy()
 				for rank in ranks:
 					self.player_ranks[player][rank] = True
@@ -114,6 +115,7 @@ class Client(aiotfm.Client):
 			self.time_diff = int(text) // 1000 - now
 
 	async def get_player_id(self, player_name):
+		player_name = player_name.replace("#", "%23").replace("+", "%2B")
 		if player_name not in self.waiting_ids:
 			self.waiting_ids.append(player_name)
 
@@ -123,7 +125,7 @@ class Client(aiotfm.Client):
 			except:
 				return
 
-			await self.sendLuaCallback(FETCH_ID, player_name.replace("#", "%23"))
+			await self.sendLuaCallback(FETCH_ID, player_name)
 
 		try:
 			n, i = await self.wait_for("on_player_id_response", lambda n, i: n == player_name, timeout=10.0)
@@ -158,6 +160,15 @@ class Client(aiotfm.Client):
 			}, headers={
 				"Content-Type": "application/json"
 			})
+
+	def normalize_name(self, name):
+		if name[0] == "+":
+			name = "+" + (name[1:].capitalize())
+		else:
+			name = name.capitalize()
+		if "#" not in name:
+			name += "#0000"
+		return name
 
 	async def on_whisper(self, whisper):
 		args = whisper.content.split(" ")
@@ -235,7 +246,7 @@ class Client(aiotfm.Client):
 				name = await self.get_player_name(id)
 				if name is None:
 					return await whisper.reply("Could not find that player.")
-			elif re.match(r"^[a-z0-9_]+(?:#\d{4})", args[0].lower()) is None:
+			elif re.match(r"^\+?[a-z0-9_]+(?:#\d{4})?", args[0].lower()) is None:
 				return await whisper.reply("Invalid name.")
 			else:
 				name = args[0].capitalize()
@@ -243,6 +254,7 @@ class Client(aiotfm.Client):
 				if id is None:
 					return await whisper.reply("Could not get the ID of the player.")
 
+			name = self.normalize_name(name)
 			if minutes == 0:
 				self.dispatch("send_webhook", "**`[BANS]:`** `{}` has unbanned `{}` (ID: `{}`)".format(author, name, id))
 			elif minutes == 1:
@@ -269,7 +281,7 @@ class Client(aiotfm.Client):
 				name = await self.get_player_name(id)
 				if name is None:
 					return await whisper.reply("Could not find that player.")
-			elif re.match(r"^[a-z0-9_]+(?:#\d{4})", args[0].lower()) is None:
+			elif re.match(r"^\+?[a-z0-9_]+(?:#\d{4})?", args[0].lower()) is None:
 				return await whisper.reply("Invalid name.")
 			else:
 				name = args[0].capitalize()
@@ -277,9 +289,10 @@ class Client(aiotfm.Client):
 				if id is None:
 					id = "unknown"
 
+			name = self.normalize_name(name)
 			await self.sendCommand("profile " + name)
 			try:
-				profile = await self.wait_for("on_profile", lambda p: p.username == name, timeout=3.0)
+				profile = await self.wait_for("on_profile", lambda p: self.normalize_name(p.username) == name, timeout=3.0)
 			except:
 				return await whisper.reply("That player is not online.")
 
@@ -300,7 +313,7 @@ class Client(aiotfm.Client):
 				await whisper.reply(name)
 
 			else:
-				if re.match(r"^[a-z0-9_]+(?:#\d{4})", args[0].lower()) is None:
+				if re.match(r"^\+?[a-z0-9_]+(?:#\d{4})?", args[0].lower()) is None:
 					return await whisper.reply("Invalid name.")
 
 				id = await self.get_player_id(args[0].capitalize())
