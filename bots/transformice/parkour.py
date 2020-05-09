@@ -334,3 +334,15 @@ class Client(aiotfm.Client):
 			self.dispatch("send_webhook", "**`[JOIN]:`** `{}` requested to join `{}`.".format(author, room))
 			await self.sendLuaPacket(0, room)
 			await whisper.reply("Room join request has been sent.")
+
+		elif cmd == "restart":
+			if ranks["admin"]:
+				pass
+			elif not ranks["mod"] and not ranks["trainee"]:
+				return
+			elif time.time() < self.next_available_restart:
+				return whisper.reply(
+					"You need to wait {} seconds to restart the bot. Call an admin otherwise.".format(self.next_available_restart - time.time())
+				)
+
+			self.loop.create_task(self.restart_soon())
