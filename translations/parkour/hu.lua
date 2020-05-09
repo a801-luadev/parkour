@@ -56,7 +56,7 @@ translations.hu = {
 
 	-- Congratulation messages
 	reached_level = "<d>Gratulálunk! Elérted a(z) <vp>%s</vp>. szintet.",
-	finished = "<d><o>%s</o> ennyi másodperc alatt fejezte be a parkourt: <vp>%s</vp>. <fc>Gratulálunk!",
+	finished = "<d><o>%s</o> a parkourt <vp>%s</vp> másodperc alatt fejezte be. <fc>Gratulálunk!",
 	unlocked_power = "<ce><d>%s</d> feloldotta a(z) <vp>%s</vp> erőt.",
 	enjoy = "<d>Élvezd az új képességeid!",
 
