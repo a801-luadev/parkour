@@ -34,14 +34,15 @@ class Client(aiotfm.Client):
 		self.ranks = {}
 		self.waiting_ids = []
 		self.webhook_links = {
-			"**`[UPDATE]:`**": "https://discordapp.com/api/webhooks/707625780838006975/VCBzIMPqRrdSnnSWg8tL5uF5VeIS2XM-qOps4kUwvqfa_IrwDejKjLIcFQRuM4AmtIJi",
-			"**`[CRASH]:`**": "https://discordapp.com/api/webhooks/707625780838006975/VCBzIMPqRrdSnnSWg8tL5uF5VeIS2XM-qOps4kUwvqfa_IrwDejKjLIcFQRuM4AmtIJi",
-			"**`[SUS]:`**": "https://discordapp.com/api/webhooks/707625625476661339/v5uDbY4nAhmR7CG43Ll6HJIAy8hrC0q4fnyt-HTVMsMiIzagB18xhj-3APB1LXZMBzzf",
-			"**`[BANS]:`**": "https://discordapp.com/api/webhooks/707625542303744030/HMGXuZoXpHaI56pm7t6tzWNPR9fBy6zcmG0ob07O6IWINPqTr9kx_dKgLKGP5ZrLXww-",
-			"**`[KILL]:`**": "https://discordapp.com/api/webhooks/707625542303744030/HMGXuZoXpHaI56pm7t6tzWNPR9fBy6zcmG0ob07O6IWINPqTr9kx_dKgLKGP5ZrLXww-",
-			"**`[RANKS]:`**": "https://discordapp.com/api/webhooks/707625380873240653/r8Byi2JWyFeCD7ulB2XUrJPIawlhUV6EeyM1yIzpqkZ9FpagpuEOHMeMja_hoo5-uCCS",
-			"**`[JOIN]:`**": "https://discordapp.com/api/webhooks/708397163385978931/SYt_p4ztX3QavIk7FB2zZCkvjvOkn9jZ9uxDNMDN2d4CrNpKmUcA-1yeUoRZpMsC0v1i"
+			"**`[UPDATE]:`**": os.getenv("GAME_LOGS_WEBHOOK"),
+			"**`[CRASH]:`**": os.getenv("GAME_LOGS_WEBHOOK"),
+			"**`[SUS]:`**": os.getenv("SUSPECT_WEBHOOK"),
+			"**`[BANS]:`**": os.getenv("SANCTIONS_WEBHOOK"),
+			"**`[KILL]:`**": os.getenv("SANCTIONS_WEBHOOK"),
+			"**`[RANKS]:`**": os.getenv("RANKS_WEBHOOK"),
+			"**`[JOIN]:`**": os.getenv("JOIN_WEBHOOK")
 		}
+		self.default_webhook = os.getenv("DEFAULT_WEBHOOK")
 		self.next_available_restart = 0
 		self.restarting = False
 
@@ -155,7 +156,7 @@ class Client(aiotfm.Client):
 		if head in self.webhook_links:
 			link = self.webhook_links[head]
 		else:
-			link = "https://discordapp.com/api/webhooks/707627044048994334/u8iTI_OxC27xveBjDtdwxe9Er5JCHTh8GIUjgRQjWAulkBK6cDI6P8rQ7KykiPHDTQBN"
+			link = self.default_webhook
 
 		async with aiohttp.ClientSession() as session:
 			await session.post(link, json={
