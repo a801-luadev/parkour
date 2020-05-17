@@ -5,6 +5,7 @@ import aiotfm
 import time
 import re
 import os
+import sys
 
 SEND_PACKET  = (1 << 8) + 255
 SEND_WEBHOOK = (2 << 8) + 255
@@ -350,4 +351,4 @@ class Client(aiotfm.Client):
 					"You need to wait {} seconds to restart the bot. Call an admin otherwise.".format(self.next_available_restart - time.time())
 				)
 
-			self.loop.create_task(self.restart(call_restart=False))
+			sys.exit(0)
