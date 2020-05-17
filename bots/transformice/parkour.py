@@ -346,7 +346,7 @@ class Client(aiotfm.Client):
 			elif not ranks["mod"] and not ranks["trainee"]:
 				return
 			elif time.time() < self.next_available_restart:
-				return whisper.reply(
+				return await whisper.reply(
 					"You need to wait {} seconds to restart the bot. Call an admin otherwise.".format(self.next_available_restart - time.time())
 				)
 
