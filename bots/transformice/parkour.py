@@ -54,11 +54,12 @@ class Client(aiotfm.Client):
 			return super().close(*args)
 		self.restarting = False
 
-	async def restart(self, *args):
+	async def restart(self, *args, call_restart=True):
 		self.close()
 		self.restarting = True
 		self.main = Connection("main", self, self.loop)
-		return await super().restart(*args)
+		if call_restart:
+			return await super().restart(*args)
 
 	async def handle_packet(self, conn, packet):
 		CCC = packet.readCode()
@@ -349,4 +350,4 @@ class Client(aiotfm.Client):
 					"You need to wait {} seconds to restart the bot. Call an admin otherwise.".format(self.next_available_restart - time.time())
 				)
 
-			self.loop.create_task(self.restart_soon())
+			self.loop.create_task(self.restart(call_restart=False))
