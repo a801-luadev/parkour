@@ -1,6 +1,7 @@
 from aiotfm.connection import TFMProtocol
 
 import aiohttp
+import asyncio
 import aiotfm
 import random
 import string
