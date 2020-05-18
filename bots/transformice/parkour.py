@@ -129,10 +129,16 @@ class Client(aiotfm.Client):
 			self.time_diff = int(text) // 1000 - now
 
 		elif txt_id == MOD_CHAT:
-			self.mod_chat_name = text.decode()
+			chat = text.decode()
+			if chat == self.mod_chat_name:
+				return
+
+			self.mod_chat_name = chat
 			if self.mod_chat is not None:
 				await self.mod_chat.leave()
 
+			self.old_player_list = None
+			await asyncio.sleep(5.0)
 			await self.joinChannel(self.mod_chat_name, permanent=False)
 
 	async def on_channel_joined(self, channel):
@@ -390,6 +396,7 @@ class Client(aiotfm.Client):
 			if not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]:
 				return
 
+			if self.mod_chat is None:
 			return await whisper.reply("The current moderator chat is {}".format(self.mod_chat.name))
 
 		elif cmd == "newmodchat":
@@ -436,17 +443,19 @@ class Client(aiotfm.Client):
 				for player in self.old_player_list:
 					disconnection.append(player)
 
-				connection = "{} joined the chat.".format(", ".join(connection))
-				disconnection = "{} left the chat.".format(", ".join(disconnection))
+				if connection:
+					connection = "{} joined the chat.".format(", ".join(connection))
+					if len(connection) <= 255:
+						await self.mod_chat.send(connection)
+					else:
+						await self.mod_chat.send("Many players have joined the chat.")
 
-				if len(connection) <= 255:
-					await self.mod_chat.send(connection)
-				else:
-					await self.mod_chat.send("Many players have joined the chat.")
-				if len(disconnection) <= 255:
-					await self.mod_chat.send(disconnection)
-				else:
-					await self.mod_chat.send("Many players have left the chat.")
+				if disconnection:
+					disconnection = "{} left the chat.".format(", ".join(disconnection))
+					if len(disconnection) <= 255:
+						await self.mod_chat.send(disconnection)
+					else:
+						await self.mod_chat.send("Many players have left the chat.")
 
 			self.old_player_list = list(players)
 
