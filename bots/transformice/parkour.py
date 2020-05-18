@@ -206,6 +206,7 @@ class Client(aiotfm.Client):
 
 		author = whisper.author.username.capitalize()
 		ranks = self.player_ranks[author] if author in self.player_ranks else self.ranks
+		print(whisper, ranks)
 
 		if cmd == "announce":
 			if not ranks["admin"]:
