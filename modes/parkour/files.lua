@@ -190,7 +190,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 end)
 
 onEvent("SavingFile", function(id, data)
-	if data.ranking then -- the only file that can get written by rooms
+	if data.ranking or room.name == "*#parkour0maps" then -- the only file that can get written by rooms
 		system.saveFile(json.encode(data), id)
 	end
 end)

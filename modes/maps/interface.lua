@@ -26,7 +26,9 @@ local packets = {
 
 	room_crash    = bit32.lshift(14, 8) + 255,
 
-	fetch_id      = bit32.lshift(15, 8) + 255
+	fetch_id      = bit32.lshift(15, 8) + 255,
+
+	send_mod_chat = bit32.lshift(16, 8) + 255
 }
 local mod_packets = {
 	send_packet   = bit32.lshift( 1, 8) + 255,
@@ -34,7 +36,9 @@ local mod_packets = {
 	modify_rank   = bit32.lshift( 3, 8) + 255,
 	rank_data     = bit32.lshift( 4, 8) + 255,
 	fetch_id      = bit32.lshift( 5, 8) + 255,
-	time_sync     = bit32.lshift( 6, 8) + 255
+	time_sync     = bit32.lshift( 6, 8) + 255,
+	mod_chat      = bit32.lshift( 7, 8) + 255,
+	send_mod_chat = bit32.lshift( 8, 8) + 255
 }
 local last_update
 local messages_cache = {}
@@ -56,6 +60,7 @@ local decoder = {
 }
 local join_requests = {_count = 0}
 local room = room
+local mod_chat, change_mod_chat
 
 function send_bot_room_crash()
 	for index = 1, webhooks._count do
@@ -356,6 +361,17 @@ onEvent("GameDataLoaded", function(data)
 		end
 	end
 
+	if data.modchat then
+		if change_mod_chat then
+			data.modchat = mod_chat
+			change_mod_chat = false
+		else
+			mod_chat = data.modchat
+		end
+
+		ui.addTextArea(mod_packets.mod_chat, mod_chat, mod_bot)
+	end
+
 	if data.banned then
 		local change
 		for index = 1, #ban_changes do
@@ -489,7 +505,7 @@ onEvent("PlayerLeft", function(player)
 end)
 
 onEvent("TextAreaCallback", function(id, player, cb)
-	if player == mapper_bot or not loaded.system then return end
+	if player == mapper_bot or player == mod_bot or not loaded.system then return end
 
 	local position = string.find(cb, ":", 1, true)
 	local action, args
@@ -668,7 +684,11 @@ end)
 onEvent("TextAreaCallback", function(id, player, cb)
 	if player ~= mod_bot then return end
 
-	if id == mod_packets.send_packet then
+	if id == mod_packets.mod_chat then
+		mod_chat = cb
+		change_mod_chat = true
+		ui.addTextArea(id, cb, player)
+	elseif id == mod_packets.send_packet then
 		local packet_id, packet = string.match(cb, "^(%d+),(.*)")
 		packet_id = tonumber(packet_id)
 		if not packet_id then return end
@@ -739,6 +759,9 @@ onEvent("TextAreaCallback", function(id, player, cb)
 
 	elseif id == packets.fetch_id then
 		ui.addTextArea(mod_packets.fetch_id, cb, mod_bot)
+
+	elseif id == packets.send_mod_chat then
+		ui.addTextArea(mod_packets.send_mod_chat, cb, mod_bot)
 
 	elseif loaded.system then
 		if id == packets.list_forum then
