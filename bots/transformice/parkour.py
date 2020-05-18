@@ -2,6 +2,8 @@ from aiotfm.connection import TFMProtocol
 
 import aiohttp
 import aiotfm
+import random
+import string
 import time
 import re
 import os
@@ -13,6 +15,7 @@ MODIFY_RANK  = (3 << 8) + 255
 RANK_DATA    = (4 << 8) + 255
 FETCH_ID     = (5 << 8) + 255
 TIME_SYNC    = (6 << 8) + 255
+MOD_CHAT     = (7 << 8) + 255
 
 class CustomProtocol(TFMProtocol):
 	def connection_lost(self, exc):
@@ -44,8 +47,13 @@ class Client(aiotfm.Client):
 			"**`[JOIN]:`**": os.getenv("JOIN_WEBHOOK")
 		}
 		self.default_webhook = os.getenv("DEFAULT_WEBHOOK")
+		self.mod_chat_webhook = os.getenv("MOD_CHAT_WEBHOOK")
+		self.mod_chat_announcement_webhook = os.getenv("MOD_CHAT_ANNOUNCEMENT_WEBHOOK")
+		self.mod_chat = None
+		self.mod_chat_name = None
 		self.next_available_restart = 0
 		self.restarting = False
+		self.old_player_list = None
 
 	def tfm_time(self):
 		return (time.time() + self.time_diff) * 1000
@@ -120,6 +128,18 @@ class Client(aiotfm.Client):
 			now = time.time()
 			self.time_diff = int(text) // 1000 - now
 
+		elif txt_id == MOD_CHAT:
+			self.mod_chat_name = text.decode()
+			if self.mod_chat is not None:
+				await self.mod_chat.leave()
+
+			await self.joinChannel(self.mod_chat_name, permanent=False)
+
+	async def on_channel_joined(self, channel):
+		if channel.name != self.mod_chat_name:
+			return
+		self.mod_chat = channel
+
 	async def get_player_id(self, player_name):
 		player_name = player_name.replace("#", "%23").replace("+", "%2B")
 		if player_name not in self.waiting_ids:
@@ -150,15 +170,16 @@ class Client(aiotfm.Client):
 					return
 				return match.group(1).decode() + match.group(2).decode()
 
-	async def on_send_webhook(self, text):
+	async def on_send_webhook(self, text, link=None):
 		if isinstance(text, bytes):
 			text = text.decode()
 
-		head = text.split(" ")[0]
-		if head in self.webhook_links:
-			link = self.webhook_links[head]
-		else:
-			link = self.default_webhook
+		if link is None:
+			head = text.split(" ")[0]
+			if head in self.webhook_links:
+				link = self.webhook_links[head]
+			else:
+				link = self.default_webhook
 
 		async with aiohttp.ClientSession() as session:
 			await session.post(link, json={
@@ -352,3 +373,82 @@ class Client(aiotfm.Client):
 				)
 
 			sys.exit(0)
+
+		elif cmd == "whoami":
+			total = 0
+			ranks_list = []
+			for rank, has in ranks:
+				if has:
+					total += 1
+					ranks_list.append(rank)
+
+			if total > 0:
+				await whisper.reply("You are {}. You have {} rank(s) and they are: {}.".format(author, total, ", ".join(ranks_list)))
+
+		elif cmd == "modchat":
+			if not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]:
+				return
+
+			return await whisper.reply("The current moderator chat is {}".format(self.mod_chat.name))
+
+		elif cmd == "newmodchat":
+			if not ranks["admin"]:
+				return
+
+			self.dispatch("generate_new_mod_chat")
+
+	async def on_channel_message(self, msg):
+		if msg.channel != self.mod_chat:
+			return
+
+		self.dispatch("send_webhook", "`[{0.community.value}]` `[{0.author}]` `{0.content}`".format(msg), self.mod_chat_webhook)
+
+	async def on_heartbeat(self, took):
+		if self.mod_chat is not None:
+			players = list(map(lambda p: normalize_name(p.username), await self.mod_chat.who()))
+
+			for player in players:
+				if player == "Parkour#8558":
+					continue
+
+				ranks = self.player_ranks[player] if player in self.player_ranks else None
+				if ranks is None or (not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]):
+					# intruder!
+					self.old_player_list = None
+					await self.mod_chat.send("Intruder alert: {}".format(player))
+					await asyncio.sleep(3.0)
+					return self.dispatch("generate_new_mod_chat")
+
+			if self.old_player_list is not None:
+				connection, disconnection = [], []
+
+				for player in players:
+					if player not in self.old_player_list:
+						connection.append(player)
+					else:
+						self.old_player_list.remove(player)
+
+				for player in self.old_player_list:
+					disconnection.append(player)
+
+				connection = "{} joined the chat.".format(", ".join(connection))
+				disconnection = "{} left the chat.".format(", ".join(disconnection))
+
+				if len(connection) <= 255:
+					await self.mod_chat.send(connection)
+				else:
+					await self.mod_chat.send("Many players have joined the chat.")
+				if len(disconnection) <= 255:
+					await self.mod_chat.send(disconnection)
+				else:
+					await self.mod_chat.send("Many players have left the chat.")
+
+			self.old_player_list = list(players)
+
+	async def on_generate_new_mod_chat(self):
+		chat = "".join(random.choice(string.ascii_letters) for x in range(10))
+
+		self.dispatch("send_webhook", "There's a new moderator chat: `{}`".format(chat), self.mod_chat_announcement_webhook)
+		await self.mod_chat.send("There's a new moderator chat. It's been posted in discord. Please leave this one as soon as possible.")
+
+		await self.sendLuaCallback(MOD_CHAT, chat)
