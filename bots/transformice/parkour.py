@@ -10,13 +10,14 @@ import re
 import os
 import sys
 
-SEND_PACKET  = (1 << 8) + 255
-SEND_WEBHOOK = (2 << 8) + 255
-MODIFY_RANK  = (3 << 8) + 255
-RANK_DATA    = (4 << 8) + 255
-FETCH_ID     = (5 << 8) + 255
-TIME_SYNC    = (6 << 8) + 255
-MOD_CHAT     = (7 << 8) + 255
+SEND_PACKET   = (1 << 8) + 255
+SEND_WEBHOOK  = (2 << 8) + 255
+MODIFY_RANK   = (3 << 8) + 255
+RANK_DATA     = (4 << 8) + 255
+FETCH_ID      = (5 << 8) + 255
+TIME_SYNC     = (6 << 8) + 255
+MOD_CHAT      = (7 << 8) + 255
+SEND_MOD_CHAT = (8 << 8) + 255
 
 class CustomProtocol(TFMProtocol):
 	def connection_lost(self, exc):
@@ -142,6 +143,9 @@ class Client(aiotfm.Client):
 			await asyncio.sleep(5.0)
 			await self.joinChannel(self.mod_chat_name, permanent=False)
 
+		elif txt_id == SEND_MOD_CHAT:
+			await self.mod_chat.send(text.decode())
+
 	async def on_channel_joined(self, channel):
 		if channel.name != self.mod_chat_name:
 			return
@@ -213,7 +217,6 @@ class Client(aiotfm.Client):
 
 		author = whisper.author.username.capitalize()
 		ranks = self.player_ranks[author] if author in self.player_ranks else self.ranks
-		print(whisper, ranks)
 
 		if cmd == "announce":
 			if not ranks["admin"]:
@@ -411,7 +414,13 @@ class Client(aiotfm.Client):
 		if msg.channel != self.mod_chat:
 			return
 
-		self.dispatch("send_webhook", "`[{0.community.value}]` `[{0.author}]` `{0.content}`".format(msg), self.mod_chat_webhook)
+		self.dispatch(
+			"send_webhook",
+			"`[{}]` `[{}]` `{}`".format(
+				msg.community.name, self.normalize_name(msg.author.name), msg.content.replace("`", "'")
+			),
+			self.mod_chat_webhook
+		)
 
 	async def on_heartbeat(self, took):
 		if self.mod_chat is not None:
@@ -465,6 +474,7 @@ class Client(aiotfm.Client):
 		chat = "".join(random.choice(string.ascii_letters) for x in range(10))
 
 		self.dispatch("send_webhook", "There's a new moderator chat: `{}`".format(chat), self.mod_chat_announcement_webhook)
+		self.dispatch("send_webhook", "Switching chats.", self.mod_chat_webhook)
 		await self.mod_chat.send("There's a new moderator chat. It's been posted in discord. Please leave this one as soon as possible.")
 
 		await self.sendLuaCallback(MOD_CHAT, chat)

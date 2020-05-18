@@ -27,6 +27,8 @@ ROOM_CRASH    = (14 << 8) + 255
 
 FETCH_ID      = (15 << 8) + 255
 
+SEND_MOD_CHAT = (16 << 8) + 255
+
 class Client(aiotfmpatch.Client):
 	version = b"1.2.0"
 	pool = None
@@ -93,6 +95,9 @@ class Client(aiotfmpatch.Client):
 		await asyncio.sleep(3.0 * 60.0)
 		await self.sendCommand(os.getenv("UPDATE_CMD"))
 		self.code_hash = code_hash
+
+	async def on_mod_chat(self, msg):
+		await self.sendLuaCallback(SEND_MOD_CHAT, msg)
 
 	async def on_load_request(self, script):
 		await self.loadLua(script)

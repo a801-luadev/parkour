@@ -149,7 +149,17 @@ class Client(discord.Client):
 
 			await msg.delete()
 
-		if msg.channel.id == 703701422910472192:
+		elif msg.channel.id == 711955597100056628:
+			args = msg.content.split(" ")
+			cmd = args.pop(0).lower()
+
+			if cmd == "!m":
+				text = "[{}] {}".format(msg.author.display_name, " ".join(args))
+				if len(text) > 255:
+					return await msg.channel.send("The message is too long.")
+				self.mapper.dispatch("mod_chat", text)
+
+		elif msg.channel.id == 703701422910472192:
 			args = msg.content.split(" ")
 			cmd = args.pop(0).lower()
 
