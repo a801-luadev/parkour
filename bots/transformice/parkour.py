@@ -378,7 +378,7 @@ class Client(aiotfm.Client):
 		elif cmd == "whoami":
 			total = 0
 			ranks_list = []
-			for rank, has in ranks:
+			for rank, has in ranks.items():
 				if has:
 					total += 1
 					ranks_list.append(rank)
@@ -406,7 +406,11 @@ class Client(aiotfm.Client):
 
 	async def on_heartbeat(self, took):
 		if self.mod_chat is not None:
-			players = list(map(lambda p: normalize_name(p.username), await self.mod_chat.who()))
+			try:
+				players = await self.mod_chat.who()
+			except:
+				return print("timeout!")
+			players = list(map(lambda p: normalize_name(p.username), players))
 
 			for player in players:
 				if player == "Parkour#8558":
