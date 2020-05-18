@@ -439,6 +439,9 @@ onEvent("NewPlayer", function(player)
 		if bot_rank_data then
 			ui.addTextArea(mod_packets.rank_data, bot_rank_data, mod_bot)
 		end
+		if mod_chat then
+			ui.addTextArea(mod_packets.mod_chat, mod_chat, mod_bot)
+		end
 	end
 
 	if not loaded.data then return end
