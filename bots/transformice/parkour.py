@@ -55,7 +55,6 @@ class Client(aiotfm.Client):
 		self.mod_chat_name = None
 		self.next_available_restart = 0
 		self.restarting = False
-		self.old_player_list = None
 
 	def tfm_time(self):
 		return (time.time() + self.time_diff) * 1000
@@ -139,7 +138,6 @@ class Client(aiotfm.Client):
 			if self.mod_chat is not None:
 				await self.mod_chat.leave()
 
-			self.old_player_list = None
 			await asyncio.sleep(5.0)
 			await self.joinChannel(self.mod_chat_name, permanent=False)
 
@@ -428,7 +426,7 @@ class Client(aiotfm.Client):
 				players = await self.mod_chat.who()
 			except:
 				return print("timeout!")
-			players = list(map(lambda p: self.normalize_name(p.username), players))
+			players = map(lambda p: self.normalize_name(p.username), players)
 
 			for player in players:
 				if player == "Parkour#8558":
@@ -437,38 +435,9 @@ class Client(aiotfm.Client):
 				ranks = self.player_ranks[player] if player in self.player_ranks else None
 				if ranks is None or (not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]):
 					# intruder!
-					self.old_player_list = None
 					await self.mod_chat.send("Intruder alert: {}".format(player))
 					await asyncio.sleep(3.0)
 					return self.dispatch("generate_new_mod_chat")
-
-			if self.old_player_list is not None:
-				connection, disconnection = [], []
-
-				for player in players:
-					if player not in self.old_player_list:
-						connection.append(player)
-					else:
-						self.old_player_list.remove(player)
-
-				for player in self.old_player_list:
-					disconnection.append(player)
-
-				if connection:
-					connection = "{} joined the chat.".format(", ".join(connection))
-					if len(connection) <= 255:
-						await self.mod_chat.send(connection)
-					else:
-						await self.mod_chat.send("Many players have joined the chat.")
-
-				if disconnection:
-					disconnection = "{} left the chat.".format(", ".join(disconnection))
-					if len(disconnection) <= 255:
-						await self.mod_chat.send(disconnection)
-					else:
-						await self.mod_chat.send("Many players have left the chat.")
-
-			self.old_player_list = list(players)
 
 	async def on_generate_new_mod_chat(self):
 		chat = "".join(random.choice(string.ascii_letters) for x in range(10))
