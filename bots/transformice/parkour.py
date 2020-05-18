@@ -397,6 +397,7 @@ class Client(aiotfm.Client):
 				return
 
 			if self.mod_chat is None:
+				return await whisper.reply("Could not connect to the moderator chat.")
 			return await whisper.reply("The current moderator chat is {}".format(self.mod_chat.name))
 
 		elif cmd == "newmodchat":
