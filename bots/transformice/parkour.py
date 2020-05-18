@@ -417,7 +417,7 @@ class Client(aiotfm.Client):
 		self.dispatch(
 			"send_webhook",
 			"`[{}]` `[{}]` `{}`".format(
-				msg.community.name, self.normalize_name(msg.author.name), msg.content.replace("`", "'")
+				msg.community.name, self.normalize_name(msg.author), msg.content.replace("`", "'")
 			),
 			self.mod_chat_webhook
 		)
