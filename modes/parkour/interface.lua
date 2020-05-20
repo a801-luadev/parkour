@@ -729,7 +729,7 @@ onEvent("PlayerWon", function(player)
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
-	if taken <= 45 and room.name ~= "*#parkour0maps" and not review_mode and not is_tribe then
+	if count_stats and taken <= 45 and room.name ~= "*#parkour0maps" and not review_mode and not is_tribe then
 		sendPacket(1, room.name .. "\000" .. player .. "\000" .. id .. "\000" .. room.currentMap .. "\000" .. taken)
 	end
 
@@ -891,7 +891,10 @@ onEvent("ChatCommand", function(player, msg)
 		if not perms[player] or not perms[player].change_map then return end
 
 		if pointer > 0 then
+			count_stats = false
 			tfm.exec.newGame(args[1])
+		elseif os.time() < map_change_cd and not review_mode then
+			tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", player)
 		else
 			newMap()
 		end

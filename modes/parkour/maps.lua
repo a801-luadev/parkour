@@ -2,9 +2,14 @@ local first_data_load = true
 local repeated = {_count = 0, low = {_count = 0}}
 local maps = {_count = 1, [1] = 7171137, low = {_count = 1, [1] = 7171137}}
 local is_invalid = false
+local count_stats = true
+local map_change_cd = 0
 local levels
 
 local function newMap()
+	count_stats = true
+	map_change_cd = os.time() + 20000
+
 	local rep, _maps
 	-- Maps with low priority get played with a half the probabilities of normal maps.
 	if math.random(1000 * (maps._count * 2 / maps.low._count + 0.5)) <= 1000 then
