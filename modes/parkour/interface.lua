@@ -801,10 +801,26 @@ onEvent("ChatCommand", function(player, msg)
 		if not perms[player] or not perms[player].enable_review then return end
 
 		if string.find(room.name, "review") then
-			review_mode = true
-			return tfm.exec.chatMessage("<v>[#] <d>Review mode enabled.")
+			return tfm.exec.chatMessage("<v>[#] <r>You can't enable review mode in this room.", player)
 		end
-		tfm.exec.chatMessage("<v>[#] <r>You can't enable review mode in this room.", player)
+		review_mode = true
+		tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
+
+	elseif cmd == "pw" then
+		if not perms[player] or not perms[player].enable_review then return end
+
+		if not review_mode then
+			return tfm.exec.chatMessage("<v>[#] <r>You can't set the password of a room without review mode.", player)
+		end
+
+		local password = table.concat(args, " ")
+		tfm.exec.setRoomPassword(password)
+
+		if password == "" then
+			return tfm.exec.chatMessage("<v>[#] <d>Room password disabled by " .. player .. ".")
+		end
+		tfm.exec.chatMessage("<v>[#] <d>Room password changed by " .. player .. ".")
+		tfm.exec.chatMessage("<v>[#] <d>You set the room password to: " .. password, player)
 
 	elseif cmd == "cp" then
 		if not review_mode then return end
@@ -1005,6 +1021,7 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("staff", true)
 	system.disableChatCommandDisplay("room", true)
 	system.disableChatCommandDisplay("review", true)
+	system.disableChatCommandDisplay("pw", true)
 	system.disableChatCommandDisplay("cp", true)
 end)
 
