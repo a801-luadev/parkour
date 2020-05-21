@@ -426,7 +426,7 @@ class Client(aiotfm.Client):
 				players = await self.mod_chat.who()
 			except:
 				return print("timeout!")
-			players = map(lambda p: self.normalize_name(p.username), players)
+			players = map(lambda p: p.username.capitalize(), players)
 
 			for player in players:
 				if player == "Parkour#8558":
