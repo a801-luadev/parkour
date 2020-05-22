@@ -753,7 +753,9 @@ onEvent("PlayerWon", function(player)
 			power = powers[index]
 
 			if players_file[player].parkour.c == power.maps then
-				translatedChatMessage("unlocked_power", nil, player, power.name)
+				for _player in next, in_room do
+					translatedChatMessage("unlocked_power", _player, player, translatedMessage(power.name, _player))
+				end
 				break
 			end
 		end
