@@ -26,6 +26,8 @@ local community_images = {
 	cz = "1651b304972.png",
 	de = "1651b306152.png",
 	ee = "1651b307973.png",
+	en = "1723dc10ec2.png",
+	e2 = "1723dc10ec2.png",
 	es = "1651b309222.png",
 	fi = "1651b30aa94.png",
 	fr = "1651b30c284.png",
@@ -176,6 +178,8 @@ local function closeLeaderboard(player)
 	removeWindow(1, player)
 	removeButton(1, player)
 	removeButton(2, player)
+	removeButton(3, player)
+	removeButton(4, player)
 	for id = 1, 8 do
 		ui.removeTextArea(id, player)
 	end
@@ -318,7 +322,7 @@ local function setNameColor(player)
 	)
 end
 
-local function showLeaderboard(player, page)
+local function showLeaderboard(player, page, week)
 	if open[player].powers then
 		closePowers(player)
 	elseif open[player].options then
@@ -334,10 +338,11 @@ local function showLeaderboard(player, page)
 	end
 	images._count = 0
 
+	local max_pages = week and max_weekleaderboard_pages or max_leaderboard_pages
 	if not page or page < 0 then
 		page = 0
-	elseif page > max_leaderboard_pages then
-		page = max_leaderboard_pages
+	elseif page > max_pages then
+		page = max_pages
 	end
 
 	addWindow(
@@ -361,9 +366,9 @@ local function showLeaderboard(player, page)
 	local position, row
 	for index = page * 14, page * 14 + 13 do
 		position = index + 1
-		if position > max_leaderboard_rows then break end
+		if position > (week and max_weekleaderboard_rows or max_leaderboard_rows) then break end
 		positions = positions .. "#" .. position .. "\n"
-		row = leaderboard[position] or default_leaderboard_user
+		row = (week and weekleaderboard or leaderboard)[position] or default_leaderboard_user
 
 		if position == 1 then
 			names = names .. "<cs>" .. row[2] .. "</cs>\n"
@@ -390,8 +395,12 @@ local function showLeaderboard(player, page)
 	ui.addTextArea(6, "<font size='12'><p align='center'><t>" .. names     , player, 246, 130, 176, 235, 0x203F43, 0x193E46, 1, true)
 	ui.addTextArea(8, "<font size='12'><p align='center'><vp>" .. completed, player, 518, 130, 100, 235, 0x203F43, 0x193E46, 1, true)
 
-	addButton(1, "&lt;                       ", "leaderboard_p:" .. page - 1, player, 185, 346, 210, 20, not (page > 0)                    )
-	addButton(2, "&gt;                       ", "leaderboard_p:" .. page + 1, player, 410, 346, 210, 20, not (page < max_leaderboard_pages))
+	local lb_type = week and 2 or 1
+	addButton(1, "&lt;\n", "leaderboard_p:".. lb_type .. ":" .. page - 1, player, 185, 346, 40, 20, not (page > 0)        )
+	addButton(2, "&gt;\n", "leaderboard_p:".. lb_type .. ":" .. page + 1, player, 580, 346, 40, 20, not (page < max_pages))
+
+	addButton(3, translatedMessage("overall_lb", player) .. "\n", "leaderboard_t:1", player, 240, 346, 155, 20, not week)
+	addButton(4, translatedMessage("weekly_lb" , player) .. "\n", "leaderboard_t:2", player, 410, 346, 155, 20, week    )
 end
 
 local function showPowers(player, page)
@@ -529,7 +538,10 @@ onEvent("TextAreaCallback", function(id, player, callback)
 	elseif action == "power" then
 		showPowers(player, tonumber(args) or 0)
 	elseif action == "leaderboard_p" then
-		showLeaderboard(player, tonumber(args) or 0)
+		local lb_type, page = string.match(args, "([12]):(%d+)")
+		showLeaderboard(player, tonumber(page) or 0, lb_type == "2")
+	elseif action == "leaderboard_t" then
+		showLeaderboard(player, 0, args == "2")
 	elseif action == "settings" then
 		if open[player].options then
 			removeOptionsMenu(player)

@@ -43,6 +43,7 @@ class Client(aiotfm.Client):
 			"**`[UPDATE]:`**": os.getenv("GAME_LOGS_WEBHOOK"),
 			"**`[CRASH]:`**": os.getenv("GAME_LOGS_WEBHOOK"),
 			"**`[SUS]:`**": os.getenv("SUSPECT_WEBHOOK"),
+			"**`[SUS2]:`**": os.getenv("SUSPECT2_WEBHOOK"),
 			"**`[BANS]:`**": os.getenv("SANCTIONS_WEBHOOK"),
 			"**`[KILL]:`**": os.getenv("SANCTIONS_WEBHOOK"),
 			"**`[RANKS]:`**": os.getenv("RANKS_WEBHOOK"),

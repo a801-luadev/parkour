@@ -429,6 +429,14 @@ onEvent("PacketReceived", function(id, packet)
 	elseif id == 2 then
 		local player, ban = string.match(packet, "^([^\000]+)\000([^\000]+)$")
 		ban_changes[#ban_changes + 1] = {player, nil, tonumber(ban)}
+
+	elseif id == 3 then
+		local _room, id, player, maps = string.match(packet, "^([^\000]+)\000([^\000]+)\000([^\000]+)\000([^\000]+)$")
+		ui.addTextArea(
+			mod_packets.send_webhook,
+			"**`[SUS2]:`** `" .. player .. "` (`" .. id .. "`) has got `" .. maps .. "` maps in the last hour.",
+			mod_bot
+		)
 	end
 end)
 

@@ -18,6 +18,7 @@ if not is_tribe then
 			0 - room crash
 			1 - suspect
 			2 - ban field set to playerdata
+			3 - farm/hack suspect
 	]]
 
 	local last_id = os.time() - 10000

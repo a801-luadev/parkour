@@ -8,23 +8,29 @@ local files = {
 	--[[
 		File values:
 
-		- maps     (1)
-		- ranks    (1)
+		- maps        (1)
+		- ranks       (1)
+		- modchat     (1)
 
-		- banned   (2)
-		- ranking  (2)
+		- ranking     (2)
+		- weekranking (2)
 
-		- lowmaps  (3)
+		- lowmaps     (3)
+		- banned      (3)
 	]]
 
-	[1] = 1, -- maps, ranks
-	[2] = 2, -- ranking, banned
-	[3] = 10, -- lowmaps
+	[1] = 1, -- maps, ranks, modchat
+	[2] = 2, -- weekranking, banned
+	[3] = 10, -- lowmaps, banned
 }
 local total_files = 3
 local file_index = 1
 local fetching_player_room = {}
 local file_id = files[file_index]
+local timed_maps = {
+	week = {},
+	hour = {}
+}
 players_file = {}
 
 local data_migrations = {
@@ -34,7 +40,7 @@ local data_migrations = {
 
 		data.modules = nil
 
-		data.parkour.v = "0.5" -- version
+		data.parkour.v = "0.6" -- version
 		data.parkour.c = data.parkour.cm -- completed maps
 		data.parkour.ckpart = 1 -- particles for checkpoints (1 -> true, 0 -> false)
 		data.parkour.mort = 1 -- /mort hotkey
@@ -45,11 +51,15 @@ local data_migrations = {
 		data.parkour.hbut = 1 -- help button
 		data.parkour.congrats = 1 -- contratulations message
 		data.parkour.troll = 0
+		data.parkour.week_c = 0 -- completed maps this week
+		data.parkour.week_r = timed_maps.week.last_reset -- last week reset
+		data.parkour.hour_c = 0 -- completed maps this hour
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000 -- next hour reset
 
 		data.parkour.cm = nil
 	end,
 	["0.1"] = function(player, data)
-		data.parkour.v = "0.5"
+		data.parkour.v = "0.6"
 		data.parkour.ckpart = 1
 		data.parkour.mort = 1
 		data.parkour.pcool = 1
@@ -58,26 +68,46 @@ local data_migrations = {
 		data.parkour.killed = 0
 		data.parkour.congrats = 1
 		data.parkour.troll = 0
-
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
 	end,
 	["0.2"] = function(player, data)
-		data.parkour.v = "0.5"
+		data.parkour.v = "0.6"
 		data.parkour.killed = 0
 		data.parkour.hbut = 1
 		data.parkour.congrats = 1
 		data.parkour.troll = 0
-
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
 	end,
 	["0.3"] = function(player, data)
-		data.parkour.v = "0.5"
+		data.parkour.v = "0.6"
 		data.parkour.hbut = 1
 		data.parkour.congrats = 1
 		data.parkour.troll = 0
-
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
 	end,
 	["0.4"] = function(player, data)
-		data.parkour.v = "0.5"
+		data.parkour.v = "0.6"
 		data.parkour.troll = 0
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+	end,
+	["0.5"] = function(player, data)
+		data.parkour.v = "0.6"
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
 	end
 }
 
@@ -179,8 +209,8 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	players_file[player] = data
-
 	players_file[player].room = room.name
+
 	system.savePlayerData(
 		player,
 		json.encode(players_file[player])
@@ -190,7 +220,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 end)
 
 onEvent("SavingFile", function(id, data)
-	if data.ranking or room.name == "*#parkour0maps" then -- the only file that can get written by rooms
+	if data.ranking or (room.name == "*#parkour0maps" and (data.modchat or data.banned)) then -- the only file that can get written by rooms
 		system.saveFile(json.encode(data), id)
 	end
 end)
@@ -226,11 +256,34 @@ end)
 
 onEvent("GameStart", function()
 	system.loadFile(file_id)
-	next_file_load = os.time() + math.random(60500, 90500)
+	local ts = os.time()
+
+	next_file_load = ts + math.random(60500, 90500)
 	file_index = file_index % total_files + 1
 	file_id = files[file_index]
+
+	local now = os.date("*t", ts / 1000) -- os.date is weird in tfm, *t accepts seconds, %d/%m/%Y accepts ms
+	now.wday = now.wday - 1
+	if now.wday == 0 then
+		now.wday = 7
+	end
+	timed_maps.week.last_reset = os.date("%d/%m/%Y", ts - (now.wday - 1) * 24 * 60 * 60 * 1000)
+	timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (8 - now.wday) * 24 * 60 * 60 * 1000)
 end)
 
 onEvent("NewPlayer", function(player)
 	system.loadPlayerData(player)
+end)
+
+onEvent("PlayerDataParsed", function(player, data)
+	local now = os.time()
+	if data.parkour.hour_r <= now then
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = now + 60 * 60 * 1000
+	end
+
+	if data.parkour.week_r ~= timed_maps.week.last_reset then
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+	end
 end)

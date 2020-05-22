@@ -118,6 +118,8 @@ translations.pl = {
 	load_from_thread = "<p align='center'><a href='event:load_custom'>Load custom map</a></p>",
 	write_comment = "Napisz swój komentarz tutaj",
 	write_map = "Zapisz tutaj kod mapy",
+	overall_lb = "Overall",
+	weekly_lb = "Weekly",
 
 	-- Power names
 	balloon = "Balon",

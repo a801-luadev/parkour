@@ -1,7 +1,10 @@
 max_leaderboard_rows = 70
+max_weekleaderboard_rows = 28
 local max_leaderboard_pages = math.ceil(max_leaderboard_rows / 14) - 1
+local max_weekleaderboard_pages = math.ceil(max_weekleaderboard_rows / 14) - 1
 local loaded_leaderboard = false
 leaderboard = {}
+weekleaderboard = {}
 -- {id, name, completed_maps, community}
 local default_leaderboard_user = {0, nil, 0, "xx"}
 
@@ -11,15 +14,17 @@ end
 
 local remove, sort = table.remove, table.sort
 
-local function checkPlayersPosition()
-	local totalRankedPlayers = #leaderboard
+local function checkPlayersPosition(week)
+	local max_lb_rows = week and max_weekleaderboard_rows or max_leaderboard_rows
+	local lb = week and weekleaderboard or leaderboard
+	local totalRankedPlayers = #lb
 	local cachedPlayers = {}
 
 	local playerId, position
 
 	local toRemove, counterRemoved = {}, 0
 	for player = 1, totalRankedPlayers do
-		position = leaderboard[player]
+		position = lb[player]
 		playerId = position[1]
 
 		if bans[playerId] then
@@ -31,7 +36,7 @@ local function checkPlayersPosition()
 	end
 
 	for index = counterRemoved, 1, -1 do
-		remove(leaderboard, toRemove[index])
+		remove(lb, toRemove[index])
 	end
 	toRemove = nil
 
@@ -44,7 +49,7 @@ local function checkPlayersPosition()
 		playerFile = players_file[player]
 
 		if playerFile then
-			completedMaps = playerFile.parkour.c
+			completedMaps = week and playerFile.parkour.week_c or playerFile.parkour.c
 			playerData = room.playerList[player]
 			playerId = playerData.id
 
@@ -56,7 +61,7 @@ local function checkPlayersPosition()
 					cacheData[4] = playerData.community
 				else
 					totalRankedPlayers = totalRankedPlayers + 1
-					leaderboard[totalRankedPlayers] = {
+					lb[totalRankedPlayers] = {
 						playerId,
 						player,
 						completedMaps,
@@ -67,14 +72,14 @@ local function checkPlayersPosition()
 		end
 	end
 
-	sort(leaderboard, leaderboardSort)
+	sort(lb, leaderboardSort)
 
-	for index = max_leaderboard_rows + 1, totalRankedPlayers do
-		leaderboard[index] = nil
+	for index = max_lb_rows + 1, totalRankedPlayers do
+		lb[index] = nil
 	end
 
-	for index = 1, #leaderboard do
-		leaderboard[leaderboard[index][2]] = index
+	for index = 1, #lb do
+		lb[lb[index][2]] = index
 	end
 end
 
@@ -88,6 +93,31 @@ onEvent("GameDataLoaded", function(data)
 
 		leaderboard = data.ranking
 
-		checkPlayersPosition()
+		checkPlayersPosition(false)
+	end
+	if data.weekranking then
+		local ts = os.time()
+		local now = os.date("*t", ts / 1000)
+		now.wday = now.wday - 1
+		if now.wday == 0 then
+			now.wday = 7
+		end
+
+		local new_reset = os.date("%d/%m/%Y", ts - (now.wday - 1) * 24 * 60 * 60 * 1000)
+		if new_reset ~= timed_maps.week.last_reset then
+			timed_maps.week.last_reset = new_reset
+			timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (8 - now.wday) * 24 * 60 * 60 * 1000)
+
+			for player, data in next, players_file do
+				data.parkour.week_c = 0
+				data.parkour.week_r = new_reset
+			end
+
+			data.weekranking = {}
+		end
+
+		weekleaderboard = data.weekranking
+
+		checkPlayersPosition(true)
 	end
 end)

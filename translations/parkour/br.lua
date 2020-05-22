@@ -118,6 +118,8 @@ translations.br = {
 	load_from_thread = "<p align='center'><a href='event:load_custom'>Carregar mapa</a></p>",
 	write_comment = "Escreva seu comentário abaixo",
 	write_map = "Escreva o código do mapa abaixo",
+	overall_lb = "Geral",
+	weekly_lb = "Semanal",
 
 	-- Power names
 	balloon = "Balão",

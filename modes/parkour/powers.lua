@@ -402,7 +402,15 @@ onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
 
 	if count_stats and room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and not is_tribe and not review_mode then
-		players_file[player].parkour.c = players_file[player].parkour.c + 1
+		local file = players_file[player].parkour
+		file.c = file.c + 1
+		file.hour_c = file.hour_c + 1
+		file.week_c = file.week_c + 1
+
+		if file.hour_c >= 35 and file.hour_c % 5 == 0 then
+			sendPacket(3, room.name .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. file.hour_c)
+		end
+
 		savePlayerData(player)
 	end
 
@@ -449,7 +457,15 @@ onEvent("NewGame", function()
 		end
 	})
 
+	local file
 	for player in next, in_room do
+		file = players_file[player]
+		if file and file.parkour.hour_r <= now then
+			file.parkour.hour_c = 0
+			file.parkour.hour_r = now + 60 * 60 * 1000
+			savePlayerData(player)
+		end
+
 		unbind(player)
 	end
 end)

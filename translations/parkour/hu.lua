@@ -118,6 +118,8 @@ translations.hu = {
 	load_from_thread = "<p align='center'><a href='event:load_custom'>Töltsd be az egyedi pályád</a></p>",
 	write_comment = "Hozzászólásodat írd le ide",
 	write_map = "Írd le a pályakódot ide",
+	overall_lb = "Teljes",
+	weekly_lb = "Heti",
 
 	-- Power names
 	balloon = "Léggömb",

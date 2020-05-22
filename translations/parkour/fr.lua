@@ -118,6 +118,8 @@ translations.fr = {
 	load_from_thread = "<p align='center'><a href='event:load_custom'>Charger une carte personnalisée</a></p>",
 	write_comment = "Écrivez votre commentaire en-dessous",
 	write_map = "Écrivez les codes de la carte en-dessous",
+	overall_lb = "Permanent",
+	weekly_lb = "Hebdomadaire",
 
 	-- Power names
 	balloon = "Ballon",

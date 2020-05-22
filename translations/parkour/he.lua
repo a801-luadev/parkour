@@ -119,6 +119,8 @@ translations.he = {
 	load_from_thread = "<p align='center'><a href='event:load_custom'>Load custom map</a></p>",
 	write_comment = "Write your comment down here",
 	write_map = "Write the mapcode down here",
+	overall_lb = "Overall",
+	weekly_lb = "Weekly",
 
 	-- Power names
 	balloon = "בלון",
