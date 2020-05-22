@@ -5,6 +5,13 @@ local facing = {}
 local cooldowns = {}
 local max_leaderboard_rows
 local leaderboard
+local obj_whitelist = {_count = 0, _index = 1}
+
+local function addShamanObject(id, x, y, ...)
+	obj_whitelist._count = obj_whitelist._count + 1
+	obj_whitelist[obj_whitelist._count] = {id, x, y}
+	return tfm.exec.addShamanObject(id, x, y, ...)
+end
 
 local function checkCooldown(player, name, long, img, x, y, show)
 	if cooldowns[player] then
@@ -29,7 +36,7 @@ local function checkCooldown(player, name, long, img, x, y, show)
 end
 
 local function despawnableObject(when, ...)
-	local obj = tfm.exec.addShamanObject(...)
+	local obj = addShamanObject(...)
 	addNewTimer(when, tfm.exec.removeObject, obj)
 end
 
@@ -38,7 +45,7 @@ toilet = {
 	water = function(img, id, x, y)
 		tfm.exec.removeImage(img)
 
-		local obj = tfm.exec.addShamanObject(63, x, y)
+		local obj = addShamanObject(63, x, y)
 		tfm.exec.addPhysicObject(id, x, y - 20, {
 			type = 9,
 			width = 30,
@@ -422,6 +429,26 @@ onEvent("NewGame", function()
 
 	facing = {}
 	cooldowns = {}
+	obj_whitelist = {_count = 0, _index = 1}
+
+	setmetatable(room.objectList, {
+		__newindex = function(self, key, value)
+			if self[key] == value then return end
+
+			rawset(self, key, value)
+
+			local obj
+			for index = obj_whitelist._index, obj_whitelist._count do
+				obj = obj_whitelist[index]
+				if obj[1] ~= key or obj[2] ~= value.x or obj[3] ~= value.y then
+					tfm.exec.removeObject(key)
+				else
+					obj_whitelist._index = index + 1
+				end
+				break
+			end
+		end
+	})
 
 	for player in next, in_room do
 		unbind(player)
