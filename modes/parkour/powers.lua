@@ -401,7 +401,6 @@ end)
 onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
 
-	if room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and not is_tribe and not review_mode then
 	if count_stats and room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and not is_tribe and not review_mode then
 		players_file[player].parkour.c = players_file[player].parkour.c + 1
 		savePlayerData(player)
