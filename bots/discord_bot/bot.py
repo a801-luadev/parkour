@@ -275,6 +275,10 @@ class Client(discord.Client):
 					await asyncio.sleep(3.0)
 					self.busy = False
 
+				elif cmd == "!cmd":
+					await self.mapper.sendCommand(" ".join(args))
+					await msg.channel.send("Done.")
+
 				elif cmd == "!update":
 					if self.busy:
 						return await msg.channel.send("The bot is busy right now.")
