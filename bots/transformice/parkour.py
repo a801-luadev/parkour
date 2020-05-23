@@ -52,6 +52,7 @@ class Client(aiotfm.Client):
 		self.default_webhook = os.getenv("DEFAULT_WEBHOOK")
 		self.mod_chat_webhook = os.getenv("MOD_CHAT_WEBHOOK")
 		self.mod_chat_announcement_webhook = os.getenv("MOD_CHAT_ANNOUNCEMENT_WEBHOOK")
+		self.heroku_token = os.getenv("HEROKU_TOKEN")
 		self.mod_chat = None
 		self.mod_chat_name = None
 		self.next_available_restart = 0
@@ -60,17 +61,25 @@ class Client(aiotfm.Client):
 	def tfm_time(self):
 		return (time.time() + self.time_diff) * 1000
 
-	def close(self, *args):
-		if not self.restarting:
-			return super().close(*args)
-		self.restarting = False
+	async def restart_dyno(self):
+		async with aiohttp.ClientSession() as session:
+			await session.delete(
+				"https://api.heroku.com/apps/parkour-bot/dynos/parkour",
+				headers={
+					"Content-Type": "application/json",
+					"Accept": "application/vnd.heroku+json; version=3",
+					"Authorization": "Bearer " + self.heroku_token
+				}
+			)
 
-	async def restart(self, *args, call_restart=True):
-		self.close()
-		self.restarting = True
-		self.main = Connection("main", self, self.loop)
-		if call_restart:
-			return await super().restart(*args)
+	async def restart(self, *args):
+		await self.restart_dyno()
+
+	async def connect(self, *args, **kwargs):
+		try:
+			return await super().connect(*args, **kwargs)
+		except:
+			await self.restart_dyno()
 
 	async def handle_packet(self, conn, packet):
 		CCC = packet.readCode()
@@ -382,7 +391,7 @@ class Client(aiotfm.Client):
 					"You need to wait {} seconds to restart the bot. Call an admin otherwise.".format(self.next_available_restart - time.time())
 				)
 
-			sys.exit(0)
+			await self.restart_dyno()
 
 		elif cmd == "whoami":
 			total = 0
