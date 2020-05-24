@@ -118,8 +118,8 @@ translations.ru = {
 	load_from_thread = "<p align='center'><a href='event:load_custom'>Load custom map</a></p>",
 	write_comment = "Напишите свой комментарий здесь",
 	write_map = "Запишите код карты здесь",
-	overall_lb = "Overall",
-	weekly_lb = "Weekly",
+	overall_lb = "В целом",
+	weekly_lb = "Еженедельно",
 
 	-- Power names
 	balloon = "Шар",

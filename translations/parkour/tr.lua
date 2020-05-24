@@ -118,8 +118,8 @@ translations.tr = {
 	load_from_thread = "<p align='center'><a href='event:load_custom'>Rastgele map yükleniyor</a></p>",
 	write_comment = "Yorumunuzu buraya yazın",
 	write_map = "Harita kodunu buraya yazın",
-	overall_lb = "Overall",
-	weekly_lb = "Weekly",
+	overall_lb = "Genel",
+	weekly_lb = "Haftalık",
 
 	-- Power names
 	balloon = "Balon",
