@@ -665,6 +665,28 @@ onEvent("GameDataLoaded", function(data)
 
 				if pdata.banned and (pdata.banned == 2 or os.time() < pdata.banned) then
 					bans[id] = true
+
+					if pdata.banned == 2 then
+						translatedChatMessage("permbanned", player)
+					else
+						local minutes = math.floor((pdata.banned - os.time()) / 1000 / 60)
+						translatedChatMessage("tempbanned", player, minutes)
+					end
+				end
+			end
+		end
+
+		for player, data in next, room.playerList do
+			if bans[data.id] and not spec_mode[player] then
+				spec_mode[player] = true
+				tfm.exec.killPlayer(player)
+
+				player_count = player_count - 1
+				if victory[player] then
+					victory_count = victory_count - 1
+				elseif player_count == victory_count and not less_time then
+					tfm.exec.setGameTime(20)
+					less_time = true
 				end
 			end
 		end
@@ -730,6 +752,26 @@ onEvent("PlayerDataParsed", function(player, data)
 
 	if data.banned and (data.banned == 2 or os.time() < data.banned) then
 		bans[room.playerList[player].id] = true
+
+		if not spec_mode[player] then
+			spec_mode[player] = true
+			tfm.exec.killPlayer(player)
+
+			player_count = player_count - 1
+			if victory[player] then
+				victory_count = victory_count - 1
+			elseif player_count == victory_count and not less_time then
+				tfm.exec.setGameTime(20)
+				less_time = true
+			end
+		end
+
+		if data.banned == 2 then
+			translatedChatMessage("permbanned", player)
+		else
+			local minutes = math.floor((data.banned - os.time()) / 1000 / 60)
+			translatedChatMessage("tempbanned", player, minutes)
+		end
 	end
 end)
 
@@ -1056,6 +1098,46 @@ onEvent("PacketReceived", function(packet_id, packet)
 		if in_room[player] and data and file then
 			file.banned = val == "1" and 2 or tonumber(val)
 			bans[data.id] = file.banned == 2 or os.time() < file.banned
+
+			if bans[data.id] then
+				if not spec_mode[player] then
+					spec_mode[player] = true
+					tfm.exec.killPlayer(player)
+
+					player_count = player_count - 1
+					if victory[player] then
+						victory_count = victory_count - 1
+					elseif player_count == victory_count and not less_time then
+						tfm.exec.setGameTime(20)
+						less_time = true
+					end
+				end
+
+				if file.banned == 2 then
+					translatedChatMessage("permbanned", player)
+				else
+					local minutes = math.floor((file.banned - os.time()) / 1000 / 60)
+					translatedChatMessage("tempbanned", player, minutes)
+				end
+
+			else
+				if spec_mode[player] then
+					spec_mode[player] = nil
+
+					if levels and players_level[player] then
+						local level = levels[ players_level[player] ]
+
+						tfm.exec.respawnPlayer(player)
+						tfm.exec.movePlayer(player, level.x, level.y)
+
+						player_count = player_count + 1
+						if victory[player] then
+							victory_count = victory_count + 1
+						end
+					end
+				end
+			end
+
 			savePlayerData(player)
 			sendPacket(2, data.id .. "\000" .. val)
 		end

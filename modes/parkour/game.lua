@@ -89,10 +89,10 @@ onEvent("PlayerDied", function(player)
 	end
 end)
 
-onEvent("PlayerWon", function(player, elapsed)
+onEvent("PlayerWon", function(player)
 	victory_count = victory_count + 1
 	victory[player] = true
-	victory._last_level[player] = nil
+	victory._last_level[player] = false
 
 	if victory_count == player_count then
 		tfm.exec.setGameTime(20)
@@ -149,12 +149,9 @@ onEvent("Loop", function()
 	if check_position > 0 then
 		check_position = check_position - 1
 	else
-		for player in next, victory._last_level do
-			if not victory[player] then
-				tfm.exec.giveCheese(player)
-				tfm.exec.playerVictory(player)
-				tfm.exec.respawnPlayer(player)
-				tfm.exec.movePlayer(player, levels[players_level[player]].x, levels[players_level[player]].y)
+		for player, to_give in next, victory._last_level do
+			if not victory[player] and to_give then
+				eventPlayerWon(player)
 			end
 		end
 
@@ -165,7 +162,7 @@ onEvent("Loop", function()
 
 		for name in next, in_room do
 			player = room.playerList[name]
-			if bans[player.id] then
+			if spec_mode[player.id] then
 				tfm.exec.killPlayer(name)
 			else
 				level_id = players_level[name] + 1

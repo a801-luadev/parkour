@@ -401,7 +401,7 @@ end)
 onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
 
-	if count_stats and room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and not is_tribe and not review_mode then
+	if count_stats and room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and player_count >= min_save and not is_tribe and not review_mode then
 		local file = players_file[player].parkour
 		file.c = file.c + 1
 		file.hour_c = file.hour_c + 1
