@@ -4,6 +4,7 @@ local staff_people = {next_check = 0, texts = {}, to_send = {}, timeout = 0}
 local open = {}
 local powers_img = {}
 local help_img = {}
+local no_help = {}
 local scrolldata = {
 	players = {},
 	texts = {}
@@ -15,7 +16,8 @@ local toggle_positions = {
 	[4] = 183,
 	[5] = 209,
 	[6] = 236,
-	[7] = 262
+	[7] = 262,
+	[8] = 289
 }
 local community_images = {
 	xx = "1651b327097.png",
@@ -221,7 +223,7 @@ local function removeOptionsMenu(player)
 	removeWindow(6, player)
 	removeButton(6, player)
 
-	for toggle = 1, 7 do
+	for toggle = 1, 8 do
 		removeToggle(toggle, player)
 	end
 
@@ -266,6 +268,7 @@ local function showOptionsMenu(player)
 	addToggle(5, player, players_file[player].parkour.pbut == 1) -- powers button
 	addToggle(6, player, players_file[player].parkour.hbut == 1) -- help button
 	addToggle(7, player, players_file[player].parkour.congrats == 1) -- congratulations message
+	addToggle(8, player, players_file[player].parkour.help == 1) -- no help indicator
 end
 
 local function showHelpMenu(player, tab)
@@ -632,6 +635,18 @@ onEvent("TextAreaCallback", function(id, player, callback)
 
 		elseif t_id == "7" then -- congratulations message
 			players_file[player].parkour.congrats = state and 1 or 0
+
+		elseif t_id == "8" then -- no help indicator
+			players_file[player].parkour.help = state and 1 or 0
+
+			if not state then
+				if no_help[player] then
+					tfm.exec.removeImage(no_help[player])
+					no_help[player] = nil
+				end
+			else
+				no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
+			end
 		end
 
 		addToggle(tonumber(t_id), player, state)
@@ -693,11 +708,20 @@ onEvent("GameDataLoaded", function(data)
 	end
 end)
 
-onEvent("PlayerRespawn", setNameColor)
+onEvent("PlayerRespawn", function(player)
+	setNameColor(player)
+	if no_help[player] then
+		no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
+	end
+end)
 
 onEvent("NewGame", function()
 	for player in next, in_room do
 		setNameColor(player)
+	end
+
+	for player in next, no_help do
+		no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
 	end
 
 	if is_tribe then
@@ -722,6 +746,11 @@ onEvent("NewPlayer", function(player)
 
 	tfm.exec.addImage("1713705576b.png", ":1", 772, 32, player)
 	ui.addTextArea(-1, "<a href='event:settings'><font size='50'>  </font></a>", player, 767, 32, 30, 32, 0, 0, 0, true)
+
+	for _player, img in next, no_help do
+		tfm.exec.removeImage(img)
+		no_help[_player] = tfm.exec.addImage("1722eeef19f.png", "$" .. _player, -10, -35)
+	end
 
 	if levels then
 		if is_tribe then
@@ -748,6 +777,9 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 	if data.parkour.hbut == 1 then
 		showHelpButton(player, data.parkour.pbut == 1 and 714 or 744)
+	end
+	if data.parkour.help == 1 then
+		no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
 	end
 
 	if data.banned and (data.banned == 2 or os.time() < data.banned) then
@@ -856,7 +888,7 @@ onEvent("ChatCommand", function(player, msg)
 	elseif cmd == "review" then
 		if not perms[player] or not perms[player].enable_review then return end
 
-		if string.find(room.name, "review") then
+		if not string.find(room.name, "review") and not ranks.admin[player] then
 			return tfm.exec.chatMessage("<v>[#] <r>You can't enable review mode in this room.", player)
 		end
 		review_mode = true
@@ -954,6 +986,12 @@ onEvent("ChatCommand", function(player, msg)
 		else
 			newMap()
 		end
+
+	elseif cmd == "forcestats" then
+		if not ranks.admin[player] then return end
+
+		count_stats = true
+		tfm.exec.chatMessage("<v>[#] <d>count_stats set to true", player)
 
 	elseif cmd == "spec" then
 		if not perms[player] or not perms[player].spectate then return end
@@ -1082,6 +1120,7 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("review", true)
 	system.disableChatCommandDisplay("pw", true)
 	system.disableChatCommandDisplay("cp", true)
+	system.disableChatCommandDisplay("forcestats", true)
 end)
 
 onEvent("PacketReceived", function(packet_id, packet)

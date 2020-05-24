@@ -55,6 +55,7 @@ local data_migrations = {
 		data.parkour.week_r = timed_maps.week.last_reset -- last week reset
 		data.parkour.hour_c = 0 -- completed maps this hour
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000 -- next hour reset
+		data.parkour.help = 0 -- doesn't want help?
 
 		data.parkour.cm = nil
 	end,
@@ -72,6 +73,7 @@ local data_migrations = {
 		data.parkour.week_r = timed_maps.week.last_reset
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
 	end,
 	["0.2"] = function(player, data)
 		data.parkour.v = "0.6"
@@ -83,6 +85,7 @@ local data_migrations = {
 		data.parkour.week_r = timed_maps.week.last_reset
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
 	end,
 	["0.3"] = function(player, data)
 		data.parkour.v = "0.6"
@@ -93,6 +96,7 @@ local data_migrations = {
 		data.parkour.week_r = timed_maps.week.last_reset
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
 	end,
 	["0.4"] = function(player, data)
 		data.parkour.v = "0.6"
@@ -101,6 +105,7 @@ local data_migrations = {
 		data.parkour.week_r = timed_maps.week.last_reset
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
 	end,
 	["0.5"] = function(player, data)
 		data.parkour.v = "0.6"
@@ -108,6 +113,7 @@ local data_migrations = {
 		data.parkour.week_r = timed_maps.week.last_reset
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
 	end
 }
 
