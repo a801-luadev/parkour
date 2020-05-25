@@ -81,6 +81,10 @@ translations.he = {
 	leaderboard_loaded = "<j>לוח התוצאות נטען. לחץ L כדי לפתוח אותו.",
 	kill_minutes = "<R>כוחותיך הושבתו ל-%s דקות.",
 	kill_map = "<R>כוחותיך הושבתו עד המפה הבאה.",
+	permbanned = "<r>You have been permanently banned from #parkour.",
+	tempbanned = "<r>You have been banned from #parkour for %s minutes.",
+	staff_power = "<r>Parkour staff <b>does not</b> have any power outside of #parkour rooms.",
+	no_help = "<r>People with a red line above their mouse don't want help!",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>אפשרויות פארקור</font></p>\n\nהשתמש בחלקים כנקודות שמירה\n\nהשתמש במקלדת <b>QWERTY</b> (כבה אם <b>AZERTY</b> בשימוש)\n\nהשתמש באות <b>צ</b> במקום <b>/mort</b> (משבית את <b>DEL</b>)\n\nהראה את זמן טעינת הכוחות\n\nהראה כפתור כוחות\n\nהראה כפתור עזרה\n\nהראה הכרזות השלמת מפות",

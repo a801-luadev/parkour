@@ -80,6 +80,10 @@ translations.fr = {
 	leaderboard_loaded = "<j>Le tableau des scores a été chargé. Appuyer sur L pour l'ouvrir.",
 	kill_minutes = "<R>Vos pouvoirs ont été désactivés pour %s minutes.",
 	kill_map = "<R>Vos pouvoirs ont été désactivés jusqu'à la prochaine carte.",
+	permbanned = "<r>You have been permanently banned from #parkour.",
+	tempbanned = "<r>You have been banned from #parkour for %s minutes.",
+	staff_power = "<r>Parkour staff <b>does not</b> have any power outside of #parkour rooms.",
+	no_help = "<r>People with a red line above their mouse don't want help!",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser les particules comme points de sauvegarde\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <b>M</b> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées",

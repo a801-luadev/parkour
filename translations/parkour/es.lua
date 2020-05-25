@@ -80,6 +80,10 @@ translations.es = {
 	leaderboard_loaded = "<j>La tabla de clasificación ha sido cargada. Presiona L para abrirla.",
 	kill_minutes = "<R>Tus poderes fueron desactivados por %s minutos.",
 	kill_map = "<R>Tus poderes fueron desactivados hasta el siguiente mapa.",
+	permbanned = "<r>Has sido baneado permanentemente de #parkour.",
+	tempbanned = "<r>Has sido baneado de #parkour por %s minutos.",
+	staff_power = "<r>El staff de Parkour <b>no tiene</b> ningún poder afuera de las salas de #parkour.",
+	no_help = "<r>¡Las personas con una linea roja sobre su ratón no quieren ayuda!",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar partículas para los checkpoints\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa\n\nMostrar indicador para no recibir ayuda",

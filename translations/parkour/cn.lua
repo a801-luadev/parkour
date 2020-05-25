@@ -80,6 +80,10 @@ translations.cn = {
 	leaderboard_loaded = "<j>排行榜已載入。請按 L 鍵打開它。",
 	kill_minutes = "<R>你的能力已經在 %s 分鐘內暫時取消了。",
 	kill_map = "<R>你的能力已被取消直到下一回合。",
+	permbanned = "<r>You have been permanently banned from #parkour.",
+	tempbanned = "<r>You have been banned from #parkour for %s minutes.",
+	staff_power = "<r>Parkour staff <b>does not</b> have any power outside of #parkour rooms.",
+	no_help = "<r>People with a red line above their mouse don't want help!",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n在重生點使用粒子效果\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <b>M</b> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告",
@@ -118,6 +122,8 @@ translations.cn = {
 	load_from_thread = "<p align='center'><a href='event:load_custom'>加載玩家創作地圖</a></p>",
 	write_comment = "在這裡寫下評價",
 	write_map = "在這裡寫下地圖編號",
+	overall_lb = "主要排名",
+	weekly_lb = "每周排名",
 
 	-- Power names
 	balloon = "氣球",

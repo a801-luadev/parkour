@@ -80,6 +80,10 @@ translations.pl = {
 	leaderboard_loaded = "<j>Tablica wyników została załadowana. Naciśnij L, aby go otworzyć.",
 	kill_minutes = "<R>Twoje moce zostały wyłączone w %s minut.",
 	kill_map = "<R>Twoje moce zostały wyłączone do następnej mapy.",
+	permbanned = "<r>You have been permanently banned from #parkour.",
+	tempbanned = "<r>You have been banned from #parkour for %s minutes.",
+	staff_power = "<r>Parkour staff <b>does not</b> have any power outside of #parkour rooms.",
+	no_help = "<r>People with a red line above their mouse don't want help!",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj cząstek jako punktów kontrolnych\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<b>M</b> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy",

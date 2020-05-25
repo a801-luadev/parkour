@@ -80,6 +80,10 @@ translations.hu = {
 	leaderboard_loaded = "<j>A ranglista be lett töltve. Nyomd meg az L gombot a megnyitásához.",
 	kill_minutes = "<R>Az erőidet %s percre letiltottuk.",
 	kill_map = "<R>Az erőidet letiltottuk a következő pályáig.",
+	permbanned = "<r>You have been permanently banned from #parkour.",
+	tempbanned = "<r>You have been banned from #parkour for %s minutes.",
+	staff_power = "<r>Parkour staff <b>does not</b> have any power outside of #parkour rooms.",
+	no_help = "<r>People with a red line above their mouse don't want help!",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználj partikülöket a checkpointokhoz\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gyorsbillentyűt a <b>/mort</b> parancshoz (tiltsd le a <b>DEL</b>-t)\n\nMutassa az erők újratöltési idejét\n\nMutassa az erők gombot\n\nMutassa a segítség gombot\n\nMutassa a teljesített pálya jelentéseket",

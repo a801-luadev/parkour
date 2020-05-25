@@ -735,7 +735,8 @@ onEvent("NewPlayer", function(player)
 	tfm.exec.lowerSyncDelay(player)
 
 	translatedChatMessage("welcome", player)
-	translatedChatMessage("type_help", player)
+	translatedChatMessage("staff_power", player)
+	translatedChatMessage("no_help", player)
 
 	system.bindKeyboard(player, 38, true, true)
 	system.bindKeyboard(player, 40, true, true)
