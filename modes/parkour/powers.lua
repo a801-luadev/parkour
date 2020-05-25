@@ -268,7 +268,7 @@ local keyPowers, clickPowers = {
 }, {}
 local player_keys = {}
 
-local function bindNecessary(player)
+function bindNecessary(player)
 	local player_pos = leaderboard[player] or max_leaderboard_rows + 1
 	local maps = players_file[player].parkour.c
 	local power, cond
@@ -385,6 +385,7 @@ onEvent("PlayerDataParsed", function(player, data)
 
 	if data.parkour.killed > os.time() then
 		no_powers[player] = true
+		translatedChatMessage("kill_minutes", player, math.ceil((data.parkour.killed - os.time()) / 1000 / 60))
 	else
 		no_powers[player] = nil
 	end

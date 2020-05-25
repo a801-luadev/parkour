@@ -2,6 +2,7 @@ local next_file_load = os.time() + math.random(60500, 90500)
 local player_ranks
 local no_powers
 local unbind
+local bindNecessary
 local killing = {}
 local to_save = {}
 local files = {
@@ -201,9 +202,15 @@ onEvent("PlayerDataLoaded", function(player, data)
 		local old = players_file[player]
 		if old.parkour.killed < data.parkour.killed then
 			old.parkour.killed = data.parkour.killed
+			translatedChatMessage("kill_minutes", player, math.ceil((data.parkour.killed - os.time()) / 1000 / 60))
 			if os.time() < data.parkour.killed then
 				no_powers[player] = true
 				unbind(player)
+			else
+				no_powers[player] = false
+				if victory[player] then
+					bindNecessary(player)
+				end
 			end
 		end
 
