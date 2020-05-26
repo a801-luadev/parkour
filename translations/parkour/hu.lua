@@ -86,7 +86,7 @@ translations.hu = {
 	no_help = "<r>Azok az emberek, akiknek vörös vonal van az egerük felett, nem akarnak segítséget!",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználj partikülöket a checkpointokhoz\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gyorsbillentyűt a <b>/mort</b> parancshoz (tiltsd le a <b>DEL</b>-t)\n\nMutassa az erők újratöltési idejét\n\nMutassa az erők gombot\n\nMutassa a segítség gombot\n\nMutassa a teljesített pálya jelentéseket\n\nNem jelenít meg segítség szimbólumot",
+	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználj partikülöket a checkpointokhoz\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gyorsbillentyűt a <b>/mort</b> parancshoz (tiltsd le a <b>DEL</b>-t)\n\nMutassa az erők újratöltési idejét\n\nMutassa az erők gombot\n\nMutassa a segítség gombot\n\nMutassa a teljesített pálya jelentéseket\n\nJelenítse meg a nincs segítség szimbólumot",
 	unknown = "Ismeretlen",
 	powers = "Erők",
 	press = "<vp>Nyomd meg: %s",
