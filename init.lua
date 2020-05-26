@@ -23,7 +23,6 @@
 -- SOFTWARE.
 --
 
-
 local room = tfm.get.room
 local links = {
 	donation = "https://bit.ly/parkour-donate",
