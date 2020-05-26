@@ -716,12 +716,13 @@ onEvent("PlayerRespawn", function(player)
 end)
 
 onEvent("NewGame", function()
-	for player in next, in_room do
-		setNameColor(player)
-	end
+	no_help = {}
 
-	for player in next, no_help do
-		no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
+	for player in next, in_room do
+		if players_file[player] and players_file[player].parkour.help == 1 then
+			no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
+		end
+		setNameColor(player)
 	end
 
 	if is_tribe then
