@@ -448,7 +448,7 @@ onEvent("NewGame", function()
 			local obj
 			for index = obj_whitelist._index, obj_whitelist._count do
 				obj = obj_whitelist[index]
-				if obj[1] ~= key or obj[2] ~= value.x or obj[3] ~= value.y then
+				if obj[1] ~= value.type or obj[2] ~= value.x or obj[3] ~= value.y then
 					tfm.exec.removeObject(key)
 				else
 					obj_whitelist._index = index + 1
