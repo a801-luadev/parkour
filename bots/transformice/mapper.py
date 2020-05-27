@@ -118,11 +118,11 @@ class Client(aiotfmpatch.Client):
 		bulles = []
 		result = [[None]]
 		overall = [[], [], []]
-		room = None
+
 		for x in range(20):
 			await asyncio.sleep(3.0)
 			room = "".join(random.choice(string.ascii_letters) for y in range(10))
-			await self.sendCommand("room* en-#{}".format(room))
+			await self.joinRoom("#{}".format(room))
 			try:
 				await self.wait_for("on_joined_room", timeout=5.0)
 				print("yass")
@@ -155,7 +155,7 @@ class Client(aiotfmpatch.Client):
 							continue
 
 						_room, msg = match.group(1, 2)
-						if _room == "en-#" + room:
+						if _room == "en-#{}".format(room):
 							if msg.startswith("[1]:"):
 								times[0].append(int(msg.split(" ")[1]))
 								checked[0] = True
