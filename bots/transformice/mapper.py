@@ -122,12 +122,9 @@ class Client(aiotfmpatch.Client):
 		result = [[None]]
 		overall = [[], [], []]
 
-		communities = ["en", "es", "br", "sk", "ch", "az"]
 		for x in range(20):
 			await asyncio.sleep(5.0)
-			community = communities[x % len(communities)]
-			room = "".join(random.choice(string.ascii_letters) for y in range(random.randint(8, 15)))
-			await self.sendCommand("room* {}-#{}".format(community, room))
+			await self.joinRoom("*#parkour0test{}".format(x))
 			try:
 				await self.wait_for("on_joined_room", timeout=5.0)
 			except:
