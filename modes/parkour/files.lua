@@ -285,6 +285,7 @@ onEvent("GameStart", function()
 end)
 
 onEvent("NewPlayer", function(player)
+	players_file[player] = nil -- don't cache lol
 	system.loadPlayerData(player)
 end)
 

@@ -692,7 +692,7 @@ onEvent("GameDataLoaded", function(data)
 		end
 
 		for player, data in next, room.playerList do
-			if bans[data.id] and not spec_mode[player] then
+			if in_room[player] and bans[data.id] and not spec_mode[player] then
 				spec_mode[player] = true
 				tfm.exec.killPlayer(player)
 
