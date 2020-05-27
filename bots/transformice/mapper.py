@@ -121,7 +121,7 @@ class Client(aiotfmpatch.Client):
 
 		communities = ["en", "es", "br", "sk", "ch", "az"]
 		for x in range(20):
-			await asyncio.sleep(3.0)
+			await asyncio.sleep(5.0)
 			community = communities[x % len(communities)]
 			room = "".join(random.choice(string.ascii_letters) for y in range(random.randint(8, 15)))
 			await self.sendCommand("room* {}-#{}".format(community, room))
