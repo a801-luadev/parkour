@@ -124,7 +124,7 @@ class Client(aiotfmpatch.Client):
 			except:
 				continue
 
-			if not self.bulle.address[0]:
+			if self.bulle.address[0] not in bulles:
 				bulles.append(self.bulle.address[0])
 
 				times = [[], [], []]
@@ -178,6 +178,8 @@ class Client(aiotfmpatch.Client):
 			sum(overall[1]) / len(overall[1]), min(overall[1]), max(overall[1]),
 			sum(overall[2]) / len(overall[2]), min(overall[2]), max(overall[2])
 		])
+		await asyncio.sleep(3.0)
+		await self.sendCommand("room* *#parkour0maps")
 		return result
 
 	async def on_migrating_data(self, to_send): # Acts as a bridge.
