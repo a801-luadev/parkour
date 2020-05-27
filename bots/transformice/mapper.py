@@ -155,7 +155,7 @@ class Client(aiotfmpatch.Client):
 							continue
 
 						_room, msg = match.group(1, 2)
-						if _room == room:
+						if _room == "en-#" + room:
 							if msg.startswith("[1]:"):
 								times[0].append(int(msg.split(" ")[1]))
 								checked[0] = True
