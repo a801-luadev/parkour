@@ -119,17 +119,17 @@ class Client(aiotfmpatch.Client):
 		result = [[None]]
 		overall = [[], [], []]
 
+		communities = ["en", "es", "br", "sk", "ch", "az"]
 		for x in range(20):
 			await asyncio.sleep(3.0)
+			community = communities[x % len(communities)]
 			room = "".join(random.choice(string.ascii_letters) for y in range(10))
-			await self.joinRoom("#{}".format(room))
+			await self.sendCommand("room* {}-#{}".format(community, room))
 			try:
 				await self.wait_for("on_joined_room", timeout=5.0)
-				print("yass")
 			except:
-				print("oops")
 				continue
-			print(self.bulle.address)
+			print(self.bulle.address, self.room.name)
 
 			if self.bulle.address[0] not in bulles:
 				bulles.append(self.bulle.address[0])
@@ -155,7 +155,7 @@ class Client(aiotfmpatch.Client):
 							continue
 
 						_room, msg = match.group(1, 2)
-						if _room == "en-#{}".format(room):
+						if _room == self.room.name:
 							if msg.startswith("[1]:"):
 								times[0].append(int(msg.split(" ")[1]))
 								checked[0] = True
