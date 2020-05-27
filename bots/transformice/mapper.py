@@ -8,6 +8,53 @@ import time
 import re
 import os
 
+APISTATUS_SCRIPT = """
+local done, msg = pcall(nil)
+local script_loader = string.match(msg, "(.-)%.")
+local time = os.time
+
+-- Test 1: how many iterations can run in a second
+local check_end = time() + 1000
+local iterations = 0
+while time() < check_end do
+	iterations = iterations + 1
+end
+
+print("[1]: " .. iterations)
+
+-- Test 2: how many time it takes to load a player's data
+local loaded
+function eventPlayerDataLoaded()
+	print("[2]: " .. time() - loaded)
+end
+
+system.loadPlayerData(script_loader)
+loaded = time()
+
+-- Test 3: how many time it takes to load an empty file
+local loaded_file
+function eventFileLoaded(f)
+	print("[3]: " .. time() - loaded_file)
+end
+
+system.loadFile(99)
+loaded_file = time()
+
+-- Test 4: are timers working?
+local timeout = time() + 2000
+local timers = false
+system.newTimer(function()
+	print("[4]: yes")
+	timers = true
+end, 1000)
+function eventLoop()
+	if not timers and time() >= timeout then
+		print("[4]: no")
+		timers = true
+	end
+end
+"""
+
 HANDSHAKE     = ( 1 << 8) + 255
 LIST_FORUM    = ( 2 << 8) + 255
 LIST_MAPS     = ( 3 << 8) + 255
@@ -64,6 +111,74 @@ class Client(aiotfmpatch.Client):
 
 		packet.pos = 0
 		await super().handle_packet(conn, packet)
+
+	async def check_api(self): # i know this code sucks (just like the whole bot)
+		bulles = []
+		result = [[None]]
+		overall = [[], [], []]
+		for x in range(20):
+			await asyncio.sleep(3.0)
+			await self.sendCommand("room* *#apistatus{}".format(x))
+			try:
+				await self.wait_for("on_joined_room", timeout=5.0)
+			except:
+				continue
+
+			if not self.bulle.address[0]:
+				bulles.append(self.bulle.address[0])
+
+				times = [[], [], []]
+				timers = False
+
+				for y in range(3):
+					await self.loadLua(APISTATUS_SCRIPT)
+
+					checked = [False, False, False, False]
+
+					while not all(checked):
+						try:
+							msg = await self.wait_for("on_lua_log", timeout=5.0)
+						except:
+							break
+
+						match = re.match(r"^<V>\[(.+?)\]<BL> (.*)$", msg, flags=re.DOTALL)
+						if match is None:
+							continue
+
+						room, msg = match.group(1, 2)
+						if room == "*#apistatus{}".format(x):
+							if msg.startswith("[1]:"):
+								times[0].append(int(msg.split(" ")[1]))
+								checked[0] = True
+							elif msg.startswith("[2]:"):
+								times[1].append(int(msg.split(" ")[1]))
+								checked[1] = True
+							elif msg.startswith("[3]:"):
+								times[2].append(int(msg.split(" ")[1]))
+								checked[2] = True
+							elif msg.startswith("[4]:"):
+								timers = msg.split(" ")[1] == "yes"
+								checked[3] = True
+
+				result.append([
+					self.bulle.address[0],
+					[
+						sum(times[0]) / len(times[0]), min(times[0]), max(times[0]),
+						sum(times[1]) / len(times[1]), min(times[1]), max(times[1]),
+						sum(times[2]) / len(times[2]), min(times[2]), max(times[2])
+					],
+					timers
+				])
+				overall[0].extend(times[0])
+				overall[1].extend(times[1])
+				overall[2].extend(times[2])
+
+		result[0].append([
+			sum(overall[0]) / len(overall[0]), min(overall[0]), max(overall[0]),
+			sum(overall[1]) / len(overall[1]), min(overall[1]), max(overall[1]),
+			sum(overall[2]) / len(overall[2]), min(overall[2]), max(overall[2])
+		])
+		return result
 
 	async def on_migrating_data(self, to_send): # Acts as a bridge.
 		await self.sendLuaCallback(MIGRATE_DATA, to_send)

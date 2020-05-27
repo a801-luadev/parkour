@@ -54,6 +54,7 @@ class Client(discord.Client):
 	game_logs_channel = 681571711849594897
 	started = False
 	busy = False
+	api_status = None
 
 	async def on_ready(self):
 		channel = self.get_channel(self.role_reaction_channel)
@@ -251,7 +252,55 @@ class Client(discord.Client):
 				await msg.channel.send("Restarting the room soon.")
 
 			elif msg.author.id == 212634414021214209 or msg.author.id == 436703225140346881:
-				if cmd == "!copyfile":
+				if cmd == "!apistatus":
+					if self.api_status is None:
+						if self.busy:
+							return await msg.channel.send("The bot is busy right now.")
+						self.busy = True
+
+						await msg.channel.send("Checking status...")
+						self.api_status = await self.mapper.check_api()
+
+						self.busy = False
+					else:
+						await msg.channel.send("Using cached status.")
+
+					embed = discord.Embed(colour=discord.Colour(0x8bcfcc))
+
+					bulles = []
+					for data in self.api_status:
+						if data[0] is None:
+							embed.add_field(
+								name="Average",
+								value="In a full second, the server can run `{}` iterations (min: `{}`, max: `{}`)\
+										**PlayerDataLoaded** takes `{}`ms to get triggered (min: `{}`ms, max: `{}`ms)\
+										**FileLoaded** takes `{}`ms to get triggered (min: `{}`ms, max: `{}`ms)".format(
+											*data[1]
+										),
+								inline=False
+							)
+						else:
+							embed.add_field(
+								name="Bulle {}".format(data[0]),
+								value="Runs `{}` iterations in average in a full second (min: `{}`, max: `{}`)\
+										**PlayerDataLoaded** takes `{}`ms to get triggered (min: `{}`ms, max: `{}`ms)\
+										**FileLoaded** takes `{}`ms to get triggered (min: `{}`ms, max: `{}`ms)\
+										Timers are {}working.".format(
+											*data[1], "" if data[2] else "not "
+										),
+								inline=False
+							)
+							bulles.append(data[0])
+
+					await msg.channel.send(
+						"There have been **{}** detected bulle servers (`{}`)".format(
+							len(bulles),
+							"`, `".join(bulles)
+						),
+						embed=embed
+					)
+
+				elif cmd == "!copyfile":
 					if len(args) < 2 or (not args[0].isdigit()) or (not args[1].isdigit()):
 						await msg.channel.send("Invalid syntax. Syntax: `!copyfile [original] [destination] (restart)`")
 
@@ -388,7 +437,7 @@ class Client(discord.Client):
 		await channel.send("Room join requests have been sent.")
 
 	async def on_lua_log(self, msg):
-		match = re.match(r"^<V>\[(.+?)\]<BL> (.+)$", msg, flags=re.DOTALL)
+		match = re.match(r"^<V>\[(.+?)\]<BL> (.*)$", msg, flags=re.DOTALL)
 		if match is None:
 			channel = self.get_channel(686933785933381680)
 			return await channel.send("Wrong match: `" + msg + "`")
