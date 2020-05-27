@@ -111,6 +111,9 @@ class Client(aiotfmpatch.Client):
 		elif CCC == (6, 10):
 			self.dispatch("special_chat_msg", packet.read8(), packet.readUTF(), packet.readUTF())
 
+		elif CCC == (44, 1):
+			print(packet)
+
 		packet.pos = 0
 		await super().handle_packet(conn, packet)
 
