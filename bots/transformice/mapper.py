@@ -123,14 +123,10 @@ class Client(aiotfmpatch.Client):
 		overall = [[], [], []]
 
 		for x in range(20):
-			await asyncio.sleep(2.0)
 			await self.drawbattle.joinRoom("*#parkour0test{}".format(x))
 			await asyncio.sleep(2.0)
-			await self.joinRoom("*#parkour0test{}".format(x))
-			try:
-				await self.wait_for("on_joined_room", timeout=5.0)
-			except:
-				continue
+			await self.sendCommand("room* *#parkour0test{}".format(x))
+			await asyncio.sleep(2.0)
 			print(self.bulle.address, self.room.name)
 
 			if self.bulle.address[0] not in bulles:
