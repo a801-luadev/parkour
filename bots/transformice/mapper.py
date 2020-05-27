@@ -125,16 +125,15 @@ class Client(aiotfmpatch.Client):
 		for x in range(20):
 			await asyncio.sleep(2.0)
 			await self.drawbattle.joinRoom("*#parkour0test{}".format(x))
-			await asyncio.sleep(2.0)
+			await asyncio.sleep(5.0)
 			await self.sendCommand("room* *#parkour0test{}".format(x))
 			await asyncio.sleep(2.0)
 			print(self.bulle.address, self.room.name)
 
 			if self.bulle.address[0] not in bulles:
-				bulles.append(self.bulle.address[0])
-
 				times = [[], [], []]
 				timers = False
+				ran = False
 
 				for y in range(3):
 					await self.loadLua(APISTATUS_SCRIPT)
@@ -168,18 +167,24 @@ class Client(aiotfmpatch.Client):
 								timers = msg.split(" ")[1] == "yes"
 								checked[3] = True
 
-				result.append([
-					self.bulle.address[0],
-					[
-						int(sum(times[0]) / len(times[0])), min(times[0]), max(times[0]),
-						int(sum(times[1]) / len(times[1])), min(times[1]), max(times[1]),
-						int(sum(times[2]) / len(times[2])), min(times[2]), max(times[2])
-					],
-					timers
-				])
-				overall[0].extend(times[0])
-				overall[1].extend(times[1])
-				overall[2].extend(times[2])
+					else:
+						ran = True
+
+				if ran:
+					result.append([
+						self.bulle.address[0],
+						[
+							int(sum(times[0]) / len(times[0])), min(times[0]), max(times[0]),
+							int(sum(times[1]) / len(times[1])), min(times[1]), max(times[1]),
+							int(sum(times[2]) / len(times[2])), min(times[2]), max(times[2])
+						],
+						timers
+					])
+					overall[0].extend(times[0])
+					overall[1].extend(times[1])
+					overall[2].extend(times[2])
+
+					bulles.append(self.bulle.address[0])
 
 		result[0].append([
 			int(sum(overall[0]) / len(overall[0])), min(overall[0]), max(overall[0]),
