@@ -124,10 +124,28 @@ class Client(aiotfmpatch.Client):
 
 		for x in range(20):
 			await asyncio.sleep(2.0)
-			await self.drawbattle.joinRoom("*#parkour0test{}".format(x))
-			await asyncio.sleep(5.0)
-			await self.sendCommand("room* *#parkour0test{}".format(x))
-			await asyncio.sleep(2.0)
+			for attempt in range(5):
+				await self.drawbattle.joinRoom("*#parkour0test{}".format(x))
+				await asyncio.sleep(3.0)
+
+				if self.drawbattle.room.name != "*#parkour0test{}".format(x):
+					print("retrying migrator")
+				else:
+					break
+			else:
+				print("migrator didnt join")
+				continue
+			for attempt in range(5):
+				await self.sendCommand("room* *#parkour0test{}".format(x))
+				await asyncio.sleep(3.0)
+
+				if self.room.name != "*#parkour0test{}".format(x):
+					print("retrying")
+				else:
+					break
+			else:
+				print("mapper didnt join")
+				continue
 			print(self.bulle.address, self.room.name)
 
 			if self.bulle.address[0] not in bulles:
