@@ -111,9 +111,6 @@ class Client(aiotfmpatch.Client):
 		elif CCC == (6, 10):
 			self.dispatch("special_chat_msg", packet.read8(), packet.readUTF(), packet.readUTF())
 
-		elif CCC == (44, 1):
-			print(packet)
-
 		packet.pos = 0
 		await super().handle_packet(conn, packet)
 
@@ -124,18 +121,7 @@ class Client(aiotfmpatch.Client):
 
 		for x in range(20):
 			await asyncio.sleep(2.0)
-			for attempt in range(5):
-				await self.sendCommand("room* es-#asdasdasd{}".format(x + 1))
-				await asyncio.sleep(3.0)
-
-				if self.room.name != "es-#asdasdasd{}".format(x + 1):
-					print("retrying")
-				else:
-					break
-			else:
-				print("mapper didnt join")
-				continue
-			print(self.bulle.address, self.room.name)
+			await self.sendCommand("room* es-#asdasdasd{}".format(x + 1))
 
 			if self.bulle.address[0] not in bulles:
 				times = [[], [], []]
@@ -150,9 +136,7 @@ class Client(aiotfmpatch.Client):
 					while not all(checked):
 						try:
 							msg = await self.wait_for("on_lua_log", timeout=5.0)
-							print(msg)
 						except:
-							print("broken")
 							break
 
 						match = re.match(r"^<V>\[(.+?)\]<BL> (.*)$", msg, flags=re.DOTALL)
