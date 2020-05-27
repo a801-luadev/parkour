@@ -125,10 +125,10 @@ class Client(aiotfmpatch.Client):
 		for x in range(20):
 			await asyncio.sleep(2.0)
 			for attempt in range(5):
-				await self.sendCommand("room* *#parkour1test{}".format(x))
+				await self.sendCommand("room* es-#parkour1test{}".format(x))
 				await asyncio.sleep(3.0)
 
-				if self.room.name != "*#parkour1test{}".format(x):
+				if self.room.name != "es-#parkour1test{}".format(x):
 					print("retrying")
 				else:
 					break
