@@ -4,6 +4,8 @@ import aiomysql
 import aiohttp
 import asyncio
 import hashlib
+import random
+import string
 import time
 import re
 import os
@@ -116,13 +118,18 @@ class Client(aiotfmpatch.Client):
 		bulles = []
 		result = [[None]]
 		overall = [[], [], []]
+		room = None
 		for x in range(20):
 			await asyncio.sleep(3.0)
-			await self.sendCommand("room* *#apistatus{}".format(x))
+			room = "".join(random.choice(string.ascii_letters) for y in range(10))
+			await self.sendCommand("room* en-#{}".format(room))
 			try:
 				await self.wait_for("on_joined_room", timeout=5.0)
+				print("yass")
 			except:
+				print("oops")
 				continue
+			print(self.bulle.address)
 
 			if self.bulle.address[0] not in bulles:
 				bulles.append(self.bulle.address[0])
@@ -138,15 +145,17 @@ class Client(aiotfmpatch.Client):
 					while not all(checked):
 						try:
 							msg = await self.wait_for("on_lua_log", timeout=5.0)
+							print(msg)
 						except:
+							print("broken")
 							break
 
 						match = re.match(r"^<V>\[(.+?)\]<BL> (.*)$", msg, flags=re.DOTALL)
 						if match is None:
 							continue
 
-						room, msg = match.group(1, 2)
-						if room == "*#apistatus{}".format(x):
+						_room, msg = match.group(1, 2)
+						if _room == room:
 							if msg.startswith("[1]:"):
 								times[0].append(int(msg.split(" ")[1]))
 								checked[0] = True
@@ -163,9 +172,9 @@ class Client(aiotfmpatch.Client):
 				result.append([
 					self.bulle.address[0],
 					[
-						sum(times[0]) / len(times[0]), min(times[0]), max(times[0]),
-						sum(times[1]) / len(times[1]), min(times[1]), max(times[1]),
-						sum(times[2]) / len(times[2]), min(times[2]), max(times[2])
+						int(sum(times[0]) / len(times[0])), min(times[0]), max(times[0]),
+						int(sum(times[1]) / len(times[1])), min(times[1]), max(times[1]),
+						int(sum(times[2]) / len(times[2])), min(times[2]), max(times[2])
 					],
 					timers
 				])
@@ -174,9 +183,9 @@ class Client(aiotfmpatch.Client):
 				overall[2].extend(times[2])
 
 		result[0].append([
-			sum(overall[0]) / len(overall[0]), min(overall[0]), max(overall[0]),
-			sum(overall[1]) / len(overall[1]), min(overall[1]), max(overall[1]),
-			sum(overall[2]) / len(overall[2]), min(overall[2]), max(overall[2])
+			int(sum(overall[0]) / len(overall[0])), min(overall[0]), max(overall[0]),
+			int(sum(overall[1]) / len(overall[1])), min(overall[1]), max(overall[1]),
+			int(sum(overall[2]) / len(overall[2])), min(overall[2]), max(overall[2])
 		])
 		await asyncio.sleep(3.0)
 		await self.sendCommand("room* *#parkour0maps")
