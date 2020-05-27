@@ -123,6 +123,7 @@ class Client(aiotfmpatch.Client):
 		overall = [[], [], []]
 
 		for x in range(20):
+			await asyncio.sleep(2.0)
 			await self.drawbattle.joinRoom("*#parkour0test{}".format(x))
 			await asyncio.sleep(2.0)
 			await self.sendCommand("room* *#parkour0test{}".format(x))
