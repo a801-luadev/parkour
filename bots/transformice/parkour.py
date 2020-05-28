@@ -336,11 +336,15 @@ class Client(aiotfm.Client):
 					id = "unknown"
 
 			name = self.normalize_name(name)
-			await self.sendCommand("profile " + name)
-			try:
-				profile = await self.wait_for("on_profile", lambda p: self.normalize_name(p.username) == name, timeout=3.0)
-			except:
-				return await whisper.reply("That player is not online.")
+			for attempt in range(2):
+				try:
+					await self.sendCommand("profile " + name)
+					profile = await self.wait_for("on_profile", lambda p: self.normalize_name(p.username) == name, timeout=3.0)
+					break
+				except:
+					continue
+			else:
+				return await whisper.reply("That player ({}) is not online.".format(name))
 
 			self.dispatch("send_webhook", "**`[KILL]:`** `{}` has killed `{}` (ID: `{}`) for `{}` minutes.".format(author, name, id, minutes))
 			await self.sendLuaPacket(2, "\x00".join((name, str(minutes))))
