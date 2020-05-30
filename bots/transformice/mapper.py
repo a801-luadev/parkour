@@ -277,6 +277,17 @@ class Client(aiotfmpatch.Client):
 			self.dispatch("restart_request", room, chat)
 			await self.sendSpecialChatMsg(chat, "Restarting the room soon.")
 
+		elif cmd == "!join":
+			room = " ".join(args)
+			if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
+				return await self.sendSpecialChatMsg(chat, "The given room is invalid. I can only let you join #parkour rooms.")
+
+			await self.whisper("Parkour#8558", ".join {}".format(room))
+
+	async def on_whisper(self, whisper):
+		if whisper.author == "Parkour#8558":
+			await self.sendSpecialChatMsg(8, whisper.content)
+
 	async def getModuleCode(self):
 		await self.sendCommand(os.getenv("GETSCRIPT_CMD"))
 		return await self.wait_for("on_ui_log", timeout=10.0)
