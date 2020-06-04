@@ -153,13 +153,10 @@ onEvent("TextAreaCallback", function(id, player, data)
 		ui.addTextArea(packets.send_other, data, player == hidden_bot and parkour_bot or hidden_bot)
 
 	elseif id == packets.send_room then
-		print("sending " .. data)
 		local packet_id, packet = string.match(data, "^(%d+)\000(.*)$")
-		print(packet_id .. " " .. packet)
 		packet_id = tonumber(packet_id)
 		if not packet_id then return end
 
-		print("triggering")
 		eventSendingPacket(packet_id, packet)
 
 	elseif id == packets.new_modchat then
