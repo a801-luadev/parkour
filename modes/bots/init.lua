@@ -245,7 +245,7 @@ onEvent("PacketReceived", function(id, packet)
 			parkour_bot
 		)
 		if tonumber(taken) <= 27 then -- autoban!
-			ban_changes[#ban_changes + 1] = {id, 1}
+			schedule("ban_change", id, 1)
 			sendPacket(3, player .. "\000" .. id .. "\0001")
 			ui.addTextArea(
 				packets.send_webhook,
@@ -256,7 +256,7 @@ onEvent("PacketReceived", function(id, packet)
 
 	elseif id == 2 then
 		local player, ban = table.unpack(args)
-		ban_changes[#ban_changes + 1] = {player, nil, tonumber(ban)}
+		schedule("ban_change", id, tonumber(ban))
 
 	elseif id == 3 then
 		local _room, id, player, maps = table.unpack(args)
