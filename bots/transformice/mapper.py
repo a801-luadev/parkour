@@ -222,9 +222,10 @@ class Client(aiotfmpatch.Client):
 		await self.sendLuaCallback(SEND_OTHER, "fetchid\x00" + response)
 
 	async def on_heartbeat(self, taken):
-		if self.room.name == "*#parkour4bots" and self.heartbeat_death is not None and time.time() >= self.heartbeat_death:
-			self.discord.dispatch("bots_room_crash")
-			self.heartbeat_death = None
+		if self.heartbeat_death is not None and self.room is not None:
+			if self.room.name == "*#parkour4bots" and time.time() >= self.heartbeat_death:
+				self.discord.dispatch("bots_room_crash")
+				self.heartbeat_death = None
 
 	async def on_map_change(self, rotation, code, add):
 		await self.sendLuaCallback(CHANGE_MAP, "{}\x00{}\x00{}".format(rotation, code, int(add)))
