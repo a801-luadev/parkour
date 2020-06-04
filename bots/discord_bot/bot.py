@@ -80,6 +80,14 @@ class Client(discord.Client):
 		channel = self.get_channel(707358868090519632)
 		await channel.send(player)
 
+	async def on_bots_room_crash(self):
+		channel = self.get_channel(707358868090519632)
+		await channel.send("*#parkour4bots has crashed. restarting it")
+		while self.busy:
+			await asyncio.sleep(5.0)
+		self.busy = True
+		self.restart_request("*#parkour4bots", channel)
+
 	async def on_message(self, msg):
 		if msg.author.id == 683839314526077066:
 			return
