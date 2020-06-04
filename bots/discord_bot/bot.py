@@ -86,7 +86,7 @@ class Client(discord.Client):
 		while self.busy:
 			await asyncio.sleep(5.0)
 		self.busy = True
-		self.restart_request("*#parkour4bots", channel)
+		self.mapper.dispatch("restart_request", "*#parkour4bots", channel)
 
 	async def on_message(self, msg):
 		if msg.author.id == 683839314526077066:
