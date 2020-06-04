@@ -93,7 +93,9 @@ if not is_tribe then
 		if now >= next_channel_load then
 			next_channel_load = now + 10000
 
-			eventChannelLoad()
+			if eventChannelLoad then
+				eventChannelLoad()
+			end
 			if add_packet_data then
 				buffer = add_packet_data
 				add_packet_data = nil
