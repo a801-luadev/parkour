@@ -211,7 +211,7 @@ onEvent("SendingPacket", function(id, packet)
 		system.loadPlayerData(player)
 
 	elseif id == 3 then -- !ban
-		local id, ban_time = string.match(cb, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
+		local id, ban_time = string.match(packet, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
 		schedule("ban_change", id, tonumber(ban_time))
 
 	elseif id == 4 then -- !announcement
@@ -298,3 +298,4 @@ tfm.exec.disableAfkDeath(true)
 tfm.exec.disableAutoShaman(true)
 tfm.exec.disableMortCommand(true)
 tfm.exec.newGame(0)
+tfm.exec.setRoomMaxPlayers(50)
