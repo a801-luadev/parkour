@@ -81,7 +81,7 @@ class Client(discord.Client):
 		await channel.send(player)
 
 	async def on_bots_room_crash(self):
-		channel = self.get_channel(707358868090519632)
+		channel = self.get_channel(686932761222578201)
 		await channel.send("*#parkour4bots has crashed. restarting it")
 		while self.busy:
 			await asyncio.sleep(5.0)
