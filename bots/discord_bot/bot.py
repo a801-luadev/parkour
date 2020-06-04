@@ -98,7 +98,7 @@ class Client(discord.Client):
 				return
 
 			content = "[{}] {}".format(msg.author.display_name, content)
-			content = re.sub(r"<a?:([^:]+):\d+>", r"\1", content)
+			content = re.sub(r"<a?:([^:]+):\d+>", r":\1:", content)
 
 			for mention_char, display_char, mention_list, name_attr in (
 				("@", "@", msg.mentions, "display_name"),
