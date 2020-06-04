@@ -21,7 +21,7 @@ local files = {
 	]]
 
 	[1] = 1, -- maps, ranks, modchat
-	[2] = 2, -- weekranking, banned
+	[2] = 2, -- ranking, weekranking
 	[3] = 10, -- lowmaps, banned
 }
 local total_files = 3
@@ -233,15 +233,15 @@ onEvent("PlayerDataLoaded", function(player, data)
 end)
 
 onEvent("SavingFile", function(id, data)
-	if data.ranking or (room.name == "*#parkour0maps" and (data.modchat or data.banned)) then -- the only file that can get written by rooms
-		system.saveFile(json.encode(data), id)
-	end
+	system.saveFile(json.encode(data), id)
 end)
 
 onEvent("FileLoaded", function(id, data)
 	data = json.decode(data)
 	eventGameDataLoaded(data)
-	eventSavingFile(id, data) -- if it is reaching a critical point, it will pause and then save the file
+	if data.ranking or data.weekranking then -- the only file that can get written by rooms
+		eventSavingFile(id, data) -- if it is reaching a critical point, it will pause and then save the file
+	end
 end)
 
 onEvent("Loop", function()

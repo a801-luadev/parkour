@@ -817,7 +817,7 @@ onEvent("PlayerWon", function(player)
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
-	if count_stats and taken <= 45 and room.name ~= "*#parkour0maps" and not review_mode and not is_tribe then
+	if count_stats and taken <= 45 and not review_mode and not is_tribe then
 		sendPacket(1, room.name .. "\000" .. player .. "\000" .. id .. "\000" .. room.currentMap .. "\000" .. taken)
 	end
 
@@ -1127,7 +1127,7 @@ end)
 
 onEvent("PacketReceived", function(packet_id, packet)
 	if packet_id == 1 then -- game update
-		update_at = os.time() + 300000
+		update_at = os.time() + 60000
 	elseif packet_id == 2 then -- !kill
 		local player = string.match(packet, "^([^\000]+)\000[^\000]+$")
 		if in_room[player] then

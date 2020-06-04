@@ -1,5 +1,4 @@
 local translatedChatMessage
-local send_bot_room_crash
 local packet_handler
 local recv_channel, send_channel
 local sendPacket
@@ -55,9 +54,7 @@ do
 		end
 
 		if keep_webhooks then
-			if room.name == "*#parkour0maps" then
-				send_bot_room_crash()
-			elseif not is_tribe then
+			if not is_tribe then
 				system.loadPlayerData(send_channel)
 
 				events.PlayerDataLoaded._count = 2

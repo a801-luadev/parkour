@@ -60,12 +60,12 @@ else
 		flags = string.sub(tfm.get.room.name, pos + #numbers + #submode + 1)
 	end
 
-	if submode == "freezertag" then
+	if room.name == "*#parkour4bots" then
+		{% require-package "modes/bots"}
+	elseif submode == "freezertag" then
 		{% require-package "modes/freezertag" %}
 	elseif submode == "rocketlaunch" then
 		{% require-package "modes/rocketlaunch" %}
-	elseif submode == "maps" then
-		{% require-package "modes/maps" %}
 	else
 		{% require-package "modes/parkour" %}
 	end

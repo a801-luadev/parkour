@@ -47,7 +47,6 @@ local ranks_permissions = {
 }
 player_ranks = {}
 local perms = {}
-local saving_ranks = false
 local ranks_order = {"admin", "manager", "mod", "mapper", "trainee"}
 
 for rank, perms in next, ranks_permissions do
@@ -60,21 +59,6 @@ end
 
 onEvent("GameDataLoaded", function(data)
 	if data.ranks then
-		if saving_ranks then
-			data.ranks = {}
-			local id
-			for player, ranks in next, player_ranks do
-				id = 0
-				for rank in next, ranks do
-					id = id + ranks_id[rank]
-				end
-				if id > 0 then
-					data.ranks[player] = id
-				end
-			end
-			saving_ranks = false
-		end
-
 		ranks, perms, player_ranks = {
 			admin = {_count = 0},
 			manager = {_count = 0},

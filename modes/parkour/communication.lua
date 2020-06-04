@@ -1,20 +1,20 @@
-if room.name == "*#parkour0maps" then
-	recv_channel, send_channel = "Holybot#0000", "Sharpiebot#0000"
+if room.name == "*#parkour4bots" then
+	recv_channel, send_channel = "Holybot#0000", "Parkour#8558"
 else
-	recv_channel, send_channel = "Sharpiebot#0000", "Holybot#0000"
+	recv_channel, send_channel = "Parkour#8558", "Holybot#0000"
 end
 
 function sendPacket(packet_id, packet) end
 if not is_tribe then
 	--[[
-		Packets from 0maps:
+		Packets from 4bots:
 			0 - join request
 			1 - game update
 			2 - !kill
 			3 - !ban
 			4 - !announcement
 
-		Packets to 0maps:
+		Packets to 4bots:
 			0 - room crash
 			1 - suspect
 			2 - ban field set to playerdata
@@ -78,7 +78,7 @@ if not is_tribe then
 			last_id = send_id
 
 			if eventPacketReceived then
-				for packet_id, packet in string.gmatch(data, ";(%d+),([^;]+)") do
+				for packet_id, packet in string.gmatch(data, ";(%d+),([^;]*)") do
 					packet = string.gsub(packet, "&[012]", common_decoder)
 
 					eventPacketReceived(tonumber(packet_id), packet)
