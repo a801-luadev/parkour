@@ -142,6 +142,9 @@ class Client(discord.Client):
 					except: # timeout
 						return await msg.channel.send("Could not load the map.")
 
+					if author is None:
+						return await msg.channel.send("Could not load the map.")
+
 					if map_perm not in available_perms:
 						return await msg.channel.send("The map is in P{}. You do not have the permission to change it.".format(map_perm))
 					elif map_perm == perm:

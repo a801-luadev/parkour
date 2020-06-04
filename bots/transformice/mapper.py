@@ -184,7 +184,7 @@ class Client(aiotfmpatch.Client):
 		return False
 
 	async def changeMapPerm(self, code, perm, timeout=15.0):
-		await self.whisper("Sharpiebot#0000", "p" + perm + " " + code)
+		await self.whisper("Sharpiebot#0000", "p{} {}".format(perm, code))
 		return await self.watchMap(code, int(perm), every=1.0, timeout=timeout)
 
 	async def on_lua_textarea(self, txt_id, text):
