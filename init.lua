@@ -61,7 +61,7 @@ else
 	end
 
 	if room.name == "*#parkour4bots" then
-		{% require-package "modes/bots"}
+		{% require-package "modes/bots" %}
 	elseif submode == "freezertag" then
 		{% require-package "modes/freezertag" %}
 	elseif submode == "rocketlaunch" then
