@@ -450,11 +450,11 @@ class Client(aiotfm.Client):
 
 		content = msg.content.replace("`", "'").replace("&lt;", "<").replace("&amp;", "&")
 		message = "` `".join(content.split(" "))
-		message = re.sub(r"`((https?://(?:-\.)?(?:[^\s/?\.#-]+\.?)+(?:/[^\s]*)?))`", r"\1", message)
+		message = re.sub(r"`((https?://(?:-\.)?(?:[^\s/?\.#-]+\.?)+(?:/[^\s]*)?))`", r"\1", "`" + message + "`")
 
 		self.dispatch(
 			"send_webhook",
-			"`[{}]` `[{}]` `{}`".format(
+			"`[{}]` `[{}]` {}".format(
 				msg.community.name, self.normalize_name(msg.author), message
 			),
 			self.mod_chat_webhook
