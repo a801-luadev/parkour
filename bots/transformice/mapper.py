@@ -187,6 +187,9 @@ class Client(aiotfmpatch.Client):
 		await self.whisper("Sharpiebot#0000", "p{} {}".format(perm, code))
 		return await self.watchMap(code, int(perm), every=1.0, timeout=timeout)
 
+	async def on_whisper(self, whisper):
+		print(whisper)
+
 	async def on_lua_textarea(self, txt_id, text):
 		if txt_id & 255 != 255:
 			return
