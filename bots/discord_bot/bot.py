@@ -97,6 +97,7 @@ class Client(discord.Client):
 			else:
 				return
 
+			content = "[{}] {}".format(msg.author.display_name, content)
 			content = re.sub(r"<a?:([^:]+):\d+>", r"\1", content)
 
 			for mention_char, display_char, mention_list, name_attr in (
