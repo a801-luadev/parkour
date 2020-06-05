@@ -68,7 +68,7 @@ local file_actions = {
 	end},
 
 	ban_change = {2, true, function(data, id, value)
-		data.banned[id] = value
+		data.banned[tostring(id)] = value
 	end},
 
 	modify_rank = {1, true, function(data, player, newrank)
@@ -256,7 +256,7 @@ onEvent("PacketReceived", function(id, packet)
 
 	elseif id == 2 then
 		local player, ban = table.unpack(args)
-		schedule("ban_change", id, tonumber(ban))
+		schedule("ban_change", player, tonumber(ban))
 
 	elseif id == 3 then
 		local _room, id, player, maps = table.unpack(args)
