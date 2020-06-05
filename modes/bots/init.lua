@@ -256,7 +256,7 @@ onEvent("PacketReceived", function(id, packet)
 
 	elseif id == 2 then
 		local player, ban = table.unpack(args)
-		schedule("ban_change", player, tonumber(ban))
+		schedule("ban_change", player, nil)
 
 	elseif id == 3 then
 		local _room, id, player, maps = table.unpack(args)
