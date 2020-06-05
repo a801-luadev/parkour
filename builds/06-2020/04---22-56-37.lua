@@ -5359,7 +5359,7 @@ else
 				system.loadPlayerData(player)
 
 			elseif id == 3 then -- !ban
-				local id, ban_time = string.match(packet, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
+				local id, ban_time = string.match(cb, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
 				schedule("ban_change", id, tonumber(ban_time))
 
 			elseif id == 4 then -- !announcement
@@ -5446,7 +5446,6 @@ else
 		tfm.exec.disableAutoShaman(true)
 		tfm.exec.disableMortCommand(true)
 		tfm.exec.newGame(0)
-		tfm.exec.setRoomMaxPlayers(50)
 		--[[ End of file modes/bots/init.lua ]]--
 		--[[ End of package modes/bots ]]--
 	elseif submode == "freezertag" then

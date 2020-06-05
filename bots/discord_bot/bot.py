@@ -5,55 +5,12 @@ import aiohttp
 import json
 import re
 
-MAPCHANGE_SCRIPT = """
-local _adding = json.decode({})
-local _removing = json.decode({})
-local file = {}
-
-local adding = {{}}
-local removing = {{}}
-
-for key in next, _adding do
-	adding[tonumber(key)] = true
-end
-for key in next, _removing do
-	removing[tonumber(key)] = true
-end
-
-system.loadFile(file)
-function eventFileLoaded(file, data)
-	data = json.decode(data)
-
-	local rem, count = {{}}, 0
-	local list = data.maps or data.lowmaps
-	local map
-	for i = 1, #list do
-		map = list[i]
-		if adding[map] then
-			adding[map] = nil
-		elseif removing[map] then
-			count = count + 1
-			rem[count] = i
-		end
-	end
-
-	for map in next, adding do
-		list[#list + 1] = map
-	end
-
-	for i = count, 1, -1 do
-		table.remove(list, rem[i])
-	end
-
-	system.saveFile(json.encode(data), file)
-end
-"""
-
 class Client(discord.Client):
 	role_reaction_channel = 683847523558883446
 	game_logs_channel = 681571711849594897
 	started = False
 	busy = False
+	api_status = None
 
 	async def on_ready(self):
 		channel = self.get_channel(self.role_reaction_channel)
@@ -78,19 +35,6 @@ class Client(discord.Client):
 		await channel.send("Restarting in an hour.")
 		await asyncio.sleep(3600.0)
 		print("Restarting transformice bot", flush=True)
-
-	async def on_transformice_logs(self, msg):
-		if msg.startswith("**`[BANS]:`**") or msg.startswith("**`[KILL]:`**"):
-			channel = 688464365581893700
-		elif msg.startswith("**`[SUS]:`**"):
-			channel = 704071145896280165
-		elif msg.startswith("**`[RANKS]:`**"):
-			channel = 688464206315651128
-		else:
-			channel = self.game_logs_channel
-
-		channel = self.get_channel(channel)
-		await channel.send(msg)
 
 	async def check_maps(self, msg, maps, adding):
 		changes = {}
@@ -132,102 +76,130 @@ class Client(discord.Client):
 
 		return changes
 
+	async def on_whois_request(self, player):
+		channel = self.get_channel(707358868090519632)
+		await channel.send(player)
+
+	async def on_bots_room_crash(self):
+		channel = self.get_channel(686932761222578201)
+		await channel.send("*#parkour4bots has crashed. restarting it")
+		while self.busy:
+			await asyncio.sleep(5.0)
+		self.busy = True
+		self.mapper.dispatch("restart_request", "*#parkour4bots", channel)
+
 	async def on_message(self, msg):
-		if msg.author.bot:
+		if msg.author.id == 683839314526077066:
 			return
 
-		if msg.channel.id == 703701422910472192:
+		if msg.channel.id == 707358868090519632:
+			self.mapper.dispatch("whois_response", msg.content.replace(" ", "\x00"))
+
+			await msg.delete()
+
+		elif msg.channel.id == 711955597100056628:
+			if msg.content.startswith("!m "):
+				content = msg.content[3:]
+			elif msg.content.startswith(","):
+				content = msg.content[1:]
+			else:
+				return
+
+			content = "[{}] {}".format(msg.author.display_name, content)
+			content = re.sub(r"<a?:([^:]+):\d+>", r":\1:", content)
+
+			for mention_char, display_char, mention_list, name_attr in (
+				("@", "@", msg.mentions, "display_name"),
+				("@!", "@", msg.mentions, "display_name"),
+				("@&", "@", msg.role_mentions, "name"),
+				("#", "#", msg.channel_mentions, "name")
+			):
+				for obj in mention_list:
+					content = content.replace(
+						"<{}{}>".format(mention_char, obj.id),
+						"{}{}".format(display_char, getattr(obj, name_attr))
+					)
+
+			if len(content) > 255:
+				return await msg.channel.send("The message is too long.")
+			self.mapper.dispatch("mod_chat", content)
+
+		elif msg.channel.id == 703701422910472192:
 			args = msg.content.split(" ")
 			cmd = args.pop(0).lower()
 
-			if cmd == "!addmap":
-				if len(args) < 2:
+			if msg.author.id == 212634414021214209:
+				available_perms = (20, 21, 22, 32, 34, 41, 42)
+			else:
+				available_perms = (22, 41, 42)
+
+			for perm in available_perms:
+				if cmd == "!p{}".format(perm):
+					if len(args) < 1:
+						return await msg.channel.send("Invalid syntax.")
+
+					if args[0][0] == "@":
+						code = args[0][1:]
+					else:
+						code = args[0]
+
+					if not code.isdigit():
+						return await msg.channel.send("Invalid syntax.")
+
+					try:
+						author, code, map_perm = await self.mapper.getMapInfo("@" + code, timeout=15.0)
+					except: # timeout
+						return await msg.channel.send("Could not load the map.")
+
+					if author is None:
+						return await msg.channel.send("Could not load the map.")
+
+					if map_perm not in available_perms:
+						return await msg.channel.send("The map is in P{}. You do not have the permission to change it.".format(map_perm))
+					elif map_perm == perm:
+						return await msg.channel.send("The map was already P{}.".format(perm))
+
+					if await self.mapper.changeMapPerm(code, perm):
+						return await msg.channel.send("Successfully changed the perm of the map {} : P{} -> P{}".format(code, map_perm, perm))
+
+					return await msg.channel.send("Could not change the perm of the map {}. (it is P{})".format(code, map_perm))
+
+			if cmd == "!rot":
+				if len(args) < 3:
 					return await msg.channel.send("Invalid syntax.")
 
 				if "high" != args[0] != "low":
 					return await msg.channel.send("Invalid syntax.")
 
-				if len(args) > 6:
-					return await msg.channel.send("Can't add more than 5 maps with a single command.")
+				if "add" != args[1] != "rem":
+					return await msg.channel.send("Invalid syntax.")
+
+				maps = []
+				for code in args[2:]:
+					if code[0] == "@":
+						code = code[1:]
+
+					if not code.isdigit():
+						return await msg.channel.send("The argument `{}` is not a valid map code.".format(code))
+					maps.append(code)
 
 				if self.busy:
 					return await msg.channel.send("The bot is busy right now.")
 				self.busy = True
 
-				await msg.channel.send(msg.author.mention + ": " + msg.content)
+				for code in maps:
+					self.mapper.dispatch("map_change", args[0], code, args[1] == "add")
 
-				changes = await self.check_maps(msg, args[1:], True)
-				if changes is None:
+				file = 1 if args[0] == "high" else 10
+				await msg.channel.send("The action should be applied within a minute.")
+				try:
+					await self.mapper.wait_for("on_file_loaded", lambda f: f == file, timeout=65.0)
+				except: # timeout!
 					self.busy = False
-					return
+					return await msg.channel.send("Could not modify the rotation. Try again later.")
 
-				await self.mapper.loadLua(
-					self.json_script + (MAPCHANGE_SCRIPT.format("'{}'", json.dumps(json.dumps(changes)), 10 if args[0] == "high" else 1).encode())
-				) # Remove maps from the other rotation
-				await asyncio.sleep(3.0)
-				await self.mapper.loadLua(
-					self.json_script + (MAPCHANGE_SCRIPT.format(json.dumps(json.dumps(changes)), "'{}'", 1 if args[0] == "high" else 10).encode())
-				) # Add maps
-
-				await asyncio.sleep(3.0)
-				self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
-				await msg.channel.send("Restarting the room soon.")
-
-				await asyncio.sleep(3.0)
 				self.busy = False
-
-			elif cmd == "!remmap":
-				if len(args) < 2:
-					return await msg.channel.send("Invalid syntax.")
-
-				if "high" != args[0] != "low":
-					return await msg.channel.send("Invalid syntax.")
-
-				if len(args) > 6:
-					return await msg.channel.send("Can't add more than 5 maps with a single command.")
-
-				if self.busy:
-					return await msg.channel.send("The bot is busy right now.")
-				self.busy = True
-
-				await msg.channel.send(msg.author.mention + ": " + msg.content)
-
-				changes = await self.check_maps(msg, args[1:], False)
-				if changes is None:
-					self.busy = False
-					return
-
-				await self.mapper.loadLua(
-					self.json_script + (MAPCHANGE_SCRIPT.format("'{}'", json.dumps(json.dumps(changes)), 1 if args[0] == "high" else 10).encode())
-				) # Remove maps
-
-				await asyncio.sleep(3.0)
-				self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
-				await msg.channel.send("Restarting the room soon.")
-
-				await asyncio.sleep(3.0)
-				self.busy = False
-
-		elif msg.channel.id == 704130876426158242:
-			args = msg.content.split(" ")
-			cmd = args.pop(0).lower()
-
-			if cmd == "!join":
-				if len(args) == 0:
-					return await msg.channel.send("Invalid syntax.")
-
-				room = " ".join(args)
-				if re.match(r"^(?:(?:[a-z][a-z]|e2)-|\*)#parkour(?:$|\d.*)", room) is None:
-					return await msg.channel.send("The given room is invalid. You can only join #parkour rooms.")
-
-				if self.busy:
-					return await msg.channel.send("The bot is busy right now.")
-				self.busy = True
-
-				self.mapper.dispatch("join_request", room)
-
-				await asyncio.sleep(3.0)
-				self.busy = False
+				await msg.channel.send("Rotation modified.")
 
 		elif msg.channel.id == 686932761222578201 or msg.channel.id == 694270110172446781:
 			args = msg.content.split(" ")
@@ -267,31 +239,25 @@ class Client(discord.Client):
 
 					if len(args) > 2:
 						await asyncio.sleep(3.0)
-						self.mapper.dispatch("restart_request", "*#parkour0maps", msg.channel)
+						self.mapper.dispatch("restart_request", "*#parkour4bots", msg.channel)
 						await msg.channel.send("Restarting the room soon.")
 
 					await asyncio.sleep(3.0)
 					self.busy = False
 
+				elif cmd == "!cmd":
+					await self.mapper.sendCommand(" ".join(args))
+					await msg.channel.send("Done.")
+
 				elif cmd == "!update":
-					if self.busy:
-						return await msg.channel.send("The bot is busy right now.")
-					self.busy = True
+					if len(args) < 1:
+						return await msg.channel.send("Invalid syntax.")
 
-					link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/builds/latest.lua"
+					if "yes" != args[1] != "no":
+						return await msg.channel.send("Invalid syntax.")
 
-					if len(args) > 0:
-						if args[0].startswith("http"):
-							link = args.pop(0)
-
-					update_msg = " ".join(args)
-
-					await msg.channel.send("Uploading script from " + link + " - Message: `" + update_msg + "`")
-					self.mapper.dispatch("update_ready", link, update_msg)
-
-					await asyncio.sleep(310.0)
-					await msg.channel.send("Updated.")
-					self.busy = False
+					self.mapper.dispatch("game_update", args[1] == "yes")
+					await msg.channel.send("Update alert sent.")
 
 				elif cmd == "!load":
 					if len(args) == 0 or args[0].startswith("http"):
@@ -382,13 +348,13 @@ class Client(discord.Client):
 		await channel.send("Room join requests have been sent.")
 
 	async def on_lua_log(self, msg):
-		match = re.match(r"^<V>\[(.+?)\]<BL> (.+)$", msg, flags=re.DOTALL)
+		match = re.match(r"^<V>\[(.+?)\]<BL> (.*)$", msg, flags=re.DOTALL)
 		if match is None:
 			channel = self.get_channel(686933785933381680)
 			return await channel.send("Wrong match: `" + msg + "`")
 
 		room, msg = match.group(1, 2)
-		if room == "*#parkour0maps":
+		if room == "*#parkour4bots":
 			channel = 686932761222578201
 		elif msg.startswith("Script terminated :"):
 			channel = 688784734813421579
@@ -398,10 +364,6 @@ class Client(discord.Client):
 		channel = self.get_channel(channel)
 
 		await channel.send("`[" + room + "]` `" + msg + "`")
-
-	async def on_map_perm(self, msg):
-		channel = self.get_channel(687804716364857401)
-		await channel.send(msg)
 
 	async def get_reaction_role(self, payload):
 		if payload.channel_id != self.role_reaction_channel:

@@ -5,6 +5,13 @@ local facing = {}
 local cooldowns = {}
 local max_leaderboard_rows
 local leaderboard
+local obj_whitelist = {_count = 0, _index = 1}
+
+local function addShamanObject(id, x, y, ...)
+	obj_whitelist._count = obj_whitelist._count + 1
+	obj_whitelist[obj_whitelist._count] = {id, x, y}
+	return tfm.exec.addShamanObject(id, x, y, ...)
+end
 
 local function checkCooldown(player, name, long, img, x, y, show)
 	if cooldowns[player] then
@@ -29,7 +36,7 @@ local function checkCooldown(player, name, long, img, x, y, show)
 end
 
 local function despawnableObject(when, ...)
-	local obj = tfm.exec.addShamanObject(...)
+	local obj = addShamanObject(...)
 	addNewTimer(when, tfm.exec.removeObject, obj)
 end
 
@@ -38,7 +45,7 @@ toilet = {
 	water = function(img, id, x, y)
 		tfm.exec.removeImage(img)
 
-		local obj = tfm.exec.addShamanObject(63, x, y)
+		local obj = addShamanObject(63, x, y)
 		tfm.exec.addPhysicObject(id, x, y - 20, {
 			type = 9,
 			width = 30,
@@ -261,7 +268,7 @@ local keyPowers, clickPowers = {
 }, {}
 local player_keys = {}
 
-local function bindNecessary(player)
+function bindNecessary(player)
 	local player_pos = leaderboard[player] or max_leaderboard_rows + 1
 	local maps = players_file[player].parkour.c
 	local power, cond
@@ -274,7 +281,7 @@ local function bindNecessary(player)
 				else
 					cond = maps >= power.maps
 				end
-				if cond or room.name == "*#parkour0maps" then
+				if cond then
 					system.bindKeyboard(player, key, true, true)
 				end
 			end
@@ -288,7 +295,7 @@ local function bindNecessary(player)
 		else
 			cond = maps >= power.maps
 		end
-		if cond or room.name == "*#parkour0maps" then
+		if cond then
 			system.bindMouse(player, true)
 			break
 		end
@@ -334,7 +341,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		else
 			cond = maps >= power.maps
 		end
-		if cond or room.name == "*#parkour0maps" then
+		if cond then
 			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_icon.img, power.cooldown_icon.x, power.cooldown_icon.y, show_cooldowns) then
 				power.fnc(player, key, down, x, y)
 			end
@@ -359,7 +366,7 @@ onEvent("Mouse", function(player, x, y)
 		else
 			cond = maps >= power.maps
 		end
-		if cond or room.name == "*#parkour0maps" then
+		if cond then
 			if (not power.cooldown) or checkCooldown(player, power.name, power.cooldown, power.cooldown_icon.img, power.cooldown_icon.x, power.cooldown_icon.y, show_cooldowns) then
 				power.fnc(player, x, y)
 			end
@@ -378,6 +385,7 @@ onEvent("PlayerDataParsed", function(player, data)
 
 	if data.parkour.killed > os.time() then
 		no_powers[player] = true
+		translatedChatMessage("kill_minutes", player, math.ceil((data.parkour.killed - os.time()) / 1000 / 60))
 	else
 		no_powers[player] = nil
 	end
@@ -394,8 +402,16 @@ end)
 onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
 
-	if room.name ~= "*#parkour0maps" and room.uniquePlayers >= min_save and not is_tribe and not review_mode then
-		players_file[player].parkour.c = players_file[player].parkour.c + 1
+	if count_stats and room.uniquePlayers >= min_save and player_count >= min_save and not is_tribe and not review_mode then
+		local file = players_file[player].parkour
+		file.c = file.c + 1
+		file.hour_c = file.hour_c + 1
+		file.week_c = file.week_c + 1
+
+		if file.hour_c >= 35 and file.hour_c % 5 == 0 then
+			sendPacket(3, room.name .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. file.hour_c)
+		end
+
 		savePlayerData(player)
 	end
 
@@ -421,8 +437,36 @@ onEvent("NewGame", function()
 
 	facing = {}
 	cooldowns = {}
+	obj_whitelist = {_count = 0, _index = 1}
 
+	setmetatable(room.objectList, {
+		__newindex = function(self, key, value)
+			if self[key] == value then return end
+
+			rawset(self, key, value)
+
+			local obj
+			for index = obj_whitelist._index, obj_whitelist._count do
+				obj = obj_whitelist[index]
+				if obj[1] ~= value.type or obj[2] ~= value.x or obj[3] ~= value.y then
+					tfm.exec.removeObject(key)
+				else
+					obj_whitelist._index = index + 1
+				end
+				break
+			end
+		end
+	})
+
+	local file
 	for player in next, in_room do
+		file = players_file[player]
+		if file and file.parkour.hour_r <= now then
+			file.parkour.hour_c = 0
+			file.parkour.hour_r = now + 60 * 60 * 1000
+			savePlayerData(player)
+		end
+
 		unbind(player)
 	end
 end)

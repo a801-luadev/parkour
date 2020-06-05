@@ -23,7 +23,6 @@
 -- SOFTWARE.
 --
 
-
 local room = tfm.get.room
 local links = {
 	donation = "https://bit.ly/parkour-donate",
@@ -33,7 +32,7 @@ local links = {
 	modapps = "https://bit.ly/parkourmod"
 }
 
-local starting = string.sub(tfm.get.room.name, 1, 2)
+local starting = string.sub(room.name, 1, 2)
 
 local tribe, module_name, submode
 local flags = ""
@@ -41,37 +40,41 @@ local flags = ""
 {% require-package "translations" %}
 {% require-package "global" %}
 
-if starting == "*\003" then
-	tribe = string.sub(tfm.get.room.name, 3)
-
+local function initialide_parkour() -- so it uses less space after building
 	{% require-package "modes/parkour" %}
+end
+
+if starting == "*\003" then
+	tribe = string.sub(room.name, 3)
+
+	initialide_parkour()
 else
 	local pos
 	if starting == "*#" then
-		module_name = string.match(tfm.get.room.name, "^%*#([a-z]+)")
+		module_name = string.match(room.name, "^%*#([a-z]+)")
 		pos = #module_name + 3
 	else
-		module_name = string.match(tfm.get.room.name, "^[a-z][a-z2]%-#([a-z]+)")
+		module_name = string.match(room.name, "^[a-z][a-z2]%-#([a-z]+)")
 		pos = #module_name + 5
 	end
 
 	local numbers
-	numbers, submode = string.match(tfm.get.room.name, "^(%d+)([a-z_]+)", pos)
+	numbers, submode = string.match(room.name, "^(%d+)([a-z_]+)", pos)
 	if numbers then
-		flags = string.sub(tfm.get.room.name, pos + #numbers + #submode + 1)
+		flags = string.sub(room.name, pos + #numbers + #submode + 1)
 	end
 
-	if submode == "freezertag" then
+	if room.name == "*#parkour4bots" then
+		{% require-package "modes/bots" %}
+	elseif submode == "freezertag" then
 		{% require-package "modes/freezertag" %}
 	elseif submode == "rocketlaunch" then
 		{% require-package "modes/rocketlaunch" %}
-	elseif submode == "maps" then
-		{% require-package "modes/maps" %}
 	else
-		{% require-package "modes/parkour" %}
+		initialide_parkour()
 	end
 end
 
-for player in next, tfm.get.room.playerList do
+for player in next, room.playerList do
 	eventNewPlayer(player)
 end

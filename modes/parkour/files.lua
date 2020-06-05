@@ -1,38 +1,38 @@
-next_file_load = os.time() + math.random(60500, 90500)
+local next_file_load = os.time() + math.random(60500, 90500)
 local player_ranks
 local no_powers
 local unbind
-local next_player_load
-local announce_bot = "Holybot#0000"
-local last_announcement = os.time()
-local next_announce_load = 0
+local bindNecessary
 local killing = {}
 local to_save = {}
 local files = {
 	--[[
 		File values:
 
-		- maps     (1)
-		- webhooks (1, 2 and 3)
-		- update   (1)
-		- ranks    (1)
+		- maps        (1)
+		- ranks       (1)
+		- modchat     (1)
 
-		- banned   (2)
-		- ranking  (2)
-		- suspects (2)
+		- ranking     (2)
+		- weekranking (2)
 
-		- lowmaps  (3)
+		- lowmaps     (3)
+		- banned      (3)
 	]]
 
-	[1] = 1, -- maps, update, ranks
-	[2] = 2, -- ranking, banned, suspects
-	[3] = 10, -- lowmaps
+	[1] = 1, -- maps, ranks, modchat
+	[2] = 2, -- ranking, weekranking
+	[3] = 10, -- lowmaps, banned
 }
 local total_files = 3
-players_file = {}
 local file_index = 1
 local fetching_player_room = {}
-file_id = files[file_index]
+local file_id = files[file_index]
+local timed_maps = {
+	week = {},
+	hour = {}
+}
+players_file = {}
 
 local data_migrations = {
 	["0.0"] = function(player, data)
@@ -41,7 +41,7 @@ local data_migrations = {
 
 		data.modules = nil
 
-		data.parkour.v = "0.5" -- version
+		data.parkour.v = "0.6" -- version
 		data.parkour.c = data.parkour.cm -- completed maps
 		data.parkour.ckpart = 1 -- particles for checkpoints (1 -> true, 0 -> false)
 		data.parkour.mort = 1 -- /mort hotkey
@@ -52,11 +52,16 @@ local data_migrations = {
 		data.parkour.hbut = 1 -- help button
 		data.parkour.congrats = 1 -- contratulations message
 		data.parkour.troll = 0
+		data.parkour.week_c = 0 -- completed maps this week
+		data.parkour.week_r = timed_maps.week.last_reset -- last week reset
+		data.parkour.hour_c = 0 -- completed maps this hour
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000 -- next hour reset
+		data.parkour.help = 0 -- doesn't want help?
 
 		data.parkour.cm = nil
 	end,
 	["0.1"] = function(player, data)
-		data.parkour.v = "0.5"
+		data.parkour.v = "0.6"
 		data.parkour.ckpart = 1
 		data.parkour.mort = 1
 		data.parkour.pcool = 1
@@ -65,53 +70,66 @@ local data_migrations = {
 		data.parkour.killed = 0
 		data.parkour.congrats = 1
 		data.parkour.troll = 0
-
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
 	end,
 	["0.2"] = function(player, data)
-		data.parkour.v = "0.5"
+		data.parkour.v = "0.6"
 		data.parkour.killed = 0
 		data.parkour.hbut = 1
 		data.parkour.congrats = 1
 		data.parkour.troll = 0
-
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
 	end,
 	["0.3"] = function(player, data)
-		data.parkour.v = "0.5"
+		data.parkour.v = "0.6"
 		data.parkour.hbut = 1
 		data.parkour.congrats = 1
 		data.parkour.troll = 0
-
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
 	end,
 	["0.4"] = function(player, data)
-		data.parkour.v = "0.5"
+		data.parkour.v = "0.6"
 		data.parkour.troll = 0
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
+	end,
+	["0.5"] = function(player, data)
+		data.parkour.v = "0.6"
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = os.time() + 60 * 60 * 1000
+		data.parkour.help = 0
 	end
 }
 
 local function savePlayerData(player)
 	if not players_file[player] then return end
 
-	to_save[player] = true
-	system.loadPlayerData(player)
+	if not to_save[player] then
+		to_save[player] = true
+		system.loadPlayerData(player)
+	end
 end
 
 onEvent("PlayerDataLoaded", function(player, data)
+	if player == send_channel or player == recv_channel then return end
 	if in_room[player] then return end
-	if player == join_bot then return end
-	if player == announce_bot then
-		local when, txt = string.match(data, "^(%d+);(.+)$")
-		if not when then
-			system.savePlayerData(player, "0;a")
-			when = "0"
-		end
-
-		when = tonumber(when)
-		if when > last_announcement then
-			last_announcement = when
-			tfm.exec.chatMessage("<vi>[#parkour] <d>" .. txt)
-		end
-		return
-	end
 	online[player] = true
 
 	if data == "" then
@@ -125,8 +143,6 @@ onEvent("PlayerDataLoaded", function(player, data)
 		end
 	end
 
-	local save = false
-
 	local fetch = fetching_player_room[player]
 	if fetch then
 		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. (data.room or "unknown"), fetch[1])
@@ -134,21 +150,14 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	if killing[player] and data.parkour then
-		webhooks._count = webhooks._count + 1
-		webhooks[webhooks._count] = "**`[KILL]:`** `" .. room.name .. "` (remotely) `" .. killing[player][1] .. "`: `!kill " .. player .. " " .. killing[player][2] .. "`"
-
-		data.parkour.killed = os.time() + killing[player][2] * 60 * 1000
-		save = true
-	end
-
-	if save then
+		data.parkour.killed = os.time() + killing[player] * 60 * 1000
 		system.savePlayerData(player, json.encode(data))
 	end
 end)
 
 onEvent("PlayerDataLoaded", function(player, data)
+	if player == send_channel or player == recv_channel then return end
 	if not in_room[player] then return end
-	if player == announce_bot or player == join_bot then return end
 	online[player] = true
 
 	local corrupt
@@ -185,7 +194,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	local fetch = fetching_player_room[player]
 	if fetch then
-		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. (data.room or "unknown"), fetch[1])
+		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. room.name, fetch[1])
 		fetching_player_room[player] = nil
 	end
 
@@ -193,9 +202,15 @@ onEvent("PlayerDataLoaded", function(player, data)
 		local old = players_file[player]
 		if old.parkour.killed < data.parkour.killed then
 			old.parkour.killed = data.parkour.killed
+			translatedChatMessage("kill_minutes", player, math.ceil((data.parkour.killed - os.time()) / 1000 / 60))
 			if os.time() < data.parkour.killed then
 				no_powers[player] = true
 				unbind(player)
+			else
+				no_powers[player] = false
+				if victory[player] then
+					bindNecessary(player)
+				end
 			end
 		end
 
@@ -207,8 +222,8 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	players_file[player] = data
-
 	players_file[player].room = room.name
+
 	system.savePlayerData(
 		player,
 		json.encode(players_file[player])
@@ -224,7 +239,9 @@ end)
 onEvent("FileLoaded", function(id, data)
 	data = json.decode(data)
 	eventGameDataLoaded(data)
-	eventSavingFile(id, data) -- if it is reaching a critical point, it will pause and then save the file
+	if data.ranking or data.weekranking then -- the only file that can get written by rooms
+		eventSavingFile(id, data) -- if it is reaching a critical point, it will pause and then save the file
+	end
 end)
 
 onEvent("Loop", function()
@@ -234,27 +251,6 @@ onEvent("Loop", function()
 		next_file_load = now + math.random(60500, 63000)
 		file_index = file_index % total_files + 1
 		file_id = files[file_index]
-
-		next_player_load = now + 5000
-	end
-	if next_player_load and now >= next_player_load then
-		next_player_load = nil
-		online = {}
-
-		for player in next, in_room do
-			system.loadPlayerData(player)
-		end
-
-		for player in next, player_ranks do
-			if not in_room[player] then
-				system.loadPlayerData(player)
-			end
-		end
-	end
-
-	if now >= next_announce_load then
-		next_announce_load = now + 5000
-		system.loadPlayerData(announce_bot)
 	end
 
 	local to_remove, count = {}, 0
@@ -273,12 +269,35 @@ end)
 
 onEvent("GameStart", function()
 	system.loadFile(file_id)
-	next_file_load = os.time() + math.random(60500, 90500)
-	next_player_load = os.time() + 5000
+	local ts = os.time()
+
+	next_file_load = ts + math.random(60500, 90500)
 	file_index = file_index % total_files + 1
 	file_id = files[file_index]
+
+	local now = os.date("*t", ts / 1000) -- os.date is weird in tfm, *t accepts seconds, %d/%m/%Y accepts ms
+	now.wday = now.wday - 1
+	if now.wday == 0 then
+		now.wday = 7
+	end
+	timed_maps.week.last_reset = os.date("%d/%m/%Y", ts - (now.wday - 1) * 24 * 60 * 60 * 1000)
+	timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (8 - now.wday) * 24 * 60 * 60 * 1000)
 end)
 
 onEvent("NewPlayer", function(player)
+	players_file[player] = nil -- don't cache lol
 	system.loadPlayerData(player)
+end)
+
+onEvent("PlayerDataParsed", function(player, data)
+	local now = os.time()
+	if data.parkour.hour_r <= now then
+		data.parkour.hour_c = 0
+		data.parkour.hour_r = now + 60 * 60 * 1000
+	end
+
+	if data.parkour.week_r ~= timed_maps.week.last_reset then
+		data.parkour.week_c = 0
+		data.parkour.week_r = timed_maps.week.last_reset
+	end
 end)

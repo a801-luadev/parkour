@@ -1,7 +1,7 @@
 local translatedChatMessage
-local next_file_load
-local send_bot_room_crash
-local file_id
+local packet_handler
+local recv_channel, send_channel
+local sendPacket
 
 local webhooks = {_count = 0}
 local runtime = 0
@@ -53,39 +53,16 @@ do
 			event._count = 0
 		end
 
-		if keep_webhooks and next_file_load then
-			if room.name == "*#parkour0maps" then
-				send_bot_room_crash()
-			else
-				events.Loop._count = 1
-				events.Loop[1] = function()
-					if os.time() >= next_file_load then
-						system.loadFile(file_id)
-						next_file_load = os.time() + math.random(60500, 63000)
-					end
-				end
+		if keep_webhooks then
+			if not is_tribe then
+				system.loadPlayerData(send_channel)
 
-				events.FileLoaded._count = 1 -- There's already a decode/encode.
-				events.SavingFile._count = 2
-				events.SavingFile[2] = function()
-					events.Loop._count = 0
-					events.FileLoaded._count = 0
-					events.SavingFile._count = 0
-					events.GameDataLoaded._count = 0
-				end
-
-				events.GameDataLoaded._count = 1
-				events.GameDataLoaded[1] = function(data)
-					local now = os.time()
-					if not data.webhooks or os.time() >= data.webhooks[1] then
-						data.webhooks = {math.floor(os.time()) + 300000} -- 5 minutes
+				events.PlayerDataLoaded._count = 2
+				events.PlayerDataLoaded[1] = packet_handler
+				events.PlayerDataLoaded[2] = function(player)
+					if player == send_channel then
+						events.PlayerDataLoaded._count = 0
 					end
-
-					local last = #data.webhooks
-					for index = 1, webhooks._count do
-						data.webhooks[last + index] = webhooks[index]
-					end
-					webhooks._count = 0
 				end
 			end
 		end
@@ -130,9 +107,6 @@ do
 					if _paused then
 						translatedChatMessage("resumed_events")
 						_paused = false
-
-						webhooks._count = webhooks._count + 1
-						webhooks[webhooks._count] = "**`[CODE]:`** `" .. tfm.get.room.name .. "` is now resumed."
 					end
 				elseif paused then
 					if schedule then
@@ -148,8 +122,7 @@ do
 					translatedChatMessage("code_error", nil, name, "", args, result)
 					tfm.exec.chatMessage(result)
 
-					webhooks._count = webhooks._count + 1
-					webhooks[webhooks._count] = "**`[CRASH]:`** `" .. tfm.get.room.name .. "` has crashed. <@212634414021214209>: `" .. name .. "`, `" .. result .. "`"
+					sendPacket(0, room.name .. "\000" .. name .. "\000" .. result)
 
 					return emergencyShutdown(true, true)
 				end
@@ -159,9 +132,6 @@ do
 				if runtime >= runtime_threshold then
 					if not _paused then
 						translatedChatMessage("paused_events")
-
-						webhooks._count = webhooks._count + 1
-						webhooks[webhooks._count] = "**`[CODE]:`** `" .. tfm.get.room.name .. "` has been paused."
 					end
 
 					runtime_check = this_check + 1

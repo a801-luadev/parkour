@@ -1,6 +1,0 @@
-[
-	{
-		"type": "require-file",
-		"file": "tech/room-gateway/init.lua"
-	}
-]

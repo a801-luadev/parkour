@@ -1,0 +1,14 @@
+[
+	{
+		"type": "require-file",
+		"file": "modes/parkour/communication.lua"
+	},
+	{
+		"type": "require-file",
+		"file": "modes/parkour/ranks.lua"
+	},
+	{
+		"type": "require-file",
+		"file": "modes/bots/init.lua"
+	}
+]

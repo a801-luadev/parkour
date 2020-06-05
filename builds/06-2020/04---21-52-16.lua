@@ -5359,7 +5359,7 @@ else
 				system.loadPlayerData(player)
 
 			elseif id == 3 then -- !ban
-				local id, ban_time = string.match(packet, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
+				local id, ban_time = string.match(cb, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
 				schedule("ban_change", id, tonumber(ban_time))
 
 			elseif id == 4 then -- !announcement
@@ -5393,7 +5393,7 @@ else
 					parkour_bot
 				)
 				if tonumber(taken) <= 27 then -- autoban!
-					schedule("ban_change", id, 1)
+					ban_changes[#ban_changes + 1] = {id, 1}
 					sendPacket(3, player .. "\000" .. id .. "\0001")
 					ui.addTextArea(
 						packets.send_webhook,
@@ -5404,7 +5404,7 @@ else
 
 			elseif id == 2 then
 				local player, ban = table.unpack(args)
-				schedule("ban_change", id, tonumber(ban))
+				ban_changes[#ban_changes + 1] = {player, nil, tonumber(ban)}
 
 			elseif id == 3 then
 				local _room, id, player, maps = table.unpack(args)
@@ -5446,7 +5446,6 @@ else
 		tfm.exec.disableAutoShaman(true)
 		tfm.exec.disableMortCommand(true)
 		tfm.exec.newGame(0)
-		tfm.exec.setRoomMaxPlayers(50)
 		--[[ End of file modes/bots/init.lua ]]--
 		--[[ End of package modes/bots ]]--
 	elseif submode == "freezertag" then

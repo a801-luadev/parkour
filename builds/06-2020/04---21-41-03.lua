@@ -4921,7 +4921,9 @@ local function initialide_parkour() -- so it uses less space after building
 	end)
 	--[[ End of file modes/parkour/webhooks.lua ]]--
 	--[[ File modes/parkour/init.lua ]]--
-	eventGameStart()
+	if submode ~= "maps" then
+		eventGameStart()
+	end
 	--[[ End of file modes/parkour/init.lua ]]--
 	--[[ End of package modes/parkour ]]--
 end
@@ -5301,10 +5303,13 @@ else
 				ui.addTextArea(packets.send_other, data, player == hidden_bot and parkour_bot or hidden_bot)
 
 			elseif id == packets.send_room then
+				print("sending " .. data)
 				local packet_id, packet = string.match(data, "^(%d+)\000(.*)$")
+				print(packet_id .. " " .. packet)
 				packet_id = tonumber(packet_id)
 				if not packet_id then return end
 
+				print("triggering")
 				eventSendingPacket(packet_id, packet)
 
 			elseif id == packets.new_modchat then
@@ -5359,7 +5364,7 @@ else
 				system.loadPlayerData(player)
 
 			elseif id == 3 then -- !ban
-				local id, ban_time = string.match(packet, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
+				local id, ban_time = string.match(cb, "^[^\000]+\000([^\000]+)\000([^\000]+)$")
 				schedule("ban_change", id, tonumber(ban_time))
 
 			elseif id == 4 then -- !announcement
@@ -5393,7 +5398,7 @@ else
 					parkour_bot
 				)
 				if tonumber(taken) <= 27 then -- autoban!
-					schedule("ban_change", id, 1)
+					ban_changes[#ban_changes + 1] = {id, 1}
 					sendPacket(3, player .. "\000" .. id .. "\0001")
 					ui.addTextArea(
 						packets.send_webhook,
@@ -5404,7 +5409,7 @@ else
 
 			elseif id == 2 then
 				local player, ban = table.unpack(args)
-				schedule("ban_change", id, tonumber(ban))
+				ban_changes[#ban_changes + 1] = {player, nil, tonumber(ban)}
 
 			elseif id == 3 then
 				local _room, id, player, maps = table.unpack(args)
@@ -5446,7 +5451,6 @@ else
 		tfm.exec.disableAutoShaman(true)
 		tfm.exec.disableMortCommand(true)
 		tfm.exec.newGame(0)
-		tfm.exec.setRoomMaxPlayers(50)
 		--[[ End of file modes/bots/init.lua ]]--
 		--[[ End of package modes/bots ]]--
 	elseif submode == "freezertag" then

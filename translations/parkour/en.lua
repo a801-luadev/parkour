@@ -52,7 +52,7 @@ translations.en = {
 	help_staff = "<p align = 'center'><font size = '13'><r>DISCLAIMER: Parkour staff ARE NOT Transformice staff and DO NOT have any power in the game itself, only within the module.</r>\nParkour staff ensure that the module runs smoothly with minimal issues, and are always available to assist players whenever necessary.</font></p>\nYou can type <D>!staff</D> in the chat to see the staff list.\n\n<font color = '#E7342A'>Administrators:</font> They are responsible for maintaining the module itself by adding new updates and fixing bugs.\n\n<font color = '#843DA4'>Team Managers:</font> They oversee the Moderator and Mapper teams, making sure they are performing their jobs well. They are also responsible for recruiting new members to the staff team.\n\n<font color = '#FFAAAA'>Moderators:</font> They are responsible for enforcing the rules of the module and punishing individuals who do not follow them.\n\n<font color = '#25C059'>Mappers:</font> They are responsible for reviewing, adding, and removing maps within the module to ensure that you have an enjoyable gameplay.",
 	help_rules = "<font size = '13'><B><J>All rules in the Transformice Terms and Conditions also apply to #parkour</J></B></font>\n\nIf you find any player breaking these rules, whisper the parkour mods in-game. If no mods are online, then it is recommended to report it in the discord server.\nWhen reporting, please include the server, room name, and player name.\n• Ex: en-#parkour10 Blank#3495 trolling\nEvidence, such as screenshots, videos and gifs are helpful and appreciated, but not necessary.\n\n<font size = '11'>• No <font color = '#ef1111'>hacks, glitches or bugs</font> are to be used in #parkour rooms\n• <font color = '#ef1111'>VPN farming</font> will be considered an <B>exploit</B> and is not allowed. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nAnyone caught breaking these rules will be immediately banned.</B></font></p>\n\n<font size = '12'>Transformice allows the concept of trolling. However, <font color='#cc2222'><B>we will not allow it in parkour.</B></font></font>\n\n<p align = 'center'><J>Trolling is when a player intentionally uses their powers to prevent other players from finishing the map.</j></p>\n• Revenge trolling is <B>not a valid reason</B> to troll someone and you will still be punished.\n• Forcing help onto players trying to solo the map and refusing to stop when asked is also considered trolling.\n• <J>If a player does not want help or prefers to solo a map, please try your best to help other players</J>. However if another player needs help in the same checkpoint as the solo player, you can help them [both].\n\nIf a player is caught trolling, they will be punished on either a time or parkour round basis. Note that repeated trolling will lead to longer and more severe punishments.",
 	help_contribute = "<font size='14'>\n<p align='center'>The parkour management team loves open source code because it <t>helps the community</t>. You can <o>view</o> and <o>modify</o> the source code on <o><u><a href='event:github'>GitHub</a></u></o>.\n\nMaintaining the module is <t>strictly voluntary</t>, so any help regarding <t>code</t>, <t>bug reports</t>, <t>suggestions</t> and <t>creating maps</t> is always <u>welcome and appreciated</u>.\nYou can <vp>report bugs</vp> and <vp>give suggestions</vp> on <o><u><a href='event:discord'>Discord</a></u></o> and/or <o><u><a href='event:github'>GitHub</a></u></o>.\nYou can <vp>submit your maps</vp> in our <o><u><a href='event:map_submission'>Forum Thread</a></u></o>.\n\nMaintaining parkour is not expensive, but it is not free either. We'd love if you could help us by <t>donating any amount</t> <o><u><a href='event:donate'>here</a></u></o>.\n<u>All donations will go towards improving the module.</u></p>",
-	help_changelog = "<font size='13'><p align='center'><o>Version 2.1.0 - 27/04/2020</o></p>\n\n• Improved the help interface\n\t\t• Added a <o>News</o> button\n\t\t• Made it <t>wider</t>\n\t\t• Added <t>arrow key scroll</t>\n• Improved <t>sanctions</t> system.\n\t\t• Added an <t>anticheat system</t>.\n• Map review system has been changed.\n\t\t• Added <t>high</t> and <t>low</t> priority map rotations.\n• The <o>!staff</o> command only shows online members.\n• Internal changes and bugfixes so the game crashes less often.\n\t\t• A bug regarding <t>people not being able to complete the map</t> has been fixed.",
+	help_changelog = "<font size='13'><p align='center'><o>Version 2.3.0 - 26/05/2020</o></p>\n\n• Fixed a glitch for room passwords.\n• Added a <vp>weekly leaderboard</vp>.\n• Added a <r>no-help</r> indicator.",
 
 	-- Congratulation messages
 	reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>.",
@@ -80,9 +80,13 @@ translations.en = {
 	leaderboard_loaded = "<j>The leaderboard has been loaded. Press L to open it.",
 	kill_minutes = "<R>Your powers have been disabled for %s minutes.",
 	kill_map = "<R>Your powers have been disabled until next map.",
+	permbanned = "<r>You have been permanently banned from #parkour.",
+	tempbanned = "<r>You have been banned from #parkour for %s minutes.",
+	staff_power = "<r>Parkour staff <b>does not</b> have any power outside of #parkour rooms.",
+	no_help = "<r>People with a red line above their mouse don't want help!",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse particles for checkpoints\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements",
+	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse particles for checkpoints\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements\n\nShow no help symbol",
 	unknown = "Unknown",
 	powers = "Powers",
 	press = "<vp>Press %s",
@@ -118,6 +122,8 @@ translations.en = {
 	load_from_thread = "<p align='center'><a href='event:load_custom'>Load custom map</a></p>",
 	write_comment = "Write your comment down here",
 	write_map = "Write the mapcode down here",
+	overall_lb = "Overall",
+	weekly_lb = "Weekly",
 
 	-- Power names
 	balloon = "Balloon",
