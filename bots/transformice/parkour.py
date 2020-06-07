@@ -10,6 +10,13 @@ import re
 import os
 import sys
 
+WEEKLY_RECORDS_MSG = """<a:blob_cheer1:683845978553450576> **[{} - {}]** <a:blob_cheer2:683846001421058071>
+Congratulations to the highest achieving Weekly Leaderboard players!
+
+> 🥇 [{}] `{}`: **{}** completed maps
+> 🥈 [{}] `{}`: **{}** completed maps
+> 🥉 [{}] `{}`: **{}** completed maps"""
+
 SEND_OTHER = (1 << 8) + 255
 SEND_ROOM = (2 << 8) + 255
 SEND_WEBHOOK = (3 << 8) + 255
@@ -21,6 +28,9 @@ FILE_LOADED = (8 << 8) + 255
 CURRENT_MODCHAT = (9 << 8) + 255
 NEW_MODCHAT = (10 << 8) + 255
 LOAD_MAP = (11 << 8) + 255
+WEEKLY_RESET = (12 << 8) + 255
+
+MODULE_CRASH = (255 << 8) + 255
 
 class CustomProtocol(TFMProtocol):
 	def connection_lost(self, exc):
@@ -38,6 +48,7 @@ class Client(aiotfm.Client):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 
+		self.received_weekly_reset = False
 		self.time_diff = 0
 		self.player_ranks = {}
 		self.ranks = {}
@@ -50,7 +61,8 @@ class Client(aiotfm.Client):
 			"**`[BANS]:`**": os.getenv("SANCTIONS_WEBHOOK"),
 			"**`[KILL]:`**": os.getenv("SANCTIONS_WEBHOOK"),
 			"**`[RANKS]:`**": os.getenv("RANKS_WEBHOOK"),
-			"**`[JOIN]:`**": os.getenv("JOIN_WEBHOOK")
+			"**`[JOIN]:`**": os.getenv("JOIN_WEBHOOK"),
+			"**`[BOTCRASH]:`**": os.getenv("BOT_CRASH_WEBHOOK")
 		}
 		self.default_webhook = os.getenv("DEFAULT_WEBHOOK")
 		self.mod_chat_webhook = os.getenv("MOD_CHAT_WEBHOOK")
@@ -161,6 +173,26 @@ class Client(aiotfm.Client):
 
 			elif head == "update":
 				self.dispatch("send_webhook", "**`[UPDATE]:`** The game is gonna update soon.")
+
+		elif txt_id == MODULE_CRASH:
+			event, message = text.split("\x00", 1)
+			self.dispatch("send_webhook", "**`[BOTCRASH]:`** <@212634414021214209>: `{}`, `{}`".format(event, message))
+
+		elif txt_id == WEEKLY_RESET:
+			if self.received_weekly_reset:
+				return
+
+			date_start, date_end, *podium = text.split("\x00")
+			data_start, date_end = date_start[:5], date_end[:5]
+
+			self.received_weekly_reset = True
+			self.dispatch(
+				"send_webhook",
+				WEEKLY_RECORDS_MSG.format(date_start, date_end, *podium),
+				os.getenv("WEEKLY_RECORD_WEBHOOK")
+			)
+			await asyncio.sleep(600.0) # sleep for 10 minutes to ignore duplicates
+			self.received_weekly_reset = False
 
 	async def on_channel_joined(self, channel):
 		if channel.name != self.mod_chat_name:

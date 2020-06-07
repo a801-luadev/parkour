@@ -20,6 +20,9 @@ FILE_LOADED = (8 << 8) + 255
 CURRENT_MODCHAT = (9 << 8) + 255
 NEW_MODCHAT = (10 << 8) + 255
 LOAD_MAP = (11 << 8) + 255
+WEEKLY_RESET = (12 << 8) + 255
+
+MODULE_CRASH = (255 << 8) + 255
 
 class Client(aiotfmpatch.Client):
 	heartbeat_death = None
