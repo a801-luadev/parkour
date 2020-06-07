@@ -183,7 +183,7 @@ class Client(aiotfm.Client):
 				return
 
 			date_start, date_end, *podium = text.split("\x00")
-			data_start, date_end = date_start[:5], date_end[:5]
+			date_start, date_end = date_start[:5], date_end[:5]
 
 			self.received_weekly_reset = True
 			self.dispatch(
