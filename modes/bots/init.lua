@@ -17,7 +17,10 @@ local packets = {
 	file_loaded = bit.lshift(8, 8) + 255,
 	current_modchat = bit.lshift(9, 8) + 255,
 	new_modchat = bit.lshift(10, 8) + 255,
-	load_map = bit.lshift(11, 8) + 255
+	load_map = bit.lshift(11, 8) + 255,
+	weekly_reset = bit.lshift(12, 8) + 255,
+
+	module_crash = bit.lshift(255, 8) + 255
 }
 
 local hidden_bot = "Tocutoeltuco#5522"
@@ -265,6 +268,9 @@ onEvent("PacketReceived", function(id, packet)
 			"**`[SUS2]:`** `" .. player .. "` (`" .. id .. "`) has got `" .. maps .. "` maps in the last hour.",
 			parkour_bot
 		)
+
+	elseif id == 4 then
+		ui.addTextArea(packets.weekly_reset, packet, parkour_bot)
 	end
 end)
 

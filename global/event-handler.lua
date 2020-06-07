@@ -2,6 +2,7 @@ local translatedChatMessage
 local packet_handler
 local recv_channel, send_channel
 local sendPacket
+local add_packet_data, buffer
 
 local webhooks = {_count = 0}
 local runtime = 0
@@ -56,6 +57,7 @@ do
 		if keep_webhooks then
 			if not is_tribe then
 				system.loadPlayerData(send_channel)
+				buffer = add_packet_data
 
 				events.PlayerDataLoaded._count = 2
 				events.PlayerDataLoaded[1] = packet_handler
@@ -118,13 +120,17 @@ do
 
 				done, result = pcall(caller, start + runtime_threshold - runtime, a, b, c, d, e)
 				if not done then
-					local args = json.encode({a, b, c, d, e})
-					translatedChatMessage("code_error", nil, name, "", args, result)
-					tfm.exec.chatMessage(result)
+					if room.name == "*#parkour4bots" then
+						return ui.addTextArea(bit.lshift(255, 8) + 255, name .. "\000" .. result) -- sent to everyone in the room
+					else
+						local args = json.encode({a, b, c, d, e})
+						translatedChatMessage("code_error", nil, name, "", args, result)
+						tfm.exec.chatMessage(result)
 
-					sendPacket(0, room.name .. "\000" .. name .. "\000" .. result)
+						sendPacket(0, room.name .. "\000" .. name .. "\000" .. result)
 
-					return emergencyShutdown(true, true)
+						return emergencyShutdown(true, true)
+					end
 				end
 
 				runtime = runtime + (os_time() - start)

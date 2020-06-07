@@ -19,12 +19,11 @@ if not is_tribe then
 			1 - suspect
 			2 - ban field set to playerdata
 			3 - farm/hack suspect
+			4 - weekly lb reset
 	]]
 
 	local last_id = os.time() - 10000
 	local next_channel_load = 0
-	local add_packet_data
-	local buffer
 
 	local common_decoder = {
 		["&0"] = "&",
