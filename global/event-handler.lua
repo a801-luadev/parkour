@@ -121,7 +121,7 @@ do
 				done, result = pcall(caller, start + runtime_threshold - runtime, a, b, c, d, e)
 				if not done then
 					if room.name == "*#parkour4bots" then
-						return ui.addTextArea(bit.lshift(255, 8) + 255, name .. "\000" .. result) -- sent to everyone in the room
+						return ui.addTextArea(bit32.lshift(255, 8) + 255, name .. "\000" .. result) -- sent to everyone in the room
 					else
 						local args = json.encode({a, b, c, d, e})
 						translatedChatMessage("code_error", nil, name, "", args, result)
