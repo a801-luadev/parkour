@@ -56,7 +56,7 @@ translations.fr = {
 
 	-- Congratulation messages
 	reached_level = "<d>Bravo! Vous avez atteint le niveau <vp>%s</vp>.",
-	finished = "<d><o>%s</o> a fini le parkour en <vp>%s</vp> secondes, <fc>félicitation!",
+	finished = "<d><o>%s</o> a fini le parkour en <vp>%s</vp> secondes, <fc>félicitations !",
 	unlocked_power = "<ce><d>%s</d> a débloqué le pouvoir <vp>%s</vp>.",
 	enjoy = "<d>Profite de tes nouvelles compétences!",
 
@@ -86,6 +86,7 @@ translations.fr = {
 	no_help = "<r>Les personnes avec une ligne rouge au-dessus d'eux ne veulent pas d'aide !",
 
 	-- Miscellaneous
+
 	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser les particules comme points de sauvegarde\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <b>M</b> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.",
 	unknown = "Inconnu",
 	powers = "Pouvoirs",
