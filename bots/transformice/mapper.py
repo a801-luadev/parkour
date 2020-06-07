@@ -81,6 +81,8 @@ class Client(aiotfmpatch.Client):
 	async def on_joined_room(self, room):
 		if room.name == "*#parkour4bots":
 			self.heartbeat_death = time.time() + 5
+		else:
+			self.heartbeat_death = None
 
 	async def on_server_reboot(self, ms):
 		seconds = ms // 1000
