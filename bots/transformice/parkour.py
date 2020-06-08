@@ -267,7 +267,7 @@ class Client(aiotfm.Client):
 		ranks = self.player_ranks[author] if author in self.player_ranks else self.ranks
 
 		if cmd == "announce":
-			if not ranks["admin"]:
+			if not ranks["admin"] and not ranks["manager"]:
 				return
 			if not args:
 				return await whisper.reply("Invalid syntax.")
