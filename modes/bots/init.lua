@@ -169,7 +169,13 @@ onEvent("TextAreaCallback", function(id, player, data)
 
 	elseif id == packets.modify_rank then
 		local player, action, rank = string.match(data, "^([^\000]+)\000([01])\000(.*)$")
-		player_ranks[player][rank] = action == "1"
+		if not player_ranks[player] then
+			player_ranks[player] = {
+				[rank] = action == "1"
+			}
+		else
+			player_ranks[player][rank] = action == "1"
+		end
 
 		local id = 0
 		for rank, has in next, player_ranks[player] do
