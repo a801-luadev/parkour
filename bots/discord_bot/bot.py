@@ -393,7 +393,7 @@ class Client(discord.Client):
 			return await channel.send("Wrong match: `" + msg + "`")
 
 		room, msg = match.group(1, 2)
-		module = re.match(r"#([a-z]+)", room)
+		module = re.match(r"#([a-z]+)", room).group(1)
 
 		if room == "*#parkour4bots" or module not in ("parkour", "ninja"):
 			channel = 686932761222578201
