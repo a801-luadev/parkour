@@ -80,7 +80,7 @@ class Client(aiotfmpatch.Client):
 
 	async def on_joined_room(self, room):
 		if room.name == "*#parkour4bots":
-			self.heartbeat_death = time.time() + 5
+			self.heartbeat_death = time.time() + 60
 		else:
 			self.heartbeat_death = None
 
@@ -192,15 +192,12 @@ class Client(aiotfmpatch.Client):
 		await self.whisper("Sharpiebot#0000", "p{} {}".format(perm, code))
 		return await self.watchMap(code, int(perm), every=1.0, timeout=timeout)
 
-	async def on_whisper(self, whisper):
-		print(whisper)
-
 	async def on_lua_textarea(self, txt_id, text):
 		if txt_id & 255 != 255:
 			return
 
 		if txt_id == HEARTBEAT:
-			self.heartbeat_death = time.time() + 5
+			self.heartbeat_death = time.time() + 60
 
 		elif txt_id == SEND_OTHER:
 			head, data = text.split("\x00", 1)
