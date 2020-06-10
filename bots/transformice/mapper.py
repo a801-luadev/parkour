@@ -226,6 +226,9 @@ class Client(aiotfmpatch.Client):
 		await self.sendLuaCallback(SEND_OTHER, "update") # trigger webhook!
 		await self.sendRoomPacket(1, "")
 
+		await asyncio.sleep(60.0)
+		await self.sendCommand(os.getenv("LAUNCHPARKOUR_CMD"))
+
 	async def on_whois_response(self, response):
 		await self.sendLuaCallback(SEND_OTHER, "fetchid\x00" + response)
 
