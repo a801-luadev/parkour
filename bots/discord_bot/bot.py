@@ -4,6 +4,7 @@ import asyncio
 import aiohttp
 import json
 import re
+import os
 
 class Client(discord.Client):
 	role_reaction_channel = 683847523558883446
@@ -393,7 +394,7 @@ class Client(discord.Client):
 			return await channel.send("Wrong match: `" + msg + "`")
 
 		room, msg = match.group(1, 2)
-		module = re.match(r"#([a-z]+)", room).group(1)
+		module = re.search(r"#([a-z]+)", room).group(1)
 
 		if room == "*#parkour4bots" or room == "*#ninja0update" or module not in ("parkour", "ninja"):
 			channel = 686932761222578201
