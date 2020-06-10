@@ -220,7 +220,46 @@ class Client(discord.Client):
 				self.mapper.dispatch("restart_request", room, msg.channel)
 				await msg.channel.send("Restarting the room soon.")
 
-			elif msg.author.id == 212634414021214209 or msg.author.id == 436703225140346881:
+			elif msg.author.id == 212634414021214209 or msg.author.id == 436703225140346881 or msg.author.id == 204230471834533889:
+				if cmd in ("!loadninja", "!launchninja"):
+					if len(args) == 0 or args[0].startswith("http"):
+						if len(args) > 0:
+							link = args.pop(0)
+						else:
+							link = "https://raw.githubusercontent.com/extremq/ninja/master/builds/latest.lua"
+
+						async with aiohttp.ClientSession() as session:
+							async with session.get(link) as resp:
+								script = await resp.read()
+					else:
+						script = re.match(r"^(`{1,3})(?:lua\n)?((?:.|\n)+)\1$", " ".join(args))
+
+						if script is None:
+							return await msg.channel.send("Invalid syntax. Can't match your script.")
+
+						script = script.group(2)
+
+					if self.busy:
+						return await msg.channel.send("The bot is busy right now.")
+					self.busy = True
+
+					await self.mapper.sendCommand("room* *#ninja0update")
+					await asyncio.sleep(3.0)
+					await self.mapper.loadLua(script)
+					await asyncio.sleep(3.0)
+
+					if cmd == "!launchninja":
+						await self.mapper.sendCommand(os.getenv("LAUNCHNINJA_CMD"))
+						await asyncio.sleep(3.0)
+
+					await self.mapper.sendCommand("room* *#parkour4bots")
+					await asyncio.sleep(3.0)
+
+					self.busy = False
+
+				if msg.author.id == 204230471834533889:
+					return
+
 				if cmd == "!copyfile":
 					if len(args) < 2 or (not args[0].isdigit()) or (not args[1].isdigit()):
 						await msg.channel.send("Invalid syntax. Syntax: `!copyfile [original] [destination] (restart)`")
@@ -354,12 +393,14 @@ class Client(discord.Client):
 			return await channel.send("Wrong match: `" + msg + "`")
 
 		room, msg = match.group(1, 2)
-		if room == "*#parkour4bots":
+		module = re.match(r"#([a-z]+)", room)
+
+		if room == "*#parkour4bots" or module not in ("parkour", "ninja"):
 			channel = 686932761222578201
 		elif msg.startswith("Script terminated :"):
-			channel = 688784734813421579
+			channel = 688784734813421579 if module == "parkour" else 720066652653223946
 		else:
-			channel = 686933785933381680
+			channel = 686933785933381680 if module == "parkour" else 720066615022190592
 
 		channel = self.get_channel(channel)
 
