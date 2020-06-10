@@ -109,9 +109,7 @@ class Client(aiotfmpatch.Client):
 				code = await self.getModuleCode()
 			except:
 				continue
-			print("loading")
 			await self.loadLua(code)
-			print("loaded")
 
 			if isinstance(channel, int):
 				await self.sendSpecialChatMsg(channel, "Room restarted.")
