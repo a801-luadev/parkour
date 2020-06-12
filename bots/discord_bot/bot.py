@@ -399,6 +399,7 @@ class Client(discord.Client):
 		if room == "*#parkour4bots" or room == "*#ninja0update" or module not in ("parkour", "ninja"):
 			channel = 686932761222578201
 		elif msg.startswith("Script terminated :"):
+			msg = msg + "s."
 			channel = 688784734813421579 if module == "parkour" else 720066652653223946
 		else:
 			channel = 686933785933381680 if module == "parkour" else 720066615022190592
