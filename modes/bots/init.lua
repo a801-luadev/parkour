@@ -108,7 +108,7 @@ local function sendSynchronization()
 end
 
 onEvent("SavingFile", function(file, data)
-	system.saveFile(filemanagers[file]:dump(data), file)
+	system.saveFile(filemanagers[tostring(file)]:dump(data), file)
 end)
 
 onEvent("FileLoaded", function(file, data)
