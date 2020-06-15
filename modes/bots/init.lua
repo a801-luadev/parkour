@@ -104,7 +104,7 @@ local function sendSynchronization()
 
 	ui.addTextArea(packets.synchronize, os.time() .. "\000" .. packet, parkour_bot)
 	ui.addTextArea(packets.current_chat, "mod\000" .. chats.mod, parkour_bot)
-	ui.addTextArea(packets.current_chat, "mapper\000" .. chat.mapper, parkour_bot)
+	ui.addTextArea(packets.current_chat, "mapper\000" .. chats.mapper, parkour_bot)
 end
 
 onEvent("SavingFile", function(file, data)
