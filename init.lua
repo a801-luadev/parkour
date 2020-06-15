@@ -26,7 +26,7 @@
 
 local room = tfm.get.room
 local links = {
-	donation = "https://bit.ly/parkour-donate",
+	donation = "https://a801-luadev.github.io/?redirect=parkour",
 	github = "https://bit.ly/tfm-parkour",
 	discord = "https://bit.ly/parkour-discord",
 	maps = "https://bit.ly/submit-parkour-maps",
