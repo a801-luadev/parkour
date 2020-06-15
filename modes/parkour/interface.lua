@@ -1182,7 +1182,12 @@ onEvent("PacketReceived", function(packet_id, packet)
 			savePlayerData(player)
 			sendPacket(2, data.id .. "\000" .. val)
 		end
-	elseif packet_id == 4 then -- !announcement
+	elseif packet_id == 4 then -- !announce
 		tfm.exec.chatMessage("<vi>[#parkour] <d>" .. packet)
+	elseif packet_id == 5 then -- !cannounce
+		local commu, msg = string.match(packet, "^([^\000]+)\000(.+)$")
+		if commu == room.community then
+			tfm.exec.chatMessage("<vi>[" .. commu .. "] [#parkour] <d>" .. msg)
+		end
 	end
 end)

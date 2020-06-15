@@ -12,7 +12,8 @@ if not is_tribe then
 			1 - game update
 			2 - !kill
 			3 - !ban
-			4 - !announcement
+			4 - !announce
+			5 - !cannounce
 
 		Packets to 4bots:
 			0 - room crash
