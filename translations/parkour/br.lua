@@ -141,3 +141,4 @@ translations.br = {
 	trampoline = "Trampolim",
 	toilet = "Vaso Sanitário"
 }
+translations.pt = translations.br
