@@ -946,7 +946,9 @@ onEvent("ChatCommand", function(player, msg)
 		if pointer == 0 then
 			tfm.exec.chatMessage("<v>[#] <d>Available languages:", player)
 			for name, data in next, translations do
-				tfm.exec.chatMessage("<d>" .. name .. " - " .. data.fullname, player)
+				if name ~= "pt" then
+					tfm.exec.chatMessage("<d>" .. name .. " - " .. data.fullname, player)
+				end
 			end
 			tfm.exec.chatMessage("<d>Type <b>!langue ID</b> to switch your language.", player)
 		else
