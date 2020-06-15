@@ -892,13 +892,18 @@ onEvent("ChatCommand", function(player, msg)
 		showHelpMenu(player, "help")
 
 	elseif cmd == "review" then
-		if not perms[player] or not perms[player].enable_review then return end
-
-		if not string.find(room.name, "review") and not ranks.admin[player] then
-			return tfm.exec.chatMessage("<v>[#] <r>You can't enable review mode in this room.", player)
+		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
+		local normal_cond = perms[player] and perms[player].enable_review and (string.find(room.name, "review") or ranks.admin[player])
+		if not tribe_cond and not normal_cond then
+			return tfm.exec.chatMessage("<v>[#] <r>You can't toggle review mode in this room.", player)
 		end
-		review_mode = true
-		tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
+
+		review_mode = not review_mode
+		if review_mode then
+			tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
+		else
+			tfm.exec.chatMessage("<v>[#] <d>Review mode disabled by " .. player .. ".")
+		end
 
 	elseif cmd == "pw" then
 		if not perms[player] or not perms[player].enable_review then return end
@@ -925,6 +930,34 @@ onEvent("ChatCommand", function(player, msg)
 			roompw.owner = player
 		end
 		roompw.password = password
+
+	elseif cmd == "roomlimit" then
+		if not ranks.admin[player] then return end
+
+		local limit = tonumber(args[1])
+		if not limit then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		tfm.exec.setRoomMaxPlayers(limit)
+		tfm.exec.chatMessage("<v>[#] <d>Set room max players to " .. limit .. ".", player)
+
+	elseif cmd == "langue" then
+		if pointer == 0 then
+			tfm.exec.chatMessage("<v>[#] <d>Available languages:", player)
+			for name, data in next, translations do
+				tfm.exec.chatMessage("<d>" .. name .. " - " .. data.fullname, player)
+			end
+			tfm.exec.chatMessage("<d>Type <b>!langue ID</b> to switch your language.", player)
+		else
+			local lang = string.lower(args[1])
+			if translations[lang] then
+				player_langs[player] = translations[lang]
+				translatedChatMessage("new_lang", player)
+			else
+				tfm.exec.chatMessage("<v>[#] <r>Unknown language: <b>" .. lang .. "</b>", player)
+			end
+		end
 
 	elseif cmd == "cp" then
 		if not review_mode then return end
@@ -1137,6 +1170,8 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("pw", true)
 	system.disableChatCommandDisplay("cp", true)
 	system.disableChatCommandDisplay("forcestats", true)
+	system.disableChatCommandDisplay("roomlimit", true)
+	system.disableChatCommandDisplay("langue", true)
 end)
 
 onEvent("PacketReceived", function(packet_id, packet)
