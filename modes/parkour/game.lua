@@ -162,7 +162,7 @@ onEvent("Loop", function()
 
 		for name in next, in_room do
 			player = room.playerList[name]
-			if spec_mode[player.id] then
+			if spec_mode[name] then
 				tfm.exec.killPlayer(name)
 			else
 				level_id = players_level[name] + 1
