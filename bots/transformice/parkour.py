@@ -172,7 +172,7 @@ class Client(aiotfm.Client):
 			head, data = text.split("\x00", 1)
 
 			if head == "chat":
-				chat, msg = text.split("\x00", 1)
+				chat, msg = data.split("\x00", 1)
 				await self.chats[chat][2].send(msg)
 
 			elif head == "fetchid":
