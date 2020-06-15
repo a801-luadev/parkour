@@ -4,6 +4,10 @@
 		"package": "tech/json"
 	},
 	{
+		"type": "require-package",
+		"package": "tech/filemanager"
+	},
+	{
 		"type": "require-file",
 		"file": "global/event-handler.lua"
 	},

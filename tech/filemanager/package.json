@@ -1,0 +1,6 @@
+[
+	{
+		"type": "require-file",
+		"file": "tech/filemanager/init.lua"
+	}
+]

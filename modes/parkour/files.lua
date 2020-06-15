@@ -20,9 +20,9 @@ local files = {
 		- banned      (3)
 	]]
 
-	[1] = 1, -- maps, ranks, modchat
-	[2] = 2, -- ranking, weekranking
-	[3] = 10, -- lowmaps, banned
+	[1] = 20, -- maps, ranks, modchat
+	[2] = 21, -- ranking, weekranking
+	[3] = 22, -- lowmaps, banned
 }
 local total_files = 3
 local file_index = 1
@@ -233,11 +233,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 end)
 
 onEvent("SavingFile", function(id, data)
-	system.saveFile(json.encode(data), id)
+	system.saveFile(filemanagers[id]:dump(data), id)
 end)
 
 onEvent("FileLoaded", function(id, data)
-	data = json.decode(data)
+	data = filemanagers[id]:load(data)
 	eventGameDataLoaded(data)
 	if data.ranking or data.weekranking then -- the only file that can get written by rooms
 		eventSavingFile(id, data) -- if it is reaching a critical point, it will pause and then save the file

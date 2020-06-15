@@ -1,6 +1,10 @@
 [
 	{
 		"type": "require-file",
+		"file": "modes/parkour/filemanagers.lua"
+	},
+	{
+		"type": "require-file",
 		"file": "modes/parkour/communication.lua"
 	},
 	{

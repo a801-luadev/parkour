@@ -1,6 +1,6 @@
 local files = {
-	[1] = 1, -- maps, ranks, modchat
-	[2] = 10 -- lowmaps, banned
+	[1] = 20, -- maps, ranks, modchat
+	[2] = 22 -- lowmaps, banned
 }
 local next_file_load = os.time() + 61000
 local next_file_check = 0
@@ -106,13 +106,13 @@ local function sendSynchronization()
 end
 
 onEvent("SavingFile", function(file, data)
-	system.saveFile(json.encode(data), file)
+	system.saveFile(filemanagers[file]:dump(data), file)
 end)
 
 onEvent("FileLoaded", function(file, data)
 	ui.addTextArea(packets.file_loaded, file, hidden_bot)
 
-	data = json.decode(data)
+	data = filemanagers[file]:load(data)
 	file = tonumber(file)
 	local save = false
 

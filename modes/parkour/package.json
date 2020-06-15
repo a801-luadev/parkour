@@ -1,5 +1,9 @@
 [
 	{
+		"type": "require-file",
+		"file": "modes/parkour/filemanagers.lua"
+	},
+	{
 		"type": "require-dir",
 		"dir": "translations/parkour",
 		"recursive": false
