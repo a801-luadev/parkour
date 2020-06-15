@@ -169,7 +169,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 	elseif id == packets.new_chat then
 		local name, chat = string.match(data, "^([^\000]+)\000([^\000]+)$")
 		schedule("new_chat", name, chat)
-		ui.addTextArea(packets.current_modchat, name .. "\000" .. chat, parkour_bot)
+		ui.addTextArea(packets.current_chat, name .. "\000" .. chat, parkour_bot)
 
 	elseif id == packets.modify_rank then
 		local player, action, rank = string.match(data, "^([^\000]+)\000([01])\000(.*)$")
