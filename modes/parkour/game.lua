@@ -136,16 +136,6 @@ end)
 onEvent("Loop", function()
 	if not levels then return end
 
-	if player_count > room_max_players then
-		if room.maxPlayers == room_max_players then
-			tfm.exec.setRoomMaxPlayers(room_max_players + 1)
-			tfm.exec.disablePhysicalConsumables(false)
-		elseif room.maxPlayers == room_max_players + 1 then
-			tfm.exec.setRoomMaxPlayers(room_max_players)
-			tfm.exec.disablePhysicalConsumables(true)
-		end
-	end
-
 	if check_position > 0 then
 		check_position = check_position - 1
 	else
