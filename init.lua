@@ -1,5 +1,5 @@
 --
--- Parkour v2.0
+-- Parkour v2
 -- MIT License
 
 -- Copyright (c) 2020 Iván Gabriel (Tocutoeltuco)
@@ -22,6 +22,7 @@
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 --
+
 
 local room = tfm.get.room
 local links = {
