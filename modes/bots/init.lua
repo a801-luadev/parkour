@@ -1,5 +1,5 @@
 local files = {
-	[1] = 20, -- maps, ranks, modchat
+	[1] = 20, -- maps, ranks, chats
 	[2] = 22 -- lowmaps, banned
 }
 local next_file_load = os.time() + 61000
@@ -15,8 +15,8 @@ local packets = {
 	heartbeat = bit.lshift(6, 8) + 255,
 	change_map = bit.lshift(7, 8) + 255,
 	file_loaded = bit.lshift(8, 8) + 255,
-	current_modchat = bit.lshift(9, 8) + 255,
-	new_modchat = bit.lshift(10, 8) + 255,
+	current_chat = bit.lshift(9, 8) + 255,
+	new_chat = bit.lshift(10, 8) + 255,
 	load_map = bit.lshift(11, 8) + 255,
 	weekly_reset = bit.lshift(12, 8) + 255,
 	room_password = bit.lshift(13, 8) + 255,
@@ -27,7 +27,7 @@ local packets = {
 local hidden_bot = "Tocutoeltuco#5522"
 local parkour_bot = "Parkour#8558"
 local loaded = false
-local modchat = nil
+local chats = {loading = true}
 local killing = {}
 local to_do = {}
 local in_room = {}
@@ -65,10 +65,10 @@ local file_actions = {
 		end
 	end},
 
-	new_modchat = {1, true, function(data, chat)
-		data.modchat = chat
-		modchat = chat
-		ui.addTextArea(packets.current_modchat, chat, parkour_bot)
+	new_chat = {1, true, function(data, name, chat)
+		data.chats[name] = chat
+		chats[name] = chat
+		ui.addTextArea(packets.current_chat, name .. "\000" .. chat, parkour_bot)
 	end},
 
 	ban_change = {2, true, function(data, id, value)
@@ -103,7 +103,8 @@ local function sendSynchronization()
 	end
 
 	ui.addTextArea(packets.synchronize, os.time() .. "\000" .. packet, parkour_bot)
-	ui.addTextArea(packets.current_modchat, modchat, parkour_bot)
+	ui.addTextArea(packets.current_chat, "mod\000" .. chats.mod, parkour_bot)
+	ui.addTextArea(packets.current_chat, "mapper\000" .. chat.mapper, parkour_bot)
 end
 
 onEvent("SavingFile", function(file, data)
@@ -136,8 +137,10 @@ onEvent("FileLoaded", function(file, data)
 	end
 
 	eventGameDataLoaded(data)
-	if data.modchat then
-		modchat = data.modchat
+	if data.chats then
+		if chats.loading then
+			chats = data.chats
+		end
 	end
 
 	if not loaded and in_room[parkour_bot] then
@@ -163,10 +166,10 @@ onEvent("TextAreaCallback", function(id, player, data)
 
 		eventSendingPacket(packet_id, packet)
 
-	elseif id == packets.new_modchat then
-		modchat = data
-		schedule("new_modchat", modchat)
-		ui.addTextArea(packets.current_modchat, modchat, parkour_bot)
+	elseif id == packets.new_chat then
+		local name, chat = string.match(data, "^([^\000]+)\000([^\000]+)$")
+		schedule("new_chat", name, chat)
+		ui.addTextArea(packets.current_modchat, name .. "\000" .. chat, parkour_bot)
 
 	elseif id == packets.modify_rank then
 		local player, action, rank = string.match(data, "^([^\000]+)\000([01])\000(.*)$")

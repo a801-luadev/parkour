@@ -17,9 +17,20 @@ local filemanagers = {
 				}
 			},
 			{
-				name = "modchat",
-				type = "string",
-				length = 10
+				name = "chats",
+				type = "dictionary",
+				map = {
+					{
+						name = "mod",
+						type = "string",
+						length = 10
+					},
+					{
+						name = "mapper",
+						type = "string",
+						length = 10
+					}
+				}
 			}
 		}
 	}):disableValidityChecks():prepare(),

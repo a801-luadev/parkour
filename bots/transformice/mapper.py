@@ -72,8 +72,8 @@ class Client(aiotfmpatch.Client):
 	async def on_logged(self, *args):
 		print("[MAPPER] Logged in!", flush=True)
 
-	async def on_mod_chat(self, msg):
-		await self.sendLuaCallback(SEND_OTHER, "modchat\x00" + msg)
+	async def on_send_chat(self, chat, msg):
+		await self.sendLuaCallback(SEND_OTHER, "chat\x00" + chat + "\x00" + msg)
 
 	async def on_load_request(self, script):
 		await self.loadLua(script)

@@ -11,7 +11,7 @@ local files = {
 
 		- maps        (1)
 		- ranks       (1)
-		- modchat     (1)
+		- chats       (1)
 
 		- ranking     (2)
 		- weekranking (2)
@@ -20,7 +20,7 @@ local files = {
 		- banned      (3)
 	]]
 
-	[1] = 20, -- maps, ranks, modchat
+	[1] = 20, -- maps, ranks, chats
 	[2] = 21, -- ranking, weekranking
 	[3] = 22, -- lowmaps, banned
 }

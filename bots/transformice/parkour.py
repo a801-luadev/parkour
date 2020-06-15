@@ -25,13 +25,15 @@ SYNCHRONIZE = (5 << 8) + 255
 HEARTBEAT = (6 << 8) + 255
 CHANGE_MAP = (7 << 8) + 255
 FILE_LOADED = (8 << 8) + 255
-CURRENT_MODCHAT = (9 << 8) + 255
-NEW_MODCHAT = (10 << 8) + 255
+CURRENT_CHAT = (9 << 8) + 255
+NEW_CHAT = (10 << 8) + 255
 LOAD_MAP = (11 << 8) + 255
 WEEKLY_RESET = (12 << 8) + 255
 ROOM_PASSWORD = (13 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
+
+STAFF_CHATS = ["mod", "mapper"]
 
 class CustomProtocol(TFMProtocol):
 	def connection_lost(self, exc):
@@ -66,11 +68,16 @@ class Client(aiotfm.Client):
 			"**`[BOTCRASH]:`**": os.getenv("BOT_CRASH_WEBHOOK")
 		}
 		self.default_webhook = os.getenv("DEFAULT_WEBHOOK")
-		self.mod_chat_webhook = os.getenv("MOD_CHAT_WEBHOOK")
-		self.mod_chat_announcement_webhook = os.getenv("MOD_CHAT_ANNOUNCEMENT_WEBHOOK")
+
+		self.chats = {}
+		for chat in STAFF_CHATS:
+			self.chats[chat] = [
+				os.getenv("{}_CHAT_WEBHOOK".format(chat.upper())),
+				os.getenv("{}_CHAT_ANNOUNCEMENT_WEBHOOK".format(chat.upper())),
+				None, None
+			]
+
 		self.heroku_token = os.getenv("HEROKU_TOKEN")
-		self.mod_chat = None
-		self.mod_chat_name = None
 		self.next_available_restart = 0
 		self.restarting = False
 
@@ -148,22 +155,25 @@ class Client(aiotfm.Client):
 				for rank in ranks:
 					self.player_ranks[player][rank] = True
 
-		elif txt_id == CURRENT_MODCHAT:
-			if text == self.mod_chat_name:
+		elif txt_id == CURRENT_CHAT:
+			chat, name = text.split("\x00", 1)
+			chat = self.chats[chat]
+			if name == chat[3]:
 				return
 
-			self.mod_chat_name = text
-			if self.mod_chat is not None:
-				await self.mod_chat.leave()
+			chat[3] = name
+			if chat[2] is not None:
+				await chat[2].leave()
 
 			await asyncio.sleep(5.0)
-			await self.joinChannel(self.mod_chat_name, permanent=False)
+			await self.joinChannel(name, permanent=False)
 
 		elif txt_id == SEND_OTHER:
 			head, data = text.split("\x00", 1)
 
-			if head == "modchat":
-				await self.mod_chat.send(data)
+			if head == "chat":
+				chat, msg = text.split("\x00", 1)
+				await self.chats[chat][2].send(msg)
 
 			elif head == "fetchid":
 				if "\x00" not in data:
@@ -196,9 +206,10 @@ class Client(aiotfm.Client):
 			self.received_weekly_reset = False
 
 	async def on_channel_joined(self, channel):
-		if channel.name != self.mod_chat_name:
-			return
-		self.mod_chat = channel
+		for data in self.chats.values():
+			if data[3] == channel.name:
+				data[2] = channel
+				break
 
 	async def get_player_id(self, player_name):
 		player_name = player_name.replace("#", "%23").replace("+", "%2B")
@@ -501,41 +512,57 @@ class Client(aiotfm.Client):
 				await whisper.reply("You are {}. You have {} rank(s) and they are: {}.".format(author, total, ", ".join(ranks_list)))
 
 		elif cmd == "modchat":
-			if not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]:
+			if not ranks["admin"] and not ranks["manager"] and not ranks["mod"] and not ranks["trainee"]:
 				return
 
-			if self.mod_chat is None:
+			if self.chats["mod"][2] is None:
 				return await whisper.reply("Could not connect to the moderator chat.")
-			return await whisper.reply("The current moderator chat is {}".format(self.mod_chat.name))
+			return await whisper.reply("The current moderator chat is {}".format(self.chats["mod"][2].name))
 
-		elif cmd == "newmodchat":
-			if not ranks["admin"]:
+		elif cmd == "mapperchat":
+			if not ranks["admin"] and not ranks["manager"] and not ranks["mapper"]:
 				return
 
-			self.dispatch("generate_new_mod_chat")
+			if self.chats["mapper"][2] is None:
+				return await whisper.reply("Could not connect to the mapper chat.")
+			return await whisper.reply("The current mapper chat is {}".format(self.chats["mapper"][2].name))
+
+		elif cmd == "newchat":
+			if not ranks["admin"] and not ranks["manager"]:
+				return
+
+			if not args or args[0].lower() not in self.chats:
+				return await whisper.reply("Invalid syntax.")
+
+			self.dispatch("generate_new_chat", args[0].lower())
 
 	async def on_channel_message(self, msg):
-		if msg.channel != self.mod_chat:
-			return
+		for data in self.chats.values():
+			if msg.channel != data[2]:
+				continue
 
-		content = msg.content.replace("`", "'").replace("&lt;", "<").replace("&amp;", "&")
-		message = "` `".join(content.split(" "))
-		message = re.sub(r"`((https?://(?:-\.)?(?:[^\s/?\.#-]+\.?)+(?:/[^\s]*)?))`", r"\1", "`" + message + "`")
+			content = msg.content.replace("`", "'").replace("&lt;", "<").replace("&amp;", "&")
+			message = "` `".join(content.split(" "))
+			message = re.sub(r"`(https?://(?:-\.)?(?:[^\s/?\.#-]+\.?)+(?:/[^\s]*)?)`", r"\1", "`" + message + "`")
 
-		self.dispatch(
-			"send_webhook",
-			"`[{}]` `[{}]` {}".format(
-				msg.community.name, self.normalize_name(msg.author), message
-			),
-			self.mod_chat_webhook
-		)
+			self.dispatch(
+				"send_webhook",
+				"`[{}]` `[{}]` {}".format(
+					msg.community.name, self.normalize_name(msg.author), message
+				),
+				data[0]
+			)
 
 	async def on_heartbeat(self, took):
-		if self.mod_chat is not None:
+		for name, data in self.chats.items():
+			if data[2] is None:
+				continue
+
 			try:
-				players = await self.mod_chat.who()
+				players = await data[2].who()
 			except:
-				return print("timeout!")
+				print("timeout!")
+				continue
 			players = map(lambda p: self.normalize_name(p.username), players)
 
 			for player in players:
@@ -543,17 +570,28 @@ class Client(aiotfm.Client):
 					continue
 
 				ranks = self.player_ranks[player] if player in self.player_ranks else None
-				if ranks is None or (not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]):
+
+				admin = ranks["admin"] or ranks["manager"]
+				if name == "mod":
+					needed_ranks = ranks["mod"] or ranks["trainee"]
+				else:
+					needed_ranks = ranks["mapper"]
+
+				if ranks is None or (not admin and not needed_ranks):
 					# intruder!
-					await self.mod_chat.send("Intruder alert: {}".format(player))
+					await data[2].send("Intruder alert: {}".format(player))
 					await asyncio.sleep(3.0)
-					return self.dispatch("generate_new_mod_chat")
+					self.dispatch("generate_new_chat", name)
+					break
 
-	async def on_generate_new_mod_chat(self):
-		chat = "".join(random.choice(string.ascii_letters) for x in range(10))
+	async def on_generate_new_chat(self, name):
+		if name not in self.chats:
+			return
 
-		self.dispatch("send_webhook", "There's a new moderator chat: `{}`".format(chat), self.mod_chat_announcement_webhook)
-		self.dispatch("send_webhook", "Switching chats.", self.mod_chat_webhook)
-		await self.mod_chat.send("There's a new moderator chat. It's been posted in discord. Please leave this one as soon as possible.")
+		newname = "".join(random.choice(string.ascii_letters) for x in range(10))
 
-		await self.sendLuaCallback(NEW_MODCHAT, chat)
+		self.dispatch("send_webhook", "There's a new {} chat: `{}`".format(name, newname), self.chats[name][1])
+		self.dispatch("send_webhook", "Switching chats.", self.chats[name][0])
+		await self.chats[name][2].send("There's a new chat. It's been posted in discord. Please leave this one as soon as possible.")
+
+		await self.sendLuaCallback(NEW_CHAT, name + "\x00" + newname)
