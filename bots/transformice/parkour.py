@@ -283,7 +283,7 @@ class Client(aiotfm.Client):
 			if len(args) < 2:
 				return await whisper.reply("Invalid syntax.")
 
-			commu = args[0].lower()
+			commu = args.pop(0).lower()
 			await self.sendRoomPacket(5, "{}\x00{}".format(commu, " ".join(args)))
 			await whisper.reply("Announced!")
 			self.dispatch("send_webhook", "**`[ANNOUNCEMENT]:`** **{}** announced `{}` to the community {}".format(author, " ".join(args), commu))
