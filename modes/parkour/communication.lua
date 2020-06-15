@@ -14,6 +14,7 @@ if not is_tribe then
 			3 - !ban
 			4 - !announce
 			5 - !cannounce
+			6 - pw request
 
 		Packets to 4bots:
 			0 - room crash
@@ -21,6 +22,7 @@ if not is_tribe then
 			2 - ban field set to playerdata
 			3 - farm/hack suspect
 			4 - weekly lb reset
+			5 - pw info
 	]]
 
 	local last_id = os.time() - 10000

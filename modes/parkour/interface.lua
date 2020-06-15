@@ -1,3 +1,7 @@
+local roompw = {
+	owner = nil,
+	password = nil
+}
 local kill_cooldown = {}
 local update_at = 0
 local staff_people = {next_check = 0, texts = {}, to_send = {}, timeout = 0}
@@ -899,18 +903,28 @@ onEvent("ChatCommand", function(player, msg)
 	elseif cmd == "pw" then
 		if not perms[player] or not perms[player].enable_review then return end
 
-		if not review_mode then
+		if not review_mode and not ranks.admin[player] then
 			return tfm.exec.chatMessage("<v>[#] <r>You can't set the password of a room without review mode.", player)
+		end
+		if roompw.owner and roompw.owner ~= player and not ranks.admin[player] then
+			return tfm.exec.chatMessage("<v>[#] <r>You can't set the password of this room. Ask " .. roompw.owner .. " to do so.", player)
 		end
 
 		local password = table.concat(args, " ")
 		tfm.exec.setRoomPassword(password)
 
 		if password == "" then
+			roompw.owner = nil
+			roompw.password = nil
 			return tfm.exec.chatMessage("<v>[#] <d>Room password disabled by " .. player .. ".")
 		end
 		tfm.exec.chatMessage("<v>[#] <d>Room password changed by " .. player .. ".")
 		tfm.exec.chatMessage("<v>[#] <d>You set the room password to: " .. password, player)
+
+		if not roompw.owner then
+			roompw.owner = player
+		end
+		roompw.password = password
 
 	elseif cmd == "cp" then
 		if not review_mode then return end
@@ -1188,6 +1202,14 @@ onEvent("PacketReceived", function(packet_id, packet)
 		local commu, msg = string.match(packet, "^([^\000]+)\000(.+)$")
 		if commu == room.community then
 			tfm.exec.chatMessage("<vi>[" .. commu .. "] [#parkour] <d>" .. msg)
+		end
+	elseif packet_id == 6 then -- pw request
+		if packet == room.name then
+			if roompw.password then
+				sendPacket(5, room.name .. "\000" .. roompw.password .. "\000" .. roompw.owner)
+			else
+				sendPacket(5, room.name .. "\000")
+			end
 		end
 	end
 end)

@@ -19,6 +19,7 @@ local packets = {
 	new_modchat = bit.lshift(10, 8) + 255,
 	load_map = bit.lshift(11, 8) + 255,
 	weekly_reset = bit.lshift(12, 8) + 255,
+	room_password = bit.lshift(13, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -277,6 +278,9 @@ onEvent("PacketReceived", function(id, packet)
 
 	elseif id == 4 then
 		ui.addTextArea(packets.weekly_reset, packet, parkour_bot)
+
+	elseif id == 5 then
+		ui.addTextArea(packets.room_password, packet, parkour_bot)
 	end
 end)
 

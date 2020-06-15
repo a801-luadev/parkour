@@ -29,6 +29,7 @@ CURRENT_MODCHAT = (9 << 8) + 255
 NEW_MODCHAT = (10 << 8) + 255
 LOAD_MAP = (11 << 8) + 255
 WEEKLY_RESET = (12 << 8) + 255
+ROOM_PASSWORD = (13 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -286,6 +287,32 @@ class Client(aiotfm.Client):
 			await self.sendRoomPacket(5, "{}\x00{}".format(commu, " ".join(args)))
 			await whisper.reply("Announced!")
 			self.dispatch("send_webhook", "**`[ANNOUNCEMENT]:`** **{}** announced `{}` to the community {}".format(author, " ".join(args), commu))
+
+		elif cmd == "pw":
+			if not ranks["admin"] and not ranks["manager"]:
+				return
+			if not args:
+				return await whisper.reply("Invalid syntax.")
+
+			room = " ".join(args)
+			await self.sendRoomPacket(6, room)
+			await whisper.reply("Requesting room password.")
+			self.dispatch("send_webhook", "**`[ROOMPW]:`** **{}** requested the password of the room `{}`.".format(author, room))
+
+			try:
+				_, txt = await self.wait_for(
+					"on_lua_textarea",
+					lambda txt_id, txt: txt_id == ROOM_PASSWORD and txt.startswith(room + "\x00"),
+					timeout=60.0
+				)
+			except:
+				return await whisper.reply("Could not get the password of the room. Is it alive?")
+
+			data = txt.split("\x00")
+			if len(data) == 3:
+				await whisper.reply("The room password has been set by {} and it is {}".format(data[2], data[1]))
+			else:
+				await whisper.reply("The room does not have a password.")
 
 		elif cmd == "update":
 			if not ranks["admin"]:
