@@ -125,7 +125,7 @@ translations.es = {
 	write_map = "Escribe el código de mapa aquí abajo",
 	overall_lb = "General",
 	weekly_lb = "Semanal",
-	new_lang = "<v>[#] <d>Language set to English",
+	new_lang = "<v>[#] <d>Lenguaje cambiado a Español",
 
 	-- Power names
 	balloon = "Globo",
