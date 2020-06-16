@@ -332,10 +332,10 @@ class Client(aiotfm.Client):
 			if len(args) < 1:
 				return await whisper.reply("Invalid syntax.")
 
-			if "yes" != args[1] != "no":
+			if "yes" != args[0] != "no":
 				return await whisper.reply("Invalid syntax.")
 
-			await self.sendLuaCallback(SEND_OTHER, "update\x00{}".format(args[1]))
+			await self.sendLuaCallback(SEND_OTHER, "update\x00{}".format(args[0]))
 			await whisper.reply("Update alert sent.")
 
 		elif cmd == "rank":

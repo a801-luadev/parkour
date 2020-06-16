@@ -293,10 +293,10 @@ class Client(discord.Client):
 					if len(args) < 1:
 						return await msg.channel.send("Invalid syntax.")
 
-					if "yes" != args[1] != "no":
+					if "yes" != args[0] != "no":
 						return await msg.channel.send("Invalid syntax.")
 
-					self.mapper.dispatch("game_update", args[1] == "yes")
+					self.mapper.dispatch("game_update", args[0] == "yes")
 					await msg.channel.send("Update alert sent.")
 
 				elif cmd == "!load":
