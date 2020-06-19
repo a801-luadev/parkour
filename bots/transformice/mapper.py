@@ -74,6 +74,8 @@ class Client(aiotfmpatch.Client):
 			else:
 				self.map_xml = zlib.decompress(compressed_xml)
 
+			self.dispatch("map_loaded")
+
 		packet.pos = 0
 		await super().handle_packet(conn, packet)
 
