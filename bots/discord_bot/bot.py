@@ -1,3 +1,4 @@
+from urllib.parse import urlencode
 import traceback
 import discord
 import asyncio
@@ -5,6 +6,37 @@ import aiohttp
 import json
 import re
 import os
+import io
+
+categories = {
+	0: "Normal",
+	1: "Locked",
+	3: "Bootcamp",
+	4: "Shaman",
+	5: "Art",
+	6: "Mechanism",
+	7: "No Shaman",
+	8: "Double Shaman",
+	9: "Miscellaneous",
+	10: "Survivor",
+	11: "Vampire Survivor",
+	13: "Generic Bootcamp",
+	17: "Racing",
+	18: "Defilante",
+	19: "Music",
+	20: "Survivor (out of rotation)",
+	21: "Vampire (out of rotation)",
+	22: "Tribe House",
+	23: "Bootcamp (out of rotation)",
+	32: "Double Shaman (out of rotation)",
+	34: "Double Shaman Survivor (out of rotation)",
+	38: "Racing (out of rotation)",
+	41: "Module",
+	42: "No Shaman (out of rotation)",
+	43: "High Deleted",
+	44: "Deleted",
+	87: "Vanilla"
+}
 
 class Client(discord.Client):
 	role_reaction_channel = 683847523558883446
@@ -161,6 +193,51 @@ class Client(discord.Client):
 
 				self.busy = False
 				await msg.channel.send("Rotation modified.")
+
+		elif msg.channel.id == 723583447976771595:
+			args = msg.content.split(" ")
+			cmd = args.pop(0).lower()
+
+			if cmd in ("!info", "!render"):
+				if not args:
+					return await msg.channel.send("Invalid syntax.")
+
+				code = args[0]
+				if code[0] != "@":
+					code = "@" + code
+				if not code[1:].isdigit():
+					return await msg.channel.send("Invalid syntax.")
+
+				if self.busy:
+					return await msg.channel.send("The bot is busy right now.")
+				self.busy = True
+
+				author, code, perm, xml = await self.mapper.getDeepMapInfo(code)
+				if author is None:
+					self.busy = False
+					return await msg.channel.send("The map does not exist or can't be loded.")
+
+				file_format = "xml"
+				file_content = xml
+				try:
+					async with aiohttp.ClientSession(conn_timeout=15.0, read_timeout=15.0) as session:
+						async with session.post(
+							"https://xml-drawer.herokuapp.com/",
+							headers={"Content-Type": "application/x-www-form-urlencoded"},
+							data=urlencode({"xml": xml.decode()}).encode()
+						) as resp:
+							file_content = await resp.read()
+					file_format = "png"
+				except:
+					await msg.channel.send("Could not render the map. Here is the XML instead.")
+
+				await msg.channel.send(
+					content=msg.author.mention,
+					embed=discord.Embed(description="`[{}]` - **P{}**\n{} - **{}**".format(categories[perm], perm, code, author)),
+					file=discord.File(filename="{}.{}".format(code, file_format), fp=io.BytesIO(file_content))
+				)
+
+				self.busy = False
 
 		elif msg.channel.id == 686932761222578201 or msg.channel.id == 694270110172446781:
 			args = msg.content.split(" ")

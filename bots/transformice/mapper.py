@@ -6,6 +6,7 @@ import hashlib
 import random
 import string
 import time
+import zlib
 import re
 import os
 
@@ -27,6 +28,8 @@ MODULE_CRASH = (255 << 8) + 255
 
 class Client(aiotfmpatch.Client):
 	heartbeat_death = None
+	received_reboot = False
+	map_xml = None
 
 	async def handle_packet(self, conn, packet):
 		CCC = packet.readCode()
@@ -59,12 +62,41 @@ class Client(aiotfmpatch.Client):
 		elif CCC == (28, 88):
 			self.dispatch("server_reboot", packet.read32())
 
+		elif CCC == (5, 2):
+			packet.read32() # map code
+			packet.read16() # room players
+			packet.read8() # round code
+			packet.read16() # ???
+			compressed_xml = packet.readString()
+
+			if len(compressed_xml) == 0:
+				self.map_xml = None
+			else:
+				self.map_xml = zlib.decompress(compressed_xml)
+
 		packet.pos = 0
 		await super().handle_packet(conn, packet)
+
+	async def loadMap(self, mapcode, timeout=3.0):
+		await self.sendLuaCallback(LOAD_MAP, mapcode)
+		await self.wait_for("on_map_loaded", timeout=timeout)
 
 	async def getMapInfo(self, mapcode, timeout=3.0):
 		await self.sendCommand("info " + mapcode)
 		return await self.wait_for("on_map_info", timeout=timeout)
+
+	async def getDeepMapInfo(self, mapcode, channel=None):
+		# tell the server to load the map into ram so /info works
+		try:
+			await self.loadMap(mapcode)
+		except: # timeout
+			return None, None, None, None
+
+		author, mapcode, perm = await self.getMapInfo(mapcode)
+		if author is None: # map doesn't exist
+			return None, None, None, None
+
+		return author, mapcode, perm, self.map_xml
 
 	async def on_login_ready(self, *args):
 		print("[MAPPER] Connected. Logging in...", flush=True)
@@ -86,14 +118,16 @@ class Client(aiotfmpatch.Client):
 			self.heartbeat_death = None
 
 	async def on_server_reboot(self, ms):
-		seconds = ms // 1000
+		if self.received_reboot:
+			return
+		self.received_reboot = True
 
-		if seconds == 120:
-			try:
-				await self.wait_for("special_chat_msg", timeout=5.0)
-			except:
-				pass
-			await self.sendSpecialChatMsg(8, "noob bot ^")
+		messages = ("of course duh", "maybe", "probably", "very unlikely", "no")
+		try:
+			await self.wait_for("special_chat_msg", timeout=5.0)
+		except:
+			pass
+		await self.sendSpecialChatMsg(8, random.choice(messages))
 
 	async def on_restart_request(self, room, channel):
 		if self.room is None:
