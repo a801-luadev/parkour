@@ -51,6 +51,8 @@ class Client(aiotfm.Client):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 
+		self.mute_check_death = None
+		self.next_mute_check = time.time() + 60.0
 		self.received_weekly_reset = False
 		self.time_diff = 0
 		self.player_ranks = {}
@@ -184,6 +186,10 @@ class Client(aiotfm.Client):
 
 			elif head == "update":
 				self.dispatch("send_webhook", "**`[UPDATE]:`** The game is gonna update soon.")
+
+			elif head == "mutecheck":
+				self.mute_check_death = None
+				self.next_mute_check = time.time() + 120.0
 
 		elif txt_id == MODULE_CRASH:
 			event, message = text.split("\x00", 1)
@@ -554,6 +560,13 @@ class Client(aiotfm.Client):
 			)
 
 	async def on_heartbeat(self, took):
+		if self.mute_check_death is not None and time.time() >= self.mute_check_death:
+			return await self.restart_dyno()
+
+		elif self.next_mute_check is not None and time.time() >= self.next_mute_check:
+			self.next_mute_check = None
+			self.dispatch("check_muted")
+
 		for name, data in self.chats.items():
 			if data[2] is None:
 				continue
@@ -595,3 +608,10 @@ class Client(aiotfm.Client):
 		await self.chats[name][2].send("There's a new chat. It's been posted in discord. Please leave this one as soon as possible.")
 
 		await self.sendLuaCallback(NEW_CHAT, name + "\x00" + newname)
+
+	async def on_check_muted(self):
+		text = "".join(random.choice(string.ascii_letters + " ") for x in range(50))
+
+		await self.whisper("Tocutoeltuco#5522", text)
+
+		self.mute_check_death = time.time() + 30

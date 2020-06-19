@@ -257,7 +257,7 @@ class Client(aiotfmpatch.Client):
 			await self.loadLua(script)
 			await asyncio.sleep(5.0)
 
-		await self.sendLuaCallback(SEND_OTHER, "update") # trigger webhook!
+		await self.sendLuaCallback(SEND_OTHER, "update\x00") # trigger webhook!
 		await self.sendRoomPacket(1, "")
 
 		await asyncio.sleep(60.0)
@@ -274,3 +274,7 @@ class Client(aiotfmpatch.Client):
 
 	async def on_map_change(self, rotation, code, add):
 		await self.sendLuaCallback(CHANGE_MAP, "{}\x00{}\x00{}".format(rotation, code, int(add)))
+
+	async def on_whisper(self, whisper):
+		if whisper.author == "Parkour#8558":
+			await self.sendLuaCallback(SEND_OTHER, "mutecheck\x00")
