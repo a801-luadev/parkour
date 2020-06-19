@@ -219,17 +219,18 @@ class Client(discord.Client):
 
 				file_format = "xml"
 				file_content = xml
-				try:
-					async with aiohttp.ClientSession(conn_timeout=15.0, read_timeout=15.0) as session:
-						async with session.post(
-							"https://xml-drawer.herokuapp.com/",
-							headers={"Content-Type": "application/x-www-form-urlencoded"},
-							data=urlencode({"xml": xml.decode()}).encode()
-						) as resp:
-							file_content = await resp.read()
-					file_format = "png"
-				except:
-					await msg.channel.send("Could not render the map. Here is the XML instead.")
+				if cmd == "!render":
+					try:
+						async with aiohttp.ClientSession(conn_timeout=15.0, read_timeout=15.0) as session:
+							async with session.post(
+								"https://xml-drawer.herokuapp.com/",
+								headers={"Content-Type": "application/x-www-form-urlencoded"},
+								data=urlencode({"xml": xml.decode()}).encode()
+							) as resp:
+								file_content = await resp.read()
+						file_format = "png"
+					except:
+						await msg.channel.send("Could not render the map. Here is the XML instead.")
 
 				await msg.channel.send(
 					content=msg.author.mention,
