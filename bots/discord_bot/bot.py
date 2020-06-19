@@ -37,46 +37,6 @@ class Client(discord.Client):
 		await asyncio.sleep(3600.0)
 		print("Restarting transformice bot", flush=True)
 
-	async def check_maps(self, msg, maps, adding):
-		changes = {}
-
-		for code in maps:
-			if not code.isdigit():
-				await msg.channel.send("Invalid syntax.")
-				return
-
-		for code in maps:
-			await asyncio.sleep(3.0)
-			try:
-				author, code, perm = await self.mapper.getMapInfo("@" + code, timeout=15.0)
-			except: # timeout
-				await msg.channel.send("The map @" + code + " cold not be loaded.")
-				return
-			if perm != 41 and perm != 22:
-				await msg.channel.send("The map " + code + " can't be in P" + str(perm) + ".")
-				return
-
-			if adding:
-				if perm == 41:
-					await msg.channel.send("The map " + code + " is already P41.")
-				elif perm == 22:
-					await msg.channel.send("Changing the perm of " + code + " to P41.")
-					if not await self.mapper.changeMapPerm(code, "41"):
-						await msg.channel.send("Could not change the perm of " + code + ".")
-						return
-			else:
-				if perm == 22:
-					await msg.channel.send("The map " + code + " is already P22.")
-				elif perm == 41:
-					await msg.channel.send("Changing the perm of " + code + " to P22.")
-					if not await self.mapper.changeMapPerm(code, "22"):
-						await msg.channel.send("Could not change the perm of " + code + ".")
-						return
-
-			changes[code[1:]] = True
-
-		return changes
-
 	async def on_whois_request(self, player):
 		channel = self.get_channel(707358868090519632)
 		await channel.send(player)
