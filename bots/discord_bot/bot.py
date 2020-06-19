@@ -151,7 +151,7 @@ class Client(discord.Client):
 				for code in maps:
 					self.mapper.dispatch("map_change", args[0], code, args[1] == "add")
 
-				file = 1 if args[0] == "high" else 10
+				file = 20 if args[0] == "high" else 22
 				await msg.channel.send("The action should be applied within a minute.")
 				try:
 					await self.mapper.wait_for("on_file_loaded", lambda f: f == file, timeout=65.0)
