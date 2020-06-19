@@ -234,7 +234,7 @@ class Client(discord.Client):
 
 				await msg.channel.send(
 					content=msg.author.mention,
-					embed=discord.Embed(description="`[{}]` - **P{}**\n{} - **{}**".format(categories[perm], perm, code, author)),
+					embed=discord.Embed(description="`[{}]` - **P{}**\n{} - **{}**".format(categories.get(perm, "Unknown"), perm, code, author)),
 					file=discord.File(filename="{}.{}".format(code, file_format), fp=io.BytesIO(file_content))
 				)
 
