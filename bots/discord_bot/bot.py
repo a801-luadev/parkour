@@ -198,7 +198,7 @@ class Client(discord.Client):
 			args = msg.content.split(" ")
 			cmd = args.pop(0).lower()
 
-			if cmd in ("!info", "!render"):
+			if cmd in ("!info", "!render", "!map"):
 				if not args:
 					return await msg.channel.send("Invalid syntax.")
 
@@ -219,7 +219,7 @@ class Client(discord.Client):
 
 				file_format = "xml"
 				file_content = xml
-				if cmd == "!render":
+				if cmd in ("!render", "!map"):
 					try:
 						async with aiohttp.ClientSession(conn_timeout=15.0, read_timeout=15.0) as session:
 							async with session.post(
