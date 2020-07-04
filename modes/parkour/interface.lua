@@ -320,10 +320,11 @@ local function setNameColor(player)
 		player,
 
 		victory[player] and 0xFEFF00 -- has won
-		or ranks.admin[player] and 0xE7342A -- admin
+		or (ranks.admin[player] or ranks.bot[player]) and 0xE7342A -- admin / bot
 		or ranks.manager[player] and 0x843DA4 -- manager
 		or (ranks.mod[player] or ranks.trainee[player]) and 0xFFAAAA -- moderator
 		or ranks.mapper[player] and 0x25C059 -- mapper
+		or ranks.translator[player] and 0xE0B856 -- translator
 		or (room.xmlMapInfo and player == room.xmlMapInfo.author) and 0x10FFF3 -- author of the map
 		or 0x148DE6 -- default
 	)
@@ -994,10 +995,10 @@ onEvent("ChatCommand", function(player, msg)
 			local texts = staff_people.texts
 			local text, first
 			for player, ranks in next, player_ranks do
-				if player ~= "Tocutoeltuco#5522" then
-					text = "\n- <v>" .. player .. "</v> ("
-					first = true
-					for rank in next, ranks do
+				text = "\n- <v>" .. player .. "</v> ("
+				first = true
+				for rank in next, ranks do
+					if not hidden_ranks[rank] then
 						rank = rank == "trainee" and "mod trainee" or rank
 						if first then
 							text = text .. rank
@@ -1006,9 +1007,9 @@ onEvent("ChatCommand", function(player, msg)
 							text = text .. ", " .. rank
 						end
 					end
-					if not first then
-						texts[player] = text .. ")"
-					end
+				end
+				if not first then
+					texts[player] = text .. ")"
 				end
 			end
 
