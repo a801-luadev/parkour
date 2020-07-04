@@ -321,7 +321,7 @@ local function setNameColor(player)
 
 		victory[player] and 0xFEFF00 -- has won
 		or (ranks.admin[player] or ranks.bot[player]) and 0xE7342A -- admin / bot
-		or ranks.manager[player] and 0x843DA4 -- manager
+		or ranks.manager[player] and 0xD0A9F0 -- manager
 		or (ranks.mod[player] or ranks.trainee[player]) and 0xFFAAAA -- moderator
 		or ranks.mapper[player] and 0x25C059 -- mapper
 		or ranks.translator[player] and 0xE0B856 -- translator
