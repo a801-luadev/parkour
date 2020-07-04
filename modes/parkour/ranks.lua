@@ -17,25 +17,18 @@ local ranks_id = {
 }
 local ranks_permissions = {
 	admin = {
-		show_update = true,
-		announce = true
 	},
 	manager = {
-		set_player_rank = true,
-		perm_map = true
 	},
 	mod = {
 		ban = true,
 		unban = true,
-		delete_comments = true,
 		spectate = true,
 		get_player_room = true,
 		change_map = true,
-		kill = true,
-		overkill = true
+		kill = true
 	},
 	mapper = {
-		vote_map = true,
 		change_map = true,
 		enable_review = true
 	},
