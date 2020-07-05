@@ -19,6 +19,7 @@ local ck = {
 }
 local players_file
 local review_mode = false
+local cp_available = {}
 
 local function generatePlayer(player, when)
 	players_level[player] = 1
@@ -39,6 +40,7 @@ onEvent("NewPlayer", function(player)
 	spec_mode[player] = nil
 	in_room[player] = true
 	player_count = player_count + 1
+	cp_available[player] = 0
 
 	if levels then
 		tfm.exec.respawnPlayer(player)
@@ -54,6 +56,7 @@ onEvent("NewPlayer", function(player)
 			end
 		else
 			generatePlayer(player, os.time())
+			tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
 		end
 
 		tfm.exec.setPlayerScore(player, players_level[player], false)
@@ -98,6 +101,17 @@ onEvent("PlayerWon", function(player)
 		tfm.exec.setGameTime(20)
 		less_time = true
 	end
+end)
+
+onEvent("PlayerRespawn", function(player)
+	cp_available[player] = os.time() + 750
+
+	if not room.playerList[player] then return end
+	if bans[room.playerList[player].id] then return tfm.exec.killPlayer(player) end
+	if (not levels) or (not players_level[player]) then return end
+
+	local level = levels[ players_level[player] ]
+	tfm.exec.movePlayer(player, level.x, level.y)
 end)
 
 onEvent("NewGame", function()
@@ -149,12 +163,13 @@ onEvent("Loop", function()
 		local level_id, next_level, player
 		local particle = 29--math.random(21, 23)
 		local x, y = math.random(-10, 10), math.random(-10, 10)
+		local now = os.time()
 
 		for name in next, in_room do
 			player = room.playerList[name]
 			if spec_mode[name] then
 				tfm.exec.killPlayer(name)
-			else
+			elseif now >= cp_available[name] then
 				level_id = players_level[name] + 1
 				next_level = levels[level_id]
 
