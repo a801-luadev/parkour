@@ -612,6 +612,14 @@ class Client(aiotfm.Client):
 	async def on_check_muted(self):
 		text = "".join(random.choice(string.ascii_letters + " ") for x in range(50))
 
+		await self.sendCommand("profile Tocutoeltuco#5522")
+		try:
+			await self.wait_for("on_profile", lambda p: p.username == "Tocutoeltuco#5522", timeout=3.0)
+		except:
+			self.mute_check_death = None
+			self.next_mute_check = time.time() + 120
+			return
+
 		await self.whisper("Tocutoeltuco#5522", text)
 
 		self.mute_check_death = time.time() + 30
