@@ -88,7 +88,9 @@ onEvent("PlayerDied", function(player)
 
 	if not spec_mode[player] then
 		tfm.exec.respawnPlayer(player)
-		tfm.exec.movePlayer(player, level.x, level.y)
+		if level then
+			tfm.exec.movePlayer(player, level.x, level.y)
+		end
 	end
 end)
 
@@ -170,7 +172,7 @@ onEvent("Loop", function()
 			if spec_mode[name] then
 				tfm.exec.killPlayer(name)
 			elseif now >= cp_available[name] then
-				level_id = players_level[name] + 1
+				level_id = (players_level[name] or 1) + 1
 				next_level = levels[level_id]
 
 				if next_level then
@@ -213,7 +215,7 @@ onEvent("PlayerDataParsed", function(player, data)
 	ck.particles[player] = data.parkour.ckpart == 1
 
 	if levels and not ck.particles[player] then
-		local next_level = levels[players_level[player] + 1]
+		local next_level = levels[(players_level[player] or 1) + 1]
 		if next_level then
 			if ck.images[player] then
 				tfm.exec.removeImage(ck.images[player])

@@ -452,7 +452,7 @@ local function showPowers(player, page)
 					canUse and (
 						power.click and
 						translatedMessage("click", player) or
-						translatedMessage("press", player, player_keys[player][power])
+						translatedMessage("press", player, player_keys[player][power] or "?")
 					) or (
 						power.ranking and
 						translatedMessage("ranking_pos", player, power.ranking) or
@@ -524,6 +524,13 @@ onEvent("TextAreaCallback", function(id, player, callback)
 	else
 		action = string.sub(callback, 1, position - 1)
 		args = string.sub(callback, position + 1)
+	end
+
+	if not players_file[player] then return end
+	if not open[player] then
+		open[player] = {
+			images = {_count = 0}
+		}
 	end
 
 	if action == "powers" then
@@ -1093,6 +1100,13 @@ onEvent("ChatCommand", function(player, msg)
 end)
 
 onEvent("Keyboard", function(player, key)
+	if not players_file[player] then return end
+	if not open[player] then
+		open[player] = {
+			images = {_count = 0}
+		}
+	end
+
 	if key == 38 or key == 40 then
 		if open[player].help then
 			scrollWindow(7, player, key == 38)
