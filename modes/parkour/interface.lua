@@ -787,6 +787,10 @@ end)
 
 onEvent("PlayerDataParsed", function(player, data)
 	system.bindKeyboard(player, data.parkour.mort == 1 and 77 or 46, true, true)
+	if data.langue and translations[data.langue] then
+		player_langs[player] = translations[data.langue]
+	end
+
 	if data.parkour.pbut == 1 then
 		showPowersButton(player)
 	end
@@ -960,10 +964,11 @@ onEvent("ChatCommand", function(player, msg)
 				end
 			end
 			tfm.exec.chatMessage("<d>Type <b>!langue ID</b> to switch your language.", player)
-		else
+		elseif players_file[player] then
 			local lang = string.lower(args[1])
 			if translations[lang] then
 				player_langs[player] = translations[lang]
+				players_file[player].langue = lang
 				translatedChatMessage("new_lang", player)
 			else
 				tfm.exec.chatMessage("<v>[#] <r>Unknown language: <b>" .. lang .. "</b>", player)
