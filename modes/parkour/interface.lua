@@ -970,6 +970,8 @@ onEvent("ChatCommand", function(player, msg)
 				player_langs[player] = translations[lang]
 				players_file[player].langue = lang
 				translatedChatMessage("new_lang", player)
+
+				savePlayerData(player)
 			else
 				tfm.exec.chatMessage("<v>[#] <r>Unknown language: <b>" .. lang .. "</b>", player)
 			end
