@@ -1039,6 +1039,10 @@ onEvent("ChatCommand", function(player, msg)
 		if not perms[player] or not perms[player].change_map then return end
 
 		if pointer > 0 then
+			if not perms[player].laod_custom_map then
+				return tfm.exec.chatMessage("<v>[#] <r>You can't load a custom map.", player)
+			end
+
 			count_stats = false
 			tfm.exec.newGame(args[1])
 		elseif os.time() < map_change_cd and not review_mode then

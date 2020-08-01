@@ -29,10 +29,12 @@ local ranks_permissions = {
 		spectate = true,
 		get_player_room = true,
 		change_map = true,
+		load_custom_map = true,
 		kill = true
 	},
 	mapper = {
 		change_map = true,
+		load_custom_map = true,
 		enable_review = true
 	},
 	trainee = {
@@ -40,7 +42,9 @@ local ranks_permissions = {
 		spectate = true,
 		get_player_room = true
 	},
-	translator = {}
+	translator = {
+		change_map = true
+	}
 }
 player_ranks = {}
 local perms = {}
