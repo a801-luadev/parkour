@@ -1057,7 +1057,7 @@ onEvent("ChatCommand", function(player, msg)
 		if not perms[player] or not perms[player].change_map then return end
 
 		if pointer > 0 then
-			if not perms[player].laod_custom_map then
+			if not perms[player].load_custom_map then
 				return tfm.exec.chatMessage("<v>[#] <r>You can't load a custom map.", player)
 			end
 
