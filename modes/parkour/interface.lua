@@ -760,9 +760,6 @@ end)
 onEvent("NewPlayer", function(player)
 	tfm.exec.lowerSyncDelay(player)
 
-	translatedChatMessage("welcome", player)
-	translatedChatMessage("donate", player)
-
 	system.bindKeyboard(player, 38, true, true)
 	system.bindKeyboard(player, 40, true, true)
 	system.bindKeyboard(player, 76, true, true)
@@ -801,6 +798,9 @@ onEvent("PlayerDataParsed", function(player, data)
 	if data.langue and translations[data.langue] then
 		player_langs[player] = translations[data.langue]
 	end
+
+	translatedChatMessage("welcome", player)
+	translatedChatMessage("donate", player)
 
 	if data.parkour.pbut == 1 then
 		showPowersButton(player)
