@@ -62,7 +62,7 @@ translations.hu = {
 	enjoy = "<d>Élvezd az új képességeid!",
 
 	-- Information messages
-	donate = "<vp>Írja be a <b>!donate</b> lehetőséget, ha adományt szeretne adni ehhez a modulhoz!",
+	donate = "<vp>Írd be a <b>!donate</b> parancsot, ha adományozni szeretnél a modul részére!",
 	paused_events = "<cep><b>[Figyelem!]</b> <n>A modul elérte a kritikus határát, így szüneteltetés alatt áll.",
 	resumed_events = "<n2>A modul folytatódik.",
 	welcome = "<n>Üdvözlünk a <t>#parkour</t>-on!",
@@ -126,7 +126,7 @@ translations.hu = {
 	write_map = "Írd ide a pályakódot",
 	overall_lb = "Teljes",
 	weekly_lb = "Heti",
-	new_lang = "<v>[#] <d>Nyelv beállítása Hungarian Magyar",
+	new_lang = "<v>[#] <d>A játék nyelvét Magyarra változtattad",
 
 	-- Power names
 	balloon = "Léggömb",
