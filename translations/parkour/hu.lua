@@ -1,6 +1,6 @@
 translations.hu = {
 	name = "hu",
-	fullname = "Hungarian",
+	fullname = "Magyar",
 
 	-- Error messages
 	corrupt_map = "<r>Sérült pálya. Egy másik pálya betöltése folyamatban...",
