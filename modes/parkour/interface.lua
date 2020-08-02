@@ -216,6 +216,7 @@ local function closePowers(player)
 
 	for index = 3000, 2999 + #powers do
 		ui.removeTextArea(index, player)
+		ui.removeTextArea(index + 27000, player)
 	end
 
 	open[player].powers = false
@@ -446,9 +447,20 @@ local function showPowers(player, page)
 			end
 			ui.addTextArea(
 				3000 + index,
-				string.format(
-					"<p align='center'><b><d>%s\n\n\n\n\n\n\n\n<n>%s",
-					power.name and translatedMessage(power.name, player) or "undefined",
+				"<p align='center'><b><d>" .. (power.name and translatedMessage(power.name, player) or "undefined"),
+				player,
+				170 + (index - page * 3) * 160,
+				150,
+				140,
+				125,
+				0x1c3a3e,
+				0x193e46,
+				1,
+				true
+			)
+			ui.addTextArea(
+				30000 + index,
+				"<p align='center'><b><n>" .. (
 					canUse and (
 						power.click and
 						translatedMessage("click", player) or
@@ -461,12 +473,12 @@ local function showPowers(player, page)
 				),
 				player,
 				170 + (index - page * 3) * 160,
-				150,
+				255,
 				140,
-				125,
-				0x1c3a3e,
-				0x193e46,
-				1,
+				20,
+				0,
+				0,
+				0,
 				true
 			)
 			images._count = images._count + 1
