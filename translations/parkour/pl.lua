@@ -62,7 +62,7 @@ translations.pl = {
 	enjoy = "<d>Ciesz się nowymi umiejętnościami!",
 
 	-- Information messages
-	donate = "<vp>Type <b>!donate</b> if you would like to donate for this module!",
+	donate = "<vp>Wpisz <b>!donate</b>, jeśli chcesz przekazać darowiznę na ten moduł!",
 	paused_events = "<cep><b>[Uwaga!]</b> <n>Moduł osiągnął limit krytyczny i jest wstrzymywany.",
 	resumed_events = "<n2>Moduł został wznowiony.",
 	welcome = "<n>Witamy w <t>#parkour</t>!",

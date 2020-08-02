@@ -62,7 +62,7 @@ translations.ro = {
 	enjoy = "<d>Bucură-te de noile abilități!",
 
 	-- Information messages
-	donate = "<vp>Wpisz <b>!donate</b>, jeśli chcesz przekazać darowiznę na ten moduł!",
+	donate = "<vp>Scrie <b>!donate</b> dacă dorești să donezi pentru acest modul!",
 	paused_events = "<cep><b>[Atenție!]</b> <n>Modulul a atins limita critcă și este pauzat.",
 	resumed_events = "<n2>Modulul a fost eliberat.",
 	welcome = "<n>Bine ai venit pe <t>#parkour</t>!",
