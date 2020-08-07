@@ -113,6 +113,7 @@ onEvent("PlayerRespawn", function(player)
 	if (not levels) or (not players_level[player]) then return end
 
 	local level = levels[ players_level[player] ]
+	if not level then return end
 	tfm.exec.movePlayer(player, level.x, level.y)
 end)
 
