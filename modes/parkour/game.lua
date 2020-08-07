@@ -179,17 +179,23 @@ onEvent("Loop", function()
 				if next_level then
 					if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_range then
 						players_level[name] = level_id
-						tfm.exec.setPlayerScore(name, level_id, false)
+						if not victory[name] then
+							tfm.exec.setPlayerScore(name, level_id, false)
+						end
 						if ck.particles[name] == false then
 							tfm.exec.removeImage(ck.images[name])
 						end
 
 						if level_id == last_level then
-							victory._last_level[name] = true
-							tfm.exec.giveCheese(name)
-							tfm.exec.playerVictory(name)
-							tfm.exec.respawnPlayer(name)
-							tfm.exec.movePlayer(name, next_level.x, next_level.y)
+							if victory[name] then -- !cp
+								translatedChatMessage("reached_level", name, level_id)
+							else
+								victory._last_level[name] = true
+								tfm.exec.giveCheese(name)
+								tfm.exec.playerVictory(name)
+								tfm.exec.respawnPlayer(name)
+								tfm.exec.movePlayer(name, next_level.x, next_level.y)
+							end
 						else
 							translatedChatMessage("reached_level", name, level_id)
 

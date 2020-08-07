@@ -990,7 +990,12 @@ onEvent("ChatCommand", function(player, msg)
 		end
 
 	elseif cmd == "cp" then
-		if not review_mode then return end
+		if not review_mode then
+			if not victory[player] then return end
+			if not checkCooldown(player, "cp_command", 1000) then
+				return translatedChatMessage("cooldown", player)
+			end
+		end
 
 		local checkpoint = tonumber(args[1])
 		if not checkpoint then
@@ -1000,7 +1005,6 @@ onEvent("ChatCommand", function(player, msg)
 		if not levels[checkpoint] then return end
 
 		players_level[player] = checkpoint
-		tfm.exec.setPlayerScore(player, checkpoint, false)
 		tfm.exec.killPlayer(player)
 
 		if ck.particles[player] == false then

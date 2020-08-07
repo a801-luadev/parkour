@@ -60,6 +60,7 @@ translations.en = {
 	overall_lb = "Overall",
 	weekly_lb = "Weekly",
 	new_lang = "<v>[#] <d>Language set to English",
+	cooldown = "<v>[#] <r>Wow, hol' on cowboy! Wait a few seconds before doing that again.",
 
 	-- Power names
 	balloon = "Balloon",
