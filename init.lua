@@ -79,3 +79,5 @@ end
 for player in next, room.playerList do
 	eventNewPlayer(player)
 end
+
+initializingModule = false
