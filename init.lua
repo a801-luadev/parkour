@@ -41,14 +41,14 @@ local flags = ""
 {% require-package "translations" %}
 {% require-package "global" %}
 
-local function initialide_parkour() -- so it uses less space after building
+local function initialize_parkour() -- so it uses less space after building
 	{% require-package "modes/parkour" %}
 end
 
 if starting == "*\003" then
 	tribe = string.sub(room.name, 3)
 
-	initialide_parkour()
+	initialize_parkour()
 else
 	local pos
 	if starting == "*#" then
@@ -72,7 +72,7 @@ else
 	elseif submode == "rocketlaunch" then
 		{% require-package "modes/rocketlaunch" %}
 	else
-		initialide_parkour()
+		initialize_parkour()
 	end
 end
 
