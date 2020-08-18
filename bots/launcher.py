@@ -26,7 +26,7 @@ while True:
 				print("Can not stop the process with CTRL+C. Killing it.")
 				process.kill()
 
-			time.sleep(3.0)
+			time.sleep(10.0)
 	except:
 		print("Could not launch bot.")
 		time.sleep(15.0)
