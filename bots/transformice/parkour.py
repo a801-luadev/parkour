@@ -582,7 +582,7 @@ class Client(aiotfm.Client):
 				if player == "Parkour#8558":
 					continue
 
-				ranks = self.player_ranks[player] if player in self.player_ranks else None
+				ranks = self.player_ranks[player] if player in self.player_ranks else self.ranks
 
 				admin = ranks["admin"] or ranks["manager"]
 				if name == "mod":
