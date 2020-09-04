@@ -26,7 +26,7 @@ translations.pl = {
 	help_staff = "<p align = 'center'><font size = '13'><r>WYJAŚNIAMY: Personel Parkour NIE JEST personelem Transformice i NIE MA żadnej mocy w samej grze, tylko w module.</r>\nPersonel w Parkour zapewnnia, że moduł działa płynnie przy minimalnych problemach i są zawsze dostępni, aby pomóc graczom w razie potrzeby.</font></p>\nAby zobaczyć listę aktywnych osób z personelu napisz <D>!staff</D> na czacie.\n\n<font color = '#E7342A'>Administratorzy:</font> Są odpowiedzialni za utrzymanie samego modułu poprzez dodawanie nowych aktualizacji i naprawianie błędów.\n\n<font color = '#D0A9F0'>Kierownicy zespołów:</font> Nadzorują zespoły moderatorów i twórców map, upewniając się, że dobrze wykonują swoje zadania. Odpowiadają również za rekrutację nowych członków do zespołu pracowników.\n\n<font color = '#FFAAAA'>Moderatoratorzy:</font> Są odpowiedzialni za egzekwowanie zasad modułu i karanie osób, które ich nie przestrzegają.\n\n<font color = '#25C059'>Mapperzy:</font> Są odpowiedzialni za przeglądanie, dodawanie i usuwanie map w modułach, aby zapewnić przyjemną rozgrywkę.",
 	help_rules = "<font size = '13'><B><J>Wszystkie zasady zawarte w Regulaminie Transformice dotyczą również #parkour</J></B></font>\n\nJeśli zauważysz, że jakiś gracz łamie te zasady, napisz do moderatorów parkour w grze. Jeżeli nie ma moderatorów w grze to zaleca się zgłosić na serwerze w discordzie.\nPodczas zgłaszania prosimy o podanie serwera, nazwy pokoju i nazwy gracza.\n• Na przykład: en-#parkour10 Blank#3495 trolling\nDowody, takie jak zrzuty ekranu, filmy i gify, są pomocne i doceniane, ale nie są konieczne.\n\n<font size = '11'>• Zakazane jest używanie: <font color = '#ef1111'>hack, usterek oraz błędów.</font>\n• <font color = '#ef1111'>VPN farmowanie</font> będzie uważany za <B>wykorzystywanie</B> i nie jest dozwolone. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nKażdy przyłapany na łamaniu tych zasad zostanie natychmiast zbanowany.</B></font></p>\n\n<font size = '12'>Transformice zezwala na trollowanie. Jednak, <font color='#cc2222'><B> zabronione jest to na  w parkourze.</B></font></font>\n\n<p align = 'center'><J>Trolling ma miejsce, gdy gracz celowo użył swoich mocy lub materiałów eksploatacyjnych, aby uniemożliwić innym graczom ukończenie mapy.</j></p>\n•Trolling w każdej formie jest zabroniony nie ważne czy w formie <B>zemsty czy zabawy</B>.\n• Za trollowanie uważa się również wymuszanie pomocy gdy gracz sam próbuje przejść mapę i prosi abyś przestał mu pomagać a ty odmawiasz.\n• <J>Jeśli gracz nie chce pomocy lub woli ukończyć sam mape, postaraj się pomóc innym graczom</J>. Jeśli jednak inny gracz potrzebuje pomocy w tym samym punkcie kontrolnym, co gracz solo, możesz im pomóc [obu].\n\nJeśli gracz zostanie przyłapany na trollowaniu, zostanie ukarany na czas. Pamiętaj, że wielokrotne trollowanie doprowadzi do dłuższych i surowszych kar.",
 	help_contribute = "<font size='14'>\n<p align='center'>Zespół zarządzający w parkour uwielbia otwarte kody, ponieważ <t>pomagają społeczności</t>. Możesz <o>zobaczyć</o> i <o>modyfikować</o> kod źródłowy na <o><u><a href='event:github'>GitHub</a></u></o>.\n\nUtrzymanie modułu jest <t>dobrowolne</t>, więc wszelka pomoc dotycząca <t>kodów</t>, <t>zgłaszania błędów</t>, <t>propozycje</t> oraz <t>tworzenie map</t> jest zawsze <u>mile widziane i doceniane</u>.\nMożesz <vp>zgłaszać błędy</vp> oraz <vp>dać propozycje</vp> na <o><u><a href='event:discord'>Discord</a></u></o> lub <o><u><a href='event:github'>GitHub</a></u></o>.\n<vp>Swoje mapy możesz przesyłać</vp> w naszym <o><u><a href='event:map_submission'>wątku na forum</a></u></o>.\n\nUtrzymanie parkour nie jest drogie, ale też nie darmowe. Możesz nam pomóc <t>przekazując dowolną kwotę</t> <o><u><a href='event:donate'>tutaj</a></u></o>.\n<u>Wszystkie darowizny zostaną przeznaczone na ulepszenie modułu.</u></p>",
-	help_changelog = "<font size='13'><p align='center'><o>Wersja 2.4.2 - 02/08/2020</o></p>\n\n• Naprawiono kilka błędów, które powodowały awarię modułu.\n• Naprawiono błąd, który nie pozwalał ludziom zobaczyć wymaganej liczby map dla niektórych mocy.\n• Także <cep>!langue</cep> polecenie jest teraz trwałe.",
+	help_changelog = "<font size='13'><p align='center'><o>Wersja 2.5.0 - 05/09/2020</o></p>\n\n<font size='11'>• Naprawiono większość błędów związanych z awariami pokojami.\n• Tym <cep>!staff</cep> komendy ma teraz okienko.\n• Po ukończeniu mapy możesz użyć <cep>!cp</cep> teleportować się do poprzedniego punktu kontrolnego.\n• Profil system! Napisz <cep>!profile [player]</cep> aby zobaczyć ich profile.\n• Niektóre mapy będą <vp>cyklicznie</vp> pokazać ankietę, abyś mógł głosować <vp>trzymać</vp> lub <r>usunąć</r> to.\n• <b>Dodano 6 nowych mocy!</b>\n• <u>Twój czas</u> zacznie liczyć <u>po pierwszym ruchu</u>.\n• Gracz, który skończy z najkrótszym czasem, będzie miał <font color='#ffffff'>białą nazwę</font>.\n• Możesz teraz <d>zmienić ustawienia klawiszy zasilania</d>.\n• Możesz użyć <cep>!map</cep> komendę w swoim plemieniu <vp>aby pominąć mapę</vp>.\n• Możesz nacisnąć <cep>F</cep> aby włączyć lub wyłączyć <r>linii bez pomocy</r>.\n• <i>(Prawdopodobnie)</i> nowe błędy :(",
 
 	-- Congratulation messages
 	reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>.",
@@ -34,6 +34,7 @@ translations.pl = {
 	unlocked_power = "<ce><d>%s</d> odblokował <vp>%s</vp> moc.",
 
 	-- Information messages
+	staff_power = "<r>Parkour staff <b>nie</b> mają jakąkolwiek moc poza #parkour pokojów.",
 	donate = "<vp>Wpisz <b>!donate</b>, jeśli chcesz przekazać darowiznę na ten moduł!",
 	paused_events = "<cep><b>[Uwaga!]</b> <n>Moduł osiągnął limit krytyczny i jest wstrzymywany.",
 	resumed_events = "<n2>Moduł został wznowiony.",
@@ -46,6 +47,61 @@ translations.pl = {
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj cząstek jako punktów kontrolnych\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<b>M</b> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy",
+	cooldown = "<v>[#] <r>Poczekaj kilka sekund, zanim zrobisz to ponownie.",
+	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> klawiatura" ..
+					 "\n\n<b>Ukryć</b> map liczb"),
+	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Ukończyć <v>%s</v> mapę" ..
+					"<font size='5'>\n\n</font>odblokować" ..
+					"<font size='5'>\n\n</font><v>%s</v>"),
+	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Ukończyć<v>%s</v> mapę" ..
+					 "<font size='5'>\n\n</font>uaktualnić do" ..
+					 "<font size='5'>\n\n</font><v>%s</v>"),
+	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Ranga<v>%s</v>" ..
+						 "<font size='5'>\n\n</font>odblokować" ..
+						 "<font size='5'>\n\n</font><v>%s</v>"),
+	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Ranga <v>%s</v>" ..
+						 "<font size='5'>\n\n</font>uaktualnić do" ..
+						 "<font size='5'>\n\n</font><v>%s</v>"),
+	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+				 "<font size='5'>\n\n</font>Ukończone mapy"),
+	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+					"<font size='5'>\n\n</font>Ogólny ranking"),
+	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+				   "<font size='5'>\n\n</font>Tygodniowa tablica wyników"),
+	badges = "<font size='14' face='Lucida Console,Verdana'>Odznaki (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	private_maps = "<bl>Liczba map tego gracza jest prywatna. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
+	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+				"Ogólna pozycja w tabeli liderów: <b><v>%s</v></b>\n\n" ..
+				"Tygodniowa pozycja w tabeli liderów: <b><v>%s</v></b>"),
+	map_count = "Map count: <b><v>%s</v></b>",
+	help_badge = "<v>[#] <d>Odznaki to osiągnięcie, które gracz może zdobyć. Kliknij je, aby zobaczyć ich opis.",
+	help_private_maps = "<v>[#] <d>Ten gracz nie lubi publicznie udostępniać liczby swoich map! Możesz je również ukryć w swoim profilu.",
+	help_badge_1 = "<v>[#] <d>Ten gracz był w przeszłości członkiem zespołu parkour. ",
+	help_badge_2 = "<v>[#] <d>Ten gracz jest lub był na pierwszej stronie ogólnej tabeli wyników.",
+	help_badge_3 = "<v>[#] <d>Ten gracz jest lub był na stronie 2 ogólnej tabeli wyników.",
+	help_badge_4 = "<v>[#] <d>Ten gracz jest lub był na stronie 3 ogólnej tabeli wyników.",
+	help_badge_5 = "<v>[#] <d>Ten gracz jest lub był na stronie 4 ogólnej tabeli wyników.",
+	help_badge_6 = "<v>[#] <d>Ten gracz jest lub był na stronie 5 ogólnej tabeli wyników.",
+	help_badge_7 = "<v>[#] <d>Ten gracz był na podium na koniec tygodniowej tabeli liderów.",
+	help_badge_8 = "<v>[#] <d>Ten gracz ma rekord 30 map na godzinę.",
+	help_badge_9 = "<v>[#] <d>Ten gracz ma rekord 35 map na godzinę.",
+	help_badge_10 = "<v>[#] <d>Ten gracz ma rekord 40 map na godzinę.",
+	help_badge_11 = "<v>[#] <d>Ten gracz ma rekord 45 map na godzinę.",
+	help_badge_12 = "<v>[#] <d>Ten gracz ma rekord 50 map na godzinę.",
+	help_badge_13 = "<v>[#] <d>Ten gracz ma rekord 55 map na godzinę.",
+	make_public = "robić publicznie",
+	make_private = "robić prywatnie",
+	moderators = "Moderatorzy",
+	mappers = "Maperzy",
+	managers = "Menedżerowie",
+	administrators = "Administratorzy",
+	close = "Zamknij",
+	cant_load_bot_profile = "<v>[#] <r>Nie możesz zobaczyć profilu tego bota, ponieważ #parkour używa go wewnętrznie do prawidłowego działania.",
+	cant_load_profile = "<v>[#] <r>Gracz <b>%s</b> wydaje się być offline lub nie istnieje.",
+	like_map = "Podoba ci się ta mapa?",
+	yes = "Tak",
+	no = "Nie",
+	idk = "Nie wiem",
 	unknown = "Nieznany",
 	powers = "Moce",
 	press = "<vp>Naciśnij %s",
@@ -53,10 +109,10 @@ translations.pl = {
 	ranking_pos = "Rang #%s",
 	completed_maps = "<p align='center'><BV><B>Ukończone mapy: %s</B></p></BV>",
 	leaderboard = "Tabela liderów",
-	position = "Pozycja",
-	username = "Nazwa",
-	community = "Społeczność",
-	completed = "Ukończone mapy",
+	position = "<V><p align=\"center\">Pozycja",
+	username = "<V><p align=\"center\">Nazwa",
+	community = "<V><p align=\"center\">Społeczność",
+	completed = "<V><p align=\"center\">Ukończone mapy",
 	overall_lb = "Ogólnie",
 	weekly_lb = "Co tydzień",
 	new_lang = "<v>[#] <d>Zestaw językowy do Polski",
@@ -75,5 +131,10 @@ translations.pl = {
 	choco = "Deska czekoladowa",
 	bigBox = "Duże pudło",
 	trampoline = "Trampolina",
-	toilet = "Toaleta"
+	toilet = "Toaleta",
+	pig = "Świnka",
+	sink = "Umywalka",
+	bathtub = "Wanna",
+	campfire = "Ognisko",
+	chair = "Krzesło", 
 }

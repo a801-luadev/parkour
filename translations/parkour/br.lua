@@ -26,7 +26,7 @@ translations.br = {
 	help_staff = "<p align = 'center'><font size = '13'><r>AVISO: A staff do Parkour não faz parte da staff do Transformice e não tem nenhum poder no jogo em si, apenas no módulo.</r>\nStaff do Parkour assegura que o módulo rode com problemas mínimos, e estão sempre disponíveis para dar assistência aos jogadores quando necessário.</font></p>\nVocê pode digitar <D>!staff</D> no chat para ver a lista de staff.\n\n<font color = '#E7342A'>Administradores:</font> São responsáveis por manter o módulo propriamente dito, atualizando-o e corrigindo bugs.\n\n<font color = '#D0A9F0'>Gerenciadores das Equipes:</font> Observam as equipes de Moderação e de Mapas, assegurando que todos estão fazendo um bom trabalho. Também são responsáveis por recrutar novos membros para a staff.\n\n<font color = '#FFAAAA'>Moderadores:</font> São responsáveis por aplicar as regras no módulo e punir aqueles que não as seguem.\n\n<font color = '#25C059'>Mappers:</font> São responsáveis por avaliar, adicionar e remover mapas do módulo para assegurar que você tenha uma jogatina divertida.",
 	help_rules = "<font size = '13'><B><J>Todas as regras nos Termos e Condições de Uso do Transformice também se aplicam no #parkour</J></B></font>\n\nSe você encontrar algum jogador quebrando-as, cochiche com um moderador do #parkour no jogo. Se os moderadores não estiverem online, recomendamos que reporte em nosso servidor no Discord.\nAo reportar, por favor inclua a comunidade, o nome da sala e o nome do jogador.\n• Ex: en-#parkour10 Blank#3495 trolling\nEvidências, como prints, vídeos e gifs são úteis e apreciados, mas não necessários.\n\n<font size = '11'>• Uso de <font color = '#ef1111'>hacks, glitches ou bugs</font> são proibidos em salas #parkour\n• <font color = '#ef1111'>Farm VPN</font> será considerado um <B>abuso</B> e não é permitido. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nQualquer um pego quebrando as regras será banido imediatamente.</B></font></p>\n\n<font size = '12'>Transformice permite trollar. No entanto, <font color='#cc2222'><B>não permitiremos isso no parkour.</B></font></font>\n\n<p align = 'center'><J>Trollar é quando um jogador intencionalmente usa seus poderes ou consumíveis para fazer com que outros jogadores não consigam terminar o mapa.</j></p>\n• Trollar por vingança <B>não é um motivo válido</B> e você ainda será punido.\n• Insistir em ajudar jogadores que estão tentando terminar o mapa sozinhos e se recusando a parar quando pedido também será considerado trollar.\n• <J>Se um jogador não quer ajuda e prefere completar o mapa sozinho, dê seu melhor para ajudar os outros jogadores</J>. No entanto, se outro jogador que precisa de ajuda estiver no mesmo checkpoint daquele que quer completar sozinho, você pode ajudar ambos sem receber punição.\n\nSe um jogador é pego trollando, será punido em uma questão de tempo. Note que trollar repetidamente irá fazer com que você receba punições gradativamente mais longas e/ou severas.",
 	help_contribute = "<font size='14'>\n<p align='center'>A equipe do parkour adora ter um código aberto, pois isso <t>ajuda a comunidade</t>. Você pode <o>ver</o> ou <o>contribuir</o> com o código no <o><u><a href='event:github'>GitHub</a></u></o>.\n\nManter o módulo é parte de um trabalho <t>voluntário</t>, então qualquer contribuição é <u>bem vinda</u>, seja com a <t>programação</t>, <t>reporte de erros</t>, <t>sugestões</t> e <t>criação de mapas</t>.\nVocê pode <vp>reportar erros</vp> ou <vp>dar sugestões</vp> no nosso <o><u><a href='event:discord'>Discord</a></u></o> e/ou no <o><u><a href='event:github'>GitHub</a></u></o>.\nVocê pode <vp>enviar seus mapas</vp> no nosso <o><u><a href='event:map_submission'>Tópico no Fórum</a></u></o>.\n\nManter o jogo não é caro, mas também não é grátis. Nós adoraríamos se você pudesse incentivar o desenvolvimento do jogo <t>doando qualquer valor</t> <o><u><a href='event:donate'>aqui</a></u></o>.\n<u>Todos os fundos arrecadados serão direcionados para o desenvolvimento do módulo.</u></p>",
-	help_changelog = "<font size='13'><p align='center'><o>Versão 2.4.2 - 02/08/2020</o></p>\n\n• Corrigidos alguns bugs que crashavam o módulo.\n• Corrigido um bug que não permitia que pessoas vissem a quantidade necessária de mapas para obter um determinado poder.\n• O comando <cep>!langue</cep> agora é permanente.",
+	help_changelog = "<font size='13'><p align='center'><o>Version 2.5.0 - 05/09/2020</o></p>\n\n<font size='11'>• Fixed most bugs regarding room crashes.\n• The <cep>!staff</cep> command now has a window.\n• When you finish a map, you can use <cep>!cp</cep> to teleport to a previous checkpoint.\n• Profile system! Type <cep>!profile [player]</cep> to see their profile.\n• Some maps will <vp>periodically</vp> show a poll so you can vote to <vp>keep</vp> or <r>remove</r> it.\n• <b>6 new powers were added!</b>\n• <u>Your time</u> will start counting <u>after you first move</u>.\n• The player who finishes with the shortest time will have a <font color='#ffffff'>white nickname</font>.\n• You can now <d>change your power key bindings</d>.\n• You can use the <cep>!map</cep> command in your tribehouse to <vp>skip a map</vp>.\n• You can press <cep>F</cep> to enable or disable the <r>no-help line</r>.\n• <i>(Probably)</i> new bugs :(",
 
 	-- Congratulation messages
 	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>.",
@@ -34,6 +34,7 @@ translations.br = {
 	unlocked_power = "<ce><d>%s</d> desbloqueou o poder <vp>%s</vp>.",
 
 	-- Information messages
+	staff_power = "<r>A Staff do Parkour <b>não</b> tem nenhum poder fora das salas #parkour.",
 	donate = "<vp>Digite <b>!donate</b> se você gostaria de doar para este módulo!",
 	paused_events = "<cep><b>[Atenção!]</b> <n>O módulo está atingindo um estado crítico e está sendo pausado.",
 	resumed_events = "<n2>O módulo está se normalizando.",
@@ -46,6 +47,61 @@ translations.br = {
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar partículas para os checkpoints\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nNão mostrar símbolo de ajuda",
+	cooldown = "<v>[#] <r>Aguarde alguns segundos antes de fazer isso novamente.",
+	power_options = ("<font size='13' face='Lucida Console'>Teclado <b>QWERTY</b>" ..
+					 "\n\n<b>Esconder</b> contagem de mapas"),
+	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Complete <v>%s</v> mapas" ..
+					"<font size='5'>\n\n</font>para desbloquear" ..
+					"<font size='5'>\n\n</font><v>%s</v>"),
+	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Complete <v>%s</v> mapas" ..
+					"<font size='5'>\n\n</font>para evoluir para" ..
+					"<font size='5'>\n\n</font><v>%s</v>"),
+	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Seja top <v>%s</v>" ..
+					"<font size='5'>\n\n</font>para desbloquear" ..
+					"<font size='5'>\n\n</font><v>%s</v>"),
+	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Seja top <v>%s</v>" ..
+					"<font size='5'>\n\n</font>para evoluir para" ..
+					"<font size='5'>\n\n</font><v>%s</v>"),
+	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+				 "<font size='5'>\n\n</font>Mapas completados"),
+	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+					"<font size='5'>\n\n</font>Ranking Geral"),
+	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+				   "<font size='5'>\n\n</font>Ranking Semanal"),
+	badges = "<font size='14' face='Lucida Console,Verdana'>Medalhas (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	private_maps = "<bl>A contagem de mapas deste jogador é privado. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
+	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+				"Posição no Ranking geral: <b><v>%s</v></b>\n\n" ..
+				"Posição no Ranking semanal: <b><v>%s</v></b>"),
+	map_count = "Contagem de mapas: <b><v>%s</v></b>",
+	help_badge = "<v>[#] <d>Medalhas são objetivos que um jogador pode conseguir. Clique nelas para ler suas descrições.",
+	help_private_maps = "<v>[#] <d>Este jogador não gosta de divulgar sua contagem de mapas publicamente! Você também pode escondê-la em seu perfil.",
+	help_badge_1 = "<v>[#] <d>Este jogador já foi um membro da staff do #parkour no passado.",
+	help_badge_2 = "<v>[#] <d>Este jogador está ou já esteve na página 1 do ranking global.",
+	help_badge_3 = "<v>[#] <d>Este jogador está ou já esteve na página 2 do ranking global.",
+	help_badge_4 = "<v>[#] <d>Este jogador está ou já esteve na página 3 do ranking global.",
+	help_badge_5 = "<v>[#] <d>Este jogador está ou já esteve na página 4 do ranking global.",
+	help_badge_6 = "<v>[#] <d>Este jogador está ou já esteve na página 5 do ranking global.",
+	help_badge_7 = "<v>[#] <d>Este jogador esteve no pódio no fim de um ranking semanal.",
+	help_badge_8 = "<v>[#] <d>Este jogador bateu um recorde de 30 mapas por hora.",
+	help_badge_9 = "<v>[#] <d>Este jogador bateu um recorde de 35 mapas por hora.",
+	help_badge_10 = "<v>[#] <d>Este jogador bateu um recorde de 40 mapas por hora.",
+	help_badge_11 = "<v>[#] <d>Este jogador bateu um recorde de 45 mapas por hora.",
+	help_badge_12 = "<v>[#] <d>Este jogador bateu um recorde de 50 mapas por hora.",
+	help_badge_13 = "<v>[#] <d>Este jogador bateu um recorde de 55 mapas por hora.",
+	make_public = "tornar público",
+	make_private = "tornar privado",
+	moderators = "Moderadores",
+	mappers = "Mappers",
+	managers = "Gerentes",
+	administrators = "Administradores",
+	close = "Fechar",
+	cant_load_bot_profile = "<v>[#] <r>You can't see this bot's profile since #parkour uses it internally to work properly.",
+	cant_load_profile = "<v>[#] <r>The player <b>%s</b> seems to be offline or does not exist.",
+	like_map = "Do you like this map?",
+	yes = "Yes",
+	no = "No",
+	idk = "I don't know",
 	unknown = "Desconhecido",
 	powers = "Poderes",
 	press = "<vp>Aperte %s",
@@ -53,10 +109,10 @@ translations.br = {
 	ranking_pos = "Rank #%s",
 	completed_maps = "<p align='center'><BV><B>Mapas completados: %s</B></p></BV>",
 	leaderboard = "Ranking",
-	position = "Posição",
-	username = "Nome",
-	community = "Comunidade",
-	completed = "Mapas completados",
+	position = "<V><p align=\"center\">Posição",
+	username = "<V><p align=\"center\">Nome",
+	community = "<V><p align=\"center\">Comunidade",
+	completed = "<V><p align=\"center\">Mapas completados",
 	overall_lb = "Geral",
 	weekly_lb = "Semanal",
 	new_lang = "<v>[#] <d>Idioma definido para Português",
@@ -75,6 +131,11 @@ translations.br = {
 	choco = "Choco-tábua",
 	bigBox = "Caixa grande",
 	trampoline = "Trampolim",
-	toilet = "Vaso Sanitário"
+	toilet = "Vaso Sanitário",
+	pig = "Pig",
+	sink = "Sink",
+	bathtub = "Bathtub",
+	campfire = "Campfire",
+	chair = "Chair",
 }
 translations.pt = translations.br
