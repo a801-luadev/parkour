@@ -7,12 +7,12 @@ do
 		[5] = "1745a89bc52.png", -- overall lb page 4
 		[6] = "1745a899776.png", -- overall lb page 5
 		[7] = "1745a6bfa2c.png", -- weekly podium on reset
-		[8] = "", -- hour record (30)
-		[9] = "", -- hour record (35)
-		[10] = "", -- hour record (40)
-		[11] = "", -- hour record (45)
-		[12] = "", -- hour record (50)
-		[13] = "", -- hour record (55)
+		[8] = "1745afa8577.png", -- hour record (30)
+		[9] = "1745afac029.png", -- hour record (35)
+		[10] = "1745afaf043.png", -- hour record (40)
+		[11] = "1745afb4333.png", -- hour record (45)
+		[12] = "1745afc2c32.png", -- hour record (50)
+		[13] = "1745afc5c2e.png", -- hour record (55)
 		[14] = "", -- verified discord
 	}
 
