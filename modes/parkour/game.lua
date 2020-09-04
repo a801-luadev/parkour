@@ -101,7 +101,7 @@ end)
 
 onEvent("Keyboard", function(player, key)
 	if key >= 0 and key <= 2 then
-		if players_file[player] == 1 and not generated_at[player] then
+		if players_level[player] == 1 and not generated_at[player] then
 			generated_at[player] = os.time()
 
 			for key = 0, 2 do
