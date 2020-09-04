@@ -5,10 +5,9 @@ import asyncio
 if __name__ == '__main__':
 	loop = asyncio.get_event_loop()
 
-	API_CREDENTIALS = (int(os.getenv("API_ID")), os.getenv("API_TOKEN"))
-	bot = parkour.Client(auto_restart=True, loop=loop)
+	bot = parkour.Client(auto_restart=True, bot_role=True, loop=loop)
 
-	loop.create_task(bot.start(*API_CREDENTIALS))
+	loop.create_task(bot.start())
 
 	try:
 		loop.run_forever()
