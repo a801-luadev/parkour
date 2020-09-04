@@ -10,7 +10,7 @@ if not is_tribe then
 		Packets from 4bots:
 			0 - join request
 			1 - game update
-			2 - !kill
+			2 - update pdata
 			3 - !ban
 			4 - !announce
 			5 - !cannounce

@@ -3,7 +3,6 @@ local player_ranks
 local no_powers
 local unbind
 local bindNecessary
-local killing = {}
 local to_save = {}
 local files = {
 	--[[
@@ -26,11 +25,26 @@ local files = {
 }
 local total_files = 3
 local file_index = 1
-local fetching_player_room = {}
 local file_id = files[file_index]
 local timed_maps = {
 	week = {},
 	hour = {}
+}
+local badges = {
+	[1] = "", -- former staff
+	[2] = "17435b0098c.png", -- overall lb page 1
+	[3] = "17435b03030.png", -- overall lb page 2
+	[4] = "17435b06052.png", -- overall lb page 3
+	[5] = "17435af7df1.png", -- overall lb page 4
+	[6] = "17435afd7c2.png", -- overall lb page 5
+	[7] = "1745a660504.png", -- weekly podium on reset
+	[8] = "1745a5547a9.png", -- hour record (30)
+	[9] = "1745a53f4c9.png", -- hour record (35)
+	[10] = "1745a5506b3.png", -- hour record (40)
+	[11] = "1745a54a1e3.png", -- hour record (45)
+	[12] = "1745a541bdd.png", -- hour record (50)
+	[13] = "1745a54869e.png", -- hour record (55)
+	[14] = "", -- verified discord
 }
 players_file = {}
 
@@ -41,13 +55,13 @@ local data_migrations = {
 
 		data.modules = nil
 
-		data.parkour.v = "0.6" -- version
+		data.parkour.v = "0.7" -- version
 		data.parkour.c = data.parkour.cm -- completed maps
 		data.parkour.ckpart = 1 -- particles for checkpoints (1 -> true, 0 -> false)
 		data.parkour.mort = 1 -- /mort hotkey
 		data.parkour.pcool = 1 -- power cooldowns
 		data.parkour.pbut = 1 -- powers button
-		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1 -- 1 -> qwerty, 0 -> false
+		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1 -- 1 -> qwerty, 0 -> azerty
 		data.parkour.killed = 0
 		data.parkour.hbut = 1 -- help button
 		data.parkour.congrats = 1 -- contratulations message
@@ -57,11 +71,13 @@ local data_migrations = {
 		data.parkour.hour_c = 0 -- completed maps this hour
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000 -- next hour reset
 		data.parkour.help = 0 -- doesn't want help?
+		data.parkour.keys = {}
+		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 		data.parkour.cm = nil
 	end,
 	["0.1"] = function(player, data)
-		data.parkour.v = "0.6"
+		data.parkour.v = "0.7"
 		data.parkour.ckpart = 1
 		data.parkour.mort = 1
 		data.parkour.pcool = 1
@@ -75,9 +91,11 @@ local data_migrations = {
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
 		data.parkour.help = 0
+		data.parkour.keys = {}
+		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	end,
 	["0.2"] = function(player, data)
-		data.parkour.v = "0.6"
+		data.parkour.v = "0.7"
 		data.parkour.killed = 0
 		data.parkour.hbut = 1
 		data.parkour.congrats = 1
@@ -87,9 +105,11 @@ local data_migrations = {
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
 		data.parkour.help = 0
+		data.parkour.keys = {}
+		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	end,
 	["0.3"] = function(player, data)
-		data.parkour.v = "0.6"
+		data.parkour.v = "0.7"
 		data.parkour.hbut = 1
 		data.parkour.congrats = 1
 		data.parkour.troll = 0
@@ -98,27 +118,38 @@ local data_migrations = {
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
 		data.parkour.help = 0
+		data.parkour.keys = {}
+		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	end,
 	["0.4"] = function(player, data)
-		data.parkour.v = "0.6"
+		data.parkour.v = "0.7"
 		data.parkour.troll = 0
 		data.parkour.week_c = 0
 		data.parkour.week_r = timed_maps.week.last_reset
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
 		data.parkour.help = 0
+		data.parkour.keys = {}
+		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	end,
 	["0.5"] = function(player, data)
-		data.parkour.v = "0.6"
+		data.parkour.v = "0.7"
 		data.parkour.week_c = 0
 		data.parkour.week_r = timed_maps.week.last_reset
 		data.parkour.hour_c = 0
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000
 		data.parkour.help = 0
+		data.parkour.keys = {}
+		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	end,
+	["0.6"] = function(player, data)
+		data.parkour.v = "0.7"
+		data.parkour.keys = {}
+		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	end
 }
 
-local function savePlayerData(player)
+function savePlayerData(player)
 	if not players_file[player] then return end
 
 	if not to_save[player] then
@@ -127,53 +158,7 @@ local function savePlayerData(player)
 	end
 end
 
-onEvent("PlayerDataLoaded", function(player, data)
-	if player == send_channel or player == recv_channel then return end
-	if in_room[player] then return end
-	online[player] = true
-
-	if data == "" then
-		data = {}
-	else
-		local done
-		done, data = pcall(json.decode, data)
-
-		if not done then
-			data = {}
-		end
-	end
-
-	local fetch = fetching_player_room[player]
-	if fetch then
-		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. (data.room or "unknown"), fetch[1])
-		fetching_player_room[player] = nil
-	end
-
-	if killing[player] and data.parkour then
-		data.parkour.killed = os.time() + killing[player] * 60 * 1000
-		system.savePlayerData(player, json.encode(data))
-	end
-end)
-
-onEvent("PlayerDataLoaded", function(player, data)
-	if player == send_channel or player == recv_channel then return end
-	if not in_room[player] then return end
-	online[player] = true
-
-	local corrupt
-	if data == "" then
-		data = {}
-	else
-		local done
-		done, data = pcall(json.decode, data)
-
-		if not done then
-			data = {}
-			translatedChatMessage("corrupt_data", player)
-			corrupt = true
-		end
-	end
-
+local function updateData(player, data)
 	if not data.parkour then
 		if data.modules then
 			data.parkour = {v = "0.0"}
@@ -187,15 +172,63 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	local migration = data_migrations[data.parkour.v or "0.0"]
 	while migration do
-		corrupt = true -- just so this process is made only once
 		migration(player, data)
 		migration = data_migrations[data.parkour.v]
 	end
+end
 
-	local fetch = fetching_player_room[player]
-	if fetch then
-		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. room.name, fetch[1])
-		fetching_player_room[player] = nil
+onEvent("PlayerDataLoaded", function(player, data)
+	if player == send_channel or player == recv_channel then return end
+	if in_room[player] then return end
+
+	if data == "" then
+		data = {}
+	else
+		local done
+		done, data = pcall(json.decode, data)
+
+		if not done then
+			data = {}
+		end
+	end
+
+	updateData(player, data)
+
+	if not data.hidden then
+		if not data.commu then
+			online[player] = "xx"
+		else
+			online[player] = data.commu
+		end
+	end
+
+	eventOutPlayerDataParsed(player, data)
+end)
+
+onEvent("PlayerDataLoaded", function(player, data)
+	if player == send_channel or player == recv_channel then return end
+	if not in_room[player] then return end
+
+	if data == "" then
+		data = {}
+	else
+		local done
+		done, data = pcall(json.decode, data)
+
+		if not done then
+			data = {}
+			translatedChatMessage("corrupt_data", player)
+		end
+	end
+
+	updateData(player, data)
+
+	if not data.hidden then
+		if not data.commu then
+			online[player] = room.community
+		else
+			online[player] = data.commu
+		end
 	end
 
 	if players_file[player] then
@@ -214,6 +247,12 @@ onEvent("PlayerDataLoaded", function(player, data)
 			end
 		end
 
+		if old.parkour.badges[14] ~= data.parkour.badges[14] then -- discord verification
+			old.parkour.badges[14] = data.parkour.badges[14]
+		end
+
+		eventPlayerDataUpdated(player, data)
+
 		if to_save[player] then
 			to_save[player] = false
 			system.savePlayerData(player, json.encode(old))
@@ -224,12 +263,16 @@ onEvent("PlayerDataLoaded", function(player, data)
 	players_file[player] = data
 	players_file[player].room = room.name
 
+	if room.playerList[player] then
+		players_file[player].commu = room.playerList[player].community
+	end
+
+	eventPlayerDataParsed(player, data)
+
 	system.savePlayerData(
 		player,
 		json.encode(players_file[player])
 	)
-
-	eventPlayerDataParsed(player, data)
 end)
 
 onEvent("SavingFile", function(id, data)
@@ -251,19 +294,6 @@ onEvent("Loop", function()
 		next_file_load = now + math.random(60500, 63000)
 		file_index = file_index % total_files + 1
 		file_id = files[file_index]
-	end
-
-	local to_remove, count = {}, 0
-	for player, data in next, fetching_player_room do
-		if now >= data[2] then
-			count = count + 1
-			to_remove[count] = player
-			tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n> is offline.", data[1])
-		end
-	end
-
-	for idx = 1, count do
-		fetching_player_room[to_remove[idx]] = nil
 	end
 end)
 
@@ -299,5 +329,13 @@ onEvent("PlayerDataParsed", function(player, data)
 	if data.parkour.week_r ~= timed_maps.week.last_reset then
 		data.parkour.week_c = 0
 		data.parkour.week_r = timed_maps.week.last_reset
+	end
+end)
+
+onEvent("PacketReceived", function(packet_id, packet)
+	if packet_id == 2 then -- update pdata
+		if in_room[packet] then
+			system.loadPlayerData(packet)
+		end
 	end
 end)

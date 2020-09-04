@@ -1,7 +1,7 @@
 local band = (bit or bit32).band
 local bxor = (bit or bit32).bxor
 
-local ranks = {
+ranks = {
 	admin = {_count = 0},
 	bot = {_count = 0},
 	manager = {_count = 0},
@@ -22,7 +22,15 @@ local ranks_id = {
 local ranks_permissions = {
 	admin = {}, -- will get every permission
 	bot = {}, -- will get every permission
-	manager = {},
+	manager = {
+		force_stats = true,
+		set_room_limit = true,
+		set_map_time = true,
+		hide = true,
+		handle_map_polls = true,
+		see_map_polls = true,
+		give_command = true
+	},
 	mod = {
 		ban = true,
 		unban = true,
@@ -30,29 +38,35 @@ local ranks_permissions = {
 		get_player_room = true,
 		change_map = true,
 		load_custom_map = true,
-		kill = true
+		kill = true,
+		see_private_maps = true,
+		use_tracker = true,
+		hide = true
 	},
 	mapper = {
 		change_map = true,
 		load_custom_map = true,
-		enable_review = true
+		enable_review = true,
+		hide = true,
+		start_round_poll = true,
+		see_map_polls = true,
+		set_map_time_review = true
 	},
 	trainee = {
 		kill = true,
 		spectate = true,
-		get_player_room = true
+		change_map = true,
+		get_player_room = true,
+		see_private_maps = true,
+		use_tracker = true
 	},
 	translator = {
-		change_map = true
+		change_map = true,
+		hide = true
 	}
 }
 player_ranks = {}
-local perms = {}
-local hidden_ranks = {
-	bot = true,
-	translator = true
-}
-local ranks_order = {"admin", "manager", "mod", "mapper", "trainee"}
+perms = {}
 
 for rank, perms in next, ranks_permissions do
 	if rank ~= "admin" and rank ~= "bot" then
@@ -82,6 +96,7 @@ onEvent("GameDataLoaded", function(data)
 					_player_ranks[name] = true
 					ranks[name][player] = true
 					ranks[name]._count = ranks[name]._count + 1
+					ranks[name][ ranks[name]._count ] = player
 					for perm, enabled in next, ranks_permissions[name] do
 						player_perms[perm] = enabled
 					end

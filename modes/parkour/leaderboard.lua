@@ -7,6 +7,14 @@ leaderboard = {}
 weekleaderboard = {}
 -- {id, name, completed_maps, community}
 local default_leaderboard_user = {0, nil, 0, "xx"}
+local leaderboard_badges = {
+	{14, 2},
+	{28, 3},
+	{42, 4},
+	{56, 5},
+	{70, 6}
+}
+leaderboard_badges._count = #leaderboard_badges
 
 local function leaderboardSort(a, b)
 	return a[3] > b[3]
@@ -78,8 +86,32 @@ local function checkPlayersPosition(week)
 		lb[index] = nil
 	end
 
-	for index = 1, #lb do
-		lb[lb[index][2]] = index
+	if not week then
+		local name, badges, rem
+		for pos = 1, #lb do
+			name = lb[pos][2]
+			lb[name] = pos
+
+			if players_file[name] then
+				badges = players_file[name].parkour.badges
+
+				rem = false
+				for index = 1, leaderboard_badges._count do
+					if rem then
+						badges[leaderboard_badges[index][2]] = 0
+					elseif pos <= leaderboard_badges[index][1] then
+						rem = true
+						badges[leaderboard_badges[index][2]] = 1
+
+						NewBadgeInterface:show(player, leaderboard_badges[index][2])
+					end
+				end
+			end
+		end
+	else
+		for index = 1, #lb do
+			lb[lb[index][2]] = index
+		end
 	end
 end
 

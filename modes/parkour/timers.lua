@@ -1,17 +1,17 @@
 local timers = {}
 local aliveTimers = false
 
-local function addNewTimer(delay, fnc, arg1, arg2, arg3, arg4)
+local function addNewTimer(delay, fnc, arg1, arg2, arg3, arg4, arg5)
 	aliveTimers = true
 	local list = timers[delay]
 	if list then
 		list._count = list._count + 1
-		list[list._count] = {os.time() + delay, fnc, arg1, arg2, arg3, arg4}
+		list[list._count] = {os.time() + delay, fnc, arg1, arg2, arg3, arg4, arg5}
 	else
 		timers[delay] = {
 			_count = 1,
 			_pointer = 1,
-			[1] = {os.time() + delay, fnc, arg1, arg2, arg3, arg4}
+			[1] = {os.time() + delay, fnc, arg1, arg2, arg3, arg4, arg5}
 		}
 	end
 end
@@ -27,7 +27,7 @@ onEvent("Loop", function()
 				timer = list[index]
 
 				if now >= timer[1] then
-					timer[2](timer[3], timer[4], timer[5], timer[6])
+					timer[2](timer[3], timer[4], timer[5], timer[6], timer[7])
 					newPointer = index + 1
 				else
 					break
@@ -48,13 +48,13 @@ onEvent("NewGame", function()
 			count = list._count
 			for index = list._pointer, count do
 				timer = list[index]
-				timer[2](timer[3], timer[4], timer[5], timer[6])
+				timer[2](timer[3], timer[4], timer[5], timer[6], timer[7])
 			end
 
 			if list._count > count then
 				for index = count + 1, list._count do
 					timer = list[index]
-					timer[2](timer[3], timer[4], timer[5], timer[6])
+					timer[2](timer[3], timer[4], timer[5], timer[6], timer[7])
 				end
 			end
 		end

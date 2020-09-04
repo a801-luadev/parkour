@@ -20,6 +20,7 @@ local packets = {
 	load_map = bit.lshift(11, 8) + 255,
 	weekly_reset = bit.lshift(12, 8) + 255,
 	room_password = bit.lshift(13, 8) + 255,
+	verify_discord = bit.lshift(14, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -29,6 +30,7 @@ local parkour_bot = "Parkour#8558"
 local loaded = false
 local chats = {loading = true}
 local killing = {}
+local verifying = {}
 local to_do = {}
 local in_room = {}
 
@@ -202,6 +204,10 @@ onEvent("TextAreaCallback", function(id, player, data)
 
 	elseif id == packets.load_map then
 		tfm.exec.newGame(data)
+
+	elseif id == packets.verify_discord then
+		verifying[data] = true
+		system.loadPlayerData(data)
 	end
 end)
 
@@ -209,11 +215,26 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if player == recv_channel or player == send_channel or data == "" then return end
 
 	data = json.decode(data)
-	if data.parkour.v ~= "0.6" then return end
+	if data.parkour.v ~= "0.7" then return end
 
+	local update = false
 	if killing[player] then
 		data.parkour.killed = os.time() + killing[player] * 60 * 1000
+
+		update = true
+		killing[player] = nil
+	end
+
+	if verifying[player] then
+		data.parkour.badges[14] = 1
+
+		update = true
+		verifying[player] = nil
+	end
+
+	if update then
 		system.savePlayerData(player, json.encode(data))
+		sendPacket(2, player)
 	end
 end)
 
@@ -222,6 +243,7 @@ onEvent("SendingPacket", function(id, packet)
 		local player, minutes = string.match(packet, "^([^\000]+)\000([^\000]+)$")
 		killing[player] = tonumber(minutes)
 		system.loadPlayerData(player)
+		return
 
 	elseif id == 3 then -- !ban
 		local id, ban_time = string.match(packet, "^[^\000]+\000([^\000]+)\000([^\000]+)$")

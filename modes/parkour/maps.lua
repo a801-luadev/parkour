@@ -5,6 +5,7 @@ local is_invalid = false
 local count_stats = true
 local map_change_cd = 0
 local levels
+local perms
 
 local function newMap()
 	count_stats = true
@@ -18,7 +19,7 @@ local function newMap()
 		rep, _maps = repeated, maps
 	end
 
-	if rep._count == _maps._count then
+	if rep._count >= _maps._count then
 		if rep == repeated then
 			repeated = {_count = 0, low = repeated.low}
 			rep = repeated
@@ -120,6 +121,12 @@ onEvent("NewGame", function()
 	end
 
 	tfm.exec.setGameTime(1080)
+
+	if room.mirroredMap then
+		for index = 1, count do
+			levels[index].x = 1600 - levels[index].x
+		end
+	end
 end)
 
 onEvent("Loop", function(elapsed, remaining)
@@ -129,10 +136,33 @@ onEvent("Loop", function(elapsed, remaining)
 	end
 end)
 
+onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
+	if cmd == "map" then
+		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
+		local normal_cond = perms[player] and perms[player].change_map
+		if not tribe_cond and not normal_cond then return end
+
+		if quantity > 0 then
+			if not tribe_cond and not perms[player].load_custom_map then
+				return tfm.exec.chatMessage("<v>[#] <r>You can't load a custom map.", player)
+			end
+
+			count_stats = false
+			tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped")
+		elseif os.time() < map_change_cd and not review_mode then
+			tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", player)
+		else
+			newMap()
+		end
+	end
+end)
+
 onEvent("GameStart", function()
 	tfm.exec.disableAutoNewGame(true)
 	tfm.exec.disableAutoShaman(true)
 	tfm.exec.disableAfkDeath(true)
 	tfm.exec.disableAutoTimeLeft(true)
 	tfm.exec.setAutoMapFlipMode(false)
+
+	system.disableChatCommandDisplay("map")
 end)
