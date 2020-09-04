@@ -35,6 +35,7 @@ local links = {
 
 local starting = string.sub(room.name, 1, 2)
 
+local is_tribe
 local tribe, module_name, submode
 local flags = ""
 
@@ -46,6 +47,7 @@ local function initialize_parkour() -- so it uses less space after building
 end
 
 if starting == "*\003" then
+	is_tribe = true
 	tribe = string.sub(room.name, 3)
 
 	initialize_parkour()
