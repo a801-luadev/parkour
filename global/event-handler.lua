@@ -36,7 +36,7 @@ do
 		tfm.exec.disablePhysicalConsumables(true)
 		tfm.exec.disableMortCommand(true)
 		tfm.exec.disableAutoShaman(true)
-		tfm.exec.newGame(7685178)
+		tfm.exec.newGame(7688481)
 		tfm.exec.setGameTime(99999)
 
 		for _, event in next, events do
