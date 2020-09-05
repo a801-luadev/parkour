@@ -34,7 +34,7 @@ translations.id = {
     unlocked_power = "<ce><d>%s</d> membuka kemampuan<vp>%s</vp>.",
 
     -- Information messages
-    staff_power = "<p align='center'><font size='12'><r>Parkour staff <b>do not</b> have any power outside of #parkour rooms.",
+    staff_power = "<p align='center'><font size='12'><r>Staf parkur <b>tidak memiliki</b> kemampuan apapun diluar ruangan #parkour.",
     donate = "<vp>Tulis <b>!donate</b> jika kamu ingin berdonasi untuk modul ini!",
     paused_events = "<cep><b>[Perhatian!]</b> <n>Modul mencapai batas kritis dan akan dihentikan.",
     resumed_events = "<n2>Modul terlah dilanjutkan.",
