@@ -432,9 +432,16 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				)
 			end
 
+			local to_remove, count = {}, 0
 			for player in next, current_poll.interface.open do
-				current_poll.interface:remove(player)
+				count = count + 1
+				to_remove[count] = player
 			end
+
+			for index = 1, count do
+				current_poll.interface:remove(to_remove[index])
+			end
+
 			current_poll = nil
 
 		else
