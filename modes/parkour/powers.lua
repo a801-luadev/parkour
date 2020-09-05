@@ -350,6 +350,7 @@ powers = {
 			"1740455e72a.png", -- glasses
 			"1740455bd82.png", -- smoking
 			"17404561700.png", -- glasses blushed
+			"1745e9316ae.png", -- roasted
 		},
 
 		fnc = function(player, key, down, x, y)
