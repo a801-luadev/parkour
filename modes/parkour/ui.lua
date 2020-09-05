@@ -267,6 +267,7 @@ local function checkProfileRequest(player, data)
 end
 
 local function toggleInterface(interface, player)
+	if not players_file[player] then return end
 	if not checkCooldown(player, "interfaceTrigger", 500) then return end
 
 	if not interface.open[player] then
