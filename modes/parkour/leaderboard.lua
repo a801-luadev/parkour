@@ -87,7 +87,7 @@ local function checkPlayersPosition(week)
 	end
 
 	if not week then
-		local name, badges, rem
+		local name, badges, badge, skip
 		for pos = 1, #lb do
 			name = lb[pos][2]
 			lb[name] = pos
@@ -95,18 +95,29 @@ local function checkPlayersPosition(week)
 			if players_file[name] then
 				badges = players_file[name].parkour.badges
 
-				rem = false
-				for index = 1, leaderboard_badges._count do
-					if rem then
-						badges[leaderboard_badges[index][2]] = 0
-					elseif pos <= leaderboard_badges[index][1] then
-						rem = true
-						if badges[leaderboard_badges[index][2]] ~= 1 then
-							badges[leaderboard_badges[index][2]] = 1
+				for i = 1, leaderboard_badges._count do
+					badge = leaderboard_badges[i]
+					if pos <= badge[1] and badges[badge[2]] ~= 1 then
+						skip = false
+						for j = 1, i - 1 do
+							if badges[leaderboard_badges[j][2]] == 1 then
+								skip = true
+								break
+							end
+						end
 
-							NewBadgeInterface:show(name, leaderboard_badges[index][2])
+						if not skip then
+							for j = i + 1, leaderboard_badges._count do
+								badges[leaderboard_badges[j][2]] = 0
+							end
+
+							badges[badge[2]] = 1
+
+							NewBadgeInterface:show(name, badge[2])
 							savePlayerData(name)
 						end
+
+						break
 					end
 				end
 			end

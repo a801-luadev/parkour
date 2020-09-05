@@ -772,18 +772,29 @@ onEvent("PlayerWon", function(player)
 		file.hour_c = file.hour_c + 1
 		file.week_c = file.week_c + 1
 
-		local rem = false
-		for index = hour_badges._count, 1, -1 do
-			if rem then
-				file.badges[hour_badges[index][2]] = 0
-			elseif file.hour_c >= hour_badges[index][1] then
-				rem = true
-
-				if file.badges[hour_badges[index][2]] ~= 1 then
-					file.badges[hour_badges[index][2]] = 1
-
-					NewBadgeInterface:show(player, hour_badges[index][2])
+		for i = 1, hour_badges._count do
+			badge = hour_badges[i]
+			if file.hour_c >= badge[1] and badges[badge[2]] ~= 1 then
+				local skip = false
+				for j = 1, i - 1 do
+					if badges[hour_badges[j][2]] == 1 then
+						skip = true
+						break
+					end
 				end
+
+				if not skip then
+					for j = i + 1, hour_badges._count do
+						badges[hour_badges[j][2]] = 0
+					end
+
+					badges[badge[2]] = 1
+
+					NewBadgeInterface:show(name, badge[2])
+					savePlayerData(name)
+				end
+
+				break
 			end
 		end
 
