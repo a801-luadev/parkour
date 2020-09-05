@@ -1321,7 +1321,7 @@ local function initialize_parkour() -- so it uses less space after building
 	    corrupt_map_missing_checkpoints = "<r>[KESALAHAN] <n>Peta harus memiliki setidaknya satu cekpoin (paku kuning).",
 	    corrupt_data = "<r>Sayangnya, data kamu rusak dan telah disetel ulang.",
 	    min_players = "<r>Untuk menyimpan data kamu, setidaknya ada 4 pemain di ruangan ini. <bl>[%s/%s]",
-	    tribe_house = "<r>Data tidak akan disimpan di rumah suku.",
+	    tribe_house = "<r>Data tidak akan tersimpan di rumah suku.",
 	    invalid_syntax = "<r>Sintaks tidak valid.",
 	    code_error = "<r>Terjadi kesalahan: <bl>%s-%s-%s %s",
 	    emergency_mode = "<r>Memulai penghentian darurat, tidak ada pemain baru diizinkan. Dimohon untuk pergi ke ruangan #parkour lain.",
@@ -1358,7 +1358,7 @@ local function initialize_parkour() -- so it uses less space after building
 
 	    -- Miscellaneous
 	    options = "<p align='center'><font size='20'>Opsi Parkur</font></p>\n\nGunakan partikel untuk cekpoin\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nGunakan <b>M</b> hotkey untuk <b>/mort</b> (nonaktifkan untuk <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan kamu\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nPerlihatkan pengumuman penyelesaian peta\n\nPerlihatkan simbol tidak memerlukan bantuan",
-	    cooldown = "<v>[#] <r>Mohon Tunggu beberapa detik untuk melakukannya lagi.",
+	    cooldown = "<v>[#] <r>Mohon Tunggu beberapa detik untuk melakukannya kembali.",
 	    power_options = ("<font size='13' face='Lucida Console'>Keyboard <b>QWERTY</b>" ..
 	                    "\n\n<b>Tutup</b> penghitung peta"),
 	    unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Selesaikan <v>%s</v> peta" ..
@@ -1407,7 +1407,7 @@ local function initialize_parkour() -- so it uses less space after building
 	    managers = "Manager",
 	    administrators = "Admin",
 	    close = "Tutup",
-	    cant_load_bot_profile = "<v>[#] <r>Kamu tidak bisa melihat profil bot sejak #parkour menggunakannya secara internal untuk bekerja lebih baik.",
+	    cant_load_bot_profile = "<v>[#] <r>Kamu tidak bisa melihat profil bot ketika #parkour menggunakannya secara internal untuk bekerja lebih baik.",
 	    cant_load_profile = "<v>[#] <r>Pemain <b>%s</b> sepertinya offline atau tidak tersedia.",
 	    like_map = "Apakah kamu menyukai peta ini?",
 	    yes = "Ya",
@@ -1426,7 +1426,7 @@ local function initialize_parkour() -- so it uses less space after building
 	    completed = "Peta diselesaikan",
 	    overall_lb = "Keseluruhan",
 	    weekly_lb = "Mingguan",
-	    new_lang = "<v>[#] <d>Bahasa diubah ke Bahasa Indonesia",
+	    new_lang = "<v>[#] <d>Bahasa telah diubah ke Bahasa Indonesia",
 
 	    -- Power names
 	    balloon = "Balon",
