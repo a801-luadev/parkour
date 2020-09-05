@@ -778,9 +778,12 @@ onEvent("PlayerWon", function(player)
 				file.badges[hour_badges[index][2]] = 0
 			elseif file.hour_c >= hour_badges[index][1] then
 				rem = true
-				file.badges[hour_badges[index][2]] = 1
 
-				NewBadgeInterface:show(player, hour_badges[index][2])
+				if file.badges[hour_badges[index][2]] ~= 1 then
+					file.badges[hour_badges[index][2]] = 1
+
+					NewBadgeInterface:show(player, hour_badges[index][2])
+				end
 			end
 		end
 
