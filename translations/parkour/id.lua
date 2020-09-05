@@ -62,11 +62,11 @@ translations.id = {
     upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Peringkat <v>%s</v>" ..
                     "<font size='5'>\n\n</font>untuk meningkatkan ke" ..
                     "<font size='5'>\n\n</font><v>%s</v>"),
-    maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+    maps_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
                 "<font size='5'>\n\n</font>Peta yang diselesaikan"),
-    overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+    overall_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
                     "<font size='5'>\n\n</font>Papan Peringkat Keseluruhan"),
-    weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+    weekly_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
                     "<font size='5'>\n\n</font>Papan Peringkat Mingguan"),
     badges = "<font size='14' face='Lucida Console,Verdana'>Lencana (%s): <a href='event:_help:badge'><j>[?]</j></a>",
     private_maps = "<bl>Jumlah peta pada pemain ini bersifat pribadi. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",

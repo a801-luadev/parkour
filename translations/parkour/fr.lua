@@ -62,11 +62,11 @@ translations.fr = {
 	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Rang <v>%s</v>" ..
 					"<font size='5'>\n\n</font>pour améliorer le pouvoir" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	maps_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 				 "<font size='5'>\n\n</font>Cartes complétées"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	overall_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>Classement Global"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	weekly_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 				   "<font size='5'>\n\n</font>Classement Hebdomadaire"),
 	badges = "<font size='14' face='Lucida Console,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Le nombre de cartes complétées de ce joueur est privé. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
