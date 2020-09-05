@@ -174,7 +174,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 			if action == "give" then
 				file.parkour.badges[badge] = 1
-				NewBadgeInterface:show(player, badge)
+				NewBadgeInterface:show(target, badge)
 			elseif action == "remove" then
 				file.parkour.badges[badge] = 0
 			else
