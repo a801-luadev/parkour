@@ -10,12 +10,12 @@ local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local used_powers = {_count = 0}
 local hour_badges = {
-	{30, 8},
-	{35, 9},
-	{40, 10},
-	{45, 11},
+	{55, 13},
 	{50, 12},
-	{55, 13}
+	{45, 11},
+	{40, 10},
+	{35, 9},
+	{30, 8}
 }
 hour_badges._count = #hour_badges
 
