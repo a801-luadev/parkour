@@ -103,6 +103,7 @@ local function checkPlayersPosition(week)
 						rem = true
 						badges[leaderboard_badges[index][2]] = 1
 
+
 						NewBadgeInterface:show(name, leaderboard_badges[index][2])
 					end
 				end
