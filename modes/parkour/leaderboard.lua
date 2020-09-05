@@ -99,12 +99,12 @@ local function checkPlayersPosition(week)
 				for index = 1, leaderboard_badges._count do
 					if rem then
 						badges[leaderboard_badges[index][2]] = 0
-					elseif pos <= leaderboard_badges[index][1] then
+					elseif pos <= leaderboard_badges[index][1] and badges[leaderboard_badges[index][2]] ~= 1 then
 						rem = true
 						badges[leaderboard_badges[index][2]] = 1
 
-
 						NewBadgeInterface:show(name, leaderboard_badges[index][2])
+						savePlayerData(name)
 					end
 				end
 			end
