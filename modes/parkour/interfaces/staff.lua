@@ -44,6 +44,7 @@ do
 		nl = "1651b31b0dc.png",
 		ph = "1651b31c891.png",
 		pl = "1651b31e0cf.png",
+		pt = "17459ce7e29.png",
 		ro = "1651b31f950.png",
 		ru = "1651b321113.png",
 		tr = "1651b3240e8.png",
