@@ -31,7 +31,7 @@ local timed_maps = {
 	hour = {}
 }
 local badges = {
-	[1] = "", -- former staff
+	[1] = "1745f43783e.png", -- former staff
 	[2] = "17435b0098c.png", -- overall lb page 1
 	[3] = "17435b03030.png", -- overall lb page 2
 	[4] = "17435b06052.png", -- overall lb page 3

@@ -1,6 +1,6 @@
 do
 	local big_badges = {
-		[1] = "", -- former staff
+		[1] = "1745f432e33.png", -- former staff
 		[2] = "1745a88ffce.png", -- overall lb page 1
 		[3] = "1745a892d25.png", -- overall lb page 2
 		[4] = "1745a89eb17.png", -- overall lb page 3
