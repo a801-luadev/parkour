@@ -227,7 +227,7 @@ do
 
 		-- Leaderboard type
 		:loadComponent( -- Overall button
-			Button.new():setTranslation("overall")
+			Button.new():setTranslation("overall_lb")
 
 			:onClick(function(self, player)
 				local args = self.parent.args[player]
@@ -241,7 +241,7 @@ do
 				end
 			end):setPosition(72, 300):setSize(155, 20)
 		):loadComponent( -- Weekly button
-			Button.new():setTranslation("weekly")
+			Button.new():setTranslation("weekly_lb")
 
 			:onClick(function(self, player)
 				local args = self.parent.args[player]
