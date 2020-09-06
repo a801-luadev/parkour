@@ -3,6 +3,7 @@ local player_ranks
 local no_powers
 local unbind
 local bindNecessary
+local NewBadgeInterface
 local to_save = {}
 local files = {
 	--[[
@@ -196,6 +197,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 		if old.parkour.badges[14] ~= data.parkour.badges[14] then -- discord verification
 			old.parkour.badges[14] = data.parkour.badges[14]
+			NewBadgeInterface:show(player, 14)
 		end
 
 		eventPlayerDataUpdated(player, data)

@@ -21,6 +21,7 @@ local packets = {
 	weekly_reset = bit.lshift(12, 8) + 255,
 	room_password = bit.lshift(13, 8) + 255,
 	verify_discord = bit.lshift(14, 8) + 255,
+	version_mismatch = bit.lshift(15, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -215,7 +216,9 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if player == recv_channel or player == send_channel or data == "" then return end
 
 	data = json.decode(data)
-	if data.parkour.v ~= data_version then return end
+	if data.parkour.v ~= data_version then
+		return ui.addTextArea(packets.version_mismatch, player)
+	end
 
 	local update = false
 	if killing[player] then
@@ -227,6 +230,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if verifying[player] then
 		data.parkour.badges[14] = 1
+		ui.addTextArea(packets.verify_discord, player)
 
 		update = true
 		verifying[player] = nil

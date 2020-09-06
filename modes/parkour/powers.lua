@@ -1,7 +1,6 @@
 local max_leaderboard_rows
 local leaderboard
 local keyboard
-local NewBadgeInterface
 
 no_powers = {}
 local facing = {}
