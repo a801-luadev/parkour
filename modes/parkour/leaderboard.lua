@@ -59,22 +59,24 @@ local function checkPlayersPosition(week)
 		if playerFile then
 			completedMaps = week and playerFile.parkour.week_c or playerFile.parkour.c
 			playerData = room.playerList[player]
-			playerId = playerData.id
+			if playerData then
+				playerId = playerData.id
 
-			if not bans[playerId] then
-				cacheData = cachedPlayers[playerId]
-				if cacheData then
-					cacheData[2] = player
-					cacheData[3] = completedMaps
-					cacheData[4] = playerData.community
-				else
-					totalRankedPlayers = totalRankedPlayers + 1
-					lb[totalRankedPlayers] = {
-						playerId,
-						player,
-						completedMaps,
-						playerData.community
-					}
+				if not bans[playerId] then
+					cacheData = cachedPlayers[playerId]
+					if cacheData then
+						cacheData[2] = player
+						cacheData[3] = completedMaps
+						cacheData[4] = playerData.community
+					else
+						totalRankedPlayers = totalRankedPlayers + 1
+						lb[totalRankedPlayers] = {
+							playerId,
+							player,
+							completedMaps,
+							playerData.community
+						}
+					end
 				end
 			end
 		end
