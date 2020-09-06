@@ -15,7 +15,7 @@ translations.id = {
     code_error = "<r>Terjadi kesalahan: <bl>%s-%s-%s %s",
     emergency_mode = "<r>Memulai penghentian darurat, tidak ada pemain baru diizinkan. Dimohon untuk pergi ke ruangan #parkour lain.",
     leaderboard_not_loaded = "<r>Papan peringkat belum dimuat. Mohon Tunggu sebentar.",
-    max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
+    max_power_keys = "<v>[#] <r>Kamu dapat memiliki paling banyak %s kemampuan pada key yang sama.",
 
     -- Help window
     help = "Bantuan",

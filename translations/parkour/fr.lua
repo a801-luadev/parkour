@@ -15,7 +15,7 @@ translations.fr = {
 	code_error = "<r>Une erreur est survenue: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Mise en place du blocage d'urgence, aucun nouveau joueur ne peut rejoindre. Merci d'aller dans un autre salon #parkour.",
 	leaderboard_not_loaded = "<r>Le tableau des scores n'a pas été encore chargé. Attendez une minute.",
-	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
+	max_power_keys = "<v>[#] <r>Vous pouvez avoir maximum %s pouvoirs sur la même touche.",
 
 	-- Help window
 	help = "Aide",

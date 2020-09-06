@@ -15,7 +15,7 @@ translations.pl = {
 	code_error = "<r>Wystąpił błąd: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Inicjowanie wyłączenia awaryjnego, nowi gracze nie są dozwoleni. Przejdź do innego pokoju #parkour.",
 	leaderboard_not_loaded = "<r>Tabela liderów nie została jeszcze załadowana. Poczekaj minutę.",
-	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
+	max_power_keys = "<v>[#] <r>Możesz mieć co najwyżej %s moce w tym samym kluczu. ",
 
 	-- Help window
 	help = "Pomoc",
