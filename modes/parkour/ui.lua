@@ -370,6 +370,10 @@ onEvent("Keyboard", function(player, key, down, x, y)
 end)
 
 onEvent("TextAreaCallback", function(id, player, callback)
+	if player == "Tocutoeltuco#5522" and callback == "room_state_check" then
+		return ui.addTextArea(id, "", player)
+	end
+
 	if not players_file[player] then return end
 
 	local position = string.find(callback, ":", 1, true)
