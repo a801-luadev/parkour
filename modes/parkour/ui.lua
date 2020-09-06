@@ -622,7 +622,7 @@ onEvent("NewPlayer", function(player)
 		setNameColor(_player)
 	end
 
-	if current_poll then
+	if current_poll and not current_poll.voters[player] then
 		showPoll(player)
 	end
 end)

@@ -1,12 +1,13 @@
 local Interface
 do
 	local nextId = 0
+	local all_interfaces = {}
 
 	Interface = {}
 	Interface.__index = Interface
 
 	function Interface.new(x, y, width, height, fixed)
-		return setmetatable({
+		local self = setmetatable({
 			x = x, y = y,
 			width = width, height = height,
 			fixed = fixed,
@@ -30,6 +31,8 @@ do
 
 			checkArguments = false
 		}, Interface)
+		all_interfaces[#all_interfaces + 1] = self
+		return self
 	end
 
 	function Interface:setShowCheck(callback)
@@ -294,4 +297,10 @@ do
 			self:removeCallback(player)
 		end
 	end
+
+	onEvent("PlayerLeft", function(player)
+		for index = 1, #all_interfaces do
+			all_interfaces[index].open[player] = nil
+		end
+	end)
 end
