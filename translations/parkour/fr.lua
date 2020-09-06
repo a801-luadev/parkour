@@ -49,7 +49,7 @@ translations.fr = {
 	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser les particules comme points de sauvegarde\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <b>M</b> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.",
 	cooldown = "<v>[#] <r>Attends quelques secondes avant de pouvoir recommencer.",
 	power_options = ("<font size='13' face='Lucida Console'>Clavier <b>QWERTY</b>" ..
-					 "\n\n<b>Cacher</b> le nombre de cartes complétées"),
+					 "\n\n<b>Cacher</b> le nombre de cartes"),
 	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Complète <v>%s</v> cartes" ..
 					"<font size='5'>\n\n</font>pour débloquer le pouvoir" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
