@@ -15,7 +15,7 @@ translations.br = {
 	code_error = "<r>Um erro aconteceu: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Começando desativação de emergência, novos jogadores não serão mais permitidos. Por favor, vá para outra sala #parkour.",
 	leaderboard_not_loaded = "<r>O ranking ainda não foi carregado. Aguarde um minuto.",
-	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
+	max_power_keys = "<v>[#] <r>Você pode ter no máximo %s poderes na mesma tecla.",
 
 	-- Help window
 	help = "Ajuda",
@@ -27,7 +27,7 @@ translations.br = {
 	help_staff = "<p align = 'center'><font size = '13'><r>AVISO: A staff do Parkour não faz parte da staff do Transformice e não tem nenhum poder no jogo em si, apenas no módulo.</r>\nStaff do Parkour assegura que o módulo rode com problemas mínimos, e estão sempre disponíveis para dar assistência aos jogadores quando necessário.</font></p>\nVocê pode digitar <D>!staff</D> no chat para ver a lista de staff.\n\n<font color = '#E7342A'>Administradores:</font> São responsáveis por manter o módulo propriamente dito, atualizando-o e corrigindo bugs.\n\n<font color = '#D0A9F0'>Gerenciadores das Equipes:</font> Observam as equipes de Moderação e de Mapas, assegurando que todos estão fazendo um bom trabalho. Também são responsáveis por recrutar novos membros para a staff.\n\n<font color = '#FFAAAA'>Moderadores:</font> São responsáveis por aplicar as regras no módulo e punir aqueles que não as seguem.\n\n<font color = '#25C059'>Mappers:</font> São responsáveis por avaliar, adicionar e remover mapas do módulo para assegurar que você tenha uma jogatina divertida.",
 	help_rules = "<font size = '13'><B><J>Todas as regras nos Termos e Condições de Uso do Transformice também se aplicam no #parkour</J></B></font>\n\nSe você encontrar algum jogador quebrando-as, cochiche com um moderador do #parkour no jogo. Se os moderadores não estiverem online, recomendamos que reporte em nosso servidor no Discord.\nAo reportar, por favor inclua a comunidade, o nome da sala e o nome do jogador.\n• Ex: en-#parkour10 Blank#3495 trolling\nEvidências, como prints, vídeos e gifs são úteis e apreciados, mas não necessários.\n\n<font size = '11'>• Uso de <font color = '#ef1111'>hacks, glitches ou bugs</font> são proibidos em salas #parkour\n• <font color = '#ef1111'>Farm VPN</font> será considerado um <B>abuso</B> e não é permitido. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nQualquer um pego quebrando as regras será banido imediatamente.</B></font></p>\n\n<font size = '12'>Transformice permite trollar. No entanto, <font color='#cc2222'><B>não permitiremos isso no parkour.</B></font></font>\n\n<p align = 'center'><J>Trollar é quando um jogador intencionalmente usa seus poderes ou consumíveis para fazer com que outros jogadores não consigam terminar o mapa.</j></p>\n• Trollar por vingança <B>não é um motivo válido</B> e você ainda será punido.\n• Insistir em ajudar jogadores que estão tentando terminar o mapa sozinhos e se recusando a parar quando pedido também será considerado trollar.\n• <J>Se um jogador não quer ajuda e prefere completar o mapa sozinho, dê seu melhor para ajudar os outros jogadores</J>. No entanto, se outro jogador que precisa de ajuda estiver no mesmo checkpoint daquele que quer completar sozinho, você pode ajudar ambos sem receber punição.\n\nSe um jogador é pego trollando, será punido em uma questão de tempo. Note que trollar repetidamente irá fazer com que você receba punições gradativamente mais longas e/ou severas.",
 	help_contribute = "<font size='14'>\n<p align='center'>A equipe do parkour adora ter um código aberto, pois isso <t>ajuda a comunidade</t>. Você pode <o>ver</o> ou <o>contribuir</o> com o código no <o><u><a href='event:github'>GitHub</a></u></o>.\n\nManter o módulo é parte de um trabalho <t>voluntário</t>, então qualquer contribuição é <u>bem vinda</u>, seja com a <t>programação</t>, <t>reporte de erros</t>, <t>sugestões</t> e <t>criação de mapas</t>.\nVocê pode <vp>reportar erros</vp> ou <vp>dar sugestões</vp> no nosso <o><u><a href='event:discord'>Discord</a></u></o> e/ou no <o><u><a href='event:github'>GitHub</a></u></o>.\nVocê pode <vp>enviar seus mapas</vp> no nosso <o><u><a href='event:map_submission'>Tópico no Fórum</a></u></o>.\n\nManter o jogo não é caro, mas também não é grátis. Nós adoraríamos se você pudesse incentivar o desenvolvimento do jogo <t>doando qualquer valor</t> <o><u><a href='event:donate'>aqui</a></u></o>.\n<u>Todos os fundos arrecadados serão direcionados para o desenvolvimento do módulo.</u></p>",
-	help_changelog = "<font size='13'><p align='center'><o>Version 2.5.0 - 05/09/2020</o></p>\n\n<font size='11'>• Fixed most bugs regarding room crashes.\n• The <cep>!staff</cep> command now has a window.\n• When you finish a map, you can use <cep>!cp</cep> to teleport to a previous checkpoint.\n• Profile system! Type <cep>!profile [player]</cep> to see their profile.\n• Some maps will <vp>periodically</vp> show a poll so you can vote to <vp>keep</vp> or <r>remove</r> it.\n• <b>6 new powers were added!</b>\n• <u>Your time</u> will start counting <u>after you first move</u>.\n• The player who finishes with the shortest time will have a <font color='#ffffff'>white nickname</font>.\n• You can now <d>change your power key bindings</d>.\n• You can use the <cep>!map</cep> command in your tribehouse to <vp>skip a map</vp>.\n• You can press <cep>F</cep> to enable or disable the <r>no-help line</r>.\n• <i>(Probably)</i> new bugs :(",
+	help_changelog = "<font size='13'><p align='center'><o>Versão 2.5.0 - 05/09/2020</o></p>\n\n<font size='10'>• Corrigidos maioria dos bugs relacionados a crashes nas salas.\n• O comando <cep>!staff</cep> agora tem uma janela.\n• Ao finalizar um mapa, você poderá usar <cep>!cp</cep> para se teleportar para um checkpoint anterior.\n• Sistema de perfis! Digite <cep>!profile [jogador]</cep> para ver seu perfil.\n• Alguns mapas irão mostrar uma votação <vp>periodicamente</vp> para que você vote nele, fazendo assim com que ele <vp>permaneça</vp> ou seja <r>removido</r> da rotação.\n• <b>6 novos poderes foram adicionados!</b>\n• <u>Seu tempo</u> começará a contar <u>após seu primeiro movimento</u>.\n• O jogador que terminar com o menor tempo terá um <font color='#ffffff'>nome de cor branca</font>.\n• Agora você pode <d>alterar as teclas de disparo dos poderes</d>.\n• Você pode usar o comando <cep>!map</cep> no cafofo da sua tribo para <vp>pular um mapa</vp>.\n• Você pode pressionar <cep>F</cep> para ativar/desativar o <r>o símbolo de não ajudar</r>.\n• <i>(Provavelmente)</i> novos bugs :(",
 
 	-- Congratulation messages
 	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>.",
@@ -47,7 +47,7 @@ translations.br = {
 	tempbanned = "<r>Você foi banido do #parkour por %s minutos.",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar partículas para os checkpoints\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nNão mostrar símbolo de ajuda",
+	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar partículas para os checkpoints\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar",
 	cooldown = "<v>[#] <r>Aguarde alguns segundos antes de fazer isso novamente.",
 	power_options = ("<font size='13' face='Lucida Console'>Teclado <b>QWERTY</b>" ..
 					 "\n\n<b>Esconder</b> contagem de mapas"),
@@ -97,12 +97,12 @@ translations.br = {
 	managers = "Gerentes",
 	administrators = "Administradores",
 	close = "Fechar",
-	cant_load_bot_profile = "<v>[#] <r>You can't see this bot's profile since #parkour uses it internally to work properly.",
-	cant_load_profile = "<v>[#] <r>The player <b>%s</b> seems to be offline or does not exist.",
-	like_map = "Do you like this map?",
-	yes = "Yes",
-	no = "No",
-	idk = "I don't know",
+	cant_load_bot_profile = "<v>[#] <r>Você não pode ver o perfil deste bot já que o #parkour utiliza-o internamente para funcionar devidamente.",
+	cant_load_profile = "<v>[#] <r>O jogador <b>%s</b> parece estar offline ou não existe.",
+	like_map = "Você gosta deste mapa?",
+	yes = "Sim",
+	no = "Não",
+	idk = "Não sei",
 	unknown = "Desconhecido",
 	powers = "Poderes",
 	press = "<vp>Aperte %s",
@@ -133,10 +133,10 @@ translations.br = {
 	bigBox = "Caixa grande",
 	trampoline = "Trampolim",
 	toilet = "Vaso Sanitário",
-	pig = "Pig",
-	sink = "Sink",
-	bathtub = "Bathtub",
-	campfire = "Campfire",
-	chair = "Chair",
+	pig = "Porco",
+	sink = "Pia",
+	bathtub = "Banheira",
+	campfire = "Fogueira",
+	chair = "Cadeira",
 }
 translations.pt = translations.br

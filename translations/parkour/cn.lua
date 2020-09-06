@@ -15,7 +15,7 @@ translations.cn = {
 	code_error = "<r>發生了錯誤: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>正在啟動緊急終止模式, 新玩家無法加入遊戲。請前往另一個　#parkour 房間。",
 	leaderboard_not_loaded = "<r>排行榜沒被加載。請稍後片刻。",
-	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
+	max_power_keys = "<v>[#] <r>你只可以在同一個按鍵使用最多 %s 個能力。",
 
 	-- Help window
 	help = "幫助",
