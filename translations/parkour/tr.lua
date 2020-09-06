@@ -15,6 +15,7 @@ translations.tr = {
 	code_error = "<r>Bir sorun oluştu: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Acildurum modu başlatılıyor, yeni oyunculara izin verilmemektedir. Lütfen başka bir #parkour odasına geçin.",
 	leaderboard_not_loaded = "<r>Lider tablosu heünz yüklenemedi. Lütfen bekleyin.",
+	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 
 	-- Help window
 	help = "Yardım",

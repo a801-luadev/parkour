@@ -353,6 +353,17 @@ do
 				end
 
 				local pkeys = players_file[player].parkour.keys
+				local count = 0
+				for index = 1, #pkeys do
+					if pkeys[index] == binding then
+						count = count + 1
+					end
+				end
+
+				if count >= 2 then
+					return translatedChatMessage("max_power_keys", player, 2)
+				end
+
 				pkeys[power] = binding
 				for index = 1, power do
 					if not pkeys[index] then

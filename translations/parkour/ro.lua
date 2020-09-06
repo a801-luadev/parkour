@@ -15,6 +15,7 @@ translations.ro = {
 	code_error = "<r>O eroare a apărut: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Inițiând închidere de urgență, niciun jucător nou nu este permis. Te rugăm să te duci pe altă sală de #parkour.",
 	leaderboard_not_loaded = "<r>Clasamentul nu a fost încă încărcat. Așteaptă un minut.",
+	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 
 	-- Help window
 	help = "Ajutor",

@@ -15,6 +15,7 @@ translations.hu = {
 	code_error = "<r>Hiba jelent meg: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Vészleállítás kezdeményezése, új játékosok nem engedélyezettek. Kérjük, menj egy másik #parkour szobába.",
 	leaderboard_not_loaded = "<r>A ranglista még nem töltött be. Várj egy percet.",
+	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 
 	-- Help window
 	help = "Segítség",

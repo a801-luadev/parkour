@@ -15,6 +15,7 @@ translations.ru = {
 	code_error = "<r>Появилась ошибка: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Активировано аварийное отключение, новые игроки не смогут зайти. Пожалуйста, перейдите в другую комнату #pourour.",
 	leaderboard_not_loaded = "<r>Таблица лидеров еще не загружена. Подождите минуту.",
+	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 
 	-- Help window
 	help = "Помощь",

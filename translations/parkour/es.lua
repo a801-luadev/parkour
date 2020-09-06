@@ -15,6 +15,7 @@ translations.es = {
 	code_error = "<r>Apareció un error: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Empezando apagado de emergencia, no se admiten más jugadores. Por favor ve a otra sala #parkour.",
 	leaderboard_not_loaded = "<r>La tabla de clasificación aun no ha sido cargada. Espera un minuto.",
+	max_power_keys = "<v>[#] <r>Solo puedes tener como máximo %s poderes en la misma tecla.",
 
 	-- Help window
 	help = "Ayuda",

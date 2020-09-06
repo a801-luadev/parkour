@@ -15,6 +15,7 @@ translations.he = {
 	code_error = "<r>שגיאה התגלתה: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>מתחיל כיבוי חירום, אין כניסה לשחקנים חדשים. אנא לך לחדר #parkour אחר.",
 	leaderboard_not_loaded = "<r>הלוח תוצאות עדיין לא נטען, המתן דקה.",
+	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 
 	-- Help window
 	help = "עזרה",
