@@ -55,92 +55,39 @@ local data_migrations = {
 
 		data.modules = nil
 
-		data.parkour.v = "0.7" -- version
+		data.parkour.v = "0.1" -- version
 		data.parkour.c = data.parkour.cm -- completed maps
+
+		data.parkour.cm = nil
+	end,
+	["0.1"] = function(player, data)
+		data.parkour.v = "0.2"
 		data.parkour.ckpart = 1 -- particles for checkpoints (1 -> true, 0 -> false)
 		data.parkour.mort = 1 -- /mort hotkey
 		data.parkour.pcool = 1 -- power cooldowns
 		data.parkour.pbut = 1 -- powers button
 		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1 -- 1 -> qwerty, 0 -> azerty
+	end,
+	["0.2"] = function(player, data)
+		data.parkour.v = "0.3"
 		data.parkour.killed = 0
+	end,
+	["0.3"] = function(player, data)
+		data.parkour.v = "0.4"
 		data.parkour.hbut = 1 -- help button
 		data.parkour.congrats = 1 -- contratulations message
+	end,
+	["0.4"] = function(player, data)
+		data.parkour.v = "0.5"
 		data.parkour.troll = 0
+	end,
+	["0.5"] = function(player, data)
+		data.parkour.v = "0.6"
 		data.parkour.week_c = 0 -- completed maps this week
 		data.parkour.week_r = timed_maps.week.last_reset -- last week reset
 		data.parkour.hour_c = 0 -- completed maps this hour
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000 -- next hour reset
 		data.parkour.help = 0 -- doesn't want help?
-		data.parkour.keys = {}
-		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-
-		data.parkour.cm = nil
-	end,
-	["0.1"] = function(player, data)
-		data.parkour.v = "0.7"
-		data.parkour.ckpart = 1
-		data.parkour.mort = 1
-		data.parkour.pcool = 1
-		data.parkour.pbut = 1
-		data.parkour.keyboard = (room.playerList[player] or room).community == "fr" and 0 or 1
-		data.parkour.killed = 0
-		data.parkour.congrats = 1
-		data.parkour.troll = 0
-		data.parkour.week_c = 0
-		data.parkour.week_r = timed_maps.week.last_reset
-		data.parkour.hour_c = 0
-		data.parkour.hour_r = os.time() + 60 * 60 * 1000
-		data.parkour.help = 0
-		data.parkour.keys = {}
-		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	end,
-	["0.2"] = function(player, data)
-		data.parkour.v = "0.7"
-		data.parkour.killed = 0
-		data.parkour.hbut = 1
-		data.parkour.congrats = 1
-		data.parkour.troll = 0
-		data.parkour.week_c = 0
-		data.parkour.week_r = timed_maps.week.last_reset
-		data.parkour.hour_c = 0
-		data.parkour.hour_r = os.time() + 60 * 60 * 1000
-		data.parkour.help = 0
-		data.parkour.keys = {}
-		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	end,
-	["0.3"] = function(player, data)
-		data.parkour.v = "0.7"
-		data.parkour.hbut = 1
-		data.parkour.congrats = 1
-		data.parkour.troll = 0
-		data.parkour.week_c = 0
-		data.parkour.week_r = timed_maps.week.last_reset
-		data.parkour.hour_c = 0
-		data.parkour.hour_r = os.time() + 60 * 60 * 1000
-		data.parkour.help = 0
-		data.parkour.keys = {}
-		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	end,
-	["0.4"] = function(player, data)
-		data.parkour.v = "0.7"
-		data.parkour.troll = 0
-		data.parkour.week_c = 0
-		data.parkour.week_r = timed_maps.week.last_reset
-		data.parkour.hour_c = 0
-		data.parkour.hour_r = os.time() + 60 * 60 * 1000
-		data.parkour.help = 0
-		data.parkour.keys = {}
-		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	end,
-	["0.5"] = function(player, data)
-		data.parkour.v = "0.7"
-		data.parkour.week_c = 0
-		data.parkour.week_r = timed_maps.week.last_reset
-		data.parkour.hour_c = 0
-		data.parkour.hour_r = os.time() + 60 * 60 * 1000
-		data.parkour.help = 0
-		data.parkour.keys = {}
-		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	end,
 	["0.6"] = function(player, data)
 		data.parkour.v = "0.7"

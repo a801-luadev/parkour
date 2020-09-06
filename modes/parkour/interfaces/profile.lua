@@ -23,6 +23,13 @@ do
 	local images = {}
 
 	Profile = Interface.new(200, 50, 400, 300, true)
+		:setShowCheck(function(self, player, profile, data)
+			local file = data or players_file[profile]
+			return (file
+					and file.parkour
+					and file.parkour.v == data_version)
+		end)
+
 		:addImage({
 			image = "173f32a90da.png",
 			target = ":1",

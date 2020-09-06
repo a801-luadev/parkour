@@ -215,7 +215,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if player == recv_channel or player == send_channel or data == "" then return end
 
 	data = json.decode(data)
-	if data.parkour.v ~= "0.7" then return end
+	if data.parkour.v ~= data_version then return end
 
 	local update = false
 	if killing[player] then
