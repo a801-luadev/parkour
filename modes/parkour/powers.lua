@@ -774,10 +774,10 @@ onEvent("PlayerWon", function(player)
 
 		for i = 1, hour_badges._count do
 			badge = hour_badges[i]
-			if file.hour_c >= badge[1] and badges[badge[2]] ~= 1 then
+			if file.hour_c >= badge[1] and file.badges[badge[2]] ~= 1 then
 				local skip = false
 				for j = 1, i - 1 do
-					if badges[hour_badges[j][2]] == 1 then
+					if file.badges[hour_badges[j][2]] == 1 then
 						skip = true
 						break
 					end
@@ -785,13 +785,12 @@ onEvent("PlayerWon", function(player)
 
 				if not skip then
 					for j = i + 1, hour_badges._count do
-						badges[hour_badges[j][2]] = 0
+						file.badges[hour_badges[j][2]] = 0
 					end
 
-					badges[badge[2]] = 1
+					file.badges[badge[2]] = 1
 
-					NewBadgeInterface:show(name, badge[2])
-					savePlayerData(name)
+					NewBadgeInterface:show(player, badge[2])
 				end
 
 				break
