@@ -15,7 +15,7 @@ translations.id = {
     code_error = "<r>Terjadi kesalahan: <bl>%s-%s-%s %s",
     emergency_mode = "<r>Penghentian darurat, tidak ada pemain baru diizinkan. Dimohon untuk pergi ke ruangan #parkour lain.",
     leaderboard_not_loaded = "<r>Papan peringkat belum bisa dimuat. Mohon Tunggu sebentar.",
-    max_power_keys = "<v>[#] <r>Anda hanya bisa memiliki paling banyak %s kemampuan dalam kunci yang sama.",
+    max_power_keys = "<v>[#] <r>Anda hanya bisa memiliki paling banyak %s kemampuan dalam kata kunci yang sama.",
 
     -- Help window
     help = "Bantuan",
@@ -42,7 +42,7 @@ translations.id = {
     welcome = "<n>Selamat datang di <t>#parkour</t>!",
     module_update = "<r><b>[Perhatian!]</b> <n>Modul akan diperbarui dalam waktu <d>%02d:%02d</d>.",
     leaderboard_loaded = "<j>Papan peringkat sudah dimuat. Tekan L untuk membukanya.",
-    kill_minutes = "<R>Kemampuan anda dimatikan dalam %s menit.",
+    kill_minutes = "<R>Kemampuan anda dimatikan paksa selama %s menit.",
     permbanned = "<r>Anda telah diblokir selamanya di #parkour.",
     tempbanned = "<r>Anda telah diblokir dari #parkour selama %s menit.",
 
