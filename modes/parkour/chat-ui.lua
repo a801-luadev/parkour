@@ -60,7 +60,8 @@ onEvent("PlayerWon", function(player)
 
 	if count_stats and taken <= 45 and not review_mode and not is_tribe then
 		sendPacket(1, room.name .. "\000" .. player .. "\000" .. id .. "\000" .. room.currentMap .. "\000" .. taken)
-	elseif not fastest.record or taken < fastest.record then
+	end
+	if not fastest.record or taken < fastest.record then
 		local old = fastest.player
 
 		fastest.record = taken
