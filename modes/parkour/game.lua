@@ -224,7 +224,7 @@ onEvent("Loop", function()
 			player = room.playerList[name]
 			if spec_mode[name] then
 				tfm.exec.killPlayer(name)
-			elseif now >= cp_available[name] then
+			elseif player and now >= cp_available[name] then
 				level_id = (players_level[name] or 1) + 1
 				next_level = levels[level_id]
 
