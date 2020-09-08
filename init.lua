@@ -28,8 +28,8 @@ local data_version = "0.7"
 local room = tfm.get.room
 local links = {
 	donation = "https://a801-luadev.github.io/?redirect=parkour",
-	github = "https://bit.ly/tfm-parkour",
-	discord = "https://bit.ly/parkour-discord",
+	github = "https://github.com/a801-luadev/parkour",
+	discord = "https://discord.gg/RXaCyWz",
 	maps = "https://bit.ly/submit-parkour-maps",
 	modapps = "https://bit.ly/parkourmod"
 }

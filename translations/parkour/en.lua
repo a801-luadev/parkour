@@ -90,6 +90,7 @@ translations.en = {
 	help_badge_11 = "This player has got a record of 45 maps per hour.",
 	help_badge_12 = "This player has got a record of 50 maps per hour.",
 	help_badge_13 = "This player has got a record of 55 maps per hour.",
+	help_badge_14 = "This player has verified their discord account in the official parkour server (type <b>!discord</b>).",
 	make_public = "make public",
 	make_private = "make private",
 	moderators = "Moderators",

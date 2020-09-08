@@ -119,6 +119,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	if cmd == "donate" then
 		tfm.exec.chatMessage("<rose>" .. links.donation, player)
 
+	elseif cmd == "discord" then
+		tfm.exec.chatMessage("<rose>" .. links.discord, player)
+
 	elseif cmd == "give" then
 		if not perms[player] or not perms[player].give_command then return end
 
@@ -343,6 +346,7 @@ end)
 
 onEvent("GameStart", function()
 	system.disableChatCommandDisplay("donate")
+	system.disableChatCommandDisplay("discord")
 	system.disableChatCommandDisplay("give")
 	system.disableChatCommandDisplay("pw")
 	system.disableChatCommandDisplay("roomlimit")

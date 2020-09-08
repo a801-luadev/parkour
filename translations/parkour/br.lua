@@ -90,6 +90,7 @@ translations.br = {
 	help_badge_11 = "Este jogador bateu um recorde de 45 mapas por hora.",
 	help_badge_12 = "Este jogador bateu um recorde de 50 mapas por hora.",
 	help_badge_13 = "Este jogador bateu um recorde de 55 mapas por hora.",
+	help_badge_14 = "This player has verified their discord account in the official parkour server (type <b>!discord</b>).",
 	make_public = "tornar público",
 	make_private = "tornar privado",
 	moderators = "Moderadores",

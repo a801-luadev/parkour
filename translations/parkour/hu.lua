@@ -90,6 +90,7 @@ translations.hu = {
 	help_badge_11 = "Ennek a játékosnak a rekordja 45 pálya/óra.",
 	help_badge_12 = "Ennek a játékosnak a rekordja 50 pálya/óra.",
 	help_badge_13 = "Ennek a játékosnak a rekordja 55 pálya/óra.",
+	help_badge_14 = "Ez a játékos hitelesítette a discord fiókját a Parkour hivatalos Discord szerverén (írd be <b>!discord</b>).",
 	make_public = "nyilvános",
 	make_private = "privát",
 	moderators = "Moderátorok",

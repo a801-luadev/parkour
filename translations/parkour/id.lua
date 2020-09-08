@@ -90,6 +90,7 @@ translations.id = {
     help_badge_11 = "Pemain ini memiliki rekor 45 peta per jam.",
     help_badge_12 = "Pemain ini memiliki rekor 50 peta per jam.",
     help_badge_13 = "Pemain ini memiliki rekor 55 peta per jam.",
+    help_badge_14 = "This player has verified their discord account in the official parkour server (type <b>!discord</b>).",
     make_public = "jadikan publik",
     make_private = "jadikan privasi",
     moderators = "Moderator",

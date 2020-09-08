@@ -90,6 +90,7 @@ translations.tr = {
 	help_badge_11 = "Bu oyuncunun, saatte 45 harita tamamlamışlığı var.",
 	help_badge_12 = "Bu oyuncunun, saatte 50 harita tamamlamışlığı var.",
 	help_badge_13 = "Bu oyuncunun, saatte 55 harita tamamlamışlığı var.",
+	help_badge_14 = "This player has verified their discord account in the official parkour server (type <b>!discord</b>).",
 	make_public = "herkese açık",
 	make_private = "kişiye özel",
 	moderators = "Moderatörler",

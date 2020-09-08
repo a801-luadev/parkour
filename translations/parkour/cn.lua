@@ -90,6 +90,7 @@ translations.cn = {
 	help_badge_11 = "這玩家達成了在一小時內通過 45 張地圖的記錄。",
 	help_badge_12 = "這玩家達成了在一小時內通過 50 張地圖的記錄。",
 	help_badge_13 = "這玩家達成了在一小時內通過 55 張地圖的記錄。",
+	help_badge_14 = "This player has verified their discord account in the official parkour server (type <b>!discord</b>).",
 	make_public = "設定為公開",
 	make_private = "設定為私人",
 	moderators = "管理員",
