@@ -45,7 +45,7 @@ local badges = {
 	[11] = "1745a54a1e3.png", -- hour record (45)
 	[12] = "1745a541bdd.png", -- hour record (50)
 	[13] = "1745a54869e.png", -- hour record (55)
-	[14] = "", -- verified discord
+	[14] = "1746ef93af1.png", -- verified discord
 }
 players_file = {}
 

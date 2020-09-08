@@ -13,7 +13,7 @@ do
 		[11] = "1745afb4333.png", -- hour record (45)
 		[12] = "1745afc2c32.png", -- hour record (50)
 		[13] = "1745afc5c2e.png", -- hour record (55)
-		[14] = "", -- verified discord
+		[14] = "1746ef8f813.png", -- verified discord
 	}
 
 	NewBadgeInterface = Interface.new(340, 130, 120, 140, true)
