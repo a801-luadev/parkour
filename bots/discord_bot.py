@@ -44,6 +44,7 @@ class env:
 
 	verifications_category = 752189155798286427
 	verified_role = 694947893433466981
+	manual_verification = 753391975742570546
 
 
 verification_messages = (
@@ -633,6 +634,19 @@ class Client(discord.Client):
 					},
 					"parkour"
 				)
+
+		elif msg.channel.id == env.manual_verification:
+			for role in member.roles:
+				if role.id == 694947893433466981:
+					break
+			else:
+				await msg.delete()
+
+				for verification in self.verifications:
+					if verification[1] == member.id:
+						break
+				else:
+					self.dispatch("member_join", member)
 
 	async def execute_code(self, channel, args):
 		# Selects an environment
