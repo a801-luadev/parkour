@@ -24,7 +24,7 @@
 --
 
 
-local data_version = "0.7"
+local data_version = "0.8"
 local room = tfm.get.room
 local links = {
 	donation = "https://a801-luadev.github.io/?redirect=parkour",

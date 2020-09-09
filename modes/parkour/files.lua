@@ -94,6 +94,11 @@ local data_migrations = {
 		data.parkour.v = "0.7"
 		data.parkour.keys = {}
 		data.parkour.badges = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	end,
+	["0.7"] = function(player, data)
+		data.parkour.v = "0.8"
+		data.parkour.badges[13] = 0
+		data.parkour.badges[14] = 0
 	end
 }
 

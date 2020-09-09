@@ -813,7 +813,7 @@ class Client(aiotfm.Client):
 		await self.send_callback(VERIFY_DISCORD, player)
 
 		try:
-			id = await self.wait_for(
+			id, text = await self.wait_for(
 				"on_lua_textarea",
 				lambda id, text: id in (VERIFY_DISCORD, VERSION_MISMATCH) and text == player,
 				timeout=timeout
