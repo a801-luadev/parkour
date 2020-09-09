@@ -41,7 +41,8 @@ class JSONProtocol(asyncio.Protocol):
 
 	def data_received(self, data):
 		for packet in self.parse_packet(data):
-			self.packets.put_nowait(packet)
+			if packet:
+				self.packets.put_nowait(packet)
 
 	async def receive(self):
 		"""Blocks until there is a packet available, decodes and returns it"""

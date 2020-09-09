@@ -34,11 +34,12 @@ class JSONProtocol(asyncio.Protocol):
 
 	def data_received(self, data):
 		for packet in self.parse_packet(data):
-			self.packets.put_nowait(packet)
+			if packet:
+				self.packets.put_nowait(packet)
 
 	async def receive(self):
 		"""Blocks until there is a packet available, decodes and returns it"""
-		return await self.packets.get()
+		return json.loads(await self.packets.get())
 
 	async def send(self, packet):
 		"""Encodes a packet and sends it"""
