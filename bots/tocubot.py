@@ -134,7 +134,7 @@ class Client(aiotfm.Client):
 
 		await self.login("Tocutoeltuco#5522", env.password, encrypted=False, room=self.bots_room)
 
-	async def on_logged(self):
+	async def on_logged(self, *a):
 		print("Logged!")
 
 	async def load_script(self, script, channel):

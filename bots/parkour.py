@@ -178,7 +178,7 @@ class Client(aiotfm.Client):
 		# Logs into transformice
 		await self.login("Parkour#8558", env.password, encrypted=False, room=self.bots_room)
 
-	async def on_logged(self):
+	async def on_logged(self, *a):
 		print("Logged!")
 
 		self.loop.create_task(self.check_forum())
