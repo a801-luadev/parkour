@@ -267,6 +267,7 @@ class Proxy(Connection):
 class Client(discord.Client):
 	verifications = None
 	next_bot_restart = time.time() + 60
+	busy = False
 
 	async def on_ready(self):
 		self.proxy = Proxy(self, env.proxy_token, "discord")
