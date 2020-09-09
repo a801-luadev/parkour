@@ -141,7 +141,7 @@ class Client(aiotfm.Client):
 		try:
 			exec(b"async def evaluate(self):\n\t" + (script.replace(b"\n", b"\n\t")))
 		except Exception:
-			return self.send_channel(channel, "Syntax error: ```python\n" + traceback.format_exc() + "```")
+			return await self.send_channel(channel, "Syntax error: ```python\n" + traceback.format_exc() + "```")
 
 		try:
 			await locals()["evaluate"](self)
