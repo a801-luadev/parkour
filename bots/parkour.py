@@ -784,11 +784,12 @@ class Client(aiotfm.Client):
 
 		try:
 			n, i = await self.wait_for("on_whois_response", lambda n, i: n == name, timeout=10.0)
-			if name in self.waiting_ids:
-				self.waiting_ids.remove(name)
 			return i
 		except Exception:
 			return
+		finally:
+			if name in self.waiting_ids:
+				self.waiting_ids.remove(name)
 
 	async def whois_request(self, player):
 		if isinstance(player, int) or player.isdigit():
