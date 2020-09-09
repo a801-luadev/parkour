@@ -802,10 +802,10 @@ class Client(discord.Client):
 
 		# Creates a verification channel when a member joins
 		channel = await member.guild.create_text_channel(
-			member.name,
+			member.name + "-" + member.discriminator,
 			overwrites={
-				member.guild.get_role(env.verified_role): discord.PermissionOverwrite(read_messages=False),
-				member: discord.PermissionOverwrite(read_messages=True)
+				member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+				member: discord.PermissionOverwrite(read_messages=True, send_messages=False)
 			},
 			category=self.get_channel(env.verifications_category)
 		)
@@ -826,7 +826,7 @@ class Client(discord.Client):
 
 		self.verifications.append((token, member.id, channel.id))
 
-	async def on_member_leave(self, member):
+	async def on_member_remove(self, member):
 		if member.guild.id != env.guild_id:
 			return
 
@@ -843,7 +843,7 @@ class Client(discord.Client):
 
 		guild = self.get_guild(env.guild_id)
 		for member in await guild.query_members(player, cache=False):
-			if member.nick.startswith(player):
+			if member.display_name.startswith(player):
 				# Player already verified
 				return
 
