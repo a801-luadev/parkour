@@ -130,7 +130,10 @@ class Client(aiotfm.Client):
 		print("Connected")
 
 		self.proxy = Proxy(self, env.proxy_token, "tocubot")
-		await self.proxy.connect(env.proxy_ip, env.proxy_port)
+		try:
+			await self.proxy.connect(env.proxy_ip, env.proxy_port)
+		except Exception:
+			await self.restart()
 
 		await self.login("Tocutoeltuco#5522", env.password, encrypted=False, room=self.bots_room)
 

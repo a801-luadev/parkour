@@ -172,7 +172,10 @@ class Client(aiotfm.Client):
 
 		# Connects to the proxy
 		self.proxy = Proxy(self, env.proxy_token, "parkour")
-		await self.proxy.connect(env.proxy_ip, env.proxy_port)
+		try:
+			await self.proxy.connect(env.proxy_ip, env.proxy_port)
+		except Exception:
+			await self.restart()
 
 		# Logs into transformice
 		await self.login("Parkour#8558", env.password, encrypted=False, room=self.bots_room)

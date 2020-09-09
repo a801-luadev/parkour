@@ -277,7 +277,10 @@ class Client(discord.Client):
 
 	async def on_ready(self):
 		self.proxy = Proxy(self, env.proxy_token, "discord")
-		await self.proxy.connect(env.proxy_ip, env.proxy_port)
+		try:
+			await self.proxy.connect(env.proxy_ip, env.proxy_port)
+		except Exception:
+			await self.restart()
 
 		async with aiohttp.ClientSession() as session:
 			async with session.get(
