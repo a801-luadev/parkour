@@ -357,7 +357,7 @@ class Client(discord.Client):
 
 		elif msg.channel.id == env.whois_channel:
 			# The other bot answered our whois response
-			if " " not in msg.content:
+			if " " in msg.content:
 				name, id = msg.content.split(" ")
 				id = int(id)
 			else:

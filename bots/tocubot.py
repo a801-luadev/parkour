@@ -459,7 +459,7 @@ class Client(aiotfm.Client):
 			return
 		await self.send_channel(channel, "Restarting the room soon.")
 
-		go_bots = self.room.name != self.bots_room
+		go_bots = self.room.name != room
 		if room != self.room.name:
 			await self.sendCommand(commands.join_room(room))
 			await asyncio.sleep(3.0)
