@@ -37,7 +37,7 @@ class JSONProtocol(asyncio.Protocol):
 
 		length = (packet[0] << 16) + (packet[1] << 8) + packet[2]
 		yield packet[3:3 + length]
-		yield from self.parse_packet(packet[length:])
+		yield from self.parse_packet(packet[3 + length:])
 
 	def data_received(self, data):
 		for packet in self.parse_packet(data):
