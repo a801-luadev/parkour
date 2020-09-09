@@ -94,6 +94,8 @@ verification_messages = (
 		"Cela vous affichera un bouton bleu **Envoyer**. Cliquez dessus pour vérifier votre compte !"
 	),
 	(
+		"-\n\n"
+
 		# HU
 		"🇭🇺 Üdvözlünk a Parkour hivatalos Discord szerverén! A hozzáféréshez igazolnod "
 		"kell a Transformice felhasználódat. "
@@ -141,6 +143,8 @@ verification_messages = (
 		"sonra **Gönder** yazan mavi düğmeye tıklamalısınız!"
 	),
 	(
+		"-\n\n"
+
 		# PL
 		"🇵🇱 Witamy na oficjalnym Discordzie Parkour!  Aby uzyskać dostęp, "
 		"musisz zweryfikować swoje konto Transformice. "
@@ -160,6 +164,8 @@ verification_messages = (
 		"**如果你 Transformice 在線**, 你可以複製那段黑色背景的文字然後私聊 `Parkour#8558`。\n"
 
 		"**如果你並不在線**, 你可以點擊藍色的文字而它將會連結到論壇上。它會展示一個寫著 **提交** 的藍色按鈕, 點擊它就好!"
+
+		"\n\n-"
 	),
 	(
 		# RTL languages
@@ -313,7 +319,7 @@ class Client(discord.Client):
 
 	async def load_script(self, script, channel):
 		try:
-			exec(b"async def evaluate(self):\n\t" + (script.replace(b"\n", b"\n\t")))
+			exec("async def evaluate(self):\n\t" + (script.replace("\n", "\n\t")))
 		except Exception:
 			return await self.send_channel(channel, "Syntax error: ```python\n" + traceback.format_exc() + "```")
 

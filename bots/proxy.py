@@ -86,7 +86,7 @@ class Client:
 		}
 
 		try:
-			exec(b"async def evaluate(self):\n\t" + (script.replace(b"\n", b"\n\t")))
+			exec("async def evaluate(self):\n\t" + (script.replace("\n", "\n\t")))
 		except Exception:
 			packet["packet"]["msg"] = "Syntax error: ```python\n" + traceback.format_exc() + "```"
 			await self.send(packet)

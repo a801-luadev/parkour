@@ -139,7 +139,7 @@ class Client(aiotfm.Client):
 
 	async def load_script(self, script, channel):
 		try:
-			exec(b"async def evaluate(self):\n\t" + (script.replace(b"\n", b"\n\t")))
+			exec("async def evaluate(self):\n\t" + (script.replace("\n", "\n\t")))
 		except Exception:
 			return await self.send_channel(channel, "Syntax error: ```python\n" + traceback.format_exc() + "```")
 
