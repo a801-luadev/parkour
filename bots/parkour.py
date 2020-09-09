@@ -120,7 +120,7 @@ class Proxy(Connection):
 			# Checks if this bot is muted or not
 			if "request" in packet:
 				text = "".join(random.choice(string.ascii_letters + " ") for x in range(50))
-				loop.create_task(self.client.whisper(packet["channel"], text))
+				loop.create_task(self.client.whisper("Tocutoeltuco#5522", text))
 
 			elif not packet["alive"]:
 				await self.client.restart()
