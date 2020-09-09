@@ -87,8 +87,6 @@ def normalize_name(name):
 
 
 class Proxy(Connection):
-	waiting_ids = []
-
 	def __init__(self, client, *args, **kwargs):
 		self.client = client
 		super().__init__(*args, **kwargs)
@@ -145,6 +143,7 @@ class Client(aiotfm.Client):
 	ranks = {}
 	player_ranks = {}
 	chats = {}
+	waiting_ids = []
 
 	def get_player_rank(self, player):
 		player = normalize_name(player)
