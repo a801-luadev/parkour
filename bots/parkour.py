@@ -619,7 +619,7 @@ class Client(aiotfm.Client):
 						await self.sendCommand("profile " + name)
 						await self.wait_for(
 							"on_profile",
-							lambda p: self.normalize_name(p.username) == name,
+							lambda p: normalize_name(p.username) == name,
 							timeout=3.0
 						)
 						break
