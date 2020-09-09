@@ -496,7 +496,7 @@ class Client(discord.Client):
 
 				# try to draw it if needed
 				file_format = "xml"
-				file_content = xml
+				file_content = xml.encode()
 				if cmd in ("!render", "!map"):
 					try:
 						async with aiohttp.ClientSession(conn_timeout=15.0, read_timeout=15.0) as session:
