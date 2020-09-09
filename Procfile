@@ -1,1 +1,1 @@
-parkour: python bots/heroku.py
+parkour: python bots/parkour.py
