@@ -6,7 +6,7 @@ do
 			return nameCache[name]
 		end
 
-		nameCache[name] = "<a href='event:msg:/w " .. name .. "'>"string.gsub(
+		nameCache[name] = "<a href='event:msg:/w " .. name .. "'>" .. string.gsub(
 			string.gsub(name, "(#%d%d%d%d)", "<font size='11'><g>%1</g></font>"),
 			"([Hh]t)tp", "%1<>tp"
 		) .. "</a>"
