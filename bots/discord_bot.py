@@ -636,6 +636,7 @@ class Client(discord.Client):
 				)
 
 		elif msg.channel.id == env.manual_verification:
+			member = msg.author
 			for role in member.roles:
 				if role.id == 694947893433466981:
 					break
