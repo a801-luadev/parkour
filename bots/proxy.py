@@ -213,7 +213,7 @@ if __name__ == '__main__':
 	server = Server(os.getenv("PROXY_TOKEN"))
 
 	print("Starting server...")
-	server.bind("127.0.0.1", 6666)
+	server.bind("0.0.0.0", 6666)
 	server.loop.run_until_complete(server.start())
 	print("Server running.")
 
