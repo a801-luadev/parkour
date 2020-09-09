@@ -266,6 +266,7 @@ class Proxy(Connection):
 
 class Client(discord.Client):
 	verifications = None
+	next_bot_restart = time.time() + 60
 
 	async def on_ready(self):
 		self.proxy = Proxy(self, env.proxy_token, "discord")
@@ -703,7 +704,7 @@ class Client(discord.Client):
 		a Role instance too. If they don't have it, it gives an int representing the role id.
 
 		Returns a tuple of two None if the user is a bot or the reaction is invalid."""
-		if payload.channel_id != self.role_reaction_channel:
+		if payload.channel_id != env.role_channel:
 			return None, None
 
 		guild = self.get_guild(payload.guild_id)
