@@ -75,7 +75,7 @@ webhooks = {
 }
 
 
-def normalize_name(self, name):
+def normalize_name(name):
 	"""Normalizes a transformice nickname."""
 	if name[0] == "+":
 		name = "+" + (name[1:].capitalize())

@@ -285,7 +285,9 @@ class Client(aiotfm.Client):
 			return await self.send_channel(env.private_channel, "Wrong match: `" + msg + "`")
 
 		room, msg = match.group(1, 2)
-		module = re.search(r"#([a-z]+)", room).group(1)
+		module = re.search(r"#([a-z]+)", room)
+		if module is not None:
+			module = module.group(1)
 
 		if room == self.bots_room or module != "parkour" or room == self.room.name:
 			channel = env.private_channel
