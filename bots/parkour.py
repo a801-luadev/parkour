@@ -395,7 +395,7 @@ class Client(aiotfm.Client):
 	async def on_whisper(self, whisper):
 		author = normalize_name(whisper.author.username)
 
-		if whisper.startswith("."):
+		if whisper.content.startswith("."):
 			# Whisper command
 			args = whisper.content.split(" ")
 			cmd = args.pop(0).lower()
@@ -687,7 +687,7 @@ class Client(aiotfm.Client):
 
 				self.dispatch("generate_new_chat", args[0].lower())
 
-		elif whisper.startswith("tfm"):
+		elif whisper.content.startswith("tfm"):
 			# Discord verification token
 			return await self.proxy.sendTo(
 				{"type": "verification", "username": author, "token": whisper.content},
