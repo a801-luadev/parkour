@@ -31,8 +31,14 @@ class JSONProtocol(asyncio.Protocol):
 	def set_client(self, client):
 		self.client = client
 
+	def parse_packet(self, packet):
+		length = (packet[0] << 16) + (packet[1] << 8) + packet[2]
+		yield packet[3:3 + length]
+		yield from self.parse_packet(packet[length:])
+
 	def data_received(self, data):
-		self.packets.put_nowait(data.decode())
+		for packet in self.parse_packet(data):
+			self.packets.put_nowait(packet)
 
 	async def receive(self):
 		"""Blocks until there is a packet available, decodes and returns it"""
@@ -40,7 +46,9 @@ class JSONProtocol(asyncio.Protocol):
 
 	async def send(self, packet):
 		"""Encodes a packet and sends it"""
-		self.transport.write(json.dumps(packet).encode())
+		data = json.dumps(packet).encode()
+		data = bytes((len(data) >> 16 & 255, len(data) >> 8 & 255, len(data) & 255)) + data
+		self.transport.write(data)
 
 
 class Client:
