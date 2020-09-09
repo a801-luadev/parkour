@@ -482,7 +482,7 @@ class Client(discord.Client):
 					return
 
 				# get map info
-				await self.proxy.sendTo({"type": "map_info", "map": code})
+				await self.proxy.sendTo({"type": "map_info", "map": code}, "tocubot")
 				try:
 					author, code, perm, xml = await self.wait_for("map_info", timeout=5.0)
 				except Exception:
