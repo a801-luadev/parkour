@@ -497,7 +497,35 @@ powers = {
 		}
 	},
 	{
-		name = "chair", ranking = 28,
+		name = "campfire", ranking = 28,
+
+		small = "173dee9c5d9.png", big = "173dee98c61.png",
+		lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
+		smallX = 0, smallY = 10,
+		bigX = 0, bigY = 10,
+
+		cooldown_x = 274,
+		cooldown_y = 376,
+		cooldown_img = "1741cfdadc9.png",
+
+		cooldown = 15000,
+		default = {3, 8}, -- J
+
+		fnc = function(player, key, down, x, y)
+			local id = room.playerList[player].id + 2147483648 -- makes 32nd bit 1 so it doesn't play around with the interface textareas
+
+			local img = tfm.exec.addImage("17426539be5.png", "_51", x - 30, y - 26)
+			ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 32, y - 26, 64, 56, 0, 0, 0)
+			addNewTimer(powers.campfire.cooldown, powers.campfire.despawn, img, id)
+		end,
+
+		despawn = function(img, id)
+			tfm.exec.removeImage(img)
+			ui.removeTextArea(id)
+		end
+	},
+	{
+		name = "chair", ranking = 14,
 
 		small = "1745a769e88.png", big = "1745a765105.png",
 		lockedSmall = "1745a76c506.png", lockedBig = "1745a7675e6.png",
@@ -526,34 +554,6 @@ powers = {
 		despawn = function(id, img)
 			tfm.exec.removePhysicObject(id)
 			tfm.exec.removeImage(img)
-		end
-	},
-	{
-		name = "campfire", ranking = 14,
-
-		small = "173dee9c5d9.png", big = "173dee98c61.png",
-		lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
-		smallX = 0, smallY = 10,
-		bigX = 0, bigY = 10,
-
-		cooldown_x = 274,
-		cooldown_y = 376,
-		cooldown_img = "1741cfdadc9.png",
-
-		cooldown = 15000,
-		default = {3, 8}, -- J
-
-		fnc = function(player, key, down, x, y)
-			local id = room.playerList[player].id + 2147483648 -- makes 32nd bit 1 so it doesn't play around with the interface textareas
-
-			local img = tfm.exec.addImage("17426539be5.png", "_51", x - 30, y - 26)
-			ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 32, y - 26, 64, 56, 0, 0, 0)
-			addNewTimer(powers.campfire.cooldown, powers.campfire.despawn, img, id)
-		end,
-
-		despawn = function(img, id)
-			tfm.exec.removeImage(img)
-			ui.removeTextArea(id)
 		end
 	},
 }
