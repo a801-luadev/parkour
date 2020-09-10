@@ -326,7 +326,7 @@ powers = {
 		end
 	},
 	{
-		name = "pig", ranking = 70,
+		name = "pig", maps = 5000,
 
 		small = "173deea75bd.png", big = "173deea2cc0.png",
 		lockedSmall = "173deea9a02.png", lockedBig = "173deea4edc.png",
@@ -380,7 +380,7 @@ powers = {
 		end
 	},
 	{
-		name = "sink", ranking = 56,
+		name = "sink", ranking = 70,
 
 		small = "173deeb1e05.png", big = "173deeac174.png",
 		lockedSmall = "173deeb3dac.png", lockedBig = "173deeaf781.png",
@@ -413,7 +413,7 @@ powers = {
 
 		upgrades = {
 			{
-				name = "toilet", ranking = 42,
+				name = "toilet", ranking = 56,
 
 				small = "173db3f2c95.png", big = "173db3f0d81.png",
 				smallX = 0, smallY = -10,
@@ -455,7 +455,7 @@ powers = {
 				end
 			},
 			{
-				name = "bathtub", ranking = 28,
+				name = "bathtub", ranking = 42,
 
 				small = "173deeb8924.png", big = "173deeb6576.png",
 				smallX = 0, smallY = 5,
@@ -497,35 +497,7 @@ powers = {
 		}
 	},
 	{
-		name = "campfire", ranking = 14,
-
-		small = "173dee9c5d9.png", big = "173dee98c61.png",
-		lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
-		smallX = 0, smallY = 10,
-		bigX = 0, bigY = 10,
-
-		cooldown_x = 274,
-		cooldown_y = 376,
-		cooldown_img = "1741cfdadc9.png",
-
-		cooldown = 15000,
-		default = {3, 8}, -- J
-
-		fnc = function(player, key, down, x, y)
-			local id = room.playerList[player].id + 2147483648 -- makes 32nd bit 1 so it doesn't play around with the interface textareas
-
-			local img = tfm.exec.addImage("17426539be5.png", "_51", x - 30, y - 26)
-			ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 32, y - 26, 64, 56, 0, 0, 0)
-			addNewTimer(powers.campfire.cooldown, powers.campfire.despawn, img, id)
-		end,
-
-		despawn = function(img, id)
-			tfm.exec.removeImage(img)
-			ui.removeTextArea(id)
-		end
-	},
-	{
-		name = "chair", ranking = 14,
+		name = "chair", ranking = 28,
 
 		small = "1745a769e88.png", big = "1745a765105.png",
 		lockedSmall = "1745a76c506.png", lockedBig = "1745a7675e6.png",
@@ -554,6 +526,34 @@ powers = {
 		despawn = function(id, img)
 			tfm.exec.removePhysicObject(id)
 			tfm.exec.removeImage(img)
+		end
+	},
+	{
+		name = "campfire", ranking = 14,
+
+		small = "173dee9c5d9.png", big = "173dee98c61.png",
+		lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
+		smallX = 0, smallY = 10,
+		bigX = 0, bigY = 10,
+
+		cooldown_x = 274,
+		cooldown_y = 376,
+		cooldown_img = "1741cfdadc9.png",
+
+		cooldown = 15000,
+		default = {3, 8}, -- J
+
+		fnc = function(player, key, down, x, y)
+			local id = room.playerList[player].id + 2147483648 -- makes 32nd bit 1 so it doesn't play around with the interface textareas
+
+			local img = tfm.exec.addImage("17426539be5.png", "_51", x - 30, y - 26)
+			ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 32, y - 26, 64, 56, 0, 0, 0)
+			addNewTimer(powers.campfire.cooldown, powers.campfire.despawn, img, id)
+		end,
+
+		despawn = function(img, id)
+			tfm.exec.removeImage(img)
+			ui.removeTextArea(id)
 		end
 	},
 }
