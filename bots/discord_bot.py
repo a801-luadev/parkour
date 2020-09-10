@@ -674,12 +674,13 @@ class Client(discord.Client):
 
 			async with aiohttp.ClientSession() as session:
 				async with session.get(link) as resp:
-					script = await resp.read()
+					script = (await resp.read()).decode()
 
 		# If we don't provide a link, we need to check for the script in the message
 		else:
 			script = re.match(r"(`{1,3})(?:lua\n|python\n)?((?:.|\n)+)\1", " ".join(args))
 			if script is None:
+				await self.set_busy(False)
 				return await channel.send("Can't match your script.")
 			script = script.group(2)
 
