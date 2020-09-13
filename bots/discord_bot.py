@@ -184,7 +184,8 @@ verification_messages = (
 
 scripts = {
 	"copyfile": 752932696782667877,
-	"migrate": 752932834607628348
+	"migrate": 752932834607628348,
+	"unverify": 754809221383585952
 }
 
 categories = {
