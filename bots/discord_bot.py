@@ -288,7 +288,7 @@ class Client(discord.Client):
 			async with session.get(
 				"https://raw.githubusercontent.com/a801-luadev/parkour/master/tech/json/init.lua"
 			) as resp:
-				self.json_script = await resp.read()
+				self.json_script = (await resp.read()).decode()
 
 		self.loop.create_task(self.check_reaction_roles())
 		self.loop.create_task(self.check_verifications())
