@@ -678,7 +678,7 @@ class Client(discord.Client):
 
 		# If we don't provide a link, we need to check for the script in the message
 		else:
-			script = re.match(r"(`{1,3})(?:lua\n|python\n)?((?:.|\n)+)\1", " ".join(args))
+			script = re.search(r"(`{1,3})(?:lua\n|python\n)?((?:.|\n)+)\1", " ".join(args))
 			if script is None:
 				await self.set_busy(False)
 				return await channel.send("Can't match your script.")
