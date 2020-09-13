@@ -144,6 +144,7 @@ class Client(aiotfm.Client):
 	player_ranks = {}
 	chats = {}
 	waiting_ids = []
+	received_weekly_reset = False
 
 	def get_player_rank(self, player):
 		player = normalize_name(player)
