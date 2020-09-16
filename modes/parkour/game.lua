@@ -147,7 +147,7 @@ onEvent("PlayerWon", function(player)
 	victory[player] = true
 	victory._last_level[player] = false
 
-	if victory_count == player_count then
+	if victory_count == player_count and not less_time then
 		tfm.exec.setGameTime(20)
 		less_time = true
 	end
@@ -278,7 +278,12 @@ end)
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	if cmd == "review" then
 		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
-		local normal_cond = perms[player] and perms[player].enable_review and (string.find(room.name, "review") or ranks.admin[player])
+		local normal_cond = (perms[player] and
+							perms[player].enable_review and
+							not records_admins and
+
+							(string.find(room.lowerName, "review") or
+							 ranks.admin[player]))
 		if not tribe_cond and not normal_cond then
 			return tfm.exec.chatMessage("<v>[#] <r>You can't toggle review mode in this room.", player)
 		end
@@ -352,6 +357,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		generated_at[player] = nil
 		victory[player] = nil
 		victory_count = victory_count - 1
+
+		tfm.exec.setPlayerScore(player, 1, false)
+		tfm.exec.killPlayer(player)
+		tfm.exec.respawnPlayer(player)
 	end
 end)
 

@@ -3,7 +3,6 @@
 local fetching_player_room = {}
 local roompw = {}
 local fastest = {}
-records_admins = string.find("records", room.lowerName, 1, true) and {}
 
 local GameInterface
 local setNameColor
@@ -144,7 +143,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			local exists = false
 
 			for index = 1, maps.high_count do
-				if map == maps.list_high then
+				if map == maps.list_high[index] then
 					exists = true
 					break
 				end
@@ -152,7 +151,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 			if not exists then
 				for index = 1, maps.low_count do
-					if map == maps.list_low then
+					if map == maps.list_low[index] then
 						exists = true
 						break
 					end
@@ -369,7 +368,7 @@ onEvent("PlayerDataParsed", function(player, data)
 	if records_admins then
 		translatedChatMessage("records_enabled", player, links.records)
 
-		if string.find(string.lower(player), room.lowerName, 1, true) then
+		if string.find(room.lowerName, string.lower(player), 1, true) then
 			records_admins[player] = true
 			translatedChatMessage("records_admin", player)
 		end

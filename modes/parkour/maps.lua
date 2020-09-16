@@ -33,12 +33,12 @@ local maps = {
 	sections_high = {
 		_count = 0,
 		_pointer = 0,
-		_map_pointer = 0
+		_map_pointer = 1
 	},
 	sections_low = {
 		_count = 0,
 		_pointer = 0,
-		_map_pointer = 0
+		_map_pointer = 1
 	},
 
 	list_high = {7171137},
@@ -53,12 +53,12 @@ local map_change_cd = 0
 
 local levels
 local perms
-local records_admins
+local records_admins = string.find(room.lowerName, "records", 1, true) and {}
 
 local function selectMap(sections, list, count)
-	if sections._map_pointer > map_per_section then
+	if sections._map_pointer > maps_per_section then
 		-- All maps played, reset sections
-		sections._map_pointer = 0
+		sections._map_pointer = 1
 		sections._pointer = 0
 		sections._count = 0
 	end
@@ -89,6 +89,8 @@ local function selectMap(sections, list, count)
 			sections[index] = sections[swap]
 			sections[swap] = current
 		end
+
+		sections._count = quantity
 	end
 
 	-- make pointer go through 1 to _count
