@@ -24,6 +24,8 @@
 --
 
 
+math.randomseed(os.time())
+
 local data_version = "0.8"
 local room = tfm.get.room
 local links = {
@@ -58,7 +60,7 @@ else
 		module_name = string.match(room.name, "^%*#([a-z]+)")
 		pos = #module_name + 3
 	else
-		module_name = string.match(room.name, "^[a-z][a-z2]%-#([a-z]+)")
+		module_name = string.match(room.name, "^[a-z][a-z]%-#([a-z]+)")
 		pos = #module_name + 5
 	end
 
