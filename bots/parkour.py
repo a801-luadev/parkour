@@ -8,6 +8,7 @@ import string
 import traceback
 import time
 import re
+import json
 from forum import ForumClient
 
 
@@ -35,6 +36,8 @@ class env:
 	private = os.getenv("BOT_CRASH_WEBHOOK")
 	default = os.getenv("DEFAULT_WEBHOOK")
 
+	records_webhook = os.getenv("RECORDS_WEBHOOK")
+
 
 WEEKLY_RECORDS_MSG = """<a:blob_cheer1:683845978553450576> **[{} - {}]** <a:blob_cheer2:683846001421058071>
 Congratulations to the highest achieving Weekly Leaderboard players!
@@ -54,6 +57,7 @@ WEEKLY_RESET = (12 << 8) + 255
 ROOM_PASSWORD = (13 << 8) + 255
 VERIFY_DISCORD = (14 << 8) + 255
 VERSION_MISMATCH = (15 << 8) + 255
+RECORD_SUBMISSION = (16 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -356,6 +360,23 @@ class Client(aiotfm.Client):
 			)
 			await asyncio.sleep(600.0) # sleep for 10 minutes to ignore duplicates
 			self.received_weekly_reset = False
+
+		elif id == RECORD_SUBMISSION:
+			code, player, time, room = text.split("\x00")
+			player = int(player)
+			name = await self.get_player_name(player)
+
+			self.dispatch(
+				"send_webhook",
+				json.dumps({
+					"type": "record",
+					"mapID": int(code),
+					"name": name,
+					"playerID": player,
+					"time": int(time),
+					"room": room
+				})
+			)
 
 	# Chat system
 	async def on_send_webhook(self, message, webhook=None):

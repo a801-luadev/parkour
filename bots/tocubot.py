@@ -9,6 +9,7 @@ import asyncio
 import re
 import zlib
 import aiohttp
+import json
 
 
 class env:
@@ -22,6 +23,8 @@ class env:
 	join_room = os.getenv("JOIN_ROOM_CMD")
 	set_limit = os.getenv("SET_LIMIT_CMD")
 	update = os.getenv("UPDATE_CMD")
+
+	records_webhook = os.getenv("RECORDS_WEBHOOK")
 
 	private_channel = 686932761222578201
 	lua_logs = 686933785933381680
@@ -405,6 +408,18 @@ class Client(aiotfm.Client):
 			await self.set_busy(False)
 			await self.send_channel(channel, "Could not modify the rotation. Try again later.")
 			return
+
+		async with aiohttp.ClientSession() as session:
+			await session.post(env.records_webhook, json={
+				"content": json.dumps({
+					"type": "rotation",
+					"maps": maps,
+					"action": "add" if add else "remove",
+					"priority": "high" if high else "low"
+				})
+			}, headers={
+				"Content-Type": "application/json"
+			})
 
 		await self.send_channel(channel, "Rotation modified.")
 		await self.set_busy(False)

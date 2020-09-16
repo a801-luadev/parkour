@@ -441,7 +441,7 @@ class Client(discord.Client):
 
 					if not code.isdigit():
 						return await msg.channel.send("The argument `{}` is not a valid map code.".format(code))
-					maps.append(code)
+					maps.append(int(code))
 
 				if not await self.set_busy(True, msg.channel):
 					return
