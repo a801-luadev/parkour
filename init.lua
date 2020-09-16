@@ -33,7 +33,6 @@ local links = {
 	github = "https://github.com/a801-luadev/parkour",
 	discord = "https://discord.gg/RXaCyWz",
 	maps = "https://bit.ly/submit-parkour-maps",
-	modapps = "https://bit.ly/parkourmod"
 }
 
 local starting = string.sub(room.name, 1, 2)
