@@ -169,8 +169,13 @@ onEvent("GameDataLoaded", function(data)
 
 			elseif sections._count == needed then
 				local section = sections[sections._count]
+				local modulo = maps.high_count % maps_per_section
 
-				if section._count ~= 0 and section._count ~= maps.high_count % maps_per_section then
+				if modulo == 0 then
+					modulo = maps_per_section
+				end
+
+				if section._count ~= 0 and section._count ~= modulo then
 					sections._map_pointer = maps_per_section + 1
 				end
 			end
