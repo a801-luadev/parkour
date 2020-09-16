@@ -168,11 +168,16 @@ end)
 onEvent("NewGame", function()
 	check_position = 6
 	victory_count = 0
-	less_time = false
 	victory = {_last_level = {}}
 	players_level = {}
 	generated_at = {}
 	map_start = os.time()
+
+	if records_admins then
+		less_time = true
+	else
+		less_time = false
+	end
 
 	local start_x, start_y
 	if levels then
@@ -322,13 +327,15 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		savePlayerData(player)
 
 	elseif cmd == "time" then
-		if not perms[player] then return end
-		if not perms[player].set_map_time then
-			if perms[player].set_map_time_review then
-				if not review_mode then
-					return tfm.exec.chatMessage("<v>[#] <r>You can only change the map time with review mode enabled.", player)
-				end
-			else return end
+		if not records_admins or not records_admins[player] then
+			if not perms[player] then return end
+			if not perms[player].set_map_time then
+				if perms[player].set_map_time_review then
+					if not review_mode then
+						return tfm.exec.chatMessage("<v>[#] <r>You can only change the map time with review mode enabled.", player)
+					end
+				else return end
+			end
 		end
 
 		local time = tonumber(args[1])
@@ -337,6 +344,14 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		tfm.exec.setGameTime(time)
+
+	elseif cmd == "redo" then
+		if not records_admins or not victory[player] then return end
+
+		players_level[player] = 1
+		generated_at[player] = nil
+		victory[player] = nil
+		victory_count = victory_count - 1
 	end
 end)
 
@@ -467,4 +482,5 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("cp")
 	system.disableChatCommandDisplay("spec")
 	system.disableChatCommandDisplay("time")
+	system.disableChatCommandDisplay("redo")
 end)

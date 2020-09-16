@@ -46,6 +46,16 @@ translations.es = {
 	permbanned = "<r>Has sido baneado permanentemente de #parkour.",
 	tempbanned = "<r>Has sido baneado de #parkour por %s minutos.",
 
+	-- Records
+	records_enabled = "<v>[#] <d>El modo de récords está activado en esta sala. ¡Las estadísticas no cuentan y los poderes están desactivados!\nPuedes encontrar más información sobre récords en <b>%s</b>",
+	records_admin = "<v>[#] <d>Eres un administrador de esta sala de récords. Puedes usar los comandos <b>!map</b>, <b>!pw</b> y <b>!time</b>.",
+	records_completed = "<v>[#] <d>¡Completaste el mapa! Si te gustaría rehacerlo, escribe <b>!redo</b>.",
+	records_submit = "<v>[#] <d>¡Wow! Parece que completaste el mapa con el tiempo más rápido en la sala. Si te gustaría enviar tu record, escribe <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>Parece que este mapa no está en la rotación de parkour... ¡No puedes enviar un récord en el!",
+	records_not_fastest = "<v>[#] <r>Parece que no eres el más rápido en la sala...",
+	records_already_submitted = "<v>[#] <r>¡Ya enviaste un récord para este mapa!",
+	records_submitted = "<v>[#] <d>Tu récord para el mapa <b>%s</b> ha sido enviado.",
+
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar partículas para los checkpoints\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa\n\nMostrar indicador para no recibir ayuda",
 	cooldown = "<v>[#] <r>Espera unos segundos antes de hacer eso de nuevo.",
@@ -99,7 +109,7 @@ translations.es = {
 	administrators = "Administradores",
 	close = "Cerrar",
 	cant_load_bot_profile = "<v>[#] <r>No puedes ver el perfil de este bot ya que #parkour lo usa internamente para funcionar.",
-	cant_load_profile = "<v>[#] <r>El jugador <b>%s</b> parace estar desconectado o no existe.",
+	cant_load_profile = "<v>[#] <r>El jugador <b>%s</b> parece estar desconectado o no existe.",
 	like_map = "¿Te gusta este mapa?",
 	yes = "Sí",
 	no = "No",

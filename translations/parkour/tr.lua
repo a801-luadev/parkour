@@ -46,6 +46,16 @@ translations.tr = {
 	permbanned = "<r>#Parkour'dan kalıcı olarak yasaklandınız.",
 	tempbanned = "<r>#Parkour'dan %s dakika boyunca yasaklandınız.",
 
+	-- Records
+	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
+	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
+	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
+	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
+	records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
+	records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
+	records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\nKontrol noktaları için parçacıkları kullan\n\n<b>QWERTY</b> klavye kullan (Kapatıldığnda <b>AZERTY</b> klavye kullanılır)\n\nÖlmek için klavyeden <b>M</b> tuşuna bas veya <b>/mort</b> komutunu kullan. (Kapattığında <b>DELETE</b> tuşuna basarak ölebilirsin.)\n\nBeceri bekleme sürelerini göster\n\nBeceriler simgesini göster\n\nYardım butonunu göster\n\nHarita bitirme duyurularını göster\n\nYardım istemiyorum simgesini göster",
 	cooldown = "<v>[#] <r>Bunu tekrar yapmadan önce birkaç saniye bekleyin",

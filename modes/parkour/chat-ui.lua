@@ -3,6 +3,7 @@
 local fetching_player_room = {}
 local roompw = {}
 local fastest = {}
+records_admins = string.find("records", room.lowerName, 1, true) and {}
 
 local GameInterface
 local setNameColor
@@ -54,6 +55,8 @@ onEvent("PlayerWon", function(player)
 	if bans[id] then return end
 	if not players_file[player] then return end
 
+	translatedChatMessage("records_completed", player)
+
 	-- If the player joined the room after the map started,
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
@@ -66,9 +69,14 @@ onEvent("PlayerWon", function(player)
 
 		fastest.record = taken
 		fastest.player = player
+		fastest.submitted = nil
 
 		if old and in_room[old] then
 			setNameColor(old)
+		end
+
+		if records_admins then
+			translatedChatMessage("records_submit", player)
 		end
 	end
 
@@ -121,6 +129,50 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 	elseif cmd == "discord" then
 		tfm.exec.chatMessage("<rose>" .. links.discord, player)
+
+	elseif cmd == "submit" then
+		if not records_admins then return end
+		local map = tonumber(string.sub(room.currentMap, 2))
+
+		if fastest.player ~= player then
+			return translatedChatMessage("records_not_fastest", player)
+		end
+		if fastest.submitted then
+			return translatedChatMessage("records_already_submitted", player)
+		end
+		if not count_stats then
+			local exists = false
+
+			for index = 1, maps.high_count do
+				if map == maps.list_high then
+					exists = true
+					break
+				end
+			end
+
+			if not exists then
+				for index = 1, maps.low_count do
+					if map == maps.list_low then
+						exists = true
+						break
+					end
+				end
+
+				if not exists then
+					return translatedChatMessage("records_invalid_map", player)
+				end
+			end
+		end
+
+		fastest.submitted = true
+		sendPacket(
+			6,
+			(map .. "\000" ..
+			 room.playerList[player].id .. "\000" ..
+			 math.floor(fastest.record * 100) .. "\000" ..
+			 room.name)
+		)
+		translatedChatMessage("records_submitted", player, room.currentMap)
 
 	elseif cmd == "give" then
 		if not perms[player] or not perms[player].give_command then return end
@@ -198,11 +250,14 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		savePlayerData(target)
 
 	elseif cmd == "pw" then
-		if not perms[player] or not perms[player].enable_review then return end
+		if not records_admins or not records_admins[player] then
+			if not perms[player] or not perms[player].enable_review then return end
 
-		if not review_mode and not ranks.admin[player] then
-			return tfm.exec.chatMessage("<v>[#] <r>You can't set the password of a room without review mode.", player)
+			if not review_mode and not ranks.admin[player] then
+				return tfm.exec.chatMessage("<v>[#] <r>You can't set the password of a room without review mode.", player)
+			end
 		end
+
 		if roompw.owner and roompw.owner ~= player and not ranks.admin[player] then
 			return tfm.exec.chatMessage("<v>[#] <r>You can't set the password of this room. Ask " .. roompw.owner .. " to do so.", player)
 		end
@@ -259,6 +314,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	elseif cmd == "forcestats" then
 		if not perms[player].force_stats then return end
 
+		if records_admins then
+			return tfm.exec.chatMessage("<v>[#] <r>you can't forcestats in a records room", player)
+		end
+
 		count_stats = true
 		tfm.exec.chatMessage("<v>[#] <d>count_stats set to true", player)
 
@@ -306,6 +365,15 @@ onEvent("PlayerDataParsed", function(player, data)
 	translatedChatMessage("donate", player)
 
 	checkRoomRequest(player, data)
+
+	if records_admins then
+		translatedChatMessage("records_enabled", player, links.records)
+
+		if string.find(string.lower(player), room.lowerName, 1, true) then
+			records_admins[player] = true
+			translatedChatMessage("records_admin", player)
+		end
+	end
 end)
 
 onEvent("PlayerDataUpdated", checkRoomRequest)
@@ -349,6 +417,7 @@ end)
 onEvent("GameStart", function()
 	system.disableChatCommandDisplay("donate")
 	system.disableChatCommandDisplay("discord")
+	system.disableChatCommandDisplay("submit")
 	system.disableChatCommandDisplay("give")
 	system.disableChatCommandDisplay("pw")
 	system.disableChatCommandDisplay("roomlimit")

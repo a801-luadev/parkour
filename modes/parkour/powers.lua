@@ -92,6 +92,7 @@ powers = {
 	{
 		name = "fly", maps = 5,
 		dontShowTracker = true,
+		availableRecords = true,
 
 		small = "173db50edf6.png", big = "173db512e9c.png", -- icons
 		lockedSmall = "173db51091f.png", lockedBig = "173db5151fd.png",
@@ -108,6 +109,7 @@ powers = {
 	{
 		name = "speed", maps = 10,
 		dontShowTracker = true,
+		availableRecords = true,
 
 		small = "173db21af6a.png", big = "173db214773.png",
 		lockedSmall = "173db21d270.png", lockedBig = "173db217990.png",
@@ -196,6 +198,7 @@ powers = {
 	{
 		name = "teleport", maps = 35,
 		dontShowTracker = true,
+		availableRecords = true,
 
 		small = "173db226b7a.png", big = "173db21f2b7.png",
 		lockedSmall = "173db22ee81.png", lockedBig = "173db223336.png",
@@ -498,6 +501,8 @@ powers = {
 	},
 	{
 		name = "campfire", ranking = 28,
+		dontShowTracker = true,
+		availableRecords = true,
 
 		small = "173dee9c5d9.png", big = "173dee98c61.png",
 		lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
@@ -603,7 +608,7 @@ function bindNecessary(player)
 	for index = 1, #powers do
 		power = getPowerUpgrade(completed, pos, powers[index], true, review_mode)
 		
-		if power then
+		if power and (not records_admins or power.availableRecords) then
 			if power.click then
 				system.bindMouse(player, true)
 			else
@@ -765,7 +770,13 @@ onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
 	if not players_file[player] then return end
 
-	if count_stats and room.uniquePlayers >= min_save and player_count >= min_save and not is_tribe and not review_mode then
+	if (count_stats and
+		room.uniquePlayers >= min_save and
+		player_count >= min_save and
+		not records_admins and
+		not is_tribe and
+		not review_mode) then
+
 		local file = players_file[player].parkour
 		file.c = file.c + 1
 		file.hour_c = file.hour_c + 1

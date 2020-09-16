@@ -46,6 +46,16 @@ translations.en = {
 	permbanned = "<r>You have been permanently banned from #parkour.",
 	tempbanned = "<r>You have been banned from #parkour for %s minutes.",
 
+	-- Records
+	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
+	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
+	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
+	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
+	records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
+	records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
+	records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse particles for checkpoints\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements\n\nShow no help symbol",
 	cooldown = "<v>[#] <r>Wait a few seconds before doing that again.",

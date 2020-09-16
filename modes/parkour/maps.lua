@@ -50,8 +50,10 @@ local maps = {
 local is_invalid = false
 local count_stats = true
 local map_change_cd = 0
+
 local levels
 local perms
+local records_admins
 
 local function selectMap(sections, list, count)
 	if sections._map_pointer > map_per_section then
@@ -279,12 +281,13 @@ end)
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	if cmd == "map" then
+		local records_cond = records_admins and records_admins[player]
 		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
 		local normal_cond = perms[player] and perms[player].change_map
-		if not tribe_cond and not normal_cond then return end
+		if not records_cond and not tribe_cond and not normal_cond then return end
 
 		if quantity > 0 then
-			if not tribe_cond and not perms[player].load_custom_map then
+			if not records_cond and not tribe_cond and not perms[player].load_custom_map then
 				return tfm.exec.chatMessage("<v>[#] <r>You can't load a custom map.", player)
 			end
 

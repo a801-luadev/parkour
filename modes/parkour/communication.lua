@@ -23,6 +23,7 @@ if not is_tribe then
 			3 - farm/hack suspect
 			4 - weekly lb reset
 			5 - pw info
+			6 - record submission
 	]]
 
 	local last_id = os.time() - 10000

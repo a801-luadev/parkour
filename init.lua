@@ -33,6 +33,7 @@ local links = {
 	github = "https://github.com/a801-luadev/parkour",
 	discord = "https://discord.gg/RXaCyWz",
 	maps = "https://bit.ly/submit-parkour-maps",
+	records = "https://tfmrecords.home.kg/",
 }
 
 local starting = string.sub(room.name, 1, 2)
@@ -40,6 +41,8 @@ local starting = string.sub(room.name, 1, 2)
 local is_tribe
 local tribe, module_name, submode
 local flags = ""
+
+room.lowerName = string.lower(room.name)
 
 {% require-package "translations" %}
 {% require-package "global" %}

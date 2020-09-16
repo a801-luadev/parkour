@@ -46,6 +46,16 @@ translations.ru = {
 	permbanned = "<r>Вы были навсегда забанены в #parkour.",
 	tempbanned = "<r>Вы были забанены в #parkour на %s минут.",
 
+	-- Records
+	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
+	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
+	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
+	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
+	records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
+	records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
+	records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Параметры Паркура</font></p>\n\nИспользуйте желтые крепления для чекпоинтов\n\nИспользуйте <b>QWERTY</b> на клавиатуре (отключить if <b>AZERTY</b>)\n\nИспользуйте <b>M</b> горячую клавишу <b>/mort</b> (отключить <b>DEL</b>)\n\nПоказать ваше время перезарядки\n\nПоказать кнопку способностей\n\nПоказать кнопку помощь\n\nПоказать объявление о завершении карты\n\nПоказать символ помощь не нужна",
 	cooldown = "<v>[#] <r>Подождите несколько минут, чтобы повторить действие.",

@@ -22,6 +22,7 @@ local packets = {
 	room_password = bit.lshift(13, 8) + 255,
 	verify_discord = bit.lshift(14, 8) + 255,
 	version_mismatch = bit.lshift(15, 8) + 255,
+	record_submission = bit.lshift(16, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -310,6 +311,9 @@ onEvent("PacketReceived", function(id, packet)
 
 	elseif id == 5 then
 		ui.addTextArea(packets.room_password, packet, parkour_bot)
+
+	elseif id == 6 then
+		ui.addTextArea(packets.record_submission, packet, parkour_bot)
 	end
 end)
 
