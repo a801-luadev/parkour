@@ -47,14 +47,14 @@ translations.hu = {
 	tempbanned = "<r>Ki lettél tiltva %s másodpercre a #parkour-ból.",
 
 	-- Records
-	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
-	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
-	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
-	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
-	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
-	records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
-	records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
-	records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+	records_enabled = "<v>[#] <d>Rekord mód lett aktiválva ebben a szobában. Az adatok nem számítanak és a képességek nem engedélyezettek!\nTöbb információt találhatsz a Rekordról itt: <b>%s</b>",
+	records_admin = "<v>[#] <d>Egy adminisztrátor vagy ebben a Rekord szobában. Használhatod a <b>!map</b>, <b>!pw</b> és <b>!time</b> parancsokat.",
+	records_completed = "<v>[#] <d>Teljesítetted a pályát! Ha újra akarod csinálni, írd be: <b>!redo</b>.",
+	records_submit = "<v>[#] <d>Hűha! Úgy tűnik, te voltál a leggyorsabb a szobában. Ha be szeretnéd küldeni a rekordod, írd be: <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>Úgy tűnik, hogy ez a pálya nincs a Parkour körforgásában... Nem tudod benyújtani a rekordod!",
+	records_not_fastest = "<v>[#] <r>Úgy tűnik, nem te vagy a leggyorsabb játékos a szobában...",
+	records_already_submitted = "<v>[#] <r>Már beküldted a rekordod ehhez a pályához!",
+	records_submitted = "<v>[#] <d>A <b>%s</b> rekordod ehhez a pályához be lett küldve.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználj effekteket az ellenőrző pontok megjelenítéséhez\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot",

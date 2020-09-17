@@ -47,14 +47,14 @@ translations.cn = {
 	tempbanned = "<r>你已經在 #parkour 被封禁了 %s 分鐘。",
 
 	-- Records
-	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
-	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
-	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
-	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
-	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
-	records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
-	records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
-	records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+	records_enabled = "<v>[#] <d>記錄模式已在這房間啟用。數據不會被記錄而且不能使用能力!\n你可以在這裡查看更多關於記錄模式的資訊: <b>%s</b>",
+	records_admin = "<v>[#] <d>你是這房間的管理員。你可以使用以下指令 <b>!map</b>, <b>!pw</b> and <b>!time</b>。",
+	records_completed = "<v>[#] <d>你已經完成了地圖! 如果你想重新嘗試, 可輸入 <b>!redo</b>。",
+	records_submit = "<v>[#] <d>哇! 看來你達成了房間裡最快的通關時間。如果你希望提交你的記錄, 可輸入 <b>!submit</b>。",
+	records_invalid_map = "<v>[#] <r>看來這張地圖並不在 parkour 的循環裡... 你不能提交這地圖的記錄!",
+	records_not_fastest = "<v>[#] <r>看來你並不是房間裡最快通關的玩家...",
+	records_already_submitted = "<v>[#] <r>你已經提交了這地圖的通關時間記錄!",
+	records_submitted = "<v>[#] <d>你在地圖 <b>%s</b> 的時間記錄已被提交。",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n在重生點使用粒子效果\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <b>M</b> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示",
