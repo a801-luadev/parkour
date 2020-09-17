@@ -81,6 +81,9 @@ webhooks = {
 
 def normalize_name(name):
 	"""Normalizes a transformice nickname."""
+	if isinstance(name, aiotfm.Player):
+		name = name.username
+
 	if name[0] == "+":
 		name = "+" + (name[1:].capitalize())
 	else:
