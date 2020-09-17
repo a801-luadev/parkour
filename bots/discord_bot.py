@@ -668,16 +668,16 @@ class Client(discord.Client):
 
 	async def execute_code(self, channel, args):
 		# Selects an environment
-		env = args.pop(0)
+		exec_env = args.pop(0)
 		environments = ("discord", "tocubot", "parkour", "proxy", "tfm")
-		if env not in environments:
+		if exec_env not in environments:
 			await channel.send(
-				"Invalid environment: **{}**, valid ones: {}.".format(env, ", ".join(environments))
+				"Invalid environment: **{}**, valid ones: {}.".format(exec_env, ", ".join(environments))
 			)
 			return
 
 		# If it is tfm, we need to mark the bot as busy
-		if env == "tfm" and not await self.set_busy(True, channel):
+		if exec_env == "tfm" and not await self.set_busy(True, channel):
 			return
 
 		# If the first arg is `json`, it will append the json script at the start if it is gonna run in
@@ -698,14 +698,14 @@ class Client(discord.Client):
 				return await channel.send("Can't match your script.")
 			script = script.group(2)
 
-		if env == "tfm":
+		if exec_env == "tfm":
 			packet = {
 				"type": "lua"
 			}
 
 			# Append json script
 			if len(args) > 1 and args[0] == "json":
-				packet["json"] = env.json_link
+				packet["json"] = exec_env.json_link
 
 			if link is not None:
 				packet["link"] = link
@@ -727,11 +727,11 @@ class Client(discord.Client):
 			else:
 				packet["script"] = script
 
-			if env == "proxy":
+			if exec_env == "proxy":
 				await self.proxy.send(packet)
 
 			else:
-				await self.proxy.sendTo(packet, env)
+				await self.proxy.sendTo(packet, exec_env)
 
 	# Reaction roles
 	async def check_reaction_roles_msg(self, msg):
