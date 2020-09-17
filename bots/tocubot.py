@@ -91,11 +91,11 @@ class Proxy(Connection):
 
 		elif packet["type"] == "lua":
 			# Loads a lua script
-			loop.create_task(self.client.loadLua(packet["script"]))
+			loop.create_task(self.client.load_lua_script(packet))
 
 		elif packet["type"] == "exec":
 			# Executes arbitrary code in this bot
-			loop.create_task(self.client.load_script(packet["script"], packet["channel"]))
+			loop.create_task(self.client.load_script(packet))
 
 		elif packet["type"] == "command":
 			# Executes a command
@@ -143,7 +143,33 @@ class Client(aiotfm.Client):
 	async def on_logged(self, *a):
 		print("Logged!")
 
-	async def load_script(self, script, channel):
+	async def load_lua_script(self, packet):
+		for field in ("json", "link"):
+			if field in packet:
+				async with aiohttp.ClientSession() as session:
+					async with session.get(packet[field]) as resp:
+						packet[field] = (await resp.read()).decode()
+
+		if "link" in packet:
+			script = packet["link"]
+		else:
+			script = packet["script"]
+
+		if "json" in packet:
+			script = packet["json"] + "\n" + script
+
+		await self.loadLua(script)
+
+	async def load_script(self, packet):
+		if "link" in packet:
+			async with aiohttp.ClientSession() as session:
+				async with session.get(packet["link"]) as resp:
+					script = (await resp.read()).decode()
+
+		else:
+			script = packet["script"]
+		channel = packet["channel"]
+
 		try:
 			exec("async def evaluate(self):\n\t" + (script.replace("\n", "\n\t")))
 		except Exception:

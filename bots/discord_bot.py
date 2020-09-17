@@ -20,6 +20,8 @@ class env:
 
 	token = os.getenv("DISCORD_TOKEN")
 
+	json_link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/tech/json/init.lua"
+
 	guild_id = 669593764305829898
 	tocu_id = 212634414021214209
 
@@ -276,7 +278,7 @@ class Proxy(Connection):
 
 		elif packet["type"] == "exec":
 			# Executes arbitrary code in this bot
-			loop.create_task(self.client.load_script(packet["script"], packet["channel"]))
+			loop.create_task(self.client.load_script(packet))
 
 		elif packet["type"] == "verification":
 			# Checks if the player sent a valid token and verifies
@@ -294,12 +296,6 @@ class Client(discord.Client):
 			await self.proxy.connect(env.proxy_ip, env.proxy_port)
 		except Exception:
 			await self.restart()
-
-		async with aiohttp.ClientSession() as session:
-			async with session.get(
-				"https://raw.githubusercontent.com/a801-luadev/parkour/master/tech/json/init.lua"
-			) as resp:
-				self.json_script = (await resp.read()).decode()
 
 		self.loop.create_task(self.check_reaction_roles())
 		self.loop.create_task(self.check_verifications())
@@ -333,7 +329,16 @@ class Client(discord.Client):
 	async def on_game_update(self):
 		await self.send_channel(env.game_logs_channel, "`[UPDATE]:` The game is updating.")
 
-	async def load_script(self, script, channel):
+	async def load_script(self, packet):
+		if "link" in packet:
+			async with aiohttp.ClientSession() as session:
+				async with session.get(packet["link"]) as resp:
+					script = (await resp.read()).decode()
+
+		else:
+			script = packet["script"]
+		channel = packet["channel"]
+
 		try:
 			exec("async def evaluate(self):\n\t" + (script.replace("\n", "\n\t")))
 		except Exception:
@@ -678,15 +683,12 @@ class Client(discord.Client):
 		# If the first arg is `json`, it will append the json script at the start if it is gonna run in
 		# tfm.
 		# If we provide a script, the bot has to access the page treat the content as the script.
+		script, link = None, None
 		if args[0].startswith("http") or (args[0] == "json" and args[1].startswith("http")):
 			if args[0] == "json":
 				link = args[1]
 			else:
 				link = args[0]
-
-			async with aiohttp.ClientSession() as session:
-				async with session.get(link) as resp:
-					script = (await resp.read()).decode()
 
 		# If we don't provide a link, we need to check for the script in the message
 		else:
@@ -697,19 +699,39 @@ class Client(discord.Client):
 			script = script.group(2)
 
 		if env == "tfm":
+			packet = {
+				"type": "lua"
+			}
+
 			# Append json script
 			if len(args) > 1 and args[0] == "json":
-				script = self.json_script + "\n" + script
+				packet["json"] = env.json_link
 
-			await self.proxy.sendTo({"type": "lua", "script": script}, "tocubot")
+			if link is not None:
+				packet["link"] = link
+			else:
+				packet["script"] = script
+
+			await self.proxy.sendTo(packet, "tocubot")
 			await asyncio.sleep(3.0)
 			await self.set_busy(False)
 
-		elif env == "proxy":
-			await self.proxy.send({"type": "exec", "script": script, "channel": channel.id})
-
 		else:
-			await self.proxy.sendTo({"type": "exec", "script": script, "channel": channel.id}, env)
+			packet = {
+				"type": "exec",
+				"channel": channel.id
+			}
+
+			if link is not None:
+				packet["link"] = link
+			else:
+				packet["script"] = script
+
+			if env == "proxy":
+				await self.proxy.send(packet)
+
+			else:
+				await self.proxy.sendTo(packet, env)
 
 	# Reaction roles
 	async def check_reaction_roles_msg(self, msg):

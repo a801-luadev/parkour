@@ -2,6 +2,7 @@ import asyncio
 import json
 import os
 import traceback
+import aiohttp
 
 
 class JSONProtocol(asyncio.Protocol):
@@ -75,7 +76,16 @@ class Client:
 		"""Shorthand for protocol.send"""
 		await self.protocol.send(packet)
 
-	async def load_script(self, script, channel):
+	async def load_script(self, packet):
+		if "link" in packet:
+			async with aiohttp.ClientSession() as session:
+				async with session.get(packet["link"]) as resp:
+					script = (await resp.read()).decode()
+
+		else:
+			script = packet["script"]
+		channel = packet["channel"]
+
 		packet = {
 			"type": "proxy",
 			"client": "proxy",
@@ -128,7 +138,7 @@ class Client:
 
 			# Executes arbitrary code in the server
 			elif packet["type"] == "exec":
-				self.loop.create_task(self.load_script(packet["script"], packet["channel"]))
+				self.loop.create_task(self.load_script(packet))
 
 			# Closes all the connections (the clients detect them and reboot)
 			elif packet["type"] == "reboot":
