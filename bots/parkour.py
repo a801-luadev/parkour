@@ -362,7 +362,7 @@ class Client(aiotfm.Client):
 			self.received_weekly_reset = False
 
 		elif id == RECORD_SUBMISSION:
-			code, player, time, room = text.split("\x00")
+			code, player, taken, room = text.split("\x00")
 			player = int(player)
 			name = await self.get_player_name(player)
 
@@ -373,7 +373,7 @@ class Client(aiotfm.Client):
 					"mapID": int(code),
 					"name": name,
 					"playerID": player,
-					"time": int(time),
+					"time": int(taken),
 					"room": room
 				})
 			)
