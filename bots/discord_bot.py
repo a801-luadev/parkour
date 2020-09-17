@@ -705,7 +705,7 @@ class Client(discord.Client):
 
 			# Append json script
 			if len(args) > 1 and args[0] == "json":
-				packet["json"] = exec_env.json_link
+				packet["json"] = env.json_link
 
 			if link is not None:
 				packet["link"] = link
