@@ -47,14 +47,14 @@ translations.ro = {
 	tempbanned = "<r>Ai fost banat de la #parkour pentru %s minute.",
 
 	-- Records
-	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
-	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
-	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
-	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
-	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
-	records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
-	records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
-	records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+	records_enabled = "<v>[#] <d>Modul de record a fost pornit pe această sală. Statisticile nu vor conta iar puterile sunt dezactivate!\nPoți afla mai multe pe <b>%s</b>",
+	records_admin = "<v>[#] <d>Ești un administrator pe această sală de recorduri. Poți folosi comenzile <b>!map</b>, <b>!pw</b> și <b>!time</b>.",
+	records_completed = "<v>[#] <d>Ai completat harta! Dacă vrei să încerci din nou, scrie <b>!redo</b>.",
+	records_submit = "<v>[#] <d>Wow! Se pare că ai avut cel mai scurt timp de pe sală. Dacă vrei să îți trimiți recordul, scrie <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>Se pare că această hartă nu este în rotația parkour... Nu poți trimite un record pentru ea!",
+	records_not_fastest = "<v>[#] <r>Se pare că nu ești cel mai rapid jucător de pe sală...",
+	records_already_submitted = "<v>[#] <r>Deja ai trimis un record pentru această hartă!",
+	records_submitted = "<v>[#] <d>Recordul tău pentru harta <b>%s</b> a fost trimis.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Opțiuni Parkour</font></p>\n\nFolosește particule pentru parkour\n\nFolosește <b>QWERTY</b> (oprește dacă <b>AZERTY</b>)\n\nFolosește scurtătura <b>M</b> pentru <b>/mort</b> (oprește pentru <b>DEL</b>)\n\nArată-ți cooldown-urile pentru puteri\n\nArată butonul de puteri\n\nArată butonul de ajutor\n\nArată anunțurile de completare a hărților\n\nArată simbolul de „fără ajutor”",

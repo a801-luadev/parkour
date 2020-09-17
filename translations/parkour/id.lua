@@ -47,14 +47,14 @@ translations.id = {
     tempbanned = "<r>Kamu diblokir dari #parkour selama %s menit.",
 
     -- Records
-    records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
-    records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
-    records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
-    records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
-    records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
-    records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
-    records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
-    records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+    records_enabled = "<v>[#] <d>Mode rekor diaktifkan di room ini. Statistik tidak dihitung dan kekuatan tidak diaktifkan!\nKamu bisa mencari informasi lebih lanjut mengenai rekor di <b>%s</b>",
+    records_admin = "<v>[#] <d>Kamu adalah admin di ruangan rekor ini. Kamu bisa menggunakan perintah <b>!map</b>, <b>!pw</b> dan <b>!time</b>.",
+    records_completed = "<v>[#] <d>Kamu telah menyelesaikan peta! Jika kamu ingin mengulanginya lagi, ketik <b>!redo</b>.",
+    records_submit = "<v>[#] <d>Wow! Sepertinya kamu memiliki waktu tercepat di ruangan. Jika kamu ingin mengirimkan rekor kamu, ketik <b>!submit</b>.",
+    records_invalid_map = "<v>[#] <r>Sepertinya ruangan ini tidak masuk dalam rotasi parkur... Kamu tidak bisa mengirim rekor ini!",
+    records_not_fastest = "<v>[#] <r>Sepertinya kamu bukan pemain tercepat di ruangan ini...",
+    records_already_submitted = "<v>[#] <r>Kamu sudah mengirimkan rekor kamu untuk peta ini!",
+    records_submitted = "<v>[#] <d>Rekor kamu untuk peta <b>%s</b> telah dikirim.",
 
     -- Miscellaneous
     options = "<p align='center'><font size='20'>Opsi Parkur</font></p>\n\nGunakan partikel untuk cekpoin\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nGunakan <b>M</b> hotkey untuk <b>/mort</b> (nonaktifkan untuk <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan kamu\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nPerlihatkan pengumuman penyelesaian peta\n\nPerlihatkan simbol tidak memerlukan bantuan",

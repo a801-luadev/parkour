@@ -47,14 +47,14 @@ translations.fr = {
 	tempbanned = "<r>Vous avez été banni de parkour pendant %s minutes.",
 
 	-- Records
-	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
-	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
-	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
-	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
-	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
-	records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
-	records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
-	records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+	records_enabled = "<v>[#] <d>Le mode de records a été activé dans ce salon. Les statistiques ne compteront pas et les pouvoirs sont désactivés !\nVous pouvez trouver plus d'informations à propos des records dans <b>%s</b>",
+	records_admin = "<v>[#] <d>Vous êtes un administrateur de ce salon de records. Vous pouvez utiliser les commandes <b>!map</b>, <b>!pw</b> et <b>!time</b>.",
+	records_completed = "<v>[#] <d>Vous avez complété la carte ! Si vous voulez la refaire, ecrivez <b>!redo</b>.",
+	records_submit = "<v>[#] <d>Wow ! On dirait que vous avez fait le temps le plus rapide dans ce salon. Si vous voulez envoyez voter record, ecrivez <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>On dirait que cette carte n'est pas dans la rotation de parkour... Vous ne pouvez pas envoyer de records pour celle-ci !",
+	records_not_fastest = "<v>[#] <r>On dirait que vous n'êtes pas le joueur le plus rapide dans ce salon...",
+	records_already_submitted = "<v>[#] <r>Vous avez déjà envoyé votre record pour cette carte !",
+	records_submitted = "<v>[#] <d>Votre record pour la carte <b>%s</b> a été envoyé.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser les particules comme points de sauvegarde\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <b>M</b> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.",
