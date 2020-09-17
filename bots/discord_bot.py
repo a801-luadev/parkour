@@ -119,7 +119,7 @@ verification_messages = (
 		"latar hitam dan bisik `Parkour#8558` dengan teks tersebut.\n"
 
 		"**Jika kamu tidak online**, kamu bisa klik teks bewarna biru dan kamu akan diarahkan ke forum. "
-		"Itu akan menampilkan sebuah tombol biru dimana terdapat **Submit**, kamu harus mengkliknya!\n\n"
+		"Itu akan menampilkan sebuah tombol biru dimana terdapat **Ajukan**, kamu harus mengkliknya!\n\n"
 
 		# RU
 		"🇷🇺 Добро пожаловать на официальный форум Паркура в Discord! Чтобы получить доступ, "
@@ -164,7 +164,18 @@ verification_messages = (
 
 		"**如果你 Transformice 在線**, 你可以複製那段黑色背景的文字然後私聊 `Parkour#8558`。\n"
 
-		"**如果你並不在線**, 你可以點擊藍色的文字而它將會連結到論壇上。它會展示一個寫著 **提交** 的藍色按鈕, 點擊它就好!"
+		"**如果你並不在線**, 你可以點擊藍色的文字而它將會連結到論壇上。它會展示一個寫著 **提交** 的藍色按鈕, 點擊它就好!\n\n"
+
+		# RO
+		"🇷🇴 Bine ai venit pe serverul oficial Parkour! Pentru a primi acces, "
+		"trebuie să-ți legi contul de Transformice. "
+		"__La finalul acestui mesaj vei găsi niște text pe un fundal negru și niște text albastru.__\n"
+
+		"**Dacă ești online pe Transformice**, poți copia textul cu un fundal negru "
+		"și să îl șoptești lui `Parkour#8558`.\n"
+
+		"**Dacă nu ești online pe Transformice**, poți apăsa pe textul albastru și te va duce pe forum. "
+		"Îți va arăta un buton albastru pe care scrie **Validează**, trebuie să dai click pe el!"
 
 		"\n\n-"
 	),
