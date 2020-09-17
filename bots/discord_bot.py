@@ -459,9 +459,6 @@ class Client(discord.Client):
 						return await msg.channel.send("The argument `{}` is not a valid map code.".format(code))
 					maps.append(int(code))
 
-				if not await self.set_busy(True, msg.channel):
-					return
-
 				# Sends the modification to Tocubot
 				await self.proxy.sendTo(
 					{
