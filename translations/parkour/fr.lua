@@ -47,7 +47,7 @@ translations.fr = {
 	tempbanned = "<r>Vous avez été banni de parkour pendant %s minutes.",
 
 	-- Records
-	records_enabled = "<v>[#] <d>Le mode de records a été activé dans ce salon. Les statistiques ne compteront pas et les pouvoirs sont désactivés !\nVous pouvez trouver plus d'informations à propos des records dans <b>%s</b>",
+	records_enabled = "<v>[#] <d>Le mode de records a été activé dans ce salon. Les statistiques ne compteront pas et les pouvoirs sont désactivés !\nVous pouvez trouver plus d'informations à propos des records sur <b>%s</b>",
 	records_admin = "<v>[#] <d>Vous êtes un administrateur de ce salon de records. Vous pouvez utiliser les commandes <b>!map</b>, <b>!pw</b> et <b>!time</b>.",
 	records_completed = "<v>[#] <d>Vous avez complété la carte ! Si vous voulez la refaire, ecrivez <b>!redo</b>.",
 	records_submit = "<v>[#] <d>Wow ! On dirait que vous avez fait le temps le plus rapide dans ce salon. Si vous voulez envoyez voter record, ecrivez <b>!submit</b>.",
