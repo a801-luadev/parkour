@@ -494,7 +494,7 @@ class Client(aiotfm.Client):
 		if self.room is None:
 			return
 
-		if re.match(r"^[a-z]{1,3}-\*?#parkour(?:$|\d.*)", room) is None:
+		if re.match(r"^(?:[a-z]{1,3}-|\*)#parkour(?:$|\d.*)", room) is None:
 			return await self.send_channel(
 				channel, "The given room is invalid. I can only restart #parkour rooms."
 			)
@@ -503,9 +503,13 @@ class Client(aiotfm.Client):
 			return
 		await self.send_channel(channel, "Restarting the room soon.")
 
+		joining_room = room
+		if "*" == room[0]:
+			joining_room = "int-" + room
+
 		go_bots = self.room.name != room
 		if room != self.room.name:
-			await self.sendCommand(commands.join_room(room))
+			await self.sendCommand(commands.join_room(joining_room))
 			await asyncio.sleep(3.0)
 
 			if room != self.room.name:
