@@ -202,7 +202,7 @@ class Client(aiotfm.Client):
 			# and come back.
 			await self.sendCommand(commands.join_room("en-1"))
 			await asyncio.sleep(3.0)
-			await self.sendCommand(commands.join_room(self.bots_room))
+			await self.sendCommand(commands.join_room("int-" + self.bots_room))
 
 	async def handle_packet(self, conn, packet):
 		CCC = packet.readCode()
@@ -515,7 +515,7 @@ class Client(aiotfm.Client):
 			if room != self.room.name:
 				await self.send_channel(channel, "Could not join the room.")
 				if go_bots:
-					await self.sendCommand(commands.join_room(self.bots_room))
+					await self.sendCommand(commands.join_room("int-" + self.bots_room))
 					await self.set_busy(False)
 					return
 
@@ -539,7 +539,7 @@ class Client(aiotfm.Client):
 
 		if go_bots:
 			await asyncio.sleep(3.0)
-			await self.sendCommand(commands.join_room(self.bots_room))
+			await self.sendCommand(commands.join_room("int-" + self.bots_room))
 
 		await self.set_busy(False)
 
