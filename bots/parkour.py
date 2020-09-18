@@ -300,7 +300,7 @@ class Client(aiotfm.Client):
 		return await self.send_callback(SEND_ROOM, str(id).encode() + b"\x00" + text)
 
 	async def on_join_request(self, room, channel):
-		validity = re.match(r"^(?:[a-z]{1,3}-|\*)#parkour(?:$|\d.*)", room)
+		validity = re.match(r"^(?:[a-z]{2}-|\*)#parkour(?:$|[^a-zA-Z])", room)
 		if validity is None:
 			return await self.send_channel(
 				channel, "The given room is invalid. You can only join #parkour rooms."

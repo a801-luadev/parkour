@@ -66,10 +66,9 @@ else
 		pos = #module_name + 5
 	end
 
-	local numbers
-	numbers, submode = string.match(room.name, "^(%d+)([a-z_]+)", pos)
-	if numbers then
-		flags = string.sub(room.name, pos + #numbers + #submode + 1)
+	submode = string.match(room.name, "^[^a-zA-Z]-([a-z_]+)", pos)
+	if submode then
+		flags = string.sub(room.name, pos + #submode + 2)
 	end
 
 	if room.name == "*#parkour4bots" then

@@ -494,7 +494,7 @@ class Client(aiotfm.Client):
 		if self.room is None:
 			return
 
-		if re.match(r"^(?:[a-z]{1,3}-|\*)#parkour(?:$|\d.*)", room) is None:
+		if re.match(r"^(?:[a-z]{2}-|\*)#parkour(?:$|[^a-zA-Z])", room) is None:
 			return await self.send_channel(
 				channel, "The given room is invalid. I can only restart #parkour rooms."
 			)
