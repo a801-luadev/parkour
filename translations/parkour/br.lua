@@ -47,14 +47,14 @@ translations.br = {
 	tempbanned = "<r>Você foi banido do #parkour por %s minutos.",
 
 	-- Records
-	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
-	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
-	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
-	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
-	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
-	records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
-	records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
-	records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+	records_enabled = "<v>[#] <d>Modo Records está ativado nesta sala. Dados não serão contados e poderes não estão ativados!\nVocê poderá encontrar mais informações sobre records em <b>%s</b>",
+	records_admin = "<v>[#] <d>Você é um administrador desta sala de records. Você pode usar os comandos <b>!map</b>, <b>!pw</b> e <b>!time</b>.",
+	records_completed = "<v>[#] <d>Você completou o mapa! Se você quiser jogar nele novamente, digite <b>!redo</b>.",
+	records_submit = "<v>[#] <d>Wow! Parece que você teve o melhor tempo nesta sala. Se você quiser enviar o record, digite <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>Parece que este mapa não está na rotação de mapas do parkour... Você não pode enviar um recorde para ele",
+	records_not_fastest = "<v>[#] <r>Parece que você não é o jogador mais rápido na sala...",
+	records_already_submitted = "<v>[#] <r>Você já enviou seu recorde para este mapa!",
+	records_submitted = "<v>[#] <d>Seu recorde para o mapa <b>%s</b> foi enviado.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar partículas para os checkpoints\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar",

@@ -47,14 +47,14 @@ translations.he = {
 	tempbanned = "<r>הורחקת מ-#parkour למשך %s דקות.",
 
 	-- Records
-	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
-	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
-	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
-	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
-	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",
-	records_not_fastest = "<v>[#] <r>Looks like you're not the fastest player in the room...",
-	records_already_submitted = "<v>[#] <r>You already submitted your record for this map!",
-	records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
+	records_enabled = "<v>[#] <d>מצב שיאים הופעל בחדר זה. סטטיסטיקה לא תיחשב וכוחות לא יפעלו. תוכלו למצוא מידע נוסף על שיאים ב <b>%s</b>",
+	records_admin = "<v>[#] <d>הנך מנהל של חדר השיאים הזה. אתה יכול להשתמש בפקודות <b>!map</b>, <b>!pw</b> ו-<b>!time</b>.",
+	records_completed = "<v>[#] <d>השלמתם את המפה! אם ברצונכם להשלימה שוב, כתבו <b>!redo</b>.",
+	records_submit = "<v>[#] <d>וואו! נראה שיש לכם את הזמן הכי מהיר בחדר. אם ברצונכם להגיש את השיא, כתבו <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>נראה כי מפה זו אינה חלק ממפות פארקור... אינכם יכולים להגיש שיא בשבילה!",
+	records_not_fastest = "<v>[#] <r>נראה כי אינך השחקן הכי מהיר בחדר...",
+	records_already_submitted = "<v>[#] <r>כבר הגשת את השיא שלך בשביל מפה זו!",
+	records_submitted = "<v>[#] <d>השיא שלך למפה <b>%s</b> הוגש.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>אפשרויות פארקור</font></p>\n\nהשתמש בחלקים כנקודות שמירה\n\nהשתמש במקלדת <b>QWERTY</b> (כבה אם <b>AZERTY</b> בשימוש)\n\nהשתמש באות <b>צ</b> במקום <b>/mort</b> (משבית את <b>DEL</b>)\n\nהראה את זמן טעינת הכוחות\n\nהראה כפתור כוחות\n\nהראה כפתור עזרה\n\nהראה הכרזות השלמת מפות\n\nהצג סימן 'ללא עזרה'",
