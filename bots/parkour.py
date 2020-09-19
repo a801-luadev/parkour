@@ -387,7 +387,8 @@ class Client(aiotfm.Client):
 					"playerID": player,
 					"time": int(taken),
 					"room": room
-				})
+				}),
+				env.records_webhook
 			)
 
 	# Chat system
