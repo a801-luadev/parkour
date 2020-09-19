@@ -361,6 +361,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.setPlayerScore(player, 1, false)
 		tfm.exec.killPlayer(player)
 		tfm.exec.respawnPlayer(player)
+		for key = 0, 2 do
+			bindKeyboard(player, key, true, true)
+		end
 	end
 end)
 
