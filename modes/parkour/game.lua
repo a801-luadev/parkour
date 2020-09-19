@@ -351,7 +351,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.setGameTime(time)
 
 	elseif cmd == "redo" then
-		if not records_admins or not victory[player] then return end
+		if not records_admins or not generated_at[player] then return end
 
 		players_level[player] = 1
 		generated_at[player] = nil
