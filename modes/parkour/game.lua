@@ -364,6 +364,13 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		for key = 0, 2 do
 			bindKeyboard(player, key, true, true)
 		end
+
+		if ck.particles[player] == false then
+			if ck.images[player] then
+				tfm.exec.removeImage(ck.images[player])
+			end
+			addCheckpointImage(player, levels[2].x, levels[2].y)
+		end
 	end
 end)
 
