@@ -828,7 +828,6 @@ class Client(discord.Client):
 			user, token = None, None
 
 			async for message in channel.history(limit=3, oldest_first=True):
-				print(message.content)
 				if "<@!" in message.content: # first message
 					user = re.search(r"<@!(\d+)>", message.content)
 					if user is not None:
@@ -839,32 +838,20 @@ class Client(discord.Client):
 					if token is not None:
 						token = token.group(1)
 
-			print(user, token)
 			if user is None or token is None:
 				deleting.append(channel)
 				continue
 
 			member = guild.get_member(user)
 			if member is None:
-				print("member is none, fetch")
 				member = await guild.fetch_member(user)
 
 			if member is None:
-				print("member is still none")
 				deleting.append(channel)
 				continue
 
-			for member in channel.members:
-				if member.id == user:
-					print("in channel")
-					# If the user is still in the channel the token is still valid
-					self.verifications.append((token, user, channel.id))
-					break
-			else:
-				print("not in channel")
-				# If the user is not in the channel, the token is invalid
-				# and the channel can be deleted
-				deleting.append(channel)
+			# If the user is still in the channel the token is still valid
+			self.verifications.append((token, user, channel.id))
 
 		for channel in deleting:
 			await channel.delete()
