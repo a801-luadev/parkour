@@ -811,10 +811,11 @@ class Client(discord.Client):
 				self.dispatch("verification_language_selected", payload, channel)
 
 	async def on_raw_reaction_remove(self, payload):
-		member, role = await self.get_reaction_role(payload)
+		if payload.channel_id == env.role_channel:
+			member, role = await self.get_reaction_role(payload)
 
-		if isinstance(role, discord.Role):
-			await member.remove_roles(role, atomic=True)
+			if isinstance(role, discord.Role):
+				await member.remove_roles(role, atomic=True)
 
 	# Verification system
 	async def check_verifications(self):
@@ -827,6 +828,7 @@ class Client(discord.Client):
 			user, token = None, None
 
 			async for message in channel.history(limit=3, oldest_first=True):
+				print(message.content)
 				if "<@!" in message.content: # first message
 					user = re.search(r"<@!(\d+)>", message.content)
 					if user is not None:
@@ -837,24 +839,29 @@ class Client(discord.Client):
 					if token is not None:
 						token = token.group(1)
 
+			print(user, token)
 			if user is None or token is None:
 				deleting.append(channel)
 				continue
 
 			member = guild.get_member(user)
 			if member is None:
+				print("member is none, fetch")
 				member = await guild.fetch_member(user)
 
 			if member is None:
+				print("member is still none")
 				deleting.append(channel)
 				continue
 
 			for member in channel.members:
 				if member.id == user:
+					print("in channel")
 					# If the user is still in the channel the token is still valid
 					self.verifications.append((token, user, channel.id))
 					break
 			else:
+				print("not in channel")
 				# If the user is not in the channel, the token is invalid
 				# and the channel can be deleted
 				deleting.append(channel)
@@ -879,10 +886,14 @@ class Client(discord.Client):
 				await message.remove_reaction(flag, member)
 
 			elif "https://atelier801.com/" not in message.content: # instructions message
-				await message.edit(content=verification_messages.get(flag, "INTERNAL ERROR 1"))
+				await message.edit(
+					content=verification_messages.get(flag, (0, "INTERNAL ERROR 1"))[1]
+				)
 				break
 		else:
-			await channel.send(content=verification_messages.get(flag, "INTERNAL ERROR 2 <@!{}>".format(env.tocu_id)))
+			await channel.send(
+				content=verification_messages.get(flag, (0, "INTERNAL ERROR 2 <@!{}>".format(env.tocu_id)))[1]
+			)
 			await asyncio.sleep(1.0)
 
 			token = "tfm" + ("".join(random.choice(string.ascii_letters + "._-") for x in range(50)))
