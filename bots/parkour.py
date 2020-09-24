@@ -705,7 +705,7 @@ class Client(aiotfm.Client):
 
 				if not ranks["admin"] and not ranks["manager"]:
 					if chat == "mod":
-						if not ranks["mods"] and not ranks["trainee"]:
+						if not ranks["mod"] and not ranks["trainee"]:
 							return
 					elif not ranks["mapper"]:
 						return
