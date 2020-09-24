@@ -49,10 +49,11 @@ class env:
 	manual_verification = 753391975742570546
 
 
-verification_messages = (
-	(
-		# EN
-		"🇬🇧 Welcome to the official Parkour Discord! To gain access, "
+verification_selector = "<@!{}>:\nPlease select your language:\n\n{}"
+verification_messages = {
+	"🇬🇧": (
+		"English",
+		"Welcome to the official Parkour Discord! To gain access, "
 		"you have to verify your Transformice account. "
 		"__At the end of this message you'll find a text with a black background and a blue text.__\n"
 
@@ -60,10 +61,12 @@ verification_messages = (
 		"and whisper `Parkour#8558` with that text.\n"
 
 		"**If you're not online**, you can click the blue text and it will take you to the forum. "
-		"It will show a blue button which says **Submit**, you have to click it!\n\n"
+		"It will show a blue button which says **Submit**, you have to click it!"
+	),
 
-		# ES
-		"🇪🇸 ¡Bienvenido al Discord oficial de Parkour! Para obtener acceso, "
+	"🇪🇸": (
+		"Español",
+		"¡Bienvenido al Discord oficial de Parkour! Para obtener acceso, "
 		"debes verificar tu cuenta de Transformice. "
 		"__Al final de este mensaje encontrarás un texto con fondo negro y un texto azul.__\n"
 
@@ -71,10 +74,12 @@ verification_messages = (
 		"y susurrar a `Parkour#8558` con ese texto.\n"
 
 		"**Si no estás conectado**, podés hacer click en el texto azul y te llevará al foro. "
-		"Te va a mostrar un botón azul el cual dice **Aceptar**, ¡debes hacerle click!\n\n"
+		"Te va a mostrar un botón azul el cual dice **Aceptar**, ¡debes hacerle click!"
+	),
 
-		# BR
-		"🇧🇷 Bem-vindo ao Discord oficial do Parkour! Para ter acesso, "
+	"🇧🇷": (
+		"Português",
+		"Bem-vindo ao Discord oficial do Parkour! Para ter acesso, "
 		"você deve verificar sua conta do Transformice. "
 
 		"__Ao fim desta mensagem você irá encontrar um texto de cor azul com um fundo preto.__\n"
@@ -82,10 +87,12 @@ verification_messages = (
 		"e o cochichar para a conta `Parkour#8558`.\n"
 
 		"**Se você não está online**, clique no texto de cor azul e você será redirecionado ao fórum. "
-		"Haverá um botão azul escrito **Validar**, clique nele!\n\n"
+		"Haverá um botão azul escrito **Validar**, clique nele!"
+	),
 
-		# FR
-		"🇫🇷 Bienvenue sur le Discord officiel de Parkour ! Pour obtenir l'accès, "
+	"🇫🇷": (
+		"Français",
+		"Bienvenue sur le Discord officiel de Parkour ! Pour obtenir l'accès, "
 		"vous devez vérifier votre compte Transformice. "
 		"__À la fin de ce message, vous trouverez un texte avec un fond noir et un autre en bleu.__\n"
 
@@ -96,11 +103,10 @@ verification_messages = (
 		"vous amènera sur le forum. "
 		"Cela vous affichera un bouton bleu **Envoyer**. Cliquez dessus pour vérifier votre compte !"
 	),
-	(
-		"-\n\n"
 
-		# HU
-		"🇭🇺 Üdvözlünk a Parkour hivatalos Discord szerverén! A hozzáféréshez igazolnod "
+	"🇭🇺": (
+		"Magyar",
+		"Üdvözlünk a Parkour hivatalos Discord szerverén! A hozzáféréshez igazolnod "
 		"kell a Transformice felhasználódat. "
 		"__Ennek az üzenetnek a végén egy fekete háttérrel ellátott szöveg és egy "
 		"kék szöveg található.__\n"
@@ -109,10 +115,12 @@ verification_messages = (
 		"szöveget és ezt írd meg suttogásban `Parkour#8558`-nak.\n"
 
 		"**Ha nem vagy online**, akkor kattints a kék szövegre, ezzel eljutsz a fórumra. "
-		"Meg fog jelenni egy kék gomb **Küldés** felírattal, arra kell kattintanod!\n\n"
+		"Meg fog jelenni egy kék gomb **Küldés** felírattal, arra kell kattintanod!"
+	),
 
-		# ID
-		"🇮🇩 Selamat datang di Discord resmi Parkour! Untuk mendapatkan akses, "
+	"🇮🇩": (
+		"Bahasa Indonesia",
+		"Selamat datang di Discord resmi Parkour! Untuk mendapatkan akses, "
 		"kamu harus melakukan verifikasi akun Transformice kamu. "
 		"__Di akhir teks ini, kamu akan melihat sebuah teks dengan dengan warna "
 		"latar hitam dan sebuah teks biru.__\n"
@@ -121,10 +129,12 @@ verification_messages = (
 		"latar hitam dan bisik `Parkour#8558` dengan teks tersebut.\n"
 
 		"**Jika kamu tidak online**, kamu bisa klik teks bewarna biru dan kamu akan diarahkan ke forum. "
-		"Itu akan menampilkan sebuah tombol biru dimana terdapat **Ajukan**, kamu harus mengkliknya!\n\n"
+		"Itu akan menampilkan sebuah tombol biru dimana terdapat **Ajukan**, kamu harus mengkliknya!"
+	),
 
-		# RU
-		"🇷🇺 Добро пожаловать на официальный форум Паркура в Discord! Чтобы получить доступ, "
+	"🇷🇺": (
+		"Русский",
+		"Добро пожаловать на официальный форум Паркура в Discord! Чтобы получить доступ, "
 		"вы должны подтвердить свою учетную запись Transformice. "
 		"__В конце этого сообщения вы найдете текст с черным фоном и синим текстом.__\n"
 
@@ -132,10 +142,12 @@ verification_messages = (
 		"черным фоном и прошептать ему `Parkour#8558`.\n"
 
 		"**Если вы не в сети**, вы можете щелкнуть синий текст, и вы попадете на форум. "
-		"Появится синяя кнопка с надписью **Отправить**, вы должны ее нажать!\n\n"
+		"Появится синяя кнопка с надписью **Отправить**, вы должны ее нажать!"
+	),
 
-		# TR
-		"🇹🇷 Resmi Parkour Discord'una hoş geldiniz! Erişim elde etmek için "
+	"🇹🇷": (
+		"Türkçe",
+		"Resmi Parkour Discord'una hoş geldiniz! Erişim elde etmek için "
 		"Transformice hesabınızı doğrulamanız gerekir. "
 		"__Bu mesajın sonunda siyah arka planlı ve mavi yazılı bir metin bulacaksınız.__\n"
 
@@ -145,11 +157,10 @@ verification_messages = (
 		"**Çevrimiçi değilseniz**, Mavi metne tıklayarak foruma gittikten "
 		"sonra **Gönder** yazan mavi düğmeye tıklamalısınız!"
 	),
-	(
-		"-\n\n"
 
-		# PL
-		"🇵🇱 Witamy na oficjalnym Discordzie Parkour!  Aby uzyskać dostęp, "
+	"🇵🇱": (
+		"Polski",
+		"Witamy na oficjalnym Discordzie Parkour!  Aby uzyskać dostęp, "
 		"musisz zweryfikować swoje konto Transformice. "
 		"__Na końcu tej wiadomości znajdziesz tekst z czarnym tłem i niebieskim tekstem.__\n"
 
@@ -158,18 +169,22 @@ verification_messages = (
 
 		"**Jeśli nie jesteś dostępny**, możesz kliknąć niebieski tekst i "
 		"przeniesie Cię na forum.  Pokaże się niebieski przycisk, który mówi "
-		"**Zatwierdź**, musisz to kliknąć!\n\n"
+		"**Zatwierdź**, musisz to kliknąć!"
+	),
 
-		# CN
-		"🇨🇳 歡迎來到官方 Parkour Discord 伺服器! 你需要認證你的 Transformice 帳戶來取得伺服權限。"
+	"🇨🇳": (
+		"中文",
+		"歡迎來到官方 Parkour Discord 伺服器! 你需要認證你的 Transformice 帳戶來取得伺服權限。"
 		"__你會在這則訊息的末端找到一段黑色背景的文字跟藍色的文字。__\n"
 
 		"**如果你 Transformice 在線**, 你可以複製那段黑色背景的文字然後私聊 `Parkour#8558`。\n"
 
-		"**如果你並不在線**, 你可以點擊藍色的文字而它將會連結到論壇上。它會展示一個寫著 **提交** 的藍色按鈕, 點擊它就好!\n\n"
+		"**如果你並不在線**, 你可以點擊藍色的文字而它將會連結到論壇上。它會展示一個寫著 **提交** 的藍色按鈕, 點擊它就好!"
+	),
 
-		# RO
-		"🇷🇴 Bine ai venit pe serverul oficial Parkour! Pentru a primi acces, "
+	"🇷🇴": (
+		"Română",
+		"Bine ai venit pe serverul oficial Parkour! Pentru a primi acces, "
 		"trebuie să-ți legi contul de Transformice. "
 		"__La finalul acestui mesaj vei găsi niște text pe un fundal negru și niște text albastru.__\n"
 
@@ -178,13 +193,10 @@ verification_messages = (
 
 		"**Dacă nu ești online pe Transformice**, poți apăsa pe textul albastru și te va duce pe forum. "
 		"Îți va arăta un buton albastru pe care scrie **Validează**, trebuie să dai click pe el!"
-
-		"\n\n-"
 	),
-	(
-		# RTL languages
 
-		# HE
+	"🇮🇱": (
+		"עברית",
 		"ברוכים הבאים לשרת הדיסקורד הרשמי של Parkour! כדי להשיג גישה, ע"
 		"ליכם לאמת את משתמש ה-Transformice שלכם.\n"
 		"__לאחר מכן, אתם תראו טקסט בצבע כחול עם רקע שחור.__\n"
@@ -193,7 +205,7 @@ verification_messages = (
 		"**אם אינכם מחוברים ל-Transformice**, אתם יכולים ללחוץ על הטקסט הכחול וזה יקח אתכם אל הפורום.\n"
 		"זה יראה לכם כפתור כחול שאומר **אשר**, עליכם ללחוץ עליו!"
 	)
-)
+}
 
 scripts = {
 	"copyfile": 752932696782667877,
@@ -761,11 +773,10 @@ class Client(discord.Client):
 		a Role instance too. If they don't have it, it gives an int representing the role id.
 
 		Returns a tuple of two None if the user is a bot or the reaction is invalid."""
-		if payload.channel_id != env.role_channel:
-			return None, None
-
 		guild = self.get_guild(payload.guild_id)
-		member = await guild.fetch_member(payload.user_id)
+		member = guild.get_member(payload.user_id)
+		if member is None:
+			member = await guild.fetch_member(payload.user_id)
 
 		if member.bot:
 			return None, None
@@ -788,10 +799,16 @@ class Client(discord.Client):
 		return None, None
 
 	async def on_raw_reaction_add(self, payload):
-		member, role = await self.get_reaction_role(payload)
+		if payload.channel_id == env.role_channel:
+			member, role = await self.get_reaction_role(payload)
 
-		if isinstance(role, int):
-			await member.add_roles(discord.Object(role), atomic=True)
+			if isinstance(role, int):
+				await member.add_roles(discord.Object(role), atomic=True)
+
+		else:
+			channel = self.get_guild(payload.guild_id).get_channel(payload.channel_id)
+			if channel.category_id == env.verifications_category:
+				self.dispatch("verification_language_selected", payload, channel)
 
 	async def on_raw_reaction_remove(self, payload):
 		member, role = await self.get_reaction_role(payload)
@@ -804,30 +821,32 @@ class Client(discord.Client):
 		"""Fetch all the tokens from discord"""
 		self.verifications = []
 		deleting = []
+		guild = self.get_guild(env.guild_id)
 
-		for channel in self.get_channel(env.verifications_category).text_channels:
-			async for message in channel.history(limit=1, oldest_first=False):
-				# Last message
-				if message.author.id != self.user.id:
-					continue
+		for channel in guild.get_channel(env.verifications_category).text_channels:
+			user, token = None, None
 
-				token = re.search(r"`([^`]+)`", message.content)
-				if token is not None:
-					token = token.group(1)
-					break
-			else:
+			async for message in channel.history(limit=3, oldest_first=True):
+				if "<@!" in message.content: # first message
+					user = re.search(r"<@!(\d+)>", message.content)
+					if user is not None:
+						user = int(user.group(1))
+
+				elif "https://atelier801.com/" in message.content: # token message
+					token = re.search(r"`([^`]+)`", message.content)
+					if token is not None:
+						token = token.group(1)
+
+			if user is None or token is None:
+				deleting.append(channel)
 				continue
 
-			async for message in channel.history(limit=100, oldest_first=True):
-				# First message
-				if message.author.id != self.user.id:
-					continue
+			member = guild.get_member(user)
+			if member is None:
+				member = await guild.fetch_member(user)
 
-				user = re.search(r"<@!(\d+)>", message.content)
-				if user is not None:
-					user = int(user.group(1))
-					break
-			else:
+			if member is None:
+				deleting.append(channel)
 				continue
 
 			for member in channel.members:
@@ -843,6 +862,40 @@ class Client(discord.Client):
 		for channel in deleting:
 			await channel.delete()
 
+	async def on_verification_language_selected(self, payload, channel):
+		guild = channel.guild
+
+		member = guild.get_member(payload.user_id)
+		if member is None:
+			member = await guild.fetch_member(payload.user_id)
+
+		if member.bot:
+			return
+
+		flag = str(payload.emoji)
+
+		async for message in channel.history(limit=3, oldest_first=True):
+			if message.id == payload.message_id:
+				await message.remove_reaction(flag, member)
+
+			elif "https://atelier801.com/" not in message.content: # instructions message
+				await message.edit(content=verification_messages.get(flag, "INTERNAL ERROR 1"))
+				break
+		else:
+			await channel.send(content=verification_messages.get(flag, "INTERNAL ERROR 2 <@!{}>".format(env.tocu_id)))
+			await asyncio.sleep(1.0)
+
+			token = "tfm" + ("".join(random.choice(string.ascii_letters + "._-") for x in range(50)))
+			link = (
+				"https://atelier801.com/new-dialog"
+				"?destinataire=Parkour%238558"
+				"&subject=%5BV%5D%20{}"
+				"&message=Verification"
+			).format(token)
+			await channel.send("`{}`\n{}".format(token, link))
+
+			self.verifications.append((token, member.id, channel.id))
+
 	async def on_member_join(self, member):
 		if member.guild.id != env.guild_id:
 			return
@@ -852,26 +905,22 @@ class Client(discord.Client):
 			member.name + "-" + member.discriminator,
 			overwrites={
 				member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
-				member: discord.PermissionOverwrite(read_messages=True, send_messages=False)
+				member: discord.PermissionOverwrite(read_messages=True, send_messages=False, add_reactions=False)
 			},
 			category=self.get_channel(env.verifications_category)
 		)
 
-		for index, msg in enumerate(verification_messages):
-			if index == 0:
-				msg = "<@!{}>:\n{}".format(member.id, msg)
-			await channel.send(msg)
+		# flag ~> **name** | flag ~> **name**
+		languages = " | ".join(
+			"{} ~> **{}**".format(flag, data[0])
+			for flag, data in verification_messages.items()
+		)
+		msg = await channel.send(
+			verification_selector.format(member.id, languages)
+		)
 
-		token = "tfm" + ("".join(random.choice(string.ascii_letters + "._-") for x in range(50)))
-		link = (
-			"https://atelier801.com/new-dialog"
-			"?destinataire=Parkour%238558"
-			"&subject=%5BV%5D%20{}"
-			"&message=Verification"
-		).format(token)
-		await channel.send("`{}`\n{}".format(token, link))
-
-		self.verifications.append((token, member.id, channel.id))
+		for flag in verification_messages:
+			await msg.add_reaction(flag)
 
 	async def on_member_remove(self, member):
 		if member.guild.id != env.guild_id:
@@ -897,7 +946,10 @@ class Client(discord.Client):
 		for index, data in enumerate(self.verifications):
 			if data[0] == token:
 				# Give verified role and change nickname
-				member = await guild.fetch_member(data[1])
+				member = guild.get_member(data[1])
+				if member is None:
+					member = await guild.fetch_member(data[1])
+
 				await member.edit(
 					nick=player,
 					roles=[guild.get_role(env.verified_role)]
