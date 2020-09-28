@@ -53,6 +53,7 @@ local map_change_cd = 0
 
 local levels
 local perms
+local review_mode
 local records_admins = false and string.find(room.lowerName, "records", 1, true) and {}
 
 local function selectMap(sections, list, count)
@@ -271,6 +272,12 @@ onEvent("NewGame", function()
 	end
 
 	tfm.exec.setGameTime(1080)
+
+	if room.xmlMapInfo.permCode ~= 41 and not is_tribe and not review_mode then
+		tfm.exec.chatMessage("<r>Not anymore buddy!")
+		is_invalid = os.time() + 3000
+		return
+	end
 	is_invalid = false
 end)
 

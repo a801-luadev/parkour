@@ -18,7 +18,7 @@ local ck = {
 	images = {}
 }
 local players_file
-local review_mode = false
+review_mode = false
 local cp_available = {}
 
 local checkCooldown
