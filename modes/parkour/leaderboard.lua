@@ -161,6 +161,7 @@ onEvent("GameDataLoaded", function(data)
 					"\000" .. data.weekranking[2][4] .. "\000" .. data.weekranking[2][2] .. "\000" .. data.weekranking[2][3] ..
 					"\000" .. data.weekranking[3][4] .. "\000" .. data.weekranking[3][2] .. "\000" .. data.weekranking[3][3]
 				)
+				system.loadPlayerData(send_channel) -- force send
 			end
 
 			timed_maps.week.last_reset = new_reset
