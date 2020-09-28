@@ -54,7 +54,9 @@ onEvent("PlayerWon", function(player)
 	if bans[id] then return end
 	if not players_file[player] then return end
 
-	translatedChatMessage("records_completed", player)
+	if records_admins then
+		translatedChatMessage("records_completed", player)
+	end
 
 	-- If the player joined the room after the map started,
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
