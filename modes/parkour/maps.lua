@@ -133,7 +133,7 @@ local function newMap()
 	map_change_cd = os.time() + 20000
 
 	local map
-	if math.random(3000000) <= 1000000 then -- 1/3
+	if math.random((maps.low_count + maps.high_count * 2) * 1000000) <= (maps.low_count * 1000000) then -- 1/3
 		map = selectMap(maps.sections_low, maps.list_low, maps.low_count)
 	else
 		map = selectMap(maps.sections_high, maps.list_high, maps.high_count)
