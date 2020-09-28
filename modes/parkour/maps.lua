@@ -53,7 +53,7 @@ local map_change_cd = 0
 
 local levels
 local perms
-local records_admins = string.find(room.lowerName, "records", 1, true) and {}
+local records_admins = false and string.find(room.lowerName, "records", 1, true) and {}
 
 local function selectMap(sections, list, count)
 	if sections._map_pointer > maps_per_section then
