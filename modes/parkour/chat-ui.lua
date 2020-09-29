@@ -238,6 +238,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			end
 
 			file.parkour.badges[group] = badge
+			if badge > 0 then
+				NewBadgeInterface:show(target, group, badge)
+			end
 
 			tfm.exec.chatMessage("<v>[#] <d>badge group " .. group .. " affected on player " .. target, player)
 
