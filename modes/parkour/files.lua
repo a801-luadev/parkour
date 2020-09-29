@@ -143,7 +143,7 @@ local data_migrations = {
 			end
 		end
 
-		data.parkour.badges = old_badges
+		data.parkour.badges = new_badges
 	end
 }
 
