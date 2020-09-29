@@ -233,7 +233,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				return tfm.exec.chatMessage(
 					"<v>[#] <r>that group has ids 0-" .. #badges[group] .. " but u want " .. badge .. "?", player
 				)
-			elseif badge[group].filePriority then
+			elseif badges[group].filePriority then
 				return tfm.exec.chatMessage("<v>[#] <r>that badge group can only be affected by bots", player)
 			end
 
