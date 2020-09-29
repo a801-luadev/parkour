@@ -23,6 +23,7 @@ local packets = {
 	verify_discord = bit.lshift(14, 8) + 255,
 	version_mismatch = bit.lshift(15, 8) + 255,
 	record_submission = bit.lshift(16, 8) + 255,
+	record_badges = bit.lshift(17, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -35,6 +36,9 @@ local killing = {}
 local verifying = {}
 local to_do = {}
 local in_room = {}
+local records = {
+	all_badges = 9
+}
 
 local file_actions = {
 	high_map_change = {1, true, function(data, map, add)
@@ -210,6 +214,18 @@ onEvent("TextAreaCallback", function(id, player, data)
 	elseif id == packets.verify_discord then
 		verifying[data] = true
 		system.loadPlayerData(data)
+
+	elseif id == packets.record_badges then
+		local name, badge = string.match(data, "^([^\000]+)\000([^\000]+)$")
+
+		if badge > 1 then
+			badge = math.ceil(badge / 5) + 1
+		end
+
+		if badge <= records.all_badges then
+			records[name] = badge
+			system.loadPlayerData(name)
+		end
 	end
 end)
 
@@ -230,11 +246,18 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	if verifying[player] then
-		data.parkour.badges[14] = 1
+		data.parkour.badges[5] = 1
 		ui.addTextArea(packets.verify_discord, player)
 
 		update = true
 		verifying[player] = nil
+	end
+
+	if records[player] then
+		data.parkour.badges[player] = records[player]
+
+		update = true
+		records[player] = nil
 	end
 
 	if update then

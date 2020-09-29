@@ -5,6 +5,19 @@ import traceback
 import aiohttp
 
 
+tokens = {
+	os.getenv("PROXY_TOKEN"): ("parkour", "tocubot", "discord"),
+	os.getenv("RECORDS_TOKEN"): ("records",)
+}
+permissions = {
+	"parkour": ("proxy", "exec", "reboot"),
+	"tocubot": ("proxy", "exec", "reboot"),
+	"discord": ("proxy", "exec", "reboot"),
+
+	"records": ("proxy",)
+}
+
+
 class JSONProtocol(asyncio.Protocol):
 	"""Represents a simple json protocol which is used to communicate with the proxy"""
 	def __init__(self, server):
@@ -67,6 +80,8 @@ class Client:
 		self.connected = False
 		self.name = None
 
+		self.permissions = ()
+
 	def close(self):
 		if self.connected:
 			self.protocol.close()
@@ -117,6 +132,9 @@ class Client:
 		while self.connected:
 			packet = await self.protocol.receive()
 
+			if packet["type"] not in self.permissions:
+				continue
+
 			# Sends the packet to other clients
 			if packet["type"] == "proxy":
 				client = packet.get("client") # defaults to None / null
@@ -159,12 +177,14 @@ class Client:
 			self.close()
 			return
 
-		if packet["type"] == "identification" and packet["token"] == self.server.token:
+		if packet["type"] == "identification" and isinstance(packet.get("token", str)):
 			if isinstance(packet.get("name"), str):
-				self.connected = True
-				self.name = packet["name"]
-				await self.server.client_identified(self)
-				return
+				if packet["token"] in tokens and packet["name"] in tokens[packet["token"]]:
+					self.permissions = permissions[packet["name"]]
+					self.connected = True
+					self.name = packet["name"]
+					await self.server.client_identified(self)
+					return
 
 		self.close()
 
@@ -176,8 +196,6 @@ class Server:
 
 	def __init__(self, token, loop=None):
 		self.loop = loop or asyncio.get_event_loop()
-
-		self.token = token
 
 		self.clients = {}
 
@@ -232,7 +250,7 @@ class Server:
 
 
 if __name__ == '__main__':
-	server = Server(os.getenv("PROXY_TOKEN"))
+	server = Server()
 
 	print("Starting server...")
 	server.bind("0.0.0.0", 6666)

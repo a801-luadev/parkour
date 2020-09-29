@@ -60,6 +60,9 @@ class Proxy(Connection):
 	async def received_proxy(self, client, packet):
 		loop = self.client.loop
 
+		if client == "records":
+			return
+
 		if packet["type"] == "busy":
 			# Shares the busy state between all the bots that need it
 			self.client.busy = packet["state"]

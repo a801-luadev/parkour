@@ -58,6 +58,7 @@ ROOM_PASSWORD = (13 << 8) + 255
 VERIFY_DISCORD = (14 << 8) + 255
 VERSION_MISMATCH = (15 << 8) + 255
 RECORD_SUBMISSION = (16 << 8) + 255
+RECORD_BADGES = (17 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -103,6 +104,15 @@ class Proxy(Connection):
 
 	async def received_proxy(self, client, packet):
 		loop = self.client.loop
+
+		if client == "records":
+			if packet["type"] == "records":
+				player = packet["player"] # id
+				records = packet["records"] # records quantity
+
+				if records > 0 and (records == 1 or records % 5 == 0):
+					loop.create_task(self.client.send_record_badge(player, records))
+			return
 
 		if packet["type"] == "message":
 			# If a client tries to send a message to a channel which is a string,
@@ -390,6 +400,13 @@ class Client(aiotfm.Client):
 				}),
 				env.records_webhook
 			)
+
+	async def send_record_badge(self, player, records):
+		player = await self.get_player_name(player)
+
+		self.dispatch("send_webhook", "`[RECORDS_BADGE]:` **{}**, **{}**".format(player, records))
+
+		await self.send_callback(RECORD_BADGES, "{}\x00{}".format(player, records))
 
 	# Chat system
 	async def on_send_webhook(self, message, webhook=None):
