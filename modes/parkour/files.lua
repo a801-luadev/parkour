@@ -60,6 +60,10 @@ local badges = {
 	},
 	[6] = { -- records
 		filePriority = true,
+
+		{15, "174dc1c8c4b.png", "174dc1c4ae8.png"}, -- 1
+		{16, "174dc220359.png", "174dc21e1c8.png"},
+		{17, "174dc22969c.png", "174dc22211d.png"},
 	},
 }
 players_file = {}

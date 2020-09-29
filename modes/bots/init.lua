@@ -37,7 +37,7 @@ local verifying = {}
 local to_do = {}
 local in_room = {}
 local records = {
-	all_badges = 9
+	all_badges = 3
 }
 
 local file_actions = {
