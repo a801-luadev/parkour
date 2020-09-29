@@ -85,7 +85,7 @@ do
 				local badge
 				for index = 1, #badges do
 					if pbg[index] > 0 then
-						badge = badges[pbg[index]]
+						badge = badges[index][pbg[index]]
 
 						container._count = container._count + 1
 						container[ container._count ] = tfm.exec.addImage(badge[2], ":2", x, y, player)
