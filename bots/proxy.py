@@ -194,7 +194,7 @@ class Server:
 
 	PROTOCOL = JSONProtocol
 
-	def __init__(self, token, loop=None):
+	def __init__(self, loop=None):
 		self.loop = loop or asyncio.get_event_loop()
 
 		self.clients = {}
