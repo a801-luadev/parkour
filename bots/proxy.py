@@ -177,7 +177,7 @@ class Client:
 			self.close()
 			return
 
-		if packet["type"] == "identification" and isinstance(packet.get("token", str)):
+		if packet["type"] == "identification" and isinstance(packet.get("token"), str):
 			if isinstance(packet.get("name"), str):
 				if packet["token"] in tokens and packet["name"] in tokens[packet["token"]]:
 					self.permissions = permissions[packet["name"]]
