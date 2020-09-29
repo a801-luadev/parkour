@@ -131,8 +131,10 @@ class Client:
 		"""Runs while the client is connected, receives packets and parses them."""
 		while self.connected:
 			packet = await self.protocol.receive()
+			print("recv", self.name, packet)
 
 			if packet["type"] not in self.permissions:
+				print("not in permissions")
 				continue
 
 			# Sends the packet to other clients
@@ -180,6 +182,7 @@ class Client:
 		if packet["type"] == "identification" and isinstance(packet.get("token"), str):
 			if isinstance(packet.get("name"), str):
 				if packet["token"] in tokens and packet["name"] in tokens[packet["token"]]:
+					print("identified", packet)
 					self.permissions = permissions[packet["name"]]
 					self.connected = True
 					self.name = packet["name"]
