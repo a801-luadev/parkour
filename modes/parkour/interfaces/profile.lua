@@ -82,13 +82,16 @@ do
 			local y = self.y + 180
 			local pbg = (data or players_file[profile]).parkour.badges
 			if pbg then
+				local badge
 				for index = 1, #badges do
-					if pbg[index] == 1 then
+					if pbg[index] > 0 then
+						badge = badges[pbg[index]]
+
 						container._count = container._count + 1
-						container[ container._count ] = tfm.exec.addImage(badges[index], ":2", x, y, player)
+						container[ container._count ] = tfm.exec.addImage(badge[2], ":2", x, y, player)
 						ui.addTextArea(
 							-10000 - index,
-							"<a href='event:_help:badge_" .. index .. "'>\n\n\n\n\n\n",
+							"<a href='event:_help:badge_" .. badge[1] .. "'>\n\n\n\n\n\n",
 							player, x, y, 30, 30,
 							0, 0, 0, true
 						)

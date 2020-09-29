@@ -217,28 +217,29 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		elseif thing == "badge" then
 			if quantity < 4 then
-				return tfm.exec.chatMessage("<v>[#] <r>u gotta specify a badge id and whether to give or remove it", player)
+				return tfm.exec.chatMessage("<v>[#] <r>u gotta specify a badge group and badge id", player)
 			end
 
-			local badge, action = tonumber(args[3]), string.lower(args[4])
-			if not badge then
-				return tfm.exec.chatMessage("<v>[#] <r>" .. badge .. " doesnt look like a badge id?", player)
-			elseif badge < 1 or badge > #badges then
+			local group, badge = tonumber(args[3]), tonumber(args[4])
+			if not group then
+				return tfm.exec.chatMessage("<v>[#] <r>" .. args[3] .. " doesnt look like a badge group?", player)
+			elseif not badge then
+				return tfm.exec.chatMessage("<v>[#] <r>" .. args[4] .. " doesnt look like a badge id?", player)
+			elseif group < 1 or group > #badges then
 				return tfm.exec.chatMessage(
-					"<v>[#] <r>there are " .. #badges .. " badges but u want to give the n° " .. badge .. "?", player
+					"<v>[#] <r>there are " .. #badges .. " badge groups but u want to give the n° " .. badge .. "?", player
 				)
+			elseif badge < 0 or badge > #badges[group] then
+				return tfm.exec.chatMessage(
+					"<v>[#] <r>that group has ids 0-" .. #badges[group] .. " but u want " .. badge .. "?", player
+				)
+			elseif badge[group].filePriority then
+				return tfm.exec.chatMessage("<v>[#] <r>that badge group can only be affected by bots", player)
 			end
 
-			if action == "give" then
-				file.parkour.badges[badge] = 1
-				NewBadgeInterface:show(target, badge)
-			elseif action == "remove" then
-				file.parkour.badges[badge] = 0
-			else
-				return tfm.exec.chatMessage("<v>[#] <r>" .. action .. " doesnt look like an action wtf", player)
-			end
+			file.parkour.badges[group] = badge
 
-			tfm.exec.chatMessage("<v>[#] <d>badge " .. badge .. " affected on player " .. target, player)
+			tfm.exec.chatMessage("<v>[#] <d>badge group " .. group .. " affected on player " .. target, player)
 
 		elseif thing == "migration" then
 			file.migrated = true

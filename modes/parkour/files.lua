@@ -32,20 +32,35 @@ local timed_maps = {
 	hour = {}
 }
 local badges = {
-	[1] = "1745f43783e.png", -- former staff
-	[2] = "17435b0098c.png", -- overall lb page 1
-	[3] = "17435b03030.png", -- overall lb page 2
-	[4] = "17435b06052.png", -- overall lb page 3
-	[5] = "17435af7df1.png", -- overall lb page 4
-	[6] = "17435afd7c2.png", -- overall lb page 5
-	[7] = "1745a660504.png", -- weekly podium on reset
-	[8] = "1745a5547a9.png", -- hour record (30)
-	[9] = "1745a53f4c9.png", -- hour record (35)
-	[10] = "1745a5506b3.png", -- hour record (40)
-	[11] = "1745a54a1e3.png", -- hour record (45)
-	[12] = "1745a541bdd.png", -- hour record (50)
-	[13] = "1745a54869e.png", -- hour record (55)
-	[14] = "1746ef93af1.png", -- verified discord
+	[1] = { -- former staff
+		{ 1, "1745f43783e.png", "1745f432e33.png"},
+	},
+	[2] = { -- leaderboard
+		{ 2, "17435b0098c.png", "1745a88ffce.png"}, -- 1
+		{ 3, "17435b03030.png", "1745a892d25.png"}, -- 2
+		{ 4, "17435b06052.png", "1745a89eb17.png"}, -- 3
+		{ 5, "17435af7df1.png", "1745a89bc52.png"}, -- 4
+		{ 6, "17435afd7c2.png", "1745a899776.png"}, -- 5
+	},
+	[3] = { -- weekly podium
+		{ 7, "1745a660504.png", "1745a6bfa2c.png"},
+	},
+	[4] = { -- hour records
+		{ 8, "1745a5547a9.png", "1745afa8577.png"}, -- 30
+		{ 9, "1745a53f4c9.png", "1745afac029.png"}, -- 35
+		{10, "1745a5506b3.png", "1745afaf043.png"}, -- 40
+		{11, "1745a54a1e3.png", "1745afb4333.png"}, -- 45
+		{12, "1745a541bdd.png", "1745afc2c32.png"}, -- 50
+		{13, "1745a54869e.png", "1745afc5c2e.png"}, -- 55
+	},
+	[5] = { -- discord
+		filePriority = true, -- always takes the value from the file
+
+		{14, "1746ef93af1.png", "1746ef8f813.png"},
+	},
+	[6] = { -- records
+		filePriority = true,
+	},
 }
 players_file = {}
 
@@ -99,6 +114,32 @@ local data_migrations = {
 		data.parkour.v = "0.8"
 		data.parkour.badges[13] = 0
 		data.parkour.badges[14] = 0
+	end,
+	["0.8"] = function(player, data)
+		data.parkour.v = "0.9"
+
+		local old_badges = data.parkour.badges
+		local new_badges = {0, 0, 0, 0, 0, 0}
+
+		local limit
+		for i = 1, 5 do
+			if i == 2 then
+				limit = 5
+			elseif i == 4 then
+				limit = 6
+			else
+				limit = 1
+			end
+
+			for j = limit, 1, -1 do
+				if old_badges[ badges[i][j][1] ] == 1 then
+					new_badges[i] = j
+					break
+				end
+			end
+		end
+
+		data.parkour.badges = old_badges
 	end
 }
 
@@ -200,9 +241,14 @@ onEvent("PlayerDataLoaded", function(player, data)
 			end
 		end
 
-		if old.parkour.badges[14] ~= data.parkour.badges[14] then -- discord verification
-			old.parkour.badges[14] = data.parkour.badges[14]
-			NewBadgeInterface:show(player, 14)
+		local p_badges = data.parkour.badges
+		for index = 1, #badges do
+			if badges[index].filePriority then
+				if old.parkour.badges[index] ~= p_badges[index] then
+					old.parkour.badges[index] = p_badges[index]
+					NewBadgeInterface:show(player, index, math.max(p_badges[index], 1))
+				end
+			end
 		end
 
 		eventPlayerDataUpdated(player, data)

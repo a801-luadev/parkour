@@ -7,14 +7,6 @@ leaderboard = {}
 weekleaderboard = {}
 -- {id, name, completed_maps, community}
 local default_leaderboard_user = {0, nil, 0, "xx"}
-local leaderboard_badges = {
-	{14, 2},
-	{28, 3},
-	{42, 4},
-	{56, 5},
-	{70, 6}
-}
-leaderboard_badges._count = #leaderboard_badges
 
 local function leaderboardSort(a, b)
 	return a[3] > b[3]
@@ -89,38 +81,19 @@ local function checkPlayersPosition(week)
 	end
 
 	if not week then
-		local name, badges, badge, skip
+		local name, badges, badge
 		for pos = 1, #lb do
 			name = lb[pos][2]
 			lb[name] = pos
 
 			if players_file[name] then
 				badges = players_file[name].parkour.badges
+				badge = math.ceil(pos / 14)
 
-				for i = 1, leaderboard_badges._count do
-					badge = leaderboard_badges[i]
-					if pos <= badge[1] and badges[badge[2]] ~= 1 then
-						skip = false
-						for j = 1, i - 1 do
-							if badges[leaderboard_badges[j][2]] == 1 then
-								skip = true
-								break
-							end
-						end
-
-						if not skip then
-							for j = i + 1, leaderboard_badges._count do
-								badges[leaderboard_badges[j][2]] = 0
-							end
-
-							badges[badge[2]] = 1
-
-							NewBadgeInterface:show(name, badge[2])
-							savePlayerData(name)
-						end
-
-						break
-					end
+				if badges[2] == 0 or badges[2] > badge then
+					badges[2] = badge
+					NewBadgeInterface:show(name, 2, badge)
+					savePlayerData(name)
 				end
 			end
 		end

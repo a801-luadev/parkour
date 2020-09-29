@@ -8,15 +8,6 @@ local cooldowns = {}
 local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local used_powers = {_count = 0}
-local hour_badges = {
-	{55, 13},
-	{50, 12},
-	{45, 11},
-	{40, 10},
-	{35, 9},
-	{30, 8}
-}
-hour_badges._count = #hour_badges
 
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
@@ -782,33 +773,18 @@ onEvent("PlayerWon", function(player)
 		file.hour_c = file.hour_c + 1
 		file.week_c = file.week_c + 1
 
-		for i = 1, hour_badges._count do
-			badge = hour_badges[i]
-			if file.hour_c >= badge[1] and file.badges[badge[2]] ~= 1 then
-				local skip = false
-				for j = 1, i - 1 do
-					if file.badges[hour_badges[j][2]] == 1 then
-						skip = true
-						break
-					end
-				end
-
-				if not skip then
-					for j = i + 1, hour_badges._count do
-						file.badges[hour_badges[j][2]] = 0
-					end
-
-					file.badges[badge[2]] = 1
-
-					NewBadgeInterface:show(player, badge[2])
-				end
-
-				break
+		if file.hour_c >= 30 and file.hour_c % 5 == 0 then
+			if file.hour_c >= 35 then
+				sendPacket(3, room.name .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. file.hour_c)
 			end
-		end
 
-		if file.hour_c >= 35 and file.hour_c % 5 == 0 then
-			sendPacket(3, room.name .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. file.hour_c)
+			local badge = math.ceil((file.hour_c - 29) / 5)
+			if badge <= #badges[4] then
+				if file.badges[4] == 0 or file.badges[4] < badge then
+					file.badges[4] = badge
+					NewBadgeInterface:show(player, 4, badge)
+				end
+			end
 		end
 
 		savePlayerData(player)
