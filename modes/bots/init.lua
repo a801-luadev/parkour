@@ -255,9 +255,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	if records[player] then
-		data.parkour.badges[6] = records[player]
+		if data.parkour.badges[6] < records[player] then
+			data.parkour.badges[6] = records[player]
 
-		update = true
+			update = true
+		end
 		records[player] = nil
 	end
 
