@@ -255,7 +255,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	if records[player] then
-		data.parkour.badges[player] = records[player]
+		data.parkour.badges[6] = records[player]
 
 		update = true
 		records[player] = nil
