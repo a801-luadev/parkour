@@ -217,6 +217,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 
 	elseif id == packets.record_badges then
 		local name, badge = string.match(data, "^([^\000]+)\000([^\000]+)$")
+		badge = tonumber(badge)
 
 		if badge > 1 then
 			badge = math.ceil(badge / 5) + 1
