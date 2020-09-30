@@ -131,10 +131,8 @@ class Client:
 		"""Runs while the client is connected, receives packets and parses them."""
 		while self.connected:
 			packet = await self.protocol.receive()
-			print("recv", self.name, packet)
 
 			if packet["type"] not in self.permissions:
-				print("not in permissions")
 				continue
 
 			# Sends the packet to other clients
@@ -173,19 +171,15 @@ class Client:
 		"""Waits for the client to identificate, and closes the connection
 		if it takes more than 5 seconds or if the identification packet is
 		incorrect."""
-		print("Identifying")
 		try:
 			packet = await asyncio.wait_for(self.protocol.receive(), 5.0)
 		except asyncio.TimeoutError:
-			print("timeout")
 			self.close()
 			return
 
-		print("identification", packet)
 		if packet["type"] == "identification" and isinstance(packet.get("token"), str):
 			if isinstance(packet.get("name"), str):
 				if packet["token"] in tokens and packet["name"] in tokens[packet["token"]]:
-					print("identified")
 					self.permissions = permissions[packet["name"]]
 					self.connected = True
 					self.name = packet["name"]

@@ -106,7 +106,6 @@ class Proxy(Connection):
 		loop = self.client.loop
 
 		if client == "records":
-			print(packet)
 			if packet["type"] == "records":
 				player = packet["player"] # id
 				records = packet["records"] # records quantity
