@@ -273,7 +273,7 @@ onEvent("NewGame", function()
 
 	tfm.exec.setGameTime(1080)
 
-	if room.xmlMapInfo.permCode ~= 41 and not is_tribe and not review_mode then
+	if not count_stats and not is_tribe and not review_mode and room.xmlMapInfo.permCode ~= 41 then
 		tfm.exec.chatMessage("<r>Not anymore buddy!")
 		is_invalid = os.time() + 3000
 		return
