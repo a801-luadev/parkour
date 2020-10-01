@@ -39,6 +39,7 @@ class env:
 	records_webhook = os.getenv("RECORDS_WEBHOOK")
 	parkour_records_webhook = os.getenv("PARKOUR_RECORDS_WEBHOOK")
 	record_badges_webhook = os.getenv("RECORD_BADGES_WEBHOOK")
+	record_suspects = os.getenv("RECORD_SUSPECTS")
 
 
 WEEKLY_RECORDS_MSG = """<a:blob_cheer1:683845978553450576> **[{} - {}]** <a:blob_cheer2:683846001421058071>
@@ -81,6 +82,7 @@ webhooks = {
 	"**`[JOIN]:`**": env.join,
 	"**`[BOTCRASH]:`**": env.private,
 	"**`[RECORD]:`**": env.parkour_records_webhook,
+	"**`[RECORD_SUS]:`**": env.record_suspects,
 	"**`[RECORDS_BADGE]:`**": env.record_badges_webhook
 }
 
@@ -411,14 +413,9 @@ class Client(aiotfm.Client):
 
 			self.dispatch(
 				"send_webhook",
-				"**`[RECORD]:`** `{}` (`{}`) completed the map `@{}` in the room `{}` in `{}` seconds."
-				.format(name, player, code, room, taken)
+				"**`[RECORD{}]:`** `{}` (`{}`) completed the map `@{}` in the room `{}` in `{}` seconds."
+				.format("" if taken > 45 else "_SUS", name, player, code, room, taken)
 			)
-			if taken <= 45:
-				await self.send_callback(
-					SIMULATE_SUS,
-					"{}\x00{}\x00{}\x00@{}\x00{}".format(room, name, player, code, taken)
-				)
 
 	async def send_record_badge(self, player, records):
 		player = await self.get_player_name(player)
