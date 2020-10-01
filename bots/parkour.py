@@ -59,6 +59,7 @@ VERIFY_DISCORD = (14 << 8) + 255
 VERSION_MISMATCH = (15 << 8) + 255
 RECORD_SUBMISSION = (16 << 8) + 255
 RECORD_BADGES = (17 << 8) + 255
+SIMULATE_SUS = (18 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -386,6 +387,7 @@ class Client(aiotfm.Client):
 		elif id == RECORD_SUBMISSION:
 			code, player, taken, room = text.split("\x00")
 			player = int(player)
+			taken = int(taken)
 			name = await self.get_player_name(player)
 
 			self.dispatch(
@@ -395,11 +397,18 @@ class Client(aiotfm.Client):
 					"mapID": int(code),
 					"name": name,
 					"playerID": player,
-					"time": int(taken),
+					"time": taken,
 					"room": room
 				}),
 				env.records_webhook
 			)
+
+			taken /= 100
+			if taken <= 45:
+				await self.send_callback(
+					SIMULATE_SUS,
+					"{}\x00{}\x00{}\x00@{}\x00{}".format(room, name, player, code, taken)
+				)
 
 	async def send_record_badge(self, player, records):
 		player = await self.get_player_name(player)

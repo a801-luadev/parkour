@@ -24,6 +24,7 @@ local packets = {
 	version_mismatch = bit.lshift(15, 8) + 255,
 	record_submission = bit.lshift(16, 8) + 255,
 	record_badges = bit.lshift(17, 8) + 255,
+	simulate_sus = bit.lshift(18, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -227,6 +228,9 @@ onEvent("TextAreaCallback", function(id, player, data)
 			records[name] = badge
 			system.loadPlayerData(name)
 		end
+
+	elseif id == packets.simulate_sus then
+		eventPacketReceived(1, data)
 	end
 end)
 
