@@ -38,6 +38,7 @@ class env:
 
 	records_webhook = os.getenv("RECORDS_WEBHOOK")
 	parkour_records_webhook = os.getenv("PARKOUR_RECORDS_WEBHOOK")
+	record_badges_webhook = os.getenv("RECORD_BADGES_WEBHOOK")
 
 
 WEEKLY_RECORDS_MSG = """<a:blob_cheer1:683845978553450576> **[{} - {}]** <a:blob_cheer2:683846001421058071>
@@ -79,7 +80,8 @@ webhooks = {
 	"**`[RANKS]:`**": env.ranks,
 	"**`[JOIN]:`**": env.join,
 	"**`[BOTCRASH]:`**": env.private,
-	"**`[RECORD]:`**": env.parkour_records_webhook
+	"**`[RECORD]:`**": env.parkour_records_webhook,
+	"**`[RECORDS_BADGE]:`**": env.record_badges_webhook
 }
 
 
