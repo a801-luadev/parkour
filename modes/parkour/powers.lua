@@ -660,7 +660,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 				power[index].cooldown_x, power[index].cooldown_y,
 
 				players_file[player].parkour.pcool == 1
-			)) then
+			)) and (not records_admins or power[index].availableRecords) then
 				power[index].fnc(player, key, down, x, y)
 
 				if not power[index].dontShowTracker then
@@ -677,14 +677,14 @@ onEvent("Mouse", function(player, x, y)
 
 	local power = powers.teleport
 	if players_file[player].parkour.c >= power.maps then
-		if not power.cooldown or checkCooldown(
+		if (not power.cooldown or checkCooldown(
 			player, power.name, power.cooldown,
 
 			power.cooldown_img,
 			power.cooldown_x, power.cooldown_y,
 
 			players_file[player].parkour.pcool == 1
-		) then
+		)) and (not records_admins or power.availableRecords) then
 			power.fnc(player, x, y)
 
 			if not power.dontShowTracker then
