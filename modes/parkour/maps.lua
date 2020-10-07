@@ -273,7 +273,7 @@ onEvent("NewGame", function()
 
 	tfm.exec.setGameTime(1080)
 
-	if not count_stats and not is_tribe and not records_admins and not review_mode and room.xmlMapInfo.permCode ~= 41 then
+	if count_stats and not is_tribe and not records_admins and not review_mode and room.xmlMapInfo.permCode ~= 41 then
 		is_invalid = os.time() + 3000
 		return
 	end
