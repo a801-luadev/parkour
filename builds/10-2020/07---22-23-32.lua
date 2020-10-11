@@ -3583,7 +3583,7 @@ local function initialize_parkour() -- so it uses less space after building
 
 		tfm.exec.setGameTime(1080)
 
-		if count_stats and not is_tribe and not records_admins and not review_mode and room.xmlMapInfo.permCode ~= 41 then
+		if not count_stats and not is_tribe and not records_admins and not review_mode and room.xmlMapInfo.permCode ~= 41 then
 			is_invalid = os.time() + 3000
 			return
 		end

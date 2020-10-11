@@ -3583,7 +3583,8 @@ local function initialize_parkour() -- so it uses less space after building
 
 		tfm.exec.setGameTime(1080)
 
-		if count_stats and not is_tribe and not records_admins and not review_mode and room.xmlMapInfo.permCode ~= 41 then
+		if not count_stats and not is_tribe and not review_mode and room.xmlMapInfo.permCode ~= 41 then
+			tfm.exec.chatMessage("<r>Not anymore buddy!")
 			is_invalid = os.time() + 3000
 			return
 		end
@@ -3610,11 +3611,6 @@ local function initialize_parkour() -- so it uses less space after building
 				end
 
 				count_stats = false
-				local map = tonumber(args[1]) or tonumber(string.sub(args[1], 2))
-				if not map or map < 1000 then
-					translatedChatMessage("invalid_syntax", player)
-					return
-				end
 				tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped")
 			elseif os.time() < map_change_cd and not review_mode then
 				tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", player)
