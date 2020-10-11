@@ -46,6 +46,7 @@ class env:
 
 	verifications_category = 752189155798286427
 	verified_role = 694947893433466981
+	verifying_role = 764647559062224937
 	manual_verification = 753391975742570546
 
 
@@ -910,6 +911,8 @@ class Client(discord.Client):
 			},
 			category=self.get_channel(env.verifications_category)
 		)
+
+		await member.add_roles(discord.Object(id=env.verifying_role))
 
 		# flag ~> **name** | flag ~> **name**
 		languages = " | ".join(
