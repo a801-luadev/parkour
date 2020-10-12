@@ -110,7 +110,7 @@ local function fixHourCount(player, data)
 			end
 		end
 
-		dara.hour_r = now
+		data.hour_r = now
 		reset = now
 	else
 		for i = 1, count do
