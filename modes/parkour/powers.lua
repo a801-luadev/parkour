@@ -907,8 +907,12 @@ onEvent("NewGame", function()
 		end
 	})
 
+	local file
 	for player in next, in_room do
-		fixHourCount(player, players_file[player])
+		file = players_file[player]
+		if file then
+			fixHourCount(player, file)
+		end
 		unbind(player)
 	end
 end)
