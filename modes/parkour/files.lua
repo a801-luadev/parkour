@@ -354,12 +354,6 @@ onEvent("NewPlayer", function(player)
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	local now = os.time()
-	if data.hour_r <= now then
-		data.hour_c = 0
-		data.hour_r = now + 60 * 60 * 1000
-	end
-
 	if data.week_r ~= timed_maps.week.last_reset then
 		data.week_c = 0
 		data.week_r = timed_maps.week.last_reset
