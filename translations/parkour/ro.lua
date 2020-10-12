@@ -84,7 +84,7 @@ translations.ro = {
 	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 				"Poziția în clasamentul general: <b><v>%s</v></b>\n\n" ..
 				"Poziția în clasamentul săptămânal<b><v>%s</v></b>"),
-	map_count = "Hărți completate: <b><v>%s</v></b>",
+	map_count = "Hărți completate: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Insignele sunt realizări pe care jucătorii le pot debloca. Apasă pe ele pentru a afla mai multe.",
 	help_private_maps = "Acest jucător nu vrea să-și arate numărul hărților! Le poți ascunde și tu pe profil.",
 	help_badge_1 = "Acest jucător a fost parte din personalul parkour.",

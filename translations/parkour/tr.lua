@@ -84,7 +84,7 @@ translations.tr = {
 	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 				"Genel skor tablosu konumu: <b><v>%s</v></b>\n\n" ..
 				"Haftalık liderlik sıralaması: <b><v>%s</v></b>"),
-	map_count = "Tamamlanan harita sayısı: <b><v>%s</v></b>",
+	map_count = "Tamamlanan harita sayısı: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Rozetler, bir oyuncunun elde edebileceği başarıdır. Açıklamalarını görmek için üzerlerine tıklayın.",
 	help_private_maps = "Bu oyuncu tamamladığı harita sayısını herkese açık olarak paylaşmaktan hoşlanmıyor! İstersen sen de kendi profilinde bu bilgileri gizleyebilirsin.",
 	help_badge_1 = "Bu oyuncu geçmişte parkur ekibindeydi.",

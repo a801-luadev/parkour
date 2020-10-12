@@ -126,7 +126,7 @@ do
 					"profile", player,
 					file.private_maps and translatedMessage("private_maps", player) or "",
 					(not file.private_maps or player == profile or (perms[player] and perms[player].see_private_maps)) and
-					translatedMessage("map_count", player, file.c) or "",
+					translatedMessage("map_count", player, file.c, file.week[1], #file.hour) or "",
 					profile == player and string.format(
 						"<a href='event:prof_maps:%s'><j>[%s]</j></a>",
 						file.private_maps and "public" or "private",

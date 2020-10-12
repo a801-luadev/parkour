@@ -84,7 +84,7 @@ translations.id = {
     profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
                 "Posisi papan peringkat keseluruhan: <b><v>%s</v></b>\n\n" ..
                 "Posisi papan peringkat mingguan: <b><v>%s</v></b>"),
-    map_count = "Jumlah peta: <b><v>%s</v></b>",
+    map_count = "Jumlah peta: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
     help_badge = "Lencana adalah pencapaian yang bisa didapatkan pemain. Klik diatasnya untuk melihat deskripsinya.",
     help_private_maps = "Pemain ini tidak mau membagikan jumlah peta mereka ke publik! Kamu bisa menyembunyikannya juga di profil.",
     help_badge_1 = "Pemain ini pernah menjadi anggota staf parkur sebelumnya.",

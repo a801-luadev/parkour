@@ -84,7 +84,7 @@ translations.br = {
 	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 				"Posição no Ranking geral: <b><v>%s</v></b>\n\n" ..
 				"Posição no Ranking semanal: <b><v>%s</v></b>"),
-	map_count = "Contagem de mapas: <b><v>%s</v></b>",
+	map_count = "Contagem de mapas: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Medalhas são objetivos que um jogador pode conseguir. Clique nelas para ler suas descrições.",
 	help_private_maps = "Este jogador não gosta de divulgar sua contagem de mapas publicamente! Você também pode escondê-la em seu perfil.",
 	help_badge_1 = "Este jogador já foi um membro da staff do #parkour no passado.",

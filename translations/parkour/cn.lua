@@ -84,7 +84,7 @@ translations.cn = {
 	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 				"整體排行榜名次: <b><v>%s</v></b>\n\n" ..
 				"每周排行榜名次: <b><v>%s</v></b>"),
-	map_count = "地圖通過數: <b><v>%s</v></b>",
+	map_count = "地圖通過數: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "徽章是玩家可以得到的成就。點擊它們查看介紹。",
 	help_private_maps = "這玩家不想公開分享他的地圖通過數! 你也可以在個人資料中設定隱藏。",
 	help_badge_1 = "這玩家曾經是parkour 的職員。",

@@ -84,7 +84,7 @@ translations.he = {
 	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 				"דרגה בלוח התוצאות הכללי: <b><v>%s</v></b>\n\n" ..
 				"דרגה בלוח התוצאות השבועי: <b><v>%s</v></b>"),
-	map_count = "מספר מפות: <b><v>%s</v></b>",
+	map_count = "מספר מפות: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "תגים הינם הישגים ששחקן יכול לקבל. לחץ עליהם על מנת לקבל פירוט.",
 	help_private_maps = "משתמש זה אינו מעוניין לשתף את מספר המפות שלו בפומבי! אתה יכול להסתיר את זה גם בפרופיל שלך.",
 	help_badge_1 = "משתמש זה היה חלק מצוות הפארקור בעבר.",

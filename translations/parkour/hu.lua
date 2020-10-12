@@ -84,7 +84,7 @@ translations.hu = {
 	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 				"Pozíció a Teljes ranglistán: <b><v>%s</v></b>\n\n" ..
 				"Pozíció a Heti ranglistán: <b><v>%s</v></b>"),
-	map_count = "Pályák száma: <b><v>%s</v></b>",
+	map_count = "Pályák száma: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "A Kitűzők olyan eredmények, melyeket a játékosok szerezhetnek. Kattints rájuk, hogy lásd a leírásukat.",
 	help_private_maps = "A játékos nem szeretné nyilvánosan megosztani a Teljesített pályáinak a számát! Te is elrejtheted a profilodon.",
 	help_badge_1 = "Ez a játékos korábban a parkour személyzetének tagjai között volt.",

@@ -84,9 +84,11 @@ translations.en = {
 	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 				"Overall leaderboard position: <b><v>%s</v></b>\n\n" ..
 				"Weekly leaderboard position: <b><v>%s</v></b>"),
-	map_count = "Map count: <b><v>%s</v></b>",
+	map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Badges are accomplishments a player can get. Click over them to see their description.",
 	help_private_maps = "This player doesn't like to share their map count publicly! You can hide them too in your profile.",
+	help_yellow_maps = "Maps in yellow are the maps completed this week.",
+	help_red_maps = "Maps in red are the maps completed in the past hour.",
 	help_badge_1 = "This player has been a parkour staff member in the past.",
 	help_badge_2 = "This player is or was in the page 1 of the overall leaderboard.",
 	help_badge_3 = "This player is or was in the page 2 of the overall leaderboard.",
