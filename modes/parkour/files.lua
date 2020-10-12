@@ -150,6 +150,30 @@ local data_migrations = {
 		end
 
 		data.parkour.badges = new_badges
+	end,
+	["0.9"] = function(player, data)
+		data.v = 0 -- better
+
+		data.c = data.parkour.c -- completed maps
+		data.killed = data.parkour.killed -- sanction end
+		data.kill = data.parkour.troll -- last sanction duration
+		data.keys = data.parkour.keys -- power keys
+		data.week = {data.parkour.week_c, data.parkour.week_r} -- maps this week
+		data.hour = {r = os.time()} -- maps in the last hour
+		data.badges = data.parkour.badges -- badges
+		data.settings = {
+			data.parkour.ckpart, -- particle checkpoints (1) or flags (0)
+			data.parkour.mort, -- M (1) or DEL (0) or /mort
+			data.parkour.pcool, -- show power cooldowns
+			data.parkour.pbut, -- show powers button
+			data.parkour.keyboard, -- qwerty (1) or azerty (0)
+			data.parkour.hbut, -- show help button
+			data.parkour.congrats, -- show congratulations messages
+			data.parkour.help -- show no help line
+		}
+
+		data.parkour = nil
+		data.drawbattle = nil
 	end
 }
 
@@ -163,7 +187,7 @@ function savePlayerData(player)
 end
 
 local function updateData(player, data)
-	if not data.parkour then
+	if not data.v and not data.parkour then
 		if data.modules then
 			data.parkour = {v = "0.0"}
 		else
@@ -174,10 +198,10 @@ local function updateData(player, data)
 		end
 	end
 
-	local migration = data_migrations[data.parkour.v or "0.0"]
+	local migration = data_migrations[data.v or data.parkour.v or "0.0"]
 	while migration do
 		migration(player, data)
-		migration = data_migrations[data.parkour.v]
+		migration = data_migrations[data.v or data.parkour.v]
 	end
 end
 
@@ -237,10 +261,10 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if players_file[player] then
 		local old = players_file[player]
-		if old.parkour.killed < data.parkour.killed then
-			old.parkour.killed = data.parkour.killed
-			translatedChatMessage("kill_minutes", player, math.ceil((data.parkour.killed - os.time()) / 1000 / 60))
-			if os.time() < data.parkour.killed then
+		if old.killed < data.killed then
+			old.killed = data.killed
+			translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
+			if os.time() < data.killed then
 				no_powers[player] = true
 				unbind(player)
 			else
@@ -251,11 +275,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 			end
 		end
 
-		local p_badges = data.parkour.badges
+		local p_badges = data.badges
 		for index = 1, #badges do
 			if badges[index].filePriority then
-				if old.parkour.badges[index] ~= p_badges[index] then
-					old.parkour.badges[index] = p_badges[index]
+				if old.badges[index] ~= p_badges[index] then
+					old.badges[index] = p_badges[index]
 					NewBadgeInterface:show(player, index, math.max(p_badges[index], 1))
 				end
 			end
@@ -331,14 +355,14 @@ end)
 
 onEvent("PlayerDataParsed", function(player, data)
 	local now = os.time()
-	if data.parkour.hour_r <= now then
-		data.parkour.hour_c = 0
-		data.parkour.hour_r = now + 60 * 60 * 1000
+	if data.hour_r <= now then
+		data.hour_c = 0
+		data.hour_r = now + 60 * 60 * 1000
 	end
 
-	if data.parkour.week_r ~= timed_maps.week.last_reset then
-		data.parkour.week_c = 0
-		data.parkour.week_r = timed_maps.week.last_reset
+	if data.week_r ~= timed_maps.week.last_reset then
+		data.week_c = 0
+		data.week_r = timed_maps.week.last_reset
 	end
 end)
 

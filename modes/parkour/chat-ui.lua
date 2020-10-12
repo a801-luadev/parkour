@@ -81,12 +81,12 @@ onEvent("PlayerWon", function(player)
 		end
 	end
 
-	if players_file[player].parkour.congrats == 0 then
+	if players_file[player].settings[7] == 0 then
 		translatedChatMessage("finished", player, player, taken)
 	end
 
 	for _player in next, in_room do
-		if players_file[_player] and players_file[_player].parkour.congrats == 1 then
+		if players_file[_player] and players_file[_player].settings[7] == 1 then
 			translatedChatMessage("finished", _player, player, taken)
 		end
 	end
@@ -100,7 +100,7 @@ onEvent("PlayerWon", function(player)
 		for index = 1, #powers do
 			power = powers[index]
 
-			if players_file[player].parkour.c == power.maps then
+			if players_file[player].c == power.maps then
 				for _player in next, in_room do
 					translatedChatMessage("unlocked_power", _player, player, translatedMessage(power.name, _player))
 				end
@@ -204,16 +204,16 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			end
 
 			if action == "add" then
-				file.parkour.c = file.parkour.c + quantity
+				file.c = file.c + quantity
 			elseif action == "sub" then
-				file.parkour.c = file.parkour.c - quantity
+				file.c = file.c - quantity
 			elseif action == "set" then
-				file.parkour.c = quantity
+				file.c = quantity
 			else
 				return tfm.exec.chatMessage("<v>[#] <r>" .. action .. " doesnt look like an action wtf", player)
 			end
 
-			tfm.exec.chatMessage("<v>[#] <d>" .. target .. "'s new map count: " .. file.parkour.c, player)
+			tfm.exec.chatMessage("<v>[#] <d>" .. target .. "'s new map count: " .. file.c, player)
 
 		elseif thing == "badge" then
 			if quantity < 4 then
@@ -237,7 +237,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				return tfm.exec.chatMessage("<v>[#] <r>that badge group can only be affected by bots", player)
 			end
 
-			file.parkour.badges[group] = badge
+			file.badges[group] = badge
 			if badge > 0 then
 				NewBadgeInterface:show(target, group, badge)
 			end

@@ -375,7 +375,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	ck.particles[player] = data.parkour.ckpart == 1
+	ck.particles[player] = data.settings[1] == 1
 
 	if levels and not ck.particles[player] then
 		local next_level = levels[(players_level[player] or 1) + 1]

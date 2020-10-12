@@ -26,8 +26,7 @@ do
 		:setShowCheck(function(self, player, profile, data)
 			local file = data or players_file[profile]
 			return (file
-					and file.parkour
-					and file.parkour.v == data_version)
+					and file.v == data_version)
 		end)
 
 		:addImage({
@@ -80,7 +79,7 @@ do
 			x = self.x + 15
 			local limit = x + 40 * 9
 			local y = self.y + 180
-			local pbg = (data or players_file[profile]).parkour.badges
+			local pbg = (data or players_file[profile]).badges
 			if pbg then
 				local badge
 				for index = 1, #badges do
@@ -121,7 +120,7 @@ do
 			x = 5, y = 50,
 			canUpdate = true,
 			text = function(self, player, profile, data)
-				local file = (data or players_file[profile]).parkour
+				local file = (data or players_file[profile])
 
 				return translatedMessage(
 					"profile", player,
@@ -145,7 +144,7 @@ do
 			canUpdate = true,
 			text = function(self, player, profile, data)
 				local count = 0
-				local pbg = (data or players_file[profile]).parkour.badges
+				local pbg = (data or players_file[profile]).badges
 				if pbg then
 					for index = 1, #badges do
 						if pbg[index] == 1 then
@@ -172,9 +171,9 @@ do
 			if not checkCooldown(player, "mapsToggle", 500) then return end
 
 			if args == "public" then
-				players_file[player].parkour.private_maps = nil
+				players_file[player].private_maps = nil
 			else
-				players_file[player].parkour.private_maps = true
+				players_file[player].private_maps = true
 			end
 
 			savePlayerData(player)

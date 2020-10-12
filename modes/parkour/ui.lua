@@ -350,17 +350,17 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		if not players_file[player] then return end
 		if not checkCooldown(player, "keyHelp", 3000) then return end
 
-		local file = players_file[player].parkour
+		local file = players_file[player]
 
-		if file.help == 1 then
-			file.help = 0
+		if file.settings[8] == 1 then
+			file.settings[8] = 0
 
 			if no_help[player] then
 				tfm.exec.removeImage(no_help[player])
 				no_help[player] = nil
 			end
 		else
-			file.help = 1
+			file.settings[8] = 1
 
 			no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
 		end
@@ -661,7 +661,7 @@ onEvent("NewGame", function(player)
 	end
 
 	for player in next, in_room do
-		if players_file[player] and players_file[player].parkour.help == 1 then
+		if players_file[player] and players_file[player].settings[8] == 1 then
 			no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
 		end
 		setNameColor(player)
@@ -669,9 +669,9 @@ onEvent("NewGame", function(player)
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	bindKeyboard(player, data.parkour.mort == 1 and 77 or 46, true, true)
+	bindKeyboard(player, data.settings[2] == 1 and 77 or 46, true, true)
 
-	if data.parkour.help == 1 then
+	if data.settings[8] == 1 then
 		no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
 	end
 

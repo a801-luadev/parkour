@@ -238,20 +238,20 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if player == recv_channel or player == send_channel or data == "" then return end
 
 	data = json.decode(data)
-	if data.parkour.v ~= data_version then
+	if data.v ~= data_version then
 		return ui.addTextArea(packets.version_mismatch, player)
 	end
 
 	local update = false
 	if killing[player] then
-		data.parkour.killed = os.time() + killing[player] * 60 * 1000
+		data.killed = os.time() + killing[player] * 60 * 1000
 
 		update = true
 		killing[player] = nil
 	end
 
 	if verifying[player] then
-		data.parkour.badges[5] = 1
+		data.badges[5] = 1
 		ui.addTextArea(packets.verify_discord, player)
 
 		update = true
@@ -259,8 +259,8 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	if records[player] then
-		if data.parkour.badges[6] < records[player] then
-			data.parkour.badges[6] = records[player]
+		if data.badges[6] < records[player] then
+			data.badges[6] = records[player]
 
 			update = true
 		end

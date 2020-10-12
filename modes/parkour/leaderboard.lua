@@ -49,7 +49,7 @@ local function checkPlayersPosition(week)
 		playerFile = players_file[player]
 
 		if playerFile then
-			completedMaps = week and playerFile.parkour.week_c or playerFile.parkour.c
+			completedMaps = week and playerFile.week[1] or playerFile.c
 			playerData = room.playerList[player]
 			if playerData then
 				playerId = playerData.id
@@ -87,7 +87,7 @@ local function checkPlayersPosition(week)
 			lb[name] = pos
 
 			if players_file[name] then
-				badges = players_file[name].parkour.badges
+				badges = players_file[name].badges
 				badge = math.ceil(pos / 14)
 
 				if badges[2] == 0 or badges[2] > badge then
@@ -141,8 +141,7 @@ onEvent("GameDataLoaded", function(data)
 			timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (8 - now.wday) * 24 * 60 * 60 * 1000)
 
 			for player, data in next, players_file do
-				data.parkour.week_c = 0
-				data.parkour.week_r = new_reset
+				data.week = {0, new_reset}
 			end
 
 			data.weekranking = {}

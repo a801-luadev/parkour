@@ -20,7 +20,7 @@ do
 	local function getPlayerPower(player, power)
 		local upgrades = power.upgrades
 		if upgrades then
-			local completed = players_file[player].parkour.c
+			local completed = players_file[player].c
 			local pos = leaderboard[player] or max_leaderboard_rows + 1
 			for index = #upgrades, 1, -1 do
 				if upgrades[index].ranking then
@@ -46,7 +46,7 @@ do
 
 		:addTextArea({
 			text = function(self, player, power)
-				return translatedMessage("maps_info", player, players_file[player].parkour.c)
+				return translatedMessage("maps_info", player, players_file[player].c)
 			end,
 			alpha = 0,
 			x = 525, y = 5,
@@ -74,7 +74,7 @@ do
 		:addTextArea({
 			canUpdate = true,
 			text = function(self, player, power)
-				local upgrades, completed = powers[power].upgrades, players_file[player].parkour.c
+				local upgrades, completed = powers[power].upgrades, players_file[player].c
 				local pos = leaderboard[player] or max_leaderboard_rows + 1
 				local cond
 				if powers[power].ranking then
@@ -152,7 +152,7 @@ do
 					Keyboard.args[player][1] = state
 				end
 
-				players_file[player].parkour.keyboard = state and 1 or 0
+				players_file[player].settings[5] = state and 1 or 0
 
 				if victory[player] then
 					unbind(player)
@@ -165,7 +165,7 @@ do
 			end)
 			:onUpdate(function(self, player)
 				local state = not not self.state[player]
-				local setting = players_file[player].parkour.keyboard == 1
+				local setting = players_file[player].settings[5] == 1
 				if state ~= setting then
 					self:toggle(player)
 				end
@@ -178,7 +178,7 @@ do
 			end)
 			:onUpdate(function(self, player)
 				local state = not not self.state[player]
-				local setting = not not players_file[player].parkour.private_maps
+				local setting = not not players_file[player].private_maps
 				if state ~= setting then
 					self:toggle(player)
 				end
@@ -215,7 +215,7 @@ do
 
 				if not Keyboard.open[player] then
 					local qwerty = (self.open[player] and Keyboard.args[player][1] or
-									players_file[player].parkour.keyboard == 1)
+									players_file[player].settings[5] == 1)
 
 					Keyboard:show(player, qwerty, numkey, keyname)
 				else
@@ -223,7 +223,7 @@ do
 				end
 			end
 
-			local completed = players_file[player].parkour.c
+			local completed = players_file[player].c
 			local pos = leaderboard[player] or max_leaderboard_rows + 1
 			local img, cond
 			if power > 1 then
@@ -346,13 +346,13 @@ do
 
 				if not old then
 					if powers[power].key[1] then -- variation qwerty/azerty
-						old = keyboard.bindings[ powers[power].key[ players_file[player].parkour.keyboard + 1 ] ]
+						old = keyboard.bindings[ powers[power].key[ players_file[player].settings[5] + 1 ] ]
 					else
 						old = keyboard.bindings[ powers[power].key ]
 					end
 				end
 
-				local pkeys = players_file[player].parkour.keys
+				local pkeys = players_file[player].keys
 				local count = 0
 				for index = 1, #pkeys do
 					if pkeys[index] == binding then
@@ -377,7 +377,7 @@ do
 				if not keys.triggers[player] then return end
 
 				power = getPowerUpgrade(
-					players_file[player].parkour.c,
+					players_file[player].c,
 					leaderboard[player] or max_leaderboard_rows + 1,
 					powers[power], true
 				)

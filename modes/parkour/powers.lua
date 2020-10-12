@@ -77,6 +77,72 @@ local function despawnableObject(when, ...)
 	addNewTimer(when, tfm.exec.removeObject, obj)
 end
 
+local function fixHourCount(player, data)
+	data = data.hour
+	local count = #data
+	local save = false
+
+	local now, reset = os.time(), data.r
+	if now - reset >= 3600000 then -- 1 hour
+		save = true
+
+		local index
+		local absolute
+		for i = 1, count do
+			absolute = data[i] * 10000 + reset
+
+			if now - absolute >= 3600000 then
+				data[i] = nil
+			else
+				index = i + 1 -- avoid hour check as they're younger than 1 hour
+				-- change offset
+				data[i] = math.floor((absolute - now) / 10000)
+				break
+			end
+		end
+
+		if index then
+			for i = index, count do
+				data[i] = math.floor(
+					(data[i] * 10000 + reset - now) / 10000
+				)
+			end
+		end
+
+		reset = now
+	else
+		for i = 1, count do
+			if now - (data[i] * 10000 + reset) >= 3600000 then
+				data[i] = nil
+			else
+				break
+			end
+		end
+	end
+
+	-- Normalize indexes
+	local offset = 0
+	for i = 1, count do
+		if data[i] then
+			if offset == 0 then
+				break
+			end
+
+			data[i - offset] = data[i]
+		else
+			offset = offset + 1
+		end
+	end
+
+	for i = count - offset + 1, count do
+		data[i] = nil
+	end
+
+	if player and (save or offset > 0) then
+		savePlayerData(player)
+	end
+end
+
 -- in small x: positive -> towards the sides, negative -> towards the center
 local powers
 powers = {
@@ -590,9 +656,9 @@ function bindNecessary(player)
 	if not keys[player] or not players_file[player] or keys.triggers[player] then return end
 
 	local triggers = {}
-	local completed = players_file[player].parkour.c
+	local completed = players_file[player].c
 	local pos = leaderboard[player] or max_leaderboard_rows + 1
-	local variation_index = players_file[player].parkour.keyboard + 1
+	local variation_index = players_file[player].settings[5] + 1
 
 	local player_keys = keys[player]
 	local power, key
@@ -659,7 +725,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 				power[index].cooldown_img,
 				power[index].cooldown_x, power[index].cooldown_y,
 
-				players_file[player].parkour.pcool == 1
+				players_file[player].settings[3] == 1
 			)) and (not records_admins or power[index].availableRecords) then
 				power[index].fnc(player, key, down, x, y)
 
@@ -676,14 +742,14 @@ onEvent("Mouse", function(player, x, y)
 	if not victory[player] or not players_file[player] then return end
 
 	local power = powers.teleport
-	if players_file[player].parkour.c >= power.maps then
+	if players_file[player].c >= power.maps then
 		if (not power.cooldown or checkCooldown(
 			player, power.name, power.cooldown,
 
 			power.cooldown_img,
 			power.cooldown_x, power.cooldown_y,
 
-			players_file[player].parkour.pcool == 1
+			players_file[player].settings[3] == 1
 		)) and (not records_admins or power.availableRecords) then
 			power.fnc(player, x, y)
 
@@ -720,15 +786,15 @@ end)
 
 onEvent("PlayerDataParsed", function(player, data)
 	keys[player] = {}
-	for index = 1, #data.parkour.keys do
-		if data.parkour.keys[index] > 0 then
-			keys[player][index] = data.parkour.keys[index]
+	for index = 1, #data.keys do
+		if data.keys[index] > 0 then
+			keys[player][index] = data.keys[index]
 		end
 	end
 
-	if data.parkour.killed > os.time() then
+	if data.killed > os.time() then
 		no_powers[player] = true
-		translatedChatMessage("kill_minutes", player, math.ceil((data.parkour.killed - os.time()) / 1000 / 60))
+		translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
 	else
 		no_powers[player] = nil
 	end
@@ -740,21 +806,27 @@ onEvent("PlayerDataParsed", function(player, data)
 	else
 		unbind(player)
 	end
+
+	-- don't save as it will trigger this twice, and this will be saved
+	-- right after this event finishes anyway
+	fixHourCount(nil, data)
 end)
 
 onEvent("PlayerDataUpdated", function(player, data)
-	if data.parkour.killed > os.time() then
+	if data.killed > os.time() then
 		if not no_powers[player] then
 			no_powers[player] = true
 			unbind(player)
 		end
-		translatedChatMessage("kill_minutes", player, math.ceil((data.parkour.killed - os.time()) / 1000 / 60))
+		translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
 	elseif no_powers[player] then
 		no_powers[player] = nil
 		if victory[player] then
 			bindNecessary(player)
 		end
 	end
+
+	fixHourCount(player, data)
 end)
 
 onEvent("PlayerWon", function(player)
@@ -768,17 +840,19 @@ onEvent("PlayerWon", function(player)
 		not is_tribe and
 		not review_mode) then
 
-		local file = players_file[player].parkour
+		local file = players_file[player]
 		file.c = file.c + 1
-		file.hour_c = file.hour_c + 1
-		file.week_c = file.week_c + 1
+		file.hour[#file.hour + 1] = math.floor((os.time() - file.hour.r) / 10000) -- convert to ms and count every 10s
+		file.week[1] = file.week[1] + 1
 
-		if file.hour_c >= 30 and file.hour_c % 5 == 0 then
-			if file.hour_c >= 35 then
-				sendPacket(3, room.name .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. file.hour_c)
+		local hour_count = #file.hour
+
+		if hour_count >= 30 and hour_count % 5 == 0 then
+			if hour_count >= 35 then
+				sendPacket(3, room.name .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. hour_count)
 			end
 
-			local badge = math.ceil((file.hour_c - 29) / 5)
+			local badge = math.ceil((hour_count - 29) / 5)
 			if badge <= #badges[4] then
 				if file.badges[4] == 0 or file.badges[4] < badge then
 					file.badges[4] = badge
@@ -800,7 +874,7 @@ onEvent("NewGame", function()
 
 	local to_remove, count = {}, 0
 	for player in next, no_powers do
-		if not players_file[player] or players_file[player].parkour.killed <= now then
+		if not players_file[player] or players_file[player].killed <= now then
 			count = count + 1
 			to_remove[count] = player
 		end
@@ -833,15 +907,8 @@ onEvent("NewGame", function()
 		end
 	})
 
-	local file
 	for player in next, in_room do
-		file = players_file[player]
-		if file and file.parkour.hour_r <= now then
-			file.parkour.hour_c = 0
-			file.parkour.hour_r = now + 60 * 60 * 1000
-			savePlayerData(player)
-		end
-
+		fixHourCount(player, players_file[player])
 		unbind(player)
 	end
 end)

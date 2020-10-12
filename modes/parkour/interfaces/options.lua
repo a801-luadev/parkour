@@ -20,7 +20,7 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 	:loadComponent(
 		Toggle.new(435, 55, false)
 		:onToggle(function(self, player, state) -- particles or images for checkpoints
-			players_file[player].parkour.ckpart = state and 1 or 0
+			players_file[player].settings[1] = state and 1 or 0
 			ck.particles[player] = state
 
 			if state then
@@ -32,7 +32,7 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 			end
 		end)
 		:onUpdate(function(self, player)
-			local setting = players_file[player].parkour.ckpart == 1
+			local setting = players_file[player].settings[1] == 1
 			if (self.state[player] and not setting) or (not self.state[player] and setting) then
 				self:toggle(player)
 			end
@@ -41,7 +41,7 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 	:loadComponent(
 		Toggle.new(435, 81, false)
 		:onToggle(function(self, player, state) -- qwerty or azerty keyboard
-			players_file[player].parkour.keyboard = state and 1 or 0
+			players_file[player].settings[5] = state and 1 or 0
 
 			if victory[player] then
 				unbind(player)
@@ -51,7 +51,7 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 			end
 		end)
 		:onUpdate(function(self, player)
-			local setting = players_file[player].parkour.keyboard == 1
+			local setting = players_file[player].settings[5] == 1
 			if (self.state[player] and not setting) or (not self.state[player] and setting) then
 				self:toggle(player)
 			end
@@ -60,7 +60,7 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 	:loadComponent(
 		Toggle.new(435, 107, false)
 		:onToggle(function(self, player, state) -- M or DEL for mort
-			players_file[player].parkour.mort = state and 1 or 0
+			players_file[player].settings[2] = state and 1 or 0
 
 			if state then
 				bindKeyboard(player, 77, true, true)
@@ -71,7 +71,7 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 			end
 		end)
 		:onUpdate(function(self, player)
-			local setting = players_file[player].parkour.mort == 1
+			local setting = players_file[player].settings[2] == 1
 			if (self.state[player] and not setting) or (not self.state[player] and setting) then
 				self:toggle(player)
 			end
@@ -80,10 +80,10 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 	:loadComponent(
 		Toggle.new(435, 133, false)
 		:onToggle(function(self, player, state) -- powers cooldown
-			players_file[player].parkour.pcool = state and 1 or 0
+			players_file[player].settings[3] = state and 1 or 0
 		end)
 		:onUpdate(function(self, player)
-			local setting = players_file[player].parkour.pcool == 1
+			local setting = players_file[player].settings[3] == 1
 			if (self.state[player] and not setting) or (not self.state[player] and setting) then
 				self:toggle(player)
 			end
@@ -92,12 +92,12 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 	:loadComponent(
 		Toggle.new(435, 159, false)
 		:onToggle(function(self, player, state) -- powers button
-			players_file[player].parkour.pbut = state and 1 or 0
+			players_file[player].settings[4] = state and 1 or 0
 
 			GameInterface:update(player)
 		end)
 		:onUpdate(function(self, player)
-			local setting = players_file[player].parkour.pbut == 1
+			local setting = players_file[player].settings[4] == 1
 			if (self.state[player] and not setting) or (not self.state[player] and setting) then
 				self:toggle(player)
 			end
@@ -106,12 +106,12 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 	:loadComponent(
 		Toggle.new(435, 185, false)
 		:onToggle(function(self, player, state) -- help button
-			players_file[player].parkour.hbut = state and 1 or 0
+			players_file[player].settings[6] = state and 1 or 0
 
 			GameInterface:update(player)
 		end)
 		:onUpdate(function(self, player)
-			local setting = players_file[player].parkour.hbut == 1
+			local setting = players_file[player].settings[6] == 1
 			if (self.state[player] and not setting) or (not self.state[player] and setting) then
 				self:toggle(player)
 			end
@@ -120,10 +120,10 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 	:loadComponent(
 		Toggle.new(435, 211, false)
 		:onToggle(function(self, player, state) -- congrats messages
-			players_file[player].parkour.congrats = state and 1 or 0
+			players_file[player].settings[7] = state and 1 or 0
 		end)
 		:onUpdate(function(self, player)
-			local setting = players_file[player].parkour.congrats == 1
+			local setting = players_file[player].settings[7] == 1
 			if (self.state[player] and not setting) or (not self.state[player] and setting) then
 				self:toggle(player)
 			end
@@ -132,7 +132,7 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 	:loadComponent(
 		Toggle.new(435, 238, false)
 		:onToggle(function(self, player, state) -- no help indicator
-			players_file[player].parkour.help = state and 1 or 0
+			players_file[player].settings[8] = state and 1 or 0
 
 			if not state then
 				if no_help[player] then
@@ -144,7 +144,7 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 			end
 		end)
 		:onUpdate(function(self, player)
-			local setting = players_file[player].parkour.help == 1
+			local setting = players_file[player].settings[8] == 1
 			if (self.state[player] and not setting) or (not self.state[player] and setting) then
 				self:toggle(player)
 			end
