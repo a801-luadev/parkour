@@ -78,42 +78,44 @@ local function despawnableObject(when, ...)
 end
 
 local function fixHourCount(player, data)
-	data = data.hour
-	local count = #data
+	local reset = data.hour_r
+	local hour = data.hour
+	local count = #hour
 	local save = false
 
-	local now, reset = os.time(), data.r
+	local now = os.time()
 	if now - reset >= 3600000 then -- 1 hour
 		save = true
 
 		local index
 		local absolute
 		for i = 1, count do
-			absolute = data[i] * 10000 + reset
+			absolute = hour[i] * 10000 + reset
 
 			if now - absolute >= 3600000 then
-				data[i] = nil
+				hour[i] = nil
 			else
 				index = i + 1 -- avoid hour check as they're younger than 1 hour
 				-- change offset
-				data[i] = math.floor((absolute - now) / 10000)
+				hour[i] = math.floor((absolute - now) / 10000)
 				break
 			end
 		end
 
 		if index then
 			for i = index, count do
-				data[i] = math.floor(
-					(data[i] * 10000 + reset - now) / 10000
+				hour[i] = math.floor(
+					(hour[i] * 10000 + reset - now) / 10000
 				)
 			end
 		end
 
+		dara.hour_r = now
 		reset = now
 	else
 		for i = 1, count do
-			if now - (data[i] * 10000 + reset) >= 3600000 then
-				data[i] = nil
+			if now - (hour[i] * 10000 + reset) >= 3600000 then
+				hour[i] = nil
 			else
 				break
 			end
@@ -123,19 +125,19 @@ local function fixHourCount(player, data)
 	-- Normalize indexes
 	local offset = 0
 	for i = 1, count do
-		if data[i] then
+		if hour[i] then
 			if offset == 0 then
 				break
 			end
 
-			data[i - offset] = data[i]
+			hour[i - offset] = hour[i]
 		else
 			offset = offset + 1
 		end
 	end
 
 	for i = count - offset + 1, count do
-		data[i] = nil
+		hour[i] = nil
 	end
 
 	if player and (save or offset > 0) then

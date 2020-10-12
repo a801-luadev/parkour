@@ -159,7 +159,8 @@ local data_migrations = {
 		data.kill = data.parkour.troll -- last sanction duration
 		data.keys = data.parkour.keys -- power keys
 		data.week = {data.parkour.week_c, data.parkour.week_r} -- maps this week
-		data.hour = {r = os.time()} -- maps in the last hour
+		data.hour_r = os.time()
+		data.hour = {} -- maps in the last hour
 		data.badges = data.parkour.badges -- badges
 		data.settings = {
 			data.parkour.ckpart, -- particle checkpoints (1) or flags (0)
