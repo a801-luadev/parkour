@@ -861,7 +861,7 @@ class Client(aiotfm.Client):
 				try:
 					response = await self.wait_for(
 						"on_whisper",
-						lambda resp: resp.author == whisper.author and resp.content.isdigit()
+						lambda resp: resp.author == whisper.author and resp.content.isdigit(),
 						timeout=120.0
 					)
 				except Exception:
