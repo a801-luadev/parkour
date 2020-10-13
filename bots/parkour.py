@@ -868,7 +868,7 @@ class Client(aiotfm.Client):
 					await whisper.reply("You took too long to provide a valid response.")
 					return
 
-				minutes = int(response)
+				minutes = int(response.content)
 
 		elif sanction >= 200:
 			await whisper.reply(
@@ -894,7 +894,7 @@ class Client(aiotfm.Client):
 				await whisper.reply("You took too long to provide a valid response.")
 				return
 
-			if response.lower() == "no":
+			if response.content.lower() == "no":
 				await whisper.reply("Kill cancelled.")
 				return
 
@@ -917,7 +917,7 @@ class Client(aiotfm.Client):
 					await whisper.reply("You took too long to provide a valid response.")
 					return
 
-				if response.lower() == "yes":
+				if response.content.lower() == "yes":
 					next_sanction = minutes
 
 			if next_sanction >= 200:
