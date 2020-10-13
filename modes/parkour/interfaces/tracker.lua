@@ -8,7 +8,7 @@ do
 
 		nameCache[name] = string.gsub(
 			string.gsub(name, "(#%d%d%d%d)", "<font size='10'><g>%1</g></font>"),
-			"([Hh]t)tp", "%1<>tp"
+			"([Hh]t)tp", "%1<->tp"
 		)
 		return nameCache[name]
 	end
