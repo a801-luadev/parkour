@@ -760,12 +760,15 @@ onEvent("Loop", function(elapsed)
 					else
 						tbl = players
 					end
-				else
+				elseif hidden[player] then
 					tbl = hide
+					commu = true
 				end
 
-				tbl._count = tbl._count + 1
-				tbl[ tbl._count ] = player
+				if commu then
+					tbl._count = tbl._count + 1
+					tbl[ tbl._count ] = player
+				end
 			end
 		end
 
