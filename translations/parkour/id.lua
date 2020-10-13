@@ -87,6 +87,8 @@ translations.id = {
     map_count = "Jumlah peta: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
     help_badge = "Lencana adalah pencapaian yang bisa didapatkan pemain. Klik diatasnya untuk melihat deskripsinya.",
     help_private_maps = "Pemain ini tidak mau membagikan jumlah peta mereka ke publik! Kamu bisa menyembunyikannya juga di profil.",
+    help_yellow_maps = "Peta dengan warna kuning adalah peta yang sudah diselesaikan minggu ini.",
+    help_red_maps = "Peta dengan warna merah adalah peta yang sudah diselelesaikan dalam satu jam terakhir.",
     help_badge_1 = "Pemain ini pernah menjadi anggota staf parkur sebelumnya.",
     help_badge_2 = "Pemain ini berada atau pernah di halaman 1 dari papan perungkat keseluruhan.",
     help_badge_3 = "Pemain ini berada atau pernah di halaman 2 dari papan perungkat keseluruhan.",

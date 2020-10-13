@@ -258,7 +258,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	updateData(player, data)
 
-	local commu = data.commu or "xx"
+	local commu = data.commu or room.community
 	if not data.hidden then
 		online[player] = commu
 	else

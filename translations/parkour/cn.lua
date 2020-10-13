@@ -87,6 +87,8 @@ translations.cn = {
 	map_count = "地圖通過數: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "徽章是玩家可以得到的成就。點擊它們查看介紹。",
 	help_private_maps = "這玩家不想公開分享他的地圖通過數! 你也可以在個人資料中設定隱藏。",
+	help_yellow_maps = "黃色標示的地圖是這周完成了的地圖。",
+	help_red_maps = "紅色標示的地圖是過去一小時內完成了的地圖。",
 	help_badge_1 = "這玩家曾經是parkour 的職員。",
 	help_badge_2 = "這玩家是或曾經達成在整體排行榜的第 1 頁上。",
 	help_badge_3 = "這玩家是或曾經達成在整體排行榜的第 2 頁以上。",

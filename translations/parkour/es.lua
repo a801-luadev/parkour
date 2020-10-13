@@ -87,6 +87,8 @@ translations.es = {
 	map_count = "Cantidad de mapas: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Las insignias son logros que un usuario puede obtener. Clickéalas para ver su descripción.",
 	help_private_maps = "¡A este jugador no le gusta compartir su cantidad de mapas! Podés esconder la tuya en tu perfil.",
+	help_yellow_maps = "Los mapas en amarillo fueron completados en esta semana.",
+	help_red_maps = "Los mapas en rojo fueron completados en la última hora.",
 	help_badge_1 = "Este jugador fue un miembro del staff de parkour.",
 	help_badge_2 = "Este jugador está o estuvo en la página 1 del ranking general.",
 	help_badge_3 = "Este jugador está o estuvo en la página 2 del ranking general.",

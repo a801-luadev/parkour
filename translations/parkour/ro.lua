@@ -87,6 +87,8 @@ translations.ro = {
 	map_count = "Hărți completate: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Insignele sunt realizări pe care jucătorii le pot debloca. Apasă pe ele pentru a afla mai multe.",
 	help_private_maps = "Acest jucător nu vrea să-și arate numărul hărților! Le poți ascunde și tu pe profil.",
+	help_yellow_maps = "Hărțile galbene sunt hărțile completate în această săptămână.",
+	help_red_maps = "Hărțile roșii sunt hărțile completate în ultima oră.",
 	help_badge_1 = "Acest jucător a fost parte din personalul parkour.",
 	help_badge_2 = "Acest jucător este sau a fost în prima pagină a clasamentului general.",
 	help_badge_3 = "Acest jucător este sau a fost în a doua pagină a clasamentului general.",

@@ -87,6 +87,8 @@ translations.hu = {
 	map_count = "Pályák száma: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "A Kitűzők olyan eredmények, melyeket a játékosok szerezhetnek. Kattints rájuk, hogy lásd a leírásukat.",
 	help_private_maps = "A játékos nem szeretné nyilvánosan megosztani a Teljesített pályáinak a számát! Te is elrejtheted a profilodon.",
+	help_yellow_maps = "A sárga pálya teljesítve lett ezen a héten.",
+	help_red_maps = "A piros pálya teljesítve lett az elmúlt egy órában.",
 	help_badge_1 = "Ez a játékos korábban a parkour személyzetének tagjai között volt.",
 	help_badge_2 = "Ez a játékos Teljes ranglistán az 1. oldalon van/volt.",
 	help_badge_3 = "Ez a játékos Teljes ranglistán az 2. oldalon van/volt.",

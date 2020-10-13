@@ -87,6 +87,8 @@ translations.tr = {
 	map_count = "Tamamlanan harita sayısı: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Rozetler, bir oyuncunun elde edebileceği başarıdır. Açıklamalarını görmek için üzerlerine tıklayın.",
 	help_private_maps = "Bu oyuncu tamamladığı harita sayısını herkese açık olarak paylaşmaktan hoşlanmıyor! İstersen sen de kendi profilinde bu bilgileri gizleyebilirsin.",
+	help_yellow_maps = "Sarı haritalar son bir hafta içinde bitirdiklerinizdir.",
+	help_red_maps = "Kırmızı haritalar son bir saat içinde bitirdiklerinizdir.",
 	help_badge_1 = "Bu oyuncu geçmişte parkur ekibindeydi.",
 	help_badge_2 = "Bu oyuncu genel liderlik tablosunun 1. sayfasında yer alıyor.",
 	help_badge_3 = "Bu oyuncu genel liderlik tablosunun 2. sayfasında yer alıyor.",

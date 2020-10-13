@@ -87,6 +87,8 @@ translations.fr = {
 	map_count = "Nombre de maps complétées: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Les badges sont des accomplissements que peuvent obtenir les joueurs. Clique sur un badge pour voir sa description.",
 	help_private_maps = "Ce joueur ne souhaite pas partager son nombre de maps complétées ! Tu peux également le cacher sur ton profil.",
+	help_yellow_maps = "Les cartes en jaune sont les cartes complétées cette semaine.",
+	help_red_maps = "Les cartes en rouge ont été complétées cette heure-ci.",
 	help_badge_1 = "Ce joueur a été un membre du staff de parkour.",
 	help_badge_2 = "Ce joueur est ou était sur la page 1 du classement global.",
 	help_badge_3 = "Ce joueur est ou était sur la page 2 du classement global.",
