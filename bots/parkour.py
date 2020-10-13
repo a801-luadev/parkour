@@ -761,7 +761,7 @@ class Client(aiotfm.Client):
 	# Sanctions system
 	async def on_ban_request(self, cmd, whisper, args, ranks, author):
 		# Argument check
-		if not ranks["admin"]:# and not ranks["mod"]:
+		if not ranks["admin"] and not ranks["mod"]:
 			return
 
 		if cmd == "unban":
@@ -803,7 +803,7 @@ class Client(aiotfm.Client):
 
 	async def on_kill_request(self, cmd, whisper, args, ranks, author):
 		# Argument check
-		if not ranks["admin"]:# and not ranks["mod"] and not ranks["trainee"]:
+		if not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]:
 			return
 
 		if len(args) < 1 or (len(args) > 1 and not args[1].isdigit()):
@@ -837,16 +837,16 @@ class Client(aiotfm.Client):
 
 		await self.send_callback(LAST_SANCTION, name)
 		try:
-			id, text = await self.wait_for(
+			txt_id, text = await self.wait_for(
 				"on_lua_textarea",
-				lambda id, text: id in (LAST_SANCTION, VERSION_MISMATCH) and text.startswith(name),
+				lambda txt_id, text: txt_id in (LAST_SANCTION, VERSION_MISMATCH) and text.startswith(name),
 				timeout=5.0
 			)
 		except Exception:
 			await whisper.reply("Could not get sanction information of the player.")
 			return
 
-		if id == VERSION_MISMATCH:
+		if txt_id == VERSION_MISMATCH:
 			await whisper.reply("That player does not have the latest player data version (are they playing?).")
 			return
 
