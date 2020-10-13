@@ -94,7 +94,7 @@ do
 					commu = online[member]
 				end
 
-				imgs[index - start] = tfm.exec.addImage(communities[ commu ], "&1", image_x, image_y, member)
+				imgs[index - start] = tfm.exec.addImage(communities[ commu ], "&1", image_x, image_y, player)
 				image_y = image_y + 12
 				imgs._count = index - start
 			end
