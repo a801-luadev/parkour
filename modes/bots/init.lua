@@ -25,6 +25,7 @@ local packets = {
 	record_submission = bit.lshift(16, 8) + 255,
 	record_badges = bit.lshift(17, 8) + 255,
 	simulate_sus = bit.lshift(18, 8) + 255,
+	last_sanction = bit.lshift(19, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -35,6 +36,7 @@ local loaded = false
 local chats = {loading = true}
 local killing = {}
 local verifying = {}
+local get_sanction = {}
 local to_do = {}
 local in_room = {}
 local records = {
@@ -231,6 +233,10 @@ onEvent("TextAreaCallback", function(id, player, data)
 
 	elseif id == packets.simulate_sus then
 		eventPacketReceived(1, data)
+
+	elseif id == packets.last_sanction then
+		get_sanction[data] = true
+		system.loadPlayerData(data)
 	end
 end)
 
@@ -245,6 +251,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 	local update = false
 	if killing[player] then
 		data.killed = os.time() + killing[player] * 60 * 1000
+		data.kill = killing[player]
 
 		update = true
 		killing[player] = nil
@@ -265,6 +272,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 			update = true
 		end
 		records[player] = nil
+	end
+
+	if get_sanction[player] then
+		ui.addTextArea(packets.last_sanction, player .. "\000" .. data.kill)
+		get_sanction[player] = nil
 	end
 
 	if update then

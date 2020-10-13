@@ -63,6 +63,7 @@ VERSION_MISMATCH = (15 << 8) + 255
 RECORD_SUBMISSION = (16 << 8) + 255
 RECORD_BADGES = (17 << 8) + 255
 SIMULATE_SUS = (18 << 8) + 255
+LAST_SANCTION = (19 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -626,49 +627,11 @@ class Client(aiotfm.Client):
 				await self.restart()
 
 			elif cmd == "ban" or cmd == "unban":
-				# Argument check
-				if not ranks["admin"] and not ranks["mod"]:
-					return
-
-				if cmd == "unban":
-					if not args:
-						return await whisper.reply("Invalid syntax.")
-
-					minutes = 0
-				elif len(args) < 2 or not args[1].isdigit():
-					return await whisper.reply("Invalid syntax.")
-				else:
-					minutes = int(args[1])
-
-				name, id = await self.whois_request(args[0])
-				if name is None:
-					return await whisper.reply("Could not get information of the player.")
-
-				# Sanction
-				if minutes == 0:
-					self.dispatch(
-						"send_webhook",
-						"**`[BANS]:`** `{}` has unbanned `{}` (ID: `{}`)".format(author, name, id)
-					)
-				elif minutes == 1:
-					self.dispatch(
-						"send_webhook",
-						"**`[BANS]:`** `{}` has permbanned `{}` (ID: `{}`)".format(author, name, id)
-					)
-				else:
-					self.dispatch(
-						"send_webhook",
-						"**`[BANS]:`** `{}` has banned `{}` (ID: `{}`) for `{}` minutes."
-						.format(author, name, id, minutes)
-					)
-					minutes *= 60 * 1000 # make it milliseconds
-					minutes += self.tfm_time() # sync it with transformice
-
-				await self.broadcast_module(3, "\x00".join((name, str(id), str(minutes))))
-				await whisper.reply("Action applied.")
+				self.dispatch("ban_request", cmd, whisper, args, ranks, author)
 
 			elif cmd == "kill":
-				# Argument check
+				self.dispatch("kill_request", cmd, whisper, args, ranks, author)
+# Argument check
 				if not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]:
 					return
 
@@ -706,8 +669,7 @@ class Client(aiotfm.Client):
 					.format(author, name, id, minutes)
 				)
 				await self.broadcast_module(2, "\x00".join((name, str(minutes))))
-				await whisper.reply("Action applied.")
-
+		await whisper.reply("Action applied.")
 			elif cmd == "join":
 				if not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]:
 					return
@@ -833,6 +795,185 @@ class Client(aiotfm.Client):
 		)
 
 		await self.send_callback(NEW_CHAT, chat + "\x00" + name)
+
+	# Sanctions system
+	async def on_ban_request(self, cmd, whisper, args, ranks, author):
+		# Argument check
+		if not ranks["admin"]:# and not ranks["mod"]:
+			return
+
+		if cmd == "unban":
+			if not args:
+				return await whisper.reply("Invalid syntax.")
+
+			minutes = 0
+		elif len(args) < 2 or not args[1].isdigit():
+			return await whisper.reply("Invalid syntax.")
+		else:
+			minutes = int(args[1])
+
+		name, id = await self.whois_request(args[0])
+		if name is None:
+			return await whisper.reply("Could not get information of the player.")
+
+		# Sanction
+		if minutes == 0:
+			self.dispatch(
+				"send_webhook",
+				"**`[BANS]:`** `{}` has unbanned `{}` (ID: `{}`)".format(author, name, id)
+			)
+		elif minutes == 1:
+			self.dispatch(
+				"send_webhook",
+				"**`[BANS]:`** `{}` has permbanned `{}` (ID: `{}`)".format(author, name, id)
+			)
+		else:
+			self.dispatch(
+				"send_webhook",
+				"**`[BANS]:`** `{}` has banned `{}` (ID: `{}`) for `{}` minutes."
+				.format(author, name, id, minutes)
+			)
+			minutes *= 60 * 1000 # make it milliseconds
+			minutes += self.tfm_time() # sync it with transformice
+
+		await self.broadcast_module(3, "\x00".join((name, str(id), str(minutes))))
+		await whisper.reply("Action applied.")
+
+	async def on_kill_request(self, cmd, whisper, args, ranks, author):
+		# Argument check
+		if not ranks["admin"]:# and not ranks["mod"] and not ranks["trainee"]:
+			return
+
+		if len(args) < 1 or (len(args) > 1 and not args[1].isdigit()):
+			return await whisper.reply("Invalid syntax.")
+		elif len(args) > 1:
+			minutes = int(args[1])
+		else:
+			minutes = None
+
+		name, id = await self.whois_request(args[0])
+		if name is None:
+			if args[0].isdigit():
+				return await whisper.reply("Could not get information of the player.")
+			else:
+				name, id = normalize_name(args[0]), "unknown"
+
+		# Check if the player is online
+		for attempt in range(2):
+			try:
+				await self.sendCommand("profile " + name)
+				await self.wait_for(
+					"on_profile",
+					lambda p: normalize_name(p.username) == name,
+					timeout=3.0
+				)
+				break
+			except Exception:
+				continue
+		else:
+			return await whisper.reply("That player ({}) is not online.".format(name))
+
+		await self.send_callback(LAST_SANCTION, name)
+		try:
+			id, text = await self.wait_for(
+				"on_lua_textarea",
+				lambda id, text: id in (LAST_SANCTION, VERSION_MISMATCH) and text.startswith(name),
+				timeout=5.0
+			)
+		except Exception:
+			await whisper.reply("Could not get sanction information of the player.")
+			return
+
+		if id == VERSION_MISMATCH:
+			await whisper.reply("That player does not have the latest player data version (are they playing?).")
+			return
+
+		sanction = int(text.split("\x00")[1])
+		if sanction == 0:
+			if minutes is None:
+				await whisper.reply(
+					"That player ({}) apparently doesn't have a previous sanction. "
+					"Double check on discord and then type the minutes here."
+					.format(name)
+				)
+				try:
+					response = await self.wait_for(
+						"on_whisper",
+						lambda resp: resp.author == whisper.author and resp.content.isdigit()
+						timeout=120.0
+					)
+				except Exception:
+					await whisper.reply("You took too long to provide a valid response.")
+					return
+
+				minutes = int(response)
+
+		elif sanction >= 200:
+			await whisper.reply(
+				"That player ({}) has already reached 200 minutes ({}); "
+				"next sanction is supposed to be a ban. Check in discord their sanction log."
+				.format(name, sanction)
+			)
+			if minutes is None:
+				return
+
+			await whisper.reply(
+				"Do you want to override the sanction and kill them for {} minutes anyway? "
+				"Reply with yes or no."
+				.format(minutes)
+			)
+			try:
+				response = await self.wait_for(
+					"on_whisper",
+					lambda resp: resp.author == whisper.author and resp.content.lower() in ("yes", "no"),
+					timeout = 120.0
+				)
+			except Exception:
+				await whisper.reply("You took too long to provide a valid response.")
+				return
+
+			if response.lower() == "no":
+				await whisper.reply("Kill cancelled.")
+				return
+
+		else:
+			next_sanction = sanction + 40
+			if minutes is not None and next_sanction != minutes:
+				await whisper.reply(
+					"The next sanction for the player {} is supposed to be {} minutes. "
+					"Do you want to override the sanction and kill them for {} minutes anyway? "
+					"Reply with yes or no."
+					.format(name, next_sanction, minutes)
+				)
+
+				try:
+					response = await self.wait_for(
+						"on_whisper",
+						lambda resp: resp.author == whisper.author and resp.content.lower() in ("yes", "no"),
+					)
+				except Exception:
+					await whisper.reply("You took too long to provide a valid response.")
+					return
+
+				if response.lower() == "yes":
+					next_sanction = minutes
+
+			if next_sanction >= 200:
+				await whisper.reply("Please warn them that their next sanction is a tempban.")
+
+			minutes = next_sanction
+
+		# Sanction
+		self.dispatch(
+			"send_webhook",
+			"**`[KILL]:`** `{}` has killed `{}` (ID: `{}`) for `{}` minutes. (previous sanction: `{}`)"
+			.format(author, name, id, minutes, sanction)
+		)
+		await self.broadcast_module(2, "\x00".join((name, str(minutes))))
+		await whisper.reply(
+			"Killed {} for {} minutes (last kill: {})"
+			.format(name, minutes, sanction)
+		)
 
 	# Whois system
 	async def get_player_name(self, id):
