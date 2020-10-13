@@ -10,6 +10,7 @@ local victory = {_last_level = {}}
 local bans = {[0] = true} -- souris banned
 local in_room = {}
 local online = {}
+local hidden = {}
 local players_level = {}
 local generated_at = {}
 local spec_mode = {}

@@ -15,7 +15,7 @@ local online_staff = {
 	next_show = 0,
 	requesters = {_count = 0}
 }
-local shown_ranks = {"mod", "mapper", "manager", "admin"}
+local shown_ranks = {"trainee", "mod", "mapper", "manager", "admin"}
 no_help = {}
 local map_polls = {}
 local current_poll
@@ -464,6 +464,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				requesters = {_count = 1, [1] = player}
 			}
 			online = {}
+			hidden = {}
 
 			local requested = {}
 			local member
@@ -725,32 +726,68 @@ onEvent("Loop", function(elapsed)
 		online_staff.next_show = 0
 
 		local room_commu = room.community
+		local rank_lists = {}
 		local commu, players, list
-		for _, rank_name in next, shown_ranks do
+		local rank_name, rank, info
+		local player, tbl, hide
+		for i = 1, #shown_ranks do
+			rank_name = shown_ranks[i]
 			rank = ranks[rank_name]
-			list = {_count = 0}
-			players = {_count = 0}
+
+			if rank_name == "trainee" then
+				rank_name = "mod"
+			end
+
+			info = rank_lists[rank_name]
+			if info then
+				players, list, hide = info.players, info.list, info.hide
+			else
+				players, list, hide = {_count = 0}, {_count = 0}, {_count = 0}
+				rank_lists[rank_name] = {
+					players = players,
+					list = list,
+					hide = hide
+				}
+			end
 
 			for index = 1, rank._count do
-				commu = online[rank[index]]
-				
+				player = rank[index]
+				commu = online[player]
+
 				if commu then
 					if commu == room_commu then
-						list._count = list._count + 1
-						list[ list._count ] = rank[index]
+						tbl = list
 					else
-						players._count = players._count + 1
-						players[ players._count ] = rank[index]
+						tbl = players
 					end
+				else
+					tbl = hide
 				end
+
+				tbl._count = tbl._count + 1
+				tbl[ tbl._count ] = player
+			end
+		end
+
+		local offset
+		for rank_name, data in next, rank_lists do
+			tbl = {_count = data.list._count + data.players._count + data.hide._count}
+
+			for i = 1, data.list._count do
+				tbl[i] = data.list[i]
 			end
 
-			for index = 1, players._count do
-				list[ list._count + index ] = players[index]
+			offset = data.list._count
+			for i = 1, data.players._count do
+				tbl[i + offset] = data.players[i]
 			end
 
-			list._count = list._count + players._count
-			Staff.sorted_members[rank_name] = list
+			offset = offset + data.players._count
+			for i = 1, data.hide._count do
+				tbl[i + offset] = data.hide[i]
+			end
+
+			Staff.sorted_members[rank_name] = tbl
 		end
 
 		local player

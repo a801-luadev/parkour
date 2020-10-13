@@ -59,6 +59,7 @@ do
 		return function(self, player)
 			local image_x, image_y = self.parent.x + x, self.parent.y + 56
 			local imgs = images[container][player]
+			local show_hidden = perms[player] -- true for staff peeps
 
 			if not imgs then
 				imgs = {_count = 0}
@@ -78,10 +79,22 @@ do
 			local names = {}
 
 			local commu_list = {}
-			local commu
+			local commu, player
 			for index = 1 + start, math.min(17 + start, rank._count) do
-				names[index - start] = formatName(rank[index])
-				imgs[index - start] = tfm.exec.addImage(communities[ online[ rank[index] ] ], "&1", image_x, image_y, player)
+				player = rank[index]
+
+				if hidden[player] then -- hidden
+					if not show_hidden then
+						break
+					end
+					names[index - start] = "<r>" .. formatName(player) .. "</r>"
+					commu = hidden[player]
+				else
+					names[index - start] = formatName(player)
+					commu = online[player]
+				end
+
+				imgs[index - start] = tfm.exec.addImage(communities[ commu ], "&1", image_x, image_y, player)
 				image_y = image_y + 12
 				imgs._count = index - start
 			end

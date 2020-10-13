@@ -230,12 +230,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	updateData(player, data)
 
+	local commu = data.commu or "xx"
 	if not data.hidden then
-		if not data.commu then
-			online[player] = "xx"
-		else
-			online[player] = data.commu
-		end
+		online[player] = commu
+	else
+		hidden[player] = commu
 	end
 
 	eventOutPlayerDataParsed(player, data)
@@ -259,12 +258,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	updateData(player, data)
 
+	local commu = data.commu or "xx"
 	if not data.hidden then
-		if not data.commu then
-			online[player] = room.community
-		else
-			online[player] = data.commu
-		end
+		online[player] = commu
+	else
+		hidden[player] = commu
 	end
 
 	if players_file[player] then
