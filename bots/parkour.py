@@ -631,45 +631,7 @@ class Client(aiotfm.Client):
 
 			elif cmd == "kill":
 				self.dispatch("kill_request", cmd, whisper, args, ranks, author)
-# Argument check
-				if not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]:
-					return
 
-				if len(args) < 2 or not args[1].isdigit():
-					return await whisper.reply("Invalid syntax.")
-				else:
-					minutes = int(args[1])
-
-				name, id = await self.whois_request(args[0])
-				if name is None:
-					if args[0].isdigit():
-						return await whisper.reply("Could not get information of the player.")
-					else:
-						name, id = normalize_name(args[0]), "unknown"
-
-				# Check if the player is online
-				for attempt in range(2):
-					try:
-						await self.sendCommand("profile " + name)
-						await self.wait_for(
-							"on_profile",
-							lambda p: normalize_name(p.username) == name,
-							timeout=3.0
-						)
-						break
-					except Exception:
-						continue
-				else:
-					return await whisper.reply("That player ({}) is not online.".format(name))
-
-				# Sanction
-				self.dispatch(
-					"send_webhook",
-					"**`[KILL]:`** `{}` has killed `{}` (ID: `{}`) for `{}` minutes."
-					.format(author, name, id, minutes)
-				)
-				await self.broadcast_module(2, "\x00".join((name, str(minutes))))
-		await whisper.reply("Action applied.")
 			elif cmd == "join":
 				if not ranks["admin"] and not ranks["mod"] and not ranks["trainee"]:
 					return
