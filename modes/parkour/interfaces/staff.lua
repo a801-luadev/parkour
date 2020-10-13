@@ -79,22 +79,22 @@ do
 			local names = {}
 
 			local commu_list = {}
-			local commu, player
+			local commu, member
 			for index = 1 + start, math.min(17 + start, rank._count) do
-				player = rank[index]
+				member = rank[index]
 
-				if hidden[player] then -- hidden
+				if hidden[member] then -- hidden
 					if not show_hidden then
 						break
 					end
-					names[index - start] = "<r>" .. formatName(player) .. "</r>"
-					commu = hidden[player]
+					names[index - start] = "<r>" .. formatName(member) .. "</r>"
+					commu = hidden[member]
 				else
-					names[index - start] = formatName(player)
-					commu = online[player]
+					names[index - start] = formatName(member)
+					commu = online[member]
 				end
 
-				imgs[index - start] = tfm.exec.addImage(communities[ commu ], "&1", image_x, image_y, player)
+				imgs[index - start] = tfm.exec.addImage(communities[ commu ], "&1", image_x, image_y, member)
 				image_y = image_y + 12
 				imgs._count = index - start
 			end
