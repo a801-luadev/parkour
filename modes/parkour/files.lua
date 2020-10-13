@@ -172,6 +172,13 @@ local data_migrations = {
 			data.parkour.congrats, -- show congratulations messages
 			data.parkour.help -- show no help line
 		}
+		-- data.commu = "en"
+		-- data.room = "en-#parkour1"
+		-- data.langue = "en"
+		-- data.spec = nil
+		-- data.banned = nil
+		-- data.private_maps = nil
+		-- data.hidden = nil
 
 		data.parkour = nil
 		data.drawbattle = nil
