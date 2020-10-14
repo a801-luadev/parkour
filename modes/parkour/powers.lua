@@ -830,6 +830,10 @@ onEvent("PlayerDataUpdated", function(player, data)
 		end
 	end
 
+	-- don't loop infinitely
+	-- calling savePlayerData loads data first, so this will get triggered again
+	-- and it will call savePlayerData again, which will load again and trigger
+	-- this again.
 	if fixHourCount(nil, data) then
 		to_save[player] = true
 	end
