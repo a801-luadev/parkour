@@ -228,7 +228,9 @@ onEvent("PlayerDataLoaded", function(player, data)
 		end
 	end
 
-	updateData(player, data)
+	if data.v ~= data_version then
+		updateData(player, data)
+	end
 
 	local commu = data.commu or "xx"
 	if not data.hidden then
@@ -256,7 +258,9 @@ onEvent("PlayerDataLoaded", function(player, data)
 		end
 	end
 
-	updateData(player, data)
+	if data.v ~= data_version then
+		updateData(player, data)
+	end
 
 	local commu = data.commu or room.community
 	if not data.hidden then

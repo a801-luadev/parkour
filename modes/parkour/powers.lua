@@ -143,6 +143,8 @@ local function fixHourCount(player, data)
 	if player and (save or offset > 0) then
 		savePlayerData(player)
 	end
+
+	return save or offset > 0
 end
 
 -- in small x: positive -> towards the sides, negative -> towards the center
@@ -828,7 +830,9 @@ onEvent("PlayerDataUpdated", function(player, data)
 		end
 	end
 
-	fixHourCount(player, data)
+	if fixHourCount(nil, data) then
+		to_save[player] = true
+	end
 end)
 
 onEvent("PlayerWon", function(player)
