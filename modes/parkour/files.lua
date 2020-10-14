@@ -364,9 +364,9 @@ onEvent("NewPlayer", function(player)
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	if data.week_r ~= timed_maps.week.last_reset then
-		data.week_c = 0
-		data.week_r = timed_maps.week.last_reset
+	if data.week[2] ~= timed_maps.week.last_reset then
+		data.week[1] = 0
+		data.week[2] = timed_maps.week.last_reset
 	end
 end)
 
