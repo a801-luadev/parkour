@@ -47,6 +47,7 @@ HEARTBEAT = (6 << 8) + 255
 CHANGE_MAP = (7 << 8) + 255
 FILE_LOADED = (8 << 8) + 255
 LOAD_MAP = (11 << 8) + 255
+RUNTIME = (20 << 8) + 255
 
 
 class Proxy(Connection):
@@ -63,7 +64,10 @@ class Proxy(Connection):
 		if client == "records":
 			return
 
-		if packet["type"] == "busy":
+		if packet["type"] == "runtime":
+			loop.create_task(self.client.check_runtime(packet["channel"]))
+
+		elif packet["type"] == "busy":
 			# Shares the busy state between all the bots that need it
 			self.client.busy = packet["state"]
 
@@ -145,6 +149,26 @@ class Client(aiotfm.Client):
 
 	async def on_logged(self, *a):
 		print("Logged!")
+
+	async def check_runtime(self, channel):
+		if not self.set_busy(True, channel):
+			return
+
+		await self.send_callback(RUNTIME, "")
+		try:
+			id, text = await self.wait_for("on_lua_textarea", lambda id, text: id == RUNTIME, timeout=10.0)
+		except Exception:
+			await self.send_channel(channel, "request timed out")
+			return self.set_busy(False)
+
+		current, total, cycles = map(int, text.split("\x00"))
+		await self.send_channel(
+			channel,
+			"Runtime usage: `{}ms` current, `{}ms` total, `{}ms` average (`{}` cycles)"
+			.format(current, total, total / cycles, cycles)
+		)
+
+		self.set_busy(False)
 
 	async def load_lua_script(self, packet):
 		for field in ("json", "link"):
@@ -487,10 +511,10 @@ class Client(aiotfm.Client):
 
 		await self.send_callback(check_id, "room_state_check")
 		try:
-			await self.wait_for("on_lua_textarea", lambda id, text: id == check_id, timeout=timeout)
+			id, text = await self.wait_for("on_lua_textarea", lambda id, text: id == check_id, timeout=timeout)
 		except Exception:
 			return False
-		return True
+		return map(int, text.split("\x00"))
 
 	async def on_restart_request(self, room, channel=None):
 		"""Restarts a room if it is dead, sets the room limit to 11 otherwise."""
@@ -522,9 +546,17 @@ class Client(aiotfm.Client):
 					await self.set_busy(False)
 					return
 
-		if await self.check_room_state(timeout=1.0):
+		result = await self.check_room_state(timeout=1.0)
+		if result:
+			current, total, cycles = result
+
 			await self.sendCommand(commands.set_limit(11))
-			await self.send_channel(channel, "Fixed room (set room limit to 11).")
+			await self.send_channel(
+				channel,
+				"Fixed room (set room limit to 11). "
+				"Runtime usage: `{}ms` current, `{}ms` total, `{}ms` average (`{}` cycles)"
+				.format(current, total, total / cycles, cycles)
+			)
 
 		else:
 			for attempt in range(6):

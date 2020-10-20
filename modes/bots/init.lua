@@ -26,6 +26,7 @@ local packets = {
 	record_badges = bit.lshift(17, 8) + 255,
 	simulate_sus = bit.lshift(18, 8) + 255,
 	last_sanction = bit.lshift(19, 8) + 255,
+	runtime = bit.lshift(20, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -237,6 +238,9 @@ onEvent("TextAreaCallback", function(id, player, data)
 	elseif id == packets.last_sanction then
 		get_sanction[data] = true
 		system.loadPlayerData(data)
+
+	elseif id == packets.runtime then
+		ui.addTextArea(packets.runtime, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
 	end
 end)
 

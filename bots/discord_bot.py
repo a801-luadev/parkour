@@ -580,7 +580,10 @@ class Client(discord.Client):
 			if msg.channel.id != env.private_channel:
 				return
 
-			if cmd == "!busy":
+			if cmd == "!runtime":
+				await self.proxy.sendTo({"type": "runtime", "channel": msg.channel.id}, "tocubot")
+
+			elif cmd == "!busy":
 				# Sets busy state (or checks it)
 				if not args:
 					if self.busy:

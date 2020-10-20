@@ -371,7 +371,7 @@ end)
 
 onEvent("TextAreaCallback", function(id, player, callback)
 	if player == "Tocutoeltuco#5522" and callback == "room_state_check" then
-		return ui.addTextArea(id, "", player)
+		return ui.addTextArea(id, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
 	end
 
 	if not players_file[player] then return end
