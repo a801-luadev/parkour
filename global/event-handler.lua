@@ -23,6 +23,7 @@ do
 	startCycle = math_floor(os_time() / CYCLE_DURATION)
 	cycleId = 0
 	usedRuntime = 0
+	totalRuntime = 0
 	local stopingAt = 0
 	local checkingRuntime = false
 	local paused = false
