@@ -804,6 +804,6 @@ end)
 
 onEvent("PacketReceived", function(packet_id, packet)
 	if packet_id == 1 then -- game update
-		update_at = int(packet)
+		update_at = tonumber(packet)
 	end
 end)

@@ -291,7 +291,7 @@ end)
 
 onEvent("SendingPacket", function(id, packet)
 	if id == 1 then -- update
-		sendPacket(1, os.time() + 60 * 1000)
+		sendPacket(1, tostring(os.time() + 60 * 1000))
 		return
 
 	elseif id == 2 then -- !kill
