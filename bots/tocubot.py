@@ -151,7 +151,7 @@ class Client(aiotfm.Client):
 		print("Logged!")
 
 	async def check_runtime(self, channel):
-		if not self.set_busy(True, channel):
+		if not await self.set_busy(True, channel):
 			return
 
 		await self.send_callback(RUNTIME, "")
@@ -159,16 +159,16 @@ class Client(aiotfm.Client):
 			id, text = await self.wait_for("on_lua_textarea", lambda id, text: id == RUNTIME, timeout=10.0)
 		except Exception:
 			await self.send_channel(channel, "request timed out")
-			return self.set_busy(False)
+			return await self.set_busy(False)
 
 		current, total, cycles = map(int, text.split("\x00"))
 		await self.send_channel(
 			channel,
 			"Runtime usage: `{}ms` current, `{}ms` total, `{}ms` average (`{}` cycles)"
-			.format(current, total, total / cycles, cycles)
+			.format(current, total, total / max(1, cycles), cycles)
 		)
 
-		self.set_busy(False)
+		await self.set_busy(False)
 
 	async def load_lua_script(self, packet):
 		for field in ("json", "link"):
@@ -555,7 +555,7 @@ class Client(aiotfm.Client):
 				channel,
 				"Fixed room (set room limit to 11). "
 				"Runtime usage: `{}ms` current, `{}ms` total, `{}ms` average (`{}` cycles)"
-				.format(current, total, total / cycles, cycles)
+				.format(current, total, total / max(1, cycles), cycles)
 			)
 
 		else:
