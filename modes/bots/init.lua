@@ -290,7 +290,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 end)
 
 onEvent("SendingPacket", function(id, packet)
-	if id == 2 then -- !kill
+	if id == 1 then -- update
+		sendPacket(1, os.time() + 60 * 1000)
+		return
+
+	elseif id == 2 then -- !kill
 		local player, minutes = string.match(packet, "^([^\000]+)\000([^\000]+)$")
 		killing[player] = tonumber(minutes)
 		system.loadPlayerData(player)
