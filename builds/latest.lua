@@ -3594,7 +3594,7 @@ local function initialize_parkour() -- so it uses less space after building
 			if properties.T == 19 and properties.C == "329cd2" then
 				chair = true
 				count = count + 1
-				levels[count] = {x = properties.X, y = properties.Y - 25}
+				levels[count] = {x = properties.X, y = properties.Y - 50}
 				break
 			end
 		end
