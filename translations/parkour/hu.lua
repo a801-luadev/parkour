@@ -45,6 +45,7 @@ translations.hu = {
 	kill_minutes = "<R>A képességeidet %s percre letiltottuk.",
 	permbanned = "<r>Véglegesen ki lettél tiltva a #parkour-ból.",
 	tempbanned = "<r>Ki lettél tiltva %s másodpercre a #parkour-ból.",
+	forum_topic = "<rose>For more information about the module visit this link: %s",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Rekord mód lett aktiválva ebben a szobában. Az adatok nem számítanak és a képességek nem engedélyezettek!\nTöbb információt találhatsz a Rekordról itt: <b>%s</b>",

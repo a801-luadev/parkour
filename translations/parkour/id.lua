@@ -45,6 +45,7 @@ translations.id = {
     kill_minutes = "<R>Kemampuan kamu dimatikan dalam %s menit.",
     permbanned = "<r>Kamu diblokir secara permanen di #parkour.",
     tempbanned = "<r>Kamu diblokir dari #parkour selama %s menit.",
+    forum_topic = "<rose>For more information about the module visit this link: %s",
 
     -- Records
     records_enabled = "<v>[#] <d>Mode rekor diaktifkan di room ini. Statistik tidak dihitung dan kekuatan tidak diaktifkan!\nKamu bisa mencari informasi lebih lanjut mengenai rekor di <b>%s</b>",

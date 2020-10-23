@@ -45,6 +45,7 @@ translations.ru = {
 	kill_minutes = "<R>Ваши способности отключены на %s минут.",
 	permbanned = "<r>Вы были навсегда забанены в #parkour.",
 	tempbanned = "<r>Вы были забанены в #parkour на %s минут.",
+	forum_topic = "<rose>For more information about the module visit this link: %s",
 
 	-- Records
 	records_enabled = "<v>[#] <d>RВ этой комнате включен режим рекордов. Статистика не учитывается, а умения отключены!\nВы можете найти больше информации в <b>%s</b>",

@@ -32,8 +32,9 @@ local links = {
 	donation = "https://a801-luadev.github.io/?redirect=parkour",
 	github = "https://github.com/a801-luadev/parkour",
 	discord = "https://discord.gg/RXaCyWz",
-	maps = "https://bit.ly/submit-parkour-maps",
+	maps = "https://atelier801.com/topic?f=6&t=887284",
 	records = "https://tfmrecords.home.kg/",
+	forum = "https://atelier801.com/topic?f=6&t=892086",
 }
 
 local starting = string.sub(room.name, 1, 2)

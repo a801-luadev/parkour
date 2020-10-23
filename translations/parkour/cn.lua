@@ -45,6 +45,7 @@ translations.cn = {
 	kill_minutes = "<R>你的能力已經在 %s 分鐘內暫時取消了。",
 	permbanned = "<r>你已經在 #parkour 被永久封禁。",
 	tempbanned = "<r>你已經在 #parkour 被封禁了 %s 分鐘。",
+	forum_topic = "<rose>For more information about the module visit this link: %s",
 
 	-- Records
 	records_enabled = "<v>[#] <d>記錄模式已在這房間啟用。數據不會被記錄而且不能使用能力!\n你可以在這裡查看更多關於記錄模式的資訊: <b>%s</b>",

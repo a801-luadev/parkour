@@ -45,6 +45,7 @@ translations.tr = {
 	kill_minutes = "<R>Becerilerin %s dakika boyunca devre dışı bırakılmıştır.",
 	permbanned = "<r>#Parkour'dan kalıcı olarak yasaklandınız.",
 	tempbanned = "<r>#Parkour'dan %s dakika boyunca yasaklandınız.",
+	forum_topic = "<rose>For more information about the module visit this link: %s",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Rekor modu bu odada açık. İstatistikleriniz bu odada sayılmaz ve güçlerinizi kullanamazsınız!\nRekorlar hakkında daha fazla bilgi edinmek için <b>%s</b>  .",

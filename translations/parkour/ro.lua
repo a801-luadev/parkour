@@ -45,6 +45,7 @@ translations.ro = {
 	kill_minutes = "<R>Puterile tale au fost oprite pentru %s minute.",
 	permbanned = "<r>Ai fost banat permanent de la #parkour.",
 	tempbanned = "<r>Ai fost banat de la #parkour pentru %s minute.",
+	forum_topic = "<rose>For more information about the module visit this link: %s",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Modul de record a fost pornit pe această sală. Statisticile nu vor conta iar puterile sunt dezactivate!\nPoți afla mai multe pe <b>%s</b>",
