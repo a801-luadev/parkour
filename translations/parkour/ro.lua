@@ -57,7 +57,7 @@ translations.ro = {
 	records_submitted = "<v>[#] <d>Recordul tău pentru harta <b>%s</b> a fost trimis.",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Opțiuni Parkour</font></p>\n\nFolosește particule pentru parkour\n\nFolosește <b>QWERTY</b> (oprește dacă <b>AZERTY</b>)\n\nFolosește scurtătura <b>M</b> pentru <b>/mort</b> (oprește pentru <b>DEL</b>)\n\nArată-ți cooldown-urile pentru puteri\n\nArată butonul de puteri\n\nArată butonul de ajutor\n\nArată anunțurile de completare a hărților\n\nArată simbolul de „fără ajutor”",
+	options = "<p align='center'><font size='20'>Opțiuni Parkour</font></p>\n\nFolosește <b>QWERTY</b> (oprește dacă <b>AZERTY</b>)\n\nFolosește scurtătura <b>M</b> pentru <b>/mort</b> (oprește pentru <b>DEL</b>)\n\nArată-ți cooldown-urile pentru puteri\n\nArată butonul de puteri\n\nArată butonul de ajutor\n\nArată anunțurile de completare a hărților\n\nArată simbolul de „fără ajutor”",
 	cooldown = "<v>[#] <r>Așteaptă câteva secunde pentru a face asta din nou.",
 	power_options = ("<font size='13' face='Lucida Console'>tastatură <b>QWERTY</b>" ..
 					 "\n\n<b>Ascunde</b> numărul hărților completate"),

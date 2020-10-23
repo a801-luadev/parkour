@@ -14,15 +14,11 @@ local hidden = {}
 local players_level = {}
 local generated_at = {}
 local spec_mode = {}
-local ck = {
-	particles = {},
-	images = {}
-}
+local checkpoints = {}
 local players_file
 review_mode = false
 local cp_available = {}
 
-local betterCheckpoints = string.find(room.name, "bettercp", 1, true)
 local checkCooldown
 local savePlayerData
 local ranks
@@ -35,7 +31,7 @@ local function addCheckpointImage(player, x, y)
 		x, y = level.x, level.y
 	end
 
-	ck.images[player] = tfm.exec.addImage("150da4a0616.png", "_51", x - 20, y - 30, player)
+	checkpoints[player] = tfm.exec.addImage("150da4a0616.png", "_51", x - 20, y - 30, player)
 end
 
 local function enableSpecMode(player, enable)
@@ -100,7 +96,9 @@ onEvent("NewPlayer", function(player)
 		tfm.exec.setPlayerScore(player, players_level[player], false)
 
 		local next_level = levels[ players_level[player] + 1 ]
-		if next_level and betterCheckpoint then
+
+		if next_level then
+			addCheckpointImage(player, next_level.x, next_level.y)
 			tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
 		end
 	end
@@ -189,18 +187,13 @@ onEvent("NewGame", function()
 	local start_x, start_y
 	if levels then
 		start_x, start_y = levels[2].x, levels[2].y
+		tfm.exec.addBonus(0, start_x, start_y, 2, 0, false)
 
-		if betterCheckpoints then
-			tfm.exec.addBonus(0, start_x, start_y, 2, 0, false)
-		end
-
-		for player, particles in next, ck.particles do
-			if not particles then
-				if ck.images[player] then
-					tfm.exec.removeImage(ck.images[player])
-				end
-				addCheckpointImage(player, start_x, start_y)
+		for player in next, in_room do
+			if checkpoints[player] then
+				tfm.exec.removeImage(checkpoints[player])
 			end
+			addCheckpointImage(player, start_x, start_y)
 		end
 	end
 
@@ -218,7 +211,6 @@ onEvent("NewGame", function()
 	end
 end)
 
-if not betterCheckpoints then
 onEvent("Loop", function()
 	if not levels then return end
 
@@ -231,96 +223,9 @@ onEvent("Loop", function()
 			end
 		end
 
-		local last_level = #levels
-		local level_id, next_level, player
-		local particle = 29--math.random(21, 23)
-		local x, y = math.random(-10, 10), math.random(-10, 10)
-		local now = os.time()
-
 		for name in next, in_room do
-			player = room.playerList[name]
 			if spec_mode[name] then
 				tfm.exec.killPlayer(name)
-			elseif player and now >= cp_available[name] then
-				level_id = (players_level[name] or 1) + 1
-				next_level = levels[level_id]
-
-				if next_level then
-					if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_range then
-						players_level[name] = level_id
-						if not victory[name] then
-							tfm.exec.setPlayerScore(name, level_id, false)
-						end
-						if ck.particles[name] == false then
-							tfm.exec.removeImage(ck.images[name])
-						end
-
-						if level_id == last_level then
-							if victory[name] then -- !cp
-								translatedChatMessage("reached_level", name, level_id)
-							else
-								victory._last_level[name] = true
-								tfm.exec.giveCheese(name)
-								tfm.exec.playerVictory(name)
-								tfm.exec.respawnPlayer(name)
-								tfm.exec.movePlayer(name, next_level.x, next_level.y)
-							end
-						else
-							translatedChatMessage("reached_level", name, level_id)
-
-							if ck.particles[name] == false then
-								addCheckpointImage(name, levels[level_id + 1].x, levels[level_id + 1].y)
-							end
-						end
-					elseif ck.particles[name] then
-						tfm.exec.displayParticle(
-							particle,
-							next_level.x + x,
-							next_level.y + y,
-							0, 0, 0, 0,
-							name
-						)
-					end
-				end
-			end
-		end
-	end
-end)
-else
-onEvent("Loop", function()
-	if not levels then return end
-
-	if check_position > 0 then
-		check_position = check_position - 1
-	else
-		for player, to_give in next, victory._last_level do
-			if not victory[player] and to_give then
-				eventPlayerWon(player)
-			end
-		end
-
-		local level_id, next_level, player
-		local particle = 29--math.random(21, 23)
-		local x, y = math.random(-10, 10), math.random(-10, 10)
-		local now = os.time()
-
-		for name in next, in_room do
-			player = room.playerList[name]
-			if spec_mode[name] then
-				tfm.exec.killPlayer(name)
-			elseif player and now >= cp_available[name] then
-				level_id = (players_level[name] or 1) + 1
-				next_level = levels[level_id]
-
-				if next_level and ck.particles[name] then
-					tfm.exec.displayParticle(
-						particle,
-						next_level.x + x,
-						next_level.y + y,
-						0, 0, 0, 0,
-						name
-					)
-				end
 			end
 		end
 	end
@@ -329,20 +234,16 @@ end)
 onEvent("PlayerBonusGrabbed", function(player, bonus)
 	local level = levels[bonus]
 
-	if check_position > 0 then return end -- not ready yet
 	if not level then return end
 	if not players_level[player] then return end
 	if bonus ~= players_level[player] + 1 then return end
-	if os.time() < cp_available[player] then return end
+	if os.time() < cp_available[player] then return tfm.exec.addBonus(0, level.x, level.y, bonus, 0, false, player) end
 
 	players_level[player] = bonus
 	if not victory[player] then
 		tfm.exec.setPlayerScore(player, bonus, false)
 	end
-	if ck.particles[player] == false then
-		tfm.exec.removeImage(ck.images[player])
-	end
-	tfm.exec.removeBonus(bonus, player)
+	tfm.exec.removeImage(checkpoints[player])
 
 	if bonus == #levels then
 		if victory[player] then -- !cp
@@ -357,15 +258,12 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	else
 		translatedChatMessage("reached_level", player, bonus)
 
-		if ck.particles[player] == false then
-			local next_level = levels[bonus + 1]
-			addCheckpointImage(player, next_level.x, next_level.y)
+		local next_level = levels[bonus + 1]
+		addCheckpointImage(player, next_level.x, next_level.y)
 
-			tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
-		end
+		tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
 	end
 end)
-end
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	if cmd == "review" then
@@ -402,9 +300,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		if not levels[checkpoint] then return end
 
-		if betterCheckpoints then
-			tfm.exec.removeBonus(players_level[player], player)
-		end
+		tfm.exec.removeBonus(players_level[player] + 1, player)
 		players_level[player] = checkpoint
 		tfm.exec.killPlayer(player)
 		if not victory[player] then
@@ -412,13 +308,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		local next_level = levels[checkpoint + 1]
-		if ck.particles[player] == false then
-			tfm.exec.removeImage(ck.images[player])
-			if next_level then
-				addCheckpointImage(player, next_level.x, next_level.y)
-			end
+		if checkpoints[player] then
+			tfm.exec.removeImage(checkpoints[player])
 		end
-		if next_level and betterCheckpoints then
+		if next_level then
+			addCheckpointImage(player, next_level.x, next_level.y)
 			tfm.exec.addBonus(0, next_level.x, next_level.y, checkpoint + 1, 0, false, player)
 		end
 
@@ -463,28 +357,16 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			bindKeyboard(player, key, true, true)
 		end
 
-		if ck.particles[player] == false then
-			if ck.images[player] then
-				tfm.exec.removeImage(ck.images[player])
-			end
-			addCheckpointImage(player, levels[2].x, levels[2].y)
+		local x, y = levels[2].x, levels[2].y
+		if checkpoints[player] then
+			tfm.exec.removeImage(checkpoints[player])
 		end
+		addCheckpointImage(player, x, y)
+		tfm.exec.addBonus(0, x, y, 2, 0, false, player)
 	end
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	ck.particles[player] = data.settings[1] == 1
-
-	if levels and not ck.particles[player] then
-		local next_level = levels[(players_level[player] or 1) + 1]
-		if next_level then
-			if ck.images[player] then
-				tfm.exec.removeImage(ck.images[player])
-			end
-			addCheckpointImage(player, next_level.x, next_level.y)
-		end
-	end
-
 	if players_file[player].spec then
 		enableSpecMode(player, true)
 		tfm.exec.chatMessage("<v>[#] <d>Your spec mode has been carried to this room since it's enabled.", player)

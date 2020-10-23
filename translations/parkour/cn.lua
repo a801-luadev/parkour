@@ -57,7 +57,7 @@ translations.cn = {
 	records_submitted = "<v>[#] <d>你在地圖 <b>%s</b> 的時間記錄已被提交。",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n在重生點使用粒子效果\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <b>M</b> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示",
+	options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <b>M</b> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示",
 	cooldown = "<v>[#] <r>請等候幾秒再重新嘗試。",
 	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> 鍵盤" ..
 					 "\n\n<b>隱藏</b> 地圖通過數"),
