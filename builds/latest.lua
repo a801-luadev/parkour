@@ -3707,7 +3707,7 @@ local function initialize_parkour() -- so it uses less space after building
 			x, y = level.x, level.y
 		end
 	
-		--checkpoints[player] = tfm.exec.addImage("", "_51", x - 15, y - 15, player)
+		checkpoints[player] = tfm.exec.addImage("17557263644.png", "_51", x - 15, y - 15, player)
 	end
 	
 	local function enableSpecMode(player, enable)
