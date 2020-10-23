@@ -4074,7 +4074,9 @@ local function initialize_parkour() -- so it uses less space after building
 	
 			if not levels[checkpoint] then return end
 	
-			tfm.exec.removeBonus(players_level[player], player)
+			if betterCheckpoints then
+				tfm.exec.removeBonus(players_level[player], player)
+			end
 			players_level[player] = checkpoint
 			tfm.exec.killPlayer(player)
 			if not victory[player] then
@@ -4088,7 +4090,7 @@ local function initialize_parkour() -- so it uses less space after building
 					addCheckpointImage(player, next_level.x, next_level.y)
 				end
 			end
-			if next_level then
+			if next_level and betterCheckpoints then
 				tfm.exec.addBonus(0, next_level.x, next_level.y, checkpoint + 1, 0, false, player)
 			end
 	
