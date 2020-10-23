@@ -22,6 +22,7 @@ local players_file
 review_mode = false
 local cp_available = {}
 
+local betterCheckpoints = string.find(room.name, "bettercp", 1, true)
 local checkCooldown
 local savePlayerData
 local ranks
@@ -184,6 +185,10 @@ onEvent("NewGame", function()
 	if levels then
 		start_x, start_y = levels[2].x, levels[2].y
 
+		if betterCheckpoints then
+			tfm.exec.addBonus(0, start_x, start_y, 2, 0, false)
+		end
+
 		for player, particles in next, ck.particles do
 			if not particles then
 				if ck.images[player] then
@@ -208,6 +213,7 @@ onEvent("NewGame", function()
 	end
 end)
 
+if not betterCheckpoints then
 onEvent("Loop", function()
 	if not levels then return end
 
@@ -275,6 +281,86 @@ onEvent("Loop", function()
 		end
 	end
 end)
+else
+onEvent("Loop", function()
+	if not levels then return end
+
+	if check_position > 0 then
+		check_position = check_position - 1
+	else
+		for player, to_give in next, victory._last_level do
+			if not victory[player] and to_give then
+				eventPlayerWon(player)
+			end
+		end
+
+		local level_id, next_level, player
+		local particle = 29--math.random(21, 23)
+		local x, y = math.random(-10, 10), math.random(-10, 10)
+		local now = os.time()
+
+		for name in next, in_room do
+			player = room.playerList[name]
+			if spec_mode[name] then
+				tfm.exec.killPlayer(name)
+			elseif player and now >= cp_available[name] then
+				level_id = (players_level[name] or 1) + 1
+				next_level = levels[level_id]
+
+				if next_level and ck.particles[name] then
+					tfm.exec.displayParticle(
+						particle,
+						next_level.x + x,
+						next_level.y + y,
+						0, 0, 0, 0,
+						name
+					)
+				end
+			end
+		end
+	end
+end)
+
+onEvent("PlayerBonusGrabbed", function(player, bonus)
+	local level = levels[bonus]
+
+	if check_position > 0 then return end -- not ready yet
+	if not level then return end
+	if not players_level[player] then return end
+	if bonus ~= players_level[player] + 1 then return end
+	if os.time() < cp_available[player] then return end
+
+	players_level[player] = bonus
+	if not victory[player] then
+		tfm.exec.setPlayerScore(player, bonus, false)
+	end
+	if ck.particles[player] == false then
+		tfm.exec.removeImage(ck.images[player])
+	end
+	tfm.exec.removeBonus(bonus, player)
+
+	if bonus == #levels then
+		if victory[player] then -- !cp
+			translatedChatMessage("reached_level", player, bonus)
+		else
+			victory._last_level[player] = true
+			tfm.exec.giveCheese(player)
+			tfm.exec.playerVictory(player)
+			tfm.exec.respawnPlayer(player)
+			tfm.exec.movePlayer(player, level.x, level.y)
+		end
+	else
+		translatedChatMessage("reached_level", player, bonus)
+
+		if ck.particles[player] == false then
+			local next_level = levels[bonus + 1]
+			addCheckpointImage(player, next_level.x, next_level.y)
+
+			tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
+		end
+	end
+end)
+end
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	if cmd == "review" then
@@ -311,18 +397,22 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		if not levels[checkpoint] then return end
 
+		tfm.exec.removeBonus(players_level[player], player)
 		players_level[player] = checkpoint
 		tfm.exec.killPlayer(player)
 		if not victory[player] then
 			tfm.exec.setPlayerScore(player, checkpoint, false)
 		end
 
+		local next_level = levels[checkpoint + 1]
 		if ck.particles[player] == false then
 			tfm.exec.removeImage(ck.images[player])
-			local next_level = levels[checkpoint + 1]
 			if next_level then
 				addCheckpointImage(player, next_level.x, next_level.y)
 			end
+		end
+		if next_level then
+			tfm.exec.addBonus(0, next_level.x, next_level.y, checkpoint + 1, 0, false, player)
 		end
 
 	elseif cmd == "spec" then
