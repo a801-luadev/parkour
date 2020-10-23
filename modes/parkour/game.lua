@@ -98,6 +98,11 @@ onEvent("NewPlayer", function(player)
 		end
 
 		tfm.exec.setPlayerScore(player, players_level[player], false)
+
+		local next_level = levels[ players_level[player] + 1 ]
+		if next_level and betterCheckpoint then
+			tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
+		end
 	end
 end)
 
