@@ -151,7 +151,7 @@ end
 
 local function getTagProperties(tag)
 	local properties = {}
-	for name, value in string.gmatch(tag, '(%S+)%s*=%s*"([^"]+)"') do
+	for name, value in string.gmatch(tag, '(%S+)%s*=%s*"([^"]*)"') do
 		properties[name] = tonumber(value) or value
 	end
 	return properties
