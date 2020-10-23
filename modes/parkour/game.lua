@@ -98,7 +98,7 @@ onEvent("NewPlayer", function(player)
 
 		if next_level then
 			addCheckpointImage(player, next_level.x, next_level.y)
-			tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
+			tfm.exec.addBonus(0, next_level.x, next_level.y, players_level[player] + 1, 0, false, player)
 		end
 	end
 end)
