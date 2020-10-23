@@ -166,7 +166,11 @@ onEvent("PlayerRespawn", function(player)
 
 	local level = levels[ players_level[player] ]
 	if not level then return end
-	tfm.exec.movePlayer(player, level.x, level.y)
+	if level.vx and level.vy then
+		tfm.exec.movePlayer(player, level.x, level.y, false, level.vx, level.vy, false)
+	else
+		tfm.exec.movePlayer(player, level.x, level.y)
+	end
 end)
 
 onEvent("NewGame", function()
@@ -252,7 +256,12 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 			tfm.exec.giveCheese(player)
 			tfm.exec.playerVictory(player)
 			tfm.exec.respawnPlayer(player)
-			tfm.exec.movePlayer(player, level.x, level.y)
+			if level.vx and level.vy then
+				tfm.exec.movePlayer(player, level.x, level.y, false, level.vx, level.vy, false)
+			else
+				tfm.exec.movePlayer(player, level.x, level.y)
+			end
+			return
 		end
 	else
 		translatedChatMessage("reached_level", player, bonus)
@@ -261,6 +270,10 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 		addCheckpointImage(player, next_level.x, next_level.y)
 
 		tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
+	end
+
+	if level.vx and level.vy then
+		tfm.exec.movePlayer(player, 0, 0, true, level.vx, level.vy, false)
 	end
 end)
 

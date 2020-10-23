@@ -245,7 +245,7 @@ onEvent("NewGame", function()
 
 		if properties.C == 22 then
 			count = count + 1
-			levels[count] = {x = properties.X, y = properties.Y}
+			levels[count] = {x = properties.X, y = properties.Y, vx = properties.vx, vy = properties.vy}
 		end
 	end
 
