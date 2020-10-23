@@ -1,4 +1,3 @@
-local checkpoint_range = 15 ^ 2 -- radius of 15px
 local min_save = 4
 
 local check_position = 6
@@ -31,7 +30,7 @@ local function addCheckpointImage(player, x, y)
 		x, y = level.x, level.y
 	end
 
-	checkpoints[player] = tfm.exec.addImage("150da4a0616.png", "_51", x - 20, y - 30, player)
+	--checkpoints[player] = tfm.exec.addImage("", "_51", x - 15, y - 15, player)
 end
 
 local function enableSpecMode(player, enable)
@@ -232,8 +231,8 @@ onEvent("Loop", function()
 end)
 
 onEvent("PlayerBonusGrabbed", function(player, bonus)
+	if not levels then return end
 	local level = levels[bonus]
-
 	if not level then return end
 	if not players_level[player] then return end
 	if bonus ~= players_level[player] + 1 then return end

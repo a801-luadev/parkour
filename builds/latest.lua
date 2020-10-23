@@ -1234,7 +1234,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>Seu recorde para o mapa <b>%s</b> foi enviado.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar partículas para os checkpoints\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar",
+		options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar",
 		cooldown = "<v>[#] <r>Aguarde alguns segundos antes de fazer isso novamente.",
 		power_options = ("<font size='13' face='Lucida Console'>Teclado <b>QWERTY</b>" ..
 						 "\n\n<b>Esconder</b> contagem de mapas"),
@@ -1400,7 +1400,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>你在地圖 <b>%s</b> 的時間記錄已被提交。",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n在重生點使用粒子效果\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <b>M</b> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示",
+		options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <b>M</b> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示",
 		cooldown = "<v>[#] <r>請等候幾秒再重新嘗試。",
 		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> 鍵盤" ..
 						 "\n\n<b>隱藏</b> 地圖通過數"),
@@ -1566,7 +1566,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>Your record for the map <b>%s</b> has been submitted.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse particles for checkpoints\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements\n\nShow no help symbol",
+		options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements\n\nShow no help symbol",
 		cooldown = "<v>[#] <r>Wait a few seconds before doing that again.",
 		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> keyboard" ..
 						 "\n\n<b>Hide</b> map count"),
@@ -1731,7 +1731,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>Tu récord para el mapa <b>%s</b> ha sido enviado.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar partículas para los checkpoints\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa\n\nMostrar indicador para no recibir ayuda",
+		options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa\n\nMostrar indicador para no recibir ayuda",
 		cooldown = "<v>[#] <r>Espera unos segundos antes de hacer eso de nuevo.",
 		power_options = ("<font size='13' face='Lucida Console'>Teclado <b>QWERTY</b>" ..
 						 "\n\n<b>Esconder</b> cantidad de mapas"),
@@ -1896,7 +1896,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>Votre record pour la carte <b>%s</b> a été envoyé.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser les particules comme points de sauvegarde\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <b>M</b> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.",
+		options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <b>M</b> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.",
 		cooldown = "<v>[#] <r>Attends quelques secondes avant de pouvoir recommencer.",
 		power_options = ("<font size='13' face='Lucida Console'>Clavier <b>QWERTY</b>" ..
 						 "\n\n<b>Cacher</b> le nombre de cartes"),
@@ -2061,7 +2061,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>השיא שלך למפה <b>%s</b> הוגש.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>אפשרויות פארקור</font></p>\n\nהשתמש בחלקים כנקודות שמירה\n\nהשתמש במקלדת <b>QWERTY</b> (כבה אם <b>AZERTY</b> בשימוש)\n\nהשתמש באות <b>צ</b> במקום <b>/mort</b> (משבית את <b>DEL</b>)\n\nהראה את זמן טעינת הכוחות\n\nהראה כפתור כוחות\n\nהראה כפתור עזרה\n\nהראה הכרזות השלמת מפות\n\nהצג סימן 'ללא עזרה'",
+		options = "<p align='center'><font size='20'>אפשרויות פארקור</font></p>\n\nהשתמש במקלדת <b>QWERTY</b> (כבה אם <b>AZERTY</b> בשימוש)\n\nהשתמש באות <b>צ</b> במקום <b>/mort</b> (משבית את <b>DEL</b>)\n\nהראה את זמן טעינת הכוחות\n\nהראה כפתור כוחות\n\nהראה כפתור עזרה\n\nהראה הכרזות השלמת מפות\n\nהצג סימן 'ללא עזרה'",
 		cooldown = "<v>[#] <r>המתן מספר שניות לפני שאתה עושה זאת.",
 		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> מקלדת" ..
 						 "\n\n<b>הסתר</b> ספירת מפות"),
@@ -2226,7 +2226,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>A <b>%s</b> rekordod ehhez a pályához be lett küldve.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználj effekteket az ellenőrző pontok megjelenítéséhez\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot",
+		options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot",
 		cooldown = "<v>[#] <r>Várj néhány másodpercet, mielőtt újra ezt tennéd.",
 		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> billentyűzet" ..
 						 "\n\nTeljesített pályák <b>elrejtése</b>"),
@@ -2391,7 +2391,7 @@ local function initialize_parkour() -- so it uses less space after building
 	    records_submitted = "<v>[#] <d>Rekor kamu untuk peta <b>%s</b> telah dikirim.",
 	
 	    -- Miscellaneous
-	    options = "<p align='center'><font size='20'>Opsi Parkur</font></p>\n\nGunakan partikel untuk cekpoin\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nGunakan <b>M</b> hotkey untuk <b>/mort</b> (nonaktifkan untuk <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan kamu\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nPerlihatkan pengumuman penyelesaian peta\n\nPerlihatkan simbol tidak memerlukan bantuan",
+	    options = "<p align='center'><font size='20'>Opsi Parkur</font></p>\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nGunakan <b>M</b> hotkey untuk <b>/mort</b> (nonaktifkan untuk <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan kamu\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nPerlihatkan pengumuman penyelesaian peta\n\nPerlihatkan simbol tidak memerlukan bantuan",
 	    cooldown = "<v>[#] <r>Mohon Tunggu beberapa detik untuk melakukannya kembali.",
 	    power_options = ("<font size='13' face='Lucida Console'>Keyboard <b>QWERTY</b>" ..
 	                    "\n\n<b>Tutup</b> penghitung peta"),
@@ -2556,7 +2556,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>Twój rekord na mapie <b>%s</b> zostały przesłane.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj cząstek jako punktów kontrolnych\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<b>M</b> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy",
+		options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<b>M</b> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy",
 		cooldown = "<v>[#] <r>Poczekaj kilka sekund, zanim zrobisz to ponownie.",
 		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> klawiatura" ..
 						 "\n\n<b>Ukryć</b> map liczb"),
@@ -2721,7 +2721,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>Recordul tău pentru harta <b>%s</b> a fost trimis.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Opțiuni Parkour</font></p>\n\nFolosește particule pentru parkour\n\nFolosește <b>QWERTY</b> (oprește dacă <b>AZERTY</b>)\n\nFolosește scurtătura <b>M</b> pentru <b>/mort</b> (oprește pentru <b>DEL</b>)\n\nArată-ți cooldown-urile pentru puteri\n\nArată butonul de puteri\n\nArată butonul de ajutor\n\nArată anunțurile de completare a hărților\n\nArată simbolul de „fără ajutor”",
+		options = "<p align='center'><font size='20'>Opțiuni Parkour</font></p>\n\nFolosește <b>QWERTY</b> (oprește dacă <b>AZERTY</b>)\n\nFolosește scurtătura <b>M</b> pentru <b>/mort</b> (oprește pentru <b>DEL</b>)\n\nArată-ți cooldown-urile pentru puteri\n\nArată butonul de puteri\n\nArată butonul de ajutor\n\nArată anunțurile de completare a hărților\n\nArată simbolul de „fără ajutor”",
 		cooldown = "<v>[#] <r>Așteaptă câteva secunde pentru a face asta din nou.",
 		power_options = ("<font size='13' face='Lucida Console'>tastatură <b>QWERTY</b>" ..
 						 "\n\n<b>Ascunde</b> numărul hărților completate"),
@@ -2886,7 +2886,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>Ваш рекорд на этой карте <b>%s</b> был сохранен.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Параметры Паркура</font></p>\n\nИспользуйте желтые крепления для чекпоинтов\n\nИспользуйте <b>QWERTY</b> на клавиатуре (отключить if <b>AZERTY</b>)\n\nИспользуйте <b>M</b> горячую клавишу <b>/mort</b> (отключить <b>DEL</b>)\n\nПоказать ваше время перезарядки\n\nПоказать кнопку способностей\n\nПоказать кнопку помощь\n\nПоказать объявление о завершении карты\n\nПоказать символ помощь не нужна",
+		options = "<p align='center'><font size='20'>Параметры Паркура</font></p>\n\nИспользуйте <b>QWERTY</b> на клавиатуре (отключить if <b>AZERTY</b>)\n\nИспользуйте <b>M</b> горячую клавишу <b>/mort</b> (отключить <b>DEL</b>)\n\nПоказать ваше время перезарядки\n\nПоказать кнопку способностей\n\nПоказать кнопку помощь\n\nПоказать объявление о завершении карты\n\nПоказать символ помощь не нужна",
 		cooldown = "<v>[#] <r>Подождите несколько минут, чтобы повторить действие.",
 		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> клавиатура" ..
 						 "\n\n<b>Hide</b> map count"),
@@ -3051,7 +3051,7 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>Rekorunuz bu harita için <b>%s</b> olarak gönderildi.",
 	
 		-- Miscellaneous
-		options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\nKontrol noktaları için parçacıkları kullan.\n\n<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n<b>/mort</b>'un kısayolu <b>M</b> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\nBeceri bekleme sürelerini göster.\n\nBeceriler simgesini göster.\n\nYardım butonunu göster.\n\nHarita bitirme duyurularını göster.\n\nYardım istemiyorum simgesini göster.",
+		options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\n<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n<b>/mort</b>'un kısayolu <b>M</b> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\nBeceri bekleme sürelerini göster.\n\nBeceriler simgesini göster.\n\nYardım butonunu göster.\n\nHarita bitirme duyurularını göster.\n\nYardım istemiyorum simgesini göster.",
 		cooldown = "<v>[#] <r>Bunu tekrar yapmadan önce birkaç saniye bekleyin",
 		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> Klavye" ..
 						 "\n\nTamamlanan harita sayısını <b>gizle</b>"),
@@ -3675,7 +3675,6 @@ local function initialize_parkour() -- so it uses less space after building
 	end)
 	--[[ End of file modes/parkour/join-system.lua ]]--
 	--[[ File modes/parkour/game.lua ]]--
-	local checkpoint_range = 15 ^ 2 -- radius of 15px
 	local min_save = 4
 	
 	local check_position = 6
@@ -3691,15 +3690,11 @@ local function initialize_parkour() -- so it uses less space after building
 	local players_level = {}
 	local generated_at = {}
 	local spec_mode = {}
-	local ck = {
-		particles = {},
-		images = {}
-	}
+	local checkpoints = {}
 	local players_file
 	review_mode = false
 	local cp_available = {}
 	
-	local betterCheckpoints = string.find(room.name, "bettercp", 1, true)
 	local checkCooldown
 	local savePlayerData
 	local ranks
@@ -3712,7 +3707,7 @@ local function initialize_parkour() -- so it uses less space after building
 			x, y = level.x, level.y
 		end
 	
-		ck.images[player] = tfm.exec.addImage("150da4a0616.png", "_51", x - 20, y - 30, player)
+		--checkpoints[player] = tfm.exec.addImage("", "_51", x - 15, y - 15, player)
 	end
 	
 	local function enableSpecMode(player, enable)
@@ -3777,7 +3772,9 @@ local function initialize_parkour() -- so it uses less space after building
 			tfm.exec.setPlayerScore(player, players_level[player], false)
 	
 			local next_level = levels[ players_level[player] + 1 ]
-			if next_level and betterCheckpoint then
+	
+			if next_level then
+				addCheckpointImage(player, next_level.x, next_level.y)
 				tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
 			end
 		end
@@ -3866,18 +3863,13 @@ local function initialize_parkour() -- so it uses less space after building
 		local start_x, start_y
 		if levels then
 			start_x, start_y = levels[2].x, levels[2].y
+			tfm.exec.addBonus(0, start_x, start_y, 2, 0, false)
 	
-			if betterCheckpoints then
-				tfm.exec.addBonus(0, start_x, start_y, 2, 0, false)
-			end
-	
-			for player, particles in next, ck.particles do
-				if not particles then
-					if ck.images[player] then
-						tfm.exec.removeImage(ck.images[player])
-					end
-					addCheckpointImage(player, start_x, start_y)
+			for player in next, in_room do
+				if checkpoints[player] then
+					tfm.exec.removeImage(checkpoints[player])
 				end
+				addCheckpointImage(player, start_x, start_y)
 			end
 		end
 	
@@ -3895,7 +3887,6 @@ local function initialize_parkour() -- so it uses less space after building
 		end
 	end)
 	
-	if not betterCheckpoints then
 	onEvent("Loop", function()
 		if not levels then return end
 	
@@ -3908,118 +3899,27 @@ local function initialize_parkour() -- so it uses less space after building
 				end
 			end
 	
-			local last_level = #levels
-			local level_id, next_level, player
-			local particle = 29--math.random(21, 23)
-			local x, y = math.random(-10, 10), math.random(-10, 10)
-			local now = os.time()
-	
 			for name in next, in_room do
-				player = room.playerList[name]
 				if spec_mode[name] then
 					tfm.exec.killPlayer(name)
-				elseif player and now >= cp_available[name] then
-					level_id = (players_level[name] or 1) + 1
-					next_level = levels[level_id]
-	
-					if next_level then
-						if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_range then
-							players_level[name] = level_id
-							if not victory[name] then
-								tfm.exec.setPlayerScore(name, level_id, false)
-							end
-							if ck.particles[name] == false then
-								tfm.exec.removeImage(ck.images[name])
-							end
-	
-							if level_id == last_level then
-								if victory[name] then -- !cp
-									translatedChatMessage("reached_level", name, level_id)
-								else
-									victory._last_level[name] = true
-									tfm.exec.giveCheese(name)
-									tfm.exec.playerVictory(name)
-									tfm.exec.respawnPlayer(name)
-									tfm.exec.movePlayer(name, next_level.x, next_level.y)
-								end
-							else
-								translatedChatMessage("reached_level", name, level_id)
-	
-								if ck.particles[name] == false then
-									addCheckpointImage(name, levels[level_id + 1].x, levels[level_id + 1].y)
-								end
-							end
-						elseif ck.particles[name] then
-							tfm.exec.displayParticle(
-								particle,
-								next_level.x + x,
-								next_level.y + y,
-								0, 0, 0, 0,
-								name
-							)
-						end
-					end
-				end
-			end
-		end
-	end)
-	else
-	onEvent("Loop", function()
-		if not levels then return end
-	
-		if check_position > 0 then
-			check_position = check_position - 1
-		else
-			for player, to_give in next, victory._last_level do
-				if not victory[player] and to_give then
-					eventPlayerWon(player)
-				end
-			end
-	
-			local level_id, next_level, player
-			local particle = 29--math.random(21, 23)
-			local x, y = math.random(-10, 10), math.random(-10, 10)
-			local now = os.time()
-	
-			for name in next, in_room do
-				player = room.playerList[name]
-				if spec_mode[name] then
-					tfm.exec.killPlayer(name)
-				elseif player and now >= cp_available[name] then
-					level_id = (players_level[name] or 1) + 1
-					next_level = levels[level_id]
-	
-					if next_level and ck.particles[name] then
-						tfm.exec.displayParticle(
-							particle,
-							next_level.x + x,
-							next_level.y + y,
-							0, 0, 0, 0,
-							name
-						)
-					end
 				end
 			end
 		end
 	end)
 	
 	onEvent("PlayerBonusGrabbed", function(player, bonus)
+		if not levels then return end
 		local level = levels[bonus]
-	
-		if check_position > 0 then return end -- not ready yet
 		if not level then return end
 		if not players_level[player] then return end
 		if bonus ~= players_level[player] + 1 then return end
-		if os.time() < cp_available[player] then return end
+		if os.time() < cp_available[player] then return tfm.exec.addBonus(0, level.x, level.y, bonus, 0, false, player) end
 	
 		players_level[player] = bonus
 		if not victory[player] then
 			tfm.exec.setPlayerScore(player, bonus, false)
 		end
-		if ck.particles[player] == false then
-			tfm.exec.removeImage(ck.images[player])
-		end
-		tfm.exec.removeBonus(bonus, player)
+		tfm.exec.removeImage(checkpoints[player])
 	
 		if bonus == #levels then
 			if victory[player] then -- !cp
@@ -4034,15 +3934,12 @@ local function initialize_parkour() -- so it uses less space after building
 		else
 			translatedChatMessage("reached_level", player, bonus)
 	
-			if ck.particles[player] == false then
-				local next_level = levels[bonus + 1]
-				addCheckpointImage(player, next_level.x, next_level.y)
+			local next_level = levels[bonus + 1]
+			addCheckpointImage(player, next_level.x, next_level.y)
 	
-				tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
-			end
+			tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
 		end
 	end)
-	end
 	
 	onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if cmd == "review" then
@@ -4079,9 +3976,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 			if not levels[checkpoint] then return end
 	
-			if betterCheckpoints then
-				tfm.exec.removeBonus(players_level[player], player)
-			end
+			tfm.exec.removeBonus(players_level[player] + 1, player)
 			players_level[player] = checkpoint
 			tfm.exec.killPlayer(player)
 			if not victory[player] then
@@ -4089,13 +3984,11 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 	
 			local next_level = levels[checkpoint + 1]
-			if ck.particles[player] == false then
-				tfm.exec.removeImage(ck.images[player])
-				if next_level then
-					addCheckpointImage(player, next_level.x, next_level.y)
-				end
+			if checkpoints[player] then
+				tfm.exec.removeImage(checkpoints[player])
 			end
-			if next_level and betterCheckpoints then
+			if next_level then
+				addCheckpointImage(player, next_level.x, next_level.y)
 				tfm.exec.addBonus(0, next_level.x, next_level.y, checkpoint + 1, 0, false, player)
 			end
 	
@@ -4140,28 +4033,16 @@ local function initialize_parkour() -- so it uses less space after building
 				bindKeyboard(player, key, true, true)
 			end
 	
-			if ck.particles[player] == false then
-				if ck.images[player] then
-					tfm.exec.removeImage(ck.images[player])
-				end
-				addCheckpointImage(player, levels[2].x, levels[2].y)
+			local x, y = levels[2].x, levels[2].y
+			if checkpoints[player] then
+				tfm.exec.removeImage(checkpoints[player])
 			end
+			addCheckpointImage(player, x, y)
+			tfm.exec.addBonus(0, x, y, 2, 0, false, player)
 		end
 	end)
 	
 	onEvent("PlayerDataParsed", function(player, data)
-		ck.particles[player] = data.settings[1] == 1
-	
-		if levels and not ck.particles[player] then
-			local next_level = levels[(players_level[player] or 1) + 1]
-			if next_level then
-				if ck.images[player] then
-					tfm.exec.removeImage(ck.images[player])
-				end
-				addCheckpointImage(player, next_level.x, next_level.y)
-			end
-		end
-	
 		if players_file[player].spec then
 			enableSpecMode(player, true)
 			tfm.exec.chatMessage("<v>[#] <d>Your spec mode has been carried to this room since it's enabled.", player)
@@ -7761,27 +7642,6 @@ local function initialize_parkour() -- so it uses less space after building
 	
 		:loadComponent(
 			Toggle.new(435, 55, false)
-			:onToggle(function(self, player, state) -- particles or images for checkpoints
-				players_file[player].settings[1] = state and 1 or 0
-				ck.particles[player] = state
-	
-				if state then
-					if ck.images[player] then
-						tfm.exec.removeImage(ck.images[player])
-					end
-				else
-					addCheckpointImage(player)
-				end
-			end)
-			:onUpdate(function(self, player)
-				local setting = players_file[player].settings[1] == 1
-				if (self.state[player] and not setting) or (not self.state[player] and setting) then
-					self:toggle(player)
-				end
-			end)
-		)
-		:loadComponent(
-			Toggle.new(435, 81, false)
 			:onToggle(function(self, player, state) -- qwerty or azerty keyboard
 				players_file[player].settings[5] = state and 1 or 0
 	
@@ -7800,7 +7660,7 @@ local function initialize_parkour() -- so it uses less space after building
 			end)
 		)
 		:loadComponent(
-			Toggle.new(435, 107, false)
+			Toggle.new(435, 81, false)
 			:onToggle(function(self, player, state) -- M or DEL for mort
 				players_file[player].settings[2] = state and 1 or 0
 	
@@ -7820,7 +7680,7 @@ local function initialize_parkour() -- so it uses less space after building
 			end)
 		)
 		:loadComponent(
-			Toggle.new(435, 133, false)
+			Toggle.new(435, 107, false)
 			:onToggle(function(self, player, state) -- powers cooldown
 				players_file[player].settings[3] = state and 1 or 0
 			end)
@@ -7832,7 +7692,7 @@ local function initialize_parkour() -- so it uses less space after building
 			end)
 		)
 		:loadComponent(
-			Toggle.new(435, 159, false)
+			Toggle.new(435, 133, false)
 			:onToggle(function(self, player, state) -- powers button
 				players_file[player].settings[4] = state and 1 or 0
 	
@@ -7846,7 +7706,7 @@ local function initialize_parkour() -- so it uses less space after building
 			end)
 		)
 		:loadComponent(
-			Toggle.new(435, 185, false)
+			Toggle.new(435, 159, false)
 			:onToggle(function(self, player, state) -- help button
 				players_file[player].settings[6] = state and 1 or 0
 	
@@ -7860,7 +7720,7 @@ local function initialize_parkour() -- so it uses less space after building
 			end)
 		)
 		:loadComponent(
-			Toggle.new(435, 211, false)
+			Toggle.new(435, 185, false)
 			:onToggle(function(self, player, state) -- congrats messages
 				players_file[player].settings[7] = state and 1 or 0
 			end)
@@ -7872,7 +7732,7 @@ local function initialize_parkour() -- so it uses less space after building
 			end)
 		)
 		:loadComponent(
-			Toggle.new(435, 238, false)
+			Toggle.new(435, 211, false)
 			:onToggle(function(self, player, state) -- no help indicator
 				players_file[player].settings[8] = state and 1 or 0
 	
