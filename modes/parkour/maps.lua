@@ -256,7 +256,7 @@ onEvent("NewGame", function()
 		if properties.T == 19 and properties.C == "329cd2" then
 			chair = true
 			count = count + 1
-			levels[count] = {x = properties.X, y = properties.Y - 50}
+			levels[count] = {x = properties.X, y = properties.Y - 40}
 			break
 		end
 	end
