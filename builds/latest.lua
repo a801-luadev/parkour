@@ -3583,7 +3583,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 			if properties.C == 22 then
 				count = count + 1
-				levels[count] = {x = properties.X, y = properties.Y, vx = properties.vx, vy = properties.vy}
+				levels[count] = {x = properties.X, y = properties.Y, stop = properties.stop}
 			end
 		end
 	
@@ -3843,11 +3843,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 		local level = levels[ players_level[player] ]
 		if not level then return end
-		if level.vx and level.vy then
-			tfm.exec.movePlayer(player, level.x, level.y, false, level.vx, level.vy, false)
-		else
-			tfm.exec.movePlayer(player, level.x, level.y)
-		end
+		tfm.exec.movePlayer(player, level.x, level.y)
 	end)
 	
 	onEvent("NewGame", function()
@@ -3933,11 +3929,7 @@ local function initialize_parkour() -- so it uses less space after building
 				tfm.exec.giveCheese(player)
 				tfm.exec.playerVictory(player)
 				tfm.exec.respawnPlayer(player)
-				if level.vx and level.vy then
-					tfm.exec.movePlayer(player, level.x, level.y, false, level.vx, level.vy, false)
-				else
-					tfm.exec.movePlayer(player, level.x, level.y)
-				end
+				tfm.exec.movePlayer(player, level.x, level.y)
 				return
 			end
 		else
@@ -3949,8 +3941,8 @@ local function initialize_parkour() -- so it uses less space after building
 			tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
 		end
 	
-		if level.vx and level.vy then
-			tfm.exec.movePlayer(player, 0, 0, true, level.vx, level.vy, false)
+		if level.stop then
+			tfm.exec.movePlayer(player, 0, 0, true, 1, 1, false)
 		end
 	end)
 	

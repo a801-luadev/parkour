@@ -166,11 +166,7 @@ onEvent("PlayerRespawn", function(player)
 
 	local level = levels[ players_level[player] ]
 	if not level then return end
-	if level.vx and level.vy then
-		tfm.exec.movePlayer(player, level.x, level.y, false, level.vx, level.vy, false)
-	else
-		tfm.exec.movePlayer(player, level.x, level.y)
-	end
+	tfm.exec.movePlayer(player, level.x, level.y)
 end)
 
 onEvent("NewGame", function()
@@ -256,11 +252,7 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 			tfm.exec.giveCheese(player)
 			tfm.exec.playerVictory(player)
 			tfm.exec.respawnPlayer(player)
-			if level.vx and level.vy then
-				tfm.exec.movePlayer(player, level.x, level.y, false, level.vx, level.vy, false)
-			else
-				tfm.exec.movePlayer(player, level.x, level.y)
-			end
+			tfm.exec.movePlayer(player, level.x, level.y)
 			return
 		end
 	else
@@ -272,8 +264,8 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 		tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
 	end
 
-	if level.vx and level.vy then
-		tfm.exec.movePlayer(player, 0, 0, true, level.vx, level.vy, false)
+	if level.stop then
+		tfm.exec.movePlayer(player, 0, 0, true, 1, 1, false)
 	end
 end)
 
