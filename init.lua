@@ -24,13 +24,17 @@
 --
 
 
+math.randomseed(os.time())
+
+local data_version = 0
 local room = tfm.get.room
 local links = {
 	donation = "https://a801-luadev.github.io/?redirect=parkour",
-	github = "https://bit.ly/tfm-parkour",
-	discord = "https://bit.ly/parkour-discord",
-	maps = "https://bit.ly/submit-parkour-maps",
-	modapps = "https://bit.ly/parkourmod"
+	github = "https://github.com/a801-luadev/parkour",
+	discord = "https://discord.gg/RXaCyWz",
+	maps = "https://atelier801.com/topic?f=6&t=887284",
+	records = "https://tfmrecords.home.kg/",
+	forum = "https://atelier801.com/topic?f=6&t=892086",
 }
 
 local starting = string.sub(room.name, 1, 2)
@@ -38,6 +42,8 @@ local starting = string.sub(room.name, 1, 2)
 local is_tribe
 local tribe, module_name, submode
 local flags = ""
+
+room.lowerName = string.lower(room.name)
 
 {% require-package "translations" %}
 {% require-package "global" %}
@@ -57,14 +63,13 @@ else
 		module_name = string.match(room.name, "^%*#([a-z]+)")
 		pos = #module_name + 3
 	else
-		module_name = string.match(room.name, "^[a-z][a-z2]%-#([a-z]+)")
+		module_name = string.match(room.name, "^[a-z][a-z]%-#([a-z]+)")
 		pos = #module_name + 5
 	end
 
-	local numbers
-	numbers, submode = string.match(room.name, "^(%d+)([a-z_]+)", pos)
-	if numbers then
-		flags = string.sub(room.name, pos + #numbers + #submode + 1)
+	submode = string.match(room.name, "^[^a-zA-Z]-([a-z_]+)", pos)
+	if submode then
+		flags = string.sub(room.name, pos + #submode + 2)
 	end
 
 	if room.name == "*#parkour4bots" then

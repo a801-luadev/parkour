@@ -1,7 +1,7 @@
 if room.name == "*#parkour4bots" then
-	recv_channel, send_channel = "Holybot#0000", "Parkour#8558"
+	recv_channel, send_channel = "Sharpiebot#0000", "Parkour#8558"
 else
-	recv_channel, send_channel = "Parkour#8558", "Holybot#0000"
+	recv_channel, send_channel = "Parkour#8558", "Sharpiebot#0000"
 end
 
 function sendPacket(packet_id, packet) end
@@ -23,6 +23,7 @@ if not is_tribe then
 			3 - farm/hack suspect
 			4 - weekly lb reset
 			5 - pw info
+			6 - record submission
 	]]
 
 	local last_id = os.time() - 10000

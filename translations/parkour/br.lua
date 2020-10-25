@@ -27,7 +27,7 @@ translations.br = {
 	help_staff = "<p align = 'center'><font size = '13'><r>AVISO: A staff do Parkour não faz parte da staff do Transformice e não tem nenhum poder no jogo em si, apenas no módulo.</r>\nStaff do Parkour assegura que o módulo rode com problemas mínimos, e estão sempre disponíveis para dar assistência aos jogadores quando necessário.</font></p>\nVocê pode digitar <D>!staff</D> no chat para ver a lista de staff.\n\n<font color = '#E7342A'>Administradores:</font> São responsáveis por manter o módulo propriamente dito, atualizando-o e corrigindo bugs.\n\n<font color = '#D0A9F0'>Gerenciadores das Equipes:</font> Observam as equipes de Moderação e de Mapas, assegurando que todos estão fazendo um bom trabalho. Também são responsáveis por recrutar novos membros para a staff.\n\n<font color = '#FFAAAA'>Moderadores:</font> São responsáveis por aplicar as regras no módulo e punir aqueles que não as seguem.\n\n<font color = '#25C059'>Mappers:</font> São responsáveis por avaliar, adicionar e remover mapas do módulo para assegurar que você tenha uma jogatina divertida.",
 	help_rules = "<font size = '13'><B><J>Todas as regras nos Termos e Condições de Uso do Transformice também se aplicam no #parkour</J></B></font>\n\nSe você encontrar algum jogador quebrando-as, cochiche com um moderador do #parkour no jogo. Se os moderadores não estiverem online, recomendamos que reporte em nosso servidor no Discord.\nAo reportar, por favor inclua a comunidade, o nome da sala e o nome do jogador.\n• Ex: en-#parkour10 Blank#3495 trolling\nEvidências, como prints, vídeos e gifs são úteis e apreciados, mas não necessários.\n\n<font size = '11'>• Uso de <font color = '#ef1111'>hacks, glitches ou bugs</font> são proibidos em salas #parkour\n• <font color = '#ef1111'>Farm VPN</font> será considerado um <B>abuso</B> e não é permitido. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nQualquer um pego quebrando as regras será banido imediatamente.</B></font></p>\n\n<font size = '12'>Transformice permite trollar. No entanto, <font color='#cc2222'><B>não permitiremos isso no parkour.</B></font></font>\n\n<p align = 'center'><J>Trollar é quando um jogador intencionalmente usa seus poderes ou consumíveis para fazer com que outros jogadores não consigam terminar o mapa.</j></p>\n• Trollar por vingança <B>não é um motivo válido</B> e você ainda será punido.\n• Insistir em ajudar jogadores que estão tentando terminar o mapa sozinhos e se recusando a parar quando pedido também será considerado trollar.\n• <J>Se um jogador não quer ajuda e prefere completar o mapa sozinho, dê seu melhor para ajudar os outros jogadores</J>. No entanto, se outro jogador que precisa de ajuda estiver no mesmo checkpoint daquele que quer completar sozinho, você pode ajudar ambos sem receber punição.\n\nSe um jogador é pego trollando, será punido em uma questão de tempo. Note que trollar repetidamente irá fazer com que você receba punições gradativamente mais longas e/ou severas.",
 	help_contribute = "<font size='14'>\n<p align='center'>A equipe do parkour adora ter um código aberto, pois isso <t>ajuda a comunidade</t>. Você pode <o>ver</o> ou <o>contribuir</o> com o código no <o><u><a href='event:github'>GitHub</a></u></o>.\n\nManter o módulo é parte de um trabalho <t>voluntário</t>, então qualquer contribuição é <u>bem vinda</u>, seja com a <t>programação</t>, <t>reporte de erros</t>, <t>sugestões</t> e <t>criação de mapas</t>.\nVocê pode <vp>reportar erros</vp> ou <vp>dar sugestões</vp> no nosso <o><u><a href='event:discord'>Discord</a></u></o> e/ou no <o><u><a href='event:github'>GitHub</a></u></o>.\nVocê pode <vp>enviar seus mapas</vp> no nosso <o><u><a href='event:map_submission'>Tópico no Fórum</a></u></o>.\n\nManter o jogo não é caro, mas também não é grátis. Nós adoraríamos se você pudesse incentivar o desenvolvimento do jogo <t>doando qualquer valor</t> <o><u><a href='event:donate'>aqui</a></u></o>.\n<u>Todos os fundos arrecadados serão direcionados para o desenvolvimento do módulo.</u></p>",
-	help_changelog = "<font size='13'><p align='center'><o>Versão 2.5.0 - 05/09/2020</o></p>\n\n<font size='10'>• Corrigidos maioria dos bugs relacionados a crashes nas salas.\n• O comando <cep>!staff</cep> agora tem uma janela.\n• Ao finalizar um mapa, você poderá usar <cep>!cp</cep> para se teleportar para um checkpoint anterior.\n• Sistema de perfis! Digite <cep>!profile [jogador]</cep> para ver seu perfil.\n• Alguns mapas irão mostrar uma votação <vp>periodicamente</vp> para que você vote nele, fazendo assim com que ele <vp>permaneça</vp> ou seja <r>removido</r> da rotação.\n• <b>6 novos poderes foram adicionados!</b>\n• <u>Seu tempo</u> começará a contar <u>após seu primeiro movimento</u>.\n• O jogador que terminar com o menor tempo terá um <font color='#ffffff'>nome de cor branca</font>.\n• Agora você pode <d>alterar as teclas de disparo dos poderes</d>.\n• Você pode usar o comando <cep>!map</cep> no cafofo da sua tribo para <vp>pular um mapa</vp>.\n• Você pode pressionar <cep>F</cep> para ativar/desativar o <r>o símbolo de não ajudar</r>.\n• <i>(Provavelmente)</i> novos bugs :(",
+	help_changelog = "<font size='13'><p align='center'><o>Versão 2.7.0 - 26/10/2020</o></p>\n\n<font size='11'>• <vp>Checkpoint aperfeiçoado</vp>:  você pode pegá-lo <o>instantaneamente</o> ao <o>passar por cima dele</o>!\n• Adicionado um novo hotkey para as <cep>salas no modo Records</cep>. Pressione <cep>N</cep> para <cep>jogar no mapa novamente</cep>!",
 
 	-- Congratulation messages
 	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>.",
@@ -45,9 +45,20 @@ translations.br = {
 	kill_minutes = "<R>Seus poderes foram desativados por %s minutos.",
 	permbanned = "<r>Você foi banido permanentemente do #parkour.",
 	tempbanned = "<r>Você foi banido do #parkour por %s minutos.",
+	forum_topic = "<rose>Para mais informações sobre o módulo, acesse o link: %s",
+
+	-- Records
+	records_enabled = "<v>[#] <d>Modo Records está ativado nesta sala. Dados não serão contados e poderes não estão ativados!\nVocê poderá encontrar mais informações sobre records em <b>%s</b>",
+	records_admin = "<v>[#] <d>Você é um administrador desta sala de records. Você pode usar os comandos <b>!map</b>, <b>!pw</b> e <b>!time</b>.",
+	records_completed = "<v>[#] <d>Você completou o mapa! Se você quiser jogar nele novamente, digite <b>!redo</b>.",
+	records_submit = "<v>[#] <d>Wow! Parece que você teve o melhor tempo nesta sala. Se você quiser enviar o record, digite <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>Parece que este mapa não está na rotação de mapas do parkour... Você não pode enviar um recorde para ele",
+	records_not_fastest = "<v>[#] <r>Parece que você não é o jogador mais rápido na sala...",
+	records_already_submitted = "<v>[#] <r>Você já enviou seu recorde para este mapa!",
+	records_submitted = "<v>[#] <d>Seu recorde para o mapa <b>%s</b> foi enviado.",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar partículas para os checkpoints\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar",
+	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar",
 	cooldown = "<v>[#] <r>Aguarde alguns segundos antes de fazer isso novamente.",
 	power_options = ("<font size='13' face='Lucida Console'>Teclado <b>QWERTY</b>" ..
 					 "\n\n<b>Esconder</b> contagem de mapas"),
@@ -74,9 +85,11 @@ translations.br = {
 	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 				"Posição no Ranking geral: <b><v>%s</v></b>\n\n" ..
 				"Posição no Ranking semanal: <b><v>%s</v></b>"),
-	map_count = "Contagem de mapas: <b><v>%s</v></b>",
+	map_count = "Contagem de mapas: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Medalhas são objetivos que um jogador pode conseguir. Clique nelas para ler suas descrições.",
 	help_private_maps = "Este jogador não gosta de divulgar sua contagem de mapas publicamente! Você também pode escondê-la em seu perfil.",
+	help_yellow_maps = "Mapas em amarelo são os mapas completados nesta semana.",
+	help_red_maps = "Mapas em vermelho são os mapas completados na última hora.",
 	help_badge_1 = "Este jogador já foi um membro da staff do #parkour no passado.",
 	help_badge_2 = "Este jogador está ou já esteve na página 1 do ranking global.",
 	help_badge_3 = "Este jogador está ou já esteve na página 2 do ranking global.",
@@ -90,6 +103,16 @@ translations.br = {
 	help_badge_11 = "Este jogador bateu um recorde de 45 mapas por hora.",
 	help_badge_12 = "Este jogador bateu um recorde de 50 mapas por hora.",
 	help_badge_13 = "Este jogador bateu um recorde de 55 mapas por hora.",
+	help_badge_14 = "Este jogador verificou sua conta no servidor oficial do Parkour no Discord (digite <b>!discord</b>).",
+	help_badge_15 = "Este jogador teve o tempo mais rápido em 1 mapa.",
+	help_badge_16 = "Este jogador teve o tempo mais rápido em 5 mapas.",
+	help_badge_17 = "Este jogador teve o tempo mais rápido em 10 mapas.",
+	help_badge_18 = "Este jogador teve o tempo mais rápido em 15 mapas.",
+	help_badge_19 = "Este jogador teve o tempo mais rápido em 20 mapas.",
+	help_badge_20 = "Este jogador teve o tempo mais rápido em 25 mapas.",
+	help_badge_21 = "Este jogador teve o tempo mais rápido em 30 mapas.",
+	help_badge_22 = "Este jogador teve o tempo mais rápido em 35 mapas.",
+	help_badge_23 = "Este jogador teve o tempo mais rápido em 40 mapas.",
 	make_public = "tornar público",
 	make_private = "tornar privado",
 	moderators = "Moderadores",

@@ -15,7 +15,7 @@ local online_staff = {
 	next_show = 0,
 	requesters = {_count = 0}
 }
-local shown_ranks = {"mod", "mapper", "manager", "admin"}
+local shown_ranks = {"trainee", "mod", "mapper", "manager", "admin"}
 no_help = {}
 local map_polls = {}
 local current_poll
@@ -350,17 +350,17 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		if not players_file[player] then return end
 		if not checkCooldown(player, "keyHelp", 3000) then return end
 
-		local file = players_file[player].parkour
+		local file = players_file[player]
 
-		if file.help == 1 then
-			file.help = 0
+		if file.settings[8] == 1 then
+			file.settings[8] = 0
 
 			if no_help[player] then
 				tfm.exec.removeImage(no_help[player])
 				no_help[player] = nil
 			end
 		else
-			file.help = 1
+			file.settings[8] = 1
 
 			no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
 		end
@@ -370,6 +370,10 @@ onEvent("Keyboard", function(player, key, down, x, y)
 end)
 
 onEvent("TextAreaCallback", function(id, player, callback)
+	if player == "Tocutoeltuco#5522" and callback == "room_state_check" then
+		return ui.addTextArea(id, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
+	end
+
 	if not players_file[player] then return end
 
 	local position = string.find(callback, ":", 1, true)
@@ -460,6 +464,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				requesters = {_count = 1, [1] = player}
 			}
 			online = {}
+			hidden = {}
 
 			local requested = {}
 			local member
@@ -657,7 +662,7 @@ onEvent("NewGame", function(player)
 	end
 
 	for player in next, in_room do
-		if players_file[player] and players_file[player].parkour.help == 1 then
+		if players_file[player] and players_file[player].settings[8] == 1 then
 			no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
 		end
 		setNameColor(player)
@@ -665,9 +670,9 @@ onEvent("NewGame", function(player)
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	bindKeyboard(player, data.parkour.mort == 1 and 77 or 46, true, true)
+	bindKeyboard(player, data.settings[2] == 1 and 77 or 46, true, true)
 
-	if data.parkour.help == 1 then
+	if data.settings[8] == 1 then
 		no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
 	end
 
@@ -721,32 +726,71 @@ onEvent("Loop", function(elapsed)
 		online_staff.next_show = 0
 
 		local room_commu = room.community
+		local rank_lists = {}
 		local commu, players, list
-		for _, rank_name in next, shown_ranks do
+		local rank_name, rank, info
+		local player, tbl, hide
+		for i = 1, #shown_ranks do
+			rank_name = shown_ranks[i]
 			rank = ranks[rank_name]
-			list = {_count = 0}
-			players = {_count = 0}
+
+			if rank_name == "trainee" then
+				rank_name = "mod"
+			end
+
+			info = rank_lists[rank_name]
+			if info then
+				players, list, hide = info.players, info.list, info.hide
+			else
+				players, list, hide = {_count = 0}, {_count = 0}, {_count = 0}
+				rank_lists[rank_name] = {
+					players = players,
+					list = list,
+					hide = hide
+				}
+			end
 
 			for index = 1, rank._count do
-				commu = online[rank[index]]
-				
+				player = rank[index]
+				commu = online[player]
+
 				if commu then
 					if commu == room_commu then
-						list._count = list._count + 1
-						list[ list._count ] = rank[index]
+						tbl = list
 					else
-						players._count = players._count + 1
-						players[ players._count ] = rank[index]
+						tbl = players
 					end
+				elseif hidden[player] then
+					tbl = hide
+					commu = true
+				end
+
+				if commu then
+					tbl._count = tbl._count + 1
+					tbl[ tbl._count ] = player
 				end
 			end
+		end
 
-			for index = 1, players._count do
-				list[ list._count + index ] = players[index]
+		local offset
+		for rank_name, data in next, rank_lists do
+			tbl = {_count = data.list._count + data.players._count + data.hide._count}
+
+			for i = 1, data.list._count do
+				tbl[i] = data.list[i]
 			end
 
-			list._count = list._count + players._count
-			Staff.sorted_members[rank_name] = list
+			offset = data.list._count
+			for i = 1, data.players._count do
+				tbl[i + offset] = data.players[i]
+			end
+
+			offset = offset + data.players._count
+			for i = 1, data.hide._count do
+				tbl[i + offset] = data.hide[i]
+			end
+
+			Staff.sorted_members[rank_name] = tbl
 		end
 
 		local player
@@ -760,6 +804,6 @@ end)
 
 onEvent("PacketReceived", function(packet_id, packet)
 	if packet_id == 1 then -- game update
-		update_at = os.time() + 60000
+		update_at = tonumber(packet)
 	end
 end)

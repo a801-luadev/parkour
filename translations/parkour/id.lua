@@ -27,7 +27,7 @@ translations.id = {
     help_staff = "<p align = 'center'><font size = '13'><r>DISCLAIMER: Staf Parkur BUKAN staff Transformice dan TIDAK memiliki kemampuan apapun didalam game itu sendiri, hanya di dalam modul.</r>\nStaff parkur memastikan modul berjalan sempurna dengan masalah yang minim, dan akan selalu tersedia untuk membantu pemain kapan pun dibutuhkan.</font></p>\nkamu bisa mengetik <D>!staff</D> di chat untuk melihat list staf.\n\n<font color = '#E7342A'>Admin:</font> Mereka bertanggung jawab dalam mengembangkan modul dengan menambahkan update baru ataupun memperbaiki bug.\n\n<font color = '#D0A9F0'>Manager Tim:</font> Mereka mengawasi tim dari moderator dan mappers untuk memastikan mereka mengerjakan perkerjaan mereka dengan baik. Mereka juga bertanggung jawab untuk merekrut anggota baru ke tim staf.\n\n<font color = '#FFAAAA'>Moderator:</font> Mereka bertanggung jawab untuk menegakkan aturan dari modul dan memberikan sanksi untuk individu yang tidak mengikutinya.\n\n<font color = '#25C059'>Mappers:</font> Mereka bertanggung jawab dalam meninjau, menambahkan, menghapus peta yang ada di modul untuk memastikan permainan yang menyenangkan.",
     help_rules = "<font size='13'><B><J>Semua aturan dalam Syarat dan Ketentuan Transformice berlaku juga di #parkour</J></B></font>\n\nJika kamu menemukan pemain yang melanggar aturan tersebut, bisik moderator di game. Jika tidak ada moderator yang online, direkomendasikan untuk melaporkan melalui server discord. \nKetika melaporkan, mohon untuk melampirkan server, nama ruangan, dan nama pemain. \n• Contoh: en-#parkour10 Blank#3495 trolling\nBukti seperti tangkapan layar, video, dan gif sangat membantu dan dihargai, tetapi tidak perlu.\n\n<font size='11'>• Tidak ada <font color='#ef1111'>hacks, glitches or bugs</font> yang digunakan di ruangan #parkour\n• <font color='#ef1111'>VPN farming</font> akan dianggap sebagai <B>mengeksploitasi</B> dan tidak diizinkan.<p align='center'><font color='#cc2222' size='12'><B>\nSiapapun yang ketahuan melanggar aturan ini akan segera diblokir.</B></font></p>\n\n<font size='12'>Transformice mengizinkan konsep trolling. Namun, <font color='#cc2222'><B>kami tidak mengizinkannya di parkour.</B></font></font>\n\n<p align='center'><J>Trolling adalah ketika seorang pemain dengan sengaja menggunakan kemampuan atau consumables untuk mencegah pemain lain dalam menyelesaikan peta.</j></p>\n• Trolling balas dendam<B> bukan sebuah alasan yang valid</B> untuk melakukan troll kepada seseorang dan kamu akan tetap diberi hukuman.\n• Memaksa membantu pemain yang mencoba untuk menyelesaikan peta sendirian dan menolak untuk berhenti melakukannya jika diminta juga termasuk sebagai trolling\n• <J>Jika seorang pemain tidak ingin bantuan dan lebih memilih solo, lebih baik membantu pemain yang lain</J>. Namun jika ada pemain lain yang meminta bantuan di cekpoin yang sama dengan pemain solo, kamu bisa membantu mereka [Keduanya].\n\nJika pemain tertangkap melakukan trolling, mereka akan mendapatkan hukuman berbasis waktu. Perlu diperhatikan bahwa trolling yang berulang akan mengakibatkan hukuman yang lebih lama dan lebih berat.",
     help_contribute = "<font size='14'>\n<p align='center'>Tim managemen parkur menyukai kode sumber terbuka karena itu  <t>membantu komunitas</t>. kamu bisa <o>melihat</o> dan <o>memodifikasi</o> kode sumber dari <o><u><a href='event:github'>GitHub</a></u></o>.\n\nMemelihara modul <t>sepenuhnya bersifat sukarela</t>, sehingga bantuan mengenai <t>kode</t>, <t>laporan bug</t>, <t>saran</t> dan <t>pembuatan peta</t> selalu <u>diterima dan dihargai</u>.\nkamu bisa <vp>melaporkan bug</vp> dan <vp>memberikan saran</vp> pada <o><u><a href='event:discord'>Discord</a></u></o> dan/atau <o><u><a href='event:github'>GitHub</a></u></o>.\nkamu bisa <vp>mengirimkan peta kamu</vp> di <o><u><a href='event:map_submission'>Forum Thread</a></u></o> kami.\n\nMemelihara parkur memang tidak mahal, tapi juga tidak gratis. Kami akan senang jika kamu bisa membantu kami dengan <t>berdonasi berapapun jumlahnya</t> <o><u><a href='event:donate'>disini</a></u></o>.\n<u>Semua donasi akan digunakna untuk meningkatkan modul.</u></p>",
-    help_changelog = "<font size='13'><p align='center'><o>Versi 2.5.0 - 05/09/2020</o></p>\n\n<font size='11'>• Memperbaiki sebagian besar bug terkait kerusakan ruangan.\n• Perintah <cep>!staff</cep> sekarang memiliki jendela.\n• Ketika kamu menyelesaikan sebuah peta, kamu bisa menggunakan <cep>!cp</cep> untuk berpindah ke cekpoin tertentu.\n• Sistem profil! Ketik <cep>!profile [pemain]</cep> untuk melihat profil pemain tersebut.\n• Beberapa map <vp>secara berkala</vp> menampilkan pemungutan suara sehingga kamu bisa voting untuk <vp>mempertahankan</vp> atau <r>menghapusnya</r>.\n• <b>6 kemampuan baru sudah ditambahkan!</b>\n• <u>Waktu kamu</u> akan mulai dihitung <u>setelah gerakan pertama kamu</u>.\n• Pemain yang menyelesaikan parkur dengan waktu yang singkat akan mendapatkan <font color='#ffffff'>nama panggilan putih</font>.\n• Sekarang kamu bisa <d>mengubah kata kunci kemampuan</d>.\n• kamu bisa menggunakan perintah <cep>!map</cep> didalam rumah suku kamu untuk <vp>mengganti peta lain.</vp>.\n• kamu bisa menekan <cep>F</cep> untuk mengaktifkan atau menonaktifkan <r>simbol tanpa-bantuan</r>.\n• <i>(Mungkin)</i> bug baru :(",
+    help_changelog = "<font size='13'><p align='center'><o>Versi 2.7.0 - 26/10/2020</o></p>\n\n<font size='11'>• <vp>Peningkatan checkpoin</vp>: kamu bisa <o>langsung</o> mendapatkannya dengan <o>berlari diatasnya</o>!\n• Penambahan pintasan baru untuk <cep>ruangan rekor</cep>. Tekan <cep>N</cep> untuk <cep>mengulangi peta</cep>!",
 
     -- Congratulation messages
     reached_level = "<d>Selamat! kamu telah meraih level <vp>%s</vp>.",
@@ -45,9 +45,20 @@ translations.id = {
     kill_minutes = "<R>Kemampuan kamu dimatikan paksa selama %s menit.",
     permbanned = "<r>kamu telah diblokir selamanya di #parkour.",
     tempbanned = "<r>kamu telah diblokir dari #parkour selama %s menit.",
+    forum_topic = "<rose>Untuk informasi lebih lanjut mengenai modul kunjungi tautan: %s",
+
+    -- Records
+    records_enabled = "<v>[#] <d>Mode rekor diaktifkan di room ini. Statistik tidak dihitung dan kekuatan tidak diaktifkan!\nKamu bisa mencari informasi lebih lanjut mengenai rekor di <b>%s</b>",
+    records_admin = "<v>[#] <d>Kamu adalah admin di ruangan rekor ini. Kamu bisa menggunakan perintah <b>!map</b>, <b>!pw</b> dan <b>!time</b>.",
+    records_completed = "<v>[#] <d>Kamu telah menyelesaikan peta! Jika kamu ingin mengulanginya lagi, ketik <b>!redo</b>.",
+    records_submit = "<v>[#] <d>Wow! Sepertinya kamu memiliki waktu tercepat di ruangan. Jika kamu ingin mengirimkan rekor kamu, ketik <b>!submit</b>.",
+    records_invalid_map = "<v>[#] <r>Sepertinya ruangan ini tidak masuk dalam rotasi parkur... Kamu tidak bisa mengirim rekor ini!",
+    records_not_fastest = "<v>[#] <r>Sepertinya kamu bukan pemain tercepat di ruangan ini...",
+    records_already_submitted = "<v>[#] <r>Kamu sudah mengirimkan rekor kamu untuk peta ini!",
+    records_submitted = "<v>[#] <d>Rekor kamu untuk peta <b>%s</b> telah dikirim.",
 
     -- Miscellaneous
-    options = "<p align='center'><font size='20'>Opsi Parkur</font></p>\n\nMunculkan partikel sebagai tkamu cekpoin\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nTekan <b>M</b> hotkey untuk <b>/mort</b> (jika dinonaktifkan menjadi <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan kamu\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nAktifkan pengumuman penyelesaian peta\n\nAktifkan simbol tidak memerlukan bantuan",
+    options = "<p align='center'><font size='20'>Opsi Parkur</font></p>\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nTekan <b>M</b> hotkey untuk <b>/mort</b> (jika dinonaktifkan menjadi <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan kamu\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nAktifkan pengumuman penyelesaian peta\n\nAktifkan simbol tidak memerlukan bantuan",
     cooldown = "<v>[#] <r>Mohon Tunggu beberapa detik untuk melakukannya kembali.",
     power_options = ("<font size='13' face='Lucida Console'>Keyboard <b>QWERTY</b>" ..
                     "\n\n<b>Tutup</b> penghitung peta"),
@@ -74,9 +85,11 @@ translations.id = {
     profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
                 "Posisi papan peringkat keseluruhan: <b><v>%s</v></b>\n\n" ..
                 "Posisi papan peringkat mingguan: <b><v>%s</v></b>"),
-    map_count = "Jumlah peta: <b><v>%s</v></b>",
+    map_count = "Jumlah peta: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
     help_badge = "Lencana adalah pencapaian yang bisa didapatkan pemain. Klik diatasnya untuk melihat deskripsi-nya.",
     help_private_maps = "Pemain ini tidak mau memperlihatkan jumlah peta mereka ke publik! jika ingin, kamu juga bisa menyembunyikannya di profil kamu.",
+    help_yellow_maps = "Peta dengan warna kuning adalah peta yang sudah diselesaikan minggu ini.",
+    help_red_maps = "Peta dengan warna merah adalah peta yang sudah diselelesaikan dalam satu jam terakhir.",
     help_badge_1 = "Pemain ini pernah menjadi anggota staf parkur sebelumnya.",
     help_badge_2 = "Pemain ini berada atau pernah di halaman 1 dari papan peringkat keseluruhan.",
     help_badge_3 = "Pemain ini berada atau pernah di halaman 2 dari papan peringkat keseluruhan.",
@@ -90,6 +103,16 @@ translations.id = {
     help_badge_11 = "Pemain ini memiliki rekor menyelesaikan 45 peta per jam.",
     help_badge_12 = "Pemain ini memiliki rekor menyelesaikan 50 peta per jam.",
     help_badge_13 = "Pemain ini memiliki rekor menyelesaikan 55 peta per jam.",
+    help_badge_14 = "Pemain ini telah memverifikasi akun mereka di server discord resmi parkur (ketik <b>!discord</b>).",
+    help_badge_15 = "Pemain ini menjadi yang tercepat pada 1 peta.",
+    help_badge_16 = "Pemain ini menjadi yang tercepat pada 5 peta.",
+    help_badge_17 = "Pemain ini menjadi yang tercepat pada 10 peta.",
+    help_badge_18 = "Pemain ini menjadi yang tercepat pada 15 peta.",
+    help_badge_19 = "Pemain ini menjadi yang tercepat pada 20 peta.",
+    help_badge_20 = "Pemain ini menjadi yang tercepat pada 25 peta.",
+    help_badge_21 = "Pemain ini menjadi yang tercepat pada 30 peta.",
+    help_badge_22 = "Pemain ini menjadi yang tercepat pada 35 peta.",
+    help_badge_23 = "Pemain ini menjadi yang tercepat pada 40 peta.",
     make_public = "jadikan publik",
     make_private = "jadikan privasi",
     moderators = "Moderator",

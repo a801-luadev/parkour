@@ -7,14 +7,6 @@ leaderboard = {}
 weekleaderboard = {}
 -- {id, name, completed_maps, community}
 local default_leaderboard_user = {0, nil, 0, "xx"}
-local leaderboard_badges = {
-	{14, 2},
-	{28, 3},
-	{42, 4},
-	{56, 5},
-	{70, 6}
-}
-leaderboard_badges._count = #leaderboard_badges
 
 local function leaderboardSort(a, b)
 	return a[3] > b[3]
@@ -57,24 +49,26 @@ local function checkPlayersPosition(week)
 		playerFile = players_file[player]
 
 		if playerFile then
-			completedMaps = week and playerFile.parkour.week_c or playerFile.parkour.c
+			completedMaps = week and playerFile.week[1] or playerFile.c
 			playerData = room.playerList[player]
-			playerId = playerData.id
+			if playerData then
+				playerId = playerData.id
 
-			if not bans[playerId] then
-				cacheData = cachedPlayers[playerId]
-				if cacheData then
-					cacheData[2] = player
-					cacheData[3] = completedMaps
-					cacheData[4] = playerData.community
-				else
-					totalRankedPlayers = totalRankedPlayers + 1
-					lb[totalRankedPlayers] = {
-						playerId,
-						player,
-						completedMaps,
-						playerData.community
-					}
+				if not bans[playerId] then
+					cacheData = cachedPlayers[playerId]
+					if cacheData then
+						cacheData[2] = player
+						cacheData[3] = completedMaps
+						cacheData[4] = playerData.community
+					else
+						totalRankedPlayers = totalRankedPlayers + 1
+						lb[totalRankedPlayers] = {
+							playerId,
+							player,
+							completedMaps,
+							playerData.community
+						}
+					end
 				end
 			end
 		end
@@ -87,38 +81,19 @@ local function checkPlayersPosition(week)
 	end
 
 	if not week then
-		local name, badges, badge, skip
+		local name, badges, badge
 		for pos = 1, #lb do
 			name = lb[pos][2]
 			lb[name] = pos
 
 			if players_file[name] then
-				badges = players_file[name].parkour.badges
+				badges = players_file[name].badges
+				badge = math.ceil(pos / 14)
 
-				for i = 1, leaderboard_badges._count do
-					badge = leaderboard_badges[i]
-					if pos <= badge[1] and badges[badge[2]] ~= 1 then
-						skip = false
-						for j = 1, i - 1 do
-							if badges[leaderboard_badges[j][2]] == 1 then
-								skip = true
-								break
-							end
-						end
-
-						if not skip then
-							for j = i + 1, leaderboard_badges._count do
-								badges[leaderboard_badges[j][2]] = 0
-							end
-
-							badges[badge[2]] = 1
-
-							NewBadgeInterface:show(name, badge[2])
-							savePlayerData(name)
-						end
-
-						break
-					end
+				if badges[2] == 0 or badges[2] > badge then
+					badges[2] = badge
+					NewBadgeInterface:show(name, 2, badge)
+					savePlayerData(name)
 				end
 			end
 		end
@@ -159,14 +134,14 @@ onEvent("GameDataLoaded", function(data)
 					"\000" .. data.weekranking[2][4] .. "\000" .. data.weekranking[2][2] .. "\000" .. data.weekranking[2][3] ..
 					"\000" .. data.weekranking[3][4] .. "\000" .. data.weekranking[3][2] .. "\000" .. data.weekranking[3][3]
 				)
+				system.loadPlayerData(send_channel) -- force send
 			end
 
 			timed_maps.week.last_reset = new_reset
 			timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (8 - now.wday) * 24 * 60 * 60 * 1000)
 
 			for player, data in next, players_file do
-				data.parkour.week_c = 0
-				data.parkour.week_r = new_reset
+				data.week = {0, new_reset}
 			end
 
 			data.weekranking = {}

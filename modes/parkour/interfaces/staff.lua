@@ -6,10 +6,10 @@ do
 			return nameCache[name]
 		end
 
-		nameCache[name] = string.gsub(
+		nameCache[name] = "<a href='event:msg:/w " .. name .. "'>" .. string.gsub(
 			string.gsub(name, "(#%d%d%d%d)", "<font size='11'><g>%1</g></font>"),
-			"([Hh]t)tp", "%1<>tp"
-		)
+			"([Hh]t)tp", "%1<->tp"
+		) .. "</a>"
 		return nameCache[name]
 	end
 	local tab = {}
@@ -59,6 +59,7 @@ do
 		return function(self, player)
 			local image_x, image_y = self.parent.x + x, self.parent.y + 56
 			local imgs = images[container][player]
+			local show_hidden = perms[player] -- true for staff peeps
 
 			if not imgs then
 				imgs = {_count = 0}
@@ -78,10 +79,22 @@ do
 			local names = {}
 
 			local commu_list = {}
-			local commu
+			local commu, member
 			for index = 1 + start, math.min(17 + start, rank._count) do
-				names[index - start] = formatName(rank[index])
-				imgs[index - start] = tfm.exec.addImage(communities[ online[ rank[index] ] ], "&1", image_x, image_y, player)
+				member = rank[index]
+
+				if hidden[member] then -- hidden
+					if not show_hidden then
+						break
+					end
+					names[index - start] = "<r>" .. formatName(member) .. "</r>"
+					commu = hidden[member]
+				else
+					names[index - start] = formatName(member)
+					commu = online[member]
+				end
+
+				imgs[index - start] = tfm.exec.addImage(communities[ commu ], "&1", image_x, image_y, player)
 				image_y = image_y + 12
 				imgs._count = index - start
 			end

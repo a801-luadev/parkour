@@ -5,7 +5,7 @@ local sendPacket
 local add_packet_data, buffer
 local initializingModule = true
 
-local onEvent
+local onEvent, totalRuntime, startCycle, cycleId, usedRuntime
 do
 	-- Configuration
 	local CYCLE_DURATION = 4100
@@ -20,8 +20,10 @@ do
 	local math_floor = math.floor
 
 	-- Runtime breaker
-	local cycleId = 0
-	local usedRuntime = 0
+	startCycle = math_floor(os_time() / CYCLE_DURATION)
+	cycleId = 0
+	usedRuntime = 0
+	totalRuntime = 0
 	local stopingAt = 0
 	local checkingRuntime = false
 	local paused = false
@@ -157,6 +159,8 @@ do
 
 			if thisCycle > cycleId then
 				-- new runtime cycle
+				totalRuntime = totalRuntime + usedRuntime
+
 				cycleId = thisCycle
 				usedRuntime = 0
 				stopingAt = start + RUNTIME_LIMIT

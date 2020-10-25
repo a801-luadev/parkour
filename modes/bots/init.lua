@@ -21,6 +21,12 @@ local packets = {
 	weekly_reset = bit.lshift(12, 8) + 255,
 	room_password = bit.lshift(13, 8) + 255,
 	verify_discord = bit.lshift(14, 8) + 255,
+	version_mismatch = bit.lshift(15, 8) + 255,
+	record_submission = bit.lshift(16, 8) + 255,
+	record_badges = bit.lshift(17, 8) + 255,
+	simulate_sus = bit.lshift(18, 8) + 255,
+	last_sanction = bit.lshift(19, 8) + 255,
+	runtime = bit.lshift(20, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -31,8 +37,12 @@ local loaded = false
 local chats = {loading = true}
 local killing = {}
 local verifying = {}
+local get_sanction = {}
 local to_do = {}
 local in_room = {}
+local records = {
+	all_badges = 9
+}
 
 local file_actions = {
 	high_map_change = {1, true, function(data, map, add)
@@ -208,6 +218,29 @@ onEvent("TextAreaCallback", function(id, player, data)
 	elseif id == packets.verify_discord then
 		verifying[data] = true
 		system.loadPlayerData(data)
+
+	elseif id == packets.record_badges then
+		local name, badge = string.match(data, "^([^\000]+)\000([^\000]+)$")
+		badge = tonumber(badge)
+
+		if badge > 1 then
+			badge = math.ceil(badge / 5) + 1
+		end
+
+		if badge <= records.all_badges then
+			records[name] = badge
+			system.loadPlayerData(name)
+		end
+
+	elseif id == packets.simulate_sus then
+		eventPacketReceived(1, data)
+
+	elseif id == packets.last_sanction then
+		get_sanction[data] = true
+		system.loadPlayerData(data)
+
+	elseif id == packets.runtime then
+		ui.addTextArea(packets.runtime, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
 	end
 end)
 
@@ -215,21 +248,39 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if player == recv_channel or player == send_channel or data == "" then return end
 
 	data = json.decode(data)
-	if data.parkour.v ~= "0.7" then return end
+	if data.v ~= data_version then
+		return ui.addTextArea(packets.version_mismatch, player)
+	end
 
 	local update = false
 	if killing[player] then
-		data.parkour.killed = os.time() + killing[player] * 60 * 1000
+		data.killed = os.time() + killing[player] * 60 * 1000
+		data.kill = killing[player]
 
 		update = true
 		killing[player] = nil
 	end
 
 	if verifying[player] then
-		data.parkour.badges[14] = 1
+		data.badges[5] = 1
+		ui.addTextArea(packets.verify_discord, player)
 
 		update = true
 		verifying[player] = nil
+	end
+
+	if records[player] then
+		if data.badges[6] < records[player] then
+			data.badges[6] = records[player]
+
+			update = true
+		end
+		records[player] = nil
+	end
+
+	if get_sanction[player] then
+		ui.addTextArea(packets.last_sanction, player .. "\000" .. data.kill)
+		get_sanction[player] = nil
 	end
 
 	if update then
@@ -239,7 +290,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 end)
 
 onEvent("SendingPacket", function(id, packet)
-	if id == 2 then -- !kill
+	if id == 1 then -- update
+		sendPacket(1, tostring(os.time() + 60 * 1000))
+		return
+
+	elseif id == 2 then -- !kill
 		local player, minutes = string.match(packet, "^([^\000]+)\000([^\000]+)$")
 		killing[player] = tonumber(minutes)
 		system.loadPlayerData(player)
@@ -306,6 +361,9 @@ onEvent("PacketReceived", function(id, packet)
 
 	elseif id == 5 then
 		ui.addTextArea(packets.room_password, packet, parkour_bot)
+
+	elseif id == 6 then
+		ui.addTextArea(packets.record_submission, packet, parkour_bot)
 	end
 end)
 

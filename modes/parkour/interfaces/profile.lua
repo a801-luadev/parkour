@@ -8,7 +8,7 @@ do
 
 		nameCache[name] = string.gsub(
 			string.gsub(name, "(#%d%d%d%d)", "<font size='15'><g>%1</g></font>"),
-			"([Hh]t)tp", "%1<>tp"
+			"([Hh]t)tp", "%1<->tp"
 		)
 		return nameCache[name]
 	end
@@ -23,6 +23,12 @@ do
 	local images = {}
 
 	Profile = Interface.new(200, 50, 400, 300, true)
+		:setShowCheck(function(self, player, profile, data)
+			local file = data or players_file[profile]
+			return (file
+					and file.v == data_version)
+		end)
+
 		:addImage({
 			image = "173f32a90da.png",
 			target = ":1",
@@ -73,15 +79,18 @@ do
 			x = self.x + 15
 			local limit = x + 40 * 9
 			local y = self.y + 180
-			local pbg = (data or players_file[profile]).parkour.badges
+			local pbg = (data or players_file[profile]).badges
 			if pbg then
+				local badge
 				for index = 1, #badges do
-					if pbg[index] == 1 then
+					if pbg[index] > 0 then
+						badge = badges[index][pbg[index]]
+
 						container._count = container._count + 1
-						container[ container._count ] = tfm.exec.addImage(badges[index], ":2", x, y, player)
+						container[ container._count ] = tfm.exec.addImage(badge[2], ":2", x, y, player)
 						ui.addTextArea(
 							-10000 - index,
-							"<a href='event:_help:badge_" .. index .. "'>\n\n\n\n\n\n",
+							"<a href='event:_help:badge_" .. badge[1] .. "'>\n\n\n\n\n\n",
 							player, x, y, 30, 30,
 							0, 0, 0, true
 						)
@@ -111,13 +120,13 @@ do
 			x = 5, y = 50,
 			canUpdate = true,
 			text = function(self, player, profile, data)
-				local file = (data or players_file[profile]).parkour
+				local file = (data or players_file[profile])
 
 				return translatedMessage(
 					"profile", player,
 					file.private_maps and translatedMessage("private_maps", player) or "",
 					(not file.private_maps or player == profile or (perms[player] and perms[player].see_private_maps)) and
-					translatedMessage("map_count", player, file.c) or "",
+					translatedMessage("map_count", player, file.c, file.week[1], #file.hour) or "",
 					profile == player and string.format(
 						"<a href='event:prof_maps:%s'><j>[%s]</j></a>",
 						file.private_maps and "public" or "private",
@@ -135,7 +144,7 @@ do
 			canUpdate = true,
 			text = function(self, player, profile, data)
 				local count = 0
-				local pbg = (data or players_file[profile]).parkour.badges
+				local pbg = (data or players_file[profile]).badges
 				if pbg then
 					for index = 1, #badges do
 						if pbg[index] == 1 then
@@ -162,9 +171,9 @@ do
 			if not checkCooldown(player, "mapsToggle", 500) then return end
 
 			if args == "public" then
-				players_file[player].parkour.private_maps = nil
+				players_file[player].private_maps = nil
 			else
-				players_file[player].parkour.private_maps = true
+				players_file[player].private_maps = true
 			end
 
 			savePlayerData(player)

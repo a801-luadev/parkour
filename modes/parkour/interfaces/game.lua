@@ -19,10 +19,10 @@ do
 		:addImage({
 			canUpdate = true,
 			image = function(self, player)
-				local file = players_file[player].parkour
-				if file.pbut == 1 then
+				local file = players_file[player]
+				if file.settings[4] == 1 then
 					return powers_img
-				elseif file.hbut == 1 then
+				elseif file.settings[6] == 1 then
 					return help_img
 				else
 					return "a.png"
@@ -34,10 +34,10 @@ do
 		:addTextArea({
 			canUpdate = true,
 			text = function(self, player)
-				local file = players_file[player].parkour
-				if file.pbut == 1 then
+				local file = players_file[player]
+				if file.settings[4] == 1 then
 					return "<a href='event:powers'><font size='50'>  </font></a>"
-				elseif file.hbut == 1 then
+				elseif file.settings[6] == 1 then
 					return "<a href='event:help_button'><font size='50'>  </font></a>"
 				else
 					return ""
@@ -51,8 +51,8 @@ do
 		:addImage({
 			canUpdate = true,
 			image = function(self, player)
-				local file = players_file[player].parkour
-				if file.pbut == 1 and file.hbut == 1 then
+				local file = players_file[player]
+				if file.settings[4] == 1 and file.settings[6] == 1 then
 					return help_img
 				else
 					return "a.png"
@@ -64,8 +64,8 @@ do
 		:addTextArea({
 			canUpdate = true,
 			text = function(self, player)
-				local file = players_file[player].parkour
-				if file.pbut == 1 and file.hbut == 1 then
+				local file = players_file[player]
+				if file.settings[4] == 1 and file.settings[6] == 1 then
 					return "<a href='event:help_button'><font size='50'>  </font></a>"
 				else
 					return ""

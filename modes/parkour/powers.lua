@@ -1,7 +1,6 @@
 local max_leaderboard_rows
 local leaderboard
 local keyboard
-local NewBadgeInterface
 
 no_powers = {}
 local facing = {}
@@ -9,15 +8,6 @@ local cooldowns = {}
 local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local used_powers = {_count = 0}
-local hour_badges = {
-	{55, 13},
-	{50, 12},
-	{45, 11},
-	{40, 10},
-	{35, 9},
-	{30, 8}
-}
-hour_badges._count = #hour_badges
 
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
@@ -87,12 +77,83 @@ local function despawnableObject(when, ...)
 	addNewTimer(when, tfm.exec.removeObject, obj)
 end
 
+local function fixHourCount(player, data)
+	local reset = data.hour_r
+	local hour = data.hour
+	local count = #hour
+	local save = false
+
+	local now = os.time()
+	if now - reset >= 3600000 then -- 1 hour
+		save = true
+
+		local index
+		local absolute
+		for i = 1, count do
+			absolute = hour[i] * 10000 + reset
+
+			if now - absolute >= 3600000 then
+				hour[i] = nil
+			else
+				index = i + 1 -- avoid hour check as they're younger than 1 hour
+				-- change offset
+				hour[i] = math.floor((absolute - now) / 10000)
+				break
+			end
+		end
+
+		if index then
+			for i = index, count do
+				hour[i] = math.floor(
+					(hour[i] * 10000 + reset - now) / 10000
+				)
+			end
+		end
+
+		data.hour_r = now
+		reset = now
+	else
+		for i = 1, count do
+			if now - (hour[i] * 10000 + reset) >= 3600000 then
+				hour[i] = nil
+			else
+				break
+			end
+		end
+	end
+
+	-- Normalize indexes
+	local offset = 0
+	for i = 1, count do
+		if hour[i] then
+			if offset == 0 then
+				break
+			end
+
+			hour[i - offset] = hour[i]
+		else
+			offset = offset + 1
+		end
+	end
+
+	for i = count - offset + 1, count do
+		hour[i] = nil
+	end
+
+	if player and (save or offset > 0) then
+		savePlayerData(player)
+	end
+
+	return save or offset > 0
+end
+
 -- in small x: positive -> towards the sides, negative -> towards the center
 local powers
 powers = {
 	{
 		name = "fly", maps = 5,
 		dontShowTracker = true,
+		availableRecords = true,
 
 		small = "173db50edf6.png", big = "173db512e9c.png", -- icons
 		lockedSmall = "173db51091f.png", lockedBig = "173db5151fd.png",
@@ -109,6 +170,7 @@ powers = {
 	{
 		name = "speed", maps = 10,
 		dontShowTracker = true,
+		availableRecords = true,
 
 		small = "173db21af6a.png", big = "173db214773.png",
 		lockedSmall = "173db21d270.png", lockedBig = "173db217990.png",
@@ -197,6 +259,7 @@ powers = {
 	{
 		name = "teleport", maps = 35,
 		dontShowTracker = true,
+		availableRecords = true,
 
 		small = "173db226b7a.png", big = "173db21f2b7.png",
 		lockedSmall = "173db22ee81.png", lockedBig = "173db223336.png",
@@ -327,7 +390,7 @@ powers = {
 		end
 	},
 	{
-		name = "pig", ranking = 70,
+		name = "pig", maps = 5000,
 
 		small = "173deea75bd.png", big = "173deea2cc0.png",
 		lockedSmall = "173deea9a02.png", lockedBig = "173deea4edc.png",
@@ -381,7 +444,7 @@ powers = {
 		end
 	},
 	{
-		name = "sink", ranking = 56,
+		name = "sink", ranking = 70,
 
 		small = "173deeb1e05.png", big = "173deeac174.png",
 		lockedSmall = "173deeb3dac.png", lockedBig = "173deeaf781.png",
@@ -414,7 +477,7 @@ powers = {
 
 		upgrades = {
 			{
-				name = "toilet", ranking = 42,
+				name = "toilet", ranking = 56,
 
 				small = "173db3f2c95.png", big = "173db3f0d81.png",
 				smallX = 0, smallY = -10,
@@ -456,7 +519,7 @@ powers = {
 				end
 			},
 			{
-				name = "bathtub", ranking = 28,
+				name = "bathtub", ranking = 42,
 
 				small = "173deeb8924.png", big = "173deeb6576.png",
 				smallX = 0, smallY = 5,
@@ -498,7 +561,9 @@ powers = {
 		}
 	},
 	{
-		name = "campfire", ranking = 14,
+		name = "campfire", ranking = 28,
+		dontShowTracker = true,
+		availableRecords = true,
 
 		small = "173dee9c5d9.png", big = "173dee98c61.png",
 		lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
@@ -595,16 +660,16 @@ function bindNecessary(player)
 	if not keys[player] or not players_file[player] or keys.triggers[player] then return end
 
 	local triggers = {}
-	local completed = players_file[player].parkour.c
+	local completed = players_file[player].c
 	local pos = leaderboard[player] or max_leaderboard_rows + 1
-	local variation_index = players_file[player].parkour.keyboard + 1
+	local variation_index = players_file[player].settings[5] + 1
 
 	local player_keys = keys[player]
 	local power, key
 	for index = 1, #powers do
 		power = getPowerUpgrade(completed, pos, powers[index], true, review_mode)
 		
-		if power then
+		if power and (not records_admins or power.availableRecords) then
 			if power.click then
 				system.bindMouse(player, true)
 			else
@@ -664,8 +729,8 @@ onEvent("Keyboard", function(player, key, down, x, y)
 				power[index].cooldown_img,
 				power[index].cooldown_x, power[index].cooldown_y,
 
-				players_file[player].parkour.pcool == 1
-			)) then
+				players_file[player].settings[3] == 1
+			)) and (not records_admins or power[index].availableRecords) then
 				power[index].fnc(player, key, down, x, y)
 
 				if not power[index].dontShowTracker then
@@ -681,15 +746,15 @@ onEvent("Mouse", function(player, x, y)
 	if not victory[player] or not players_file[player] then return end
 
 	local power = powers.teleport
-	if players_file[player].parkour.c >= power.maps then
-		if not power.cooldown or checkCooldown(
+	if players_file[player].c >= power.maps then
+		if (not power.cooldown or checkCooldown(
 			player, power.name, power.cooldown,
 
 			power.cooldown_img,
 			power.cooldown_x, power.cooldown_y,
 
-			players_file[player].parkour.pcool == 1
-		) then
+			players_file[player].settings[3] == 1
+		)) and (not records_admins or power.availableRecords) then
 			power.fnc(player, x, y)
 
 			if not power.dontShowTracker then
@@ -725,15 +790,15 @@ end)
 
 onEvent("PlayerDataParsed", function(player, data)
 	keys[player] = {}
-	for index = 1, #data.parkour.keys do
-		if data.parkour.keys[index] > 0 then
-			keys[player][index] = data.parkour.keys[index]
+	for index = 1, #data.keys do
+		if data.keys[index] > 0 then
+			keys[player][index] = data.keys[index]
 		end
 	end
 
-	if data.parkour.killed > os.time() then
+	if data.killed > os.time() then
 		no_powers[player] = true
-		translatedChatMessage("kill_minutes", player, math.ceil((data.parkour.killed - os.time()) / 1000 / 60))
+		translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
 	else
 		no_powers[player] = nil
 	end
@@ -745,20 +810,32 @@ onEvent("PlayerDataParsed", function(player, data)
 	else
 		unbind(player)
 	end
+
+	-- don't save as it will trigger this twice, and this will be saved
+	-- right after this event finishes anyway
+	fixHourCount(nil, data)
 end)
 
 onEvent("PlayerDataUpdated", function(player, data)
-	if data.parkour.killed > os.time() then
+	if data.killed > os.time() then
 		if not no_powers[player] then
 			no_powers[player] = true
 			unbind(player)
 		end
-		translatedChatMessage("kill_minutes", player, math.ceil((data.parkour.killed - os.time()) / 1000 / 60))
+		translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
 	elseif no_powers[player] then
 		no_powers[player] = nil
 		if victory[player] then
 			bindNecessary(player)
 		end
+	end
+
+	-- don't loop infinitely
+	-- calling savePlayerData loads data first, so this will get triggered again
+	-- and it will call savePlayerData again, which will load again and trigger
+	-- this again.
+	if fixHourCount(nil, data) then
+		to_save[player] = true
 	end
 end)
 
@@ -766,39 +843,32 @@ onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
 	if not players_file[player] then return end
 
-	if count_stats and room.uniquePlayers >= min_save and player_count >= min_save and not is_tribe and not review_mode then
-		local file = players_file[player].parkour
+	if (count_stats and
+		room.uniquePlayers >= min_save and
+		player_count >= min_save and
+		not records_admins and
+		not is_tribe and
+		not review_mode) then
+
+		local file = players_file[player]
 		file.c = file.c + 1
-		file.hour_c = file.hour_c + 1
-		file.week_c = file.week_c + 1
+		file.hour[#file.hour + 1] = math.floor((os.time() - file.hour_r) / 10000) -- convert to ms and count every 10s
+		file.week[1] = file.week[1] + 1
 
-		for i = 1, hour_badges._count do
-			badge = hour_badges[i]
-			if file.hour_c >= badge[1] and file.badges[badge[2]] ~= 1 then
-				local skip = false
-				for j = 1, i - 1 do
-					if file.badges[hour_badges[j][2]] == 1 then
-						skip = true
-						break
-					end
-				end
+		local hour_count = #file.hour
 
-				if not skip then
-					for j = i + 1, hour_badges._count do
-						file.badges[hour_badges[j][2]] = 0
-					end
-
-					file.badges[badge[2]] = 1
-
-					NewBadgeInterface:show(player, badge[2])
-				end
-
-				break
+		if hour_count >= 30 and hour_count % 5 == 0 then
+			if hour_count >= 35 then
+				sendPacket(3, room.name .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. hour_count)
 			end
-		end
 
-		if file.hour_c >= 35 and file.hour_c % 5 == 0 then
-			sendPacket(3, room.name .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. file.hour_c)
+			local badge = math.ceil((hour_count - 29) / 5)
+			if badge <= #badges[4] then
+				if file.badges[4] == 0 or file.badges[4] < badge then
+					file.badges[4] = badge
+					NewBadgeInterface:show(player, 4, badge)
+				end
+			end
 		end
 
 		savePlayerData(player)
@@ -814,7 +884,7 @@ onEvent("NewGame", function()
 
 	local to_remove, count = {}, 0
 	for player in next, no_powers do
-		if not players_file[player] or players_file[player].parkour.killed <= now then
+		if not players_file[player] or players_file[player].killed <= now then
 			count = count + 1
 			to_remove[count] = player
 		end
@@ -850,12 +920,9 @@ onEvent("NewGame", function()
 	local file
 	for player in next, in_room do
 		file = players_file[player]
-		if file and file.parkour.hour_r <= now then
-			file.parkour.hour_c = 0
-			file.parkour.hour_r = now + 60 * 60 * 1000
-			savePlayerData(player)
+		if file then
+			fixHourCount(player, file)
 		end
-
 		unbind(player)
 	end
 end)
