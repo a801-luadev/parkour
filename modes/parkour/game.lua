@@ -101,6 +101,10 @@ onEvent("NewPlayer", function(player)
 			tfm.exec.addBonus(0, next_level.x, next_level.y, players_level[player] + 1, 0, false, player)
 		end
 	end
+
+	if records_admins then
+		bindKeyboard(player, 78, true, true) -- N key
+	end
 end)
 
 onEvent("Keyboard", function(player, key)
@@ -111,6 +115,10 @@ onEvent("Keyboard", function(player, key)
 			for key = 0, 2 do
 				bindKeyboard(player, key, true, false)
 			end
+		end
+	elseif records_admins and key == 78 then
+		if checkCooldown(player, "redo_key", 500) then
+			eventParsedChatCommand(player, "redo")
 		end
 	end
 end)

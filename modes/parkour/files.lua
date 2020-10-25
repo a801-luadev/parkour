@@ -31,7 +31,7 @@ local timed_maps = {
 	week = {},
 	hour = {}
 }
-local badges = {
+local badges = { -- badge id, small image, big image
 	[1] = { -- former staff
 		{ 1, "1745f43783e.png", "1745f432e33.png"},
 	},
@@ -61,15 +61,15 @@ local badges = {
 	[6] = { -- records
 		filePriority = true,
 
-		{15, "174e4ab6c8e.png", "174e4ad310f.png"}, -- 1
-		{16, "174e4abd8bf.png", "174e4ad809d.png"}, -- 5
-		{17, "174e4ab90e8.png", "174e4ad9ac9.png"}, -- 10
-		{18, "174e4ac1da4.png", "174e4adb7b6.png"}, -- 15
-		{19, "174e4ac3c80.png", "174e4add665.png"}, -- 20
-		{20, "174e4ac5e0c.png", "174e4adf461.png"}, -- 25
-		{21, "174e4acbb91.png", "174e4ae116f.png"}, -- 30
-		{22, "174e4acd5af.png", "174e4ae2cd5.png"}, -- 35
-		{23, "174e4acee82.png", "174e4ae49a3.png"}, -- 40
+		{15, "1755b8540b8.png", "1755b851704.png"}, -- 1
+		{16, "1755b858a36.png", "1755b85628e.png"}, -- 5
+		{17, "1755b85f345.png", "1755b85cc7e.png"}, -- 10
+		{18, "1755b865284.png", "1755b861ef0.png"}, -- 15
+		{19, "1755baac7c8.png", "1755baa9e31.png"}, -- 20
+		{20, "1755bab889c.png", "1755bab5995.png"}, -- 25
+		{21, "1755babf3c0.png", "1755babbd2d.png"}, -- 30
+		{22, "1755bac4ab9.png", "1755bac1ed3.png"}, -- 35
+		{23, "1755bacbdd6.png", "1755bac996d.png"}, -- 40
 	},
 }
 players_file = {}
