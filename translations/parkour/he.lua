@@ -57,7 +57,7 @@ translations.he = {
 	records_submitted = "<v>[#] <d>השיא שלך למפה <b>%s</b> הוגש.",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>אפשרויות פארקור</font></p>\n\nהשתמש בחלקים כנקודות שמירה\n\nהשתמש במקלדת <b>QWERTY</b> (כבה אם <b>AZERTY</b> בשימוש)\n\nהשתמש באות <b>צ</b> במקום <b>/mort</b> (משבית את <b>DEL</b>)\n\nהראה את זמן טעינת הכוחות\n\nהראה כפתור כוחות\n\nהראה כפתור עזרה\n\nהראה הכרזות השלמת מפות\n\nהצג סימן 'ללא עזרה'",
+	options = "<p align='center'><font size='20'>אפשרויות פארקור</font></p>\n\nהשתמש במקלדת <b>QWERTY</b> (כבה אם <b>AZERTY</b> בשימוש)\n\nהשתמש באות <b>צ</b> במקום <b>/mort</b> (משבית את <b>DEL</b>)\n\nהראה את זמן טעינת הכוחות\n\nהראה כפתור כוחות\n\nהראה כפתור עזרה\n\nהראה הכרזות השלמת מפות\n\nהצג סימן 'ללא עזרה'",
 	cooldown = "<v>[#] <r>המתן מספר שניות לפני שאתה עושה זאת.",
 	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> מקלדת" ..
 					 "\n\n<b>הסתר</b> ספירת מפות"),

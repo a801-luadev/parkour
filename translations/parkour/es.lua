@@ -57,7 +57,7 @@ translations.es = {
 	records_submitted = "<v>[#] <d>Tu récord para el mapa <b>%s</b> ha sido enviado.",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar partículas para los checkpoints\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa\n\nMostrar indicador para no recibir ayuda",
+	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa\n\nMostrar indicador para no recibir ayuda",
 	cooldown = "<v>[#] <r>Espera unos segundos antes de hacer eso de nuevo.",
 	power_options = ("<font size='13' face='Lucida Console'>Teclado <b>QWERTY</b>" ..
 					 "\n\n<b>Esconder</b> cantidad de mapas"),

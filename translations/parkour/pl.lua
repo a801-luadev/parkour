@@ -57,7 +57,7 @@ translations.pl = {
 	records_submitted = "<v>[#] <d>Twój rekord na mapie <b>%s</b> zostały przesłane.",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj cząstek jako punktów kontrolnych\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<b>M</b> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy",
+	options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<b>M</b> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy",
 	cooldown = "<v>[#] <r>Poczekaj kilka sekund, zanim zrobisz to ponownie.",
 	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> klawiatura" ..
 					 "\n\n<b>Ukryć</b> map liczb"),

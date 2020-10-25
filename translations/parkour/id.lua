@@ -57,7 +57,7 @@ translations.id = {
     records_submitted = "<v>[#] <d>Rekor kamu untuk peta <b>%s</b> telah dikirim.",
 
     -- Miscellaneous
-    options = "<p align='center'><font size='20'>Opsi Parkur</font></p>\n\nGunakan partikel untuk cekpoin\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nGunakan <b>M</b> hotkey untuk <b>/mort</b> (nonaktifkan untuk <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan kamu\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nPerlihatkan pengumuman penyelesaian peta\n\nPerlihatkan simbol tidak memerlukan bantuan",
+    options = "<p align='center'><font size='20'>Opsi Parkur</font></p>\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nGunakan <b>M</b> hotkey untuk <b>/mort</b> (nonaktifkan untuk <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan kamu\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nPerlihatkan pengumuman penyelesaian peta\n\nPerlihatkan simbol tidak memerlukan bantuan",
     cooldown = "<v>[#] <r>Mohon Tunggu beberapa detik untuk melakukannya kembali.",
     power_options = ("<font size='13' face='Lucida Console'>Keyboard <b>QWERTY</b>" ..
                     "\n\n<b>Tutup</b> penghitung peta"),

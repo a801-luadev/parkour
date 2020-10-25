@@ -151,7 +151,7 @@ end
 
 local function getTagProperties(tag)
 	local properties = {}
-	for name, value in string.gmatch(tag, '(%S+)%s*=%s*"([^"]+)"') do
+	for name, value in string.gmatch(tag, '(%S+)%s*=%s*"([^"]*)"') do
 		properties[name] = tonumber(value) or value
 	end
 	return properties
@@ -245,7 +245,7 @@ onEvent("NewGame", function()
 
 		if properties.C == 22 then
 			count = count + 1
-			levels[count] = {x = properties.X, y = properties.Y}
+			levels[count] = {x = properties.X, y = properties.Y, stop = properties.stop}
 		end
 	end
 
@@ -256,7 +256,7 @@ onEvent("NewGame", function()
 		if properties.T == 19 and properties.C == "329cd2" then
 			chair = true
 			count = count + 1
-			levels[count] = {x = properties.X, y = properties.Y - 25}
+			levels[count] = {x = properties.X, y = properties.Y - 40}
 			break
 		end
 	end

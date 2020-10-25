@@ -57,7 +57,7 @@ translations.tr = {
 	records_submitted = "<v>[#] <d>Rekorunuz bu harita için <b>%s</b> olarak gönderildi.",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\nKontrol noktaları için parçacıkları kullan.\n\n<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n<b>/mort</b>'un kısayolu <b>M</b> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\nBeceri bekleme sürelerini göster.\n\nBeceriler simgesini göster.\n\nYardım butonunu göster.\n\nHarita bitirme duyurularını göster.\n\nYardım istemiyorum simgesini göster.",
+	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\n<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n<b>/mort</b>'un kısayolu <b>M</b> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\nBeceri bekleme sürelerini göster.\n\nBeceriler simgesini göster.\n\nYardım butonunu göster.\n\nHarita bitirme duyurularını göster.\n\nYardım istemiyorum simgesini göster.",
 	cooldown = "<v>[#] <r>Bunu tekrar yapmadan önce birkaç saniye bekleyin",
 	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> Klavye" ..
 					 "\n\nTamamlanan harita sayısını <b>gizle</b>"),

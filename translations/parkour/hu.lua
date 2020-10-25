@@ -57,7 +57,7 @@ translations.hu = {
 	records_submitted = "<v>[#] <d>A <b>%s</b> rekordod ehhez a pályához be lett küldve.",
 
 	-- Miscellaneous
-	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználj effekteket az ellenőrző pontok megjelenítéséhez\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot",
+	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot",
 	cooldown = "<v>[#] <r>Várj néhány másodpercet, mielőtt újra ezt tennéd.",
 	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> billentyűzet" ..
 					 "\n\nTeljesített pályák <b>elrejtése</b>"),
