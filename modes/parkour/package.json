@@ -23,6 +23,7 @@
 	{"type": "require-file", "file": "modes/parkour/chat-ui.lua"},
 
 	{"type": "require-dir", "dir": "modes/parkour/objects", "recursive": false},
+	{"type": "require-dir", "dir": "modes/parkour/interfaces/requirements", "recursive": false},
 	{"type": "require-dir", "dir": "modes/parkour/interfaces", "recursive": false},
 	{"type": "require-file", "file": "modes/parkour/ui.lua"},
 
