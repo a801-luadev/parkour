@@ -49,7 +49,7 @@ translations.br = {
 
 	-- Records
 	records_enabled = "<v>[#] <d>Modo Records está ativado nesta sala. Dados não serão contados e poderes não estão ativados!\nVocê poderá encontrar mais informações sobre records em <b>%s</b>",
-	records_admin = "<v>[#] <d>Você é um administrador desta sala de records. Você pode usar os comandos <b>!map</b>, <b>!pw</b> e <b>!time</b>.",
+	records_admin = "<v>[#] <d>Você é um administrador desta sala de records. Você pode usar os comandos <b>!map</b>, <b>!setcp</b>, <b>!pw</b> e <b>!time</b>.",
 	records_completed = "<v>[#] <d>Você completou o mapa! Se você quiser jogar nele novamente, digite <b>!redo</b>.",
 	records_submit = "<v>[#] <d>Wow! Parece que você teve o melhor tempo nesta sala. Se você quiser enviar o record, digite <b>!submit</b>.",
 	records_invalid_map = "<v>[#] <r>Parece que este mapa não está na rotação de mapas do parkour... Você não pode enviar um recorde para ele",

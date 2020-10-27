@@ -49,7 +49,7 @@ translations.tr = {
 
 	-- Records
 	records_enabled = "<v>[#] <d>Rekor modu bu odada açık. İstatistikleriniz bu odada sayılmaz ve güçlerinizi kullanamazsınız!\nRekorlar hakkında daha fazla bilgi edinmek için <b>%s</b>  .",
-	records_admin = "<v>[#] <d>Bu rekor odasının yöneticisisiniz. <b>!map</b>, <b>!pw</b> ve <b>!time</b> komutlarını kullanabilirsiniz.",
+	records_admin = "<v>[#] <d>Bu rekor odasının yöneticisisiniz. <b>!map</b>, <b>!setcp</b>, <b>!pw</b> ve <b>!time</b> komutlarını kullanabilirsiniz.",
 	records_completed = "<v>[#] <d>Haritayı tamamladınız! Eğer tekrar yapmak istiyorsanız <b>!redo</b> yazabilirsiniz.",
 	records_submit = "<v>[#] <d>Harika! Görünüşe göre bu haritayı en kısa sürede siz tamamladınız. Rekorunuzu göndermek isterseniz <b>!submit</b> yazın.",
 	records_invalid_map = "<v>[#] <r>Görünüşe göre bu harita parkur biçiminde değil... Bu harita için rekor gönderemezsiniz!",

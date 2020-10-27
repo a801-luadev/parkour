@@ -49,7 +49,7 @@ translations.pl = {
 
 	-- Records
 	records_enabled = "<v>[#] <d> W tym pokoju włączony jest tryb nagrywania.  Statystyki się nie liczą, a uprawnienia nie są włączone!\nWięcej informacji na temat rekordów można znaleźć w <b>%s</b>",
-	records_admin = "<v>[#] <d>Jesteś administratorem tego pokoju z aktami.  Możesz użyć poleceń <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
+	records_admin = "<v>[#] <d>Jesteś administratorem tego pokoju z aktami.  Możesz użyć poleceń <b>!map</b>, <b>!setcp</b>, <b>!pw</b> and <b>!time</b>.",
 	records_completed = "<v>[#] <d>Ukończyłeś mapę!  Jeśli chcesz to zrobić ponownie, wpisz <b>!redo</b>.",
 	records_submit = "<v>[#] <d>Łał! Wygląda na to, że miałeś najszybszy czas w pokoju. Jeśli chcesz przesłać swój rekord, wpisz <b>!submit</b>.",
 	records_invalid_map = "<v>[#] <r>Wygląda na to, że na tej mapie nie ma rotacji parkour... Nie możesz przesłać jej rekordu!",

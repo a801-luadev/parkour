@@ -18,6 +18,11 @@ local players_file
 review_mode = false
 local cp_available = {}
 
+local checkpoint_info = {
+	version = 1, -- 0 = old, 1 = new
+	radius = 15 ^ 2, -- radius of 15px
+	next_version = 1
+}
 local checkCooldown
 local savePlayerData
 local ranks
@@ -98,7 +103,9 @@ onEvent("NewPlayer", function(player)
 
 		if next_level then
 			addCheckpointImage(player, next_level.x, next_level.y)
-			tfm.exec.addBonus(0, next_level.x, next_level.y, players_level[player] + 1, 0, false, player)
+			if checkpoint_info.version == 1 then
+				tfm.exec.addBonus(0, next_level.x, next_level.y, players_level[player] + 1, 0, false, player)
+			end
 		end
 	end
 
@@ -155,6 +162,9 @@ onEvent("PlayerDied", function(player)
 end)
 
 onEvent("PlayerWon", function(player)
+	if bans[ room.playerList[player].id ] then return end
+	if victory[player] then return end
+
 	victory_count = victory_count + 1
 	victory[player] = true
 	victory._last_level[player] = false
@@ -184,6 +194,7 @@ onEvent("NewGame", function()
 	players_level = {}
 	generated_at = {}
 	map_start = os.time()
+	checkpoint_info.version = checkpoint_info.next_version
 
 	if records_admins then
 		less_time = true
@@ -194,7 +205,9 @@ onEvent("NewGame", function()
 	local start_x, start_y
 	if levels then
 		start_x, start_y = levels[2].x, levels[2].y
-		tfm.exec.addBonus(0, start_x, start_y, 2, 0, false)
+		if checkpoint_info.version == 1 then
+			tfm.exec.addBonus(0, start_x, start_y, 2, 0, false)
+		end
 
 		for player in next, in_room do
 			if checkpoints[player] then
@@ -235,10 +248,49 @@ onEvent("Loop", function()
 				tfm.exec.killPlayer(name)
 			end
 		end
+
+		if checkpoint_info.version ~= 0 then return end
+
+		local last_level = #levels
+		local level_id, next_level, player
+		local now = os.time()
+		for name in next, in_room do
+			player = room.playerList[name]
+			if player and now >= cp_available[name] then
+				level_id = (players_level[name] or 1) + 1
+				next_level = levels[level_id]
+
+				if next_level then
+					if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_info.radius then
+						players_level[name] = level_id
+						if not victory[name] then
+							tfm.exec.setPlayerScore(name, level_id, false)
+						end
+						tfm.exec.removeImage(checkpoints[name])
+
+						if level_id == last_level then
+							if victory[name] then -- !cp
+								translatedChatMessage("reached_level", name, level_id)
+							else
+								victory._last_level[name] = true
+								tfm.exec.giveCheese(name)
+								tfm.exec.playerVictory(name)
+								tfm.exec.respawnPlayer(name)
+								tfm.exec.movePlayer(name, next_level.x, next_level.y)
+							end
+						else
+							translatedChatMessage("reached_level", name, level_id)
+							addCheckpointImage(name, levels[level_id + 1].x, levels[level_id + 1].y)
+						end
+					end
+				end
+			end
+		end
 	end
 end)
 
 onEvent("PlayerBonusGrabbed", function(player, bonus)
+	if checkpoint_info.version ~= 1 then return end
 	if not levels then return end
 	local level = levels[bonus]
 	if not level then return end
@@ -312,7 +364,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		if not levels[checkpoint] then return end
 
-		tfm.exec.removeBonus(players_level[player] + 1, player)
+		if checkpoint_info.version == 1 then
+			tfm.exec.removeBonus(players_level[player] + 1, player)
+		end
 		players_level[player] = checkpoint
 		tfm.exec.killPlayer(player)
 		if not victory[player] then
@@ -325,7 +379,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 		if next_level then
 			addCheckpointImage(player, next_level.x, next_level.y)
-			tfm.exec.addBonus(0, next_level.x, next_level.y, checkpoint + 1, 0, false, player)
+			if checkpoint_info.version == 1 then
+				tfm.exec.addBonus(0, next_level.x, next_level.y, checkpoint + 1, 0, false, player)
+			end
 		end
 
 	elseif cmd == "spec" then
@@ -357,6 +413,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	elseif cmd == "redo" then
 		if not records_admins or not generated_at[player] then return end
 
+		if checkpoint_info.version == 1 then
+			tfm.exec.removeBonus(players_level[player] + 1, player)
+		end
+
 		players_level[player] = 1
 		generated_at[player] = nil
 		victory[player] = nil
@@ -374,7 +434,25 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.removeImage(checkpoints[player])
 		end
 		addCheckpointImage(player, x, y)
-		tfm.exec.addBonus(0, x, y, 2, 0, false, player)
+		if checkpoint_info.version == 1 then
+			tfm.exec.addBonus(0, x, y, 2, 0, false, player)
+		end
+
+	elseif cmd == "setcp" then
+		if not records_admins or not records_admins[player] then
+			if not perms[player].set_checkpoint_version then return end
+		end
+
+		local version = tonumber(args[1])
+		if not version then
+			return tfm.exec.chatMessage("<v>[#] <r>Usage: <b>!setcp 1</b> or <b>!setcp 2</b>.", player)
+		end
+		if version ~= 1 and version ~= 2 then
+			return tfm.exec.chatMessage("<v>[#] <r>Checkpoint version can either be 1 or 2.", player)
+		end
+
+		checkpoint_info.next_version = version - 1
+		tfm.exec.chatMessage("<v>[#] <d>Changes will be applied in the next round.", player)
 	end
 end)
 
@@ -494,4 +572,5 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("spec")
 	system.disableChatCommandDisplay("time")
 	system.disableChatCommandDisplay("redo")
+	system.disableChatCommandDisplay("setcp")
 end)

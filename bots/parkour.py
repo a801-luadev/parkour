@@ -392,9 +392,10 @@ class Client(aiotfm.Client):
 			self.received_weekly_reset = False
 
 		elif id == RECORD_SUBMISSION:
-			code, player, taken, room = text.split("\x00")
+			code, player, taken, room, checkpoint = text.split("\x00")
 			player = int(player)
 			taken = int(taken)
+			checkpoint = int(checkpoint)
 			name = await self.get_player_name(player)
 
 			self.dispatch(
@@ -405,7 +406,8 @@ class Client(aiotfm.Client):
 					"name": name,
 					"playerID": player,
 					"time": taken,
-					"room": room
+					"room": room,
+					"cp": checkpoint
 				}),
 				env.records_webhook
 			)

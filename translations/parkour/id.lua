@@ -49,7 +49,7 @@ translations.id = {
 
     -- Records
     records_enabled = "<v>[#] <d>Mode rekor diaktifkan di room ini. Statistik tidak dihitung dan kekuatan tidak diaktifkan!\nKamu bisa mencari informasi lebih lanjut mengenai rekor di <b>%s</b>",
-    records_admin = "<v>[#] <d>Kamu adalah admin di ruangan rekor ini. Kamu bisa menggunakan perintah <b>!map</b>, <b>!pw</b> dan <b>!time</b>.",
+    records_admin = "<v>[#] <d>Kamu adalah admin di ruangan rekor ini. Kamu bisa menggunakan perintah <b>!map</b>, <b>!setcp</b>, <b>!pw</b> dan <b>!time</b>.",
     records_completed = "<v>[#] <d>Kamu telah menyelesaikan peta! Jika kamu ingin mengulanginya lagi, ketik <b>!redo</b>.",
     records_submit = "<v>[#] <d>Wow! Sepertinya kamu memiliki waktu tercepat di ruangan. Jika kamu ingin mengirimkan rekor kamu, ketik <b>!submit</b>.",
     records_invalid_map = "<v>[#] <r>Sepertinya ruangan ini tidak masuk dalam rotasi parkur... Kamu tidak bisa mengirim rekor ini!",

@@ -52,6 +52,7 @@ end)
 onEvent("PlayerWon", function(player)
 	local id = room.playerList[player].id
 	if bans[id] then return end
+	if victory[player] then return end
 	if not players_file[player] then return end
 
 	if records_admins then
@@ -171,7 +172,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			(map .. "\000" ..
 			 room.playerList[player].id .. "\000" ..
 			 math.floor(fastest.record * 100) .. "\000" ..
-			 room.name)
+			 room.name .. "\000" ..
+			 checkpoint_info.version)
 		)
 		translatedChatMessage("records_submitted", player, room.currentMap)
 

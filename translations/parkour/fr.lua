@@ -7,10 +7,10 @@ translations.fr = {
 	corrupt_map_vanilla = "<r>[ERROR] <n>Impossible de récolter les informations de cette carte.",
 	corrupt_map_mouse_start = "<r>[ERROR] <n>Cette carte a besoin d'un point d'apparition (pour les souris).",
 	corrupt_map_needing_chair = "<r>[ERROR] <n>La carte a besoin d'une chaise d'arrivée (point final).",
-	corrupt_map_missing_checkpoints = "<r>[ERROR] <n>La carte à besoin d'au moins un point de sauvegarde (étoiles jaunes).",
-	corrupt_data = "<r>Malheureusement, vos données ont été corrompues et ont été effacées.",
-	min_players = "<r>Pour sauvegarder vos données, il doit y avoir au moins 4 souris dans le salon. <bl>[%s/%s]",
-	tribe_house = "<r>Les données ne sont pas sauvegardées dans les maisons de tribus.",
+	corrupt_map_missing_checkpoints = "<r>[ERROR] <n>La carte a besoin d'au moins un point de sauvegarde (étoiles jaunes).",
+	corrupt_data = "<r>Malheureusement, tes données ont été corrompues et ont été effacées.",
+	min_players = "<r>Pour sauvegarder les données, il doit y avoir au moins 4 souris dans le salon. <bl>[%s/%s]",
+	tribe_house = "<r>Les données ne sont pas sauvegardées dans les maisons de tribu.",
 	invalid_syntax = "<r>Syntaxe invalide.",
 	code_error = "<r>Une erreur est survenue: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Mise en place du blocage d'urgence, aucun nouveau joueur ne peut rejoindre. Merci d'aller dans un autre salon #parkour.",
@@ -23,10 +23,10 @@ translations.fr = {
 	rules = "Règles",
 	contribute = "Contribuer",
 	changelog = "Changements",
-	help_help = "<p align = 'center'><font size = '14'>Bienvenue à <T>#parkour!</T></font>\n\n<font size = '12'><J>Votre but est d'atteindre tous les points de sauvegarde pour finir la carte.</J></font></p>\n\n<font size = '11'><N>• Appuyez sur <O>O</O>, écrivez <O>!op</O> ou cliquez le <O>bouton de configuration</O> pour ouvrir le <T>menu des options</T>.\n• Appuyez sur <O>P</O> ou cliquez l'<O>icône de main</O> en haut à droite pour ouvrir le <T>menu des pouvoirs</T>.\n• Appuyez sur <O>L</O> ou écrivez <O>!lb</O> pour ouvrir le <T>tableau des scores</T>.\n• Utilisez la touche <O>M</O> ou la touche <O>Suppr.</O> comme un raccourci de <T>/mort</T>, vous pouvez personnaliser les touches dans le menu des <J>Options</J>.\n• Pour en savoir plus à propos de notre <O>staff</O> et des <O>règles de parkour</O>, cliquez sur les pages respectives du <T>Staff</T> et des <T>Règles</T>.\n• Cliquez <a href='event:discord'><o>ici</o></a> pour avoir le lien d'invitation pour le discord et <a href='event:map_submission'><o>ici</o></a> pour avoir le lien de soumission de cartes.\n• Utilisez les flèches d'<o>en haut</o> et d'<o>en bas</o> quand vous avez besoin de scroller.\n\n<p align = 'center'><font size = '13'><T>Les contributions sont maintenant ouvertes ! pour plus d'informations, cliquez sur la page <O>Contribuer</O> </T></font></p>",
+	help_help = "<p align = 'center'><font size = '14'>Bienvenue à <T>#parkour!</T></font>\n\n<font size = '12'><J>Ton but est d'atteindre tous les points de sauvegarde pour finir la carte.</J></font></p>\n\n<font size = '11'><N>• Appuie sur <O>O</O>, écris <O>!op</O> ou clique sur le <O>bouton de configuration</O> pour ouvrir les <T>options</T>.\n• Appuie sur <O>P</O> ou clique sur la <O>main</O> en haut à droite pour voir les <T>pouvoirs</T>.\n• Appuie sur <O>L</O> ou écris <O>!lb</O> pour ouvrir le <T>classement</T>.\n• Utilise la touche <O>M</O> ou la touche <O>Suppr.</O> comme un raccourci pour <T>/mort</T>, tu peux personnaliser les touches dans les <J>Options</J>.\n• Pour en savoir plus à propos du <O>staff</O> et des <O>règles de parkour</O>, clique sur les pages <T>Staff</T> et <T>Règles</T>.\n• Clique <a href='event:discord'><o>ici</o></a> pour avoir le lien d'invitation Discord et <a href='event:map_submission'><o>ici</o></a> pour avoir le lien pour proposer des maps.\n• Utilise les fléches d'<o>en haut</o> et d'<o>en bas</o> si tu as besoin de scroller.\n\n<p align = 'center'><font size = '13'><T>Les contributions sont maintenant ouvertes ! Pour plus d'informations, clique sur la page <O>Contribuer</O> </T></font></p>",
 	help_staff = "<p align = 'center'><font size = '13'><r>INFORMATION: Le Staff de Parkour n'est pas le Staff de Transformice, ils n'ont aucun pouvoir sur le jeu en lui-même, seulement dans ce module.</r>\nLe Staff de Parkour s'assure que le module marche bien, avec le moins de problèmes possible et sont toujours disponibles pour aider les joueurs.</font></p>\nVous pouvez écrire <D>!staff</D> dans le chat pour voir la liste du Staff en ligne.\n\n<font color = '#E7342A'>Administrateurs:</font> Ils sont responsables de maintenir le module lui-même en ajoutant des mises à jour et en réparant les bugs.\n\n<font color = '#D0A9F0'>Managers des équipes:</font> Ils surveillent les modérateurs et les créateurs de cartes, surveillant s'ils font bien leur travail. Ils sont aussi responsable du recrutement des nouveaux membres du Staff.\n\n<font color = '#FFAAAA'>Modérateurs:</font> Ils font respecter les règles du module et punissent ceux qui les enfreignent.\n\n<font color = '#25C059'>Mappers:</font> Ils sont aussi responsable de vérifier, ajouter et de supprimer des cartes dans le module pour rendre vos parties plus agréables.",
-	help_rules = "<font size = '13'><B><J>Toutes Les Règles des Termes et des Conditions de Transformice s'appliquent aussi dans #parkour.</J></B></font>\n\nSi vous surprenez un joueur en train d'enfreindre les règles, chuchotez à un modérateur du module #parkour connecté. Si aucun modérateur n'est en ligne, rapportez-le dans le serveur Discord.\nPour tous reports, veuillez inclure : le serveur, le nom du salon, et le nom du joueur.\n• Ex: fr-#parkour10 Blank#3495 troll\nDes preuves, comme des captures d'écran, des vidéos et des GIFs aident et sont appréciés, mais pas nécessaires.\n\n<font size = '11'>• Aucun <font color = '#ef1111'> hack, aucune glitch ou bugs</font> utilisés/abusés ne sont autorisés dans les salons #parkour\n• <font color = '#ef1111'>Le farm VPN</font> est considéré comme <B>une violation</B> et n'est pas autorisé. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nN'importe qui surprit en train d'enfreindre ces règles sera banni.</B></font></p>\n\n<font size = '12'>Transformice autorise le concept du troll. Mais, <font color='#cc2222'><B>nous ne l'autorisons pas dans #parkour.</B></font></font>\n\n<p align = 'center'><J>Le troll est quand un joueur utilise ses pouvoirs ou ses objets d’inventaire pour intentionnellement empêcher les autres joueurs de finir la carte.</j></p>\n• Le troll en revanche d'un autre troll<B>n'est pas une raison valable</B> et vous serez quand même puni.\n• Aider un joueur disant vouloir faire la carte seule est aussi considéré comme du troll.\n• <J>Si un joueur veut réaliser la carte sans aide, merci de le laisser libre de son choix et d'aider les autres joueurs</J>. Si un autre joueur a besoin d'aide au même point de sauvegarde que celui-ci, vous pouvez aider les deux.\n\nSi un joueur est surpris en train de troller, il sera punis en fonction d’un système de temps. Notez que du troll répétitif peut amener à des sanctions de plus en plus sévères.",
-	help_contribute = "<font size='14'>\n<p align='center'>L'équipe de management de parkour aime l'open-source car <t>cela aide la communauté</t>. Vous pouvez <o>voir</o> et <o>modifier</o> le code source sur <o><u><a href='event:github'>GitHub</a></u></o>.\n\nEntretenir le module est <t>strictement volontaire</t>, donc toute aide à propos du <t>code</t>, <t>des rapports de bugs</t>, <t>des suggestions</t> et <t>la création de cartes</t> est toujours <u>la bienvenue et apprécié</u>.\nVous pouvez <vp>rapporter des bugs</vp> et <vp>faire des suggestions</vp> dans <o><u><a href='event:discord'>Discord</a></u></o> et/ou <o><u><a href='event:github'>GitHub</a></u></o>.\nVous pouvez <vp>proposer des cartes</vp> sur le <o><u><a href='event:map_submission'>Forum</a></u></o>.\n\nEntretenir le parkour n'est pas cher, mais ce n'est pas non plus gratuit. Nous apprécierons si vous nous aidez en <t>faisant un don</t> <o><u><a href='event:donate'>ici</a></u></o>.\n<u>Toutes les donations iront directement dans l'amélioration du module.</u></p>",
+	help_rules = "<font size = '13'><B><J>Toutes Les Règles des Termes et des Conditions de Transformice s'appliquent aussi dans #parkour.</J></B></font>\n\nSi vous surprenez un joueur en train d'enfreindre les règles, chuchotez à un modérateur #parkour connecté. Si aucun modérateur n'est en ligne, signalez le joueur dans le serveur Discord.\nPour tous signalements, veuillez inclure : la communauté, le nom du salon, et le nom du joueur.\n• Ex: fr-#parkour10 Blank#3495 troll\nDes preuves, comme des vidéos et des GIFs aident et sont appréciés, mais pas nécessaires.\n\n<font size = '11'>• Aucun <font color = '#ef1111'>hack, glitch ou bugs</font> utilisé/abusé n'est pas autorisé dans les salons #parkour\n• <font color = '#ef1111'>Le farm VPN</font> est considéré comme <B>une violation</B> et n'est pas autorisé. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nN'importe qui surprit en train d'enfreindre ces règles sera banni.</B></font></p>\n\n<font size = '12'>Transformice autorise le concept du troll. Cependant, <font color='#cc2222'><B>nous ne l'autorisons pas dans #parkour.</B></font></font>\n\n<p align = 'center'><J>Le troll est quand un joueur utilise ses pouvoirs ou ses objets d’inventaire pour intentionnellement empêcher les autres joueurs de finir la map.</j></p>\n• Le troll en revanche d'un autre troll <B>n'est pas une raison valable</B> et sera sanctionné.\n• Aider un joueur voulant faire la carte seule est aussi considéré comme du troll.\n• <J>Si un joueur veut réaliser la map sans aide, merci de le laisser libre de son choix et d'aider les autres joueurs</J>. Si un autre joueur a besoin d'aide au même point de sauvegarde qu'un autre qui n'en veut pas, vous pouvez aider les deux.\n\nSi un joueur est surpris en train de troller, il sera puni en fonction d’un système de temps. Notez que du troll répétitif peut amener à des sanctions de plus en plus sévères.",
+	help_contribute = "<font size='14'>\n<p align='center'>L'équipe de direction de parkour aime l'open-source car <t>cela aide la communauté</t>. Vous pouvez <o>voir</o> et <o>modifier</o> le code source sur <o><u><a href='event:github'>GitHub</a></u></o>.\n\nEntretenir le module est <t>strictement volontaire</t>, donc toute aide regardant le <t>développement</t>, <t>des signalements de bugs</t>, <t>des suggestions</t> et <t>la création de maps</t> est toujours <u>la bienvenue et apprécié</u>.\nVous pouvez <vp>signaler des bugs</vp> et <vp>faire des suggestions</vp> sur le <o><u><a href='event:discord'>Discord</a></u></o> et/ou <o><u><a href='event:github'>GitHub</a></u></o>.\nVous pouvez <vp>proposer des cartes</vp> sur le <o><u><a href='event:map_submission'>Forum</a></u></o>.\n\nEntretenir le module n'est pas cher, mais ce n'est pas non plus gratuit. Nous apprécierons si vous nous aidiez en <t>faisant un don</t> <o><u><a href='event:donate'>ici</a></u></o>.\n<u>Toutes les donations iront directement dans l'amélioration du module.</u></p>",
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.7.0 - 26/10/2020</o></p>\n\n<font size='11'>• <vp>Amélioration des points de sauvegarde</vp> : vous pouvez <o>instantanément</o> les achever en <o>passant dessus</o> !\n• Ajout d'une touche de raccourci pour les <cep>salons de records</cep>. Appuyez sur <cep>N</cep> pour <cep>refaire la map</cep>!",
 
 	-- Congratulation messages
@@ -36,46 +36,46 @@ translations.fr = {
 
 	-- Information messages
 	staff_power = "<r>Le staff de parkour <b>n'a pas</b> de pouvoir en dehors du module.",
-	donate = "<vp>Tapez <b>!donate</b> si vous souhaitez faire un don pour ce module!",
+	donate = "<vp>Tapez <b>!donate</b> si vous souhaitez faire un don pour ce module !",
 	paused_events = "<cep><b>[Attention!]</b> <n>Le module a atteint sa limite critique et est en pause.",
 	resumed_events = "<n2>Le module n'est plus en pause.",
-	welcome = "<n>Bienvenue à<t>#parkour</t>!",
+	welcome = "<n>Bienvenue dans <t>#parkour</t>!",
 	module_update = "<r><b>[Attention!]</b> <n>Le module va se réinitialiser dans<d>%02d:%02d</d>.",
 	leaderboard_loaded = "<j>Le tableau des scores a été chargé. Appuyer sur L pour l'ouvrir.",
-	kill_minutes = "<R>Vos pouvoirs ont été désactivés pour %s minutes.",
-	permbanned = "<r>Vous avez été banni de #parkour définitevement.",
-	tempbanned = "<r>Vous avez été banni de parkour pendant %s minutes.",
-	forum_topic = "<rose>Więcej informacji o module znajdziesz pod tym linkiem: %s",
+	kill_minutes = "<R>Tes pouvoirs ont été désactivés pour %s minutes.",
+	permbanned = "<r>Tu as été banni de #parkour définitevement.",
+	tempbanned = "<r>Tu as été banni de #parkour pendant %s minutes.",
+	forum_topic = "<rose>Pour plus d'informations sur le module, visite ce lien : %s",
 
 	-- Records
-	records_enabled = "<v>[#] <d>Le mode de records a été activé dans ce salon. Les statistiques ne compteront pas et les pouvoirs sont désactivés !\nVous pouvez trouver plus d'informations à propos des records sur <b>%s</b>",
-	records_admin = "<v>[#] <d>Vous êtes un administrateur de ce salon de records. Vous pouvez utiliser les commandes <b>!map</b>, <b>!pw</b> et <b>!time</b>.",
-	records_completed = "<v>[#] <d>Vous avez complété la carte ! Si vous voulez la refaire, ecrivez <b>!redo</b>.",
-	records_submit = "<v>[#] <d>Wow ! On dirait que vous avez fait le temps le plus rapide dans ce salon. Si vous voulez envoyez voter record, ecrivez <b>!submit</b>.",
-	records_invalid_map = "<v>[#] <r>On dirait que cette carte n'est pas dans la rotation de parkour... Vous ne pouvez pas envoyer de records pour celle-ci !",
-	records_not_fastest = "<v>[#] <r>On dirait que vous n'êtes pas le joueur le plus rapide dans ce salon...",
-	records_already_submitted = "<v>[#] <r>Vous avez déjà envoyé votre record pour cette carte !",
-	records_submitted = "<v>[#] <d>Votre record pour la carte <b>%s</b> a été envoyé.",
+	records_enabled = "<v>[#] <d>Le mode de records a été activé dans ce salon. Les statistiques ne compteront pas et les pouvoirs sont désactivés !\nTu peux trouver plus d'informations à propos des records sur <b>%s</b>",
+	records_admin = "<v>[#] <d>Tu es un administrateur de ce salon de records. Vous pouvez utiliser les commandes <b>!map</b>, <b>!pw</b> et <b>!time</b>.",
+	records_completed = "<v>[#] <d>Tu as complété la carte ! Si tu veux la refaire, ecrivez <b>!redo</b>.",
+	records_submit = "<v>[#] <d>Wow ! On dirait que tu as fait le temps le plus rapide dans ce salon. Si tu veux envoyez voter record, écris <b>!submit</b>.",
+	records_invalid_map = "<v>[#] <r>On dirait que cette carte n'est pas dans la rotation de parkour... Tu ne peux pas envoyer de records pour celle-ci !",
+	records_not_fastest = "<v>[#] <r>On dirait que tu n'es pas le joueur le plus rapide dans ce salon...",
+	records_already_submitted = "<v>[#] <r>Tu as déjà envoyé ton record pour cette carte !",
+	records_submitted = "<v>[#] <d>Ton record pour la carte <b>%s</b> a été envoyé.",
 
 	-- Miscellaneous
 	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <b>M</b> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.",
 	cooldown = "<v>[#] <r>Attends quelques secondes avant de pouvoir recommencer.",
 	power_options = ("<font size='13' face='Lucida Console'>Clavier <b>QWERTY</b>" ..
 					 "\n\n<b>Cacher</b> le nombre de cartes"),
-	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Complète <v>%s</v> cartes" ..
+	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Complète <v>%s</v> maps" ..
 					"<font size='5'>\n\n</font>pour débloquer le pouvoir" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Complète <v>%s</v> cartes" ..
+	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Complète <v>%s</v> maps" ..
 					"<font size='5'>\n\n</font>pour améliorer le pouvoir" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Rang <v>%s</v>" ..
+	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Rang <v>%s</v> requis" ..
 					"<font size='5'>\n\n</font>pour débloquer le pouvoir" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Rang <v>%s</v>" ..
+	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Rang <v>%s</v> requis" ..
 					"<font size='5'>\n\n</font>pour améliorer le pouvoir" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
 	maps_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
-				 "<font size='5'>\n\n</font>Cartes complétées"),
+				 "<font size='5'>\n\n</font>Maps complétées"),
 	overall_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>Classement Global"),
 	weekly_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
@@ -103,7 +103,7 @@ translations.fr = {
 	help_badge_11 = "Ce joueur a un record de 45 cartes par heure.",
 	help_badge_12 = "Ce joueur a un record de 50 cartes par heure.",
 	help_badge_13 = "Ce joueur a un record de 55 cartes par heure.",
-	help_badge_14 = "Ce joueur a vérifié son compte discord sur le discord officiel de parkour (écrivez <b>!discord</b>).",
+	help_badge_14 = "Ce joueur a vérifié son compte discord sur le discord officiel de parkour (écris <b>!discord</b>).",
 	help_badge_15 = "Ce joueur a obtenu le temps le plus rapide sur 1 carte.",
 	help_badge_16 = "Ce joueur a obtenu le temps le plus rapide sur 5 cartes.",
 	help_badge_17 = "Ce joueur a obtenu le temps le plus rapide sur 10 cartes.",
@@ -117,10 +117,10 @@ translations.fr = {
 	make_private = "Rendre privé",
 	moderators = "Modérateurs",
 	mappers = "Mappers",
-	managers = "Managers",
+	managers = "Manageurs",
 	administrators = "Administrateurs",
 	close = "Fermer",
-	cant_load_bot_profile = "<v>[#] <r>Vous ne pouvez pas voir le profile de ce robot car #parkour l'utilise intérieurement pour faire fonctionner le module correctement.",
+	cant_load_bot_profile = "<v>[#] <r>Tu ne peux pas voir le profile de ce robot car #parkour l'utilise intérieurement pour faire fonctionner le module correctement.",
 	cant_load_profile = "<v>[#] <r>Le joueur <b>%s</b> semble être hors ligne ou n'existe pas.",
 	like_map = "Aimez-vous cette carte ?",
 	yes = "Oui",
@@ -129,10 +129,10 @@ translations.fr = {
 	unknown = "Inconnu",
 	powers = "Pouvoirs",
 	press = "<vp>Appuyer sur %s",
-	click = "<vp>Clic gauche",
+	click = "<vp>Clique gauche",
 	ranking_pos = "Classement #%s",
 	completed_maps = "<p align='center'><BV><B>Cartes complétées: %s</B></p></BV>",
-	leaderboard = "Tableau des scores",
+	leaderboard = "Classement",
 	position = "<V><p align=\"center\">Position",
 	username = "<V><p align=\"center\">Pseudo",
 	community = "<V><p align=\"center\">Communauté",
@@ -147,9 +147,9 @@ translations.fr = {
 	bubble = "Bulle",
 	fly = "Voler",
 	snowball = "Boule de neige",
-	speed = "Vitesse",
+	speed = "Accélération",
 	teleport = "Téléportation",
-	smallbox = "Petite boite",
+	smallbox = "Petite boîte",
 	cloud = "Nuage",
 	rip = "Tombe",
 	choco = "Planche de chocolat",

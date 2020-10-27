@@ -49,7 +49,7 @@ translations.ro = {
 
 	-- Records
 	records_enabled = "<v>[#] <d>Modul de record a fost pornit pe această sală. Statisticile nu vor conta iar puterile sunt dezactivate!\nPoți afla mai multe pe <b>%s</b>",
-	records_admin = "<v>[#] <d>Ești un administrator pe această sală de recorduri. Poți folosi comenzile <b>!map</b>, <b>!pw</b> și <b>!time</b>.",
+	records_admin = "<v>[#] <d>Ești un administrator pe această sală de recorduri. Poți folosi comenzile <b>!map</b>, <b>!setcp</b>, <b>!pw</b> și <b>!time</b>.",
 	records_completed = "<v>[#] <d>Ai completat harta! Dacă vrei să încerci din nou, scrie <b>!redo</b>.",
 	records_submit = "<v>[#] <d>Wow! Se pare că ai avut cel mai scurt timp de pe sală. Dacă vrei să îți trimiți recordul, scrie <b>!submit</b>.",
 	records_invalid_map = "<v>[#] <r>Se pare că această hartă nu este în rotația parkour... Nu poți trimite un record pentru ea!",

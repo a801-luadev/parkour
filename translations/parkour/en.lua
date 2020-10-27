@@ -49,7 +49,7 @@ translations.en = {
 
 	-- Records
 	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
-	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!pw</b> and <b>!time</b>.",
+	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!setcp</b>, <b>!pw</b> and <b>!time</b>.",
 	records_completed = "<v>[#] <d>You've completed the map! If you would like to re-do it, type <b>!redo</b>.",
 	records_submit = "<v>[#] <d>Wow! Looks like you had the fastest time in the room. If you would like to submit your record, type <b>!submit</b>.",
 	records_invalid_map = "<v>[#] <r>Looks like this map is not in parkour rotation... You can't submit a record for it!",

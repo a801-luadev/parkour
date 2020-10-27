@@ -49,7 +49,7 @@ translations.cn = {
 
 	-- Records
 	records_enabled = "<v>[#] <d>記錄模式已在這房間啟用。數據不會被記錄而且不能使用能力!\n你可以在這裡查看更多關於記錄模式的資訊: <b>%s</b>",
-	records_admin = "<v>[#] <d>你是這房間的管理員。你可以使用以下指令 <b>!map</b>, <b>!pw</b> and <b>!time</b>。",
+	records_admin = "<v>[#] <d>你是這房間的管理員。你可以使用以下指令 <b>!map</b>, <b>!setcp</b>, <b>!pw</b> and <b>!time</b>。",
 	records_completed = "<v>[#] <d>你已經完成了地圖! 如果你想重新嘗試, 可輸入 <b>!redo</b>。",
 	records_submit = "<v>[#] <d>哇! 看來你達成了房間裡最快的通關時間。如果你希望提交你的記錄, 可輸入 <b>!submit</b>。",
 	records_invalid_map = "<v>[#] <r>看來這張地圖並不在 parkour 的循環裡... 你不能提交這地圖的記錄!",

@@ -49,7 +49,7 @@ translations.hu = {
 
 	-- Records
 	records_enabled = "<v>[#] <d>Rekord mód lett aktiválva ebben a szobában. Az adatok nem számítanak és a képességek nem engedélyezettek!\nTöbb információt találhatsz a Rekordról itt: <b>%s</b>",
-	records_admin = "<v>[#] <d>Egy adminisztrátor vagy ebben a Rekord szobában. Használhatod a <b>!map</b>, <b>!pw</b> és <b>!time</b> parancsokat.",
+	records_admin = "<v>[#] <d>Egy adminisztrátor vagy ebben a Rekord szobában. Használhatod a <b>!map</b>, <b>!setcp</b>, <b>!pw</b> és <b>!time</b> parancsokat.",
 	records_completed = "<v>[#] <d>Teljesítetted a pályát! Ha újra akarod csinálni, írd be: <b>!redo</b>.",
 	records_submit = "<v>[#] <d>Hűha! Úgy tűnik, te voltál a leggyorsabb a szobában. Ha be szeretnéd küldeni a rekordod, írd be: <b>!submit</b>.",
 	records_invalid_map = "<v>[#] <r>Úgy tűnik, hogy ez a pálya nincs a Parkour körforgásában... Nem tudod benyújtani a rekordod!",

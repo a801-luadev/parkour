@@ -841,6 +841,7 @@ end)
 
 onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
+	if victory[player] then return end
 	if not players_file[player] then return end
 
 	if (count_stats and
