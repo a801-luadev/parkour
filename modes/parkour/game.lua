@@ -440,7 +440,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 	elseif cmd == "setcp" then
 		if not records_admins or not records_admins[player] then
-			if not perms[player].set_checkpoint_version then return end
+			if not perms[player] or not perms[player].set_checkpoint_version then return end
 		end
 
 		local version = tonumber(args[1])

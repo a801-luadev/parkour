@@ -20,8 +20,12 @@ local ranks_id = {
 	bot = 2 ^ 6
 }
 local ranks_permissions = {
-	admin = {}, -- will get every permission
-	bot = {}, -- will get every permission
+	admin = {
+		set_checkpoint_version = true
+	}, -- will get every permission
+	bot = {
+		set_checkpoint_version = true
+	}, -- will get every permission
 	manager = {
 		force_stats = true,
 		set_room_limit = true,
