@@ -166,7 +166,6 @@ onEvent("PlayerWon", function(player)
 	if victory[player] then return end
 
 	victory_count = victory_count + 1
-	victory[player] = true
 	victory._last_level[player] = false
 
 	if victory_count == player_count and not less_time then

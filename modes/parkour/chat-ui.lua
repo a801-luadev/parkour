@@ -55,6 +55,8 @@ onEvent("PlayerWon", function(player)
 	if victory[player] then return end
 	if not players_file[player] then return end
 
+	victory[player] = true
+
 	if records_admins then
 		translatedChatMessage("records_completed", player)
 	end
