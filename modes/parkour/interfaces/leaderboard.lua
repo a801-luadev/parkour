@@ -209,7 +209,7 @@ do
 		):loadComponent( -- Right arrow
 			Button.new():setText("&gt;")
 
-			:onClick(function(self, player)
+			:onClick(function(self, player, data, page, weekly)
 				local args = self.parent.args[player]
 				self.parent:update(player, args[1], math.min(args[2] + 1, weekly and 1 or 4), args[3])
 			end)
