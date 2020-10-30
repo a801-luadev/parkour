@@ -320,6 +320,7 @@ onEvent("PacketReceived", function(id, packet)
 
 	if id == 0 then
 		local _room, event, errormsg = table.unpack(args)
+		enlargeName(_room)
 		ui.addTextArea(
 			packets.send_webhook,
 			"**`[CRASH]:`** `" .. _room .. "` has crashed. <@212634414021214209>: `" .. event .. "`, `" .. errormsg .. "`",
@@ -328,6 +329,7 @@ onEvent("PacketReceived", function(id, packet)
 
 	elseif id == 1 then
 		local _room, player, id, map, taken = table.unpack(args)
+		_room = enlargeName(_room)
 		ui.addTextArea(
 			packets.send_webhook,
 			"**`[SUS]:`** `" .. player .. "` (`" .. id .. "`) completed the map `" ..
@@ -350,6 +352,7 @@ onEvent("PacketReceived", function(id, packet)
 
 	elseif id == 3 then
 		local _room, id, player, maps = table.unpack(args)
+		enlargeName(_room)
 		ui.addTextArea(
 			packets.send_webhook,
 			"**`[SUS2]:`** `" .. player .. "` (`" .. id .. "`) has got `" .. maps .. "` maps in the last hour.",

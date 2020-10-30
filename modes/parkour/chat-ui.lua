@@ -66,7 +66,7 @@ onEvent("PlayerWon", function(player)
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
 	if not records_admins and count_stats and taken <= 45 and not review_mode and not is_tribe then
-		sendPacket(1, room.name .. "\000" .. player .. "\000" .. id .. "\000" .. room.currentMap .. "\000" .. taken)
+		sendPacket(1, room.shortName .. "\000" .. player .. "\000" .. id .. "\000" .. room.currentMap .. "\000" .. taken)
 	end
 	if not fastest.record or taken < fastest.record then
 		local old = fastest.player
@@ -174,7 +174,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			(map .. "\000" ..
 			 room.playerList[player].id .. "\000" ..
 			 math.floor(fastest.record * 100) .. "\000" ..
-			 room.name .. "\000" ..
+			 room.shortName .. "\000" ..
 			 checkpoint_info.version)
 		)
 		translatedChatMessage("records_submitted", player, room.currentMap)
@@ -414,11 +414,11 @@ onEvent("PacketReceived", function(packet_id, packet)
 			tfm.exec.chatMessage("<vi>[" .. commu .. "] [#parkour] <d>" .. msg)
 		end
 	elseif packet_id == 6 then -- pw request
-		if packet == room.name then
+		if packet == room.shortName then
 			if roompw.password then
-				sendPacket(5, room.name .. "\000" .. roompw.password .. "\000" .. roompw.owner)
+				sendPacket(5, room.shortName .. "\000" .. roompw.password .. "\000" .. roompw.owner)
 			else
-				sendPacket(5, room.name .. "\000")
+				sendPacket(5, room.shortName .. "\000")
 			end
 		end
 	end

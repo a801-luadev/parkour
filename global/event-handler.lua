@@ -57,7 +57,7 @@ do
 
 		tfm.exec.setRoomMaxPlayers(1)
 
-		sendPacket(0, room.name .. "\000" .. name .. "\000" .. msg)
+		sendPacket(0, room.shortName .. "\000" .. name .. "\000" .. msg)
 		system.loadPlayerData(send_channel)
 		buffer = add_packet_data
 

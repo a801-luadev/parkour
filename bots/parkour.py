@@ -102,6 +102,18 @@ def normalize_name(name):
 	return name
 
 
+def enlarge_name(name):
+	"""Enlarges a parkour room name."""
+	if name[0] == "*":
+		return "*#parkour" + name[1:]
+	else:
+		return name[:2] + "#parkour" + name[2:]
+
+
+def shorten_name(name):
+	return name.replace("#parkour", "", 1)
+
+
 class Proxy(Connection):
 	def __init__(self, client, *args, **kwargs):
 		self.client = client
@@ -324,7 +336,7 @@ class Client(aiotfm.Client):
 				channel, "The given room is invalid. You can only join #parkour rooms."
 			)
 
-		await self.broadcast_module(0, room)
+		await self.broadcast_module(0, shorten_name(room))
 		await self.send_channel(channel, "Room join request has been sent.")
 
 	async def on_lua_textarea(self, id, text):
@@ -406,7 +418,7 @@ class Client(aiotfm.Client):
 					"name": name,
 					"playerID": player,
 					"time": taken,
-					"room": room,
+					"room": enlarge_name(room),
 					"cp": checkpoint
 				}),
 				env.records_webhook
@@ -514,7 +526,8 @@ class Client(aiotfm.Client):
 					return await whisper.reply("Invalid syntax.")
 
 				room = " ".join(args)
-				await self.broadcast_module(6, room)
+				shortName = shorten_name(room)
+				await self.broadcast_module(6, shortName)
 				await whisper.reply("Requesting room password.")
 				self.dispatch(
 					"send_webhook",
@@ -524,7 +537,7 @@ class Client(aiotfm.Client):
 				try:
 					_, txt = await self.wait_for(
 						"on_lua_textarea",
-						lambda txt_id, txt: txt_id == ROOM_PASSWORD and txt.startswith(room + "\x00"),
+						lambda txt_id, txt: txt_id == ROOM_PASSWORD and txt.startswith(shortName + "\x00"),
 						timeout=60.0
 					)
 				except Exception:
