@@ -110,7 +110,7 @@ onEvent("NewPlayer", function(player)
 	end
 
 	if records_admins then
-		bindKeyboard(player, 78, true, true) -- N key
+		bindKeyboard(player, 66, true, true) -- B key
 	end
 end)
 
@@ -123,7 +123,7 @@ onEvent("Keyboard", function(player, key)
 				bindKeyboard(player, key, true, false)
 			end
 		end
-	elseif records_admins and key == 78 then
+	elseif records_admins and key == 66 then
 		if checkCooldown(player, "redo_key", 500) then
 			eventParsedChatCommand(player, "redo")
 		end
