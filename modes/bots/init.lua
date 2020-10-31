@@ -27,6 +27,8 @@ local packets = {
 	simulate_sus = bit.lshift(18, 8) + 255,
 	last_sanction = bit.lshift(19, 8) + 255,
 	runtime = bit.lshift(20, 8) + 255,
+	player_victory = bit.lshift(21, 8) + 255,
+	get_player_info = bit.lshift(22, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -38,6 +40,7 @@ local chats = {loading = true}
 local killing = {}
 local verifying = {}
 local get_sanction = {}
+local get_player_info = {}
 local to_do = {}
 local in_room = {}
 local records = {
@@ -241,6 +244,10 @@ onEvent("TextAreaCallback", function(id, player, data)
 
 	elseif id == packets.runtime then
 		ui.addTextArea(packets.runtime, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
+
+	elseif id == packets.get_player_info then
+		get_player_info[data] = true
+		system.loadPlayerData(data)
 	end
 end)
 
@@ -278,6 +285,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 		records[player] = nil
 	end
 
+	if get_player_info[player] then
+		ui.addTextArea(packets.get_player_info, player .. "\000" .. data.room .. "\000" .. #data.hour)
+		get_player_info[player] = nil
+	end
+
 	if get_sanction[player] then
 		ui.addTextArea(packets.last_sanction, player .. "\000" .. data.kill)
 		get_sanction[player] = nil
@@ -311,7 +323,12 @@ onEvent("SendingPacket", function(id, packet)
 	sendPacket(id, packet)
 end)
 
-onEvent("PacketReceived", function(id, packet)
+onEvent("PacketReceived", function(id, packet, map, time)
+	if id == -1 then
+		ui.addTextArea(packets.payer_victory, packet, parkour_bot)
+		return
+	end
+
 	local args, count = {}, 0
 	for slice in string.gmatch(packet, "[^\000]+") do
 		count = count + 1

@@ -41,6 +41,9 @@ class env:
 	record_badges_webhook = os.getenv("RECORD_BADGES_WEBHOOK")
 	record_suspects = os.getenv("RECORD_SUSPECTS")
 
+	suspects_norecord = os.getenv("SUSPECTS_NORECORD_WEBHOOK")
+	game_victory = os.getenv("GAME_VICTORY_WEBHOOK")
+
 
 WEEKLY_RECORDS_MSG = """<a:blob_cheer1:683845978553450576> **[{} - {}]** <a:blob_cheer2:683846001421058071>
 Congratulations to the highest achieving Weekly Leaderboard players!
@@ -64,6 +67,8 @@ RECORD_SUBMISSION = (16 << 8) + 255
 RECORD_BADGES = (17 << 8) + 255
 SIMULATE_SUS = (18 << 8) + 255
 LAST_SANCTION = (19 << 8) + 255
+PLAYER_VICTORY = (21 << 8) + 255
+GET_PLAYER_INFO = (22 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -132,6 +137,9 @@ class Proxy(Connection):
 
 				if records > 0 and (records == 1 or records % 5 == 0):
 					loop.create_task(self.client.send_record_badge(player, records))
+
+			elif packet["type"] == "map-records":
+				self.client.dispatch("map_records", packet["map"], packet["records"])
 			return
 
 		if packet["type"] == "message":
@@ -180,6 +188,7 @@ class Client(aiotfm.Client):
 	ranks = {}
 	player_ranks = {}
 	chats = {}
+	victory_cache = {}
 	waiting_ids = []
 	received_weekly_reset = False
 
@@ -387,6 +396,59 @@ class Client(aiotfm.Client):
 				"send_webhook", "**`[BOTCRASH]:`** <@212634414021214209>: `{}`, `{}`".format(event, message)
 			)
 
+		elif id == PLAYER_VICTORY:
+			now = time.time()
+
+			if text in self.victory_cache: # duplicated
+				to_delete = []
+
+				for victory_data, expire in self.victory_cache.items():
+					if now >= expire:
+						to_delete.append(victory_data)
+
+				for victory_data in to_delete:
+					del self.victory_cache[victory_data]
+
+				if text in self.victory_cache: # didn't expire
+					return
+
+			self.victory_cache[text] = now + 60.0 # cache for 1 minute
+
+			text = text.encode()
+			player, map_code, taken = text[:4], text[4:8], text[8:]
+
+			player = (player[0] << (7 * 3)) +
+					 (player[1] << (7 * 2)) +
+					 (player[2] << (7 * 1)) +
+					  player[3]
+
+			map_code = (map_code[0] << (7 * 3)) +
+					   (map_code[1] << (7 * 2)) +
+					   (map_code[2] << (7 * 1)) +
+					    map_code[3]
+
+			taken = (taken[0] << (7 * 2)) +
+					(taken[1] << (7 * 1)) +
+					 taken[2]
+
+			name = await self.get_player_name(player)
+			await self.send_callback(GET_PLAYER_INFO, name)
+			room, hour_maps = "unknown", "unknown"
+
+			try:
+				txt_id, text = await self.wait_for(
+					"on_lua_textarea",
+					lambda txt_id, text: txt_id in (GET_PLAYER_INFO, VERSION_MISMATCH) and text.startswith(name),
+					timeout=5.0
+				)
+			except Exception:
+				pass
+			else:
+				if text_id == GET_PLAYER_INFO:
+					name, room, hour_maps = text.split("\x00")
+
+			self.dispatch("player_victory", player, name, map_code, taken / 1000, room, hour_maps)
+
 		elif id == WEEKLY_RESET:
 			if self.received_weekly_reset:
 				return
@@ -431,6 +493,41 @@ class Client(aiotfm.Client):
 				"**`[RECORD{}]:`** `{}` (`{}`) completed the map `@{}` in the room `{}` in `{}` seconds."
 				.format("" if taken > 45 else "_SUS", name, player, code, room, taken)
 			)
+
+	async def get_map_records(self, code):
+		await self.proxy.sendTo({"type": "map-records", "map": code}, "records")
+		try:
+			code, records = await self.wait_for(
+				"on_map_records",
+				lambda map_code, records: map_code == code,
+				timeout=10.0
+			)
+		except Exception:
+			return ()
+		return records
+
+	async def on_player_victory(self, id, name, code, taken, room, maps):
+		records = await self.get_map_records(code)
+		msg = (
+			"**`[SUS]:`** `{}` (`{}`) (`{}` maps/hour) completed the map `@{}` "
+			"in the room `{}` in `{}` seconds. - "
+			"Map record: `{{}}` (threshold `{{}}`)"
+		).format(name, id, maps, code, room, taken)
+
+		if not records: # empty
+			webhook = env.suspects_norecord
+			threshold = 45
+			msg = msg.format("none", 45)
+		else:
+			webhook = env.suspects
+			record = records[0]["time"] / 100
+			threshold = record * 1.15 # first record + 15% of the time
+			msg = msg.format(record, threshold)
+
+		if taken > threshold:
+			webhook = env.game_victory
+
+		self.dispatch("send_webhook", msg, webhook)
 
 	async def send_record_badge(self, player, records):
 		player = await self.get_player_name(player)

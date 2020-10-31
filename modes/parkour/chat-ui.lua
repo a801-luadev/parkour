@@ -65,8 +65,26 @@ onEvent("PlayerWon", function(player)
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
-	if not records_admins and count_stats and taken <= 45 and not review_mode and not is_tribe then
-		sendPacket(1, room.shortName .. "\000" .. player .. "\000" .. id .. "\000" .. room.currentMap .. "\000" .. taken)
+	if not records_admins and count_stats and not review_mode and not is_tribe then
+		local map = tonumber(string.gsub(room.currentMap, "@", "", 1))
+		local packedTime = taken * 1000
+		local band, rshift = bit32.band, bit32.rshift
+
+		sendPacket(-1,
+			     rshift(id, 7 * 3)        ..
+			band(rshift(id, 7 * 2), 0x7f) ..
+			band(rshift(id, 7 * 1), 0x7f) ..
+			band(       id        , 0x7f) ..
+
+			     rshift(map, 7 * 3)        ..
+			band(rshift(map, 7 * 2), 0x7f) ..
+			band(rshift(map, 7 * 1), 0x7f) ..
+			band(       map        , 0x7f) ..
+
+			     rshift(packedTime, 7 * 2)        ..
+			band(rshift(packedTime, 7 * 1), 0x7f) ..
+			band(       packedTime        , 0x7f)
+		)
 	end
 	if not fastest.record or taken < fastest.record then
 		local old = fastest.player
