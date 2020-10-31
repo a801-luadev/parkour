@@ -70,21 +70,21 @@ onEvent("PlayerWon", function(player)
 		local packedTime = taken * 1000
 		local band, rshift = bit32.band, bit32.rshift
 
-		sendPacket(-1,
-			     rshift(id, 7 * 3)        ..
-			band(rshift(id, 7 * 2), 0x7f) ..
-			band(rshift(id, 7 * 1), 0x7f) ..
-			band(       id        , 0x7f) ..
+		sendPacket(-1, string.char(
+			     rshift(id, 7 * 3)       ,
+			band(rshift(id, 7 * 2), 0x7f),
+			band(rshift(id, 7 * 1), 0x7f),
+			band(       id        , 0x7f),
 
-			     rshift(map, 7 * 3)        ..
-			band(rshift(map, 7 * 2), 0x7f) ..
-			band(rshift(map, 7 * 1), 0x7f) ..
-			band(       map        , 0x7f) ..
+			     rshift(map, 7 * 3)       ,
+			band(rshift(map, 7 * 2), 0x7f),
+			band(rshift(map, 7 * 1), 0x7f),
+			band(       map        , 0x7f),
 
-			     rshift(packedTime, 7 * 2)        ..
-			band(rshift(packedTime, 7 * 1), 0x7f) ..
+			     rshift(packedTime, 7 * 2)       ,
+			band(rshift(packedTime, 7 * 1), 0x7f),
 			band(       packedTime        , 0x7f)
-		)
+		))
 	end
 	if not fastest.record or taken < fastest.record then
 		local old = fastest.player
