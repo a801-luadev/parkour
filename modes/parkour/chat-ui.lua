@@ -66,7 +66,7 @@ onEvent("PlayerWon", function(player)
 	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
 
 	if not records_admins and count_stats and not review_mode and not is_tribe then
-		local map = tonumber(string.gsub(room.currentMap, "@", "", 1))
+		local map = tonumber((string.gsub(room.currentMap, "@", "", 1)))
 		local packedTime = taken * 1000
 		local band, rshift = bit32.band, bit32.rshift
 
