@@ -190,6 +190,7 @@ class Client(aiotfm.Client):
 	chats = {}
 	victory_cache = {}
 	sessions = {}
+	name_cache = {}
 	waiting_ids = []
 	received_weekly_reset = False
 
