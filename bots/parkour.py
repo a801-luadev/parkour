@@ -521,7 +521,7 @@ class Client(aiotfm.Client):
 		else:
 			webhook = env.suspects
 			record = records[0]["time"] / 100
-			threshold = record * 1.15 # first record + 15% of the time
+			threshold = round(record * 1.15 * 1000) / 1000 # first record + 15% of the time, remove some decimals
 			msg = msg.format(record, threshold)
 
 		if taken > threshold:
