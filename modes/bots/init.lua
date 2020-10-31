@@ -252,7 +252,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 end)
 
 onEvent("PlayerDataLoaded", function(player, data)
-	if player == recv_channel or player == send_channel or data == "" then return end
+	if player == recv_channel or player == send_channel or player == victory_channel or data == "" then return end
 
 	data = json.decode(data)
 	if data.v ~= data_version then
