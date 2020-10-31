@@ -189,6 +189,7 @@ class Client(aiotfm.Client):
 	player_ranks = {}
 	chats = {}
 	victory_cache = {}
+	sessions = {}
 	waiting_ids = []
 	received_weekly_reset = False
 
@@ -209,6 +210,9 @@ class Client(aiotfm.Client):
 
 	async def on_login_ready(self, *a):
 		print("Connected")
+
+		self.sessions["webhook"] = aiohttp.ClientSession()
+		self.sessions["forum"] = aiohttp.ClientSession()
 
 		for name, announcement, chat in chats:
 			self.chats[name] = [
@@ -548,12 +552,17 @@ class Client(aiotfm.Client):
 			head = message.split(" ")[0]
 			webhook = webhooks.get(head, env.default)
 
-		async with aiohttp.ClientSession() as session:
-			await session.post(webhook, json={
-				"content": message
-			}, headers={
-				"Content-Type": "application/json"
-			})
+		for attempt in range(3):
+			try:
+				await self.sessions["webhook"].post(webhook, json={
+					"content": message
+				}, headers={
+					"Content-Type": "application/json"
+				})
+				break
+			except Exception:
+				await self.sessions["webhook"].close()
+				self.sessions["webhook"] = aiohttp.ClientSession()
 
 	async def send_channel(self, channel, msg):
 		"""Sends a message to the specified channel (discord, whisper or staff chat)"""
@@ -1054,15 +1063,39 @@ class Client(aiotfm.Client):
 
 	# Whois system
 	async def get_player_name(self, id):
-		async with aiohttp.ClientSession() as session:
-			async with session.get("https://atelier801.com/profile?pr={}".format(id)) as resp:
-				match = re.search(
-					rb'> ([^<]+)<span class="nav-header-hashtag">(#\d{4})<\/span>',
-					await resp.read()
-				)
-				if match is None:
-					return
-				return normalize_name(match.group(1).decode() + match.group(2).decode())
+		id = int(id)
+		if id in self.name_cache:
+			name = self.name_cache[id]
+			length = len(self.name_cache)
+
+			if length >= 200:
+				to_remove = []
+
+				for key in self.name_cache:
+					if length >= 200:
+						to_remove.append(key)
+					else:
+						break
+
+				for key in to_remove:
+					del self.name_cache[key]
+
+			return name
+
+		for attempt in range(3):
+			try:
+				async with self.sessions["forum"].get("https://atelier801.com/profile?pr={}".format(id)) as resp:
+					match = re.search(
+						rb'> ([^<]+)<span class="nav-header-hashtag">(#\d{4})<\/span>',
+						await resp.read()
+					)
+					if match is None:
+						return
+					name = self.name_cache[id] = normalize_name(match.group(1).decode() + match.group(2).decode())
+					return name
+			except Exception:
+				await self.sessions["forum"].close()
+				self.sessions["forum"] = aiohttp.ClientSession()
 
 	async def get_player_id(self, name):
 		name = name.replace("#", "%23").replace("+", "%2B")
