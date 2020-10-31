@@ -417,18 +417,18 @@ class Client(aiotfm.Client):
 			text = text.encode()
 			player, map_code, taken = text[:4], text[4:8], text[8:]
 
-			player = (player[0] << (7 * 3)) +
-					 (player[1] << (7 * 2)) +
-					 (player[2] << (7 * 1)) +
+			player = (player[0] << (7 * 3)) + \
+					 (player[1] << (7 * 2)) + \
+					 (player[2] << (7 * 1)) + \
 					  player[3]
 
-			map_code = (map_code[0] << (7 * 3)) +
-					   (map_code[1] << (7 * 2)) +
-					   (map_code[2] << (7 * 1)) +
+			map_code = (map_code[0] << (7 * 3)) + \
+					   (map_code[1] << (7 * 2)) + \
+					   (map_code[2] << (7 * 1)) + \
 					    map_code[3]
 
-			taken = (taken[0] << (7 * 2)) +
-					(taken[1] << (7 * 1)) +
+			taken = (taken[0] << (7 * 2)) + \
+					(taken[1] << (7 * 1)) + \
 					 taken[2]
 
 			name = await self.get_player_name(player)
