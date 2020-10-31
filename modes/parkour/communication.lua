@@ -105,7 +105,7 @@ if not is_tribe then
 		elseif player == victory_channel then
 			if room.name == "*#parkour4bots" then
 				local send_id
-				send_id, data = string.match(data or "0;", "^(%d+);(.*)$")
+				send_id, data = string.match(data == "" and "0;" or data, "^(%d+);(.*)$")
 				send_id = tonumber(send_id)
 				if send_id <= last_victory_id then return end
 				last_victory_id = send_id
