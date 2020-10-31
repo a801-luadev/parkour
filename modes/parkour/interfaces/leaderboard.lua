@@ -211,7 +211,7 @@ do
 
 			:onClick(function(self, player, data, page, weekly)
 				local args = self.parent.args[player]
-				self.parent:update(player, args[1], math.min(args[2] + 1, weekly and 1 or 4), args[3])
+				self.parent:update(player, args[1], math.min(args[2] + 1, args[3] and 1 or 4), args[3])
 			end)
 
 			:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
