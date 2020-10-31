@@ -325,7 +325,7 @@ end)
 
 onEvent("PacketReceived", function(id, packet, map, time)
 	if id == -1 then
-		ui.addTextArea(packets.payer_victory, packet, parkour_bot)
+		ui.addTextArea(packets.player_victory, packet, parkour_bot)
 		return
 	end
 
