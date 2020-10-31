@@ -444,7 +444,7 @@ class Client(aiotfm.Client):
 			except Exception:
 				pass
 			else:
-				if text_id == GET_PLAYER_INFO:
+				if txt_id == GET_PLAYER_INFO:
 					name, room, hour_maps = text.split("\x00")
 
 			self.dispatch("player_victory", player, name, map_code, taken / 1000, room, hour_maps)
