@@ -102,6 +102,10 @@ if not is_tribe then
 				end
 			end
 
+			if room.name == "*#parkour4bots" then
+				system.savePlayerData(player, "0")
+			end
+
 		elseif player == victory_channel then
 			if room.name == "*#parkour4bots" then
 				local send_id
@@ -115,6 +119,8 @@ if not is_tribe then
 						eventPacketReceived(-1, packet)
 					end
 				end
+
+				system.savePlayerData(player, "0;")
 
 			else
 				if not victory_packet_data then return end
