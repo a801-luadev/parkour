@@ -412,7 +412,7 @@ class Client(aiotfm.Client):
 				if text in self.victory_cache: # didn't expire
 					return
 
-			self.victory_cache[text] = now + 60.0 # cache for 1 minute
+			self.victory_cache[text] = now + 600.0 # cache for 10 minutes
 
 			text = text.encode()
 			player, map_code, taken = text[:4], text[4:8], text[8:]
@@ -432,6 +432,9 @@ class Client(aiotfm.Client):
 					 taken[2]
 
 			name = await self.get_player_name(player)
+			if name is None:
+				return
+
 			await self.send_callback(GET_PLAYER_INFO, name)
 			room, hour_maps = "unknown", "unknown"
 
