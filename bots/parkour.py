@@ -1072,7 +1072,7 @@ class Client(aiotfm.Client):
 				to_remove = []
 
 				for key in self.name_cache:
-					if length >= 200:
+					if length >= 180:
 						to_remove.append(key)
 					else:
 						break
