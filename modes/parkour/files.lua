@@ -349,13 +349,14 @@ onEvent("GameStart", function()
 	file_index = file_index % total_files + 1
 	file_id = files[file_index]
 
+	ts = ts + 60 * 60 * 1000
 	local now = os.date("*t", ts / 1000) -- os.date is weird in tfm, *t accepts seconds, %d/%m/%Y accepts ms
 	now.wday = now.wday - 1
 	if now.wday == 0 then
 		now.wday = 7
 	end
-	timed_maps.week.last_reset = os.date("%d/%m/%Y", ts - (now.wday - 1) * 24 * 60 * 60 * 1000)
-	timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (8 - now.wday) * 24 * 60 * 60 * 1000)
+	timed_maps.week.last_reset = os.date("%d/%m/%Y", ts - now.wday * 24 * 60 * 60 * 1000)
+	timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (7 - now.wday) * 24 * 60 * 60 * 1000)
 end)
 
 onEvent("NewPlayer", function(player)

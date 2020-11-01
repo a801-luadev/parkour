@@ -117,14 +117,14 @@ onEvent("GameDataLoaded", function(data)
 		checkPlayersPosition(false)
 	end
 	if data.weekranking then
-		local ts = os.time()
+		local ts = os.time() + 60 * 60 * 1000
 		local now = os.date("*t", ts / 1000)
 		now.wday = now.wday - 1
 		if now.wday == 0 then
 			now.wday = 7
 		end
 
-		local new_reset = os.date("%d/%m/%Y", ts - (now.wday - 1) * 24 * 60 * 60 * 1000)
+		local new_reset = os.date("%d/%m/%Y", ts - now.wday * 24 * 60 * 60 * 1000)
 		if new_reset ~= timed_maps.week.last_reset then
 			if #data.weekranking > 2 and data.weekranking[1][3] > 30 then
 				sendPacket(
@@ -138,7 +138,7 @@ onEvent("GameDataLoaded", function(data)
 			end
 
 			timed_maps.week.last_reset = new_reset
-			timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (8 - now.wday) * 24 * 60 * 60 * 1000)
+			timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (7 - now.wday) * 24 * 60 * 60 * 1000)
 
 			for player, data in next, players_file do
 				data.week = {0, new_reset}
