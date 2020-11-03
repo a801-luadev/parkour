@@ -115,7 +115,7 @@ if not is_tribe then
 				last_victory_id = send_id
 
 				if eventPacketReceived then
-					for packet in string.gmatch(data, "(...........)") do
+					for packet in string.gmatch(data, "(...........[^\000]+)\000") do
 						eventPacketReceived(-1, packet)
 					end
 				end

@@ -44,13 +44,13 @@ local tribe, module_name, submode
 local flags = ""
 
 room.lowerName = string.lower(room.name)
-room.shortName = string.gsub(room.name, "#parkour", "", 1)
+room.shortName = string.gsub(room.name, "%-?#parkour", "", 1)
 
 local function enlargeName(name)
 	if string.sub(name, 1, 1) == "*" then
 		return "*#parkour" .. string.sub(name, 2)
 	else
-		return string.sub(name, 1, 2) .. "#parkour" .. string.sub(name, 3)
+		return string.sub(name, 1, 2) .. "-#parkour" .. string.sub(name, 3)
 	end
 end
 

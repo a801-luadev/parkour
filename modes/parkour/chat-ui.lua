@@ -84,7 +84,7 @@ onEvent("PlayerWon", function(player)
 			     rshift(packedTime, 7 * 2)       ,
 			band(rshift(packedTime, 7 * 1), 0x7f),
 			band(       packedTime        , 0x7f)
-		))
+		) .. player .. "\000")
 	end
 	if not fastest.record or taken < fastest.record then
 		local old = fastest.player

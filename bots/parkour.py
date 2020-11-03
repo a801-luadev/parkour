@@ -112,11 +112,13 @@ def enlarge_name(name):
 	if name[0] == "*":
 		return "*#parkour" + name[1:]
 	else:
-		return name[:2] + "#parkour" + name[2:]
+		return name[:2] + "-#parkour" + name[2:]
 
 
 def shorten_name(name):
-	return name.replace("#parkour", "", 1)
+	if name[0] == "*":
+		return name.replace("#parkour", "", 1)
+	return name.replace("-#parkour", "", 1)
 
 
 class Proxy(Connection):
@@ -420,7 +422,8 @@ class Client(aiotfm.Client):
 			self.victory_cache[text] = now + 600.0 # cache for 10 minutes
 
 			text = text.encode()
-			player, map_code, taken = text[:4], text[4:8], text[8:]
+			player, map_code, taken = text[:4], text[4:8], text[8:11]
+			name = text[11:]
 
 			player = (player[0] << (7 * 3)) + \
 					 (player[1] << (7 * 2)) + \
@@ -435,10 +438,6 @@ class Client(aiotfm.Client):
 			taken = (taken[0] << (7 * 2)) + \
 					(taken[1] << (7 * 1)) + \
 					 taken[2]
-
-			name = await self.get_player_name(player)
-			if name is None:
-				return
 
 			await self.send_callback(GET_PLAYER_INFO, name)
 			room, hour_maps = "unknown", "unknown"
@@ -478,6 +477,7 @@ class Client(aiotfm.Client):
 			player = int(player)
 			taken = int(taken)
 			checkpoint = int(checkpoint)
+			room = enlarge_name(room)
 			name = await self.get_player_name(player)
 
 			self.dispatch(
@@ -488,7 +488,7 @@ class Client(aiotfm.Client):
 					"name": name,
 					"playerID": player,
 					"time": taken,
-					"room": enlarge_name(room),
+					"room": room,
 					"cp": checkpoint
 				}),
 				env.records_webhook
