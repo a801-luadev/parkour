@@ -423,7 +423,7 @@ class Client(aiotfm.Client):
 
 			text = text.encode()
 			player, map_code, taken = text[:4], text[4:8], text[8:11]
-			name = text[11:]
+			name = text[11:].decode()
 
 			player = (player[0] << (7 * 3)) + \
 					 (player[1] << (7 * 2)) + \
