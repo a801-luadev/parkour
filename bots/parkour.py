@@ -44,6 +44,8 @@ class env:
 	suspects_norecord = os.getenv("SUSPECTS_NORECORD_WEBHOOK")
 	game_victory = os.getenv("GAME_VICTORY_WEBHOOK")
 
+	report_channel = 773630094257815572
+
 
 WEEKLY_RECORDS_MSG = """<a:blob_cheer1:683845978553450576> **[{} - {}]** <a:blob_cheer2:683846001421058071>
 Congratulations to the highest achieving Weekly Leaderboard players!
@@ -195,6 +197,8 @@ class Client(aiotfm.Client):
 	name_cache = {}
 	waiting_ids = []
 	received_weekly_reset = False
+	next_report = 0
+	reports = {}
 
 	def get_player_rank(self, player):
 		player = normalize_name(player)
@@ -238,6 +242,27 @@ class Client(aiotfm.Client):
 		print("Logged!")
 
 		self.loop.create_task(self.check_forum())
+		self.loop.create_task(self.check_reports())
+
+	async def check_reports(self):
+		while True:
+			now = time.time()
+			to_remove = []
+
+			for report, data in self.reports.items():
+				# reporter, reported, sent to discord, when to send to discord, expiration date
+				if not data[2] and now >= data[3]: # not sent to discord and has to
+					data[2] = True
+					await self.send_report_discord(report, data[0], data[1])
+
+				elif now >= data[4]: # expired
+					to_remove.append(report)
+					await self.chats["mod"][2].send("Report id {} has expired.".format(report))
+
+			for report in to_remove:
+				del self.reports[report]
+
+			await asyncio.sleep(30.0)
 
 	async def check_forum(self):
 		"""Checks for new messages every minute."""
@@ -349,6 +374,38 @@ class Client(aiotfm.Client):
 			text = text.encode()
 		return await self.send_callback(SEND_ROOM, str(id).encode() + b"\x00" + text)
 
+	async def is_online(self, name):
+		for attempt in range(2):
+			try:
+				await self.sendCommand("profile " + name)
+				await self.wait_for(
+					"on_profile",
+					lambda p: normalize_name(p.username) == name,
+					timeout=3.0
+				)
+				return True
+			except Exception:
+				continue
+		else:
+			return False
+
+	async def get_player_info(self, name):
+		await self.send_callback(GET_PLAYER_INFO, name)
+
+		try:
+			txt_id, text = await self.wait_for(
+				"on_lua_textarea",
+				lambda txt_id, text: txt_id in (GET_PLAYER_INFO, VERSION_MISMATCH) and text.startswith(name),
+				timeout=5.0
+			)
+		except Exception:
+			pass
+		else:
+			if txt_id == GET_PLAYER_INFO:
+				name, room, hour_maps = text.split("\x00")
+				return room, int(hour_maps)
+		return None, None
+
 	async def on_join_request(self, room, channel):
 		validity = re.match(r"^(?:[a-z]{2}-|\*)#parkour(?:$|[^a-zA-Z])", room)
 		if validity is None:
@@ -443,20 +500,9 @@ class Client(aiotfm.Client):
 					(taken[1] << (7 * 1)) + \
 					 taken[2]
 
-			await self.send_callback(GET_PLAYER_INFO, name)
-			room, hour_maps = "unknown", "unknown"
-
-			try:
-				txt_id, text = await self.wait_for(
-					"on_lua_textarea",
-					lambda txt_id, text: txt_id in (GET_PLAYER_INFO, VERSION_MISMATCH) and text.startswith(name),
-					timeout=5.0
-				)
-			except Exception:
-				pass
-			else:
-				if txt_id == GET_PLAYER_INFO:
-					name, room, hour_maps = text.split("\x00")
+			room, hour_maps = await self.get_player_info(name)
+			if room is None:
+				room, hour_maps = "unknown", "unknown"
 
 			self.dispatch("player_victory", player, name, map_code, taken / 1000, room, hour_maps)
 
@@ -591,6 +637,41 @@ class Client(aiotfm.Client):
 		if chat in self.chats and self.chats[chat][2] is not None:
 			await self.chats[chat][2].send(msg)
 
+	async def send_report_discord(self, report, author, reported):
+		room, hour_maps = await self.get_player_info(reported)
+		if room is None:
+			room = "unknown"
+		await self.send_channel(
+			env.report_channel,
+			"@everyone `{}` reported `{}` (room: `{}`, report id: `{}`). Connect to the game and use the handle command in modchat."
+			.format(author, reported, room, report)
+		)
+
+	async def on_new_report(self, author, reported):
+		report = self.next_report
+		self.next_report += 1
+
+		online = 0
+		modchat = self.chats["mod"][2]
+		max_attempts = 3
+
+		for attempt in range(max_attempts):
+			try:
+				online = len(await modchat.who()) - 1
+			except Exception:
+				if attempt < max_attempts - 1:
+					await asyncio.sleep(3.0)
+				continue
+
+		now = time.time()
+		# reporter, reported, sent to discord, when to send to discord, expiration date
+		self.reports[report] = [author, reported, online == 0, now + 60 * 5, now + 60 * 30]
+
+		if online == 0:
+			return await self.send_report_discord(report, author, reported)
+
+		await modchat.send("{} reported {} (report id: {}) (use the handle command here before handling it)")
+
 	async def on_whisper(self, whisper):
 		author = normalize_name(whisper.author.username)
 
@@ -602,7 +683,18 @@ class Client(aiotfm.Client):
 
 			ranks = self.get_player_rank(author)
 
-			if cmd == "announce":
+			if cmd == "report":
+				if not args:
+					return await whisper.reply("Usage: .report Username#0000")
+
+				reported = normalize_name(args[0])
+				if not await self.is_online(reported):
+					return await whisper.reply("That player ({}) is not online.".format(reported))
+
+				self.dispatch("new_report", author, reported)
+				await whisper.reply("Your report of the player {} will be handled shortly.")
+
+			elif cmd == "announce":
 				# Sends an announcement to the server
 				if not ranks["admin"] and not ranks["manager"]:
 					return
@@ -819,7 +911,7 @@ class Client(aiotfm.Client):
 
 	async def on_channel_message(self, msg):
 		# send the message to discord
-		for data in self.chats.values():
+		for name, data in self.chats.items():
 			if msg.channel != data[2]:
 				continue
 
@@ -829,14 +921,46 @@ class Client(aiotfm.Client):
 				r"`(https?://(?:-\.)?(?:[^\s/?\.#-]+\.?)+(?:/[^\s]*)?)`",
 				r"\1", "`" + message + "`"
 			)
+			author = normalize_name(msg.author)
 
 			self.dispatch(
 				"send_webhook",
 				"`[{}]` `[{}]` {}".format(
-					msg.community.name, normalize_name(msg.author), message
+					msg.community.name, author, message
 				),
 				data[0]
 			)
+
+			if name == "mod":
+				args = msg.content.split(" ")
+				cmd = args.pop(0).lower()
+				cmd = cmd[1:]
+
+				if cmd == "handle":
+					if not args or not args[0].isdigit():
+						return await msg.reply("Usage: .handle [id] (silent?)")
+
+					report = int(args[0])
+					silent = len(args) > 1 and args[1].lower() in ("silent", "silence", "s")
+
+					if report not in self.reports:
+						return await msg.reply("Report id {} not found".format(report))
+
+					report_data = self.reports[report]
+					room, hour_maps = await self.get_player_info(report_data[1])
+					if room is None:
+						extra = "Could not get reported player information."
+					else:
+						extra = "Sent you the player's room in whispers."
+						await self.whisper(author, "{}'s room: {}".format(report_data[1], room))
+
+					await msg.reply("{} will be handling the report {}. {}".format(author, report, extra))
+
+					if not silent:
+						await self.whisper(report_data[0], "A parkour moderator is now handling your report.")
+
+					del self.reports[report]
+			break
 
 	async def on_heartbeat(self, took):
 		for name, data in self.chats.items():
@@ -949,19 +1073,7 @@ class Client(aiotfm.Client):
 			else:
 				name, id = normalize_name(args[0]), "unknown"
 
-		# Check if the player is online
-		for attempt in range(2):
-			try:
-				await self.sendCommand("profile " + name)
-				await self.wait_for(
-					"on_profile",
-					lambda p: normalize_name(p.username) == name,
-					timeout=3.0
-				)
-				break
-			except Exception:
-				continue
-		else:
+		if not await self.is_online(name):
 			return await whisper.reply("That player ({}) is not online.".format(name))
 
 		await self.send_callback(LAST_SANCTION, name)
