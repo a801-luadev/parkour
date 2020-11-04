@@ -235,7 +235,11 @@ class Client(aiotfm.Client):
 		CCC = packet.readCode()
 
 		if CCC == (29, 20):
-			self.dispatch("lua_textarea", packet.read32(), packet.readUTF())
+			self.dispatch(
+				"lua_textarea",
+				packet.read32(),
+				re.sub(r"(ht)<(tp)", r"\1\2", packet.readUTF(), flags=re.I)
+			)
 
 		elif CCC == (28, 5): # Translated message
 			packet.read16()
@@ -348,7 +352,7 @@ class Client(aiotfm.Client):
 		if module is not None:
 			module = module.group(1)
 
-		if room == self.bots_room or module != "parkour" or room == self.room.name:
+		if room == self.bots_room or (module != "parkour" and module is not None) or room == self.room.name:
 			channel = env.private_channel
 		elif msg.startswith("Script terminated :"):
 			channel = env.lua_unloads

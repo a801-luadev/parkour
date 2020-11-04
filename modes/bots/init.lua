@@ -1,3 +1,12 @@
+local addTextArea
+do
+	local add = ui.addTextArea
+	local gsub = strnig.gsub
+	function addTextArea(id, data, target)
+		return add(id, gsub(data, "([Hh][Tt])([Tt][Pp])", "%1<%2"), target)
+	end
+end
+
 local files = {
 	[1] = 20, -- maps, ranks, chats
 	[2] = 22 -- lowmaps, banned
@@ -83,7 +92,7 @@ local file_actions = {
 	new_chat = {1, true, function(data, name, chat)
 		data.chats[name] = chat
 		chats[name] = chat
-		ui.addTextArea(packets.current_chat, name .. "\000" .. chat, parkour_bot)
+		addTextArea(packets.current_chat, name .. "\000" .. chat, parkour_bot)
 	end},
 
 	ban_change = {2, true, function(data, id, value)
@@ -117,9 +126,9 @@ local function sendSynchronization()
 		end
 	end
 
-	ui.addTextArea(packets.synchronize, os.time() .. "\000" .. packet, parkour_bot)
-	ui.addTextArea(packets.current_chat, "mod\000" .. chats.mod, parkour_bot)
-	ui.addTextArea(packets.current_chat, "mapper\000" .. chats.mapper, parkour_bot)
+	addTextArea(packets.synchronize, os.time() .. "\000" .. packet, parkour_bot)
+	addTextArea(packets.current_chat, "mod\000" .. chats.mod, parkour_bot)
+	addTextArea(packets.current_chat, "mapper\000" .. chats.mapper, parkour_bot)
 end
 
 onEvent("SavingFile", function(file, data)
@@ -127,7 +136,7 @@ onEvent("SavingFile", function(file, data)
 end)
 
 onEvent("FileLoaded", function(file, data)
-	ui.addTextArea(packets.file_loaded, file, hidden_bot)
+	addTextArea(packets.file_loaded, file, hidden_bot)
 
 	data = filemanagers[file]:load(data)
 	file = tonumber(file)
@@ -172,7 +181,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 	if player ~= hidden_bot and player ~= parkour_bot then return end
 
 	if id == packets.send_other then
-		ui.addTextArea(packets.send_other, data, player == hidden_bot and parkour_bot or hidden_bot)
+		addTextArea(packets.send_other, data, player == hidden_bot and parkour_bot or hidden_bot)
 
 	elseif id == packets.send_room then
 		local packet_id, packet = string.match(data, "^(%d+)\000(.*)$")
@@ -184,7 +193,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 	elseif id == packets.new_chat then
 		local name, chat = string.match(data, "^([^\000]+)\000([^\000]+)$")
 		schedule("new_chat", name, chat)
-		ui.addTextArea(packets.current_chat, name .. "\000" .. chat, parkour_bot)
+		addTextArea(packets.current_chat, name .. "\000" .. chat, parkour_bot)
 
 	elseif id == packets.modify_rank then
 		local player, action, rank = string.match(data, "^([^\000]+)\000([01])\000(.*)$")
@@ -243,7 +252,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 		system.loadPlayerData(data)
 
 	elseif id == packets.runtime then
-		ui.addTextArea(packets.runtime, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
+		addTextArea(packets.runtime, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
 
 	elseif id == packets.get_player_info then
 		get_player_info[data] = true
@@ -256,7 +265,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	data = json.decode(data)
 	if data.v ~= data_version then
-		return ui.addTextArea(packets.version_mismatch, player)
+		return addTextArea(packets.version_mismatch, player)
 	end
 
 	local update = false
@@ -270,7 +279,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if verifying[player] then
 		data.badges[5] = 1
-		ui.addTextArea(packets.verify_discord, player)
+		addTextArea(packets.verify_discord, player)
 
 		update = true
 		verifying[player] = nil
@@ -286,12 +295,12 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	if get_player_info[player] then
-		ui.addTextArea(packets.get_player_info, player .. "\000" .. data.room .. "\000" .. #data.hour)
+		addTextArea(packets.get_player_info, player .. "\000" .. data.room .. "\000" .. #data.hour)
 		get_player_info[player] = nil
 	end
 
 	if get_sanction[player] then
-		ui.addTextArea(packets.last_sanction, player .. "\000" .. data.kill)
+		addTextArea(packets.last_sanction, player .. "\000" .. data.kill)
 		get_sanction[player] = nil
 	end
 
@@ -325,7 +334,7 @@ end)
 
 onEvent("PacketReceived", function(id, packet, map, time)
 	if id == -1 then
-		ui.addTextArea(packets.player_victory, packet, parkour_bot)
+		addTextArea(packets.player_victory, packet, parkour_bot)
 		return
 	end
 
@@ -338,7 +347,7 @@ onEvent("PacketReceived", function(id, packet, map, time)
 	if id == 0 then
 		local _room, event, errormsg = table.unpack(args)
 		_room = enlargeName(_room)
-		ui.addTextArea(
+		addTextArea(
 			packets.send_webhook,
 			"**`[CRASH]:`** `" .. _room .. "` has crashed. <@212634414021214209>: `" .. event .. "`, `" .. errormsg .. "`",
 			parkour_bot
@@ -347,7 +356,7 @@ onEvent("PacketReceived", function(id, packet, map, time)
 	elseif id == 1 then
 		local _room, player, id, map, taken = table.unpack(args)
 		_room = enlargeName(_room)
-		ui.addTextArea(
+		addTextArea(
 			packets.send_webhook,
 			"**`[SUS]:`** `" .. player .. "` (`" .. id .. "`) completed the map `" ..
 			map .. "` in the room `" .. _room .. "` in `" .. taken .. "` seconds.",
@@ -356,7 +365,7 @@ onEvent("PacketReceived", function(id, packet, map, time)
 		if tonumber(taken) <= 27 then -- autoban!
 			schedule("ban_change", id, 1)
 			sendPacket(3, player .. "\000" .. id .. "\0001")
-			ui.addTextArea(
+			addTextArea(
 				packets.send_webhook,
 				"**`[BANS]:`** `AntiCheatSystem` has permbanned the player `" .. player .. "` (`" .. id .. "`)",
 				parkour_bot
@@ -370,25 +379,25 @@ onEvent("PacketReceived", function(id, packet, map, time)
 	elseif id == 3 then
 		local _room, id, player, maps = table.unpack(args)
 		_room = enlargeName(_room)
-		ui.addTextArea(
+		addTextArea(
 			packets.send_webhook,
 			"**`[SUS2]:`** `" .. player .. "` (`" .. id .. "`) has got `" .. maps .. "` maps in the last hour.",
 			parkour_bot
 		)
 
 	elseif id == 4 then
-		ui.addTextArea(packets.weekly_reset, packet, parkour_bot)
+		addTextArea(packets.weekly_reset, packet, parkour_bot)
 
 	elseif id == 5 then
-		ui.addTextArea(packets.room_password, packet, parkour_bot)
+		addTextArea(packets.room_password, packet, parkour_bot)
 
 	elseif id == 6 then
-		ui.addTextArea(packets.record_submission, packet, parkour_bot)
+		addTextArea(packets.record_submission, packet, parkour_bot)
 	end
 end)
 
 onEvent("Loop", function()
-	ui.addTextArea(packets.heartbeat, "", hidden_bot)
+	addTextArea(packets.heartbeat, "", hidden_bot)
 
 	local now = os.time()
 	if #to_do > 0 and now >= next_file_check and now >= next_file_load then

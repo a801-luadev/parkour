@@ -317,7 +317,11 @@ class Client(aiotfm.Client):
 	async def handle_packet(self, conn, packet):
 		CCC = packet.readCode()
 		if CCC == (29, 20):
-			self.dispatch("lua_textarea", packet.read32(), packet.readUTF())
+			self.dispatch(
+				"lua_textarea",
+				packet.read32(),
+				re.sub(r"(ht)<(tp)", r"\1\2", packet.readUTF(), flags=re.I)
+			)
 
 		packet.pos = 0
 		await super().handle_packet(conn, packet)
