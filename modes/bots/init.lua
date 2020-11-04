@@ -1,7 +1,7 @@
 local addTextArea
 do
 	local add = ui.addTextArea
-	local gsub = strnig.gsub
+	local gsub = string.gsub
 	function addTextArea(id, data, target)
 		return add(id, gsub(data, "([Hh][Tt])([Tt][Pp])", "%1<%2"), target)
 	end
