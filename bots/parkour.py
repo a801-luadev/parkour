@@ -670,7 +670,10 @@ class Client(aiotfm.Client):
 		if online == 0:
 			return await self.send_report_discord(report, author, reported)
 
-		await modchat.send("{} reported {} (report id: {}) (use the handle command here before handling it)")
+		await modchat.send(
+			"{} reported {} (report id: {}) (use the handle command here before handling it)"
+			.format(author, reported, report)
+		)
 
 	async def on_whisper(self, whisper):
 		author = normalize_name(whisper.author.username)
@@ -692,7 +695,7 @@ class Client(aiotfm.Client):
 					return await whisper.reply("That player ({}) is not online.".format(reported))
 
 				self.dispatch("new_report", author, reported)
-				await whisper.reply("Your report of the player {} will be handled shortly.")
+				await whisper.reply("Your report of the player {} will be handled shortly.".format(reported))
 
 			elif cmd == "announce":
 				# Sends an announcement to the server
