@@ -275,7 +275,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				return tfm.exec.chatMessage("<v>[#] <r>u cant set a player's namecolor", player)
 			end
 
-			if string.lower(args[3]) == "nil" then
+			if quantity > 2 and string.lower(args[3]) == "nil" then
 				tfm.exec.chatMessage("<v>[#] <d>removed custom namecolor from " .. target, player)
 				file.namecolor = nil
 
