@@ -187,6 +187,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		fastest.submitted = true
+		fastest.wait_send = true
 		sendPacket(
 			6,
 			(map .. "\000" ..
@@ -195,7 +196,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			 room.shortName .. "\000" ..
 			 checkpoint_info.version)
 		)
-		translatedChatMessage("records_submitted", player, room.currentMap)
+		tfm.exec.chatMessage("<v>[#] <d>Your record will be submitted shortly.", player)
 
 	elseif cmd == "give" then
 		if not perms[player] or not perms[player].give_command then return end
@@ -492,3 +493,23 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("forcestats")
 	system.disableChatCommandDisplay("room")
 end)
+
+if records_admins then
+	onEvent("CantSendData", function()
+		if fastest.wait_send then
+			fastest.submitted = false
+			fastest.wait_send = false
+			tfm.exec.chatMessage(
+				"<v>[#] <r>Your record couldn't be submitted. Type <b>!submit</b> again in a few minutes.",
+				fastest.player
+			)
+		end
+	end)
+
+	onEvent("PacketSent", function()
+		if fastest.wait_send then
+			translatedChatMessage("records_submitted", fastest.player, room.currentMap)
+			fastest.wait_send = false
+		end
+	end)
+end

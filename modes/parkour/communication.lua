@@ -31,6 +31,7 @@ if not is_tribe then
 	local last_id = os.time() - 10000
 	local last_victory_id = last_id
 	local next_channel_load = 0
+	local loaded_sender
 	local victory_packet_data
 
 	local common_decoder = {
@@ -63,6 +64,8 @@ if not is_tribe then
 
 	packet_handler = function(player, data)
 		if player == send_channel then
+			loaded_sender = nil
+
 			if not buffer then return end
 			local send_id
 			send_id, data = string.match(data, "^(%d+)(.*)$")
@@ -147,6 +150,14 @@ if not is_tribe then
 
 	onEvent("Loop", function()
 		local now = os.time()
+
+		if loaded_sender and now >= loaded_sender then
+			loaded_sender = nil
+			if eventCantSendData then
+				eventCantSendData()
+			end
+		end
+
 		if now >= next_channel_load then
 			next_channel_load = now + 10000
 
@@ -156,6 +167,7 @@ if not is_tribe then
 			if add_packet_data then
 				buffer = add_packet_data
 				add_packet_data = nil
+				loaded_sender = os.time() + 1500
 				system.loadPlayerData(send_channel)
 			end
 			if room.name == "*#parkour4bots" or victory_packet_data then
