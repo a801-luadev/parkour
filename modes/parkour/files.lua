@@ -280,7 +280,9 @@ onEvent("PlayerDataLoaded", function(player, data)
 			old.report = data.report
 		end
 
-		if old.killed < data.killed then
+		old.kill = data.kill
+
+		if old.killed ~= data.killed then
 			old.killed = data.killed
 			translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
 			if os.time() < data.killed then
