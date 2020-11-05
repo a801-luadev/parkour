@@ -61,6 +61,7 @@ local pdata_actions = {
 	kill = function(player, data)
 		data.killed = os.time() + killing[player] * 60 * 1000
 		data.kill = killing[player]
+		killing[player] = nil
 
 		return true
 	end,
@@ -73,8 +74,10 @@ local pdata_actions = {
 	end,
 
 	records = function(player, data)
-		if data.badges[6] < records[player] then
-			data.badges[6] = records[player]
+		local newbadge = records[player]
+		records[player] = nil
+		if data.badges[6] < newbadge then
+			data.badges[6] = newbadge
 
 			return true
 		end
