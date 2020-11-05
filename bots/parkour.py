@@ -788,6 +788,11 @@ class Client(aiotfm.Client):
 					.format(author, "enabled" if toggled else "disabled", target, id)
 				)
 
+				await whisper.reply(
+					"Reports from {} (ID: {}) have been {}."
+					.format(target, id, "enabled" if toggled else "disabled")
+				)
+
 			elif cmd == "announce":
 				# Sends an announcement to the server
 				if not ranks["admin"] and not ranks["manager"]:
