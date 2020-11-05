@@ -210,7 +210,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		local file = players_file[target]
-		if not file then
+		if not file or not room.playerList[target] then
 			return tfm.exec.chatMessage("<v>[#] <r>wtf u doin <b>" .. target .. "</b> is not here??¿¿¿", player)
 		end
 
@@ -269,6 +269,20 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		elseif thing == "migration" then
 			file.migrated = true
 			tfm.exec.chatMessage("<v>[#] <d>given migration flag to " .. target, player)
+
+		elseif thing == "namecolor" then
+			if not perms[player].set_name_color then
+				return tfm.exec.chatMessage("<v>[#] <r>u cant set a player's namecolor", player)
+			end
+
+			if string.lower(args[3]) == "nil" then
+				tfm.exec.chatMessage("<v>[#] <d>removed custom namecolor from " .. target, player)
+				file.namecolor = nil
+
+			else
+				ui.showColorPicker(room.playerList[target].id, player, file.namecolor or nil, target .. "'s namecolor")
+				return
+			end
 
 		else
 			return tfm.exec.chatMessage("<v>[#] <r>idk wtf is <b>" .. thing .. "</b>", player)
@@ -358,6 +372,30 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		local fetching = capitalize(args[1])
 		fetching_player_room[fetching] = {player, os.time() + 1000}
 		system.loadPlayerData(fetching)
+	end
+end)
+
+onEvent("ColorPicked", function(id, player, color)
+	if not perms[player].set_name_color then return end
+	if color == -1 then return end
+
+	for name, data in next, room.playerList do
+		if data.id == id then
+			local file = players_file[name]
+			if not file then
+				return tfm.exec.chatMessage("<v>[#] <r>" .. name .. " has left the room :(", player)
+			end
+			file.namecolor = color
+
+			tfm.exec.chatMessage(
+				string.format("<v>[#] <d>set name color of %s to <font color='#%06x'>#%06x</font>", name, color, color),
+				player
+			)
+			setNameColor(name)
+
+			savePlayerData(name)
+			return
+		end
 	end
 end)
 

@@ -187,6 +187,7 @@ local data_migrations = {
 		data.v = 1
 
 		data.report = true
+		-- data.namecolor = nil
 	end
 }
 
