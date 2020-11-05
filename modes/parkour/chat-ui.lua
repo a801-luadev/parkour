@@ -278,9 +278,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			if quantity > 2 and string.lower(args[3]) == "nil" then
 				tfm.exec.chatMessage("<v>[#] <d>removed custom namecolor from " .. target, player)
 				file.namecolor = nil
+				setNameColor(target)
 
 			else
-				ui.showColorPicker(room.playerList[target].id, player, file.namecolor or nil, target .. "'s namecolor")
+				ui.showColorPicker(room.playerList[target].id, player, file.namecolor, target .. "'s namecolor")
 				return
 			end
 
