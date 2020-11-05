@@ -754,19 +754,18 @@ class Client(aiotfm.Client):
 				await whisper.reply("Your report of the player {} will be handled shortly.".format(reported))
 
 				if self.report_cooldown(author):
-					return print("cooldown")
+					return
 
 				if not await self.can_report(author):
-					return print("cant report")
+					return
 
 				if await self.is_sanctioned(reported):
-					return print("sanctioned")
+					return
 
 				for report in self.reports.items():
 					if report[1] == reported:
-						return print("already reported")
+						return
 
-				print("new_report")
 				self.dispatch("new_report", author, reported)
 
 			elif cmd == "norep":
