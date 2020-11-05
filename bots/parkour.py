@@ -71,6 +71,9 @@ SIMULATE_SUS = (18 << 8) + 255
 LAST_SANCTION = (19 << 8) + 255
 PLAYER_VICTORY = (21 << 8) + 255
 GET_PLAYER_INFO = (22 << 8) + 255
+IS_SANCTIONED = (23 << 8) + 255
+CAN_REPORT = (24 << 8) + 255
+TOGGLE_REPORT = (25 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -86,6 +89,7 @@ webhooks = {
 	"**`[SUS2]:`**": env.suspects2,
 	"**`[BANS]:`**": env.sanctions,
 	"**`[KILL]:`**": env.sanctions,
+	"**`[NOREP]:`**": env.sanctions,
 	"**`[RANKS]:`**": env.ranks,
 	"**`[JOIN]:`**": env.join,
 	"**`[BOTCRASH]:`**": env.private,
@@ -199,6 +203,7 @@ class Client(aiotfm.Client):
 	received_weekly_reset = False
 	next_report = 0
 	reports = {}
+	reporters = []
 
 	def get_player_rank(self, player):
 		player = normalize_name(player)
@@ -405,6 +410,53 @@ class Client(aiotfm.Client):
 				name, room, hour_maps = text.split("\x00")
 				return room, int(hour_maps)
 		return None, None
+
+	async def is_sanctioned(self, name):
+		await self.send_callback(IS_SANCTIONED, name)
+
+		try:
+			txt_id, text = await self.wait_for(
+				"on_lua_textarea",
+				lambda txt_id, text: txt_id in (IS_SANCTIONED, VERSION_MISMATCH) and text.startswith(name),
+				timeout=5.0
+			)
+		except Exception:
+			return False
+		else:
+			return not (txt_id == IS_SANCTIONED and text[-1] == "0")
+
+	def report_cooldown(self, name):
+		reports = 0
+		remove_until = -1
+		now = time.time()
+
+		for index, (expire, reporter) in enumerate(self.reporters):
+			if now >= expire:
+				remove_until = index
+
+			elif reporter == name:
+				reports += 1
+
+		if remove_until >= 0:
+			del self.reporters[:remove_until + 1]
+
+		if reports >= 2:
+			return True
+		return False
+
+	async def can_report(self, name):
+		await self.send_callback(CAN_REPORT, name)
+
+		try:
+			txt_id, text = await self.wait_for(
+				"on_lua_textarea",
+				lambda txt_id, text: txt_id in (CAN_REPORT, VERSION_MISMATCH) and text.startswith(name),
+				timeout=5.0
+			)
+		except Exception:
+			return False
+		else:
+			return txt_id == CAN_REPORT and text[-1] == "1"
 
 	async def on_join_request(self, room, channel):
 		validity = re.match(r"^(?:[a-z]{2}-|\*)#parkour(?:$|[^a-zA-Z])", room)
@@ -666,6 +718,7 @@ class Client(aiotfm.Client):
 		now = time.time()
 		# reporter, reported, sent to discord, when to send to discord, expiration date
 		self.reports[report] = [author, reported, online == 0, now + 60 * 5, now + 60 * 30]
+		self.reporters.append((now + 60 * 5, author))
 
 		if online == 0:
 			return await self.send_report_discord(report, author, reported)
@@ -691,11 +744,48 @@ class Client(aiotfm.Client):
 					return await whisper.reply("Usage: .report Username#0000")
 
 				reported = normalize_name(args[0])
+				if reported == author:
+					return await whisper.reply("Why are you trying to report yourself?")
+
 				if not await self.is_online(reported):
 					return await whisper.reply("That player ({}) is not online.".format(reported))
 
-				self.dispatch("new_report", author, reported)
 				await whisper.reply("Your report of the player {} will be handled shortly.".format(reported))
+
+				if self.report_cooldown(author):
+					return
+
+				if not await self.can_report(author):
+					return
+
+				if await self.is_sanctioned(reported):
+					return
+
+				for report in self.reports.items():
+					if report[1] == reported:
+						return
+
+				self.dispatch("new_report", author, reported)
+
+			elif cmd == "norep":
+				if not ranks["admin"] and not ranks["mod"]:
+					return
+				if not args:
+					return await whisper.reply("Usage: .norep Username#0000")
+
+				target = normalize_name(args[0])
+				if not await self.is_online(target):
+					return await whisper.reply("That player ({}) is not online.".format(target))
+
+				toggled = not await self.can_report(target)
+				await self.send_callback(TOGGLE_REPORT, target)
+				id = await self.get_player_id(target)
+
+				self.dispatch(
+					"send_webhook",
+					"**`[NOREP]:`** `{}` has {} reports from `{}` (ID: `{}`)."
+					.format(author, "enabled" if toggled else "disabled", target, id)
+				)
 
 			elif cmd == "announce":
 				# Sends an announcement to the server

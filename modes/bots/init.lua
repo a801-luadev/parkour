@@ -38,6 +38,9 @@ local packets = {
 	runtime = bit.lshift(20, 8) + 255,
 	player_victory = bit.lshift(21, 8) + 255,
 	get_player_info = bit.lshift(22, 8) + 255,
+	is_sanctioned = bit.lshift(23, 8) + 255,
+	can_report = bit.lshift(24, 8) + 255,
+	toggle_report = bit.lshift(25, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -50,6 +53,9 @@ local killing = {}
 local verifying = {}
 local get_sanction = {}
 local get_player_info = {}
+local check_sanction = {}
+local check_report = {}
+local toggle_report = {}
 local to_do = {}
 local in_room = {}
 local records = {
@@ -257,6 +263,18 @@ onEvent("TextAreaCallback", function(id, player, data)
 	elseif id == packets.get_player_info then
 		get_player_info[data] = true
 		system.loadPlayerData(data)
+
+	elseif id == packets.is_sanctioned then
+		check_sanction[data] = true
+		system.loadPlayerData(data)
+
+	elseif id == packets.can_report then
+		check_report[data] = true
+		system.loadPlayerData(data)
+
+	elseif id == packets.toggle_report then
+		toggle_report[data] = true
+		system.loadPlayerData(data)
 	end
 end)
 
@@ -302,6 +320,24 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if get_sanction[player] then
 		addTextArea(packets.last_sanction, player .. "\000" .. data.kill)
 		get_sanction[player] = nil
+	end
+
+	if check_sanction[player] then
+		local now = os.time()
+		local sanctioned = now < data.killed or data.banned == 2 or now < data.banned
+		addTextArea(packets.is_sanctioned, player .. "\000" .. (sanctioned and 1 or 0))
+		check_sanction[player] = nil
+	end
+
+	if check_report[player] then
+		addTextArea(packets.can_report, player .. "\000" .. (data.report and 1 or 0))
+		check_report[player] = nil
+	end
+
+	if toggle_report[player] then
+		data.report = not data.report
+		update = true
+		toggle_report[player] = nil
 	end
 
 	if update then

@@ -182,6 +182,11 @@ local data_migrations = {
 
 		data.parkour = nil
 		data.drawbattle = nil
+	end,
+	[0] = function(player, data)
+		data.v = 1
+
+		data.report = true
 	end
 }
 
@@ -271,6 +276,10 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if players_file[player] then
 		local old = players_file[player]
+		if data.report ~= nil then
+			old.report = data.report
+		end
+
 		if old.killed < data.killed then
 			old.killed = data.killed
 			translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
