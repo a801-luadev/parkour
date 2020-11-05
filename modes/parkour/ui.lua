@@ -490,6 +490,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 	elseif cmd == "hide" then
 		if not perms[player] or not perms[player].hide then return end
+		if ranks.hidden[player] then
+			return tfm.exec.chatMessage("<v>[#] <r>You're a hidden staff. You can't use this command.", player)
+		end
 
 		players_file[player].hidden = not players_file[player].hidden
 

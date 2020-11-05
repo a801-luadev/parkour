@@ -8,7 +8,8 @@ ranks = {
 	mod = {_count = 0},
 	mapper = {_count = 0},
 	trainee = {_count = 0},
-	translator = {_count = 0}
+	translator = {_count = 0},
+	hidden = {_count = 0}
 }
 local ranks_id = {
 	admin = 2 ^ 0,
@@ -17,7 +18,8 @@ local ranks_id = {
 	mapper = 2 ^ 3,
 	trainee = 2 ^ 4,
 	translator = 2 ^ 5,
-	bot = 2 ^ 6
+	bot = 2 ^ 6,
+	hidden = 2 ^ 7
 }
 local ranks_permissions = {
 	admin = {
@@ -67,7 +69,8 @@ local ranks_permissions = {
 	translator = {
 		change_map = true,
 		hide = true
-	}
+	},
+	hidden = {}
 }
 player_ranks = {}
 perms = {}
@@ -90,7 +93,8 @@ onEvent("GameDataLoaded", function(data)
 			mod = {_count = 0},
 			mapper = {_count = 0},
 			trainee = {_count = 0},
-			translator = {_count = 0}
+			translator = {_count = 0},
+			hidden = {_count = 0}
 		}, {}, {}
 		local player_perms, _player_ranks
 		for player, rank in next, data.ranks do

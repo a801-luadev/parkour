@@ -267,6 +267,10 @@ onEvent("PlayerDataLoaded", function(player, data)
 		updateData(player, data)
 	end
 
+	if ranks.hidden[player] then
+		data.hidden = true
+	end
+
 	local commu = data.commu or room.community
 	if not data.hidden then
 		online[player] = commu
