@@ -50,16 +50,68 @@ local parkour_bot = "Parkour#8558"
 local loaded = false
 local chats = {loading = true}
 local killing = {}
-local verifying = {}
-local get_sanction = {}
-local get_player_info = {}
-local check_sanction = {}
-local check_report = {}
-local toggle_report = {}
 local to_do = {}
 local in_room = {}
 local records = {
 	all_badges = 9
+}
+
+local loadingPlayerData = {}
+local pdata_actions = {
+	kill = function(player, data)
+		data.killed = os.time() + killing[player] * 60 * 1000
+		data.kill = killing[player]
+
+		return true
+	end,
+
+	verifying = function(player, data)
+		data.badges[5] = 1
+		addTextArea(packets.verify_discord, player)
+
+		return true
+	end,
+
+	records = function(player, data)
+		if data.badges[6] < records[player] then
+			data.badges[6] = records[player]
+
+			return true
+		end
+		return false
+	end,
+
+	get_info = function(player, data)
+		addTextArea(packets.get_player_info, player .. "\000" .. data.room .. "\000" .. #data.hour)
+
+		return false
+	end,
+
+	get_last_sanction = function(player, data)
+		addTextArea(packets.last_sanction, player .. "\000" .. data.kill)
+
+		return false
+	end,
+
+	is_sanctioned = function(player, data)
+		local now = os.time()
+		local sanctioned = now < data.killed or data.banned == 2 or now < data.banned
+		addTextArea(packets.is_sanctioned, player .. "\000" .. (sanctioned and 1 or 0))
+
+		return false
+	end,
+
+	can_report = function(player, data)
+		addTextArea(packets.can_report, player .. "\000" .. (data.report and 1 or 0))
+
+		return false
+	end,
+
+	toggle_report = function(player, data)
+		data.report = not data.report
+
+		return true
+	end
 }
 
 local file_actions = {
@@ -113,6 +165,17 @@ local file_actions = {
 local function schedule(action, arg1, arg2)
 	to_do[#to_do + 1] = {file_actions[action], arg1, arg2}
 	next_file_check = os.time() + 4000
+end
+
+local function onPlayerData(target, fnc)
+	local actions = loadingPlayerData[target]
+
+	if actions then
+		actions[ #actions + 1 ] = pdata_actions[fnc]
+	else
+		loadingPlayerData[target] = {os.time() + 1500, pdata_actions[fnc]}
+		system.loadPlayerData(target)
+	end
 end
 
 local function sendSynchronization()
@@ -234,8 +297,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 		tfm.exec.newGame(data)
 
 	elseif id == packets.verify_discord then
-		verifying[data] = true
-		system.loadPlayerData(data)
+		onPlayerData(data, "verifying")
 
 	elseif id == packets.record_badges then
 		local name, badge = string.match(data, "^([^\000]+)\000([^\000]+)$")
@@ -247,39 +309,40 @@ onEvent("TextAreaCallback", function(id, player, data)
 
 		if badge <= records.all_badges then
 			records[name] = badge
-			system.loadPlayerData(name)
+			onPlayerData(name, "records")
 		end
 
 	elseif id == packets.simulate_sus then
 		eventPacketReceived(1, data)
 
 	elseif id == packets.last_sanction then
-		get_sanction[data] = true
-		system.loadPlayerData(data)
+		onPlayerData(data, "get_last_sanction")
 
 	elseif id == packets.runtime then
 		addTextArea(packets.runtime, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
 
 	elseif id == packets.get_player_info then
-		get_player_info[data] = true
-		system.loadPlayerData(data)
+		onPlayerData(data, "get_info")
 
 	elseif id == packets.is_sanctioned then
-		check_sanction[data] = true
-		system.loadPlayerData(data)
+		onPlayerData(data, "is_sanctioned")
 
 	elseif id == packets.can_report then
-		check_report[data] = true
-		system.loadPlayerData(data)
+		onPlayerData(data, "can_report")
 
 	elseif id == packets.toggle_report then
-		toggle_report[data] = true
-		system.loadPlayerData(data)
+		onPlayerData(data, "toggle_report")
 	end
 end)
 
 onEvent("PlayerDataLoaded", function(player, data)
-	if player == recv_channel or player == send_channel or player == victory_channel or data == "" then return end
+	local actions = loadingPlayerData[player]
+	if not actions then return end
+	loadingPlayerData[player] = nil
+
+	if data == "" then
+		return addTextArea(packets.version_mismatch, player)
+	end
 
 	data = json.decode(data)
 	if data.v ~= data_version then
@@ -287,57 +350,9 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	local update = false
-	if killing[player] then
-		data.killed = os.time() + killing[player] * 60 * 1000
-		data.kill = killing[player]
 
-		update = true
-		killing[player] = nil
-	end
-
-	if verifying[player] then
-		data.badges[5] = 1
-		addTextArea(packets.verify_discord, player)
-
-		update = true
-		verifying[player] = nil
-	end
-
-	if records[player] then
-		if data.badges[6] < records[player] then
-			data.badges[6] = records[player]
-
-			update = true
-		end
-		records[player] = nil
-	end
-
-	if get_player_info[player] then
-		addTextArea(packets.get_player_info, player .. "\000" .. data.room .. "\000" .. #data.hour)
-		get_player_info[player] = nil
-	end
-
-	if get_sanction[player] then
-		addTextArea(packets.last_sanction, player .. "\000" .. data.kill)
-		get_sanction[player] = nil
-	end
-
-	if check_sanction[player] then
-		local now = os.time()
-		local sanctioned = now < data.killed or data.banned == 2 or now < data.banned
-		addTextArea(packets.is_sanctioned, player .. "\000" .. (sanctioned and 1 or 0))
-		check_sanction[player] = nil
-	end
-
-	if check_report[player] then
-		addTextArea(packets.can_report, player .. "\000" .. (data.report and 1 or 0))
-		check_report[player] = nil
-	end
-
-	if toggle_report[player] then
-		data.report = not data.report
-		update = true
-		toggle_report[player] = nil
+	for index = 2, #actions do
+		update = update or actions[index](player, data)
 	end
 
 	if update then
@@ -354,7 +369,7 @@ onEvent("SendingPacket", function(id, packet)
 	elseif id == 2 then -- !kill
 		local player, minutes = string.match(packet, "^([^\000]+)\000([^\000]+)$")
 		killing[player] = tonumber(minutes)
-		system.loadPlayerData(player)
+		onPlayerData(player, "kill")
 		return
 
 	elseif id == 3 then -- !ban
@@ -440,6 +455,23 @@ onEvent("Loop", function()
 		next_file_load = os.time() + 61000
 
 		system.loadFile(files[to_do[1][1][1]]) -- first action, data, file
+	end
+
+	local to_remove, count = nil, 0
+	for target, data in next, loadingPlayerData do
+		if now >= data[1] then
+			if count == 0 then
+				count = 1
+				to_remove = {target}
+			else
+				count = count + 1
+				to_remove[count] = target
+			end
+		end
+	end
+
+	for index = 1, count do
+		loadingPlayerData[ to_remove[index] ] = nil
 	end
 end)
 
