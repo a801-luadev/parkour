@@ -1256,6 +1256,7 @@ class Client(aiotfm.Client):
 					response = await self.wait_for(
 						"on_whisper",
 						lambda resp: resp.author == whisper.author and resp.content.lower() in ("yes", "no"),
+						timeout = 120.0
 					)
 				except Exception:
 					await whisper.reply("You took too long to provide a valid response.")
