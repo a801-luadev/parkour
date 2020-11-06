@@ -615,28 +615,32 @@ class Client(aiotfm.Client):
 	async def on_player_victory(self, id, name, code, taken):
 		records = await self.get_map_records(code)
 		msg = (
-			"**`[SUS]:`** `{}` (`{}`) (`{{}}` maps/hour) completed the map `@{}` "
-			"in the room `{{}}` in `{}` seconds. - "
+			"**`[SUS]:`** `{}` (`{}`) (`{{{{}}}}` maps/hour) completed the map `@{}` "
+			"in the room `{{{{}}}}` in `{}` seconds. - "
 			"Map record: `{{}}` (threshold `{{}}`)"
 		).format(name, id, code, taken)
 
 		if not records: # empty
 			webhook = env.suspects_norecord
 			threshold = 45
-			msg = msg.format("unknown", "unknown", "none", 45)
+			msg = msg.format("none", 45)
 
+		else:
+
+			webhook = env.suspects
+			record = records[0]["time"] / 100
+			threshold = round(record * 1.15 * 1000) / 1000 # first record + 15% of the time, remove some decimals
+			msg = msg.format(record, threshold)
+
+		if taken > threshold:
+			webhook = env.game_victory
+			room, hour_maps = "unknown", "unknown"
 		else:
 			room, hour_maps = await self.get_player_info(name)
 			if room is None:
 				room, hour_maps = "unknown", "unknown"
 
-			webhook = env.suspects
-			record = records[0]["time"] / 100
-			threshold = round(record * 1.15 * 1000) / 1000 # first record + 15% of the time, remove some decimals
-			msg = msg.format(hour_maps, room, record, threshold)
-
-		if taken > threshold:
-			webhook = env.game_victory
+		msg = msg.format(room, hour_maps)
 
 		self.dispatch("send_webhook", msg, webhook)
 
