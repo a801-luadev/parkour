@@ -98,7 +98,7 @@ local pdata_actions = {
 
 	is_sanctioned = function(player, data)
 		local now = os.time()
-		local sanctioned = now < data.killed or data.banned == 2 or now < data.banned
+		local sanctioned = now < (data.killed or 0) or data.banned == 2 or now < (data.banned or 0)
 		addTextArea(packets.is_sanctioned, player .. "\000" .. (sanctioned and 1 or 0))
 
 		return false
