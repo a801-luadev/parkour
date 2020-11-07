@@ -147,7 +147,7 @@ do
 				local pbg = (data or players_file[profile]).badges
 				if pbg then
 					for index = 1, #badges do
-						if pbg[index] == 1 then
+						if pbg[index] > 0 then
 							count = count + 1
 						end
 					end
