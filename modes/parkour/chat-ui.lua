@@ -198,6 +198,16 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		)
 		tfm.exec.chatMessage("<v>[#] <d>Your record will be submitted shortly.", player)
 
+	elseif cmd == "pause" then
+		if not ranks.admin[player] then return end
+
+		local total = tonumber(args[1]) or 31
+
+		local finish = os.time() + (total - usedRuntime)
+		while os.time() < total do end
+
+		tfm.exec.chatMessage("<v>[#] <d>used " .. (total - usedRuntime) .. "ms of runtime", player)
+
 	elseif cmd == "give" then
 		if not perms[player] or not perms[player].give_command then return end
 
@@ -487,6 +497,7 @@ onEvent("GameStart", function()
 	system.disableChatCommandDisplay("donate")
 	system.disableChatCommandDisplay("discord")
 	system.disableChatCommandDisplay("submit")
+	system.disableChatCommandDisplay("pause")
 	system.disableChatCommandDisplay("give")
 	system.disableChatCommandDisplay("pw")
 	system.disableChatCommandDisplay("roomlimit")
