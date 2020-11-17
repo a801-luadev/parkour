@@ -384,6 +384,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 	elseif cmd == "spec" then
+		if not players_file[player] then return end
 		if not perms[player] or not perms[player].spectate then return end
 
 		enableSpecMode(player, not spec_mode[player])
