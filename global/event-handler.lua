@@ -24,7 +24,7 @@ do
 	cycleId = 0
 	usedRuntime = 0
 	totalRuntime = 0
-	local stopingAt = 0
+	local stoppingAt = 0
 	local checkingRuntime = false
 	local paused = false
 	local scheduled = {_count = 0, _pointer = 1}
@@ -74,7 +74,7 @@ do
 		for index = offset, evt._count do
 			evt[index](a, b, c, d, e)
 
-			if not initializingModule and os_time() >= stopingAt then
+			if not initializingModule and os_time() >= stoppingAt then
 				if index < evt._count then
 					-- If this event didn't end, we need to resume from
 					-- where it has been left!
@@ -163,7 +163,7 @@ do
 
 				cycleId = thisCycle
 				usedRuntime = 0
-				stopingAt = start + RUNTIME_LIMIT
+				stoppingAt = start + RUNTIME_LIMIT
 
 				-- if this was paused, we need to resume!
 				if paused then
@@ -189,7 +189,7 @@ do
 					end
 				end
 			else
-				stopingAt = start + RUNTIME_LIMIT - usedRuntime
+				stoppingAt = start + RUNTIME_LIMIT - usedRuntime
 			end
 
 			if paused then

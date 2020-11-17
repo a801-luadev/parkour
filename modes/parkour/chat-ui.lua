@@ -204,7 +204,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		local total = tonumber(args[1]) or 31
 
 		local finish = os.time() + (total - usedRuntime)
-		while os.time() < total do end
+		while os.time() < finish do end
 
 		tfm.exec.chatMessage("<v>[#] <d>used " .. (total - usedRuntime) .. "ms of runtime", player)
 
