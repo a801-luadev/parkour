@@ -56,6 +56,11 @@ local records = {
 	all_badges = 9
 }
 
+local ignoredPlayerData = {
+	[recv_channel] = true,
+	[send_channel] = true,
+	[victory_channel] = true
+}
 local loadingPlayerData = {}
 local pdata_actions = {
 	kill = function(player, data)
@@ -342,6 +347,8 @@ onEvent("PlayerDataLoaded", function(player, data)
 	local actions = loadingPlayerData[player]
 	if not actions then return end
 	loadingPlayerData[player] = nil
+
+	if ignoredPlayerData[player] then return end
 
 	if data == "" then
 		return addTextArea(packets.version_mismatch, player)
