@@ -188,6 +188,21 @@ local data_migrations = {
 
 		data.report = true
 		-- data.namecolor = nil
+	end,
+	[1] = function(player, data)
+		data.v = 2
+
+		for index = 1, 8 do
+			if not data.settings[index] then
+				if index == 5 then -- keyboard
+					data.settings[index] = (room.playerList[player] or room).community == "fr" and 0 or 1
+				elseif index >= 1 and index <= 7 then
+					data.settings[index] = 1
+				else
+					data.settings[index] = 0
+				end
+			end
+		end
 	end
 }
 
