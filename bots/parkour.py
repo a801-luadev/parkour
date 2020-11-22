@@ -984,7 +984,7 @@ class Client(aiotfm.Client):
 				chat = self.chats["mod" if cmd == "modchat" else "mapper"]
 
 				if not ranks["admin"] and not ranks["manager"]:
-					if chat == "mod":
+					if cmd == "modchat":
 						if not ranks["mod"] and not ranks["trainee"]:
 							return
 					elif not ranks["mapper"]:
