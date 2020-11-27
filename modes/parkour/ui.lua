@@ -429,7 +429,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				results = {total = 0, [1] = 0, [2] = 0, [3] = 0}
 			}
 			for player in next, in_room do
-				showPoll(player)
+				if victory[player] or (perms[player] and perms[player].start_round_poll) then
+					showPoll(player)
+				end
 			end
 
 		elseif action == "see" then
@@ -643,7 +645,16 @@ onEvent("NewPlayer", function(player)
 		setNameColor(_player)
 	end
 
-	if current_poll and not current_poll.voters[player] then
+	if (current_poll
+		and not current_poll.voters[player]
+		and (victory[player] or (perms[player] and perms[player].start_round_poll))) then
+		showPoll(player)
+	end
+end)
+
+onEvent("PlayerWon", function(player)
+	if (current_poll
+		and not current_poll.voters[player]) then
 		showPoll(player)
 	end
 end)
