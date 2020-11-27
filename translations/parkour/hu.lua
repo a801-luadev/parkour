@@ -30,7 +30,7 @@ translations.hu = {
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.8.0 - 07/11/2020</o></p>\n\n<font size='11'>• <vp>Improved the report system</vp>: You can now whisper <t>/c Parkour#8558 .report Username#0000</t>",
 
 	-- Congratulation messages
-	reached_level = "<d>Gratulálunk! Elérted a(z) <vp>%s</vp>. ellenőrző pontot.",
+	reached_level = "<d>Gratulálunk! Elérted a(z) <vp>%s</vp>. ellenőrző pontot. (<vp>%ss</vp>)",
 	finished = "<d><o>%s</o> befejezte a parkour pályát <vp>%s</vp> másodperc alatt. <fc>Gratulálunk!",
 	unlocked_power = "<ce><d>%s</d> feloldotta a(z) <vp>%s</vp> képességet.",
 

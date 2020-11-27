@@ -30,7 +30,7 @@ translations.id = {
     help_changelog = "<font size='13'><p align='center'><o>Versi 2.8.0 - 07/11/2020</o></p>\n\n<font size='11'>• <vp>Peningkatan sistem pelaporan</vp>: Sekarang anda bisa bisik dengan cara <t>/c Parkour#8558 .report Username#0000</t>",
 
     -- Congratulation messages
-    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>.",
+    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<vp>%ss</vp>)",
     finished = "<d><o>%s</o> telah menyelesaikan parkour dalam <vp>%s</vp> detik, <fc>selamat!",
     unlocked_power = "<ce><d>%s</d> telah membuka kemampuan <vp>%s</vp>.",
 

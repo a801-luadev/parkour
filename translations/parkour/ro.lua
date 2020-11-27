@@ -30,7 +30,7 @@ translations.ro = {
 	help_changelog = "<font size='13'><p align='center'><o>Versiunea 2.8.0 - 07/11/2020</o></p>\n\n<font size='11'>• <vp>Sistemul de raportare a fost îmbunătățit.</vp>: Acum poți șopti <t>/c Parkour#8558 .report Username#0000</t>",
 
 	-- Congratulation messages
-	reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>.",
+	reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<vp>%ss</vp>)",
 	finished = "<d><o>%s</o> a terminat parkour în <vp>%s</vp> secunde, <fc>felicitări!",
 	unlocked_power = "<ce><d>%s</d> a deblocat puterea <vp>%s</vp>.",
 

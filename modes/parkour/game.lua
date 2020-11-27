@@ -12,6 +12,7 @@ local online = {}
 local hidden = {}
 local players_level = {}
 local generated_at = {}
+local checkpoint_at = {}
 local spec_mode = {}
 local checkpoints = {}
 local players_file
@@ -118,6 +119,7 @@ onEvent("Keyboard", function(player, key)
 	if key >= 0 and key <= 2 then
 		if players_level[player] == 1 and not generated_at[player] then
 			generated_at[player] = os.time()
+			checkpoint_at[player] = os.time()
 
 			for key = 0, 2 do
 				bindKeyboard(player, key, true, false)
@@ -252,7 +254,7 @@ onEvent("Loop", function()
 
 		local last_level = #levels
 		local level_id, next_level, player
-		local now = os.time()
+		local now, taken = os.time()
 		for name in next, in_room do
 			player = room.playerList[name]
 			if player and now >= cp_available[name] then
@@ -261,6 +263,8 @@ onEvent("Loop", function()
 
 				if next_level then
 					if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_info.radius then
+						taken = (now - (checkpoint_at[player] or map_start)) / 1000
+						checkpoint_at[player] = now
 						players_level[name] = level_id
 						if not victory[name] then
 							tfm.exec.setPlayerScore(name, level_id, false)
@@ -269,7 +273,7 @@ onEvent("Loop", function()
 
 						if level_id == last_level then
 							if victory[name] then -- !cp
-								translatedChatMessage("reached_level", name, level_id)
+								translatedChatMessage("reached_level", name, level_id, taken)
 							else
 								victory._last_level[name] = true
 								tfm.exec.giveCheese(name)
@@ -278,7 +282,7 @@ onEvent("Loop", function()
 								tfm.exec.movePlayer(name, next_level.x, next_level.y)
 							end
 						else
-							translatedChatMessage("reached_level", name, level_id)
+							translatedChatMessage("reached_level", name, level_id, taken)
 							addCheckpointImage(name, levels[level_id + 1].x, levels[level_id + 1].y)
 						end
 					end
@@ -297,6 +301,8 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if bonus ~= players_level[player] + 1 then return end
 	if os.time() < cp_available[player] then return tfm.exec.addBonus(0, level.x, level.y, bonus, 0, false, player) end
 
+	local taken = (os.time() - (checkpoint_at[player] or map_start)) / 1000
+	checkpoint_at[player] = os.time()
 	players_level[player] = bonus
 	if not victory[player] then
 		tfm.exec.setPlayerScore(player, bonus, false)
@@ -305,7 +311,7 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 
 	if bonus == #levels then
 		if victory[player] then -- !cp
-			translatedChatMessage("reached_level", player, bonus)
+			translatedChatMessage("reached_level", player, bonus, taken)
 		else
 			victory._last_level[player] = true
 			tfm.exec.giveCheese(player)
@@ -315,7 +321,7 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 			return
 		end
 	else
-		translatedChatMessage("reached_level", player, bonus)
+		translatedChatMessage("reached_level", player, bonus, taken)
 
 		local next_level = levels[bonus + 1]
 		addCheckpointImage(player, next_level.x, next_level.y)
@@ -367,6 +373,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.removeBonus(players_level[player] + 1, player)
 		end
 		players_level[player] = checkpoint
+		checkpoint_at[player] = os.time()
 		tfm.exec.killPlayer(player)
 		if not victory[player] then
 			tfm.exec.setPlayerScore(player, checkpoint, false)
@@ -419,6 +426,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		players_level[player] = 1
 		generated_at[player] = nil
+		checkpoint_at[player] = nil
 		victory[player] = nil
 		victory_count = victory_count - 1
 

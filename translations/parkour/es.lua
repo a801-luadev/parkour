@@ -30,7 +30,7 @@ translations.es = {
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.8.0 - 07/11/2020</o></p>\n\n<font size='11'>• <vp>Se mejoró el sistema de reportes</vp>: Ahora puedes susurrar <t>/c Parkour#8558 .report Usuario#0000</t>",
 
 	-- Congratulation messages
-	reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>.",
+	reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>. (<vp>%ss</vp>)",
 	finished = "<d><o>%s</o> completó el parkour en <vp>%s</vp> segundos, <fc>¡felicitaciones!",
 	unlocked_power = "<ce><d>%s</d> desbloqueó el poder <vp>%s<ce>.",
 

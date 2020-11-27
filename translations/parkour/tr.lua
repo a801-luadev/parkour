@@ -30,7 +30,7 @@ translations.tr = {
 	help_changelog = "<font size='13'><p align='center'><o>Versiyon 2.8.0 - 07/11/2020</o></p>\n\n<font size='11'>• <vp>Bildirme sistemi geldi</vp>: <t>/c Parkour#8558 .report KullanıcıAdı#Kod</t> şeklinde fısıldayabilirsin.",
 
 	-- Congratulation messages
-	reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeye ulaştınız.",
+	reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeye ulaştınız. (<vp>%ss</vp>)",
 	finished = "<d><o>%s</o> parkuru <vp>%s</vp> saniyede bitirdi, <fc>Tebrikler!",
 	unlocked_power = "<ce><d>%s</d>, <vp>%s</vp> becerisini açtı.",
 

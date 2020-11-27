@@ -30,7 +30,7 @@ translations.cn = {
 	help_changelog = "<font size='13'><p align='center'><o>版本 2.8.0 - 07/11/2020</o></p>\n\n<font size='11'>• <vp>改善了舉報系統</vp>: 你現在可以私聊 <t>/c Parkour#8558 .report 玩家名字#0000</t>",
 
 	-- Congratulation messages
-	reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。",
+	reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。 (<vp>%ss</vp>)",
 	finished = "<d><o>%s</o> 在 <vp>%s</vp> 秒內完成了地圖, <fc>恭喜!",
 	unlocked_power = "<ce><d>%s</d> 解鎖了 <vp>%s</vp> 能力。",
 
