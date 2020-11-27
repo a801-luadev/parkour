@@ -41,6 +41,7 @@ local packets = {
 	is_sanctioned = bit.lshift(23, 8) + 255,
 	can_report = bit.lshift(24, 8) + 255,
 	toggle_report = bit.lshift(25, 8) + 255,
+	command_log = bit.lshift(26, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -451,6 +452,9 @@ onEvent("PacketReceived", function(channel, id, packet, map, time)
 
 	elseif id == 6 then
 		addTextArea(packets.record_submission, packet, parkour_bot)
+
+	elseif id == 7 then
+		addTextArea(packets.command_log, packet, parkour_bot)
 	end
 end)
 

@@ -146,11 +146,15 @@ onEvent("ChatCommand", function(player, msg)
 end)
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
+	local max_args = quantity
+
 	if cmd == "donate" then
 		tfm.exec.chatMessage("<rose>" .. links.donation, player)
+		return
 
 	elseif cmd == "discord" then
 		tfm.exec.chatMessage("<rose>" .. links.discord, player)
+		return
 
 	elseif cmd == "submit" then
 		if not records_admins then return end
@@ -197,8 +201,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			 checkpoint_info.version)
 		)
 		tfm.exec.chatMessage("<v>[#] <d>Your record will be submitted shortly.", player)
+		return
 
-	elseif cmd == "pause" then
+	elseif cmd == "pause" then -- logged
 		if not ranks.admin[player] then return end
 
 		local total = tonumber(args[1]) or 31
@@ -207,8 +212,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		while os.time() < finish do end
 
 		tfm.exec.chatMessage("<v>[#] <d>used " .. (total - usedRuntime) .. "ms of runtime", player)
+		max_args = 1
 
-	elseif cmd == "give" then
+	elseif cmd == "give" then -- logged
 		if not perms[player] or not perms[player].give_command then return end
 
 		if quantity < 2 then
@@ -330,8 +336,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			roompw.owner = player
 		end
 		roompw.password = password
+		return
 
-	elseif cmd == "roomlimit" then
+	elseif cmd == "roomlimit" then -- logged
 		if not perms[player] or not perms[player].set_room_limit then return end
 
 		local limit = tonumber(args[1])
@@ -341,6 +348,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		tfm.exec.setRoomMaxPlayers(limit)
 		tfm.exec.chatMessage("<v>[#] <d>Set room max players to " .. limit .. ".", player)
+		max_args = 1
 
 	elseif cmd == "langue" then
 		if quantity == 0 then
@@ -363,8 +371,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				tfm.exec.chatMessage("<v>[#] <r>Unknown language: <b>" .. lang .. "</b>", player)
 			end
 		end
+		return
 
-	elseif cmd == "forcestats" then
+	elseif cmd == "forcestats" then -- logged
 		if not perms[player].force_stats then return end
 
 		if records_admins then
@@ -373,8 +382,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		count_stats = true
 		tfm.exec.chatMessage("<v>[#] <d>count_stats set to true", player)
+		max_args = 0
 
-	elseif cmd == "room" then
+	elseif cmd == "room" then -- logged
 		if not perms[player] or not perms[player].get_player_room then return end
 
 		if quantity == 0 then
@@ -384,7 +394,13 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		local fetching = capitalize(args[1])
 		fetching_player_room[fetching] = {player, os.time() + 1000}
 		system.loadPlayerData(fetching)
+		max_args = 1
+
+	else
+		return
 	end
+
+	logCommand(player, cmd, math.min(quantity, max_args), args)
 end)
 
 onEvent("ColorPicked", function(id, player, color)
@@ -406,6 +422,8 @@ onEvent("ColorPicked", function(id, player, color)
 			setNameColor(name)
 
 			savePlayerData(name)
+
+			logCommand(player, string.format("give %s namecolor #%06x", name, color))
 			return
 		end
 	end

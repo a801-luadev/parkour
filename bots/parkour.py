@@ -44,6 +44,8 @@ class env:
 	suspects_norecord = os.getenv("SUSPECTS_NORECORD_WEBHOOK")
 	game_victory = os.getenv("GAME_VICTORY_WEBHOOK")
 
+	commands_webhook = os.getenv("COMMAND_LOG_WEBHOOK")
+
 	report_channel = 773630094257815572
 
 
@@ -74,6 +76,7 @@ GET_PLAYER_INFO = (22 << 8) + 255
 IS_SANCTIONED = (23 << 8) + 255
 CAN_REPORT = (24 << 8) + 255
 TOGGLE_REPORT = (25 << 8) + 255
+COMMAND_LOG = (26 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -95,7 +98,8 @@ webhooks = {
 	"**`[BOTCRASH]:`**": env.private,
 	"**`[RECORD]:`**": env.parkour_records_webhook,
 	"**`[RECORD_SUS]:`**": env.record_suspects,
-	"**`[RECORDS_BADGE]:`**": env.record_badges_webhook
+	"**`[RECORDS_BADGE]:`**": env.record_badges_webhook,
+	"**`[COMMAND]:`**": env.commands_webhook
 }
 
 
@@ -598,6 +602,16 @@ class Client(aiotfm.Client):
 				"send_webhook",
 				"**`[RECORD{}]:`** `{}` (`{}`) completed the map `@{}` in the room `{}` in `{}` seconds."
 				.format("" if taken > 45 else "_SUS", name, player, code, room, taken)
+			)
+
+		elif id == COMMAND_LOG:
+			room, player, command = text.split("\x00")
+			room = enlarge_name(room)
+
+			self.dispatch(
+				"send_webhook",
+				"**`[COMMAND]:`** `{}` `{}`: `!{}`"
+				.format(room, player, command)
 			)
 
 	async def get_map_records(self, code):

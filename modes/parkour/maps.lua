@@ -311,6 +311,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		else
 			newMap()
 		end
+
+		if not records_cond and not tribe_cond and normal_cond then
+			-- logged when using staff powers
+			logCommand(player, "map", math.min(quantity, 2), args)
+		end
 	end
 end)
 
