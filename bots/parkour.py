@@ -77,6 +77,7 @@ IS_SANCTIONED = (23 << 8) + 255
 CAN_REPORT = (24 << 8) + 255
 TOGGLE_REPORT = (25 << 8) + 255
 COMMAND_LOG = (26 << 8) + 255
+POLL_VOTE = (27 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -613,6 +614,16 @@ class Client(aiotfm.Client):
 				"**`[COMMAND]:`** `{}` `{}`: `!{}`"
 				.format(room, player, command)
 			)
+
+		elif id == POLL_VOTE:
+			vote = int(text) - 1
+
+			if vote == 0: # yes
+				pass
+			elif vote == 1: # no
+				pass
+			elif vote == 2: # idk
+				pass
 
 	async def get_map_records(self, code):
 		await self.proxy.sendTo({"type": "map-records", "map": code}, "records")

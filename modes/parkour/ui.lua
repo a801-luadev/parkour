@@ -450,6 +450,12 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				)
 			end
 
+			if global_poll then
+				return tfm.exec.chatMessage(
+					"<v>[#] <r>The current poll is automated. You can't stop it.", player
+				)
+			end
+
 			local to_remove, count = {}, 0
 			for player in next, current_poll.interface.open do
 				count = count + 1
@@ -581,6 +587,10 @@ end)
 onEvent("PollVote", function(poll, player, button)
 	if not current_poll or current_poll.voters[player] then return end
 
+	if global_poll then
+		sendPacket("common", 8, tostring(button)) -- 1 = yes, 2 = no, 3 = idk
+	end
+
 	current_poll.voters[player] = true
 	current_poll.results.total = current_poll.results.total + 1
 	current_poll.results[button] = current_poll.results[button] + 1
@@ -686,6 +696,11 @@ onEvent("NewGame", function(player)
 		end
 
 		current_poll = nil
+	end
+
+	if global_poll then
+		-- execute as bot as it has all the permissions
+		eventParsedChatCommand("Tocutoeltuco#5522", "poll", 1, {"start"})
 	end
 
 	for player in next, in_room do

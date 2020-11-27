@@ -27,9 +27,12 @@
 	runtime limitations in transformice lua, this is way better
 ]]
 
+local global_poll = false
 local first_data_load = true
 local maps_per_section = math.random(10, 20)
 local maps = {
+	polls = {_count = 0},
+
 	sections_high = {
 		_count = 0,
 		_pointer = 0,
@@ -191,6 +194,14 @@ onEvent("GameDataLoaded", function(data)
 			first_data_load = false
 		end
 	end
+
+	if data.map_polls then
+		maps.polls = data.map_polls
+
+		-- even if we are modifying the file object, internally it's an array
+		-- so _count will be ignored
+		maps.polls._count = #data.map_polls
+	end
 	
 	if data.lowmaps then
 		maps.list_low = data.lowmaps
@@ -278,6 +289,16 @@ onEvent("NewGame", function()
 		return
 	end
 	is_invalid = false
+
+	global_poll = false
+	local map = tonumber((string.gsub(room.currentMap, "@", "", 1)))
+	for index = 1, maps.polls._count do
+		if maps.polls[index] == map then
+			global_poll = true
+			-- poll starts in modes/parkour/ui.lua
+			break
+		end
+	end
 end)
 
 onEvent("Loop", function(elapsed, remaining)

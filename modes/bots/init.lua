@@ -42,6 +42,8 @@ local packets = {
 	can_report = bit.lshift(24, 8) + 255,
 	toggle_report = bit.lshift(25, 8) + 255,
 	command_log = bit.lshift(26, 8) + 255,
+	poll_vote = bit.lshift(27, 8) + 255,
+	global_poll = bit.lshift(28, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -122,11 +124,10 @@ local file_actions = {
 	high_map_change = {1, true, function(data, map, add)
 		for index = #data.maps, 1, -1 do
 			if data.maps[index] == map then
-				if add then
-					return
-				else
+				if not add then
 					table.remove(data.maps, index)
 				end
+				return
 			end
 		end
 
@@ -138,11 +139,10 @@ local file_actions = {
 	low_map_change = {2, true, function(data, map, add)
 		for index = 1, #data.lowmaps do
 			if data.lowmaps[index] == map then
-				if add then
-					return
-				else
+				if not add then
 					table.remove(data.lowmaps, index)
 				end
+				return
 			end
 		end
 
@@ -163,6 +163,31 @@ local file_actions = {
 
 	modify_rank = {1, true, function(data, player, newrank)
 		data.ranks[player] = newrank
+	end},
+
+	global_poll_change = {1, true, function(data, add, remove)
+		for map in next, remove do
+			add[map] = nil
+		end
+
+		local map
+		for index = #data.map_polls, 1, -1 do
+			map = data.map_polls[index]
+
+			if add[map] then
+				add[map] = nil -- no duplicates pls
+			end
+
+			if remove[map] then
+				table.remove(data.map_polls, index)
+			end
+		end
+
+		local count = #data.map_polls
+		for map in next, add do
+			count = count + 1
+			data.map_polls[count] = map
+		end
 	end}
 }
 
@@ -336,6 +361,21 @@ onEvent("TextAreaCallback", function(id, player, data)
 
 	elseif id == packets.toggle_report then
 		onPlayerData(data, "toggle_report")
+
+	elseif id == packets.global_poll then
+		local addition, remove = {}, {}
+
+		for map, add in string.gmatch(data, "(%d+)\000([01])\000") do
+			map, add = tonumber(map), add == "1"
+
+			if add then
+				addition[map] = true
+			else
+				remove[map] = true
+			end
+		end
+
+		schedule("global_poll_change", addition, remove)
 	end
 end)
 
@@ -455,6 +495,9 @@ onEvent("PacketReceived", function(channel, id, packet, map, time)
 
 	elseif id == 7 then
 		addTextArea(packets.command_log, packet, parkour_bot)
+
+	elseif id == 8 then
+		addTextArea(packets.poll_vote, packet, parkour_bot)
 	end
 end)
 

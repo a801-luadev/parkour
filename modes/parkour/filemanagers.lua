@@ -16,6 +16,14 @@ local filemanagers = {
 					type = "number"
 				}
 			},
+			-- commented because the file is missing migration
+			-- {
+			-- 	name = "map_polls",
+			-- 	type = "array",
+			-- 	objects = {
+			-- 		type = "number"
+			-- 	}
+			-- },
 			{
 				name = "chats",
 				type = "dictionary",
