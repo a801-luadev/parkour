@@ -506,7 +506,7 @@ onEvent("GameDataLoaded", function(data)
 						pdata.banned = ban
 					end
 					savePlayerData(player)
-					sendPacket(2, id .. "\000" .. ban)
+					sendPacket("common", 2, id .. "\000" .. ban)
 				end
 
 				if pdata.banned and (pdata.banned == 2 or os.time() < pdata.banned) then
@@ -530,8 +530,10 @@ onEvent("GameDataLoaded", function(data)
 	end
 end)
 
-onEvent("PacketReceived", function(packet_id, packet)
-	if packet_id == 3 then -- !ban
+onEvent("PacketReceived", function(channel, id, packet)
+	if channel ~= "bots" then return end
+
+	if id == 3 then -- !ban
 		local player, val = string.match(packet, "^([^\000]+)\000[^\000]+\000([^\000]+)$")
 		local file, data = players_file[player], room.playerList[player]
 		if in_room[player] and data and file then
@@ -564,7 +566,7 @@ onEvent("PacketReceived", function(packet_id, packet)
 			end
 
 			savePlayerData(player)
-			sendPacket(2, data.id .. "\000" .. val)
+			sendPacket("common", 2, data.id .. "\000" .. val)
 		end
 	end
 end)

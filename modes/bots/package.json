@@ -5,10 +5,6 @@
 	},
 	{
 		"type": "require-file",
-		"file": "modes/parkour/communication.lua"
-	},
-	{
-		"type": "require-file",
 		"file": "modes/parkour/ranks.lua"
 	},
 	{

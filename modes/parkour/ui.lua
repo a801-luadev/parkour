@@ -829,8 +829,10 @@ onEvent("Loop", function(elapsed)
 	end
 end)
 
-onEvent("PacketReceived", function(packet_id, packet)
-	if packet_id == 1 then -- game update
+onEvent("PacketReceived", function(channel, id, packet)
+	if channel ~= "bots" then return end
+
+	if id == 1 then -- game update
 		update_at = tonumber(packet)
 	end
 end)

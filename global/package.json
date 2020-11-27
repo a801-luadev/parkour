@@ -14,5 +14,9 @@
 	{
 		"type": "require-file",
 		"file": "global/translation-handler.lua"
+	},
+	{
+		"type": "require-file",
+		"file": "global/communication.lua"
 	}
 ]

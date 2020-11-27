@@ -860,7 +860,7 @@ onEvent("PlayerWon", function(player)
 
 		if hour_count >= 30 and hour_count % 5 == 0 then
 			if hour_count >= 35 then
-				sendPacket(3, room.shortName .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. hour_count)
+				sendPacket("common", 3, room.shortName .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. hour_count)
 			end
 
 			local badge = math.ceil((hour_count - 29) / 5)

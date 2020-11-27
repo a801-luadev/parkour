@@ -56,11 +56,6 @@ local records = {
 	all_badges = 9
 }
 
-local ignoredPlayerData = {
-	[recv_channel] = true,
-	[send_channel] = true,
-	[victory_channel] = true
-}
 local loadingPlayerData = {}
 local pdata_actions = {
 	kill = function(player, data)
@@ -321,7 +316,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 		end
 
 	elseif id == packets.simulate_sus then
-		eventPacketReceived(1, data)
+		eventPacketReceived("common", 1, data)
 
 	elseif id == packets.last_sanction then
 		onPlayerData(data, "get_last_sanction")
@@ -348,7 +343,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if not actions then return end
 	loadingPlayerData[player] = nil
 
-	if ignoredPlayerData[player] then return end
+	if channels[player] then return end
 
 	if data == "" then
 		return addTextArea(packets.version_mismatch, player)
@@ -367,13 +362,13 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if update then
 		system.savePlayerData(player, json.encode(data))
-		sendPacket(2, player)
+		sendPacket("bots", 2, player)
 	end
 end)
 
 onEvent("SendingPacket", function(id, packet)
 	if id == 1 then -- update
-		sendPacket(1, tostring(os.time() + 60 * 1000))
+		sendPacket("bots", 1, tostring(os.time() + 60 * 1000))
 		return
 
 	elseif id == 2 then -- !kill
@@ -390,14 +385,16 @@ onEvent("SendingPacket", function(id, packet)
 		tfm.exec.chatMessage("<vi>[#parkour] <d>" .. packet)
 	end
 
-	sendPacket(id, packet)
+	sendPacket("bots", id, packet)
 end)
 
-onEvent("PacketReceived", function(id, packet, map, time)
-	if id == -1 then
+onEvent("PacketReceived", function(channel, id, packet, map, time)
+	if channel == "victory" then
 		addTextArea(packets.player_victory, packet, parkour_bot)
 		return
 	end
+
+	if channel ~= "common" then return end
 
 	local args, count = {}, 0
 	for slice in string.gmatch(packet, "[^\000]+") do
@@ -425,7 +422,7 @@ onEvent("PacketReceived", function(id, packet, map, time)
 		)
 		if tonumber(taken) <= 27 then -- autoban!
 			schedule("ban_change", id, 1)
-			sendPacket(3, player .. "\000" .. id .. "\0001")
+			sendPacket("bots", 3, player .. "\000" .. id .. "\0001")
 			addTextArea(
 				packets.send_webhook,
 				"**`[BANS]:`** `AntiCheatSystem` has permbanned the player `" .. player .. "` (`" .. id .. "`)",

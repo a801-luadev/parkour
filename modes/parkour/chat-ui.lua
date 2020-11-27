@@ -70,7 +70,7 @@ onEvent("PlayerWon", function(player)
 		local packedTime = taken * 1000
 		local band, rshift = bit32.band, bit32.rshift
 
-		sendPacket(-1, string.char(
+		sendPacket("victory", -1, string.char(
 			     rshift(id, 7 * 3)       ,
 			band(rshift(id, 7 * 2), 0x7f),
 			band(rshift(id, 7 * 1), 0x7f),
@@ -189,7 +189,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		fastest.submitted = true
 		fastest.wait_send = true
 		sendPacket(
-			6,
+			"common", 6,
 			(map .. "\000" ..
 			 room.playerList[player].id .. "\000" ..
 			 math.floor(fastest.record * 100) .. "\000" ..
@@ -474,20 +474,22 @@ onEvent("Loop", function()
 	end
 end)
 
-onEvent("PacketReceived", function(packet_id, packet)
-	if packet_id == 4 then -- !announce
+onEvent("PacketReceived", function(channel, id, packet)
+	if channel ~= "bots" then return end
+
+	if id == 4 then -- !announce
 		tfm.exec.chatMessage("<vi>[#parkour] <d>" .. packet)
-	elseif packet_id == 5 then -- !cannounce
+	elseif id == 5 then -- !cannounce
 		local commu, msg = string.match(packet, "^([^\000]+)\000(.+)$")
 		if commu == room.community then
 			tfm.exec.chatMessage("<vi>[" .. commu .. "] [#parkour] <d>" .. msg)
 		end
-	elseif packet_id == 6 then -- pw request
+	elseif id == 6 then -- pw request
 		if packet == room.shortName then
 			if roompw.password then
-				sendPacket(5, room.shortName .. "\000" .. roompw.password .. "\000" .. roompw.owner)
+				sendPacket("common", 5, room.shortName .. "\000" .. roompw.password .. "\000" .. roompw.owner)
 			else
-				sendPacket(5, room.shortName .. "\000")
+				sendPacket("common", 5, room.shortName .. "\000")
 			end
 		end
 	end
@@ -507,8 +509,8 @@ onEvent("GameStart", function()
 end)
 
 if records_admins then
-	onEvent("CantSendData", function()
-		if fastest.wait_send then
+	onEvent("CantSendData", function(channel)
+		if channel == "common" and fastest.wait_send then
 			fastest.submitted = false
 			fastest.wait_send = false
 			tfm.exec.chatMessage(
@@ -518,8 +520,17 @@ if records_admins then
 		end
 	end)
 
-	onEvent("PacketSent", function()
-		if fastest.wait_send then
+	onEvent("RetrySendData", function(channel)
+		if channel == "common" and fastest.wait_send then
+			tfm.exec.chatMessage(
+				"<v>[#] <r>Failed to send your record. Retrying in a moment.",
+				fastest.player
+			)
+		end
+	end)
+
+	onEvent("PacketSent", function(channel)
+		if channel = "common" and fastest.wait_send then
 			translatedChatMessage("records_submitted", fastest.player, room.currentMap)
 			fastest.wait_send = false
 		end

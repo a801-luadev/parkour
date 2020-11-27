@@ -402,8 +402,10 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 end)
 
-onEvent("PacketReceived", function(packet_id, packet)
-	if packet_id == 2 then -- update pdata
+onEvent("PacketReceived", function(channel, id, packet)
+	if channel ~= "bots" then return end
+
+	if id == 2 then -- update pdata
 		if in_room[packet] then
 			system.loadPlayerData(packet)
 		end

@@ -1,8 +1,5 @@
 local translatedChatMessage
-local packet_handler
-local send_channel
-local sendPacket
-local add_packet_data, buffer
+local channels, sendPacket, pipeHandler, channelHandler
 local initializingModule = true
 
 local onEvent, totalRuntime, startCycle, cycleId, usedRuntime
@@ -57,14 +54,18 @@ do
 
 		tfm.exec.setRoomMaxPlayers(1)
 
-		sendPacket(0, room.shortName .. "\000" .. name .. "\000" .. msg)
-		system.loadPlayerData(send_channel)
-		buffer = add_packet_data
+		channels.canRead = false
+		sendPacket("common", 0, room.shortName .. "\000" .. name .. "\000" .. msg)
+		channelHandler(true) -- load channel now to send all the data
+
+		events.Loop._count = 1
+		events.Loop[1] = channelHandler
 
 		events.PlayerDataLoaded._count = 2
-		events.PlayerDataLoaded[1] = packet_handler
+		events.PlayerDataLoaded[1] = pipeHandler
 		events.PlayerDataLoaded[2] = function(player)
 			if player == send_channel then
+				events.Loop._count = 0
 				events.PlayerDataLoaded._count = 0
 			end
 		end

@@ -128,7 +128,7 @@ onEvent("GameDataLoaded", function(data)
 		if new_reset ~= timed_maps.week.last_reset then
 			if #data.weekranking > 2 and data.weekranking[1][3] > 30 then
 				sendPacket(
-					4,
+					"common", 4,
 					timed_maps.week.last_reset .. "\000" .. os.date("%d/%m/%Y", ts - 24 * 60 * 60 * 1000) ..
 					"\000" .. data.weekranking[1][4] .. "\000" .. data.weekranking[1][2] .. "\000" .. data.weekranking[1][3] ..
 					"\000" .. data.weekranking[2][4] .. "\000" .. data.weekranking[2][2] .. "\000" .. data.weekranking[2][3] ..
