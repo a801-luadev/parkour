@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import sys
 import traceback
 import aiohttp
 
@@ -158,9 +159,9 @@ class Client:
 			elif packet["type"] == "exec":
 				self.loop.create_task(self.load_script(packet))
 
-			# Closes all the connections (the clients detect them and reboot)
+			# This indirectly reboots discord, tocubot and parkour
 			elif packet["type"] == "reboot":
-				self.loop.create_task(self.server.close_clients())
+				os.execl(sys.executable, sys.executable, *sys.argv)
 
 	async def connection_lost(self):
 		if self.connected:
