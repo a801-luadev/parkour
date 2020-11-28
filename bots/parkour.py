@@ -897,8 +897,8 @@ class Client(aiotfm.Client):
 				elif len(args) < 2:
 					return await whisper.reply("Invalid syntax.")
 
-				elif args[1] == "load":
-					await self.proxy.sendTo({"type": "game_update", "now": False, "load": True}, "tocubot")
+				else:
+					await self.proxy.sendTo({"type": "game_update", "now": False, "load": args[1] == "load"}, "tocubot")
 
 				await whisper.reply("Updating the game.")
 

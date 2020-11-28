@@ -624,8 +624,8 @@ class Client(discord.Client):
 				elif len(args) < 2:
 					return await msg.channel.send("Invalid syntax.")
 
-				elif args[1] == "load":
-					await self.proxy.sendTo({"type": "game_update", "now": False, "load": True}, "tocubot")
+				else:
+					await self.proxy.sendTo({"type": "game_update", "now": False, "load": args[1] == "load"}, "tocubot")
 
 				await msg.channel.send("Updating the game.")
 
