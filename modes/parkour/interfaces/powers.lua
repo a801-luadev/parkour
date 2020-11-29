@@ -274,48 +274,6 @@ do
 						old = keyboard.bindings[ powers[power].key ]
 					end
 				end
-				elseif Keyboard.open[player] and action == "keyboard" then
-			if not checkCooldown(player, "changeKeys", 1000) then return end
-
-			local binding = keyboard.bindings[args]
-			if binding then
-				Keyboard:update(player, Keyboard.args[player][1], nil, args)
-
-				local power = PowersInterface.args[player][1]
-				local old = keys[player][power]
-				if old == binding then return end
-
-				if not old then
-					if powers[power].key[1] then -- variation qwerty/azerty
-						old = keyboard.bindings[ powers[power].key[ players_file[player].settings[5] + 1 ] ]
-					else
-						old = keyboard.bindings[ powers[power].key ]
-					end
-				end
-
-				local pkeys = players_file[player].keys
-				local count = 0
-				for index = 1, #pkeys do
-					if pkeys[index] == binding then
-						count = count + 1
-					end
-				end
-
-				if count >= 2 then
-					return translatedChatMessage("max_power_keys", player, 2)
-				end
-
-				pkeys[power] = binding
-				for index = 1, power do
-					if not pkeys[index] then
-						pkeys[index] = 0
-					end
-				end
-
-				keys[player][power] = binding
-				savePlayerData(player)
-			end
-		end
 			end)
 		)
 
