@@ -56,6 +56,7 @@ onEvent("PlayerWon", function(player)
 	if not players_file[player] then return end
 
 	victory[player] = true
+	setNameColor(player) -- just in case PlayerRespawn triggers first
 
 	if records_admins then
 		translatedChatMessage("records_completed", player)
