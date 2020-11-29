@@ -435,6 +435,8 @@ onEvent("RawTextAreaCallback", function(id, player, callback)
 		tfm.exec.chatMessage("<rose>" .. links.discord, player)
 	elseif callback == "map_submission" then
 		tfm.exec.chatMessage("<rose>" .. links.maps, player)
+	elseif callback == "forum" then
+		tfm.exec.chatMessage("<rose>" .. links.forum, player)
 	elseif callback == "donate" then
 		tfm.exec.chatMessage("<rose>" .. links.donation, player)
 	elseif callback == "github" then
