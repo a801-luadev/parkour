@@ -108,6 +108,7 @@ if not is_tribe then
 		if not expire then
 			expire, data = 0, ""
 		end
+		expire = tonumber(expire)
 
 		local now = os.time()
 
