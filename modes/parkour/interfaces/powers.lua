@@ -80,6 +80,7 @@ do
 		end
 	end
 
+	local defaultKeyToggle
 	PowersInterface = Interface.new(55, 28, 685, 366, true)
 		:setDefaultArgs(1)
 
@@ -268,6 +269,8 @@ do
 			end)
 			:onUpdate(function(self, player)
 				if not self.canUpdate then
+					defaultKeyToggle = self
+
 					local textareas = self.parent.textareas
 					local clickable = textareas[ self.id - textareas[1].id + 2 ]
 
@@ -440,6 +443,10 @@ do
 			local binding = keyboard.bindings[args]
 			if binding then
 				Keyboard:update(player, Keyboard.args[player][1], nil, args)
+
+				if defaultKeyToggle and defaultKeyToggle.state[player] then
+					defaultKeyToggle:toggle(player)
+				end
 
 				local power = PowersInterface.args[player][1]
 				local old = keys[player][power]
