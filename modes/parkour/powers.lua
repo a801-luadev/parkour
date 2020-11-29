@@ -200,7 +200,7 @@ powers = {
 		cooldown_y = 374,
 		cooldown_img = "17127e6674c.png",
 
-		cooldown = 5000,
+		cooldown = 12500,
 		default = {2, 4}, -- E
 
 		fnc = function(player, key, down, x, y)
