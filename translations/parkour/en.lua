@@ -62,7 +62,8 @@ translations.en = {
 	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements\n\nShow no help symbol",
 	cooldown = "<v>[#] <r>Wait a few seconds before doing that again.",
 	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> keyboard" ..
-					 "\n\n<b>Hide</b> map count"),
+					 "\n\n<b>Hide</b> map count" ..
+					 "\n\nUse <b>default key</b>"),
 	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Complete <v>%s</v> maps" ..
 					"<font size='5'>\n\n</font>to unlock" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),

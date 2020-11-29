@@ -35,6 +35,51 @@ do
 		return power
 	end
 
+	local function rebindKeys(player, power, old, new)
+		power = getPowerUpgrade(
+			players_file[player].c,
+			leaderboard[player] or max_leaderboard_rows + 1,
+			powers[power], true
+		)
+		if not power then return end
+
+		local triggers = keys.triggers[player]
+		local oldPowers = triggers[old]
+		if oldPowers then
+			if oldPowers._count == 1 then
+				triggers[old] = nil
+				bindKeyboard(player, old, true, false)
+			else
+				for index = 1, oldPowers._count do
+					if oldPowers[index] == power then
+						oldPowers[index] = nil
+						break
+					end
+				end
+
+				local delete = true
+				for index = 1, oldPowers._count do
+					if oldPowers[index] then
+						delete = false
+						break
+					end
+				end
+				if delete then
+					triggers[old] = nil
+					bindKeyboard(player, old, true, false)
+				end
+			end
+		end
+
+		if not triggers[new] then
+			triggers[new] = {_count = 1, [1] = power}
+			bindKeyboard(player, new, true, true)
+		else
+			triggers[new]._count = triggers[new]._count + 1
+			triggers[new][ triggers[new]._count ] = power
+		end
+	end
+
 	PowersInterface = Interface.new(55, 28, 685, 366, true)
 		:setDefaultArgs(1)
 
@@ -182,6 +227,95 @@ do
 				if state ~= setting then
 					self:toggle(player)
 				end
+			end)
+		)
+		:loadComponent(
+			Toggle.new(10, 62, false)
+			:onToggle(function(self, player, state)
+				if not state or not Keyboard.open[player] then
+					self:toggle(player)
+
+				else
+					local power = PowersInterface.args[player][1]
+					local pkeys = players_file[player].keys
+
+					local key
+					if powers[power].key[1] then -- variation qwerty/azerty
+						local setting = players_file[player].settings[5] + 1
+						key = powers[power].key[setting]
+					else
+						key = powers[power].key
+					end
+					local old = keys[player][power]
+					local new = keyboard.bindings[key]
+
+					keys[player][power] = new
+					pkeys[power] = 0
+
+					for index = 1, power do
+						if not pkeys[index] then
+							pkeys[index] = 0
+						end
+					end
+
+					savePlayerData(player)
+
+					Keyboard:update(player, Keyboard.args[player][1], nil, key)
+
+					if not keys.triggers[player] then return end
+					rebindKeys(player, power, old, new)
+				end
+			end)
+			:onUpdate(function(self, player)
+				if not old then
+					if powers[power].key[1] then -- variation qwerty/azerty
+						old = keyboard.bindings[ powers[power].key[ players_file[player].settings[5] + 1 ] ]
+					else
+						old = keyboard.bindings[ powers[power].key ]
+					end
+				end
+				elseif Keyboard.open[player] and action == "keyboard" then
+			if not checkCooldown(player, "changeKeys", 1000) then return end
+
+			local binding = keyboard.bindings[args]
+			if binding then
+				Keyboard:update(player, Keyboard.args[player][1], nil, args)
+
+				local power = PowersInterface.args[player][1]
+				local old = keys[player][power]
+				if old == binding then return end
+
+				if not old then
+					if powers[power].key[1] then -- variation qwerty/azerty
+						old = keyboard.bindings[ powers[power].key[ players_file[player].settings[5] + 1 ] ]
+					else
+						old = keyboard.bindings[ powers[power].key ]
+					end
+				end
+
+				local pkeys = players_file[player].keys
+				local count = 0
+				for index = 1, #pkeys do
+					if pkeys[index] == binding then
+						count = count + 1
+					end
+				end
+
+				if count >= 2 then
+					return translatedChatMessage("max_power_keys", player, 2)
+				end
+
+				pkeys[power] = binding
+				for index = 1, power do
+					if not pkeys[index] then
+						pkeys[index] = 0
+					end
+				end
+
+				keys[player][power] = binding
+				savePlayerData(player)
+			end
+		end
 			end)
 		)
 
@@ -375,49 +509,7 @@ do
 				savePlayerData(player)
 
 				if not keys.triggers[player] then return end
-
-				power = getPowerUpgrade(
-					players_file[player].c,
-					leaderboard[player] or max_leaderboard_rows + 1,
-					powers[power], true
-				)
-				if not power then return end
-
-				local triggers = keys.triggers[player]
-				local oldPowers = triggers[old]
-				if oldPowers then
-					if oldPowers._count == 1 then
-						triggers[old] = nil
-						bindKeyboard(player, old, true, false)
-					else
-						for index = 1, oldPowers._count do
-							if oldPowers[index] == power then
-								oldPowers[index] = nil
-								break
-							end
-						end
-
-						local delete = true
-						for index = 1, oldPowers._count do
-							if oldPowers[index] then
-								delete = false
-								break
-							end
-						end
-						if delete then
-							triggers[old] = nil
-							bindKeyboard(player, old, true, false)
-						end
-					end
-				end
-
-				if not triggers[binding] then
-					triggers[binding] = {_count = 1, [1] = power}
-					bindKeyboard(player, binding, true, true)
-				else
-					triggers[binding]._count = triggers[binding]._count + 1
-					triggers[binding][ triggers[binding]._count ] = power
-				end
+				rebindKeys(player, power, old, binding)
 			end
 		end
 	end)
