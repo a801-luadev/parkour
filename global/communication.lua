@@ -104,7 +104,7 @@ if not is_tribe then
 		local channel = channels[pipe]
 		if not channel then return end -- not a channel!
 
-		local expire, data = string.match(data, "^(%d+);(.*)%")
+		local expire, data = string.match(data, "^(%d+);(.*)$")
 		if not expire then
 			expire, data = 0, ""
 		end
