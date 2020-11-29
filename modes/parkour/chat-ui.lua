@@ -64,7 +64,7 @@ onEvent("PlayerWon", function(player)
 
 	-- If the player joined the room after the map started,
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
-	local taken = (os.time() - (generated_at[player] or map_start)) / 1000
+	local taken = (os.time() - (times.generated[player] or times.map_start)) / 1000
 
 	if not records_admins and count_stats and not review_mode and not is_tribe then
 		local map = tonumber((string.gsub(room.currentMap, "@", "", 1)))

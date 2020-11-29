@@ -3,7 +3,6 @@ local min_save = 4
 local check_position = 6
 local player_count = 0
 local victory_count = 0
-local map_start = 0
 local less_time = false
 local victory = {_last_level = {}}
 local bans = {[0] = true} -- souris banned
@@ -11,8 +10,13 @@ local in_room = {}
 local online = {}
 local hidden = {}
 local players_level = {}
-local generated_at = {}
-local checkpoint_at = {}
+local times = {
+	map_start = 0,
+
+	generation = {},
+	checkpoint = {},
+	movement = {}
+}
 local spec_mode = {}
 local checkpoints = {}
 local players_file
@@ -24,6 +28,7 @@ local checkpoint_info = {
 	radius = 15 ^ 2, -- radius of 15px
 	next_version = 1
 }
+local AfkInterface
 local checkCooldown
 local savePlayerData
 local ranks
@@ -76,6 +81,11 @@ onEvent("NewPlayer", function(player)
 	in_room[player] = true
 	player_count = player_count + 1
 	cp_available[player] = 0
+	times.movement[player] = os.time()
+
+	for key = 0, 2 do
+		bindKeyboard(player, key, true, true)
+	end
 
 	if levels then
 		tfm.exec.respawnPlayer(player)
@@ -92,10 +102,6 @@ onEvent("NewPlayer", function(player)
 		else
 			players_level[player] = 1
 			tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
-
-			for key = 0, 2 do
-				bindKeyboard(player, key, true, true)
-			end
 		end
 
 		tfm.exec.setPlayerScore(player, players_level[player], false)
@@ -117,14 +123,18 @@ end)
 
 onEvent("Keyboard", function(player, key)
 	if key >= 0 and key <= 2 then
-		if players_level[player] == 1 and not generated_at[player] then
-			generated_at[player] = os.time()
-			checkpoint_at[player] = os.time()
-
-			for key = 0, 2 do
-				bindKeyboard(player, key, true, false)
-			end
+		local now = os.time()
+		if players_level[player] == 1 and not times.generated[player] then
+			times.generated[player] = now
+			times.checkpoint[player] = now
 		end
+		times.movement[player] = now
+
+		if AfkInterface.open[player] then
+			enableSpecMode(player, false)
+			AfkInterface:remove(player)
+		end
+
 	elseif records_admins and key == 66 then
 		if checkCooldown(player, "redo_key", 500) then
 			eventParsedChatCommand(player, "redo")
@@ -135,6 +145,7 @@ end)
 onEvent("PlayerLeft", function(player)
 	players_file[player] = nil
 	in_room[player] = nil
+	times.movement[player] = nil
 
 	if spec_mode[player] then return end
 
@@ -193,8 +204,8 @@ onEvent("NewGame", function()
 	victory_count = 0
 	victory = {_last_level = {}}
 	players_level = {}
-	generated_at = {}
-	map_start = os.time()
+	times.generated = {}
+	times.map_start = os.time()
 	checkpoint_info.version = checkpoint_info.next_version
 
 	if records_admins then
@@ -221,10 +232,6 @@ onEvent("NewGame", function()
 	for player in next, in_room do
 		players_level[player] = 1
 		tfm.exec.setPlayerScore(player, 1, false)
-
-		for key = 0, 2 do
-			bindKeyboard(player, key, true, true)
-		end
 	end
 
 	for player in next, spec_mode do
@@ -244,9 +251,13 @@ onEvent("Loop", function()
 			end
 		end
 
+		local now = os.time()
 		for name in next, in_room do
 			if spec_mode[name] then
 				tfm.exec.killPlayer(name)
+			elseif now >= times.movement[player] + 120000 then -- 2 mins afk
+				enableSpecMode(player, true)
+				AfkInterface:show(player)
 			end
 		end
 
@@ -254,7 +265,7 @@ onEvent("Loop", function()
 
 		local last_level = #levels
 		local level_id, next_level, player
-		local now, taken = os.time()
+		local taken
 		for name in next, in_room do
 			player = room.playerList[name]
 			if player and now >= cp_available[name] then
@@ -263,8 +274,8 @@ onEvent("Loop", function()
 
 				if next_level then
 					if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_info.radius then
-						taken = (now - (checkpoint_at[player] or map_start)) / 1000
-						checkpoint_at[player] = now
+						taken = (now - (times.checkpoint[player] or times.map_start)) / 1000
+						times.checkpoint[player] = now
 						players_level[name] = level_id
 						if not victory[name] then
 							tfm.exec.setPlayerScore(name, level_id, false)
@@ -301,8 +312,8 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if bonus ~= players_level[player] + 1 then return end
 	if os.time() < cp_available[player] then return tfm.exec.addBonus(0, level.x, level.y, bonus, 0, false, player) end
 
-	local taken = (os.time() - (checkpoint_at[player] or map_start)) / 1000
-	checkpoint_at[player] = os.time()
+	local taken = (os.time() - (times.checkpoint[player] or times.map_start)) / 1000
+	times.checkpoint[player] = os.time()
 	players_level[player] = bonus
 	if not victory[player] then
 		tfm.exec.setPlayerScore(player, bonus, false)
@@ -377,7 +388,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.removeBonus(players_level[player] + 1, player)
 		end
 		players_level[player] = checkpoint
-		checkpoint_at[player] = os.time()
+		times.checkpoint[player] = os.time()
 		tfm.exec.killPlayer(player)
 		if not victory[player] then
 			tfm.exec.setPlayerScore(player, checkpoint, false)
@@ -422,24 +433,21 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.setGameTime(time)
 
 	elseif cmd == "redo" then
-		if not records_admins or not generated_at[player] then return end
+		if not records_admins or not times.generated[player] then return end
 
 		if checkpoint_info.version == 1 then
 			tfm.exec.removeBonus(players_level[player] + 1, player)
 		end
 
 		players_level[player] = 1
-		generated_at[player] = nil
-		checkpoint_at[player] = nil
+		times.generated[player] = nil
+		times.checkpoint[player] = nil
 		victory[player] = nil
 		victory_count = victory_count - 1
 
 		tfm.exec.setPlayerScore(player, 1, false)
 		tfm.exec.killPlayer(player)
 		tfm.exec.respawnPlayer(player)
-		for key = 0, 2 do
-			bindKeyboard(player, key, true, true)
-		end
 
 		local x, y = levels[2].x, levels[2].y
 		if checkpoints[player] then
