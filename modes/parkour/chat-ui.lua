@@ -549,7 +549,7 @@ if records_admins then
 	end)
 
 	onEvent("PacketSent", function(channel)
-		if channel = "common" and fastest.wait_send then
+		if channel == "common" and fastest.wait_send then
 			translatedChatMessage("records_submitted", fastest.player, room.currentMap)
 			fastest.wait_send = false
 		end
