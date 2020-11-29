@@ -267,6 +267,14 @@ do
 				end
 			end)
 			:onUpdate(function(self, player)
+				if not self.canUpdate then
+					local textareas = self.parent.textareas
+					local clickable = textareas[ self.id - textareas[1].id + 2 ]
+
+					self.canUpdate = true
+					clickable.canUpdate = true
+				end
+
 				local power = PowersInterface.args[player][1]
 				local key = players_file[player].keys[power]
 
