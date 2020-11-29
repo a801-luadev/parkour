@@ -47,6 +47,8 @@ end
 local function showStats()
 	-- Shows if stats count or not
 
+	if not room.xmlMapInfo then return end
+
 	local text = (count_stats and
 		room.uniquePlayers >= min_save and
 		player_count >= min_save and
@@ -259,6 +261,8 @@ onEvent("NewGame", function()
 	for player in next, spec_mode do
 		tfm.exec.killPlayer(player)
 	end
+
+	showStats()
 end)
 
 onEvent("Loop", function()
