@@ -44,6 +44,22 @@ local function addCheckpointImage(player, x, y)
 	checkpoints[player] = tfm.exec.addImage("17557263644.png", "!1", x - 15, y - 15, player)
 end
 
+local function showStats()
+	-- Shows if stats count or not
+
+	local text = (count_stats and
+		room.uniquePlayers >= min_save and
+		player_count >= min_save and
+		not records_admins and
+		not is_tribe and
+		not review_mode) and "<v>Stats count" or "<r>Stats don't count"
+
+	ui.setMapName(string.format(
+		"<j>%s<bl> - %s<g>   |   %s",
+		room.xmlMapInfo.author, room.currentMap, text
+	))
+end
+
 local function enableSpecMode(player, enable)
 	if spec_mode[player] and enable then return end
 	if not spec_mode[player] and not enable then return end
@@ -74,6 +90,8 @@ local function enableSpecMode(player, enable)
 			victory_count = victory_count + 1
 		end
 	end
+
+	showStats()
 end
 
 onEvent("NewPlayer", function(player)
@@ -119,6 +137,8 @@ onEvent("NewPlayer", function(player)
 	if records_admins then
 		bindKeyboard(player, 66, true, true) -- B key
 	end
+
+	showStats()
 end)
 
 onEvent("Keyboard", function(player, key)
@@ -157,6 +177,8 @@ onEvent("PlayerLeft", function(player)
 		tfm.exec.setGameTime(5)
 		less_time = true
 	end
+
+	showStats()
 end)
 
 onEvent("PlayerDied", function(player)
@@ -255,9 +277,9 @@ onEvent("Loop", function()
 		for name in next, in_room do
 			if spec_mode[name] then
 				tfm.exec.killPlayer(name)
-			elseif now >= times.movement[player] + 120000 then -- 2 mins afk
-				enableSpecMode(player, true)
-				AfkInterface:show(player)
+			elseif player_count > 4 and not victory[name] and now >= times.movement[name] + 120000 then -- 2 mins afk
+				enableSpecMode(name, true)
+				AfkInterface:show(name)
 			end
 		end
 
@@ -364,6 +386,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		else
 			tfm.exec.chatMessage("<v>[#] <d>Review mode disabled by " .. player .. ".")
 		end
+		showStats()
 
 	elseif cmd == "cp" then
 		local checkpoint = tonumber(args[1])
@@ -558,6 +581,7 @@ onEvent("PacketReceived", function(channel, id, packet)
 					tfm.exec.killPlayer(player)
 
 					player_count = player_count - 1
+					showStats()
 					if victory[player] then
 						victory_count = victory_count - 1
 					elseif player_count == victory_count and not less_time then
