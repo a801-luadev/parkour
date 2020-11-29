@@ -355,19 +355,23 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 	elseif cmd == "cp" then
+		local checkpoint = tonumber(args[1])
+		if not checkpoint then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		if checkpoint == 0 then
+			checkpoint = #levels
+		end
+
+		if not levels[checkpoint] then return end
+
 		if not review_mode then
 			if not victory[player] then return end
 			if not checkCooldown(player, "cp_command", 10000) then
 				return translatedChatMessage("cooldown", player)
 			end
 		end
-
-		local checkpoint = tonumber(args[1])
-		if not checkpoint then
-			return translatedChatMessage("invalid_syntax", player)
-		end
-
-		if not levels[checkpoint] then return end
 
 		if checkpoint_info.version == 1 then
 			tfm.exec.removeBonus(players_level[player] + 1, player)
