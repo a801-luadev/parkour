@@ -11,7 +11,7 @@
 	eventCantSendData(channel)
 ]]
 
-local channels = {
+channels = {
 	canRead = true,
 
 	-- isRead, doClean, ttl, customStructure, bots (pipes)
