@@ -36,7 +36,7 @@ local function addCheckpointImage(player, x, y)
 		x, y = level.x, level.y
 	end
 
-	checkpoints[player] = tfm.exec.addImage("17557263644.png", "_51", x - 15, y - 15, player)
+	checkpoints[player] = tfm.exec.addImage("17557263644.png", "!1", x - 15, y - 15, player)
 end
 
 local function enableSpecMode(player, enable)
