@@ -51,7 +51,7 @@ local function enableSpecMode(player, enable)
 		if victory[player] then
 			victory_count = victory_count - 1
 		elseif player_count == victory_count and not less_time then
-			tfm.exec.setGameTime(20)
+			tfm.exec.setGameTime(5)
 			less_time = true
 		end
 	else
@@ -143,7 +143,7 @@ onEvent("PlayerLeft", function(player)
 	if victory[player] then
 		victory_count = victory_count - 1
 	elseif player_count == victory_count and not less_time then
-		tfm.exec.setGameTime(20)
+		tfm.exec.setGameTime(5)
 		less_time = true
 	end
 end)
@@ -171,7 +171,7 @@ onEvent("PlayerWon", function(player)
 	victory._last_level[player] = false
 
 	if victory_count == player_count and not less_time then
-		tfm.exec.setGameTime(20)
+		tfm.exec.setGameTime(5)
 		less_time = true
 	end
 end)
@@ -553,7 +553,7 @@ onEvent("PacketReceived", function(channel, id, packet)
 					if victory[player] then
 						victory_count = victory_count - 1
 					elseif player_count == victory_count and not less_time then
-						tfm.exec.setGameTime(20)
+						tfm.exec.setGameTime(5)
 						less_time = true
 					end
 				end
