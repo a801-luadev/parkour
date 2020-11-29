@@ -267,12 +267,13 @@ do
 				end
 			end)
 			:onUpdate(function(self, player)
-				if not old then
-					if powers[power].key[1] then -- variation qwerty/azerty
-						old = keyboard.bindings[ powers[power].key[ players_file[player].settings[5] + 1 ] ]
-					else
-						old = keyboard.bindings[ powers[power].key ]
-					end
+				local power = PowersInterface.args[player][1]
+				local key = players_file[player].keys[power]
+
+				local state = key == 0 or not key
+
+				if (not not self.state[player]) ~= state then
+					self:toggle(player)
 				end
 			end)
 		)
