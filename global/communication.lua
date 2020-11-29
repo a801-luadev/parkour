@@ -17,7 +17,7 @@ channels = {
 	-- isRead, doClean, ttl, customStructure, bots (pipes)
 	common = { -- to bots (common data, low traffic)
 		room.name == "*#parkour4bots", true, 10000,
-		nil,
+		false,
 		"Sharpiebot#0000", "D_shades#0780"
 	},
 	victory = { -- to bots (all victory logs, high traffic)
@@ -27,7 +27,7 @@ channels = {
 	},
 	bots = { -- from bots (all orders, low traffic)
 		room.name ~= "*#parkour4bots", false, 10000,
-		nil,
+		false,
 		"Parkour#8558"
 	}
 }
