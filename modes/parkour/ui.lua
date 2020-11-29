@@ -1,6 +1,7 @@
 -- Stuff related to the keyboard and game interface (not chat)
 
 local interfaces = {
+	[72] = HelpInterface,
 	[76] = LeaderboardInterface,
 	[79] = OptionsInterface,
 	[80] = PowersInterface
@@ -19,219 +20,6 @@ local shown_ranks = {"trainee", "mod", "mapper", "manager", "admin"}
 no_help = {}
 local map_polls = {}
 local current_poll
-
--- legacy code (i'm too lazy to remake the help window; i'll do it soon)
-local help = {}
-local scrolldata = {
-	players = {},
-	texts = {}
-}
-
-local function addButton(id, text, action, player, x, y, width, height, disabled, left)
-	id = -2000 + id * 3
-	if not disabled then
-		text = "<a href='event:" .. action .. "'>" .. text .. "</a>"
-	end
-	if not left then
-		text = "<p align='center'>" .. text .. "</p>"
-	end
-	local color = disabled and 0x2a424b or 0x314e57
-
-	ui.addTextArea(id    , ""  , player, x-1, y-1, width, height, 0x7a8d93, 0x7a8d93, 1, true)
-	ui.addTextArea(id + 1, ""  , player, x+1, y+1, width, height, 0x0e1619, 0x0e1619, 1, true)
-	ui.addTextArea(id + 2, text, player, x  , y  , width, height, color   , color   , 1, true)
-end
-
-local function removeButton(id, player)
-	for i = -2000 + id * 3, -2000 + id * 3 + 2 do
-		ui.removeTextArea(i, player)
-	end
-end
-
-local function scrollWindow(id, player, up, force)
-	local data = scrolldata.players[player]
-	if not data then return end
-
-	local old = data[2]
-	data[2] = up and math.max(data[2] - 1, 1) or math.min(data[2] + 1, data[3])
-	if data[2] == old and not force then return end
-
-	ui.addTextArea(-1000 + id * 9 + 8, data[1][data[2]], player, data[4], data[5], data[6], data[7], 0, 0, 0, true)
-
-	if not data.behind_img then
-		data.behind_img = tfm.exec.addImage("1719e0e550a.png", "&1", data[8], data[9], player)
-	end
-	if data.img then
-		tfm.exec.removeImage(data.img)
-	end
-	data.img = tfm.exec.addImage("1719e173ac6.png", "&2", data[8], data[9] + (125 / (data[3] - 1)) * (data[2] - 1), player)
-end
-
-local function addWindow(id, text, player, x, y, width, height, isHelp)
-	if width < 0 or height and height < 0 then
-		return
-	elseif not height then
-		height = width/2
-	end
-	local _id = id
-	id = -1000 + id * 9
-
-	ui.addTextArea(id    , "", player, x              , y               , width+100   , height+70, 0x78462b, 0x78462b, 1, true)
-	ui.addTextArea(id + 1, "", player, x              , y+(height+140)/4, width+100   , height/2 , 0x9d7043, 0x9d7043, 1, true)
-	ui.addTextArea(id + 2, "", player, x+(width+180)/4, y               , (width+10)/2, height+70, 0x9d7043, 0x9d7043, 1, true)
-	ui.addTextArea(id + 3, "", player, x              , y               , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
-	ui.addTextArea(id + 4, "", player, x+width+80     , y               , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
-	ui.addTextArea(id + 5, "", player, x              , y+height+50     , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
-	ui.addTextArea(id + 6, "", player, x+width+80     , y+height+50     , 20          , 20       , 0xbeb17d, 0xbeb17d, 1, true)
-
-	if text[1] then -- it is a table
-		if scrolldata.players[player] and scrolldata.players[player].img then
-			tfm.exec.removeImage(scrolldata.players[player].img)
-			tfm.exec.removeImage(scrolldata.players[player].behind_img)
-		end
-		scrolldata.players[player] = {text, 1, #text, x+3, y+40, width+70, height, x+width+85, y+40, _id}
-		ui.addTextArea(id + 7, "", player, x+3, y+3, width+94, height+64, 0x1c3a3e, 0x232a35, 1, true)
-		scrollWindow(_id, player, true, true)
-	else
-		ui.addTextArea(id + 7, (isHelp and "\n\n\n" or "") .. text, player, x+3, y+3, width+94, height+64, 0x1c3a3e, 0x232a35, 1, true)
-	end
-end
-
-local function removeWindow(id, player)
-	if scrolldata.players[player] and scrolldata.players[player].img then
-		tfm.exec.removeImage(scrolldata.players[player].img)
-		tfm.exec.removeImage(scrolldata.players[player].behind_img)
-	end
-	scrolldata.players[player] = nil
-	for i = -1000 + id * 9, -1000 + id * 9 + 8 do
-		ui.removeTextArea(i, player)
-	end
-end
-
-local function removeHelpMenu(player)
-	if not help[player] then return end
-
-	removeWindow(7, player)
-
-	for index = -20002, -20000 do
-		ui.removeTextArea(index, player)
-	end
-
-	for button = 7, 12 do
-		removeButton(button, player)
-	end
-
-	help[player] = nil
-end
-
-local function showHelpMenu(player, tab)
-	help[player] = true
-
-	if scrolldata.players[player] and scrolldata.players[player].img then
-		tfm.exec.removeImage(scrolldata.players[player].img)
-		tfm.exec.removeImage(scrolldata.players[player].behind_img)
-	end
-	scrolldata.players[player] = nil
-
-	addWindow(7, scrolldata.texts[player_langs[player].name .. "_help_" .. tab], player, 100, 50, 500, 260, true)
-
-	ui.addTextArea(-20000, "", player, 155, 55, 490, 30, 0x1c3a3e, 0x1c3a3e, 1, true)
-	ui.addTextArea(-20001, "", player, 155, 358, 490, 17, 0x1c3a3e, 0x1c3a3e, 1, true)
-
-	addButton(7, translatedMessage("help", player), "help:help", player, 160, 60, 80, 18, tab == "help")
-	addButton(8, translatedMessage("staff", player), "help:staff", player, 260, 60, 80, 18, tab == "staff")
-	addButton(9, translatedMessage("rules", player), "help:rules", player, 360, 60, 80, 18, tab == "rules")
-	addButton(10, translatedMessage("contribute", player), "help:contribute", player, 460, 60, 80, 18, tab == "contribute")
-	addButton(11, translatedMessage("changelog", player), "help:changelog", player, 560, 60, 80, 18, tab == "changelog")
-
-	addButton(12, "", "close_help", player, 160, 362, 480, 10, false)
-	ui.addTextArea(-20002, "<a href='event:close_help'><p align='center'>Close\n", player, 160, 358, 480, 15, 0, 0, 0, true)
-end
-
-onEvent("NewPlayer", function(player)
-	bindKeyboard(player, 38, true, true)
-	bindKeyboard(player, 40, true, true)
-	bindKeyboard(player, 72, true, true)
-end)
-
-onEvent("Keyboard", function(player, key)
-	if key == 38 or key == 40 then
-		if help[player] then
-			scrollWindow(7, player, key == 38)
-		end
-
-	elseif key == 72 then -- h
-		if help[player] then
-			removeHelpMenu(player)
-		else
-			showHelpMenu(player, "help")
-		end
-	end
-end)
-
-onEvent("ParsedChatCommand", function(player, cmd)
-	if cmd == "help" then
-		showHelpMenu(player, "help")
-	end
-end)
-
-onEvent("RawTextAreaCallback", function(id, player, callback)
-	if callback == "help_button" then
-		if help[player] then
-			removeHelpMenu(player)
-		else
-			showHelpMenu(player, "help")
-		end
-
-	elseif callback == "close_help" then
-		removeHelpMenu(player)
-	end
-end)
-
-onEvent("ParsedTextAreaCallback", function(id, player, action, args)
-	if action == "help" then
-		if args ~= "help" and args ~= "staff" and args ~= "rules" and args ~= "contribute" and args ~= "changelog" then return end
-		showHelpMenu(player, args)
-	end
-end)
-
-onEvent("GameStart", function()
-	system.disableChatCommandDisplay("help")
-
-	local help_texts = {"help_help", "help_staff", "help_rules", "help_contribute", "help_changelog"}
-
-	local count, page, newline, key, text
-	for name, translation in next, translations do
-		for index = 1, #help_texts do
-			key = name .. "_" .. help_texts[index]
-			text = translation[help_texts[index]]
-			count = 0
-			scrolldata.texts[key] = {}
-			text = "\n" .. text
-			for slice = 1, #text, (help_texts[index] == "help_staff" and 700 or 800) + (name == "ru" and 250 or 0) do
-				page = string.sub(text, slice)
-				newline = string.find(page, "\n")
-				if newline then
-					page = string.sub(page, newline)
-					while string.sub(page, 1, 1) == "\n" do
-						page = string.sub(page, 2)
-					end
-					count = count + 1
-					scrolldata.texts[key][count] = page
-				else
-					break
-				end
-			end
-			if (#text < 1100
-				or help_texts[index] == "help_help"
-				or help_texts[index] == "help_contribute"
-				or help_texts[index] == "help_changelog") then
-				scrolldata.texts[key] = string.sub(text, 2)
-			end
-		end
-	end
-end)
--- end of legacy code
 
 local function closeAllInterfaces(player)
 	for index = 1, interfaces_ordered._count do
@@ -399,6 +187,9 @@ end)
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	if cmd == "lb" then
 		toggleInterface(LeaderboardInterface, player)
+
+	elseif cmd == "help" then
+		toggleInterface(HelpInterface, player)
 
 	elseif cmd == "op" then
 		toggleInterface(OptionsInterface, player)
@@ -627,6 +418,10 @@ end)
 onEvent("RawTextAreaCallback", function(id, player, callback)
 	if callback == "settings" then
 		toggleInterface(OptionsInterface, player)
+
+	elseif callback == "help_button" then
+		toggleInterface(HelpInterface, player)
+
 	elseif callback == "powers" then
 		toggleInterface(PowersInterface, player)
 	end
