@@ -154,6 +154,10 @@ if not is_tribe then
 				end
 			end
 
+			if string.sub(buffer, 1, 1) ~= ";" then
+				buffer = ";" .. buffer
+			end
+
 			if eventPacketSent then
 				eventPacketSent(channel.name)
 			end
