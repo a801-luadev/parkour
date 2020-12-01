@@ -44,6 +44,7 @@ local packets = {
 	command_log = bit.lshift(26, 8) + 255,
 	poll_vote = bit.lshift(27, 8) + 255,
 	global_poll = bit.lshift(28, 8) + 255,
+	get_player_data = bit.lshift(29, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -117,6 +118,11 @@ local pdata_actions = {
 		data.report = not data.report
 
 		return true
+	end,
+
+	get_file = function(player, data, file)
+		addTextArea(packets.get_player_data, player .. "\000" .. file)
+		return false
 	end
 }
 
@@ -376,21 +382,24 @@ onEvent("TextAreaCallback", function(id, player, data)
 		end
 
 		schedule("global_poll_change", addition, remove)
+
+	elseif id == packets.get_player_data then
+		onPlayerData(data, "get_file")
 	end
 end)
 
-onEvent("PlayerDataLoaded", function(player, data)
+onEvent("PlayerDataLoaded", function(player, file)
 	local actions = loadingPlayerData[player]
 	if not actions then return end
 	loadingPlayerData[player] = nil
 
 	if channels[player] then return end
 
-	if data == "" then
+	if file == "" then
 		return addTextArea(packets.version_mismatch, player)
 	end
 
-	data = json.decode(data)
+	data = json.decode(file)
 	if data.v ~= data_version then
 		return addTextArea(packets.version_mismatch, player)
 	end
@@ -398,7 +407,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 	local update = false
 
 	for index = 2, #actions do
-		update = update or actions[index](player, data)
+		update = update or actions[index](player, data, file)
 	end
 
 	if update then
