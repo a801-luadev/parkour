@@ -203,9 +203,9 @@ class Proxy(Connection):
 				roles = self.client.get_player_rank(name)
 				role_list = []
 
-				for name, active in roles.items():
+				for role, active in roles.items():
 					if active:
-						role_list.append(name)
+						role_list.append(role)
 
 				response["profile"] = profile = {
 					"roles": role_list
