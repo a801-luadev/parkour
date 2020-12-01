@@ -5,10 +5,11 @@ import string
 import random
 import asyncio
 import traceback
+from api.player import bp as player
 from api.utils import MissingPrivileges, MalformedRequest, normalize_name
 from sanic import Sanic, Blueprint
 from sanic.response import json
-from sanic.exceptions import NotFound
+from sanic.exceptions import NotFound, MethodNotSupported
 from sanic.views import HTTPMethodView
 from proxy_connector import Connection
 
@@ -18,7 +19,7 @@ class env:
 	proxy_ip = os.getenv("PROXY_IP")
 	proxy_port = os.getenv("PROXY_PORT")
 
-	gateway_token = Os.getenv("GATEWAY_TOKEN")
+	gateway_token = os.getenv("GATEWAY_TOKEN")
 
 
 app = Sanic("parkour_api")
@@ -26,7 +27,7 @@ app.tokens = {
 	# tfm name, permissions, expiration time, expired
 	env.gateway_token: ["Parkour#8558", ["bot"], None, False]
 }
-endpoints = Blueprint.group(, url_prefix="/parkour/api")
+auth_endpoints = Blueprint("auth")
 
 
 class Proxy(Connection):
@@ -110,9 +111,9 @@ class Proxy(Connection):
 async def open_proxy(app, loop):
 	print("Connecting with the proxy...")
 
-	app.proxy = Proxy(app, env.proxy_token, "tocubot")
+	app.proxy = Proxy(env.proxy_token, "api")
 	try:
-		await self.proxy.connect(env.proxy_ip, env.proxy_port)
+		await app.proxy.connect(env.proxy_ip, env.proxy_port)
 	except Exception:
 		print("Could not connect to the proxy. Restarting process in 10 seconds.")
 		await asyncio.sleep(10.0)
@@ -135,8 +136,9 @@ async def auth_check(request):
 			auth = app.tokens[token]
 
 			if not auth[3] and (auth[2] is None or time.time() < auth[2]): # didn't expire
-				request.auth = auth
-				request.user, request.roles = auth[0], auth[1]
+				ctx = request.ctx
+				ctx.auth = auth
+				ctx.user, ctx.roles = auth[0], auth[1]
 				# we return "peacefully" to continue with the request
 				return
 
@@ -150,9 +152,9 @@ async def auth_check(request):
 	}, status=403)
 
 
-@endpoints.route("/token", methods=frozenset({"POST"}))
+@auth_endpoints.route("/token", methods=frozenset({"POST"}))
 async def create_token(request):
-	if "bot" not in request.roles:
+	if "bot" not in request.ctx.roles:
 		raise MissingPrivileges
 
 	info = request.json
@@ -232,7 +234,7 @@ async def create_token(request):
 
 class TokenAuthorizer(HTTPMethodView):
 	def assert_privileges(self, request):
-		if "bot" not in request.roles:
+		if "bot" not in request.ctx.roles:
 			raise MissingPrivileges
 
 	def get(self, request, token):
@@ -266,7 +268,7 @@ class TokenAuthorizer(HTTPMethodView):
 
 		return json({})
 
-endpoints.add_route(TokenAuthorizer.as_view(), "/token/<token:string>")
+auth_endpoints.add_route(TokenAuthorizer.as_view(), "/token/<token:string>")
 
 @app.exception(NotFound)
 async def not_found(request, exception):
@@ -274,6 +276,13 @@ async def not_found(request, exception):
 		"error": "Not found",
 		"message": "Could not find the resource you're looking for."
 	}, status=404)
+
+@app.exception(MethodNotSupported)
+async def not_supported(request, exception):
+	return json({
+		"error": "Method not supported",
+		"message": "The request method used is not supported for this endpoint."
+	}, status=405)
 
 @app.exception(MissingPrivileges)
 async def missing_privileges(request, exception):
@@ -296,17 +305,24 @@ async def timeout(request, exception):
 		"message": "The server timed out to provide a proper response."
 	}, status=504)
 
-app.blueprint(endpoints)
 
+endpoints = Blueprint.group(
+	player, auth_endpoints,
+	url_prefix="/parkour/api"
+)
+app.blueprint(endpoints)
 
 if __name__ == '__main__':
 	kwargs = {
-		"host": "127.0.0.1", "port": 8182
+		"host": "127.0.0.1", "port": 8182,
+		"debug": False,
+		"access_log": False
 	}
 
-	if "debug" not in sys.argv:
+	if "debug" in sys.argv:
+		print("Debug mode is enabled.")
 		kwargs.update({
-			"host": True,
+			"debug": True,
 			"access_log": True
 		})
 

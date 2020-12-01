@@ -5,12 +5,13 @@ from api.utils import MalformedRequest, normalize_name
 
 bp = Blueprint("player")
 
-@bp.route(r"/player/<user:string>@<name:[a-zA-Z0-9_+]#\d{4}>/profile")
+@bp.route(r"/player/<name:string>/profile")
 async def profile(request, name):
 	app = request.app
 
 	if name[0] == ":":
 		pid = name[1:]
+		print(pid)
 
 		if not pid.isdigit():
 			raise MalformedRequest
@@ -24,9 +25,11 @@ async def profile(request, name):
 			lambda _pid, name, profile: _pid == pid,
 			3.0
 		)
+		print(pid, name, profile)
 
-	elif name[1] == "@":
+	elif name[0] == "@":
 		name = normalize_name(name[1:])
+		print(name)
 
 		await app.proxy.sendTo({
 			"type": "profile",
@@ -37,6 +40,7 @@ async def profile(request, name):
 			lambda pid, _name, profile: _name == name,
 			3.0
 		)
+		print(pid, name, profile)
 
 	else:
 		raise MalformedRequest
@@ -71,12 +75,13 @@ async def profile(request, name):
 				"badges": file["badges"]
 			}
 
-			has_auth = "mod" in request.roles or "admin" in request.roles
+			req_roles = request.ctx.roles
+			has_auth = "mod" in req_roles or "admin" in req_roles
 			if not file.get("private_maps") or has_auth:
 				hour_r = profile["hour_r"] # UTC in seconds, normalized by parkour
 
 				response["parkour"]["maps"] = {
-					"private": file.get("private_maps", False)
+					"private": file.get("private_maps", False),
 					"all": file["c"],
 					"week": file["week"],
 					"hour": [

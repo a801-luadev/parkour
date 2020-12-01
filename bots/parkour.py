@@ -182,11 +182,11 @@ class Proxy(Connection):
 
 			elif packet["type"] == "profile":
 				if "id" in packet:
-					name = await client.get_player_name(packet["id"])
+					name = await self.client.get_player_name(packet["id"])
 					pid = packet["id"]
 
 				else:
-					pid = await client.get_player_id(packet["name"])
+					pid = await self.client.get_player_id(packet["name"])
 					name = packet["name"]
 
 				response = {
