@@ -78,6 +78,7 @@ CAN_REPORT = (24 << 8) + 255
 TOGGLE_REPORT = (25 << 8) + 255
 COMMAND_LOG = (26 << 8) + 255
 POLL_VOTE = (27 << 8) + 255
+GET_PLAYER_DATA = (29 << 8) + 255
 
 MODULE_CRASH = (255 << 8) + 255
 
@@ -155,6 +156,99 @@ class Proxy(Connection):
 				self.client.dispatch("map_records", packet["map"], packet["records"])
 			return
 
+		elif client == "api":
+			if packet["type"] == "get_roles":
+				roles = self.client.get_player_rank(packet["player"])
+				role_list = []
+
+				for name, active in roles.items():
+					if active:
+						role_list.append(name)
+
+				await self.sendTo({
+					"type": "get_roles",
+					"player": packet["player"],
+					"roles": role_list
+				}, client)
+
+			elif packet["type"] == "whois":
+				name = await self.client.get_player_name(packet["id"])
+
+				await self.sendTo({
+					"type": "whois",
+					"id": packet["id"],
+					"name": name
+				}, client)
+
+			elif packet["type"] == "profile":
+				if "id" in packet:
+					name = await client.get_player_name(packet["id"])
+					pid = packet["id"]
+
+				else:
+					pid = await client.get_player_id(packet["name"])
+					name = packet["name"]
+
+				response = {
+					"type": "profile",
+					"id": pid,
+					"name": name
+				}
+
+				if pid is None or name is None:
+					response["profile"] = None
+					await self.sendTo(response, client)
+					return
+				
+				roles = self.client.get_player_rank(name)
+				role_list = []
+
+				for name, active in roles.items():
+					if active:
+						role_list.append(name)
+
+				response["profile"] = profile = {
+					"roles": role_list
+				}
+
+				await self.client.send_callback(GET_PLAYER_DATA, name)
+
+				try:
+					txt_id, text = await self.client.wait_for(
+						"on_lua_textarea",
+						lambda txt_id, text: (
+							txt_id in (GET_PLAYER_DATA, VERSION_MISMATCH)
+							and text.startswith(name)
+						),
+						timeout=2.0
+					)
+				except Exception:
+					profile["online"] = False
+					return await self.sendTo(response, client)
+
+				profile["online"] = True
+
+				if txt_id == VERSION_MISMATCH:
+					profile["outdated"] = True
+					return await self.sendTo(response, client)
+				else:
+					profile["outdated"] = False
+
+				name, file = text.split("\x00")
+				file = json.loads(file)
+
+				profile.update({
+					"file": file,
+					"leaderboard": { # not implemented yet
+						"overall": None,
+						"weekly": None
+					},
+					"hour_r": file["hour_r"] // 1000 - self.client.time_diff
+				})
+
+				await self.sendTo(response, client)
+			return
+
 		if packet["type"] == "message":
 			# If a client tries to send a message to a channel which is a string,
 			# it is a whisper and this bot should handle it
@@ -187,7 +281,7 @@ class Proxy(Connection):
 
 		elif packet["type"] == "whois":
 			# Whois response
-			self.client.dispatch("whois_response", packet["user"], packet["id"])
+			self.client.dispatch("whois_response", packet["name"], packet["id"])
 
 		elif packet["type"] == "join":
 			# Room join request

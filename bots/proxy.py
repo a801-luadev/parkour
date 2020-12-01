@@ -7,13 +7,14 @@ import aiohttp
 
 
 tokens = {
-	os.getenv("PROXY_TOKEN"): ("parkour", "tocubot", "discord"),
+	os.getenv("PROXY_TOKEN"): ("parkour", "tocubot", "discord", "api"),
 	os.getenv("RECORDS_TOKEN"): ("records",)
 }
 permissions = {
 	"parkour": ("proxy", "exec", "reboot"),
 	"tocubot": ("proxy", "exec", "reboot"),
 	"discord": ("proxy", "exec", "reboot"),
+	"api": ("proxy", "exec", "reboot"),
 
 	"records": ("proxy",)
 }

@@ -270,6 +270,60 @@ class Proxy(Connection):
 		if client == "records":
 			return
 
+		if client == "api":
+			if packet["type"] == "discord_info":
+				guild = self.client.get_guild(env.guild_id)
+
+				if "discord_id" in packet:
+					discord_id = packet["discord_id"]
+
+					member = guild.get_member(discord_id)
+					if member is None:
+						member = await guild.fetch_member(discord_id)
+
+						if member is None:
+							return await self.sendTo({
+								"type": "discord_info",
+								"discord_id": discord_id
+							}, client)
+
+				else:
+					nickname = packet["nickname"]
+
+					for member in await guild.query_members(player, cache=False):
+						if member.nick.startswith(nickname):
+							break
+
+					else:
+						return await self.sendTo({
+							"type": "discord_info",
+							"discord_id": None,
+							"nickname": nickname
+						}, client)
+
+				is_verified, roles = False, []
+				for role in member.roles:
+					roles.append(role.name)
+
+					if role.id == env.verified_role:
+						is_verified = True
+
+				data = {
+					"type": "discord_info",
+					"discord_id": discord_id,
+					"name": "{}#{}".format(member.name, member.discriminator),
+					"roles": roles
+				}
+				if "discord_id" in packet:
+					if is_verified:
+						data["nickname"] = member.nick
+				else:
+					data["nickname"] = nickname
+
+				await self.proxy.sendTo(data, client)
+
+			return
+
 		if packet["type"] == "busy":
 			# Shares the busy state between all the bots that need it
 			self.client.busy = packet["state"]
@@ -406,7 +460,7 @@ class Client(discord.Client):
 				id = int(id)
 			else:
 				name, id = msg.content, None
-			await self.proxy.sendTo({"type": "whois", "user": name, "id": id}, "parkour")
+			await self.proxy.sendTo({"type": "whois", "name": name, "id": id})
 
 			await msg.delete()
 
