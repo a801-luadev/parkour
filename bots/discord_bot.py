@@ -320,7 +320,7 @@ class Proxy(Connection):
 				else:
 					data["nickname"] = nickname
 
-				await self.proxy.sendTo(data, client)
+				await self.sendTo(data, client)
 
 			return
 
