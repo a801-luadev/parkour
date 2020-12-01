@@ -340,6 +340,9 @@ class Proxy(Connection):
 
 		elif packet["type"] == "whois":
 			# When Parkour bot asks who is someone, we send the request to other bot
+			if client == "discord":
+				return
+
 			loop.create_task(self.client.send_channel(env.whois_channel, packet["user"]))
 
 		elif packet["type"] == "map_info":

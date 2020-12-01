@@ -36,9 +36,12 @@ class Proxy(Connection):
 		super().__init__(*args, **kwargs)
 
 	async def connection_lost(self):
-		await app.restart()
+		print("Connection lost with the proxy. Restarting in 3 seconds.")
+		await asyncio.sleep(3.0)
+		os.execl(sys.executable, sys.executable, *sys.argv)
 
 	async def received_proxy(self, client, packet):
+		print(client, packet)
 		if client == "records":
 			return
 
