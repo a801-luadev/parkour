@@ -290,7 +290,7 @@ class Proxy(Connection):
 				else:
 					nickname = packet["nickname"]
 
-					for member in await guild.query_members(player, cache=False):
+					for member in await guild.query_members(nickname, cache=False):
 						if member.nick.startswith(nickname):
 							break
 
