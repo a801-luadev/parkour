@@ -134,7 +134,7 @@ class Client(aiotfm.Client):
 		"""|coro|
 		Sends the handshake packet so the server recognizes this socket as a player.
 		"""
-		packet = Packet.new(28, 1)
+		packet = aiotfm.Packet.new(28, 1)
 		if self.bot_role:
 			packet.write16(666).write8(8)
 		else:
