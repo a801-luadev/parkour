@@ -130,6 +130,27 @@ class Client(aiotfm.Client):
 	mute_confirmed = None
 	next_bot_restart = time.time() + 60 # wait 1 minute before starting again
 
+	async def sendHandshake(self):
+		"""|coro|
+		Sends the handshake packet so the server recognizes this socket as a player.
+		"""
+		packet = Packet.new(28, 1)
+		if self.bot_role:
+			packet.write16(666).write8(8)
+		else:
+			packet.write16(self.keys.version).write8(8)
+			packet.writeString('en').writeString(self.keys.connection)
+
+		packet.writeString('Desktop').writeString('-').write32(0x1fbd).writeString('')
+		packet.writeString('74696720697320676f6e6e61206b696c6c206d7920626f742e20736f20736164')
+		packet.writeString(
+			"A=t&SA=t&SV=t&EV=t&MP3=t&AE=t&VE=t&ACC=t&PR=t&SP=f&SB=f&DEB=f&V=LNX 29,0,0,140&M=Adobe"
+			" Linux&R=1920x1080&COL=color&AR=1.0&OS=Linux&ARCH=x86&L=en&IME=t&PR32=t&PR64=t&LS=en-U"
+			"S&PT=Desktop&AVD=f&LFD=f&WD=f&TLS=t&ML=5.1&DP=72")
+		packet.write32(0).write32(0x6257).writeString('')
+
+		await self.main.send(packet)
+
 	async def connect(self, *args, **kwargs):
 		try:
 			return await super().connect(*args, **kwargs)
