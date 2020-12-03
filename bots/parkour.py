@@ -319,9 +319,9 @@ class Client(aiotfm.Client):
 		"""
 		packet = aiotfm.Packet.new(28, 1)
 		if self.bot_role:
-			packet.write16(666).write8(8)
+			packet.write16(666).write16(8)
 		else:
-			packet.write16(self.keys.version).write8(8)
+			packet.write16(self.keys.version).write16(8)
 			packet.writeString('en').writeString(self.keys.connection)
 
 		packet.writeString('Desktop').writeString('-').write32(0x1fbd).writeString('')
