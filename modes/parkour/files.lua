@@ -27,6 +27,7 @@ local files = {
 local total_files = 3
 local file_index = 1
 local file_id = files[file_index]
+local updating = {}
 local timed_maps = {
 	week = {},
 	hour = {}
@@ -296,36 +297,45 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if players_file[player] then
 		local old = players_file[player]
-		if data.report ~= nil then
-			old.report = data.report
-		end
+		local fields = updating[player]
+		updating[player] = nil
 
-		old.kill = data.kill
+		if not fields or fields == "auto" then
+			if data.report ~= nil then
+				old.report = data.report
+			end
 
-		if old.killed ~= data.killed then
-			old.killed = data.killed
-			translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
-			if os.time() < data.killed then
-				no_powers[player] = true
-				unbind(player)
-			else
-				no_powers[player] = false
-				if victory[player] then
-					bindNecessary(player)
+			old.kill = data.kill
+
+			if old.killed ~= data.killed then
+				old.killed = data.killed
+				translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
+				if os.time() < data.killed then
+					no_powers[player] = true
+					unbind(player)
+				else
+					no_powers[player] = false
+					if victory[player] then
+						bindNecessary(player)
+					end
 				end
 			end
-		end
 
-		local p_badges = data.badges
-		for index = 1, #badges do
-			if badges[index].filePriority then
-				if old.badges[index] ~= p_badges[index] then
-					old.badges[index] = p_badges[index]
-					NewBadgeInterface:show(player, index, math.max(p_badges[index], 1))
+			local p_badges = data.badges
+			for index = 1, #badges do
+				if badges[index].filePriority then
+					if old.badges[index] ~= p_badges[index] then
+						old.badges[index] = p_badges[index]
+						NewBadgeInterface:show(player, index, math.max(p_badges[index], 1))
+					end
 				end
 			end
-		end
 
+		else
+			for field in string.gmatch(fields, "[^\001]+") do
+				old[field] = data[field]
+			end
+		end
 		eventPlayerDataUpdated(player, data)
 
 		if to_save[player] then
@@ -406,8 +416,10 @@ onEvent("PacketReceived", function(channel, id, packet)
 	if channel ~= "bots" then return end
 
 	if id == 2 then -- update pdata
-		if in_room[packet] then
-			system.loadPlayerData(packet)
+		local player, fields = string.match(packet, "([^\000]+)\000([^\000]+)")
+		if in_room[player] then
+			system.loadPlayerData(player)
+			updating[player] = fields
 		end
 	end
 end)

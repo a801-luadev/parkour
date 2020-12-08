@@ -44,7 +44,8 @@ local packets = {
 	command_log = bit.lshift(26, 8) + 255,
 	poll_vote = bit.lshift(27, 8) + 255,
 	global_poll = bit.lshift(28, 8) + 255,
-	get_player_data = bit.lshift(29, 8) + 255,
+	load_player_data = bit.lshift(29, 8) + 255,
+	save_player_data = bit.lshift(30, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -53,6 +54,7 @@ local hidden_bot = "Tocutoeltuco#5522"
 local parkour_bot = "Parkour#8558"
 local loaded = false
 local chats = {loading = true}
+local saving = {}
 local killing = {}
 local to_do = {}
 local in_room = {}
@@ -121,7 +123,7 @@ local pdata_actions = {
 	end,
 
 	get_file = function(player, data, file)
-		addTextArea(packets.get_player_data, player .. "\000" .. file)
+		addTextArea(packets.load_player_data, player .. "\000" .. file)
 		return false
 	end
 }
@@ -383,12 +385,19 @@ onEvent("TextAreaCallback", function(id, player, data)
 
 		schedule("global_poll_change", addition, remove)
 
-	elseif id == packets.get_player_data then
+	elseif id == packets.load_player_data then
 		onPlayerData(data, "get_file")
+
+	elseif id == packets.save_player_data then
+		local name, data, fields = string.match(data, "([^\000]+)\000([^\000]+)\000([^\000]+)")
+		saving[name] = {json.decode(data), fields}
 	end
 end)
 
 onEvent("PlayerDataLoaded", function(player, file)
+	local new = saving[player]
+	saving[player] = nil
+
 	local actions = loadingPlayerData[player]
 	if not actions then return end
 	loadingPlayerData[player] = nil
@@ -404,15 +413,23 @@ onEvent("PlayerDataLoaded", function(player, file)
 		return addTextArea(packets.version_mismatch, player)
 	end
 
-	local update = false
+	local save, update = false, false
+
+	if new then
+		save = true
+		data = new[1]
+		sendPacket("bots", 2, player .. "\000" .. new[2])
+	end
 
 	for index = 2, #actions do
 		update = update or actions[index](player, data, file)
 	end
 
-	if update then
+	if update or save then
 		system.savePlayerData(player, json.encode(data))
-		sendPacket("bots", 2, player)
+	end
+	if update then
+		sendPacket("bots", 2, player .. "\000auto")
 	end
 end)
 
