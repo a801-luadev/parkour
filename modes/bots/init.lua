@@ -417,6 +417,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 	elseif id == packets.save_player_data then
 		local name, data, fields = string.match(data, "([^\000]+)\000([^\000]+)\000([^\000]+)")
 		saving[name] = {json.decode(data), fields}
+		system.loadPlayerData(name)
 	end
 end)
 
