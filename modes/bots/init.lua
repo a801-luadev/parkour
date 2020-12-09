@@ -165,8 +165,11 @@ local file_actions = {
 		addTextArea(packets.current_chat, name .. "\000" .. chat, parkour_bot)
 	end},
 
-	ban_change = {2, true, function(data, id, value)
-		data.banned[tostring(id)] = value
+	ban_change = {2, true, function(data, id, value, old)
+		id = tostring(id)
+		if not old or tonumber(old) == data.banned[id] then
+			data.banned[id] = value
+		end
 	end},
 
 	modify_rank = {1, true, function(data, player, newrank)
@@ -199,8 +202,8 @@ local file_actions = {
 	end}
 }
 
-local function schedule(action, arg1, arg2)
-	to_do[#to_do + 1] = {file_actions[action], arg1, arg2}
+local function schedule(action, arg1, arg2, arg3)
+	to_do[#to_do + 1] = {file_actions[action], arg1, arg2, arg3}
 	next_file_check = os.time() + 4000
 end
 
@@ -267,6 +270,29 @@ onEvent("FileLoaded", function(file, data)
 	end
 
 	eventGameDataLoaded(data)
+
+	if data.banned then
+		local now = os.time()
+		local count, to_remove = 0
+
+		-- wipe expired bans
+		for id, value in next, data.banned do
+			if value > 1 and now >= value then
+				if count == 0 then
+					count = 1
+					to_remove = {id}
+				else
+					count = count + 1
+					to_remove[count] = id
+				end
+			end
+		end
+
+		for index = 1, count do
+			data.banned[to_remove[index]] = nil
+		end
+	end
+
 	if data.chats then
 		if chats.loading then
 			chats = data.chats
@@ -499,7 +525,7 @@ onEvent("PacketReceived", function(channel, id, packet, map, time)
 
 	elseif id == 2 then
 		local player, ban = table.unpack(args)
-		schedule("ban_change", player, nil)
+		schedule("ban_change", player, nil, ban)
 
 	elseif id == 3 then
 		local _room, id, player, maps = table.unpack(args)
