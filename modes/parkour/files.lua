@@ -333,7 +333,6 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 		else
 			for field in string.gmatch(fields, "[^\001]+") do
-				tfm.exec.chatMessage("updating field " .. field)
 				old[field] = data[field]
 			end
 		end
@@ -418,7 +417,6 @@ onEvent("PacketReceived", function(channel, id, packet)
 
 	if id == 2 then -- update pdata
 		local player, fields = string.match(packet, "([^\000]+)\000([^\000]+)")
-		tfm.exec.chatMessage("update fields " .. player .. " " .. fields)
 		if in_room[player] then
 			system.loadPlayerData(player)
 			updating[player] = fields

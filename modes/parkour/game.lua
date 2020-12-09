@@ -96,6 +96,25 @@ local function enableSpecMode(player, enable)
 	showStats()
 end
 
+local function checkBan(player, data)
+	id = room.playerList[player].id
+	if data.banned and (data.banned == 2 or os.time() < data.banned) then
+		bans[room.playerList[player].id] = true
+
+		enableSpecMode(player, true)
+
+		if data.banned == 2 then
+			translatedChatMessage("permbanned", player)
+		else
+			local minutes = math.floor((data.banned - os.time()) / 1000 / 60)
+			translatedChatMessage("tempbanned", player, minutes)
+		end
+	elseif bans[id] then
+		bans[id] = false
+		enableSpecMode(player, false)
+	end
+end
+
 onEvent("NewPlayer", function(player)
 	spec_mode[player] = nil
 	in_room[player] = true
@@ -509,18 +528,11 @@ onEvent("PlayerDataParsed", function(player, data)
 		tfm.exec.chatMessage("<v>[#] <d>Your spec mode has been carried to this room since it's enabled.", player)
 	end
 
-	if data.banned and (data.banned == 2 or os.time() < data.banned) then
-		bans[room.playerList[player].id] = true
+	checkBan(player, data)
+end)
 
-		enableSpecMode(player, true)
-
-		if data.banned == 2 then
-			translatedChatMessage("permbanned", player)
-		else
-			local minutes = math.floor((data.banned - os.time()) / 1000 / 60)
-			translatedChatMessage("tempbanned", player, minutes)
-		end
-	end
+onEvent("PlayerDataUpdated", function(player, data)
+	checkBan(player, data)
 end)
 
 onEvent("GameDataLoaded", function(data)
