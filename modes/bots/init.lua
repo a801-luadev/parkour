@@ -426,7 +426,7 @@ onEvent("PlayerDataLoaded", function(player, file)
 	saving[player] = nil
 
 	local actions = loadingPlayerData[player]
-	if not actions then return end
+	if not actions and not new then return end
 	loadingPlayerData[player] = nil
 
 	if channels[player] then return end
@@ -448,8 +448,10 @@ onEvent("PlayerDataLoaded", function(player, file)
 		sendPacket("bots", 2, player .. "\000" .. new[2])
 	end
 
-	for index = 2, #actions do
-		update = update or actions[index](player, data, file)
+	if actions then
+		for index = 2, #actions do
+			update = update or actions[index](player, data, file)
+		end
 	end
 
 	if update or save then
