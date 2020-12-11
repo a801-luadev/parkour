@@ -236,7 +236,7 @@ local function updateData(player, data)
 end
 
 onEvent("PlayerDataLoaded", function(player, data)
-	if player == send_channel or player == recv_channel or player == victory_channel then return end
+	if channels[player] then return end
 	if in_room[player] then return end
 
 	if data == "" then
@@ -265,7 +265,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 end)
 
 onEvent("PlayerDataLoaded", function(player, data)
-	if player == send_channel or player == recv_channel or player == victory_channel then return end
+	if channels[player] then return end
 	if not in_room[player] then return end
 
 	if data == "" then

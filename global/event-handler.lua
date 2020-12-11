@@ -64,7 +64,7 @@ do
 		events.PlayerDataLoaded._count = 2
 		events.PlayerDataLoaded[1] = pipeHandler
 		events.PlayerDataLoaded[2] = function(player)
-			if player == send_channel then
+			if channels[player] and channels[player].buffer then
 				events.Loop._count = 0
 				events.PlayerDataLoaded._count = 0
 			end
