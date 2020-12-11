@@ -228,7 +228,7 @@ powers = {
 			local obj = despawnableObject(2000, 28, x, y + 10)
 			addNewTimer(
 				2000,
-				tfm.exec.removeImage
+				tfm.exec.removeImage,
 				tfm.exec.addImage("17653d6417c.png", "#" .. obj, -16, -22)
 			)
 		end,
@@ -400,7 +400,7 @@ powers = {
 			local obj = despawnableObject(4000, 701, x, y + 10, 0)
 			addNewTimer(
 				4000,
-				tfm.exec.removeImage
+				tfm.exec.removeImage,
 				tfm.exec.addImage("17653d4a436.png", "#" .. obj, -65, -11)
 			)
 		end
@@ -448,7 +448,7 @@ powers = {
 			addNewTimer(5000, powers.pig.explode, id1, id2, img, x, y)
 			addNewTimer(
 				5000,
-				tfm.exec.removeImage
+				tfm.exec.removeImage,
 				tfm.exec.addImage("17653e5be63.png", "_52", x - 30, y - 28)
 			)
 		end,
