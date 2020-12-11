@@ -11,39 +11,26 @@ async def profile(request, name):
 
 	if name[0] == ":":
 		pid = name[1:]
-		print(pid)
-
 		if not pid.isdigit():
 			raise MalformedRequest
 
-		await app.proxy.sendTo({
-			"type": "profile",
-			"id": int(pid)
-		}, "parkour")
-		pid, name, profile = await app.proxy.wait_for(
-			"profile_response",
-			lambda _pid, name, profile: _pid == pid,
-			3.0
-		)
-		print(pid, name, profile)
+		query = int(pid)
 
 	elif name[0] == "@":
-		name = normalize_name(name[1:])
-		print(name)
-
-		await app.proxy.sendTo({
-			"type": "profile",
-			"name": name
-		}, "parkour")
-		pid, name, profile = await app.proxy.wait_for(
-			"profile_response",
-			lambda pid, _name, profile: _name == name,
-			3.0
-		)
-		print(pid, name, profile)
+		query = normalize_name(name[1:])
 
 	else:
 		raise MalformedRequest
+
+	await app.proxy.sendTo({
+		"type": "profile",
+		"query": query
+	}, "parkour")
+	pid, name, profile = await app.proxy.wait_for(
+		"profile_response",
+		lambda pid, name, profile: query in (pid, name),
+		2
+	)
 
 	if profile is None:
 		return json({
@@ -62,7 +49,7 @@ async def profile(request, name):
 
 	if profile["online"]:
 		file = profile["file"]
-		if profile["outdated"]:
+		if file is None:
 			response["parkour"] = {
 				"outdated": True
 			}
@@ -99,22 +86,23 @@ async def profile(request, name):
 					"language": file.get("langue"),
 					"room": file["room"],
 					"can_report": file["report"],
-					"ban": parkour["ban_info"],
-					"power_removal": parkour["kill_info"],
+					"ban": profile.get("ban_info"),
+					"power_removal": profile.get("kill_info"),
 					"spec": file.get("spec", False),
 					"hide": file.get("hidden", False)
 				})
 
-	await app.proxy.sendTo({
-		"type": "discord_info",
-		"nickname": name
-	})
-	discord_id, name, discord_name, roles = await app.proxy.wait_for(
-		"discord_response",
-		lambda discord_id, nickname, discord_name, roles: nickname == name,
-		3.0
-	)
+	# await app.proxy.sendTo({
+	# 	"type": "discord_info",
+	# 	"nickname": name
+	# }, "discord")
+	# discord_id, name, discord_name, roles = await app.proxy.wait_for(
+	# 	"discord_response",
+	# 	lambda discord_id, nickname, discord_name, roles: nickname == name,
+	# 	3.0
+	# )
 
+	discord_id = None
 	if discord_id is not None: # has been found
 		response["discord"] = {
 			"id": str(discord_id),

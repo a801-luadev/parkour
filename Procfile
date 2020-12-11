@@ -1,1 +1,1 @@
-parkour: python bots/parkour.py
+parkour: python bots/parkour_bot.py
