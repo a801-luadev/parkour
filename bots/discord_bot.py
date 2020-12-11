@@ -474,6 +474,11 @@ class Client(discord.Client):
 			elif msg.content.startswith(","):
 				content = msg.content[1:]
 			else:
+				if msg.content.lower() == "/who":
+					await self.proxy.sendTo({
+						"type": "who_chat",
+						"chat": "mod" if msg.channel.id == env.mod_chat else "mapper"
+					}, "parkour")
 				return
 
 			# Format the content
