@@ -59,10 +59,12 @@ translations.ro = {
 	records_submitted = "<v>[#] <d>Recordul tău pentru harta <b>%s</b> a fost trimis.",
 
 	-- Miscellaneous
+	afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
 	options = "<p align='center'><font size='20'>Opțiuni Parkour</font></p>\n\nFolosește <b>QWERTY</b> (oprește dacă <b>AZERTY</b>)\n\nFolosește scurtătura <b>M</b> pentru <b>/mort</b> (oprește pentru <b>DEL</b>)\n\nArată-ți cooldown-urile pentru puteri\n\nArată butonul de puteri\n\nArată butonul de ajutor\n\nArată anunțurile de completare a hărților\n\nArată simbolul de „fără ajutor”",
 	cooldown = "<v>[#] <r>Așteaptă câteva secunde pentru a face asta din nou.",
 	power_options = ("<font size='13' face='Lucida Console'>tastatură <b>QWERTY</b>" ..
-					 "\n\n<b>Ascunde</b> numărul hărților completate"),
+					 "\n\n<b>Ascunde</b> numărul hărților completate" ..
+					 "\n\nUse <b>default key</b>"),
 	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Completează <v>%s</v> hărți" ..
 					"<font size='5'>\n\n</font>pentru a debloca" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),

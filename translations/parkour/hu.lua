@@ -59,10 +59,12 @@ translations.hu = {
 	records_submitted = "<v>[#] <d>A <b>%s</b> rekordod ehhez a pályához be lett küldve.",
 
 	-- Miscellaneous
+	afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
 	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot",
 	cooldown = "<v>[#] <r>Várj néhány másodpercet, mielőtt újra ezt tennéd.",
 	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> billentyűzet" ..
-					 "\n\nTeljesített pályák <b>elrejtése</b>"),
+					 "\n\nTeljesített pályák <b>elrejtése</b>" ..
+					 "\n\nUse <b>default key</b>"),
 	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Teljesíts <v>%s</v> pályát" ..
 					"<font size='5'>\n\n</font>a(z) <v>%s</v>" ..
 					"<font size='5'>\n\n</font>feloldásához"),
