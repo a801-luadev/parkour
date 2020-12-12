@@ -333,6 +333,17 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 		else
 			for field in string.gmatch(fields, "[^\001]+") do
+				if field == "badges" then
+					local p_badges = data.badges
+					for index = 1, #badges do
+						if old.badges[index] ~= p_badges[index] then
+							NewBadgeInterface:show(
+								player, index, math.max(p_badges[index], 1)
+							)
+						end
+					end
+				end
+
 				old[field] = data[field]
 			end
 		end
