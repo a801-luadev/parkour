@@ -1,5 +1,5 @@
-max_leaderboard_rows = 70
-max_weekleaderboard_rows = 28
+max_leaderboard_rows = 73
+max_weekleaderboard_rows = 31
 local max_leaderboard_pages = math.ceil(max_leaderboard_rows / 14) - 1
 local max_weekleaderboard_pages = math.ceil(max_weekleaderboard_rows / 14) - 1
 local loaded_leaderboard = false
@@ -82,7 +82,7 @@ local function checkPlayersPosition(week)
 
 	if not week then
 		local name, badges, badge
-		for pos = 1, #lb do
+		for pos = 1, math.min(#lb, 70) do
 			name = lb[pos][2]
 			lb[name] = pos
 
