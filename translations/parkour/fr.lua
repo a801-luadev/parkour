@@ -35,6 +35,7 @@ translations.fr = {
 	unlocked_power = "<ce><d>%s</d> a débloqué le pouvoir <vp>%s</vp>.",
 
 	-- Information messages
+	mod_apps = "<j>Les candidatures pour devenir modérateur de Parkour sont maintenant ouvertes! Rendez-vous sur cette page: <rose>%s",
 	staff_power = "<r>Le staff de parkour <b>n'a pas</b> de pouvoir en dehors du module.",
 	donate = "<vp>Tapez <b>!donate</b> si vous souhaitez faire un don pour ce module !",
 	paused_events = "<cep><b>[Attention!]</b> <n>Le module a atteint sa limite critique et est en pause.",

@@ -35,6 +35,7 @@ translations.he = {
 	unlocked_power = "<ce><d>%s</d> השיג את הכח <vp>%s</vp>.",
 
 	-- Information messages
+	mod_apps = "<j>הגשות מועמדות להיות מנהל/ת פארקור פתוחות כעת! השתמש בקישור זה: <rose>%s",
 	staff_power = "<r>לצוות פארקור <b>אין</b> שום כוחות מחוץ לחדרי פארקור.",
 	donate = "<vp>הקלד <b>!donate</b> אם תרצה לתרום עבור מודול זה!",
 	paused_events = "<cep><b>[אזהרה!]</b> <n>המשחק הגיע למגבלה קריטית ונעצר כעת.",

@@ -35,6 +35,7 @@ translations.tr = {
 	unlocked_power = "<ce><d>%s</d>, <vp>%s</vp> becerisini açtı.",
 
 	-- Information messages
+	mod_apps = "<j>Parkour moderatör alımları şimdi açık! Bu bağlantıyı kullanın: <rose>%s",
 	staff_power = "<r>Parkour personelinin #parkour odalarının dışında hiçbir gücü <b>yoktur</b>.",
 	donate = "<vp>Bu modül için bağış yapmak istiyorsanız <b>!donate</b> yazın!",
 	paused_events = "<cep><b>[Dikkat!]</b> <n>Modül kritik seviyeye ulaştı ve durduruluyor.",

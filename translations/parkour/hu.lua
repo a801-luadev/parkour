@@ -35,6 +35,7 @@ translations.hu = {
 	unlocked_power = "<ce><d>%s</d> feloldotta a(z) <vp>%s</vp> képességet.",
 
 	-- Information messages
+	mod_apps = "<j>A Parkour Moderátor jelentkezések nyitva vannak! Használd ezt a linket: <rose>%s",
 	staff_power = "<r>A parkour személyzetének <b>nincs</b> hatalma a #parkour pályákon kívül.",
 	donate = "<vp>Írd be a <b>!donate</b> parancsot, ha adományozni szeretnél a modul részére!",
 	paused_events = "<cep><b>[Figyelem!]</b> <n>A modul elérte a kritikus határát, így szüneteltetés alatt áll.",

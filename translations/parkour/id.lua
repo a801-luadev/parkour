@@ -35,6 +35,7 @@ translations.id = {
     unlocked_power = "<ce><d>%s</d> telah membuka kemampuan <vp>%s</vp>.",
 
     -- Information messages
+    mod_apps = "<j>Aplikasi untuk moderator parkour telah dibuka! Gunakan link ini: <rose>%s",
     staff_power = "<p align='center'><font size='12'><r>Staf parkour <b>tidak memiliki</b> wewenang apapun di selain ruangan #parkour.",
     donate = "<vp>Ketik <b>!donate</b> jika anda ingin berdonasi untuk modul ini!",
     paused_events = "<cep><b>[Perhatian!]</b> <n>Modul mencapai batas kritis terpaksa dihentikan sementara.",
