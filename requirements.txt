@@ -1,1 +1,1 @@
-aiotfm==1.4.0b3
+-e git://github.com/Athesdrake/aiotfm.git@c83e1e8ed0ec27090dc77adcfac5cfb86f62f142#egg=aiotfm
