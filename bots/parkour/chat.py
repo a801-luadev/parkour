@@ -72,7 +72,7 @@ class Chat(aiotfm.Client):
 					await self.whisper("Tocutoeltuco#5522", text)
 
 				elif not packet["alive"]:
-					await self.client.restart()
+					await self.restart()
 
 			elif packet["type"] == "who_chat":
 				# Request player list in a chat
