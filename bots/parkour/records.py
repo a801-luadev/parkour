@@ -100,7 +100,9 @@ class Records(aiotfm.Client):
 
 			# handle victory
 			self.loop.create_task(
-				self.handle_player_victory(player, name, map_code, taken)
+				self.handle_player_victory(
+					player, name, map_code, taken / 1000
+				)
 			)
 
 		else:
