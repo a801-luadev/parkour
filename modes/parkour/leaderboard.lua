@@ -1,7 +1,5 @@
 max_leaderboard_rows = 73
-max_weekleaderboard_rows = 31
-local max_leaderboard_pages = math.ceil(max_leaderboard_rows / 14) - 1
-local max_weekleaderboard_pages = math.ceil(max_weekleaderboard_rows / 14) - 1
+local max_weekleaderboard_rows = 31
 local loaded_leaderboard = false
 leaderboard = {}
 weekleaderboard = {}
@@ -82,11 +80,11 @@ local function checkPlayersPosition(week)
 
 	if not week then
 		local name, badges, badge
-		for pos = 1, math.min(#lb, 70) do
+		for pos = 1, #lb do
 			name = lb[pos][2]
 			lb[name] = pos
 
-			if players_file[name] then
+			if pos <= 70 and players_file[name] then
 				badges = players_file[name].badges
 				badge = math.ceil(pos / 14)
 

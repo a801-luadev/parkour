@@ -297,10 +297,16 @@ onEvent("Loop", function()
 		end
 
 		local now = os.time()
+		local player
 		for name in next, in_room do
-			if spec_mode[name] then
+			player = room.playerList[name]
+			if spec_mode[name] or (player and bans[player.id]) then
 				tfm.exec.killPlayer(name)
-			elseif player_count > 4 and not victory[name] and now >= times.movement[name] + 120000 then -- 2 mins afk
+			elseif (player_count > 4
+					and not records_admins
+					and not review_mode
+					and not victory[name]
+					and now >= times.movement[name] + 120000) then -- 2 mins afk
 				enableSpecMode(name, true)
 				AfkInterface:show(name)
 			end
@@ -575,6 +581,9 @@ onEvent("GameDataLoaded", function(data)
 
 		for player, data in next, room.playerList do
 			if in_room[player] and bans[data.id] then
+				if AfkInterface.open[player] then
+					AfkInterface:remove(player)
+				end
 				enableSpecMode(player, true)
 			end
 		end
