@@ -97,9 +97,14 @@ local function enableSpecMode(player, enable)
 end
 
 local function checkBan(player, data)
-	id = room.playerList[player].id
+	local id = room.playerLis[player]
+	if not id or not in_room[player] then
+		return
+	end
+	id = id.id
+
 	if data.banned and (data.banned == 2 or os.time() < data.banned) then
-		bans[room.playerList[player].id] = true
+		bans[id] = true
 
 		enableSpecMode(player, true)
 
