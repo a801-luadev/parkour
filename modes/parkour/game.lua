@@ -97,7 +97,7 @@ local function enableSpecMode(player, enable)
 end
 
 local function checkBan(player, data)
-	local id = room.playerLis[player]
+	local id = room.playerList[player]
 	if not id or not in_room[player] then
 		return
 	end
