@@ -169,8 +169,7 @@ class Records(aiotfm.Client):
 						.format(name, records)
 					)
 
-					if records > 1:
-						badge = math.ceil(records / 5) + 1
+					badge = records // 5 + 1
 
 					if badge > 9:
 						return True
