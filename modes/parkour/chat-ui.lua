@@ -124,7 +124,7 @@ onEvent("PlayerWon", function(player)
 			min_save
 		)
 
-	elseif count_stats and and not records_admins and not review_mode then
+	elseif count_stats and not records_admins and not review_mode then
 		local power
 		for index = 1, #powers do
 			power = powers[index]
