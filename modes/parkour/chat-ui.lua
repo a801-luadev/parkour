@@ -115,9 +115,16 @@ onEvent("PlayerWon", function(player)
 
 	if is_tribe then
 		translatedChatMessage("tribe_house", player)
+
 	elseif room.uniquePlayers < min_save or player_count < min_save then
-		translatedChatMessage("min_players", player, room.uniquePlayers, min_save)
-	elseif count_stats and not review_mode then
+		translatedChatMessage(
+			"min_players",
+			player,
+			math.min(room.uniquePlayers, player_count),
+			min_save
+		)
+
+	elseif count_stats and and not records_admins and not review_mode then
 		local power
 		for index = 1, #powers do
 			power = powers[index]
