@@ -202,7 +202,7 @@ onEvent("GameDataLoaded", function(data)
 		-- so _count will be ignored
 		maps.polls._count = #data.map_polls
 	end
-	
+
 	if data.lowmaps then
 		maps.list_low = data.lowmaps
 		maps.low_count = #data.lowmaps
@@ -335,6 +335,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		if not records_cond and not tribe_cond and normal_cond then
 			-- logged when using staff powers
+			if review_mode and perms[player].enable_review then
+				-- legitimate review mode
+				return
+			end
 			logCommand(player, "map", math.min(quantity, 2), args)
 		end
 	end
