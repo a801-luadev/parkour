@@ -130,9 +130,9 @@ class Records(aiotfm.Client):
 			# first record + 15% of the time, remove some decimals
 			threshold = round(record * 1.15 * 1000) / 1000
 
+		room = None
 		if taken > threshold:
 			webhook = env.webhooks.game_victory
-			room = None
 
 		else:
 			file = await self.load_player_file(name)
