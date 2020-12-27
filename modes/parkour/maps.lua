@@ -132,7 +132,7 @@ local function selectMap(sections, list, count)
 end
 
 local function newMap()
-	count_stats = true
+	count_stats = not review_mode
 	map_change_cd = os.time() + 20000
 
 	local map
