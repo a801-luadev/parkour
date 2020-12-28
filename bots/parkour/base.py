@@ -59,10 +59,12 @@ class Base(aiotfm.Client):
 			self.ranks
 		)
 
-	async def connect(self, *args, **kwargs):
+	async def start(self, *args, **kwargs):
 		try:
-			return await super().connect(*args, **kwargs)
+			await super().start(*args, **kwargs)
 		except Exception:
+			traceback.print_exc()
+		finally:
 			await self.restart()
 
 	async def restart(self):

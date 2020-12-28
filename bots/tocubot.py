@@ -151,10 +151,12 @@ class Client(aiotfm.Client):
 
 		await self.main.send(packet)
 
-	async def connect(self, *args, **kwargs):
+	async def start(self, *args, **kwargs):
 		try:
-			return await super().connect(*args, **kwargs)
+			await super().start(*args, **kwargs)
 		except Exception:
+			traceback.print_exc()
+		finally:
 			await self.restart()
 
 	async def on_login_ready(self, *a):
@@ -662,7 +664,7 @@ class Client(aiotfm.Client):
 if __name__ == '__main__':
 	loop = asyncio.get_event_loop()
 
-	bot = Client(auto_restart=True, bot_role=True, loop=loop)
+	bot = Client(bot_role=True, loop=loop)
 	loop.create_task(bot.start())
 
 	try:

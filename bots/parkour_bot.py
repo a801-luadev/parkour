@@ -31,7 +31,7 @@ class ParkourBot(
 if __name__ == '__main__':
 	loop = asyncio.get_event_loop()
 
-	bot = ParkourBot(auto_restart=True, bot_role=True, loop=loop)
+	bot = ParkourBot(bot_role=True, loop=loop)
 	loop.create_task(bot.start())
 
 	try:
