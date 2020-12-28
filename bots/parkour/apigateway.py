@@ -13,7 +13,7 @@ class ApiGateway(aiotfm.Client):
 		if client == "tokens":
 			if packet["type"] == "get_player_id":
 				name = packet["name"]
-				pid = await self.get_player_id(normalize_name(name))
+				pid = await self.get_player_id(name)
 
 				await self.proxy.sendTo({
 					"type": "get_player_id",
