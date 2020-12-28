@@ -10,7 +10,21 @@ class ApiGateway(aiotfm.Client):
 		if await super().handle_proxy_packet(client, packet):
 			return True
 
-		if client == "api":
+		if client == "tokens":
+			if packet["type"] == "get_player_id":
+				name = packet["name"]
+				pid = await self.get_player_id(normalize_name(name))
+
+				await self.proxy.sendTo({
+					"type": "get_player_id",
+					"name": name,
+					"pid": pid
+				}, client)
+
+			else:
+				return False
+
+		elif client == "api":
 			if packet["type"] == "get_roles":
 				player = packet["player"]
 
