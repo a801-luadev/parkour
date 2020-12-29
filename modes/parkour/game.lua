@@ -5,7 +5,7 @@ local player_count = 0
 local victory_count = 0
 local less_time = false
 local victory = {_last_level = {}}
-local bans = {[0] = true} -- souris banned
+local bans = {}
 local in_room = {}
 local online = {}
 local hidden = {}
@@ -164,6 +164,10 @@ onEvent("NewPlayer", function(player)
 		bindKeyboard(player, 66, true, true) -- B key
 	end
 
+	if room.playerList[player].id == 0 then -- souris
+		checkBan(player, {banned = 2})
+		return
+	end
 	showStats()
 end)
 
@@ -414,6 +418,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>You can't toggle review mode in this room.", player)
 		end
 
+		count_stats = false
 		review_mode = not review_mode
 		if review_mode then
 			tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
@@ -548,7 +553,7 @@ end)
 
 onEvent("GameDataLoaded", function(data)
 	if data.banned then
-		bans = {[0] = true}
+		bans = {}
 		for id, value in next, data.banned do
 			if value == 1 or os.time() < value then
 				bans[tonumber(id)] = true
