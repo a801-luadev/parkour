@@ -63,30 +63,30 @@ translations.br = {
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>VOCê ESTÁ NO MODO AFK</b></bv>\nMOVA-SE PARA RENASCER</font>\n\n<font size='30'><u><t>Lembretes:</t></u></font>\n\n<font size='15'><r>Jogadores com uma linha vermelha em cima deles não querem ajuda!\nTrollar/bloquear outros jogadores no parkour NÃO é permitido!<d>\nEntre em nosso <cep><a href='event:discord'>servidor no Discord</a></cep>!\nQuer contribuir com código? Veja nosso <cep><a href='event:github'>repositório no Github</a></cep>\nVocê tem um mapa bom pra enviar? Mande-o em nosso <cep><a href='event:map_submission'>tópico de submissão de mapas</a></cep>\nCheque nosso <cep><a href='event:forum'>tópico oficial no fórum</a></cep> para mais informações!\nNos apoie com <cep><a href='event:donate'>doações!</a></cep>",
 	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar",
 	cooldown = "<v>[#] <r>Aguarde alguns segundos antes de fazer isso novamente.",
-	power_options = ("<font size='13' face='Lucida Console'>Teclado <b>QWERTY</b>" ..
+	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Teclado <b>QWERTY</b>" ..
 					 "\n\n<b>Esconder</b> contagem de mapas" ..
 					 "\n\nUsar <b>tecla padrão</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Complete <v>%s</v> mapas" ..
+	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> mapas" ..
 					"<font size='5'>\n\n</font>para desbloquear" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Complete <v>%s</v> mapas" ..
+	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> mapas" ..
 					"<font size='5'>\n\n</font>para evoluir para" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Seja top <v>%s</v>" ..
+	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Seja top <v>%s</v>" ..
 					"<font size='5'>\n\n</font>para desbloquear" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Seja top <v>%s</v>" ..
+	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Seja top <v>%s</v>" ..
 					"<font size='5'>\n\n</font>para evoluir para" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				 "<font size='5'>\n\n</font>Mapas completados"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>Ranking Geral"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				   "<font size='5'>\n\n</font>Ranking Semanal"),
-	badges = "<font size='14' face='Lucida Console,Verdana'>Medalhas (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Medalhas (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>A contagem de mapas deste jogador é privado. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 				"Posição no Ranking geral: <b><v>%s</v></b>\n\n" ..
 				"Posição no Ranking semanal: <b><v>%s</v></b>"),
 	map_count = "Contagem de mapas: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",

@@ -63,30 +63,30 @@ translations.ru = {
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
 	options = "<p align='center'><font size='20'>Параметры Паркура</font></p>\n\nИспользуйте <b>QWERTY</b> на клавиатуре (отключить if <b>AZERTY</b>)\n\nИспользуйте <b>M</b> горячую клавишу <b>/mort</b> (отключить <b>DEL</b>)\n\nПоказать ваше время перезарядки\n\nПоказать кнопку способностей\n\nПоказать кнопку помощь\n\nПоказать объявление о завершении карты\n\nПоказать символ помощь не нужна",
 	cooldown = "<v>[#] <r>Подождите несколько минут, чтобы повторить действие.",
-	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> клавиатура" ..
+	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> клавиатура" ..
 					 "\n\n<b>Hide</b> map count" ..
 					 "\n\nUse <b>default key</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Пройденные <v>%s</v> карты" ..
+	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты" ..
 					"<font size='5'>\n\n</font>разблокированы" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Пройденные <v>%s</v> карты" ..
+	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты" ..
 					"<font size='5'>\n\n</font>обновлены" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Ранг <v>%s</v>" ..
+	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v>" ..
 					"<font size='5'>\n\n</font>разбокирован" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Ранг <v>%s</v>" ..
+	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v>" ..
 					"<font size='5'>\n\n</font>обновлен" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				 "<font size='5'>\n\n</font>Пройденые карты"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>Общая таблица лидеров"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				   "<font size='5'>\n\n</font>Еженедельная таблица лидеров"),
-	badges = "<font size='14' face='Lucida Console,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Количество карт этого игрока является частным.<a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 				"Общая таблица лидеров: <b><v>%s</v></b>\n\n" ..
 				"Еженедельначя таблица лидеров: <b><v>%s</v></b>"),
 	map_count = "Количество карт: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",

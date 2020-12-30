@@ -63,30 +63,30 @@ translations.tr = {
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MODDASIN</b></bv>\nYENİDEN DOĞMAK İÇİN HAREKET ET. </font>\n\n<font size='30'><u><t>Hatırlatıcılar:</t></u></font>\n\n<font size='15'><r>Üzerinde kırmızı çizgi olan oyuncular yardım istemiyordur!\nParkurdaki diğer oyuncuları trollemek/engellemek YASAKTIR!<d>\n<cep><a href='event:discord'>Discord</a></cep>'umuza katıl!\nKodumuza katkıda bulunmak mı istiyorsun? <cep><a href='event:github'>Github depomuza</a></cep> bir bak\nSunacak iyi bir haritanız mı var? <cep><a href='event:map_submission'>Harita öneri başlığımıza</a></cep> gönderin!\nDaha fazla bilgi için<cep><a href='event:forum'>resmi başlığımıza</a></cep> bakın!\nBizi desteklemek için <cep><a href='event:donate'>bağış yap!</a></cep>",
 	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\n<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n<b>/mort</b>'un kısayolu <b>M</b> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\nBeceri bekleme sürelerini göster.\n\nBeceriler simgesini göster.\n\nYardım butonunu göster.\n\nHarita bitirme duyurularını göster.\n\nYardım istemiyorum simgesini göster.",
 	cooldown = "<v>[#] <r>Bunu tekrar yapmadan önce birkaç saniye bekleyin",
-	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> Klavye" ..
+	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> Klavye" ..
 					 "\n\nTamamlanan harita sayısını <b>gizle</b>" ..
 					 "\n\n<b>Varsayılan tuşu</b> kullan"),
 	unlock_power = ("<font size='5'>\n\n</font>Kilidi açmak için" ..
-					"<font size='13' face='Lucida Console'><p align='center'><v>%s</v> harita tamamlayınız" ..  
+					"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v> harita tamamlayınız" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
 	upgrade_power = ("<font size='5'>\n\n</font>Yükseltmek için" ..
-					"<font size='13' face='Lucida Console'><p align='center'><v>%s</v> harita tamamlayınız" ..
+					"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v> harita tamamlayınız" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
 	unlock_power_rank = ("<font size='5'>\n\n</font>Kilidi açmak için" ..
-					"<font size='13' face='Lucida Console'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
+					"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
 	upgrade_power_rank = ("<font size='5'>\n\n</font>Yükseltmek için" ..
-					"<font size='13' face='Lucida Console'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
+					"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				 "<font size='5'>\n\n</font>Tamamlanmış Harita"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>Genel Sıralamanız"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>Bu Haftaki Sıralamanız"),
-	badges = "<font size='14' face='Lucida Console,Verdana'>Rozetler (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Rozetler (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Bu oyuncunun tamamladığı harita sayısı özeldir. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 				"Genel skor tablosu konumu: <b><v>%s</v></b>\n\n" ..
 				"Haftalık liderlik sıralaması: <b><v>%s</v></b>"),
 	map_count = "Tamamlanan harita sayısı: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",

@@ -63,30 +63,30 @@ translations.hu = {
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MÓDBAN VAGY</b></bv>\nMOZOGJ HOGY ÚJRAÉLEDJ</font>\n\n<font size='30'><u><t>Emlékeztetők:</t></u></font>\n\n<font size='15'><r>A játékosok piros vonallal a fejük felett nem kérnek segítséget!\nTrollkodás/blokkolás más játékosokkal szemben a parkourban NEM megengedett!<d>\nCsatlakozz a <cep><a href='event:discord'>discord szerverünkhöz</a></cep>!\nSzertnél közreműködni kódolással? Tekintsd meg a <cep><a href='event:github'>github gyűjteményünket</a></cep>\nVan egy jó pályád amit bemutatnál? Posztold ki a <cep><a href='event:map_submission'>pálya beadvány témához</a></cep>\nCsekkold le a <cep><a href='event:forum'>official topic fület</a></cep> több információért!\nTámogass minket <cep><a href='event:donate'>adománnyal!</a></cep>",
 	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot",
 	cooldown = "<v>[#] <r>Várj néhány másodpercet, mielőtt újra ezt tennéd.",
-	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> billentyűzet" ..
+	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> billentyűzet" ..
 					 "\n\nTeljesített pályák <b>elrejtése</b>" ..
 					 "\n\nUse <b>default key</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Teljesíts <v>%s</v> pályát" ..
+	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Teljesíts <v>%s</v> pályát" ..
 					"<font size='5'>\n\n</font>a(z) <v>%s</v>" ..
 					"<font size='5'>\n\n</font>feloldásához"),
-	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Teljesíts <v>%s</v> pályát" ..
+	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Teljesíts <v>%s</v> pályát" ..
 					"<font size='5'>\n\n</font>a(z) <v>%s</v>" ..
 					"<font size='5'>\n\n</font>frissítéséhez"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Érd el a(z) <v>%s</v>" ..
+	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Érd el a(z) <v>%s</v>" ..
 					"<font size='5'>\n\n</font>rangot a(z) <v>%s</v>" ..
 					"<font size='5'>\n\n</font>feloldásához"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Érd el a(z) <v>%s</v>" ..
+	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Érd el a(z) <v>%s</v>" ..
 					"<font size='5'>\n\n</font>rangot a(z) <v>%s</v>" ..
 					"<font size='5'>\n\n</font>frissítéséhez"),
-	maps_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
+	maps_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				 "<font size='5'>\n\n</font>Teljesített pálya"),
-	overall_info = ("<p align='center'><font size='11' face='Lucida Console'>Pozíció a Teljes ranglistán:" ..
+	overall_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'>Pozíció a Teljes ranglistán:" ..
 					"<font size='5'>\n\n</font><b><v>%s</v></b>"),
-	weekly_info = ("<p align='center'><font size='11' face='Lucida Console'>Pozíció a Heti ranglistán:" ..
+	weekly_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'>Pozíció a Heti ranglistán:" ..
 				   "<font size='5'>\n\n</font><b><v>%s</v></b>"),
-	badges = "<font size='14' face='Lucida Console,Verdana'>Kitűzők (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Kitűzők (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>A játékos teljesített pályáinak száma privát. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 				"Pozíció a Teljes ranglistán: <b><v>%s</v></b>\n\n" ..
 				"Pozíció a Heti ranglistán: <b><v>%s</v></b>"),
 	map_count = "Pályák száma: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",

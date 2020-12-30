@@ -63,30 +63,30 @@ translations.cn = {
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>你正在掛機模式</b></bv>\n隨意移動來復活</font>\n\n<font size='30'><u><t>提示:</t></u></font>\n\n<font size='15'><r>玩家頭上的紅線表示他們不想被協助!\n在parkour惡作劇/阻礙其他玩家通關是不被允許的!<d>\n加入我們的 <cep><a href='event:discord'>discord 伺服器</a></cep>!\n想在編程上貢獻? 查看 <cep><a href='event:github'>github 編程庫</a></cep> 吧。\n你有好的地圖想提交嗎? 在我們的 <cep><ahref='event:map_submission'>地圖提交帖子</a></cep> 上留言吧。\n查看我們的 <cep><a href='event:forum'>官方帖子</a></cep> 來得到更多資訊!\n透過 <cep><a href='event:donate'>捐款</a></cep> 支持我們吧!",
 	options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <b>M</b> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示",
 	cooldown = "<v>[#] <r>請等候幾秒再重新嘗試。",
-	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> 鍵盤" ..
+	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> 鍵盤" ..
 					 "\n\n<b>隱藏</b> 地圖通過數" ..
 					 "\n\n使用 <b>預設鍵</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>完成 <v>%s</v> 張地圖" ..
+	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>完成 <v>%s</v> 張地圖" ..
 					"<font size='5'>\n\n</font>來解鎖" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>完成 <v>%s</v> 張地圖" ..
+	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>完成 <v>%s</v> 張地圖" ..
 					"<font size='5'>\n\n</font>來升級到" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>階級 <v>%s</v>" ..
+	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>階級 <v>%s</v>" ..
 					"<font size='5'>\n\n</font>來解鎖" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>階級 <v>%s</v>" ..
+	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>階級 <v>%s</v>" ..
 					"<font size='5'>\n\n</font>來升級到" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				 "<font size='5'>\n\n</font>完成地圖數"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>整體排行榜"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				   "<font size='5'>\n\n</font>每周排行榜"),
-	badges = "<font size='14' face='Lucida Console,Verdana'>徽章 (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>徽章 (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>玩家的地圖通過數已設定為私人。 <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 				"整體排行榜名次: <b><v>%s</v></b>\n\n" ..
 				"每周排行榜名次: <b><v>%s</v></b>"),
 	map_count = "地圖通過數: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
