@@ -96,12 +96,14 @@ local function enableSpecMode(player, enable)
 	showStats()
 end
 
-local function checkBan(player, data)
-	local id = room.playerList[player]
-	if not id or not in_room[player] then
-		return
+local function checkBan(player, data, id)
+	if not id then
+		id = room.playerList[player]
+		if not id or not in_room[player] then
+			return
+		end
+		id = id.id
 	end
-	id = id.id
 
 	if data.banned and (data.banned == 2 or os.time() < data.banned) then
 		bans[id] = true
@@ -164,8 +166,17 @@ onEvent("NewPlayer", function(player)
 		bindKeyboard(player, 66, true, true) -- B key
 	end
 
-	if room.playerList[player].id == 0 then -- souris
-		checkBan(player, {banned = 2})
+	local playerInfo = room.playerList[player]
+	local isSouris
+	if playerInfo then
+		-- this check is faster but not always possible
+		isSouris = playerInfo.id == 0
+	else
+		isSouris = string.sub(player, 1, 1) == "*"
+	end
+
+	if isSouris then
+		checkBan(player, {banned = 2}, 0)
 		return
 	end
 	showStats()
