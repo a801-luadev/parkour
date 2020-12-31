@@ -11,6 +11,7 @@ import sys
 import io
 import random
 import string
+import json
 
 
 class env:
@@ -603,9 +604,12 @@ class Client(discord.Client):
 					try:
 						async with aiohttp.ClientSession(conn_timeout=15.0, read_timeout=15.0) as session:
 							async with session.post(
-								"https://xml-drawer.herokuapp.com/",
-								headers={"Content-Type": "application/x-www-form-urlencoded"},
-								data=urlencode({"xml": xml}).encode()
+								"https://miceditor-map-preview.herokuapp.com/",
+								headers={"Content-Type": "application/json"},
+								data=json.dumps({
+									"xml": xml,
+									"raw": True
+								}).encode()
 							) as resp:
 								file_content = await resp.read()
 						file_format = "png"
