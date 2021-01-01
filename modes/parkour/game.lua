@@ -206,6 +206,25 @@ onEvent("PlayerLeft", function(player)
 		less_time = true
 	end
 
+	if not AfkInterface.open[player] then
+		local required = 4 - player_count
+
+		if required > 0 then
+			local to_remove = {}
+
+			for name in next, AfkInterface.open do
+				enableSpecMode(name, false)
+				to_remove[required] = name
+				required = required - 1
+				if required == 0 then break end
+			end
+
+			for name = 1, #to_remove do
+				AfkInterface:remove(name)
+			end
+		end
+	end
+
 	showStats()
 end)
 
