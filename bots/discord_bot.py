@@ -373,6 +373,7 @@ class Client(discord.Client):
 
 		self.loop.create_task(self.check_reaction_roles())
 		self.loop.create_task(self.check_verifications())
+		self.loop.create_task(self.drawer_idle())
 
 		await self.get_channel(env.private_channel).send("Ready!")
 		print("Ready!")
@@ -399,6 +400,21 @@ class Client(discord.Client):
 			await asyncio.sleep(required_time)
 
 		os.execl(sys.executable, sys.executable, *sys.argv)
+
+	async def drawer_idle(self):
+		"""Prevents the drawer system from going into idle."""
+		while True:
+			async with aiohttp.ClientSession(conn_timeout=120.0, read_timeout=120.0) as session:
+				await session.post(
+					"https://miceditor-map-preview.herokuapp.com/",
+					headers={"Content-Type": "application/json"},
+					data=json.dumps({
+						"xml": "<C><P /><Z><S /><D /><O /></Z></C>",
+						"raw": True
+					}).encode()
+				)
+
+			await asyncio.sleep(60 * 25) # 25 minutes
 
 	async def on_game_update(self):
 		await self.send_channel(env.game_logs_channel, "`[UPDATE]:` The game is updating.")
