@@ -58,6 +58,9 @@ local levels
 local perms
 local review_mode
 local records_admins = string.find(room.lowerName, "records", 1, true) and {}
+if records_admins and submode == "smol" then
+	records_admins = nil
+end
 
 local function selectMap(sections, list, count)
 	if sections._map_pointer > maps_per_section then
@@ -272,8 +275,10 @@ onEvent("NewGame", function()
 		end
 	end
 
-	if not chair or count < 3 then -- start, at least one nail and end chair
-		return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
+	if room.xmlMapInfo.author ~= "#Module" then
+		if not chair or count < 3 then -- start, at least one nail and end chair
+			return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
+		end
 	end
 
 	if room.mirroredMap then
@@ -284,7 +289,12 @@ onEvent("NewGame", function()
 
 	tfm.exec.setGameTime(1080)
 
-	if count_stats and not is_tribe and not records_admins and not review_mode and room.xmlMapInfo.permCode ~= 41 then
+	if (count_stats
+		and not is_tribe
+		and not records_admins
+		and not review_mode
+		and room.xmlMapInfo.permCode ~= 41
+		and room.xmlMapInfo.author ~= "#Module") then
 		is_invalid = os.time() + 3000
 		return
 	end

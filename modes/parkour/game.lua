@@ -280,6 +280,10 @@ onEvent("NewGame", function()
 	times.map_start = os.time()
 	checkpoint_info.version = checkpoint_info.next_version
 
+	if submode == "smol" then
+		count_stats = false
+	end
+
 	if records_admins then
 		less_time = true
 	else
