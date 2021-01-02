@@ -1,4 +1,4 @@
-local is_thicc = true
+local is_smol = true
 local in_room = {}
 local next_xml
 local next_load
@@ -22,7 +22,7 @@ end
 
 local newGame = tfm.exec.newGame
 function tfm.exec.newGame(arg)
-	is_thicc = false
+	is_smol = false
 	return newGame(arg)
 end
 
@@ -30,7 +30,7 @@ onEvent("NewPlayer", function(player)
 	if chair_x and chair_y then
 		tfm.exec.addImage(
 			"176c51d7288.png", "_51",
-			chair_x - HALF, chair_y - TOTAL,
+			chair_x - 18, chair_y - 31,
 			player
 		)
 		tfm.exec.addPhysicObject(0, chair_x, chair_y - 7, chair_prop)
@@ -44,7 +44,7 @@ onEvent("PlayerLeft", function(player)
 end)
 
 onEvent("NewGame", function()
-	if not is_thicc then
+	if not is_smol then
 		map_author = room.xmlMapInfo.author
 		map_core = room.currentMap
 		next_load = os.time() + 3000
@@ -66,6 +66,7 @@ onEvent("NewGame", function()
 
 		chair_x, chair_y = nil, nil
 		if not chair then return end
+		print(chair)
 
 		for prop, val in string.gmatch(chair, '([XY])%s*=%s*"(%d+)"') do
 			if prop == "X" then
@@ -75,19 +76,24 @@ onEvent("NewGame", function()
 			end
 		end
 
+		print(chair_x)
+		print(chair_y)
+
+		if not chair_x or not chair_y then return end
+
 		-- remove chair
 		next_xml = string.gsub(next_xml, chair, "")
 		-- replace with nail
 		next_xml = string.gsub(
 			next_xml,
 			"</O>",
-			'<O C="22" Y="' .. chair_x .. '" P="0" X="' .. chair_y .. '" /></O>'
+			'<O C="22" X="' .. chair_x .. '" P="0" Y="' .. chair_y .. '" /></O>'
 		)
 
 	elseif chair_x and chair_y then
 		tfm.exec.addImage(
 			"176c51d7288.png", "_51",
-			chair_x - HALF, chair_y - TOTAL
+			chair_x - 18, chair_y - 31
 		)
 		tfm.exec.addPhysicObject(0, chair_x, chair_y - 7, chair_prop)
 	end
@@ -96,7 +102,7 @@ end)
 onEvent("Loop", function()
 	if next_load and os.time() >= next_load then
 		next_load = nil
-		is_thicc = true
+		is_smol = true
 		newGame(next_xml)
 	end
 end)
