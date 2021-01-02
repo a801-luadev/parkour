@@ -67,6 +67,14 @@ onEvent("NewGame", function()
 		chair_x, chair_y = nil, nil
 		if not chair then return end
 
+		for prop, val in string.gmatch(chair, '([XY])%s*=%s*"(%d+)"') do
+			if prop == "X" then
+				chair_x = tonumber(val)
+			else
+				chair_y = tonumber(val)
+			end
+		end
+
 		-- remove chair
 		next_xml = string.gsub(next_xml, chair, "")
 		-- replace with nail
@@ -75,14 +83,6 @@ onEvent("NewGame", function()
 			"</O>",
 			'<O C="22" Y="' .. chair_x .. '" P="0" X="' .. chair_y .. '" /></O>'
 		)
-
-		for prop, val in string.gmatch(chair, '([XY])%s*=%s*"(%d+)"') do
-			if prop == "X" then
-				chair_x = tonumber(val)
-			else
-				chair_y = tonumber(val)
-			end
-		end
 
 	elseif chair_x and chair_y then
 		tfm.exec.addImage(
