@@ -14,7 +14,7 @@ local chair_prop = {
 
 local function tinyfy(prop, val)
 	if prop == "X" or prop == "Y" then
-		return prop = '="' .. ((tonumber(val) + 800) / 2 - 800) .. '"'
+		return prop .. '="' .. ((tonumber(val) + 800) / 2 - 800) .. '"'
 	end
 
 	return prop .. '="' .. (tonumber(val) / 2) .. '"'
