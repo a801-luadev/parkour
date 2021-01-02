@@ -77,7 +77,7 @@ onEvent("NewGame", function()
 		next_xml = string.gsub(
 			next_xml,
 			"</O>",
-			'<O C="22" X="' .. chair_x .. '" P="0" Y="' .. chair_y .. '" /></O>'
+			'<O C="22" X="' .. chair_x .. '" P="0" Y="' .. (chair_y - 20) .. '" /></O>'
 		)
 
 	elseif chair_x and chair_y then
