@@ -14,7 +14,7 @@ local chair_prop = {
 
 local function tinyfy(prop, val)
 	if prop == "X" or prop == "Y" then
-		return prop .. '="' .. ((tonumber(val) + 800) / 2 - 800) .. '"'
+		return prop .. '="' .. ((tonumber(val) + 800) / 2 - 400) .. '"'
 	end
 
 	return prop .. '="' .. (tonumber(val) / 2) .. '"'
@@ -50,7 +50,7 @@ onEvent("NewGame", function()
 		next_load = os.time() + 3000
 
 		next_xml = string.gsub(
-			room.xmlMapInfo.xml, '([XYLH])%s*=%s*"(%d+)"', tinyfy
+			room.xmlMapInfo.xml, '([XYLH])%s*=%s*"([^"]+)"', tinyfy
 		)
 
 		local chair = string.match(
@@ -66,20 +66,14 @@ onEvent("NewGame", function()
 
 		chair_x, chair_y = nil, nil
 		if not chair then return end
-		print(chair)
 
-		for prop, val in string.gmatch(chair, '([XY])%s*=%s*"(%d+)"') do
+		for prop, val in string.gmatch(chair, '([XY])%s*=%s*"([^"]+)"') do
 			if prop == "X" then
 				chair_x = tonumber(val)
 			else
 				chair_y = tonumber(val)
 			end
 		end
-
-		print(chair_x)
-		print(chair_y)
-
-		if not chair_x or not chair_y then return end
 
 		-- remove chair
 		next_xml = string.gsub(next_xml, chair, "")
