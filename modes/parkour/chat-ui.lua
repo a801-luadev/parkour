@@ -470,7 +470,6 @@ onEvent("PlayerDataParsed", function(player, data)
 	translatedChatMessage("forum_topic", player, links.forum)
 	translatedChatMessage("report", player)
 	translatedChatMessage("donate", player)
-	translatedChatMessage("mod_apps", player, links.mod_apps)
 
 	checkRoomRequest(player, data)
 
