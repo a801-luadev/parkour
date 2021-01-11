@@ -113,6 +113,14 @@ onEvent("PlayerWon", function(player)
 		end
 	end
 
+	if records_admins then
+		tfm.exec.chatMessage(
+			"<v>[#] <d>" .. room.currentMap .. " - CP: " ..
+			(checkpoint_info.version == 0 and "old" or "new")
+			, player
+		)
+	end
+
 	if is_tribe then
 		translatedChatMessage("tribe_house", player)
 
