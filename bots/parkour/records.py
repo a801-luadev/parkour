@@ -53,7 +53,7 @@ class Records(aiotfm.Client):
 			await self.send_webhook(
 				env.webhooks.parkour_records
 				if taken > 45 else
-				env.webhooks.records_suspects,
+				env.webhooks.record_suspects,
 
 				"**`[RECORD]:`** `{}` (`{}`) completed the map `@{}` "
 				"in the room `{}` in `{}` seconds."
