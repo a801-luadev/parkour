@@ -13,7 +13,7 @@ local players_level = {}
 local times = {
 	map_start = 0,
 
-	generation = {},
+	generated = {},
 	checkpoint = {},
 	movement = {}
 }
