@@ -26,6 +26,8 @@ class env:
 
 	records_webhook = os.getenv("RECORDS_WEBHOOK")
 
+	graph_db = os.getenv("GRAPH_DB")
+
 	private_channel = 686932761222578201
 	lua_logs = 686933785933381680
 	lua_unloads = 688784734813421579
@@ -66,6 +68,9 @@ class Proxy(Connection):
 
 		if packet["type"] == "runtime":
 			loop.create_task(self.client.check_runtime(packet["channel"]))
+
+		elif packet["type"] == "room_graph":
+			loop.create_task(self.client.post_graph_data(packet["modules"]))
 
 		elif packet["type"] == "busy":
 			# Shares the busy state between all the bots that need it
@@ -172,6 +177,13 @@ class Client(aiotfm.Client):
 
 	async def on_logged(self, *a):
 		print("Logged!")
+
+	async def post_graph_data(self, modules):
+		async with aiohttp.ClientSession() as sess:
+			await sess.post(
+				env.graph_db,
+				data=(json.dumps(modules) + ",").encode()
+			)
 
 	async def check_runtime(self, channel):
 		if not await self.set_busy(True, channel):

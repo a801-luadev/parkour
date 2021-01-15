@@ -4,6 +4,7 @@ from parkour.apigateway import ApiGateway
 from parkour.base import Base
 from parkour.chat import Chat
 from parkour.commands import Commands
+from parkour.graphs import RoomGraphs
 from parkour.logs import Logs
 from parkour.records import Records
 from parkour.reports import Reports
@@ -14,6 +15,7 @@ from parkour.whois import Whois
 
 class ParkourBot(
 		ApiGateway,
+		RoomGraphs,
 
 		Records,
 		Verification,
