@@ -4,6 +4,7 @@ Extracts quantity of players in official modules
 
 import asyncio
 import aiotfm
+import time
 from aiotfm.room import DropdownRoomEntry
 
 
@@ -21,7 +22,7 @@ class RoomGraphs(aiotfm.Client):
 			await asyncio.sleep(900.0)
 
 			rooms = await self.getRoomList(aiotfm.GameMode.MODULES)
-			modules = {}
+			modules = {"_t": int(time.time())}
 
 			if rooms is not None:
 				for room in rooms.pinned_rooms:
