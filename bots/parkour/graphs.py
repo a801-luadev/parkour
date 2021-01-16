@@ -18,16 +18,17 @@ class RoomGraphs(aiotfm.Client):
 			await asyncio.sleep(3.0)
 
 		while self.main.open:
-			await asyncio.sleep(300.0)
+			await asyncio.sleep(900.0)
 
 			rooms = await self.getRoomList(aiotfm.GameMode.MODULES)
-			modules = []
+			modules = {}
 
 			if rooms is not None:
 				for room in rooms.pinned_rooms:
 					if isinstance(room, DropdownRoomEntry):
 						for entry in room.entries:
-							modules.append([entry.name, entry.player_count])
+							if entry.player_count > 0:
+								modules[entry.name] = entry.player_count
 
 			await self.proxy.sendTo({
 				"type": "room_graph",
