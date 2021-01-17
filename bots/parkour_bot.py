@@ -9,12 +9,14 @@ from parkour.logs import Logs
 from parkour.records import Records
 from parkour.reports import Reports
 from parkour.sanctions import Sanctions
+from parkour.standalone import StandaloneGateway
 from parkour.verification import Verification
 from parkour.whois import Whois
 
 
 class ParkourBot(
 		ApiGateway,
+		StandaloneGateway,
 		RoomGraphs,
 
 		Records,

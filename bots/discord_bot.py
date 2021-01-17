@@ -50,6 +50,8 @@ class env:
 	verifying_role = 764647559062224937
 	manual_verification = 753391975742570546
 
+	standalone_tokens = 800439365972394065
+
 
 verification_selector = "<@!{}>:\nPlease select your language:\n\n{}"
 verification_messages = {
@@ -329,6 +331,10 @@ class Proxy(Connection):
 			# Shares the busy state between all the bots that need it
 			self.client.busy = packet["state"]
 
+		elif packet["type"] == "get_tokens":
+			# Fetch the message with tokens and return it
+			loop.create_task(self.client.send_tokens())
+
 		elif packet["type"] == "game_update":
 			# Sends update message
 			self.client.dispatch("game_update")
@@ -442,6 +448,20 @@ class Client(discord.Client):
 			)
 
 		return await self.send_channel(channel, "Script ran successfully.")
+
+	# Standalone Gateway
+	async def get_tokens(self):
+		channel = self.get_channel(env.private_channel)
+		msg = await channel.fetch_message(env.standalone_tokens)
+		data = msg.content.replace("`", "").split("\n")
+
+		return [token.split(" ") for token in data]
+
+	async def send_tokens(self):
+		await self.proxy.sendTo({
+			"type": "get_tokens",
+			"tokens": await self.get_tokens()
+		}, "tokens")
 
 	# Chat system
 	async def send_channel(self, channel, msg):
@@ -664,6 +684,20 @@ class Client(discord.Client):
 
 			if cmd == "!runtime":
 				await self.proxy.sendTo({"type": "runtime", "channel": msg.channel.id}, "tocubot")
+
+			elif cmd == "!token":
+				if not args:
+					await msg.channel.send("invalid syntax")
+					return
+
+				await self.proxy.sendTo({
+					"type": "token_request",
+					"owner": args[0],
+					"channel": msg.channel.id
+				}, tokens)
+
+			elif cmd == "!reloadtokens":
+				await self.send_tokens()
 
 			elif cmd == "!busy":
 				# Sets busy state (or checks it)
