@@ -694,7 +694,7 @@ class Client(discord.Client):
 					"type": "token_request",
 					"owner": args[0],
 					"channel": msg.channel.id
-				}, tokens)
+				}, "tokens")
 
 			elif cmd == "!reloadtokens":
 				await self.send_tokens()
