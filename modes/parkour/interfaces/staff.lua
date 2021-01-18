@@ -103,7 +103,7 @@ do
 		end
 	end
 
-	Staff = Interface.new(170, 50, 459, 300, true)
+	Staff = Interface.new(163, 50, 474, 300, true)
 		:loadTemplate(WindowBackground)
 
 		:loadComponent(
@@ -189,25 +189,25 @@ do
 
 		:addTextArea({
 			y = 55, x = 22,
-			height = 210, width = 130,
+			height = 210, width = 135,
 			canUpdate = true,
 			text = names(1, 5, 0),
 			alpha = 0
 		})
 
 		:addTextArea({
-			y = 55, x = 172,
-			height = 210, width = 130,
+			y = 55, x = 177,
+			height = 210, width = 135,
 			canUpdate = true,
-			text = names(2, 155, 17),
+			text = names(2, 160, 17),
 			alpha = 0
 		})
 
 		:addTextArea({
-			y = 55, x = 322,
-			height = 210, width = 130,
+			y = 55, x = 332,
+			height = 210, width = 135,
 			canUpdate = true,
-			text = names(3, 305, 34),
+			text = names(3, 315, 34),
 			alpha = 0
 		})
 
