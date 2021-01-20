@@ -295,6 +295,14 @@ onEvent("NewGame", function()
 				level.size = levels[i - 1].size
 			end
 		end
+	else
+		local level
+		for i = 1, count do
+			level = levels[i]
+			if not level.size then
+				level.size = levels[i - 1].size
+			end
+		end
 	end
 
 	if room.xmlMapInfo.author ~= "#Module" then
