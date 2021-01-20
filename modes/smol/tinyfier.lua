@@ -96,6 +96,6 @@ onEvent("Loop", function()
 	if next_load and os.time() >= next_load then
 		next_load = nil
 		is_smol = true
-		newGame(next_xml)
+		newGame(next_xml, room.mirroredMap)
 	end
 end)
