@@ -153,8 +153,7 @@ local powers
 powers = {
 	{
 		name = "fly", maps = 5,
-		dontShowTracker = true,
-		availableRecords = true,
+		isVisual = true,
 
 		small = "173db50edf6.png", big = "173db512e9c.png", -- icons
 		lockedSmall = "173db51091f.png", lockedBig = "173db5151fd.png",
@@ -170,8 +169,7 @@ powers = {
 	},
 	{
 		name = "speed", maps = 10,
-		dontShowTracker = true,
-		availableRecords = true,
+		isVisual = true,
 
 		small = "173db21af6a.png", big = "173db214773.png",
 		lockedSmall = "173db21d270.png", lockedBig = "173db217990.png",
@@ -266,8 +264,7 @@ powers = {
 	},
 	{
 		name = "teleport", maps = 35,
-		dontShowTracker = true,
-		availableRecords = true,
+		isVisual = true,
 
 		small = "173db226b7a.png", big = "173db21f2b7.png",
 		lockedSmall = "173db22ee81.png", lockedBig = "173db223336.png",
@@ -583,8 +580,7 @@ powers = {
 	},
 	{
 		name = "campfire", ranking = 28,
-		dontShowTracker = true,
-		availableRecords = true,
+		isVisual = true,
 
 		small = "173dee9c5d9.png", big = "173dee98c61.png",
 		lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
@@ -689,8 +685,9 @@ function bindNecessary(player)
 	local power, key
 	for index = 1, #powers do
 		power = getPowerUpgrade(completed, pos, powers[index], true, review_mode)
-		
-		if power and (not records_admins or power.availableRecords) then
+
+		if (power and
+			(power.isVisual or (not records_admins and submode ~= "smol"))) then
 			if power.click then
 				system.bindMouse(player, true)
 			else
@@ -751,10 +748,10 @@ onEvent("Keyboard", function(player, key, down, x, y)
 				power[index].cooldown_x, power[index].cooldown_y,
 
 				players_file[player].settings[3] == 1
-			)) and (not records_admins or power[index].availableRecords) then
+			)) and (power.isVisual or (not records_admins and submode ~= "smol")) then
 				power[index].fnc(player, key, down, x, y)
 
-				if not power[index].dontShowTracker then
+				if not power[index].isVisual then
 					used_powers._count = used_powers._count + 1
 					used_powers[ used_powers._count ] = {player, power[index].name}
 				end
@@ -775,10 +772,10 @@ onEvent("Mouse", function(player, x, y)
 			power.cooldown_x, power.cooldown_y,
 
 			players_file[player].settings[3] == 1
-		)) and (not records_admins or power.availableRecords) then
+		)) and (power.isVisual or (not records_admins and submode ~= "smol")) then
 			power.fnc(player, x, y)
 
-			if not power.dontShowTracker then
+			if not power.isVisual then
 				used_powers._count = used_powers._count + 1
 				used_powers[ used_powers._count ] = {player, power.name}
 			end
