@@ -30,7 +30,7 @@ translations.cn = {
 	help_changelog = "<font size='13'><p align='center'><o>版本 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• 更新了一些 <ch>聖誕</ch> 元素!\n• 修改了 <r>視覺上的漏洞</r>\n• 改善了 <vp>模組的架構</vp>\n• 你現在可以把 <t>能力重設</t> 回到 <t>預設鍵</t>\n• <cep>當房間裡所有人完成了地圖</cep>, 計時器會設成剩下 <cep>5 秒而不再是 20秒</cep>.\n• <cs>新增掛機模式</cs>\n• 新增 <ps>雪球冷卻時間</ps>",
 
 	-- Congratulation messages
-	reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。 (<vp>%ss</vp>)",
+	reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。 (<t>%ss</t>)",
 	finished = "<d><o>%s</o> 在 <vp>%s</vp> 秒內完成了地圖, <fc>恭喜!",
 	unlocked_power = "<ce><d>%s</d> 解鎖了 <vp>%s</vp> 能力。",
 

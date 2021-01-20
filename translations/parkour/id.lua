@@ -30,7 +30,7 @@ translations.id = {
     help_changelog = "<font size='13'><p align='center'><o>Versi 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Perubahan beberapa sprite untuk <ch>natal</ch>!\n• Perbaikan <r>bug visual</r>\n• <vp>Infrastruktur modul</vp> telah ditingkatkan\n• Anda sekarang bisa <t>menyetel ulang kekuatan</t> ke <t>kunci default</t>\n• <cep>Ketika semua pemain menyelesaikan peta</cep>, timer akan disetel ke <cep>5 detik dibandingkan 20</cep>.\n• <cs>Penambahan mode AFK</cs>\n• Meningkatkan <ps>cooldown salju</ps>",
 
     -- Congratulation messages
-    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<vp>%ss</vp>)",
+    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<t>%ss</t>)",
     finished = "<d><o>%s</o> telah menyelesaikan parkour dalam <vp>%s</vp> detik, <fc>selamat!",
     unlocked_power = "<ce><d>%s</d> telah membuka kemampuan <vp>%s</vp>.",
 

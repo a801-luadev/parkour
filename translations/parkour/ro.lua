@@ -30,7 +30,7 @@ translations.ro = {
 	help_changelog = "<font size='13'><p align='center'><o>Versiunea 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Câteva imagini au fost schimbate pentru <ch>crăciun</ch>!\n• Am rezolvat <r>probleme vizuale</r>\n• <vp>Infrastructura modulului</vp> a fost îmbunătățită\n• Acum poți <t>reseta o putere</t> înapoi la <t>tasta obișnuită</t>\n• <cep>Când toată lumea termină harta</cep>, ceasul va fi setat la  <cep>5 secunde în loc de 20</cep>.\n• <cs>Modul AFK a fost adăugat</cs>!\n• A fost mărit <ps>timpul de așteptare pentru bulgăre</ps>",
 
 	-- Congratulation messages
-	reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<vp>%ss</vp>)",
+	reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> a terminat parkour în <vp>%s</vp> secunde, <fc>felicitări!",
 	unlocked_power = "<ce><d>%s</d> a deblocat puterea <vp>%s</vp>.",
 

@@ -30,7 +30,7 @@ translations.tr = {
 	help_changelog = "<font size='13'><p align='center'><o>Versiyon 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• <ch>Noel</ch> için bazı görselleri değiştirdik!\n• <r>Görsel hataları</r> düzelttik.\n• <vp>Modül altyapısı</vp> güçlendirildi\n• Artık <t>bir gücü</t> <t>varsayılan tuşuna</t> geri atayabilirsiniz.\n• <cep>Herkes haritayı tamamladığında</cep>, süre <cep>20 saniyeye değil de 5 saniyeye</cep> ayarlanacak.\n• <cs>AFK modu eklendi</cs>\n• <ps>Kartopu süresi</ps> arttırıldı",
 
 	-- Congratulation messages
-	reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeye ulaştınız. (<vp>%ss</vp>)",
+	reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeye ulaştınız. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> parkuru <vp>%s</vp> saniyede bitirdi, <fc>Tebrikler!",
 	unlocked_power = "<ce><d>%s</d>, <vp>%s</vp> becerisini açtı.",
 

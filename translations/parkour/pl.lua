@@ -30,7 +30,7 @@ translations.pl = {
 	help_changelog = "<font size='13'><p align='center'><o>Wersja 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Zmieniono niektóre sprite'y na <ch>świąteczne</ch>!\n• Naprawiono <r>wizualne błędy</r>\n• <vp>Infrastruktura modułu</vp> został ulepszony\n• Możesz teraz <t>zresetować moce</t> na <t>klucz główny</t>\n• <cep>Kiedy wszyscy ukończą mapę</cep>, czas będzie ustawiony na <cep>5 sekund zamiast 20</cep>.\n• <cs>Dodano trybu AFK</cs>\n• Powiększono <ps>czas odnowienia śnieżki</ps>",
 
 	-- Congratulation messages
-	reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<vp>%ss</vp>)",
+	reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> skończyłeś parkour w <vp>%s</vp> sekundach, <fc>Gratulacje!",
 	unlocked_power = "<ce><d>%s</d> odblokował <vp>%s</vp> moc.",
 

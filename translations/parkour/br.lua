@@ -30,7 +30,7 @@ translations.br = {
 	help_changelog = "<font size='13'><p align='center'><o>Versão 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Algumas imagens foram alteradas para o <ch>natal</ch>!\n• Corrigidos <r>bugs visuais</r>\n• <vp>Infraestrutura do módulo</vp> foi melhorada\n• Agora você pode <t>reiniciar as configurações de um poder</t> para sua <t>tecla padrão</t>\n• <cep>Quando todos terminarem o mapa</cep>, o tempo restante será de <cep>5 segundos ao invés de 20 segundos</cep>.\n• <cs>Adicionado Modo AFK</cs>\n• Aumentado <ps>o tempo de espera para atirar bolas de neve</ps>",
 
 	-- Congratulation messages
-	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>. (<vp>%ss</vp>)",
+	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> terminou o parkour em <vp>%s</vp> segundos, <fc>parabéns!",
 	unlocked_power = "<ce><d>%s</d> desbloqueou o poder <vp>%s</vp>.",
 

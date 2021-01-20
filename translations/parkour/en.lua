@@ -30,7 +30,7 @@ translations.en = {
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Changed some sprites for <ch>christmas</ch>!\n• Fixed <r>visual bugs</r>\n• <vp>Module infrastructure</vp> has been improved\n• You can now <t>reset a power</t> to the <t>default key</t>\n• <cep>When everyone finishes the map</cep>, the timer will be set to <cep>5 seconds instead of 20</cep>.\n• <cs>Added AFK mode</cs>\n• Increased <ps>snowball cooldown</ps>",
 
 	-- Congratulation messages
-	reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>. (<vp>%ss</vp>)",
+	reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> finished the parkour in <vp>%s</vp> seconds, <fc>congratulations!",
 	unlocked_power = "<ce><d>%s</d> unlocked the <vp>%s</vp> power.",
 

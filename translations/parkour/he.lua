@@ -30,7 +30,7 @@ translations.he = {
 	help_changelog = "<font size='13'><p align='center'><o>גירסה 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• שינינו חלק מהחפצים למראה של <ch>חג המולד</ch>!\n• <r>באגים וויזואלים</r> תוקנו\n• <vp>תשתית המודול</vp> שופרה\n• כעת אתם יכולים<t>לאתחל כוח</t> ל<t>מקש ברירת המחדל</t>\n• <cep>כאשר כולם מסיימים את המפה</cep>, הטיימר יתעדכן ל-<cep>5 שניות במקום 20</cep>.\n• <cs>נוסף מצב AFK</cs>\n• הגדלנו את <ps>זמן הטעינה של כדורי השלג</ps>",
 
 	-- Congratulation messages
-	reached_level = "<d>ברכות! עלית לרמה <vp>%s</vp>. (<vp>%ss</vp>)",
+	reached_level = "<d>ברכות! עלית לרמה <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> סיים את הפארקור תוך <vp>%s</vp> שניות, <fc>ברכות!",
 	unlocked_power = "<ce><d>%s</d> השיג את הכח <vp>%s</vp>.",
 
