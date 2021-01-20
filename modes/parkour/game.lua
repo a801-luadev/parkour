@@ -34,6 +34,12 @@ local savePlayerData
 local ranks
 local bindKeyboard
 
+local changePlayerSize = function() end
+if string.find(room.name, "test", 1, true) then
+	-- only enable on testing rooms
+	changePlayerSize = tfm.exec.changePlayerSize
+end
+
 local function addCheckpointImage(player, x, y)
 	if not x then
 		local level = levels[ players_level[player] + 1 ]
@@ -140,16 +146,19 @@ onEvent("NewPlayer", function(player)
 			victory_count = victory_count + 1
 		end
 
+		local level
 		if players_level[player] then
-			local level = levels[ players_level[player] ]
+			level = levels[ players_level[player] ]
 			if level then
 				tfm.exec.movePlayer(player, level.x, level.y)
 			end
 		else
+			level = levels[1]
 			players_level[player] = 1
 			tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
 		end
 
+		changePlayerSize(player, level.size)
 		tfm.exec.setPlayerScore(player, players_level[player], false)
 
 		local next_level = levels[ players_level[player] + 1 ]
@@ -305,8 +314,10 @@ onEvent("NewGame", function()
 		end
 	end
 
+	local size = levels[1].size
 	for player in next, in_room do
 		players_level[player] = 1
+		changePlayerSize(player, size)
 		tfm.exec.setPlayerScore(player, 1, false)
 	end
 
@@ -363,6 +374,12 @@ onEvent("Loop", function()
 						taken = (now - (times.checkpoint[player] or times.map_start)) / 1000
 						times.checkpoint[player] = now
 						players_level[name] = level_id
+
+						if next_level.size ~= levels[ level_id - 1 ].size then
+							-- need to change the size
+							changePlayerSize(name, next_level.size)
+						end
+
 						if not victory[name] then
 							tfm.exec.setPlayerScore(name, level_id, false)
 						end
@@ -401,6 +418,12 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	local taken = (os.time() - (times.checkpoint[player] or times.map_start)) / 1000
 	times.checkpoint[player] = os.time()
 	players_level[player] = bonus
+
+	if level.size ~= levels[ bonus - 1 ].size then
+		-- need to change the size
+		changePlayerSize(player, level.size)
+	end
+
 	if not victory[player] then
 		tfm.exec.setPlayerScore(player, bonus, false)
 	end
@@ -476,6 +499,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.removeBonus(players_level[player] + 1, player)
 		end
 		players_level[player] = checkpoint
+		changePlayerSize(player, levels[checkpoint].size)
 		times.checkpoint[player] = os.time()
 		tfm.exec.killPlayer(player)
 		if not victory[player] then
@@ -528,6 +552,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		players_level[player] = 1
+		changePlayerSize(player, levels[1].size)
 		times.generated[player] = nil
 		times.checkpoint[player] = nil
 		victory[player] = nil

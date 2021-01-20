@@ -31,7 +31,10 @@ onEvent("NewPlayer", function(player)
 		)
 		tfm.exec.addPhysicObject(0, chair_x, chair_y - 7, chair_prop)
 	end
-	tfm.exec.changePlayerSize(player, 0.5)
+	if not string.find(room.name, "test", 1, true) then
+		-- has to be disabled, because size is already handled by normal parkour
+		tfm.exec.changePlayerSize(player, 0.5)
+	end
 	in_room[player] = true
 end)
 

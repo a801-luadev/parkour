@@ -252,14 +252,20 @@ onEvent("NewGame", function()
 	end
 
 	local properties = getTagProperties(mouse_start)
-	levels[count] = {x = properties.X, y = properties.Y}
+	levels[count] = {
+		x = properties.X, y = properties.Y,
+		size = properties.size or 1
+	}
 
 	for tag in string.gmatch(xml, '<O%s+(.-)%s+/>') do
 		properties = getTagProperties(tag)
 
 		if properties.C == 22 then
 			count = count + 1
-			levels[count] = {x = properties.X, y = properties.Y, stop = properties.stop}
+			levels[count] = {
+				x = properties.X, y = properties.Y,
+				stop = properties.stop, size = properties.size
+			}
 		end
 	end
 
@@ -270,8 +276,23 @@ onEvent("NewGame", function()
 		if properties.T == 19 and properties.C == "329cd2" then
 			chair = true
 			count = count + 1
-			levels[count] = {x = properties.X, y = properties.Y - 40}
+			levels[count] = {
+				x = properties.X, y = properties.Y - 40,
+				size = 1
+			}
 			break
+		end
+	end
+
+	if submode == "smol" then
+		local level
+		for i = 1, count do
+			level = levels[i]
+			if level.size then
+				level.size = level.size / 2
+			else
+				level.size = levels[i - 1].size
+			end
 		end
 	end
 
