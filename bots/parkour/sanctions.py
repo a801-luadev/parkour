@@ -3,6 +3,7 @@ Handles sanctions (power removals, bans)
 """
 
 from parkour.env import env
+import traceback
 import aiotfm
 
 
@@ -67,27 +68,37 @@ class Sanctions(aiotfm.Client):
 			minutes *= 60 * 1000 # make it milliseconds
 			minutes += self.tfm_time() # sync it with transformice
 
-		if online:
-			file = await self.load_player_file(name, online_check=False)
+		try:
+			if online:
+				file = await self.load_player_file(name, online_check=False)
 
-			if minutes == 1:
-				file["banned"] = 2
+				if minutes == 1:
+					file["banned"] = 2
+				else:
+					file["banned"] = minutes
+
+				await self.save_player_file(
+					name, file, "banned",
+					online_check=False
+				)
+
 			else:
-				file["banned"] = minutes
-
-			await self.save_player_file(
-				name, file, "banned",
-				online_check=False
+				await self.broadcast_module(
+					3,
+					"{}\x00{}\x00{}"
+					.format(name, pid, minutes)
+				)
+		except Exception:
+			await self.send_webhook(
+				env.webhooks.sanctions,
+				"<@212634414021214209> ```python{}```"
+				.format(traceback.format_exc())
 			)
+
+			await whisper.reply("Couldn't apply the sanction.")
 
 		else:
-			await self.broadcast_module(
-				3,
-				"{}\x00{}\x00{}"
-				.format(name, pid, minutes)
-			)
-
-		await whisper.reply("Action applied.")
+			await whisper.reply("Action applied.")
 
 	async def kill_request(self, whisper, author, ranks, cmd, args):
 		# Argument check

@@ -30,7 +30,7 @@ translations.ro = {
 	help_changelog = "<font size='13'><p align='center'><o>Versiunea 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Câteva imagini au fost schimbate pentru <ch>crăciun</ch>!\n• Am rezolvat <r>probleme vizuale</r>\n• <vp>Infrastructura modulului</vp> a fost îmbunătățită\n• Acum poți <t>reseta o putere</t> înapoi la <t>tasta obișnuită</t>\n• <cep>Când toată lumea termină harta</cep>, ceasul va fi setat la  <cep>5 secunde în loc de 20</cep>.\n• <cs>Modul AFK a fost adăugat</cs>!\n• A fost mărit <ps>timpul de așteptare pentru bulgăre</ps>",
 
 	-- Congratulation messages
-	reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<vp>%ss</vp>)",
+	reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> a terminat parkour în <vp>%s</vp> secunde, <fc>felicitări!",
 	unlocked_power = "<ce><d>%s</d> a deblocat puterea <vp>%s</vp>.",
 
@@ -63,30 +63,30 @@ translations.ro = {
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>EȘTI ÎN MODUL AFK</b></bv>\nMIȘCĂ-TE PENTRU A JUCA</font>\n\n<font size='30'><u><t>Reamintire:</t></u></font>\n\n<font size='15'><r>Jucătorii cu o linie roșie deasupra lor nu doresc ajutor!\nTrolling/blocarea altor jucători în parkour NU este permisă!<d>\nAlătură-te <cep><a href='event:discord'>serverului nostru de discord</a></cep>!\nVrei să contribui cu cod? Vizitează <cep><a href='event:github'>pagina noastră github</a></cep>\nAi o hartă bună? Posteaz-o în <cep><a href='event:map_submission'>firul pentru hărți parkour</a></cep>\nVerifică <cep><a href='event:forum'>firul oficial</a></cep> pentru mai multe informații!\nAjută-ne <cep><a href='event:donate'>donând!</a></cep>",
 	options = "<p align='center'><font size='20'>Opțiuni Parkour</font></p>\n\nFolosește <b>QWERTY</b> (oprește dacă <b>AZERTY</b>)\n\nFolosește scurtătura <b>M</b> pentru <b>/mort</b> (oprește pentru <b>DEL</b>)\n\nArată-ți cooldown-urile pentru puteri\n\nArată butonul de puteri\n\nArată butonul de ajutor\n\nArată anunțurile de completare a hărților\n\nArată simbolul de „fără ajutor”",
 	cooldown = "<v>[#] <r>Așteaptă câteva secunde pentru a face asta din nou.",
-	power_options = ("<font size='13' face='Lucida Console'>tastatură <b>QWERTY</b>" ..
+	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>tastatură <b>QWERTY</b>" ..
 					 "\n\n<b>Ascunde</b> numărul hărților completate" ..
 					 "\n\nPune <b>tasta obișnuită</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Completează <v>%s</v> hărți" ..
+	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completează <v>%s</v> hărți" ..
 					"<font size='5'>\n\n</font>pentru a debloca" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Completează <v>%s</v> hărți" ..
+	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completează <v>%s</v> hărți" ..
 					"<font size='5'>\n\n</font>pentru a îmbunătăți" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Fii pe locul <v>%s</v>" ..
+	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Fii pe locul <v>%s</v>" ..
 					"<font size='5'>\n\n</font>pentru a debloca" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Fii pe locul <v>%s</v>" ..
+	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Fii pe locul <v>%s</v>" ..
 					"<font size='5'>\n\n</font>pentru a îmbunătăți" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				 "<font size='5'>\n\n</font>Hărți completate"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>Clasamentul general"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				   "<font size='5'>\n\n</font>Clasamentul săptămânal"),
-	badges = "<font size='14' face='Lucida Console,Verdana'>Insigne (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Insigne (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Hărțile acestui jucător sunt private. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 				"Poziția în clasamentul general: <b><v>%s</v></b>\n\n" ..
 				"Poziția în clasamentul săptămânal<b><v>%s</v></b>"),
 	map_count = "Hărți completate: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",

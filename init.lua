@@ -40,9 +40,13 @@ local links = {
 
 local starting = string.sub(room.name, 1, 2)
 
-local is_tribe
+local is_tribe = starting == "*\003"
 local tribe, module_name, submode
 local flags = ""
+
+if is_tribe then
+	tribe = string.sub(room.name, 3)
+end
 
 room.lowerName = string.lower(room.name)
 room.shortName = string.gsub(room.name, "%-?#parkour", "", 1)
@@ -62,10 +66,7 @@ local function initialize_parkour() -- so it uses less space after building
 	{% require-package "modes/parkour" %}
 end
 
-if starting == "*\003" then
-	is_tribe = true
-	tribe = string.sub(room.name, 3)
-
+if is_tribe then
 	initialize_parkour()
 else
 	local pos
@@ -88,6 +89,9 @@ else
 		{% require-package "modes/freezertag" %}
 	elseif submode == "rocketlaunch" then
 		{% require-package "modes/rocketlaunch" %}
+	elseif submode == "smol" then
+		initialize_parkour()
+		{% require-package "modes/smol" %}
 	else
 		initialize_parkour()
 	end

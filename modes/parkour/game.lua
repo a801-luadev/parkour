@@ -5,7 +5,7 @@ local player_count = 0
 local victory_count = 0
 local less_time = false
 local victory = {_last_level = {}}
-local bans = {[0] = true} -- souris banned
+local bans = {}
 local in_room = {}
 local online = {}
 local hidden = {}
@@ -13,7 +13,7 @@ local players_level = {}
 local times = {
 	map_start = 0,
 
-	generation = {},
+	generated = {},
 	checkpoint = {},
 	movement = {}
 }
@@ -33,6 +33,12 @@ local checkCooldown
 local savePlayerData
 local ranks
 local bindKeyboard
+
+local changePlayerSize = function() end
+if string.find(room.name, "test", 1, true) then
+	-- only enable on testing rooms
+	changePlayerSize = tfm.exec.changePlayerSize
+end
 
 local function addCheckpointImage(player, x, y)
 	if not x then
@@ -96,12 +102,14 @@ local function enableSpecMode(player, enable)
 	showStats()
 end
 
-local function checkBan(player, data)
-	local id = room.playerList[player]
-	if not id or not in_room[player] then
-		return
+local function checkBan(player, data, id)
+	if not id then
+		id = room.playerList[player]
+		if not id or not in_room[player] then
+			return
+		end
+		id = id.id
 	end
-	id = id.id
 
 	if data.banned and (data.banned == 2 or os.time() < data.banned) then
 		bans[id] = true
@@ -138,16 +146,19 @@ onEvent("NewPlayer", function(player)
 			victory_count = victory_count + 1
 		end
 
+		local level
 		if players_level[player] then
-			local level = levels[ players_level[player] ]
+			level = levels[ players_level[player] ]
 			if level then
 				tfm.exec.movePlayer(player, level.x, level.y)
 			end
 		else
+			level = levels[1]
 			players_level[player] = 1
 			tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
 		end
 
+		changePlayerSize(player, level.size)
 		tfm.exec.setPlayerScore(player, players_level[player], false)
 
 		local next_level = levels[ players_level[player] + 1 ]
@@ -204,12 +215,34 @@ onEvent("PlayerLeft", function(player)
 		less_time = true
 	end
 
+	if not AfkInterface.open[player] then
+		local required = 4 - player_count
+
+		if required > 0 then
+			local to_remove = {}
+
+			for name in next, AfkInterface.open do
+				enableSpecMode(name, false)
+				to_remove[required] = name
+				required = required - 1
+				if required == 0 then break end
+			end
+
+			for name = 1, #to_remove do
+				AfkInterface:remove(name)
+			end
+		end
+	end
+
 	showStats()
 end)
 
 onEvent("PlayerDied", function(player)
-	if not room.playerList[player] then return end
-	if bans[room.playerList[player].id] then return end
+	local info = room.playerList[player]
+
+	if not info then return end
+	if info.id == 0 then return end
+	if bans[info.id] then return end
 	if (not levels) or (not players_level[player]) then return end
 
 	local level = levels[ players_level[player] ]
@@ -256,6 +289,10 @@ onEvent("NewGame", function()
 	times.map_start = os.time()
 	checkpoint_info.version = checkpoint_info.next_version
 
+	if submode == "smol" then
+		count_stats = false
+	end
+
 	if records_admins then
 		less_time = true
 	else
@@ -275,11 +312,13 @@ onEvent("NewGame", function()
 			end
 			addCheckpointImage(player, start_x, start_y)
 		end
-	end
 
-	for player in next, in_room do
-		players_level[player] = 1
-		tfm.exec.setPlayerScore(player, 1, false)
+		local size = levels[1].size
+		for player in next, in_room do
+			players_level[player] = 1
+			changePlayerSize(player, size)
+			tfm.exec.setPlayerScore(player, 1, false)
+		end
 	end
 
 	for player in next, spec_mode do
@@ -305,15 +344,17 @@ onEvent("Loop", function()
 		local player
 		for name in next, in_room do
 			player = room.playerList[name]
-			if spec_mode[name] or (player and bans[player.id]) then
-				tfm.exec.killPlayer(name)
-			elseif (player_count > 4
-					and not records_admins
-					and not review_mode
-					and not victory[name]
-					and now >= times.movement[name] + 120000) then -- 2 mins afk
-				enableSpecMode(name, true)
-				AfkInterface:show(name)
+			if player then
+				if spec_mode[name] or player.id == 0 or bans[player.id] then
+					tfm.exec.killPlayer(name)
+				elseif (player_count > 4
+						and not records_admins
+						and not review_mode
+						and not victory[name]
+						and now >= times.movement[name] + 120000) then -- 2 mins afk
+					enableSpecMode(name, true)
+					AfkInterface:show(name)
+				end
 			end
 		end
 
@@ -333,6 +374,12 @@ onEvent("Loop", function()
 						taken = (now - (times.checkpoint[player] or times.map_start)) / 1000
 						times.checkpoint[player] = now
 						players_level[name] = level_id
+
+						if next_level.size ~= levels[ level_id - 1 ].size then
+							-- need to change the size
+							changePlayerSize(name, next_level.size)
+						end
+
 						if not victory[name] then
 							tfm.exec.setPlayerScore(name, level_id, false)
 						end
@@ -371,6 +418,12 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	local taken = (os.time() - (times.checkpoint[player] or times.map_start)) / 1000
 	times.checkpoint[player] = os.time()
 	players_level[player] = bonus
+
+	if level.size ~= levels[ bonus - 1 ].size then
+		-- need to change the size
+		changePlayerSize(player, level.size)
+	end
+
 	if not victory[player] then
 		tfm.exec.setPlayerScore(player, bonus, false)
 	end
@@ -414,6 +467,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>You can't toggle review mode in this room.", player)
 		end
 
+		count_stats = false
 		review_mode = not review_mode
 		if review_mode then
 			tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
@@ -445,6 +499,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.removeBonus(players_level[player] + 1, player)
 		end
 		players_level[player] = checkpoint
+		changePlayerSize(player, levels[checkpoint].size)
 		times.checkpoint[player] = os.time()
 		tfm.exec.killPlayer(player)
 		if not victory[player] then
@@ -497,6 +552,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		players_level[player] = 1
+		changePlayerSize(player, levels[1].size)
 		times.generated[player] = nil
 		times.checkpoint[player] = nil
 		victory[player] = nil
@@ -548,7 +604,7 @@ end)
 
 onEvent("GameDataLoaded", function(data)
 	if data.banned then
-		bans = {[0] = true}
+		bans = {}
 		for id, value in next, data.banned do
 			if value == 1 or os.time() < value then
 				bans[tonumber(id)] = true

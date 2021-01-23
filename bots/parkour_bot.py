@@ -4,16 +4,20 @@ from parkour.apigateway import ApiGateway
 from parkour.base import Base
 from parkour.chat import Chat
 from parkour.commands import Commands
+from parkour.graphs import RoomGraphs
 from parkour.logs import Logs
 from parkour.records import Records
 from parkour.reports import Reports
 from parkour.sanctions import Sanctions
+from parkour.standalone import StandaloneGateway
 from parkour.verification import Verification
 from parkour.whois import Whois
 
 
 class ParkourBot(
 		ApiGateway,
+		StandaloneGateway,
+		RoomGraphs,
 
 		Records,
 		Verification,
@@ -31,7 +35,7 @@ class ParkourBot(
 if __name__ == '__main__':
 	loop = asyncio.get_event_loop()
 
-	bot = ParkourBot(auto_restart=True, bot_role=True, loop=loop)
+	bot = ParkourBot(bot_role=True, loop=loop)
 	loop.create_task(bot.start())
 
 	try:

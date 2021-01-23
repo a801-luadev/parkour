@@ -140,35 +140,75 @@ class Reports(aiotfm.Client):
 		):
 			return True
 
-		if cmd == "report":
+		if cmd == "norep":
+			if not ranks["admin"] and not ranks["mod"]:
+				return True
+
+			if not args:
+				await whisper.reply("Usage: .norep Username#0000")
+				return True
+
+			target = normalize_name(args[0])
+			pid, name, online = await self.get_player_info(target)
+			if name is None or not online:
+				await whisper.reply("That player ({}) is not online.".format(target))
+				return True
+
+			file = await self.load_player_file(name, online_check=False)
+			if file is None:
+				await whisper.reply("Could not load {}'s file.".format(name))
+				return True
+
+			file["report"] = not file["report"]
+			if not await self.save_player_file(
+				name, file, "report", online_check=False
+			):
+				await whisper.reply("Could not modify {}'s file.".format(name))
+				return True
+
+			action = "enabled" if file["report"] else "disabled"
+			await self.send_webhook(
+				env.webhooks.sanctions,
+				"**`[NOREP]:`** `{}` has {} reports from `{}` (ID: `{}`)"
+				.format(author, action, name, pid)
+			)
+			await whisper.reply(
+				"Reports from {} (ID: {}) have been {}."
+				.format(name, pid, action)
+			)
+
+		elif cmd == "report":
 			# Argument check
 			if not args:
-				return await whisper.reply("Usage: .report Username#0000")
+				await whisper.reply("Usage: .report Username#0000")
+				return True
 
 			reported = normalize_name(args[0])
 			if reported == author:
-				return await whisper.reply("Why are you trying to report yourself?")
+				await whisper.reply("Why are you trying to report yourself?")
+				return True
 
 			pid, name, online = await self.get_player_info(reported)
 			if name is None or not online:
-				return await whisper.reply("That player ({}) is not online.".format(reported))
+				await whisper.reply("That player ({}) is not online.".format(reported))
+				return True
 
 			await whisper.reply("Your report of the player {} will be handled shortly.".format(reported))
 
 			# Player information check
 			if self.report_cooldown(author):
-				return
+				return True
 
 			if reported in self.reported:
-				return
+				return True
 
 			file = await self.load_player_file(author, online_check=False)
 			if file is None or not file["report"]:
-				return
+				return True
 
 			file = await self.load_player_file(reported, online_check=False)
 			if file is None:
-				return
+				return True
 
 			now = self.tfm_time()
 			if now < file.get("killed", 0):
@@ -176,7 +216,7 @@ class Reports(aiotfm.Client):
 
 			ban = file.get("banned", 0)
 			if ban == 2 or now < ban:
-				return
+				return True
 
 			# Create report
 			report = self.rep_id

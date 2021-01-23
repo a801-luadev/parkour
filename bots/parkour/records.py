@@ -53,7 +53,7 @@ class Records(aiotfm.Client):
 			await self.send_webhook(
 				env.webhooks.parkour_records
 				if taken > 45 else
-				env.webhooks.records_suspects,
+				env.webhooks.record_suspects,
 
 				"**`[RECORD]:`** `{}` (`{}`) completed the map `@{}` "
 				"in the room `{}` in `{}` seconds."
@@ -130,9 +130,9 @@ class Records(aiotfm.Client):
 			# first record + 15% of the time, remove some decimals
 			threshold = round(record * 1.15 * 1000) / 1000
 
+		room = None
 		if taken > threshold:
 			webhook = env.webhooks.game_victory
-			room = None
 
 		else:
 			file = await self.load_player_file(name)

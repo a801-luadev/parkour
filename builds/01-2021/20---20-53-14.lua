@@ -3800,7 +3800,7 @@ local function initialize_parkour() -- so it uses less space after building
 		local properties = getTagProperties(mouse_start)
 		levels[count] = {
 			x = properties.X, y = properties.Y,
-			size = tonumber(properties.size) or 1
+			size = properties.size or 1
 		}
 
 		for tag in string.gmatch(xml, '<O%s+(.-)%s+/>') do
@@ -3810,7 +3810,7 @@ local function initialize_parkour() -- so it uses less space after building
 				count = count + 1
 				levels[count] = {
 					x = properties.X, y = properties.Y,
-					stop = properties.stop, size = tonumber(properties.size)
+					stop = properties.stop, size = properties.size
 				}
 			end
 		end
@@ -4268,13 +4268,13 @@ local function initialize_parkour() -- so it uses less space after building
 				end
 				addCheckpointImage(player, start_x, start_y)
 			end
+		end
 
-			local size = levels[1].size
-			for player in next, in_room do
-				players_level[player] = 1
-				changePlayerSize(player, size)
-				tfm.exec.setPlayerScore(player, 1, false)
-			end
+		local size = levels[1].size
+		for player in next, in_room do
+			players_level[player] = 1
+			changePlayerSize(player, size)
+			tfm.exec.setPlayerScore(player, 1, false)
 		end
 
 		for player in next, spec_mode do
@@ -11564,7 +11564,7 @@ else
 			if next_load and os.time() >= next_load then
 				next_load = nil
 				is_smol = true
-				newGame(next_xml, room.mirroredMap)
+				newGame(next_xml)
 			end
 		end)
 		--[[ End of file modes/smol/tinyfier.lua ]]--

@@ -4268,13 +4268,13 @@ local function initialize_parkour() -- so it uses less space after building
 				end
 				addCheckpointImage(player, start_x, start_y)
 			end
+		end
 
-			local size = levels[1].size
-			for player in next, in_room do
-				players_level[player] = 1
-				changePlayerSize(player, size)
-				tfm.exec.setPlayerScore(player, 1, false)
-			end
+		local size = levels[1].size
+		for player in next, in_room do
+			players_level[player] = 1
+			changePlayerSize(player, size)
+			tfm.exec.setPlayerScore(player, 1, false)
 		end
 
 		for player in next, spec_mode do

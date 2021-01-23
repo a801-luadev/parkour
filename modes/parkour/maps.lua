@@ -58,6 +58,9 @@ local levels
 local perms
 local review_mode
 local records_admins = string.find(room.lowerName, "records", 1, true) and {}
+if records_admins and submode == "smol" then
+	records_admins = nil
+end
 
 local function selectMap(sections, list, count)
 	if sections._map_pointer > maps_per_section then
@@ -131,8 +134,9 @@ local function selectMap(sections, list, count)
 	return list[map]
 end
 
+local is_test = string.find(room.name, "test", 1, true)
 local function newMap()
-	count_stats = true
+	count_stats = not review_mode
 	map_change_cd = os.time() + 20000
 
 	local map
@@ -142,7 +146,7 @@ local function newMap()
 		map = selectMap(maps.sections_high, maps.list_high, maps.high_count)
 	end
 
-	tfm.exec.newGame(map)
+	tfm.exec.newGame(map, is_test and math.random(3000000) <= 1000000)
 end
 
 local function invalidMap(arg)
@@ -202,7 +206,7 @@ onEvent("GameDataLoaded", function(data)
 		-- so _count will be ignored
 		maps.polls._count = #data.map_polls
 	end
-	
+
 	if data.lowmaps then
 		maps.list_low = data.lowmaps
 		maps.low_count = #data.lowmaps
@@ -249,14 +253,20 @@ onEvent("NewGame", function()
 	end
 
 	local properties = getTagProperties(mouse_start)
-	levels[count] = {x = properties.X, y = properties.Y}
+	levels[count] = {
+		x = properties.X, y = properties.Y,
+		size = tonumber(properties.size) or 1
+	}
 
 	for tag in string.gmatch(xml, '<O%s+(.-)%s+/>') do
 		properties = getTagProperties(tag)
 
 		if properties.C == 22 then
 			count = count + 1
-			levels[count] = {x = properties.X, y = properties.Y, stop = properties.stop}
+			levels[count] = {
+				x = properties.X, y = properties.Y,
+				stop = properties.stop, size = tonumber(properties.size)
+			}
 		end
 	end
 
@@ -267,13 +277,38 @@ onEvent("NewGame", function()
 		if properties.T == 19 and properties.C == "329cd2" then
 			chair = true
 			count = count + 1
-			levels[count] = {x = properties.X, y = properties.Y - 40}
+			levels[count] = {
+				x = properties.X, y = properties.Y - 40,
+				size = 1
+			}
 			break
 		end
 	end
 
-	if not chair or count < 3 then -- start, at least one nail and end chair
-		return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
+	if submode == "smol" then
+		local level
+		for i = 1, count do
+			level = levels[i]
+			if level.size then
+				level.size = level.size / 2
+			else
+				level.size = levels[i - 1].size
+			end
+		end
+	else
+		local level
+		for i = 1, count do
+			level = levels[i]
+			if not level.size then
+				level.size = levels[i - 1].size
+			end
+		end
+	end
+
+	if room.xmlMapInfo.author ~= "#Module" then
+		if not chair or count < 3 then -- start, at least one nail and end chair
+			return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
+		end
 	end
 
 	if room.mirroredMap then
@@ -284,7 +319,12 @@ onEvent("NewGame", function()
 
 	tfm.exec.setGameTime(1080)
 
-	if count_stats and not is_tribe and not records_admins and not review_mode and room.xmlMapInfo.permCode ~= 41 then
+	if (count_stats
+		and not is_tribe
+		and not records_admins
+		and not review_mode
+		and room.xmlMapInfo.permCode ~= 41
+		and room.xmlMapInfo.author ~= "#Module") then
 		is_invalid = os.time() + 3000
 		return
 	end
@@ -335,6 +375,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		if not records_cond and not tribe_cond and normal_cond then
 			-- logged when using staff powers
+			if review_mode and perms[player].enable_review then
+				-- legitimate review mode
+				return
+			end
 			logCommand(player, "map", math.min(quantity, 2), args)
 		end
 	end

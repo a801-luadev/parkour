@@ -40,13 +40,9 @@ local links = {
 
 local starting = string.sub(room.name, 1, 2)
 
-local is_tribe = starting == "*\003"
+local is_tribe
 local tribe, module_name, submode
 local flags = ""
-
-if is_tribe then
-	tribe = string.sub(room.name, 3)
-end
 
 room.lowerName = string.lower(room.name)
 room.shortName = string.gsub(room.name, "%-?#parkour", "", 1)
@@ -1466,7 +1462,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Versiunea 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Câteva imagini au fost schimbate pentru <ch>crăciun</ch>!\n• Am rezolvat <r>probleme vizuale</r>\n• <vp>Infrastructura modulului</vp> a fost îmbunătățită\n• Acum poți <t>reseta o putere</t> înapoi la <t>tasta obișnuită</t>\n• <cep>Când toată lumea termină harta</cep>, ceasul va fi setat la  <cep>5 secunde în loc de 20</cep>.\n• <cs>Modul AFK a fost adăugat</cs>!\n• A fost mărit <ps>timpul de așteptare pentru bulgăre</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> a terminat parkour în <vp>%s</vp> secunde, <fc>felicitări!",
 		unlocked_power = "<ce><d>%s</d> a deblocat puterea <vp>%s</vp>.",
 
@@ -1636,7 +1632,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Verzió: 2.8.0 - 2020/11/07</o></p>\n\n<font size='11'>• <vp>Fejlődöttt a jelentés rendszer</vp>: Most már tudsz suttogni <t>/c Parkour#8558 .report Felhasználónév#0000</t>",
 
 		-- Congratulation messages
-		reached_level = "<d>Gratulálunk! Elérted a(z) <vp>%s</vp>. ellenőrző pontot. (<t>%ss</t>)",
+		reached_level = "<d>Gratulálunk! Elérted a(z) <vp>%s</vp>. ellenőrző pontot. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> befejezte a parkour pályát <vp>%s</vp> másodperc alatt. <fc>Gratulálunk!",
 		unlocked_power = "<ce><d>%s</d> feloldotta a(z) <vp>%s</vp> képességet.",
 
@@ -1806,7 +1802,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>גירסה 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• שינינו חלק מהחפצים למראה של <ch>חג המולד</ch>!\n• <r>באגים וויזואלים</r> תוקנו\n• <vp>תשתית המודול</vp> שופרה\n• כעת אתם יכולים<t>לאתחל כוח</t> ל<t>מקש ברירת המחדל</t>\n• <cep>כאשר כולם מסיימים את המפה</cep>, הטיימר יתעדכן ל-<cep>5 שניות במקום 20</cep>.\n• <cs>נוסף מצב AFK</cs>\n• הגדלנו את <ps>זמן הטעינה של כדורי השלג</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>ברכות! עלית לרמה <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>ברכות! עלית לרמה <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> סיים את הפארקור תוך <vp>%s</vp> שניות, <fc>ברכות!",
 		unlocked_power = "<ce><d>%s</d> השיג את הכח <vp>%s</vp>.",
 
@@ -1976,7 +1972,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Version 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Changed some sprites for <ch>christmas</ch>!\n• Fixed <r>visual bugs</r>\n• <vp>Module infrastructure</vp> has been improved\n• You can now <t>reset a power</t> to the <t>default key</t>\n• <cep>When everyone finishes the map</cep>, the timer will be set to <cep>5 seconds instead of 20</cep>.\n• <cs>Added AFK mode</cs>\n• Increased <ps>snowball cooldown</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> finished the parkour in <vp>%s</vp> seconds, <fc>congratulations!",
 		unlocked_power = "<ce><d>%s</d> unlocked the <vp>%s</vp> power.",
 
@@ -2146,7 +2142,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Versión 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• ¡Se cambiaron algunas imágenes por <ch>Navidad</ch>!\n• Se arreglaron algunos <r>bugs visuales</r>\n• Se mejoró la <vp>infrastructura del módulo</vp>\n• Ahora podés <t>reiniciar un poder</t> a su <t>tecla original</t>\n• <cep>Cuando todos terminan el mapa</cep>, el temporizador será de <cep>5 segundos en vez de 20</cep>.\n• <cs>Se añadió el modo AFK</cs>\n• Se incrementó el <ps>tiempo de espera de la bola de nieve</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> completó el parkour en <vp>%s</vp> segundos, <fc>¡felicitaciones!",
 		unlocked_power = "<ce><d>%s</d> desbloqueó el poder <vp>%s<ce>.",
 
@@ -2316,7 +2312,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Версия 2.8.0 - 07/11/2020</o></p>\n\n<font size='11'>• <vp>Улучшена система жалоб на пользователей</vp>: Теперь вы можете написать в лс <t>/c Parkour#8558 .report Никнейм#0000</t>",
 
 		-- Congratulation messages
-		reached_level = "<d>Поздравляем! Вы достигли уровня <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Поздравляем! Вы достигли уровня <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> завершил паркур за <vp>%s</vp> секунд, <fc>поздравляем!",
 		unlocked_power = "<ce><d>%s</d> разблокировал способность <vp>%s</vp>.",
 
@@ -2486,7 +2482,7 @@ local function initialize_parkour() -- so it uses less space after building
 	    help_changelog = "<font size='13'><p align='center'><o>Versi 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Perubahan beberapa sprite untuk <ch>natal</ch>!\n• Perbaikan <r>bug visual</r>\n• <vp>Infrastruktur modul</vp> telah ditingkatkan\n• Anda sekarang bisa <t>menyetel ulang kekuatan</t> ke <t>kunci default</t>\n• <cep>Ketika semua pemain menyelesaikan peta</cep>, timer akan disetel ke <cep>5 detik dibandingkan 20</cep>.\n• <cs>Penambahan mode AFK</cs>\n• Meningkatkan <ps>cooldown salju</ps>",
 
 	    -- Congratulation messages
-	    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<t>%ss</t>)",
+	    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<vp>%ss</vp>)",
 	    finished = "<d><o>%s</o> telah menyelesaikan parkour dalam <vp>%s</vp> detik, <fc>selamat!",
 	    unlocked_power = "<ce><d>%s</d> telah membuka kemampuan <vp>%s</vp>.",
 
@@ -2656,7 +2652,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>版本 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• 更新了一些 <ch>聖誕</ch> 元素!\n• 修改了 <r>視覺上的漏洞</r>\n• 改善了 <vp>模組的架構</vp>\n• 你現在可以把 <t>能力重設</t> 回到 <t>預設鍵</t>\n• <cep>當房間裡所有人完成了地圖</cep>, 計時器會設成剩下 <cep>5 秒而不再是 20秒</cep>.\n• <cs>新增掛機模式</cs>\n• 新增 <ps>雪球冷卻時間</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。 (<t>%ss</t>)",
+		reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。 (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> 在 <vp>%s</vp> 秒內完成了地圖, <fc>恭喜!",
 		unlocked_power = "<ce><d>%s</d> 解鎖了 <vp>%s</vp> 能力。",
 
@@ -2827,7 +2823,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Version 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Changement de certaines images pour <ch>Noël</ch> !\n• Réparation de <r>bugs visuels</r>.\n• <vp>L'infrastructure du module</vp> a été amélioré.\n• Vous pouvez maintenant <t>réinitialiser un pouvoir</t> à sa <t>touche par défaut</t>.\n• <cep>Lorsque tout le monde finit la map</cep>, le temps est réduit à <cep>5 secondes au lieu de 20</cep>.\n• <cs>Ajout d'un mode AFK</cs>\n• Le <ps>cooldown de la boule de neige</ps> a été augmenté.",
 
 		-- Congratulation messages
-		reached_level = "<d>Bravo! Vous avez atteint le niveau <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Bravo! Vous avez atteint le niveau <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> a fini le parkour en <vp>%s</vp> secondes, <fc>félicitations !",
 		unlocked_power = "<ce><d>%s</d> a débloqué le pouvoir <vp>%s</vp>.",
 
@@ -2997,7 +2993,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Wersja 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Zmieniono niektóre sprite'y na <ch>świąteczne</ch>!\n• Naprawiono <r>wizualne błędy</r>\n• <vp>Infrastruktura modułu</vp> został ulepszony\n• Możesz teraz <t>zresetować moce</t> na <t>klucz główny</t>\n• <cep>Kiedy wszyscy ukończą mapę</cep>, czas będzie ustawiony na <cep>5 sekund zamiast 20</cep>.\n• <cs>Dodano trybu AFK</cs>\n• Powiększono <ps>czas odnowienia śnieżki</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> skończyłeś parkour w <vp>%s</vp> sekundach, <fc>Gratulacje!",
 		unlocked_power = "<ce><d>%s</d> odblokował <vp>%s</vp> moc.",
 
@@ -3167,7 +3163,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Versão 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Algumas imagens foram alteradas para o <ch>natal</ch>!\n• Corrigidos <r>bugs visuais</r>\n• <vp>Infraestrutura do módulo</vp> foi melhorada\n• Agora você pode <t>reiniciar as configurações de um poder</t> para sua <t>tecla padrão</t>\n• <cep>Quando todos terminarem o mapa</cep>, o tempo restante será de <cep>5 segundos ao invés de 20 segundos</cep>.\n• <cs>Adicionado Modo AFK</cs>\n• Aumentado <ps>o tempo de espera para atirar bolas de neve</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> terminou o parkour em <vp>%s</vp> segundos, <fc>parabéns!",
 		unlocked_power = "<ce><d>%s</d> desbloqueou o poder <vp>%s</vp>.",
 
@@ -3338,7 +3334,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Versiyon 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• <ch>Noel</ch> için bazı görselleri değiştirdik!\n• <r>Görsel hataları</r> düzelttik.\n• <vp>Modül altyapısı</vp> güçlendirildi\n• Artık <t>bir gücü</t> <t>varsayılan tuşuna</t> geri atayabilirsiniz.\n• <cep>Herkes haritayı tamamladığında</cep>, süre <cep>20 saniyeye değil de 5 saniyeye</cep> ayarlanacak.\n• <cs>AFK modu eklendi</cs>\n• <ps>Kartopu süresi</ps> arttırıldı",
 
 		-- Congratulation messages
-		reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeye ulaştınız. (<t>%ss</t>)",
+		reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeye ulaştınız. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> parkuru <vp>%s</vp> saniyede bitirdi, <fc>Tebrikler!",
 		unlocked_power = "<ce><d>%s</d>, <vp>%s</vp> becerisini açtı.",
 
@@ -3603,9 +3599,6 @@ local function initialize_parkour() -- so it uses less space after building
 	local perms
 	local review_mode
 	local records_admins = string.find(room.lowerName, "records", 1, true) and {}
-	if records_admins and submode == "smol" then
-		records_admins = nil
-	end
 
 	local function selectMap(sections, list, count)
 		if sections._map_pointer > maps_per_section then
@@ -3679,7 +3672,6 @@ local function initialize_parkour() -- so it uses less space after building
 		return list[map]
 	end
 
-	local is_test = string.find(room.name, "test", 1, true)
 	local function newMap()
 		count_stats = not review_mode
 		map_change_cd = os.time() + 20000
@@ -3691,7 +3683,7 @@ local function initialize_parkour() -- so it uses less space after building
 			map = selectMap(maps.sections_high, maps.list_high, maps.high_count)
 		end
 
-		tfm.exec.newGame(map, is_test and math.random(3000000) <= 1000000)
+		tfm.exec.newGame(map)
 	end
 
 	local function invalidMap(arg)
@@ -3798,20 +3790,14 @@ local function initialize_parkour() -- so it uses less space after building
 		end
 
 		local properties = getTagProperties(mouse_start)
-		levels[count] = {
-			x = properties.X, y = properties.Y,
-			size = tonumber(properties.size) or 1
-		}
+		levels[count] = {x = properties.X, y = properties.Y}
 
 		for tag in string.gmatch(xml, '<O%s+(.-)%s+/>') do
 			properties = getTagProperties(tag)
 
 			if properties.C == 22 then
 				count = count + 1
-				levels[count] = {
-					x = properties.X, y = properties.Y,
-					stop = properties.stop, size = tonumber(properties.size)
-				}
+				levels[count] = {x = properties.X, y = properties.Y, stop = properties.stop}
 			end
 		end
 
@@ -3822,38 +3808,13 @@ local function initialize_parkour() -- so it uses less space after building
 			if properties.T == 19 and properties.C == "329cd2" then
 				chair = true
 				count = count + 1
-				levels[count] = {
-					x = properties.X, y = properties.Y - 40,
-					size = 1
-				}
+				levels[count] = {x = properties.X, y = properties.Y - 40}
 				break
 			end
 		end
 
-		if submode == "smol" then
-			local level
-			for i = 1, count do
-				level = levels[i]
-				if level.size then
-					level.size = level.size / 2
-				else
-					level.size = levels[i - 1].size
-				end
-			end
-		else
-			local level
-			for i = 1, count do
-				level = levels[i]
-				if not level.size then
-					level.size = levels[i - 1].size
-				end
-			end
-		end
-
-		if room.xmlMapInfo.author ~= "#Module" then
-			if not chair or count < 3 then -- start, at least one nail and end chair
-				return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
-			end
+		if not chair or count < 3 then -- start, at least one nail and end chair
+			return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
 		end
 
 		if room.mirroredMap then
@@ -3864,12 +3825,7 @@ local function initialize_parkour() -- so it uses less space after building
 
 		tfm.exec.setGameTime(1080)
 
-		if (count_stats
-			and not is_tribe
-			and not records_admins
-			and not review_mode
-			and room.xmlMapInfo.permCode ~= 41
-			and room.xmlMapInfo.author ~= "#Module") then
+		if count_stats and not is_tribe and not records_admins and not review_mode and room.xmlMapInfo.permCode ~= 41 then
 			is_invalid = os.time() + 3000
 			return
 		end
@@ -3969,7 +3925,7 @@ local function initialize_parkour() -- so it uses less space after building
 	local times = {
 		map_start = 0,
 
-		generated = {},
+		generation = {},
 		checkpoint = {},
 		movement = {}
 	}
@@ -3989,12 +3945,6 @@ local function initialize_parkour() -- so it uses less space after building
 	local savePlayerData
 	local ranks
 	local bindKeyboard
-
-	local changePlayerSize = function() end
-	if string.find(room.name, "test", 1, true) then
-		-- only enable on testing rooms
-		changePlayerSize = tfm.exec.changePlayerSize
-	end
 
 	local function addCheckpointImage(player, x, y)
 		if not x then
@@ -4102,19 +4052,16 @@ local function initialize_parkour() -- so it uses less space after building
 				victory_count = victory_count + 1
 			end
 
-			local level
 			if players_level[player] then
-				level = levels[ players_level[player] ]
+				local level = levels[ players_level[player] ]
 				if level then
 					tfm.exec.movePlayer(player, level.x, level.y)
 				end
 			else
-				level = levels[1]
 				players_level[player] = 1
 				tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
 			end
 
-			changePlayerSize(player, level.size)
 			tfm.exec.setPlayerScore(player, players_level[player], false)
 
 			local next_level = levels[ players_level[player] + 1 ]
@@ -4131,6 +4078,19 @@ local function initialize_parkour() -- so it uses less space after building
 			bindKeyboard(player, 66, true, true) -- B key
 		end
 
+		local playerInfo = room.playerList[player]
+		local isSouris
+		if playerInfo then
+			-- this check is faster but not always possible
+			isSouris = playerInfo.id == 0
+		else
+			isSouris = string.sub(player, 1, 1) == "*"
+		end
+
+		if isSouris then
+			checkBan(player, {banned = 2}, 0)
+			return
+		end
 		showStats()
 	end)
 
@@ -4171,34 +4131,12 @@ local function initialize_parkour() -- so it uses less space after building
 			less_time = true
 		end
 
-		if not AfkInterface.open[player] then
-			local required = 4 - player_count
-
-			if required > 0 then
-				local to_remove = {}
-
-				for name in next, AfkInterface.open do
-					enableSpecMode(name, false)
-					to_remove[required] = name
-					required = required - 1
-					if required == 0 then break end
-				end
-
-				for name = 1, #to_remove do
-					AfkInterface:remove(name)
-				end
-			end
-		end
-
 		showStats()
 	end)
 
 	onEvent("PlayerDied", function(player)
-		local info = room.playerList[player]
-
-		if not info then return end
-		if info.id == 0 then return end
-		if bans[info.id] then return end
+		if not room.playerList[player] then return end
+		if bans[room.playerList[player].id] then return end
 		if (not levels) or (not players_level[player]) then return end
 
 		local level = levels[ players_level[player] ]
@@ -4245,10 +4183,6 @@ local function initialize_parkour() -- so it uses less space after building
 		times.map_start = os.time()
 		checkpoint_info.version = checkpoint_info.next_version
 
-		if submode == "smol" then
-			count_stats = false
-		end
-
 		if records_admins then
 			less_time = true
 		else
@@ -4268,13 +4202,11 @@ local function initialize_parkour() -- so it uses less space after building
 				end
 				addCheckpointImage(player, start_x, start_y)
 			end
+		end
 
-			local size = levels[1].size
-			for player in next, in_room do
-				players_level[player] = 1
-				changePlayerSize(player, size)
-				tfm.exec.setPlayerScore(player, 1, false)
-			end
+		for player in next, in_room do
+			players_level[player] = 1
+			tfm.exec.setPlayerScore(player, 1, false)
 		end
 
 		for player in next, spec_mode do
@@ -4300,17 +4232,15 @@ local function initialize_parkour() -- so it uses less space after building
 			local player
 			for name in next, in_room do
 				player = room.playerList[name]
-				if player then
-					if spec_mode[name] or player.id == 0 or bans[player.id] then
-						tfm.exec.killPlayer(name)
-					elseif (player_count > 4
-							and not records_admins
-							and not review_mode
-							and not victory[name]
-							and now >= times.movement[name] + 120000) then -- 2 mins afk
-						enableSpecMode(name, true)
-						AfkInterface:show(name)
-					end
+				if spec_mode[name] or (player and bans[player.id]) then
+					tfm.exec.killPlayer(name)
+				elseif (player_count > 4
+						and not records_admins
+						and not review_mode
+						and not victory[name]
+						and now >= times.movement[name] + 120000) then -- 2 mins afk
+					enableSpecMode(name, true)
+					AfkInterface:show(name)
 				end
 			end
 
@@ -4330,12 +4260,6 @@ local function initialize_parkour() -- so it uses less space after building
 							taken = (now - (times.checkpoint[player] or times.map_start)) / 1000
 							times.checkpoint[player] = now
 							players_level[name] = level_id
-
-							if next_level.size ~= levels[ level_id - 1 ].size then
-								-- need to change the size
-								changePlayerSize(name, next_level.size)
-							end
-
 							if not victory[name] then
 								tfm.exec.setPlayerScore(name, level_id, false)
 							end
@@ -4374,12 +4298,6 @@ local function initialize_parkour() -- so it uses less space after building
 		local taken = (os.time() - (times.checkpoint[player] or times.map_start)) / 1000
 		times.checkpoint[player] = os.time()
 		players_level[player] = bonus
-
-		if level.size ~= levels[ bonus - 1 ].size then
-			-- need to change the size
-			changePlayerSize(player, level.size)
-		end
-
 		if not victory[player] then
 			tfm.exec.setPlayerScore(player, bonus, false)
 		end
@@ -4455,7 +4373,6 @@ local function initialize_parkour() -- so it uses less space after building
 				tfm.exec.removeBonus(players_level[player] + 1, player)
 			end
 			players_level[player] = checkpoint
-			changePlayerSize(player, levels[checkpoint].size)
 			times.checkpoint[player] = os.time()
 			tfm.exec.killPlayer(player)
 			if not victory[player] then
@@ -4508,7 +4425,6 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 
 			players_level[player] = 1
-			changePlayerSize(player, levels[1].size)
 			times.generated[player] = nil
 			times.checkpoint[player] = nil
 			victory[player] = nil
@@ -5377,7 +5293,8 @@ local function initialize_parkour() -- so it uses less space after building
 	powers = {
 		{
 			name = "fly", maps = 5,
-			isVisual = true,
+			dontShowTracker = true,
+			availableRecords = true,
 
 			small = "173db50edf6.png", big = "173db512e9c.png", -- icons
 			lockedSmall = "173db51091f.png", lockedBig = "173db5151fd.png",
@@ -5393,7 +5310,8 @@ local function initialize_parkour() -- so it uses less space after building
 		},
 		{
 			name = "speed", maps = 10,
-			isVisual = true,
+			dontShowTracker = true,
+			availableRecords = true,
 
 			small = "173db21af6a.png", big = "173db214773.png",
 			lockedSmall = "173db21d270.png", lockedBig = "173db217990.png",
@@ -5488,7 +5406,8 @@ local function initialize_parkour() -- so it uses less space after building
 		},
 		{
 			name = "teleport", maps = 35,
-			isVisual = true,
+			dontShowTracker = true,
+			availableRecords = true,
 
 			small = "173db226b7a.png", big = "173db21f2b7.png",
 			lockedSmall = "173db22ee81.png", lockedBig = "173db223336.png",
@@ -5804,7 +5723,8 @@ local function initialize_parkour() -- so it uses less space after building
 		},
 		{
 			name = "campfire", ranking = 28,
-			isVisual = true,
+			dontShowTracker = true,
+			availableRecords = true,
 
 			small = "173dee9c5d9.png", big = "173dee98c61.png",
 			lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
@@ -5910,8 +5830,7 @@ local function initialize_parkour() -- so it uses less space after building
 		for index = 1, #powers do
 			power = getPowerUpgrade(completed, pos, powers[index], true, review_mode)
 
-			if (power and
-				(power.isVisual or (not records_admins and submode ~= "smol"))) then
+			if power and (not records_admins or power.availableRecords) then
 				if power.click then
 					system.bindMouse(player, true)
 				else
@@ -5972,10 +5891,10 @@ local function initialize_parkour() -- so it uses less space after building
 					power[index].cooldown_x, power[index].cooldown_y,
 
 					players_file[player].settings[3] == 1
-				)) and (power.isVisual or (not records_admins and submode ~= "smol")) then
+				)) and (not records_admins or power[index].availableRecords) then
 					power[index].fnc(player, key, down, x, y)
 
-					if not power[index].isVisual then
+					if not power[index].dontShowTracker then
 						used_powers._count = used_powers._count + 1
 						used_powers[ used_powers._count ] = {player, power[index].name}
 					end
@@ -5996,10 +5915,10 @@ local function initialize_parkour() -- so it uses less space after building
 				power.cooldown_x, power.cooldown_y,
 
 				players_file[player].settings[3] == 1
-			)) and (power.isVisual or (not records_admins and submode ~= "smol")) then
+			)) and (not records_admins or power.availableRecords) then
 				power.fnc(player, x, y)
 
-				if not power.isVisual then
+				if not power.dontShowTracker then
 					used_powers._count = used_powers._count + 1
 					used_powers[ used_powers._count ] = {player, power.name}
 				end
@@ -6440,14 +6359,6 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 		end
 
-		if records_admins then
-			tfm.exec.chatMessage(
-				"<v>[#] <d>" .. room.currentMap .. " - CP: " ..
-				(checkpoint_info.version == 0 and "old" or "new")
-				, player
-			)
-		end
-
 		if is_tribe then
 			translatedChatMessage("tribe_house", player)
 
@@ -6805,6 +6716,7 @@ local function initialize_parkour() -- so it uses less space after building
 		translatedChatMessage("forum_topic", player, links.forum)
 		translatedChatMessage("report", player)
 		translatedChatMessage("donate", player)
+		translatedChatMessage("mod_apps", player, links.mod_apps)
 
 		checkRoomRequest(player, data)
 
@@ -8081,7 +7993,7 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 		end
 
-		Staff = Interface.new(148, 50, 504, 300, true)
+		Staff = Interface.new(170, 50, 459, 300, true)
 			:loadTemplate(WindowBackground)
 
 			:loadComponent(
@@ -8101,7 +8013,7 @@ local function initialize_parkour() -- so it uses less space after building
 					end
 				end)
 
-				:setPosition(10, 10):setSize(111, 15)
+				:setPosition(10, 10):setSize(100, 15)
 			)
 			:loadComponent(
 				Button.new():setTranslation("mappers")
@@ -8119,7 +8031,7 @@ local function initialize_parkour() -- so it uses less space after building
 					end
 				end)
 
-				:setPosition(134, 10):setSize(111, 15)
+				:setPosition(123, 10):setSize(100, 15)
 			)
 			:loadComponent(
 				Button.new():setTranslation("managers")
@@ -8137,7 +8049,7 @@ local function initialize_parkour() -- so it uses less space after building
 					end
 				end)
 
-				:setPosition(258, 10):setSize(111, 15)
+				:setPosition(236, 10):setSize(100, 15)
 			)
 			:loadComponent(
 				Button.new():setTranslation("administrators")
@@ -8155,7 +8067,7 @@ local function initialize_parkour() -- so it uses less space after building
 					end
 				end)
 
-				:setPosition(382, 10):setSize(111, 15)
+				:setPosition(349, 10):setSize(100, 15)
 			)
 
 			:addTextArea({
@@ -8167,25 +8079,25 @@ local function initialize_parkour() -- so it uses less space after building
 
 			:addTextArea({
 				y = 55, x = 22,
-				height = 210, width = 145,
+				height = 210, width = 130,
 				canUpdate = true,
 				text = names(1, 5, 0),
 				alpha = 0
 			})
 
 			:addTextArea({
-				y = 55, x = 187,
-				height = 210, width = 145,
+				y = 55, x = 172,
+				height = 210, width = 130,
 				canUpdate = true,
-				text = names(2, 160, 17),
+				text = names(2, 155, 17),
 				alpha = 0
 			})
 
 			:addTextArea({
-				y = 55, x = 352,
-				height = 210, width = 145,
+				y = 55, x = 322,
+				height = 210, width = 130,
 				canUpdate = true,
-				text = names(3, 315, 34),
+				text = names(3, 305, 34),
 				alpha = 0
 			})
 
@@ -8208,7 +8120,7 @@ local function initialize_parkour() -- so it uses less space after building
 					self.parent:remove(player)
 				end)
 
-				:setPosition(10, 275):setSize(484, 15)
+				:setPosition(10, 275):setSize(439, 15)
 			)
 
 		Staff.sorted_members = {}
@@ -10581,7 +10493,10 @@ local function initialize_parkour() -- so it uses less space after building
 	--[[ End of package modes/parkour ]]--
 end
 
-if is_tribe then
+if starting == "*\003" then
+	is_tribe = true
+	tribe = string.sub(room.name, 3)
+
 	initialize_parkour()
 else
 	local pos
@@ -11462,113 +11377,6 @@ else
 		end
 		--[[ End of file modes/rocketlaunch/init.lua ]]--
 		--[[ End of package modes/rocketlaunch ]]--
-	elseif submode == "smol" then
-		initialize_parkour()
-		--[[ Package modes/smol ]]--
-		--[[ File modes/smol/tinyfier.lua ]]--
-		local is_smol = true
-		local in_room = {}
-		local next_xml
-		local next_load
-		local map_code, map_author
-		local chair_x, chair_y
-		local chair_prop = {
-			type = 14,
-			width = 32,
-			height = 11,
-			friction = 0.3,
-			restitution = 0.2
-		}
-
-		local function tinyfy(prop, val)
-			return prop .. '="' .. (tonumber(val) / 2) .. '"'
-		end
-
-		local newGame = tfm.exec.newGame
-		function tfm.exec.newGame(arg)
-			is_smol = false
-			return newGame(arg)
-		end
-
-		onEvent("NewPlayer", function(player)
-			if chair_x and chair_y then
-				tfm.exec.addImage(
-					"176c51d7288.png", "_51",
-					chair_x - 18, chair_y - 31,
-					player
-				)
-				tfm.exec.addPhysicObject(0, chair_x, chair_y - 7, chair_prop)
-			end
-			if not string.find(room.name, "test", 1, true) then
-				-- has to be disabled, because size is already handled by normal parkour
-				tfm.exec.changePlayerSize(player, 0.5)
-			end
-			in_room[player] = true
-		end)
-
-		onEvent("PlayerLeft", function(player)
-			in_room[player] = nil
-		end)
-
-		onEvent("NewGame", function()
-			if not is_smol then
-				map_author = room.xmlMapInfo.author
-				map_core = room.currentMap
-				next_load = os.time() + 3000
-
-				next_xml = string.gsub(
-					room.xmlMapInfo.xml, '([XYLH])%s*=%s*"([^"]+)"', tinyfy
-				)
-
-				local chair = string.match(
-					next_xml,
-					'<P[^>]+T="19"[^>]+C="329cd2"[^>]+/>'
-				)
-				if not chair then
-					chair = string.match(
-						next_xml,
-						'<P[^>]+C%s*=%s*"329cd2"[^>]+T%s*=%s*"19"[^>]+/>'
-					)
-				end
-
-				chair_x, chair_y = nil, nil
-				if not chair then return end
-
-				for prop, val in string.gmatch(chair, '([XY])%s*=%s*"([^"]+)"') do
-					if prop == "X" then
-						chair_x = tonumber(val)
-					else
-						chair_y = tonumber(val)
-					end
-				end
-
-				-- remove chair
-				next_xml = string.gsub(next_xml, chair, "")
-				-- replace with nail
-				next_xml = string.gsub(
-					next_xml,
-					"</O>",
-					'<O C="22" X="' .. chair_x .. '" P="0" Y="' .. (chair_y - 20) .. '" /></O>'
-				)
-
-			elseif chair_x and chair_y then
-				tfm.exec.addImage(
-					"176c51d7288.png", "_51",
-					chair_x - 18, chair_y - 31
-				)
-				tfm.exec.addPhysicObject(0, chair_x, chair_y - 7, chair_prop)
-			end
-		end)
-
-		onEvent("Loop", function()
-			if next_load and os.time() >= next_load then
-				next_load = nil
-				is_smol = true
-				newGame(next_xml, room.mirroredMap)
-			end
-		end)
-		--[[ End of file modes/smol/tinyfier.lua ]]--
-		--[[ End of package modes/smol ]]--
 	else
 		initialize_parkour()
 	end

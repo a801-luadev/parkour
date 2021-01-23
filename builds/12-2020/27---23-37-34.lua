@@ -40,13 +40,9 @@ local links = {
 
 local starting = string.sub(room.name, 1, 2)
 
-local is_tribe = starting == "*\003"
+local is_tribe
 local tribe, module_name, submode
 local flags = ""
-
-if is_tribe then
-	tribe = string.sub(room.name, 3)
-end
 
 room.lowerName = string.lower(room.name)
 room.shortName = string.gsub(room.name, "%-?#parkour", "", 1)
@@ -1466,7 +1462,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Versiunea 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Câteva imagini au fost schimbate pentru <ch>crăciun</ch>!\n• Am rezolvat <r>probleme vizuale</r>\n• <vp>Infrastructura modulului</vp> a fost îmbunătățită\n• Acum poți <t>reseta o putere</t> înapoi la <t>tasta obișnuită</t>\n• <cep>Când toată lumea termină harta</cep>, ceasul va fi setat la  <cep>5 secunde în loc de 20</cep>.\n• <cs>Modul AFK a fost adăugat</cs>!\n• A fost mărit <ps>timpul de așteptare pentru bulgăre</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> a terminat parkour în <vp>%s</vp> secunde, <fc>felicitări!",
 		unlocked_power = "<ce><d>%s</d> a deblocat puterea <vp>%s</vp>.",
 
@@ -1499,30 +1495,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>EȘTI ÎN MODUL AFK</b></bv>\nMIȘCĂ-TE PENTRU A JUCA</font>\n\n<font size='30'><u><t>Reamintire:</t></u></font>\n\n<font size='15'><r>Jucătorii cu o linie roșie deasupra lor nu doresc ajutor!\nTrolling/blocarea altor jucători în parkour NU este permisă!<d>\nAlătură-te <cep><a href='event:discord'>serverului nostru de discord</a></cep>!\nVrei să contribui cu cod? Vizitează <cep><a href='event:github'>pagina noastră github</a></cep>\nAi o hartă bună? Posteaz-o în <cep><a href='event:map_submission'>firul pentru hărți parkour</a></cep>\nVerifică <cep><a href='event:forum'>firul oficial</a></cep> pentru mai multe informații!\nAjută-ne <cep><a href='event:donate'>donând!</a></cep>",
 		options = "<p align='center'><font size='20'>Opțiuni Parkour</font></p>\n\nFolosește <b>QWERTY</b> (oprește dacă <b>AZERTY</b>)\n\nFolosește scurtătura <b>M</b> pentru <b>/mort</b> (oprește pentru <b>DEL</b>)\n\nArată-ți cooldown-urile pentru puteri\n\nArată butonul de puteri\n\nArată butonul de ajutor\n\nArată anunțurile de completare a hărților\n\nArată simbolul de „fără ajutor”",
 		cooldown = "<v>[#] <r>Așteaptă câteva secunde pentru a face asta din nou.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>tastatură <b>QWERTY</b>" ..
+		power_options = ("<font size='13' face='Lucida Console'>tastatură <b>QWERTY</b>" ..
 						 "\n\n<b>Ascunde</b> numărul hărților completate" ..
 						 "\n\nPune <b>tasta obișnuită</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completează <v>%s</v> hărți" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Completează <v>%s</v> hărți" ..
 						"<font size='5'>\n\n</font>pentru a debloca" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completează <v>%s</v> hărți" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Completează <v>%s</v> hărți" ..
 						"<font size='5'>\n\n</font>pentru a îmbunătăți" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Fii pe locul <v>%s</v>" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Fii pe locul <v>%s</v>" ..
 						"<font size='5'>\n\n</font>pentru a debloca" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Fii pe locul <v>%s</v>" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Fii pe locul <v>%s</v>" ..
 						"<font size='5'>\n\n</font>pentru a îmbunătăți" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>Hărți completate"),
-		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>Clasamentul general"),
-		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					   "<font size='5'>\n\n</font>Clasamentul săptămânal"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Insigne (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>Insigne (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>Hărțile acestui jucător sunt private. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"Poziția în clasamentul general: <b><v>%s</v></b>\n\n" ..
 					"Poziția în clasamentul săptămânal<b><v>%s</v></b>"),
 		map_count = "Hărți completate: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -1633,10 +1629,10 @@ local function initialize_parkour() -- so it uses less space after building
 		help_staff = "<p align = 'center'><font size = '13'><r>FELHÍVÁS: A Parkour személyzet NEM Transformice személyzet és NEM rendelkeznek hatalommal a játékban, csak a modulon belül.</r>\nA Parkour személyzete gondoskodik arról, hogy a modul zökkenőmentesen működjön minimális problémákkal. Ők mindig rendelkezésre állnak, hogy szükség esetén segítsék a játékosokat.</font></p>\nÍrd be a <D>!staff</D> parancsot a chatbe, hogy lásd a személyzet listáját.\n\n<font color = '#E7342A'>Rendszergazdák <i>(admin)</i>:</font> Ők felelnek a modul karbantartásáért az új frissítések és hibák kijavításával.\n\n<font color = '#D0A9F0'>Csapatvezetők <i>(manager)</i>:</font> Ők felügyelik a Moderátorok és Pálya legénység csapatát odafigyelve arra, hogy megfelelően végezzék a munkájukat. Továbbá ők felelősek az új tagok toborzásáért a személyzet csapatába.\n\n<font color = '#FFAAAA'>Moderátorok <i>(mod)</i>:</font> Ők felelnek a modul szabályzatának betartásáért és a rájuk nem hallgató személyek büntetéséért.\n\n<font color = '#25C059'>Pálya legénység <i>(mapper)</i>:</font> Ők felelnek a pályák felülvizsgálatáért, hozzáadásáért és eltávolításáért a modulon belül annak érdekében, hogy a játékmenet élvezetes legyen.",
 		help_rules = "<font size = '13'><B><J>A Transformice Általános Szerződési feltételeinek minden szabálya vonatkozik a #parkour-ra</J></B></font>\n\nHa olyan játékost találsz, aki megsérti a szabályokat, akkor suttogásban szólj a moderátoroknak. Ha nem érhető el moderátor, akkor jelentsd a játékost a Discord felületen.\nJelentéskor kérjük, add meg a szerver-, a szoba- és a játékos nevét.\n• Például: hu-#parkour10 Blank#3495 trolling\nA bizonyítékok, mint például képernyőfotók, videók és gifek hasznosak és értékeljük, de nem szükségesek.\n\n<font size = '11'>• A #parkour szobákban nem lehet <font color = '#ef1111'>hacket, glitcheket vagy bugokat</font> használni.\n• A <font color = '#ef1111'>VPN farmolást</font> <B>kizsákmányolásnak</B> tekintjük, és nem engedélyezettek. <p align = 'center'><font color = '#cc2222' size = '12'><B>\n\nBárkit, akit szabályszegésen kapunk, azonnal kitiltjuk.</B></font></p>\n\n<font size = '12'>A Transformice engedélyezi a trollkodást, ettől függetlenül <font color='#cc2222'><B>a parkour-ban nem engedélyezzük ezt.</B></font></font>\n\n<p align = 'center'><J>Trollkodás akkor következik, ha egy játékos szándékosan arra használja a képességeit vagy fogyóeszközeit, hogy más játékosokat megakadályozzon a pálya végig játszásában.</j></p>\n• Bosszúból trollkodni nem megfelelő indok, és még mindig büntetjük.\n• Trollkodásnak tekintjük azt is, amikor egy játékos a kérés ellenére is megpróbálja segíteni azt a játékost, aki egyedül akarja végigjátszani a pályát.\n• <J>Ha egy játékos nem akar segítséget vagy egy pályát jobban szeretné egyedül végigjátszani, kérjük, segíts más játékosnak</J>. Ettől függetlenül, ha egy másik játékosnak segítségre van szüksége ugyan abban az ellenőrző pontban, akkor segíthetsz nekik [mindkettőnek].\n\nHa egy játékos trollkodik, azonnal büntetve lesz. Vedd figyelembe, hogy az ismétlődő trollkodás hosszabb és súlyosabb büntetésekkel jár.",
 		help_contribute = "<font size='14'>\n<p align='center'>A parkour menedzsment csapata szereti a nyílt forráskódot, mert ez <t>segít a közösségnek</t>. <o>Megtekintheted</o> és <o>módosíthatod</o> a nyílt forráskódot a <o><u><a href='event:github'>GitHub</a></u></oú>-on.\n\nA modul karbantartása <t>szigorúan önkéntes</t>, ezért a <t>kód</t> olvasásával, <t>hibajelentésekkel</t>, <t>javaslatokkal</t> és <t>pályakészítéssel</t> kapcsolatos bármilyen segítséget <u>mindig örömmel fogadunk és értékeljük</u>.\nTehetsz <vp>hibajelentéseket</vp> és <vp>javaslatokat</vp> a <o><u><a href='event:discord'>Discord</a></u></o>-on és/vagy <o><u><a href='event:github'>GitHub</a></u></o>-on.\nA <vp>pályádat beküldheted</vp> a mi <o><u><a href='event:map_submission'>Fórum témánkba</a></u></o>.\n\nA parkour fenntartása nem drága, de nem is ingyenes. Szeretnénk, ha <t>bármekkora összeggel</t> támogatnál minket <o><u><a href='event:donate'>ide</a></u></o> kattintva.\n<u>Minden támogatás a modul fejlesztésére irányul.</u></p>",
-		help_changelog = "<font size='13'><p align='center'><o>Verzió: 2.8.0 - 2020/11/07</o></p>\n\n<font size='11'>• <vp>Fejlődöttt a jelentés rendszer</vp>: Most már tudsz suttogni <t>/c Parkour#8558 .report Felhasználónév#0000</t>",
+		help_changelog = "<font size='13'><p align='center'><o>Version 2.8.0 - 07/11/2020</o></p>\n\n<font size='11'>• <vp>Improved the report system</vp>: You can now whisper <t>/c Parkour#8558 .report Username#0000</t>",
 
 		-- Congratulation messages
-		reached_level = "<d>Gratulálunk! Elérted a(z) <vp>%s</vp>. ellenőrző pontot. (<t>%ss</t>)",
+		reached_level = "<d>Gratulálunk! Elérted a(z) <vp>%s</vp>. ellenőrző pontot. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> befejezte a parkour pályát <vp>%s</vp> másodperc alatt. <fc>Gratulálunk!",
 		unlocked_power = "<ce><d>%s</d> feloldotta a(z) <vp>%s</vp> képességet.",
 
@@ -1652,8 +1648,8 @@ local function initialize_parkour() -- so it uses less space after building
 		kill_minutes = "<R>A képességeidet %s percre letiltottuk.",
 		permbanned = "<r>Véglegesen ki lettél tiltva a #parkour-ból.",
 		tempbanned = "<r>Ki lettél tiltva %s másodpercre a #parkour-ból.",
-		forum_topic = "<rose>Ha szeretnél több információt a modulról látogasd meg a linket: %s",
-		report = "<j>Jelenteni szeretnél egy parkour játékost? <t><b>/c Parkour#8558 .report Felhasználónév0000</b></t>",
+		forum_topic = "<rose>For more information about the module visit this link: %s",
+		report = "<j>Want to report a parkour player? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
 
 		-- Records
 		records_enabled = "<v>[#] <d>Rekord mód lett aktiválva ebben a szobában. Az adatok nem számítanak és a képességek nem engedélyezettek!\nTöbb információt találhatsz a Rekordról itt: <b>%s</b>",
@@ -1666,33 +1662,33 @@ local function initialize_parkour() -- so it uses less space after building
 		records_submitted = "<v>[#] <d>A <b>%s</b> rekordod ehhez a pályához be lett küldve.",
 
 		-- Miscellaneous
-		afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MÓDBAN VAGY</b></bv>\nMOZOGJ HOGY ÚJRAÉLEDJ</font>\n\n<font size='30'><u><t>Emlékeztetők:</t></u></font>\n\n<font size='15'><r>A játékosok piros vonallal a fejük felett nem kérnek segítséget!\nTrollkodás/blokkolás más játékosokkal szemben a parkourban NEM megengedett!<d>\nCsatlakozz a <cep><a href='event:discord'>discord szerverünkhöz</a></cep>!\nSzertnél közreműködni kódolással? Tekintsd meg a <cep><a href='event:github'>github gyűjteményünket</a></cep>\nVan egy jó pályád amit bemutatnál? Posztold ki a <cep><a href='event:map_submission'>pálya beadvány témához</a></cep>\nCsekkold le a <cep><a href='event:forum'>official topic fület</a></cep> több információért!\nTámogass minket <cep><a href='event:donate'>adománnyal!</a></cep>",
+		afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
 		options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <b>M</b> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot",
 		cooldown = "<v>[#] <r>Várj néhány másodpercet, mielőtt újra ezt tennéd.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> billentyűzet" ..
+		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> billentyűzet" ..
 						 "\n\nTeljesített pályák <b>elrejtése</b>" ..
 						 "\n\nUse <b>default key</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Teljesíts <v>%s</v> pályát" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Teljesíts <v>%s</v> pályát" ..
 						"<font size='5'>\n\n</font>a(z) <v>%s</v>" ..
 						"<font size='5'>\n\n</font>feloldásához"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Teljesíts <v>%s</v> pályát" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Teljesíts <v>%s</v> pályát" ..
 						"<font size='5'>\n\n</font>a(z) <v>%s</v>" ..
 						"<font size='5'>\n\n</font>frissítéséhez"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Érd el a(z) <v>%s</v>" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Érd el a(z) <v>%s</v>" ..
 						"<font size='5'>\n\n</font>rangot a(z) <v>%s</v>" ..
 						"<font size='5'>\n\n</font>feloldásához"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Érd el a(z) <v>%s</v>" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Érd el a(z) <v>%s</v>" ..
 						"<font size='5'>\n\n</font>rangot a(z) <v>%s</v>" ..
 						"<font size='5'>\n\n</font>frissítéséhez"),
-		maps_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>Teljesített pálya"),
-		overall_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'>Pozíció a Teljes ranglistán:" ..
+		overall_info = ("<p align='center'><font size='11' face='Lucida Console'>Pozíció a Teljes ranglistán:" ..
 						"<font size='5'>\n\n</font><b><v>%s</v></b>"),
-		weekly_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'>Pozíció a Heti ranglistán:" ..
+		weekly_info = ("<p align='center'><font size='11' face='Lucida Console'>Pozíció a Heti ranglistán:" ..
 					   "<font size='5'>\n\n</font><b><v>%s</v></b>"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Kitűzők (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>Kitűzők (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>A játékos teljesített pályáinak száma privát. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"Pozíció a Teljes ranglistán: <b><v>%s</v></b>\n\n" ..
 					"Pozíció a Heti ranglistán: <b><v>%s</v></b>"),
 		map_count = "Pályák száma: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -1806,7 +1802,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>גירסה 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• שינינו חלק מהחפצים למראה של <ch>חג המולד</ch>!\n• <r>באגים וויזואלים</r> תוקנו\n• <vp>תשתית המודול</vp> שופרה\n• כעת אתם יכולים<t>לאתחל כוח</t> ל<t>מקש ברירת המחדל</t>\n• <cep>כאשר כולם מסיימים את המפה</cep>, הטיימר יתעדכן ל-<cep>5 שניות במקום 20</cep>.\n• <cs>נוסף מצב AFK</cs>\n• הגדלנו את <ps>זמן הטעינה של כדורי השלג</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>ברכות! עלית לרמה <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>ברכות! עלית לרמה <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> סיים את הפארקור תוך <vp>%s</vp> שניות, <fc>ברכות!",
 		unlocked_power = "<ce><d>%s</d> השיג את הכח <vp>%s</vp>.",
 
@@ -1839,30 +1835,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>אתה במצב AFK</b></bv>\nזוז כדי לחזור</font>\n\n<font size='30'><u><t>תזכורות:</t></u></font>\n\n<font size='15'><r>שחקנים עם קו אדום מעליהם אינם מעוניינים בעזרה!\nהטרלת/חסימת שחקנים אחרים בפארקור אסורה!<d>\nהצטרפו ל<cep><a href='event:discord'>שרת הדיסקורד</a></cep> שלנו!\nרוצה לתרום קוד? ראה את <cep><a href='event:github'>מאגר ה-GitHub</a></cep> שלנו.\nיש לך מפה טובה להגיש?  שלח את זה ב<cep><a href='event:map_submission'>נושא הגשת המפות</a></cep> שלנו\nבידקו את <cep><a href='event:forum'>הנושא הרשמי</a></cep> שלנו למידע נוסף!\nתמוך בנו על ידי <cep><a href='event:donate'>תרומה!</a></cep>",
 		options = "<p align='center'><font size='20'>אפשרויות פארקור</font></p>\n\nהשתמש במקלדת <b>QWERTY</b> (כבה אם <b>AZERTY</b> בשימוש)\n\nהשתמש באות <b>צ</b> במקום <b>/mort</b> (משבית את <b>DEL</b>)\n\nהראה את זמן טעינת הכוחות\n\nהראה כפתור כוחות\n\nהראה כפתור עזרה\n\nהראה הכרזות השלמת מפות\n\nהצג סימן 'ללא עזרה'",
 		cooldown = "<v>[#] <r>המתן מספר שניות לפני שאתה עושה זאת.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> מקלדת" ..
+		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> מקלדת" ..
 						 "\n\n<b>הסתר</b> ספירת מפות" ..
 						 "\n\nהשתמש ב<b>מקשים מקוריים</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>השלם <v>%s</v> מפות" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>השלם <v>%s</v> מפות" ..
 						"<font size='5'>\n\n</font>בכדי להשיג" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>השלם <v>%s</v> מפות" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>השלם <v>%s</v> מפות" ..
 						"<font size='5'>\n\n</font>כדי לשדרג ל" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>דרגה <v>%s</v>" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>דרגה <v>%s</v>" ..
 						"<font size='5'>\n\n</font>בכדי להשיג" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>דרגה <v>%s</v>" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>דרגה <v>%s</v>" ..
 						"<font size='5'>\n\n</font>כדי לשדרג ל" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>מפות שהושלמו"),
-		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>לוח תוצאות כללי"),
-		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					   "<font size='5'>\n\n</font>לוח תוצאות שבועי"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>תגים (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>תגים (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>מספר המפות של שחקן זה הינו פרטי. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"דרגה בלוח התוצאות הכללי: <b><v>%s</v></b>\n\n" ..
 					"דרגה בלוח התוצאות השבועי: <b><v>%s</v></b>"),
 		map_count = "מספר מפות: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -1976,7 +1972,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Version 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Changed some sprites for <ch>christmas</ch>!\n• Fixed <r>visual bugs</r>\n• <vp>Module infrastructure</vp> has been improved\n• You can now <t>reset a power</t> to the <t>default key</t>\n• <cep>When everyone finishes the map</cep>, the timer will be set to <cep>5 seconds instead of 20</cep>.\n• <cs>Added AFK mode</cs>\n• Increased <ps>snowball cooldown</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Congratulations! You've reached level <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> finished the parkour in <vp>%s</vp> seconds, <fc>congratulations!",
 		unlocked_power = "<ce><d>%s</d> unlocked the <vp>%s</vp> power.",
 
@@ -2009,30 +2005,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
 		options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <b>M</b> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements\n\nShow no help symbol",
 		cooldown = "<v>[#] <r>Wait a few seconds before doing that again.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> keyboard" ..
+		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> keyboard" ..
 						 "\n\n<b>Hide</b> map count" ..
 						 "\n\nUse <b>default key</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> maps" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Complete <v>%s</v> maps" ..
 						"<font size='5'>\n\n</font>to unlock" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> maps" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Complete <v>%s</v> maps" ..
 						"<font size='5'>\n\n</font>to upgrade to" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Rank <v>%s</v>" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Rank <v>%s</v>" ..
 						"<font size='5'>\n\n</font>to unlock" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Rank <v>%s</v>" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Rank <v>%s</v>" ..
 						"<font size='5'>\n\n</font>to upgrade to" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>Completed Maps"),
-		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>Overall Leaderboard"),
-		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					   "<font size='5'>\n\n</font>Weekly Leaderboard"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>This player's map count is private. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"Overall leaderboard position: <b><v>%s</v></b>\n\n" ..
 					"Weekly leaderboard position: <b><v>%s</v></b>"),
 		map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -2146,7 +2142,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Versión 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• ¡Se cambiaron algunas imágenes por <ch>Navidad</ch>!\n• Se arreglaron algunos <r>bugs visuales</r>\n• Se mejoró la <vp>infrastructura del módulo</vp>\n• Ahora podés <t>reiniciar un poder</t> a su <t>tecla original</t>\n• <cep>Cuando todos terminan el mapa</cep>, el temporizador será de <cep>5 segundos en vez de 20</cep>.\n• <cs>Se añadió el modo AFK</cs>\n• Se incrementó el <ps>tiempo de espera de la bola de nieve</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>¡Felicitaciones! Alcanzaste el nivel <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> completó el parkour en <vp>%s</vp> segundos, <fc>¡felicitaciones!",
 		unlocked_power = "<ce><d>%s</d> desbloqueó el poder <vp>%s<ce>.",
 
@@ -2179,30 +2175,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>ESTÁS EN MODO AFK</b></bv>\nMUÉVETE PARA REAPARECER</font>\n\n<font size='30'><u><t>Recordatorios:</t></u></font>\n\n<font size='15'><r>¡Los jugadores con una línea roja sobre ellos no quieren ayuda!\n¡Trollear/bloquear a otros jugadores en parkour NO está permitido!<d>\n¡Únete a nuestro <cep><a href='event:discord'>servidor de discord</a></cep>!\n¿Quieres contribuir con código? Vé a nuestro <cep><a href='event:github'>repositorio de github</a></cep>\n¿Tienes un buen mapa para enviar? Envíalo a nuestro <cep><a href='event:map_submission'>hilo de presentaciones de mapas</a></cep>\n¡Checkea nuestro <cep><a href='event:forum'>hilo oficial</a></cep> para más información!\n¡Ayúdanos <cep><a href='event:donate'>donando!</a></cep>",
 		options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <b>M</b> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa\n\nMostrar indicador para no recibir ayuda",
 		cooldown = "<v>[#] <r>Espera unos segundos antes de hacer eso de nuevo.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Teclado <b>QWERTY</b>" ..
+		power_options = ("<font size='13' face='Lucida Console'>Teclado <b>QWERTY</b>" ..
 						 "\n\n<b>Esconder</b> cantidad de mapas" ..
 						 "\n\nUsar <b>tecla original</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completa <v>%s</v> mapas" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Completa <v>%s</v> mapas" ..
 						"<font size='5'>\n\n</font>para desbloquear" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completa <v>%s</v> mapas" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Completa <v>%s</v> mapas" ..
 						"<font size='5'>\n\n</font>para mejorar a" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Posición <v>%s</v>" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Posición <v>%s</v>" ..
 						"<font size='5'>\n\n</font>para desbloquear" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Posición <v>%s</v>" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Posición <v>%s</v>" ..
 						"<font size='5'>\n\n</font>para mejorar a" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>Mapas Completados"),
-		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>Posición General"),
-		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					   "<font size='5'>\n\n</font>Posición Semanal"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Insignias (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>Insignias (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>La cantidad de mapas de este jugador es privada. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"Posición general: <b><v>%s</v></b>\n\n" ..
 					"Posición semanal: <b><v>%s</v></b>"),
 		map_count = "Cantidad de mapas: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -2316,7 +2312,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Версия 2.8.0 - 07/11/2020</o></p>\n\n<font size='11'>• <vp>Улучшена система жалоб на пользователей</vp>: Теперь вы можете написать в лс <t>/c Parkour#8558 .report Никнейм#0000</t>",
 
 		-- Congratulation messages
-		reached_level = "<d>Поздравляем! Вы достигли уровня <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Поздравляем! Вы достигли уровня <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> завершил паркур за <vp>%s</vp> секунд, <fc>поздравляем!",
 		unlocked_power = "<ce><d>%s</d> разблокировал способность <vp>%s</vp>.",
 
@@ -2349,30 +2345,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
 		options = "<p align='center'><font size='20'>Параметры Паркура</font></p>\n\nИспользуйте <b>QWERTY</b> на клавиатуре (отключить if <b>AZERTY</b>)\n\nИспользуйте <b>M</b> горячую клавишу <b>/mort</b> (отключить <b>DEL</b>)\n\nПоказать ваше время перезарядки\n\nПоказать кнопку способностей\n\nПоказать кнопку помощь\n\nПоказать объявление о завершении карты\n\nПоказать символ помощь не нужна",
 		cooldown = "<v>[#] <r>Подождите несколько минут, чтобы повторить действие.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> клавиатура" ..
+		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> клавиатура" ..
 						 "\n\n<b>Hide</b> map count" ..
 						 "\n\nUse <b>default key</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Пройденные <v>%s</v> карты" ..
 						"<font size='5'>\n\n</font>разблокированы" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Пройденные <v>%s</v> карты" ..
 						"<font size='5'>\n\n</font>обновлены" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v>" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Ранг <v>%s</v>" ..
 						"<font size='5'>\n\n</font>разбокирован" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v>" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Ранг <v>%s</v>" ..
 						"<font size='5'>\n\n</font>обновлен" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>Пройденые карты"),
-		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>Общая таблица лидеров"),
-		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					   "<font size='5'>\n\n</font>Еженедельная таблица лидеров"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>Количество карт этого игрока является частным.<a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"Общая таблица лидеров: <b><v>%s</v></b>\n\n" ..
 					"Еженедельначя таблица лидеров: <b><v>%s</v></b>"),
 		map_count = "Количество карт: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -2486,7 +2482,7 @@ local function initialize_parkour() -- so it uses less space after building
 	    help_changelog = "<font size='13'><p align='center'><o>Versi 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Perubahan beberapa sprite untuk <ch>natal</ch>!\n• Perbaikan <r>bug visual</r>\n• <vp>Infrastruktur modul</vp> telah ditingkatkan\n• Anda sekarang bisa <t>menyetel ulang kekuatan</t> ke <t>kunci default</t>\n• <cep>Ketika semua pemain menyelesaikan peta</cep>, timer akan disetel ke <cep>5 detik dibandingkan 20</cep>.\n• <cs>Penambahan mode AFK</cs>\n• Meningkatkan <ps>cooldown salju</ps>",
 
 	    -- Congratulation messages
-	    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<t>%ss</t>)",
+	    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<vp>%ss</vp>)",
 	    finished = "<d><o>%s</o> telah menyelesaikan parkour dalam <vp>%s</vp> detik, <fc>selamat!",
 	    unlocked_power = "<ce><d>%s</d> telah membuka kemampuan <vp>%s</vp>.",
 
@@ -2519,30 +2515,30 @@ local function initialize_parkour() -- so it uses less space after building
 	    afk_popup = "\n<p align='center'><font size='30'><bv><b>ANDA DALAM MODE AFK</b></bv>\nPINDAH UNTUK RESPAWN</font>\n\n<font size='30'><u><t>Pengingat:</t></u></font>\n\n<font size='15'><r>Pemain dengan simbol merah tidak menginginkan bantuan!\nTrolling/pemblokiran pemain lain di parkur TIDAK dizinkan!<d>\nBergabung dengan <cep><a href='event:discord'>discord server</a> kami</cep>!\nIngin berkontribusi dengan kode? Lihat <cep><a href='event:github'>repository github</a> kami</cep>\nKamu memiliki peta bagus untuk diajukan? Posting di <cep><a href='event:map_submission'>topik pengajuan peta</a> kami</cep>\nCek <cep><a href='event:forum'>topik resmi</a></cep> kami untuk informasi lebih lanjut!\nDukung kami dengan <cep><a href='event:donate'>donasi!</a></cep>",
 	    options = "<p align='center'><font size='20'>Opsi Parkour</font></p>\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nTekan <b>M</b> hotkey untuk <b>/mort</b> (jika dinonaktifkan menjadi <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan anda\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nAktifkan pengumuman penyelesaian peta\n\nAktifkan simbol tidak memerlukan bantuan",
 	    cooldown = "<v>[#] <r>Mohon Tunggu beberapa detik untuk melakukan-nya kembali.",
-	    power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Keyboard <b>QWERTY</b>" ..
+	    power_options = ("<font size='13' face='Lucida Console'>Keyboard <b>QWERTY</b>" ..
 	                    "\n\n<b>Tutup</b> penghitung peta" ..
 	                    "\n\nGunakan <b>kunci default</b>"),
-	    unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Selesaikan <v>%s</v> peta" ..
+	    unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Selesaikan <v>%s</v> peta" ..
 	                    "<font size='5'>\n\n</font>untuk membuka" ..
 	                    "<font size='5'>\n\n</font><v>%s</v>"),
-	    upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Selesaikan <v>%s</v> peta" ..
+	    upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Selesaikan <v>%s</v> peta" ..
 	                    "<font size='5'>\n\n</font>untuk meningkatkan ke" ..
 	                    "<font size='5'>\n\n</font><v>%s</v>"),
-	    unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Peringkat <v>%s</v>" ..
+	    unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Peringkat <v>%s</v>" ..
 	                    "<font size='5'>\n\n</font>untuk membuka" ..
 	                    "<font size='5'>\n\n</font><v>%s</v>"),
-	    upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Peringkat <v>%s</v>" ..
+	    upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Peringkat <v>%s</v>" ..
 	                    "<font size='5'>\n\n</font>untuk meningkatkan ke" ..
 	                    "<font size='5'>\n\n</font><v>%s</v>"),
-	    maps_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+	    maps_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 	                "<font size='5'>\n\n</font>Peta yang diselesaikan"),
-	    overall_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+	    overall_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 	                    "<font size='5'>\n\n</font>Papan Peringkat Keseluruhan"),
-	    weekly_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+	    weekly_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 	                    "<font size='5'>\n\n</font>Papan Peringkat Mingguan"),
-	    badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Lencana (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	    badges = "<font size='14' face='Lucida Console,Verdana'>Lencana (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	    private_maps = "<bl>Jumlah peta pada pemain ini bersifat Pribadi. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	    profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+	    profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 	                "Posisi papan peringkat keseluruhan: <b><v>%s</v></b>\n\n" ..
 	                "Posisi papan peringkat mingguan: <b><v>%s</v></b>"),
 	    map_count = "Jumlah peta: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -2656,7 +2652,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>版本 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• 更新了一些 <ch>聖誕</ch> 元素!\n• 修改了 <r>視覺上的漏洞</r>\n• 改善了 <vp>模組的架構</vp>\n• 你現在可以把 <t>能力重設</t> 回到 <t>預設鍵</t>\n• <cep>當房間裡所有人完成了地圖</cep>, 計時器會設成剩下 <cep>5 秒而不再是 20秒</cep>.\n• <cs>新增掛機模式</cs>\n• 新增 <ps>雪球冷卻時間</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。 (<t>%ss</t>)",
+		reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。 (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> 在 <vp>%s</vp> 秒內完成了地圖, <fc>恭喜!",
 		unlocked_power = "<ce><d>%s</d> 解鎖了 <vp>%s</vp> 能力。",
 
@@ -2689,30 +2685,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>你正在掛機模式</b></bv>\n隨意移動來復活</font>\n\n<font size='30'><u><t>提示:</t></u></font>\n\n<font size='15'><r>玩家頭上的紅線表示他們不想被協助!\n在parkour惡作劇/阻礙其他玩家通關是不被允許的!<d>\n加入我們的 <cep><a href='event:discord'>discord 伺服器</a></cep>!\n想在編程上貢獻? 查看 <cep><a href='event:github'>github 編程庫</a></cep> 吧。\n你有好的地圖想提交嗎? 在我們的 <cep><ahref='event:map_submission'>地圖提交帖子</a></cep> 上留言吧。\n查看我們的 <cep><a href='event:forum'>官方帖子</a></cep> 來得到更多資訊!\n透過 <cep><a href='event:donate'>捐款</a></cep> 支持我們吧!",
 		options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <b>M</b> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示",
 		cooldown = "<v>[#] <r>請等候幾秒再重新嘗試。",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> 鍵盤" ..
+		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> 鍵盤" ..
 						 "\n\n<b>隱藏</b> 地圖通過數" ..
 						 "\n\n使用 <b>預設鍵</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>完成 <v>%s</v> 張地圖" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>完成 <v>%s</v> 張地圖" ..
 						"<font size='5'>\n\n</font>來解鎖" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>完成 <v>%s</v> 張地圖" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>完成 <v>%s</v> 張地圖" ..
 						"<font size='5'>\n\n</font>來升級到" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>階級 <v>%s</v>" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>階級 <v>%s</v>" ..
 						"<font size='5'>\n\n</font>來解鎖" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>階級 <v>%s</v>" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>階級 <v>%s</v>" ..
 						"<font size='5'>\n\n</font>來升級到" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>完成地圖數"),
-		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>整體排行榜"),
-		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					   "<font size='5'>\n\n</font>每周排行榜"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>徽章 (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>徽章 (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>玩家的地圖通過數已設定為私人。 <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"整體排行榜名次: <b><v>%s</v></b>\n\n" ..
 					"每周排行榜名次: <b><v>%s</v></b>"),
 		map_count = "地圖通過數: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -2827,7 +2823,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Version 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Changement de certaines images pour <ch>Noël</ch> !\n• Réparation de <r>bugs visuels</r>.\n• <vp>L'infrastructure du module</vp> a été amélioré.\n• Vous pouvez maintenant <t>réinitialiser un pouvoir</t> à sa <t>touche par défaut</t>.\n• <cep>Lorsque tout le monde finit la map</cep>, le temps est réduit à <cep>5 secondes au lieu de 20</cep>.\n• <cs>Ajout d'un mode AFK</cs>\n• Le <ps>cooldown de la boule de neige</ps> a été augmenté.",
 
 		-- Congratulation messages
-		reached_level = "<d>Bravo! Vous avez atteint le niveau <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Bravo! Vous avez atteint le niveau <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> a fini le parkour en <vp>%s</vp> secondes, <fc>félicitations !",
 		unlocked_power = "<ce><d>%s</d> a débloqué le pouvoir <vp>%s</vp>.",
 
@@ -2860,30 +2856,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>VOUS ÊTES DÉSORMAIS AFK</b></bv>\nBOUGEZ POUR REAPPARAÎTRE</font>\n\n<font size='30'><u><t>Rappels :</t></u></font>\n\n<font size='15'><r>Les joueurs avec une ligne rouge au-dessus d'eux ne veulent pas d'aide !\nTroller/bloquer des joueurs est interdit dans parkour !<d>\nRejoins notre <cep><a href='event:discord'>serveur Discord</a></cep>!\nEnvie de contribuer au code ? Viens voir notre <cep><a href='event:github'>GitHub</a></cep>\nTu as une bonne carte à nous proposer ? Viens la poster sur notre <cep><a href='event:map_submission'>sujet de proposition de cartes</a></cep>\nJettes un oeil à notre <cep><a href='event:forum'>sujet officiel</a></cep> pour plus d'informations !\nSoutiens le module en faisant un <cep><a href='event:donate'>don !</a></cep>",
 		options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <b>M</b> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.",
 		cooldown = "<v>[#] <r>Attends quelques secondes avant de pouvoir recommencer.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Clavier <b>QWERTY</b>" ..
+		power_options = ("<font size='13' face='Lucida Console'>Clavier <b>QWERTY</b>" ..
 						 "\n\n<b>Cacher</b> le nombre de cartes" ..
 						 "\n\n<b>Touche original</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complète <v>%s</v> maps" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Complète <v>%s</v> maps" ..
 						"<font size='5'>\n\n</font>pour débloquer le pouvoir" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complète <v>%s</v> maps" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Complète <v>%s</v> maps" ..
 						"<font size='5'>\n\n</font>pour améliorer le pouvoir" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Rang <v>%s</v> requis" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Rang <v>%s</v> requis" ..
 						"<font size='5'>\n\n</font>pour débloquer le pouvoir" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Rang <v>%s</v> requis" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Rang <v>%s</v> requis" ..
 						"<font size='5'>\n\n</font>pour améliorer le pouvoir" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>Maps complétées"),
-		overall_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>Classement Global"),
-		weekly_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
 					   "<font size='5'>\n\n</font>Classement Hebdomadaire"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>Le nombre de cartes complétées de ce joueur est privé. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"Position dans le classement global: <b><v>%s</v></b>\n\n" ..
 					"Position dans le classement hebdomadaire: <b><v>%s</v></b>"),
 		map_count = "Nombre de maps complétées: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -2997,7 +2993,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Wersja 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Zmieniono niektóre sprite'y na <ch>świąteczne</ch>!\n• Naprawiono <r>wizualne błędy</r>\n• <vp>Infrastruktura modułu</vp> został ulepszony\n• Możesz teraz <t>zresetować moce</t> na <t>klucz główny</t>\n• <cep>Kiedy wszyscy ukończą mapę</cep>, czas będzie ustawiony na <cep>5 sekund zamiast 20</cep>.\n• <cs>Dodano trybu AFK</cs>\n• Powiększono <ps>czas odnowienia śnieżki</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> skończyłeś parkour w <vp>%s</vp> sekundach, <fc>Gratulacje!",
 		unlocked_power = "<ce><d>%s</d> odblokował <vp>%s</vp> moc.",
 
@@ -3030,30 +3026,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>JESTEŚ W TRYBIE AFK</b></bv>\nPORUSZAJ SIĘ BY ODRODZIĆ</font>\n\n<font size='30'><u><t>Przypomnienie:</t></u></font>\n\n<font size='15'><r>Gracze z czerwoną linią nad nimi nie chcą pomocy!\nTrollowanie/blokowanie innych graczy w parkour NIE jest dozwolone!<d>\nDołącz do naszego <cep><a href='event:discord'>serwera discorda</a></cep>!\nChcesz współtworzyć kod?  Zobacz nasze <cep><a href='event:github'>magazyn githuba </a></cep>\nCzy masz dobrą mapę do przesłania?  Opublikuj to w naszym <cep><a href='event:map_submission'>temat przesyłania map</a></cep>\nSprawdź nasz <cep><a href='event:forum'>oficjalny forum</a></cep> dla więcej szczegółów\nWesprzyj nas przez <cep><a href='event:donate'>darowizmy!</a></cep>",
 		options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<b>M</b> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy",
 		cooldown = "<v>[#] <r>Poczekaj kilka sekund, zanim zrobisz to ponownie.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> klawiatura" ..
+		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> klawiatura" ..
 						 "\n\n<b>Ukryć</b> map liczb" ..
 						 "\n\nUżyj <b>klucz główny</b> "),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ukończyć <v>%s</v> mapę" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Ukończyć <v>%s</v> mapę" ..
 						"<font size='5'>\n\n</font>odblokować" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ukończyć<v>%s</v> mapę" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Ukończyć<v>%s</v> mapę" ..
 						 "<font size='5'>\n\n</font>uaktualnić do" ..
 						 "<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ranga<v>%s</v>" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Ranga<v>%s</v>" ..
 							 "<font size='5'>\n\n</font>odblokować" ..
 							 "<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ranga <v>%s</v>" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Ranga <v>%s</v>" ..
 							 "<font size='5'>\n\n</font>uaktualnić do" ..
 							 "<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>Ukończone mapy"),
-		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>Ogólny ranking"),
-		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					   "<font size='5'>\n\n</font>Tygodniowa tablica wyników"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Odznaki (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>Odznaki (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>Liczba map tego gracza jest prywatna. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"Ogólna pozycja w tabeli liderów: <b><v>%s</v></b>\n\n" ..
 					"Tygodniowa pozycja w tabeli liderów: <b><v>%s</v></b>"),
 		map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -3167,7 +3163,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Versão 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Algumas imagens foram alteradas para o <ch>natal</ch>!\n• Corrigidos <r>bugs visuais</r>\n• <vp>Infraestrutura do módulo</vp> foi melhorada\n• Agora você pode <t>reiniciar as configurações de um poder</t> para sua <t>tecla padrão</t>\n• <cep>Quando todos terminarem o mapa</cep>, o tempo restante será de <cep>5 segundos ao invés de 20 segundos</cep>.\n• <cs>Adicionado Modo AFK</cs>\n• Aumentado <ps>o tempo de espera para atirar bolas de neve</ps>",
 
 		-- Congratulation messages
-		reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>. (<t>%ss</t>)",
+		reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> terminou o parkour em <vp>%s</vp> segundos, <fc>parabéns!",
 		unlocked_power = "<ce><d>%s</d> desbloqueou o poder <vp>%s</vp>.",
 
@@ -3200,30 +3196,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>VOCê ESTÁ NO MODO AFK</b></bv>\nMOVA-SE PARA RENASCER</font>\n\n<font size='30'><u><t>Lembretes:</t></u></font>\n\n<font size='15'><r>Jogadores com uma linha vermelha em cima deles não querem ajuda!\nTrollar/bloquear outros jogadores no parkour NÃO é permitido!<d>\nEntre em nosso <cep><a href='event:discord'>servidor no Discord</a></cep>!\nQuer contribuir com código? Veja nosso <cep><a href='event:github'>repositório no Github</a></cep>\nVocê tem um mapa bom pra enviar? Mande-o em nosso <cep><a href='event:map_submission'>tópico de submissão de mapas</a></cep>\nCheque nosso <cep><a href='event:forum'>tópico oficial no fórum</a></cep> para mais informações!\nNos apoie com <cep><a href='event:donate'>doações!</a></cep>",
 		options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <b>M</b> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar",
 		cooldown = "<v>[#] <r>Aguarde alguns segundos antes de fazer isso novamente.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Teclado <b>QWERTY</b>" ..
+		power_options = ("<font size='13' face='Lucida Console'>Teclado <b>QWERTY</b>" ..
 						 "\n\n<b>Esconder</b> contagem de mapas" ..
 						 "\n\nUsar <b>tecla padrão</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> mapas" ..
+		unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Complete <v>%s</v> mapas" ..
 						"<font size='5'>\n\n</font>para desbloquear" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> mapas" ..
+		upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Complete <v>%s</v> mapas" ..
 						"<font size='5'>\n\n</font>para evoluir para" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Seja top <v>%s</v>" ..
+		unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Seja top <v>%s</v>" ..
 						"<font size='5'>\n\n</font>para desbloquear" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Seja top <v>%s</v>" ..
+		upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Seja top <v>%s</v>" ..
 						"<font size='5'>\n\n</font>para evoluir para" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>Mapas completados"),
-		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>Ranking Geral"),
-		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					   "<font size='5'>\n\n</font>Ranking Semanal"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Medalhas (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>Medalhas (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>A contagem de mapas deste jogador é privado. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"Posição no Ranking geral: <b><v>%s</v></b>\n\n" ..
 					"Posição no Ranking semanal: <b><v>%s</v></b>"),
 		map_count = "Contagem de mapas: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -3338,7 +3334,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_changelog = "<font size='13'><p align='center'><o>Versiyon 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• <ch>Noel</ch> için bazı görselleri değiştirdik!\n• <r>Görsel hataları</r> düzelttik.\n• <vp>Modül altyapısı</vp> güçlendirildi\n• Artık <t>bir gücü</t> <t>varsayılan tuşuna</t> geri atayabilirsiniz.\n• <cep>Herkes haritayı tamamladığında</cep>, süre <cep>20 saniyeye değil de 5 saniyeye</cep> ayarlanacak.\n• <cs>AFK modu eklendi</cs>\n• <ps>Kartopu süresi</ps> arttırıldı",
 
 		-- Congratulation messages
-		reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeye ulaştınız. (<t>%ss</t>)",
+		reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeye ulaştınız. (<vp>%ss</vp>)",
 		finished = "<d><o>%s</o> parkuru <vp>%s</vp> saniyede bitirdi, <fc>Tebrikler!",
 		unlocked_power = "<ce><d>%s</d>, <vp>%s</vp> becerisini açtı.",
 
@@ -3371,30 +3367,30 @@ local function initialize_parkour() -- so it uses less space after building
 		afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MODDASIN</b></bv>\nYENİDEN DOĞMAK İÇİN HAREKET ET. </font>\n\n<font size='30'><u><t>Hatırlatıcılar:</t></u></font>\n\n<font size='15'><r>Üzerinde kırmızı çizgi olan oyuncular yardım istemiyordur!\nParkurdaki diğer oyuncuları trollemek/engellemek YASAKTIR!<d>\n<cep><a href='event:discord'>Discord</a></cep>'umuza katıl!\nKodumuza katkıda bulunmak mı istiyorsun? <cep><a href='event:github'>Github depomuza</a></cep> bir bak\nSunacak iyi bir haritanız mı var? <cep><a href='event:map_submission'>Harita öneri başlığımıza</a></cep> gönderin!\nDaha fazla bilgi için<cep><a href='event:forum'>resmi başlığımıza</a></cep> bakın!\nBizi desteklemek için <cep><a href='event:donate'>bağış yap!</a></cep>",
 		options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\n<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n<b>/mort</b>'un kısayolu <b>M</b> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\nBeceri bekleme sürelerini göster.\n\nBeceriler simgesini göster.\n\nYardım butonunu göster.\n\nHarita bitirme duyurularını göster.\n\nYardım istemiyorum simgesini göster.",
 		cooldown = "<v>[#] <r>Bunu tekrar yapmadan önce birkaç saniye bekleyin",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> Klavye" ..
+		power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> Klavye" ..
 						 "\n\nTamamlanan harita sayısını <b>gizle</b>" ..
 						 "\n\n<b>Varsayılan tuşu</b> kullan"),
 		unlock_power = ("<font size='5'>\n\n</font>Kilidi açmak için" ..
-						"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v> harita tamamlayınız" ..
+						"<font size='13' face='Lucida Console'><p align='center'><v>%s</v> harita tamamlayınız" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
 		upgrade_power = ("<font size='5'>\n\n</font>Yükseltmek için" ..
-						"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v> harita tamamlayınız" ..
+						"<font size='13' face='Lucida Console'><p align='center'><v>%s</v> harita tamamlayınız" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
 		unlock_power_rank = ("<font size='5'>\n\n</font>Kilidi açmak için" ..
-						"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
+						"<font size='13' face='Lucida Console'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
 		upgrade_power_rank = ("<font size='5'>\n\n</font>Yükseltmek için" ..
-						"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
+						"<font size='13' face='Lucida Console'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 					 "<font size='5'>\n\n</font>Tamamlanmış Harita"),
-		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>Genel Sıralamanız"),
-		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
+		weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
 						"<font size='5'>\n\n</font>Bu Haftaki Sıralamanız"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Rozetler (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		badges = "<font size='14' face='Lucida Console,Verdana'>Rozetler (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 		private_maps = "<bl>Bu oyuncunun tamamladığı harita sayısı özeldir. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
+		profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
 					"Genel skor tablosu konumu: <b><v>%s</v></b>\n\n" ..
 					"Haftalık liderlik sıralaması: <b><v>%s</v></b>"),
 		map_count = "Tamamlanan harita sayısı: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -3603,9 +3599,6 @@ local function initialize_parkour() -- so it uses less space after building
 	local perms
 	local review_mode
 	local records_admins = string.find(room.lowerName, "records", 1, true) and {}
-	if records_admins and submode == "smol" then
-		records_admins = nil
-	end
 
 	local function selectMap(sections, list, count)
 		if sections._map_pointer > maps_per_section then
@@ -3679,7 +3672,6 @@ local function initialize_parkour() -- so it uses less space after building
 		return list[map]
 	end
 
-	local is_test = string.find(room.name, "test", 1, true)
 	local function newMap()
 		count_stats = not review_mode
 		map_change_cd = os.time() + 20000
@@ -3691,7 +3683,7 @@ local function initialize_parkour() -- so it uses less space after building
 			map = selectMap(maps.sections_high, maps.list_high, maps.high_count)
 		end
 
-		tfm.exec.newGame(map, is_test and math.random(3000000) <= 1000000)
+		tfm.exec.newGame(map)
 	end
 
 	local function invalidMap(arg)
@@ -3798,20 +3790,14 @@ local function initialize_parkour() -- so it uses less space after building
 		end
 
 		local properties = getTagProperties(mouse_start)
-		levels[count] = {
-			x = properties.X, y = properties.Y,
-			size = tonumber(properties.size) or 1
-		}
+		levels[count] = {x = properties.X, y = properties.Y}
 
 		for tag in string.gmatch(xml, '<O%s+(.-)%s+/>') do
 			properties = getTagProperties(tag)
 
 			if properties.C == 22 then
 				count = count + 1
-				levels[count] = {
-					x = properties.X, y = properties.Y,
-					stop = properties.stop, size = tonumber(properties.size)
-				}
+				levels[count] = {x = properties.X, y = properties.Y, stop = properties.stop}
 			end
 		end
 
@@ -3822,38 +3808,13 @@ local function initialize_parkour() -- so it uses less space after building
 			if properties.T == 19 and properties.C == "329cd2" then
 				chair = true
 				count = count + 1
-				levels[count] = {
-					x = properties.X, y = properties.Y - 40,
-					size = 1
-				}
+				levels[count] = {x = properties.X, y = properties.Y - 40}
 				break
 			end
 		end
 
-		if submode == "smol" then
-			local level
-			for i = 1, count do
-				level = levels[i]
-				if level.size then
-					level.size = level.size / 2
-				else
-					level.size = levels[i - 1].size
-				end
-			end
-		else
-			local level
-			for i = 1, count do
-				level = levels[i]
-				if not level.size then
-					level.size = levels[i - 1].size
-				end
-			end
-		end
-
-		if room.xmlMapInfo.author ~= "#Module" then
-			if not chair or count < 3 then -- start, at least one nail and end chair
-				return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
-			end
+		if not chair or count < 3 then -- start, at least one nail and end chair
+			return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
 		end
 
 		if room.mirroredMap then
@@ -3864,12 +3825,7 @@ local function initialize_parkour() -- so it uses less space after building
 
 		tfm.exec.setGameTime(1080)
 
-		if (count_stats
-			and not is_tribe
-			and not records_admins
-			and not review_mode
-			and room.xmlMapInfo.permCode ~= 41
-			and room.xmlMapInfo.author ~= "#Module") then
+		if count_stats and not is_tribe and not records_admins and not review_mode and room.xmlMapInfo.permCode ~= 41 then
 			is_invalid = os.time() + 3000
 			return
 		end
@@ -3961,7 +3917,7 @@ local function initialize_parkour() -- so it uses less space after building
 	local victory_count = 0
 	local less_time = false
 	local victory = {_last_level = {}}
-	local bans = {}
+	local bans = {[0] = true} -- souris banned
 	local in_room = {}
 	local online = {}
 	local hidden = {}
@@ -3969,7 +3925,7 @@ local function initialize_parkour() -- so it uses less space after building
 	local times = {
 		map_start = 0,
 
-		generated = {},
+		generation = {},
 		checkpoint = {},
 		movement = {}
 	}
@@ -3989,12 +3945,6 @@ local function initialize_parkour() -- so it uses less space after building
 	local savePlayerData
 	local ranks
 	local bindKeyboard
-
-	local changePlayerSize = function() end
-	if string.find(room.name, "test", 1, true) then
-		-- only enable on testing rooms
-		changePlayerSize = tfm.exec.changePlayerSize
-	end
 
 	local function addCheckpointImage(player, x, y)
 		if not x then
@@ -4058,14 +4008,12 @@ local function initialize_parkour() -- so it uses less space after building
 		showStats()
 	end
 
-	local function checkBan(player, data, id)
-		if not id then
-			id = room.playerList[player]
-			if not id or not in_room[player] then
-				return
-			end
-			id = id.id
+	local function checkBan(player, data)
+		local id = room.playerList[player]
+		if not id or not in_room[player] then
+			return
 		end
+		id = id.id
 
 		if data.banned and (data.banned == 2 or os.time() < data.banned) then
 			bans[id] = true
@@ -4102,19 +4050,16 @@ local function initialize_parkour() -- so it uses less space after building
 				victory_count = victory_count + 1
 			end
 
-			local level
 			if players_level[player] then
-				level = levels[ players_level[player] ]
+				local level = levels[ players_level[player] ]
 				if level then
 					tfm.exec.movePlayer(player, level.x, level.y)
 				end
 			else
-				level = levels[1]
 				players_level[player] = 1
 				tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
 			end
 
-			changePlayerSize(player, level.size)
 			tfm.exec.setPlayerScore(player, players_level[player], false)
 
 			local next_level = levels[ players_level[player] + 1 ]
@@ -4171,34 +4116,12 @@ local function initialize_parkour() -- so it uses less space after building
 			less_time = true
 		end
 
-		if not AfkInterface.open[player] then
-			local required = 4 - player_count
-
-			if required > 0 then
-				local to_remove = {}
-
-				for name in next, AfkInterface.open do
-					enableSpecMode(name, false)
-					to_remove[required] = name
-					required = required - 1
-					if required == 0 then break end
-				end
-
-				for name = 1, #to_remove do
-					AfkInterface:remove(name)
-				end
-			end
-		end
-
 		showStats()
 	end)
 
 	onEvent("PlayerDied", function(player)
-		local info = room.playerList[player]
-
-		if not info then return end
-		if info.id == 0 then return end
-		if bans[info.id] then return end
+		if not room.playerList[player] then return end
+		if bans[room.playerList[player].id] then return end
 		if (not levels) or (not players_level[player]) then return end
 
 		local level = levels[ players_level[player] ]
@@ -4245,10 +4168,6 @@ local function initialize_parkour() -- so it uses less space after building
 		times.map_start = os.time()
 		checkpoint_info.version = checkpoint_info.next_version
 
-		if submode == "smol" then
-			count_stats = false
-		end
-
 		if records_admins then
 			less_time = true
 		else
@@ -4268,13 +4187,11 @@ local function initialize_parkour() -- so it uses less space after building
 				end
 				addCheckpointImage(player, start_x, start_y)
 			end
+		end
 
-			local size = levels[1].size
-			for player in next, in_room do
-				players_level[player] = 1
-				changePlayerSize(player, size)
-				tfm.exec.setPlayerScore(player, 1, false)
-			end
+		for player in next, in_room do
+			players_level[player] = 1
+			tfm.exec.setPlayerScore(player, 1, false)
 		end
 
 		for player in next, spec_mode do
@@ -4300,17 +4217,15 @@ local function initialize_parkour() -- so it uses less space after building
 			local player
 			for name in next, in_room do
 				player = room.playerList[name]
-				if player then
-					if spec_mode[name] or player.id == 0 or bans[player.id] then
-						tfm.exec.killPlayer(name)
-					elseif (player_count > 4
-							and not records_admins
-							and not review_mode
-							and not victory[name]
-							and now >= times.movement[name] + 120000) then -- 2 mins afk
-						enableSpecMode(name, true)
-						AfkInterface:show(name)
-					end
+				if spec_mode[name] or (player and bans[player.id]) then
+					tfm.exec.killPlayer(name)
+				elseif (player_count > 4
+						and not records_admins
+						and not review_mode
+						and not victory[name]
+						and now >= times.movement[name] + 120000) then -- 2 mins afk
+					enableSpecMode(name, true)
+					AfkInterface:show(name)
 				end
 			end
 
@@ -4330,12 +4245,6 @@ local function initialize_parkour() -- so it uses less space after building
 							taken = (now - (times.checkpoint[player] or times.map_start)) / 1000
 							times.checkpoint[player] = now
 							players_level[name] = level_id
-
-							if next_level.size ~= levels[ level_id - 1 ].size then
-								-- need to change the size
-								changePlayerSize(name, next_level.size)
-							end
-
 							if not victory[name] then
 								tfm.exec.setPlayerScore(name, level_id, false)
 							end
@@ -4374,12 +4283,6 @@ local function initialize_parkour() -- so it uses less space after building
 		local taken = (os.time() - (times.checkpoint[player] or times.map_start)) / 1000
 		times.checkpoint[player] = os.time()
 		players_level[player] = bonus
-
-		if level.size ~= levels[ bonus - 1 ].size then
-			-- need to change the size
-			changePlayerSize(player, level.size)
-		end
-
 		if not victory[player] then
 			tfm.exec.setPlayerScore(player, bonus, false)
 		end
@@ -4423,7 +4326,6 @@ local function initialize_parkour() -- so it uses less space after building
 				return tfm.exec.chatMessage("<v>[#] <r>You can't toggle review mode in this room.", player)
 			end
 
-			count_stats = false
 			review_mode = not review_mode
 			if review_mode then
 				tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
@@ -4455,7 +4357,6 @@ local function initialize_parkour() -- so it uses less space after building
 				tfm.exec.removeBonus(players_level[player] + 1, player)
 			end
 			players_level[player] = checkpoint
-			changePlayerSize(player, levels[checkpoint].size)
 			times.checkpoint[player] = os.time()
 			tfm.exec.killPlayer(player)
 			if not victory[player] then
@@ -4508,7 +4409,6 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 
 			players_level[player] = 1
-			changePlayerSize(player, levels[1].size)
 			times.generated[player] = nil
 			times.checkpoint[player] = nil
 			victory[player] = nil
@@ -4560,7 +4460,7 @@ local function initialize_parkour() -- so it uses less space after building
 
 	onEvent("GameDataLoaded", function(data)
 		if data.banned then
-			bans = {}
+			bans = {[0] = true}
 			for id, value in next, data.banned do
 				if value == 1 or os.time() < value then
 					bans[tonumber(id)] = true
@@ -5377,7 +5277,8 @@ local function initialize_parkour() -- so it uses less space after building
 	powers = {
 		{
 			name = "fly", maps = 5,
-			isVisual = true,
+			dontShowTracker = true,
+			availableRecords = true,
 
 			small = "173db50edf6.png", big = "173db512e9c.png", -- icons
 			lockedSmall = "173db51091f.png", lockedBig = "173db5151fd.png",
@@ -5393,7 +5294,8 @@ local function initialize_parkour() -- so it uses less space after building
 		},
 		{
 			name = "speed", maps = 10,
-			isVisual = true,
+			dontShowTracker = true,
+			availableRecords = true,
 
 			small = "173db21af6a.png", big = "173db214773.png",
 			lockedSmall = "173db21d270.png", lockedBig = "173db217990.png",
@@ -5488,7 +5390,8 @@ local function initialize_parkour() -- so it uses less space after building
 		},
 		{
 			name = "teleport", maps = 35,
-			isVisual = true,
+			dontShowTracker = true,
+			availableRecords = true,
 
 			small = "173db226b7a.png", big = "173db21f2b7.png",
 			lockedSmall = "173db22ee81.png", lockedBig = "173db223336.png",
@@ -5804,7 +5707,8 @@ local function initialize_parkour() -- so it uses less space after building
 		},
 		{
 			name = "campfire", ranking = 28,
-			isVisual = true,
+			dontShowTracker = true,
+			availableRecords = true,
 
 			small = "173dee9c5d9.png", big = "173dee98c61.png",
 			lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
@@ -5910,8 +5814,7 @@ local function initialize_parkour() -- so it uses less space after building
 		for index = 1, #powers do
 			power = getPowerUpgrade(completed, pos, powers[index], true, review_mode)
 
-			if (power and
-				(power.isVisual or (not records_admins and submode ~= "smol"))) then
+			if power and (not records_admins or power.availableRecords) then
 				if power.click then
 					system.bindMouse(player, true)
 				else
@@ -5972,10 +5875,10 @@ local function initialize_parkour() -- so it uses less space after building
 					power[index].cooldown_x, power[index].cooldown_y,
 
 					players_file[player].settings[3] == 1
-				)) and (power.isVisual or (not records_admins and submode ~= "smol")) then
+				)) and (not records_admins or power[index].availableRecords) then
 					power[index].fnc(player, key, down, x, y)
 
-					if not power[index].isVisual then
+					if not power[index].dontShowTracker then
 						used_powers._count = used_powers._count + 1
 						used_powers[ used_powers._count ] = {player, power[index].name}
 					end
@@ -5996,10 +5899,10 @@ local function initialize_parkour() -- so it uses less space after building
 				power.cooldown_x, power.cooldown_y,
 
 				players_file[player].settings[3] == 1
-			)) and (power.isVisual or (not records_admins and submode ~= "smol")) then
+			)) and (not records_admins or power.availableRecords) then
 				power.fnc(player, x, y)
 
-				if not power.isVisual then
+				if not power.dontShowTracker then
 					used_powers._count = used_powers._count + 1
 					used_powers[ used_powers._count ] = {player, power.name}
 				end
@@ -6440,14 +6343,6 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 		end
 
-		if records_admins then
-			tfm.exec.chatMessage(
-				"<v>[#] <d>" .. room.currentMap .. " - CP: " ..
-				(checkpoint_info.version == 0 and "old" or "new")
-				, player
-			)
-		end
-
 		if is_tribe then
 			translatedChatMessage("tribe_house", player)
 
@@ -6805,6 +6700,7 @@ local function initialize_parkour() -- so it uses less space after building
 		translatedChatMessage("forum_topic", player, links.forum)
 		translatedChatMessage("report", player)
 		translatedChatMessage("donate", player)
+		translatedChatMessage("mod_apps", player, links.mod_apps)
 
 		checkRoomRequest(player, data)
 
@@ -8081,7 +7977,7 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 		end
 
-		Staff = Interface.new(148, 50, 504, 300, true)
+		Staff = Interface.new(170, 50, 459, 300, true)
 			:loadTemplate(WindowBackground)
 
 			:loadComponent(
@@ -8101,7 +7997,7 @@ local function initialize_parkour() -- so it uses less space after building
 					end
 				end)
 
-				:setPosition(10, 10):setSize(111, 15)
+				:setPosition(10, 10):setSize(100, 15)
 			)
 			:loadComponent(
 				Button.new():setTranslation("mappers")
@@ -8119,7 +8015,7 @@ local function initialize_parkour() -- so it uses less space after building
 					end
 				end)
 
-				:setPosition(134, 10):setSize(111, 15)
+				:setPosition(123, 10):setSize(100, 15)
 			)
 			:loadComponent(
 				Button.new():setTranslation("managers")
@@ -8137,7 +8033,7 @@ local function initialize_parkour() -- so it uses less space after building
 					end
 				end)
 
-				:setPosition(258, 10):setSize(111, 15)
+				:setPosition(236, 10):setSize(100, 15)
 			)
 			:loadComponent(
 				Button.new():setTranslation("administrators")
@@ -8155,7 +8051,7 @@ local function initialize_parkour() -- so it uses less space after building
 					end
 				end)
 
-				:setPosition(382, 10):setSize(111, 15)
+				:setPosition(349, 10):setSize(100, 15)
 			)
 
 			:addTextArea({
@@ -8167,25 +8063,25 @@ local function initialize_parkour() -- so it uses less space after building
 
 			:addTextArea({
 				y = 55, x = 22,
-				height = 210, width = 145,
+				height = 210, width = 130,
 				canUpdate = true,
 				text = names(1, 5, 0),
 				alpha = 0
 			})
 
 			:addTextArea({
-				y = 55, x = 187,
-				height = 210, width = 145,
+				y = 55, x = 172,
+				height = 210, width = 130,
 				canUpdate = true,
-				text = names(2, 160, 17),
+				text = names(2, 155, 17),
 				alpha = 0
 			})
 
 			:addTextArea({
-				y = 55, x = 352,
-				height = 210, width = 145,
+				y = 55, x = 322,
+				height = 210, width = 130,
 				canUpdate = true,
-				text = names(3, 315, 34),
+				text = names(3, 305, 34),
 				alpha = 0
 			})
 
@@ -8208,7 +8104,7 @@ local function initialize_parkour() -- so it uses less space after building
 					self.parent:remove(player)
 				end)
 
-				:setPosition(10, 275):setSize(484, 15)
+				:setPosition(10, 275):setSize(439, 15)
 			)
 
 		Staff.sorted_members = {}
@@ -10581,7 +10477,10 @@ local function initialize_parkour() -- so it uses less space after building
 	--[[ End of package modes/parkour ]]--
 end
 
-if is_tribe then
+if starting == "*\003" then
+	is_tribe = true
+	tribe = string.sub(room.name, 3)
+
 	initialize_parkour()
 else
 	local pos
@@ -11462,113 +11361,6 @@ else
 		end
 		--[[ End of file modes/rocketlaunch/init.lua ]]--
 		--[[ End of package modes/rocketlaunch ]]--
-	elseif submode == "smol" then
-		initialize_parkour()
-		--[[ Package modes/smol ]]--
-		--[[ File modes/smol/tinyfier.lua ]]--
-		local is_smol = true
-		local in_room = {}
-		local next_xml
-		local next_load
-		local map_code, map_author
-		local chair_x, chair_y
-		local chair_prop = {
-			type = 14,
-			width = 32,
-			height = 11,
-			friction = 0.3,
-			restitution = 0.2
-		}
-
-		local function tinyfy(prop, val)
-			return prop .. '="' .. (tonumber(val) / 2) .. '"'
-		end
-
-		local newGame = tfm.exec.newGame
-		function tfm.exec.newGame(arg)
-			is_smol = false
-			return newGame(arg)
-		end
-
-		onEvent("NewPlayer", function(player)
-			if chair_x and chair_y then
-				tfm.exec.addImage(
-					"176c51d7288.png", "_51",
-					chair_x - 18, chair_y - 31,
-					player
-				)
-				tfm.exec.addPhysicObject(0, chair_x, chair_y - 7, chair_prop)
-			end
-			if not string.find(room.name, "test", 1, true) then
-				-- has to be disabled, because size is already handled by normal parkour
-				tfm.exec.changePlayerSize(player, 0.5)
-			end
-			in_room[player] = true
-		end)
-
-		onEvent("PlayerLeft", function(player)
-			in_room[player] = nil
-		end)
-
-		onEvent("NewGame", function()
-			if not is_smol then
-				map_author = room.xmlMapInfo.author
-				map_core = room.currentMap
-				next_load = os.time() + 3000
-
-				next_xml = string.gsub(
-					room.xmlMapInfo.xml, '([XYLH])%s*=%s*"([^"]+)"', tinyfy
-				)
-
-				local chair = string.match(
-					next_xml,
-					'<P[^>]+T="19"[^>]+C="329cd2"[^>]+/>'
-				)
-				if not chair then
-					chair = string.match(
-						next_xml,
-						'<P[^>]+C%s*=%s*"329cd2"[^>]+T%s*=%s*"19"[^>]+/>'
-					)
-				end
-
-				chair_x, chair_y = nil, nil
-				if not chair then return end
-
-				for prop, val in string.gmatch(chair, '([XY])%s*=%s*"([^"]+)"') do
-					if prop == "X" then
-						chair_x = tonumber(val)
-					else
-						chair_y = tonumber(val)
-					end
-				end
-
-				-- remove chair
-				next_xml = string.gsub(next_xml, chair, "")
-				-- replace with nail
-				next_xml = string.gsub(
-					next_xml,
-					"</O>",
-					'<O C="22" X="' .. chair_x .. '" P="0" Y="' .. (chair_y - 20) .. '" /></O>'
-				)
-
-			elseif chair_x and chair_y then
-				tfm.exec.addImage(
-					"176c51d7288.png", "_51",
-					chair_x - 18, chair_y - 31
-				)
-				tfm.exec.addPhysicObject(0, chair_x, chair_y - 7, chair_prop)
-			end
-		end)
-
-		onEvent("Loop", function()
-			if next_load and os.time() >= next_load then
-				next_load = nil
-				is_smol = true
-				newGame(next_xml, room.mirroredMap)
-			end
-		end)
-		--[[ End of file modes/smol/tinyfier.lua ]]--
-		--[[ End of package modes/smol ]]--
 	else
 		initialize_parkour()
 	end

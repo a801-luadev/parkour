@@ -11,6 +11,7 @@ import sys
 import io
 import random
 import string
+import json
 
 
 class env:
@@ -48,6 +49,8 @@ class env:
 	verified_role = 694947893433466981
 	verifying_role = 764647559062224937
 	manual_verification = 753391975742570546
+
+	standalone_tokens = 800439365972394065
 
 
 verification_selector = "<@!{}>:\nPlease select your language:\n\n{}"
@@ -328,6 +331,10 @@ class Proxy(Connection):
 			# Shares the busy state between all the bots that need it
 			self.client.busy = packet["state"]
 
+		elif packet["type"] == "get_tokens":
+			# Fetch the message with tokens and return it
+			loop.create_task(self.client.send_tokens())
+
 		elif packet["type"] == "game_update":
 			# Sends update message
 			self.client.dispatch("game_update")
@@ -372,6 +379,7 @@ class Client(discord.Client):
 
 		self.loop.create_task(self.check_reaction_roles())
 		self.loop.create_task(self.check_verifications())
+		self.loop.create_task(self.drawer_idle())
 
 		await self.get_channel(env.private_channel).send("Ready!")
 		print("Ready!")
@@ -399,6 +407,21 @@ class Client(discord.Client):
 
 		os.execl(sys.executable, sys.executable, *sys.argv)
 
+	async def drawer_idle(self):
+		"""Prevents the drawer system from going into idle."""
+		while True:
+			async with aiohttp.ClientSession(conn_timeout=120.0, read_timeout=120.0) as session:
+				await session.post(
+					"https://miceditor-map-preview.herokuapp.com/",
+					headers={"Content-Type": "application/json"},
+					data=json.dumps({
+						"xml": "<C><P /><Z><S /><D /><O /></Z></C>",
+						"raw": True
+					}).encode()
+				)
+
+			await asyncio.sleep(60 * 25) # 25 minutes
+
 	async def on_game_update(self):
 		await self.send_channel(env.game_logs_channel, "`[UPDATE]:` The game is updating.")
 
@@ -425,6 +448,20 @@ class Client(discord.Client):
 			)
 
 		return await self.send_channel(channel, "Script ran successfully.")
+
+	# Standalone Gateway
+	async def get_tokens(self):
+		channel = self.get_channel(env.private_channel)
+		msg = await channel.fetch_message(env.standalone_tokens)
+		data = msg.content.replace("`", "").split("\n")
+
+		return [token.split(" ") for token in data]
+
+	async def send_tokens(self):
+		await self.proxy.sendTo({
+			"type": "get_tokens",
+			"tokens": await self.get_tokens()
+		}, "tokens")
 
 	# Chat system
 	async def send_channel(self, channel, msg):
@@ -603,9 +640,12 @@ class Client(discord.Client):
 					try:
 						async with aiohttp.ClientSession(conn_timeout=15.0, read_timeout=15.0) as session:
 							async with session.post(
-								"https://xml-drawer.herokuapp.com/",
-								headers={"Content-Type": "application/x-www-form-urlencoded"},
-								data=urlencode({"xml": xml}).encode()
+								"https://miceditor-map-preview.herokuapp.com/",
+								headers={"Content-Type": "application/json"},
+								data=json.dumps({
+									"xml": xml,
+									"raw": True
+								}).encode()
 							) as resp:
 								file_content = await resp.read()
 						file_format = "png"
@@ -644,6 +684,20 @@ class Client(discord.Client):
 
 			if cmd == "!runtime":
 				await self.proxy.sendTo({"type": "runtime", "channel": msg.channel.id}, "tocubot")
+
+			elif cmd == "!token":
+				if not args:
+					await msg.channel.send("invalid syntax")
+					return
+
+				await self.proxy.sendTo({
+					"type": "token_request",
+					"owner": args[0],
+					"channel": msg.channel.id
+				}, "tokens")
+
+			elif cmd == "!reloadtokens":
+				await self.send_tokens()
 
 			elif cmd == "!busy":
 				# Sets busy state (or checks it)

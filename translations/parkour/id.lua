@@ -30,7 +30,7 @@ translations.id = {
     help_changelog = "<font size='13'><p align='center'><o>Versi 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Perubahan beberapa sprite untuk <ch>natal</ch>!\n• Perbaikan <r>bug visual</r>\n• <vp>Infrastruktur modul</vp> telah ditingkatkan\n• Anda sekarang bisa <t>menyetel ulang kekuatan</t> ke <t>kunci default</t>\n• <cep>Ketika semua pemain menyelesaikan peta</cep>, timer akan disetel ke <cep>5 detik dibandingkan 20</cep>.\n• <cs>Penambahan mode AFK</cs>\n• Meningkatkan <ps>cooldown salju</ps>",
 
     -- Congratulation messages
-    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<vp>%ss</vp>)",
+    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<t>%ss</t>)",
     finished = "<d><o>%s</o> telah menyelesaikan parkour dalam <vp>%s</vp> detik, <fc>selamat!",
     unlocked_power = "<ce><d>%s</d> telah membuka kemampuan <vp>%s</vp>.",
 
@@ -63,30 +63,30 @@ translations.id = {
     afk_popup = "\n<p align='center'><font size='30'><bv><b>ANDA DALAM MODE AFK</b></bv>\nPINDAH UNTUK RESPAWN</font>\n\n<font size='30'><u><t>Pengingat:</t></u></font>\n\n<font size='15'><r>Pemain dengan simbol merah tidak menginginkan bantuan!\nTrolling/pemblokiran pemain lain di parkur TIDAK dizinkan!<d>\nBergabung dengan <cep><a href='event:discord'>discord server</a> kami</cep>!\nIngin berkontribusi dengan kode? Lihat <cep><a href='event:github'>repository github</a> kami</cep>\nKamu memiliki peta bagus untuk diajukan? Posting di <cep><a href='event:map_submission'>topik pengajuan peta</a> kami</cep>\nCek <cep><a href='event:forum'>topik resmi</a></cep> kami untuk informasi lebih lanjut!\nDukung kami dengan <cep><a href='event:donate'>donasi!</a></cep>",
     options = "<p align='center'><font size='20'>Opsi Parkour</font></p>\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nTekan <b>M</b> hotkey untuk <b>/mort</b> (jika dinonaktifkan menjadi <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan anda\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nAktifkan pengumuman penyelesaian peta\n\nAktifkan simbol tidak memerlukan bantuan",
     cooldown = "<v>[#] <r>Mohon Tunggu beberapa detik untuk melakukan-nya kembali.",
-    power_options = ("<font size='13' face='Lucida Console'>Keyboard <b>QWERTY</b>" ..
+    power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Keyboard <b>QWERTY</b>" ..
                     "\n\n<b>Tutup</b> penghitung peta" ..
                     "\n\nGunakan <b>kunci default</b>"),
-    unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Selesaikan <v>%s</v> peta" ..
+    unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Selesaikan <v>%s</v> peta" ..
                     "<font size='5'>\n\n</font>untuk membuka" ..
                     "<font size='5'>\n\n</font><v>%s</v>"),
-    upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Selesaikan <v>%s</v> peta" ..
+    upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Selesaikan <v>%s</v> peta" ..
                     "<font size='5'>\n\n</font>untuk meningkatkan ke" ..
                     "<font size='5'>\n\n</font><v>%s</v>"),
-    unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Peringkat <v>%s</v>" ..
+    unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Peringkat <v>%s</v>" ..
                     "<font size='5'>\n\n</font>untuk membuka" ..
                     "<font size='5'>\n\n</font><v>%s</v>"),
-    upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Peringkat <v>%s</v>" ..
+    upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Peringkat <v>%s</v>" ..
                     "<font size='5'>\n\n</font>untuk meningkatkan ke" ..
                     "<font size='5'>\n\n</font><v>%s</v>"),
-    maps_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
+    maps_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
                 "<font size='5'>\n\n</font>Peta yang diselesaikan"),
-    overall_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
+    overall_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
                     "<font size='5'>\n\n</font>Papan Peringkat Keseluruhan"),
-    weekly_info = ("<p align='center'><font size='11' face='Lucida Console'><b><v>%s</v></b>" ..
+    weekly_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
                     "<font size='5'>\n\n</font>Papan Peringkat Mingguan"),
-    badges = "<font size='14' face='Lucida Console,Verdana'>Lencana (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+    badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Lencana (%s): <a href='event:_help:badge'><j>[?]</j></a>",
     private_maps = "<bl>Jumlah peta pada pemain ini bersifat Pribadi. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-    profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+    profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
                 "Posisi papan peringkat keseluruhan: <b><v>%s</v></b>\n\n" ..
                 "Posisi papan peringkat mingguan: <b><v>%s</v></b>"),
     map_count = "Jumlah peta: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",

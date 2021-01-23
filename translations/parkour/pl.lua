@@ -30,7 +30,7 @@ translations.pl = {
 	help_changelog = "<font size='13'><p align='center'><o>Wersja 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• Zmieniono niektóre ozdoby na <ch>świąteczne!</ch>!\n• Naprawiono <r>wizualne błędy</r>\n• <vp>(nfrastruktura modułu</vp> została ulepszona\n• Możesz teraz <t>zresetować moce</t> na <t>domyślny klawisz</t>\n• <cep>Kiedy wszyscy ukończą mapę</cep>, czas będzie ustawiony na <cep>5 sekund zamiast 20</cep>.\n• <cs>Dodano tryb AFK</cs>\n• Powiększono <ps>czas odnowienia śnieżki</ps>",
 
 	-- Congratulation messages
-	reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<vp>%ss</vp>)",
+	reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> skończyłeś parkour w <vp>%s</vp> sekundach, <fc>Gratulacje!",
 	unlocked_power = "<ce><d>%s</d> odblokował <vp>%s</vp> moc.",
 
@@ -63,30 +63,32 @@ translations.pl = {
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>JESTEŚ W TRYBIE AFK</b></bv>\nPORUSZAJ SIĘ ABY GRAĆ DALEJ</font>\n\n<font size='30'><u><t>Przypomnienie:</t></u></font>\n\n<font size='15'><r>Gracze z czerwona kreska nie chcą pomocy\nTrollowanie/blokowanie innych graczy na parkour jest zabronione!<d>\nDołącz do na nasz <cep><a href='event:discord'>serwer discorda</a></cep>!\nChcesz współtworzyć kod?  Zobacz nasz <cep><a href='event:github'>magazyn </a></cep>\nCzy masz dobrą mapę do przesłania?  Opublikuj ją w naszym <cep><a href='event:map_submission'> temacie przesyłania map</a></cep>\nSprawdź nasz temat <cep><a href='event:forum'>na forum</a></cep> dla więcej informacji\nWesprzyj nas przez <cep><a href='event:donate'>darowizmy!</a></cep>",
 	options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<b>M</b> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy",
 	cooldown = "<v>[#] <r>Poczekaj kilka sekund, zanim zrobisz to ponownie.",
+
 	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> klawiatura" ..
 					 "\n\n<b>Ukryj</b> liczbę map" ..
 					 "\n\nUżyj <b>klawisza domyślnego</b> "),
 	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>Ukończyć <v>%s</v> mapę" ..
 					"<font size='5'>\n\n</font>odblokować" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>Ukończyć<v>%s</v> mapę" ..
+	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ukończyć<v>%s</v> mapę" ..
 					 "<font size='5'>\n\n</font>uaktualnić do" ..
 					 "<font size='5'>\n\n</font><v>%s</v>"),
 	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Wymagane<v>%s</v>" ..
 						 "<font size='5'>\n\n</font>w ogólnej tabeli wyników" ..
+
 						 "<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>Ranga <v>%s</v>" ..
+	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ranga <v>%s</v>" ..
 						 "<font size='5'>\n\n</font>uaktualnić do" ..
 						 "<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				 "<font size='5'>\n\n</font>Ukończone mapy"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>Ogólny ranking"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				   "<font size='5'>\n\n</font>Tygodniowa tablica wyników"),
-	badges = "<font size='14' face='Lucida Console,Verdana'>Odznaki (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Odznaki (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Liczba map tego gracza jest prywatna. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 				"Ogólna pozycja w tabeli liderów: <b><v>%s</v></b>\n\n" ..
 				"Tygodniowa pozycja w tabeli liderów: <b><v>%s</v></b>"),
 	map_count = "Liczba map: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
@@ -164,5 +166,5 @@ translations.pl = {
 	sink = "Umywalka",
 	bathtub = "Wanna",
 	campfire = "Ognisko",
-	chair = "Krzesło", 
+	chair = "Krzesło",
 }

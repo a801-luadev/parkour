@@ -30,7 +30,7 @@ translations.he = {
 	help_changelog = "<font size='13'><p align='center'><o>גירסה 2.9.0 - 13/12/2020</o></p>\n\n<font size='11'>• שינינו חלק מהחפצים למראה של <ch>חג המולד</ch>!\n• <r>באגים וויזואלים</r> תוקנו\n• <vp>תשתית המודול</vp> שופרה\n• כעת אתם יכולים<t>לאתחל כוח</t> ל<t>מקש ברירת המחדל</t>\n• <cep>כאשר כולם מסיימים את המפה</cep>, הטיימר יתעדכן ל-<cep>5 שניות במקום 20</cep>.\n• <cs>נוסף מצב AFK</cs>\n• הגדלנו את <ps>זמן הטעינה של כדורי השלג</ps>",
 
 	-- Congratulation messages
-	reached_level = "<d>ברכות! עלית לרמה <vp>%s</vp>. (<vp>%ss</vp>)",
+	reached_level = "<d>ברכות! עלית לרמה <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> סיים את הפארקור תוך <vp>%s</vp> שניות, <fc>ברכות!",
 	unlocked_power = "<ce><d>%s</d> השיג את הכח <vp>%s</vp>.",
 
@@ -63,30 +63,30 @@ translations.he = {
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>אתה במצב AFK</b></bv>\nזוז כדי לחזור</font>\n\n<font size='30'><u><t>תזכורות:</t></u></font>\n\n<font size='15'><r>שחקנים עם קו אדום מעליהם אינם מעוניינים בעזרה!\nהטרלת/חסימת שחקנים אחרים בפארקור אסורה!<d>\nהצטרפו ל<cep><a href='event:discord'>שרת הדיסקורד</a></cep> שלנו!\nרוצה לתרום קוד? ראה את <cep><a href='event:github'>מאגר ה-GitHub</a></cep> שלנו.\nיש לך מפה טובה להגיש?  שלח את זה ב<cep><a href='event:map_submission'>נושא הגשת המפות</a></cep> שלנו\nבידקו את <cep><a href='event:forum'>הנושא הרשמי</a></cep> שלנו למידע נוסף!\nתמוך בנו על ידי <cep><a href='event:donate'>תרומה!</a></cep>",
 	options = "<p align='center'><font size='20'>אפשרויות פארקור</font></p>\n\nהשתמש במקלדת <b>QWERTY</b> (כבה אם <b>AZERTY</b> בשימוש)\n\nהשתמש באות <b>צ</b> במקום <b>/mort</b> (משבית את <b>DEL</b>)\n\nהראה את זמן טעינת הכוחות\n\nהראה כפתור כוחות\n\nהראה כפתור עזרה\n\nהראה הכרזות השלמת מפות\n\nהצג סימן 'ללא עזרה'",
 	cooldown = "<v>[#] <r>המתן מספר שניות לפני שאתה עושה זאת.",
-	power_options = ("<font size='13' face='Lucida Console'><b>QWERTY</b> מקלדת" ..
+	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> מקלדת" ..
 					 "\n\n<b>הסתר</b> ספירת מפות" ..
 					 "\n\nהשתמש ב<b>מקשים מקוריים</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console'><p align='center'>השלם <v>%s</v> מפות" ..
+	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>השלם <v>%s</v> מפות" ..
 					"<font size='5'>\n\n</font>בכדי להשיג" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console'><p align='center'>השלם <v>%s</v> מפות" ..
+	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>השלם <v>%s</v> מפות" ..
 					"<font size='5'>\n\n</font>כדי לשדרג ל" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>דרגה <v>%s</v>" ..
+	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>דרגה <v>%s</v>" ..
 					"<font size='5'>\n\n</font>בכדי להשיג" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console'><p align='center'>דרגה <v>%s</v>" ..
+	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>דרגה <v>%s</v>" ..
 					"<font size='5'>\n\n</font>כדי לשדרג ל" ..
 					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				 "<font size='5'>\n\n</font>מפות שהושלמו"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 					"<font size='5'>\n\n</font>לוח תוצאות כללי"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console'><b><v>%s</v></b>" ..
+	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
 				   "<font size='5'>\n\n</font>לוח תוצאות שבועי"),
-	badges = "<font size='14' face='Lucida Console,Verdana'>תגים (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>תגים (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>מספר המפות של שחקן זה הינו פרטי. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Verdana'>%s%s %s\n\n" ..
+	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 				"דרגה בלוח התוצאות הכללי: <b><v>%s</v></b>\n\n" ..
 				"דרגה בלוח התוצאות השבועי: <b><v>%s</v></b>"),
 	map_count = "מספר מפות: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",

@@ -103,7 +103,7 @@ do
 		end
 	end
 
-	Staff = Interface.new(170, 50, 459, 300, true)
+	Staff = Interface.new(148, 50, 504, 300, true)
 		:loadTemplate(WindowBackground)
 
 		:loadComponent(
@@ -123,7 +123,7 @@ do
 				end
 			end)
 
-			:setPosition(10, 10):setSize(100, 15)
+			:setPosition(10, 10):setSize(111, 15)
 		)
 		:loadComponent(
 			Button.new():setTranslation("mappers")
@@ -141,7 +141,7 @@ do
 				end
 			end)
 
-			:setPosition(123, 10):setSize(100, 15)
+			:setPosition(134, 10):setSize(111, 15)
 		)
 		:loadComponent(
 			Button.new():setTranslation("managers")
@@ -159,7 +159,7 @@ do
 				end
 			end)
 
-			:setPosition(236, 10):setSize(100, 15)
+			:setPosition(258, 10):setSize(111, 15)
 		)
 		:loadComponent(
 			Button.new():setTranslation("administrators")
@@ -177,7 +177,7 @@ do
 				end
 			end)
 
-			:setPosition(349, 10):setSize(100, 15)
+			:setPosition(382, 10):setSize(111, 15)
 		)
 
 		:addTextArea({
@@ -189,25 +189,25 @@ do
 
 		:addTextArea({
 			y = 55, x = 22,
-			height = 210, width = 130,
+			height = 210, width = 145,
 			canUpdate = true,
 			text = names(1, 5, 0),
 			alpha = 0
 		})
 
 		:addTextArea({
-			y = 55, x = 172,
-			height = 210, width = 130,
+			y = 55, x = 187,
+			height = 210, width = 145,
 			canUpdate = true,
-			text = names(2, 155, 17),
+			text = names(2, 160, 17),
 			alpha = 0
 		})
 
 		:addTextArea({
-			y = 55, x = 322,
-			height = 210, width = 130,
+			y = 55, x = 352,
+			height = 210, width = 145,
 			canUpdate = true,
-			text = names(3, 305, 34),
+			text = names(3, 315, 34),
 			alpha = 0
 		})
 
@@ -230,7 +230,7 @@ do
 				self.parent:remove(player)
 			end)
 
-			:setPosition(10, 275):setSize(439, 15)
+			:setPosition(10, 275):setSize(484, 15)
 		)
 
 	Staff.sorted_members = {}

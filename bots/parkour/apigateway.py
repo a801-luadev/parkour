@@ -10,69 +10,69 @@ class ApiGateway(aiotfm.Client):
 		if await super().handle_proxy_packet(client, packet):
 			return True
 
-		if client == "api":
-			if packet["type"] == "get_roles":
-				player = packet["player"]
+		if client != "api":
+			return False
 
-				ranks = []
-				for rank, has in self.get_player_rank(player).items():
-					if has:
-						ranks.append(rank)
+		if packet["type"] == "get_roles":
+			player = packet["player"]
 
-				await self.proxy.sendTo({
-					"type": "get_roles",
-					"player": player,
-					"roles": ranks
-				}, client)
+			ranks = []
+			for rank, has in self.get_player_rank(player).items():
+				if has:
+					ranks.append(rank)
 
-			elif packet["type"] == "profile":
-				query = packet["query"]
-				pid, name, online = await self.get_player_info(query)
+			await self.proxy.sendTo({
+				"type": "get_roles",
+				"player": player,
+				"roles": ranks
+			}, client)
 
-				response = {
-					"type": "profile",
-					"id": pid,
-					"name": name
-				}
-				# We have to return a response with the exact query
-				if isinstance(query, int):
-					response["id"] = query
-				else:
-					response["name"] = query
+		elif packet["type"] == "profile":
+			query = packet["query"]
+			pid, name, online = await self.get_player_info(query)
 
-				if name is None:
-					response["profile"] = None
-					await self.proxy.sendTo(response, client)
-					return True
-
-				ranks = []
-				for rank, has in self.get_player_rank(name).items():
-					if has:
-						ranks.append(rank)
-
-				response["profile"] = profile = {
-					"roles": ranks,
-					"online": online
-				}
-
-				if online:
-					profile["file"] = file = await self.load_player_file(
-						name, online_check=False
-					)
-
-					if file is not None:
-						profile.update({
-							"leaderboard": { # not implemented yet
-								"overall": None,
-								"weekly": None
-							},
-							"hour_r": file["hour_r"] // 1000 - self.time_diff
-						})
-
-				await self.proxy.sendTo(response, client)
-
+			response = {
+				"type": "profile",
+				"id": pid,
+				"name": name
+			}
+			# We have to return a response with the exact query
+			if isinstance(query, int):
+				response["id"] = query
 			else:
-				return False
+				response["name"] = query
+
+			if name is None:
+				response["profile"] = None
+				await self.proxy.sendTo(response, client)
+				return True
+
+			ranks = []
+			for rank, has in self.get_player_rank(name).items():
+				if has:
+					ranks.append(rank)
+
+			response["profile"] = profile = {
+				"roles": ranks,
+				"online": online
+			}
+
+			if online:
+				profile["file"] = file = await self.load_player_file(
+					name, online_check=False
+				)
+
+				if file is not None:
+					profile.update({
+						"leaderboard": { # not implemented yet
+							"overall": None,
+							"weekly": None
+						},
+						"hour_r": file["hour_r"] // 1000 - self.time_diff
+					})
+
+			await self.proxy.sendTo(response, client)
+
 		else:
 			return False
 		return True
