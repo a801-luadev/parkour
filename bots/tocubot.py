@@ -582,10 +582,10 @@ class Client(aiotfm.Client):
 		if result:
 			current, total, cycles = result
 
-			await self.sendCommand(commands.set_limit(19))
+			await self.sendCommand(commands.set_limit(11))
 			await self.send_channel(
 				channel,
-				"Fixed room (set room limit to 19). "
+				"Fixed room (set room limit to 11). "
 				"Runtime usage: `{}ms` current, `{}ms` total, `{}ms` average (`{}` cycles)"
 				.format(current, total, total / max(1, cycles), cycles)
 			)
