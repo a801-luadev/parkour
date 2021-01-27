@@ -19,7 +19,7 @@ class env:
 
 	password = os.getenv("TOCU_PASSWORD")
 
-	get_code = os.getenv("GET_CODE_CMD")
+	load_module = os.getenv("LOAD_MODULE_CMD")
 	join_room = os.getenv("JOIN_ROOM_CMD")
 	set_limit = os.getenv("SET_LIMIT_CMD")
 	update = os.getenv("UPDATE_CMD")
@@ -39,7 +39,7 @@ class Commands:
 
 
 commands = Commands()
-commands.add_command("get_code", env.get_code)
+commands.add_command("load_module", env.load_module)
 commands.add_command("join_room", env.join_room)
 commands.add_command("set_limit", env.set_limit)
 commands.add_command("update", env.update)
@@ -537,13 +537,6 @@ class Client(aiotfm.Client):
 		)
 
 	# Restart system / room fix system
-	async def get_module_code(self, timeout=10.0):
-		"""Returns the code that is currently running in the module. Caches it."""
-		if self.module_code is None:
-			await self.sendCommand(commands.get_code("parkour"))
-			self.module_code = await self.wait_for("on_ui_log", timeout=timeout)
-		return self.module_code
-
 	async def check_room_state(self, timeout=1.0):
 		"""Checks if the room is alive. Returns True if it is."""
 		check_id = (1 << 24) + 255
@@ -589,27 +582,17 @@ class Client(aiotfm.Client):
 		if result:
 			current, total, cycles = result
 
-			await self.sendCommand(commands.set_limit(11))
+			await self.sendCommand(commands.set_limit(19))
 			await self.send_channel(
 				channel,
-				"Fixed room (set room limit to 11). "
+				"Fixed room (set room limit to 19). "
 				"Runtime usage: `{}ms` current, `{}ms` total, `{}ms` average (`{}` cycles)"
 				.format(current, total, total / max(1, cycles), cycles)
 			)
 
 		else:
-			for attempt in range(6):
-				try:
-					code = await self.get_module_code()
-				except Exception:
-					continue
-				await self.loadLua(code)
-
-				await self.send_channel(channel, "Room restarted.")
-				break
-
-			else:
-				await self.send_channel(channel, "Could not restart the room.")
+			await self.sendCommand(commands.load_module("parkour"))
+			await self.send_channel(channel, "Room restarted.")
 
 		if go_bots:
 			await asyncio.sleep(3.0)

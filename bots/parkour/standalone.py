@@ -29,5 +29,14 @@ class StandaloneGateway(aiotfm.Client):
 				"reports": self.reports
 			}, client)
 
+		elif packet["type"] == "get_chats":
+			await self.proxy.sendTo({
+				"type": "chats",
+				"chats": {
+					"mod": self.mod_chat.channel_name,
+					"mapper": self.mapper_chat.channel_name
+				}
+			}, client)
+
 		else:
 			return False

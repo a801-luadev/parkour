@@ -1,4 +1,4 @@
-local room_max_players = 12
+local room_max_players = 20
 
 onEvent("PacketReceived", function(channel, id, packet)
 	if channel ~= "bots" then return end
