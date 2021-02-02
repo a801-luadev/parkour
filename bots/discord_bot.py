@@ -502,7 +502,7 @@ class Client(discord.Client):
 
 	async def get_map_info(self, code, channel):
 		if not await self.set_busy(True, channel):
-			return
+			return (None, None, None, None)
 
 		await self.proxy.sendTo({"type": "map_info", "map": code}, "tocubot")
 		try:
@@ -514,6 +514,8 @@ class Client(discord.Client):
 			await channel.send("The map does not exist or can't be loded.")
 
 		await self.set_busy(False)
+
+		return author, code, perm, xml
 
 	async def on_message(self, msg):
 		args = msg.content.split(" ")
