@@ -718,8 +718,8 @@ class Client(discord.Client):
 						)
 					),
 					file=discord.File(
-						filename="{}.{}".format(code, file_format),
-						fp=io.BytesIO(file_content)
+						filename="{}.png".format(code),
+						fp=io.BytesIO(img)
 					)
 				)
 
