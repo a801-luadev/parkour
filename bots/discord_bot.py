@@ -42,6 +42,8 @@ class env:
 	mod_chat = 711955597100056628
 	mapper_chat = 722189771631231029
 
+	mapper_role = 669594612834369546
+	map_advice = 768925497056165888
 	map_perm_chat = 703701422910472192
 	map_info_chat = 723583447976771595
 
@@ -483,6 +485,36 @@ class Client(discord.Client):
 		if channel is not None:
 			await channel.send(msg)
 
+	async def render_map(self, xml):
+		try:
+			async with aiohttp.ClientSession(conn_timeout=15.0, read_timeout=15.0) as session:
+				async with session.post(
+					"https://miceditor-map-preview.herokuapp.com/",
+					headers={"Content-Type": "application/json"},
+					data=json.dumps({
+						"xml": xml,
+						"raw": True
+					}).encode()
+				) as resp:
+					return await resp.read()
+		except Exception:
+			return None
+
+	async def get_map_info(self, code, channel):
+		if not await self.set_busy(True, channel):
+			return
+
+		await self.proxy.sendTo({"type": "map_info", "map": code}, "tocubot")
+		try:
+			author, code, perm, xml = await self.wait_for("map_info", timeout=5.0)
+		except Exception:
+			author, code, perm, xml = (None, None, None, None)
+
+		if author is None:
+			await channel.send("The map does not exist or can't be loded.")
+
+		await self.set_busy(False)
+
 	async def on_message(self, msg):
 		args = msg.content.split(" ")
 		cmd = args.pop(0).lower()
@@ -618,39 +650,23 @@ class Client(discord.Client):
 				if not code[1:].isdigit():
 					return await msg.channel.send("Invalid syntax.")
 
-				if not await self.set_busy(True, msg.channel):
-					return
-
-				# get map info
-				await self.proxy.sendTo({"type": "map_info", "map": code}, "tocubot")
-				try:
-					author, code, perm, xml = await self.wait_for("map_info", timeout=5.0)
-				except Exception:
-					author = None
+				author, code, perm, xml = await self.get_map_info(code, msg.channel)
 
 				if author is None:
-					await msg.channel.send("The map does not exist or can't be loded.")
-					await self.set_busy(False)
 					return
 
 				# try to draw it if needed
 				file_format = "xml"
 				file_content = xml.encode()
 				if cmd in ("!render", "!map"):
-					try:
-						async with aiohttp.ClientSession(conn_timeout=15.0, read_timeout=15.0) as session:
-							async with session.post(
-								"https://miceditor-map-preview.herokuapp.com/",
-								headers={"Content-Type": "application/json"},
-								data=json.dumps({
-									"xml": xml,
-									"raw": True
-								}).encode()
-							) as resp:
-								file_content = await resp.read()
-						file_format = "png"
-					except Exception:
+					img = await self.render_map(xml)
+
+					if img is None:
 						await msg.channel.send("Could not render the map. Here is the XML instead.")
+
+					else:
+						file_format = "png"
+						file_content = img
 
 				# send the result
 				await msg.channel.send(
@@ -668,7 +684,42 @@ class Client(discord.Client):
 					)
 				)
 
-				await self.set_busy(False)
+		elif msg.channel.id == env.map_advice:
+			if cmd == ("<#{}>".format(env.map_advice)):
+				if not args:
+					return
+
+				code = args[0]
+				if code[0] != "@":
+					code = "@" + code
+				if not code[1:].isdigit():
+					return
+
+				author, code, perm, xml = await self.get_map_info(code, msg.channel)
+
+				if author is None:
+					return
+
+				img = await self.render_map(xml)
+				if img is None:
+					await msg.channel.send("Could not render the map.")
+					return
+
+				# send the result
+				await msg.channel.send(
+					content="{} - <@&{}>".format(msg.author.mention, env.mapper_role),
+					embed=discord.Embed(
+						description="`[{}]` - **P{}**\n{} - **{}**"
+						.format(
+							categories.get(perm, "Unknown"),
+							perm, code, author
+						)
+					),
+					file=discord.File(
+						filename="{}.{}".format(code, file_format),
+						fp=io.BytesIO(file_content)
+					)
+				)
 
 		elif msg.channel.id in (env.commands_channel, env.private_channel):
 			if cmd == "!restart":
