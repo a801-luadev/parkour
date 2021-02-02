@@ -31,7 +31,7 @@ translations.fr = {
 
 	-- Congratulation messages
 	reached_level = "<d>Bravo! Vous avez atteint le niveau <vp>%s</vp>. (<t>%ss</t>)",
-	finished = "<d><o>%s</o> a fini le parkour en <vp>%s</vp> secondes, <fc>félicitations !",
+	finished = "<d><o>%s</o> a fini le parkour en <vp>%s</vp> secondes, <fc>félicitations!",
 	unlocked_power = "<ce><d>%s</d> a débloqué le pouvoir <vp>%s</vp>.",
 
 	-- Information messages
@@ -41,26 +41,26 @@ translations.fr = {
 	paused_events = "<cep><b>[Attention!]</b> <n>Le module a atteint sa limite critique et est en pause.",
 	resumed_events = "<n2>Le module n'est plus en pause.",
 	welcome = "<n>Bienvenue dans <t>#parkour</t>!",
-	module_update = "<r><b>[Attention!]</b> <n>Le module va se réinitialiser dans<d>%02d:%02d</d>.",
+	module_update = "<r><b>[Attention!]</b> <n>Le module va se réinitialiser dans <d>%02d:%02d</d>.",
 	leaderboard_loaded = "<j>Le tableau des scores a été chargé. Appuyer sur L pour l'ouvrir.",
 	kill_minutes = "<R>Tes pouvoirs ont été désactivés pour %s minutes.",
 	permbanned = "<r>Tu as été banni de #parkour définitevement.",
 	tempbanned = "<r>Tu as été banni de #parkour pendant %s minutes.",
-	forum_topic = "<rose>Pour plus d'informations sur le module, visite ce lien : %s",
-	report = "<j>Besoin de signaler un joueur ? <t><b>/c Parkour#8558 .report Pseudo#0000</b></t>",
+	forum_topic = "<rose>Pour plus d'informations sur le module, visite ce lien: %s",
+	report = "<j>Besoin de signaler un joueur? <t><b>/c Parkour#8558 .report Pseudo#0000</b></t>",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Le mode de records a été activé dans ce salon. Les statistiques ne compteront pas et les pouvoirs sont désactivés !\nTu peux trouver plus d'informations à propos des records sur <b>%s</b>",
 	records_admin = "<v>[#] <d>Tu es un administrateur de ce salon de records. Vous pouvez utiliser les commandes <b>!map</b>, <b>!pw</b> et <b>!time</b>.",
 	records_completed = "<v>[#] <d>Tu as complété la carte ! Si tu veux la refaire, ecrivez <b>!redo</b>.",
 	records_submit = "<v>[#] <d>Wow ! On dirait que tu as fait le temps le plus rapide dans ce salon. Si tu veux envoyez voter record, écris <b>!submit</b>.",
-	records_invalid_map = "<v>[#] <r>On dirait que cette carte n'est pas dans la rotation de parkour... Tu ne peux pas envoyer de records pour celle-ci !",
+	records_invalid_map = "<v>[#] <r>On dirait que cette carte n'est pas dans la rotation de parkour... Tu ne peux pas envoyer de records pour celle-ci!",
 	records_not_fastest = "<v>[#] <r>On dirait que tu n'es pas le joueur le plus rapide dans ce salon...",
-	records_already_submitted = "<v>[#] <r>Tu as déjà envoyé ton record pour cette carte !",
+	records_already_submitted = "<v>[#] <r>Tu as déjà envoyé ton record pour cette carte!",
 	records_submitted = "<v>[#] <d>Ton record pour la carte <b>%s</b> a été envoyé.",
 
 	-- Miscellaneous
-	afk_popup = "\n<p align='center'><font size='30'><bv><b>VOUS ÊTES DÉSORMAIS AFK</b></bv>\nBOUGEZ POUR REAPPARAÎTRE</font>\n\n<font size='30'><u><t>Rappels :</t></u></font>\n\n<font size='15'><r>Les joueurs avec une ligne rouge au-dessus d'eux ne veulent pas d'aide !\nTroller/bloquer des joueurs est interdit dans parkour !<d>\nRejoins notre <cep><a href='event:discord'>serveur Discord</a></cep>!\nEnvie de contribuer au code ? Viens voir notre <cep><a href='event:github'>GitHub</a></cep>\nTu as une bonne carte à nous proposer ? Viens la poster sur notre <cep><a href='event:map_submission'>sujet de proposition de cartes</a></cep>\nJettes un oeil à notre <cep><a href='event:forum'>sujet officiel</a></cep> pour plus d'informations !\nSoutiens le module en faisant un <cep><a href='event:donate'>don !</a></cep>",
+	afk_popup = "\n<p align='center'><font size='30'><bv><b>VOUS ÊTES DÉSORMAIS AFK</b></bv>\nBOUGEZ POUR REAPPARAÎTRE</font>\n\n<font size='30'><u><t>Rappels:</t></u></font>\n\n<font size='15'><r>Les joueurs avec une ligne rouge au-dessus d'eux ne veulent pas d'aide!\nTroller/bloquer des joueurs est interdit dans parkour!<d>\nRejoins notre <cep><a href='event:discord'>serveur Discord</a></cep>!\nEnvie de contribuer au code? Viens voir notre <cep><a href='event:github'>GitHub</a></cep>\nTu as une bonne carte à nous proposer? Viens la poster sur notre <cep><a href='event:map_submission'>sujet de proposition de cartes</a></cep>\nJettes un oeil à notre <cep><a href='event:forum'>sujet officiel</a></cep> pour plus d'informations!\nSoutiens le module en faisant un <cep><a href='event:donate'>don!</a></cep>",
 	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <b>M</b> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.",
 	cooldown = "<v>[#] <r>Attends quelques secondes avant de pouvoir recommencer.",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Clavier <b>QWERTY</b>" ..
@@ -126,7 +126,7 @@ translations.fr = {
 	close = "Fermer",
 	cant_load_bot_profile = "<v>[#] <r>Tu ne peux pas voir le profile de ce robot car #parkour l'utilise intérieurement pour faire fonctionner le module correctement.",
 	cant_load_profile = "<v>[#] <r>Le joueur <b>%s</b> semble être hors ligne ou n'existe pas.",
-	like_map = "Aimez-vous cette carte ?",
+	like_map = "Aimez-vous cette carte?",
 	yes = "Oui",
 	no = "Non",
 	idk = "Je ne sais pas",
