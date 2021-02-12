@@ -47,7 +47,15 @@ local function addCheckpointImage(player, x, y)
 		x, y = level.x, level.y
 	end
 
-	checkpoints[player] = tfm.exec.addImage("17653c05485.png", "!1", x - 15, y - 15, player)
+	local data = room.playerList[player]
+	local img
+	if data and data.spouseId then
+		img = "17797d878fa.png" -- soulmate
+	else
+		img = "17797d860b6.png" -- no soulmate
+	end
+
+	checkpoints[player] = tfm.exec.addImage(img, "!1", x - 15, y - 15, player)
 end
 
 local function showStats()
