@@ -223,12 +223,7 @@ powers = {
 		default = {2, 2}, -- Q, A
 
 		fnc = function(player, key, down, x, y)
-			local obj = despawnableObject(2000, 28, x, y + 10)
-			addNewTimer(
-				2000,
-				tfm.exec.removeImage,
-				tfm.exec.addImage("17653d6417c.png", "#" .. obj, -16, -22)
-			)
+			despawnableObject(2000, 28, x, y + 10)
 		end,
 
 		upgrades = {
@@ -242,8 +237,7 @@ powers = {
 				cooldown_img = "17127e62809.png",
 
 				fnc = function(player, key, down, x, y)
-					-- 2804
-					despawnableObject(3000, 2808, x, y + 10)
+					despawnableObject(3000, 2804, x, y + 10)
 				end
 			},
 			{
@@ -256,8 +250,7 @@ powers = {
 				cooldown_img = "17127e5ca47.png",
 
 				fnc = function(player, key, down, x, y)
-					-- 59
-					despawnableObject(4000, 2809, x, y + 12)
+					despawnableObject(4000, 59, x, y + 12)
 				end
 			},
 		}
@@ -296,8 +289,7 @@ powers = {
 		default = {4, 3}, -- Z, W
 
 		fnc = function(player, key, down, x, y)
-			-- 1
-			despawnableObject(3000, 103, x, y + 10)
+			despawnableObject(3000, 1, x, y + 10)
 		end
 	},
 	{
@@ -354,8 +346,7 @@ powers = {
 		default = {5, 1}, -- CTRL
 
 		fnc = function(player, key, down, x, y)
-			-- 46
-			despawnableObject(4000, 304, x + (facing[player] and 20 or -20), y - 30, 90)
+			despawnableObject(4000, 46, x + (facing[player] and 20 or -20), y - 30, 90)
 		end
 	},
 	{
@@ -374,8 +365,7 @@ powers = {
 		default = {4, 7}, -- B
 
 		fnc = function(player, key, down, x, y)
-			-- 2
-			despawnableObject(4000, 217, x, y + 10, 0)
+			despawnableObject(4000, 2, x, y + 10, 0)
 		end
 	},
 	{
@@ -394,12 +384,7 @@ powers = {
 		default = {4, 8}, -- N
 
 		fnc = function(player, key, down, x, y)
-			local obj = despawnableObject(4000, 701, x, y + 10, 0)
-			addNewTimer(
-				4000,
-				tfm.exec.removeImage,
-				tfm.exec.addImage("17653d4a436.png", "#" .. obj, -65, -11)
-			)
+			despawnableObject(4000, 701, x, y + 10, 0)
 		end
 	},
 	{
@@ -446,7 +431,7 @@ powers = {
 			addNewTimer(
 				5000,
 				tfm.exec.removeImage,
-				tfm.exec.addImage("17653e5be63.png", "_52", x - 30, y - 28)
+				tfm.exec.addImage("17797e8de0d.png", "_52", x - 30, y - 28)
 			)
 		end,
 
