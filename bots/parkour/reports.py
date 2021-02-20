@@ -114,8 +114,9 @@ class Reports(aiotfm.Client):
 					extra = "Sent you the player's room in whispers."
 					await self.whisper(
 						author,
-						"{}'s room: {}".format(report[1], file["room"])
+						"{}'s room: {}. The join request has been sent.".format(report[1], file["room"])
 					)
+					await self.handle_join_request(file["room"], author)
 
 				await channel.send(
 					"{} will be handling the report {}. {}"
