@@ -1,1 +1,1 @@
--e git://github.com/Athesdrake/aiotfm.git@4c19368ec6695d2f20164f2819380f2ed503d23d#egg=aiotfm
+-e git://github.com/Athesdrake/aiotfm.git@47c2d50219867fc3f11edab64fa53153c5a863f9#egg=aiotfm
