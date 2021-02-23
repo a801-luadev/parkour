@@ -62,7 +62,7 @@ class Whois(aiotfm.Client):
 			try:
 				friend = await self.friends.add(name)
 			except Exception:
-				return
+				return normalize_name(name)
 
 		return normalize_name(friend.name)
 
