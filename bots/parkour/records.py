@@ -159,7 +159,7 @@ class Records(aiotfm.Client):
 				name = packet["name"] # name
 				records = packet["records"] # records quantity
 
-				if records > 0 and (records == 1 or records % 5 == 0):
+				if records >= 0 and (records == 1 or records % 5 == 0):
 					await self.send_webhook(
 						env.webhooks.record_badges,
 						"**`[BADGE]:`** **{}**, **{}**"
