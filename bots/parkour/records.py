@@ -27,12 +27,11 @@ class Records(aiotfm.Client):
 			return True
 
 		if tid == RECORD_SUBMISSION:
-			code, player, taken, room, checkpoint = packet.split("\x00")
+			code, name, player, taken, room, checkpoint = packet.split("\x00")
 			player = int(player)
 			taken = int(taken)
 			checkpoint = int(checkpoint)
 			room = enlarge_name(room)
-			name = await self.get_player_name(player)
 
 			# send to records website
 			await self.send_webhook(

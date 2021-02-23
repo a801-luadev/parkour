@@ -211,6 +211,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		sendPacket(
 			"common", 6,
 			(map .. "\000" ..
+			 player .. "\000" ..
 			 room.playerList[player].id .. "\000" ..
 			 math.floor(fastest.record * 100) .. "\000" ..
 			 room.shortName .. "\000" ..
