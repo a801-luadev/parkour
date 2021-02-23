@@ -366,7 +366,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				translatedChatMessage("invalid_syntax", player)
 				return
 			end
-			tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped")
+			tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped" and not records_cond)
 		elseif os.time() < map_change_cd and not review_mode then
 			tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", player)
 		else
