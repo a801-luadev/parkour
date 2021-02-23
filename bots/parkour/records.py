@@ -11,6 +11,7 @@ import time
 import math
 
 
+RECORD_BADGES = (17 << 8) + 255
 RECORD_SUBMISSION = (16 << 8) + 255
 PLAYER_VICTORY = (21 << 8) + 255
 
@@ -155,38 +156,24 @@ class Records(aiotfm.Client):
 
 		if client == "records":
 			if packet["type"] == "records":
-				player = packet["player"] # id
+				name = packet["name"] # name
 				records = packet["records"] # records quantity
 
 				if records > 0 and (records == 1 or records % 5 == 0):
-					pid, name, online = await self.get_player_info(player)
-					if name is None:
-						return
-
 					await self.send_webhook(
 						env.webhooks.record_badges,
 						"**`[BADGE]:`** **{}**, **{}**"
 						.format(name, records)
 					)
 
-					badge = records // 5 + 1
-
-					if badge > 9:
+					if badge >= 9 * 5:
 						return True
 
-					file = await self.load_player_file(
-						name, online_check=False
+					await self.send_callback(
+						RECORD_BADGES,
+						"{}\x00{}"
+						.format(name, records)
 					)
-					if not file:
-						return True
-
-					if file["badges"][5] < badge:
-						file["badges"][5] = badge
-
-						await self.save_player_file(
-							name, file, "badges",
-							online_check=False
-						)
 
 			elif packet["type"] == "map-records":
 				self.dispatch("map_records", packet["map"], packet["records"])
