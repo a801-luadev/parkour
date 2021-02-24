@@ -239,7 +239,7 @@ class Chat(aiotfm.Client):
 
 		if community is not None:
 			return "`[{}]` `[{}]` {}".format(
-				msg.community.name, author, content
+				community, author, content
 			)
 		else:
 			return "`[{}]` {}".format(author, content)
