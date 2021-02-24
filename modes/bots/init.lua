@@ -82,7 +82,7 @@ local pdata_actions = {
 	records = function(player, data)
 		local newbadge = records[player]
 		records[player] = nil
-		if data.badges[6] < newbadge then
+		if data.badges[6] < newbadge or newbadge == 0 then
 			data.badges[6] = newbadge
 
 			return true
@@ -366,8 +366,8 @@ onEvent("TextAreaCallback", function(id, player, data)
 		local name, badge = string.match(data, "^([^\000]+)\000([^\000]+)$")
 		badge = tonumber(badge)
 
-		if badge > 1 then
-			badge = math.ceil(badge / 5) + 1
+		if badge > 0 then
+			badge = math.floor(badge / 5) + 1
 		end
 
 		if badge <= records.all_badges then
