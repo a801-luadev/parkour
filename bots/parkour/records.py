@@ -165,7 +165,7 @@ class Records(aiotfm.Client):
 						.format(name, records)
 					)
 
-					if badge >= 9 * 5:
+					if records >= 9 * 5:
 						return True
 
 					await self.send_callback(

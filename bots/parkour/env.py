@@ -36,4 +36,6 @@ class env:
 
 		commands = os.getenv("COMMAND_LOG_WEBHOOK")
 
+		tribe = os.getenv("TRIBE_WEBHOOK")
+
 	report_channel = 773630094257815572

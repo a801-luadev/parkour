@@ -59,6 +59,10 @@ class Chat(aiotfm.Client):
 
 						if chat.loaded:
 							await chat.channel.send(packet["msg"])
+
+					elif packet["channel"] == "*": # Tribe
+						await self.sendTribeMessage(packet["msg"])
+
 					else:
 						await self.whisper(packet["channel"], packet["msg"])
 
@@ -76,18 +80,28 @@ class Chat(aiotfm.Client):
 
 			elif packet["type"] == "who_chat":
 				# Request player list in a chat
-				mod_chat = packet["chat"] == "mod"
-				chat = self.mod_chat if mod_chat else self.mapper_chat
+				players = ("not loaded",)
+				webhook = None
 
-				if chat.loaded:
-					players = chat.players
+				if packet["chat"] == "tribe":
+					tribe = await self.getTribe(False)
+					webhook = env.webhooks.tribe
+
+					if tribe is not None:
+						players = map(lambda m: m.name, tribe.members)
+
 				else:
-					players = ()
+					mod_chat = packet["chat"] == "mod"
+					chat = self.mod_chat if mod_chat else self.mapper_chat
+					webhook = chat.chat_webhook
+
+					if chat.loaded:
+						players = chat.players
 
 				await self.send_webhook(
-					chat.chat_webhook,
+					webhook,
 					"/who: `{}`".format(
-						"`, `".join(players or ("not loaded",))
+						"`, `".join(players)
 					)
 				)
 
@@ -211,30 +225,58 @@ class Chat(aiotfm.Client):
 				chat.loaded = True
 				break
 
+	def prettify_message(self, author, content, community=None):
+		content = re.sub(
+			r"`(https?://(?:-\.)?(?:[^\s/?\.#-]+\.?)+(?:/[^\s]*)?)`",
+			r"\1",
+
+			"`" + content.replace("`", "'")
+			.replace("&lt;", "<")
+			.replace("&amp;", "&")
+			.replace(" ", "` `") + "`"
+		)
+		author = normalize_name(author)
+
+		if community is not None:
+			return "`[{}]` `[{}]` {}".format(
+				msg.community.name, author, content
+			)
+		else:
+			return "`[{}]` {}".format(author, content)
+
+	async def on_tribe_message(self, author, msg):
+		# send the message to discord
+		await self.send_webhook(
+			env.webhooks.tribe,
+			self.prettify_message(author, msg)
+		)
+
+	async def on_member_connected(self, name):
+		await self.send_webhook(
+			env.webhooks.tribe,
+			"`{}` just connected.".format(name)
+		)
+
+	async def on_member_disconnected(self, name):
+		await self.send_webhook(
+			env.webhooks.tribe,
+			"`{}` has disconnected.".format(name)
+		)
+
 	async def on_channel_message(self, msg):
 		# send the message to discord
 		for chat in (self.mod_chat, self.mapper_chat):
 			if msg.channel != chat.channel:
 				continue
 
-			content = re.sub(
-				r"`(https?://(?:-\.)?(?:[^\s/?\.#-]+\.?)+(?:/[^\s]*)?)`",
-				r"\1",
-
-				"`" + msg.content.replace("`", "'")
-				.replace("&lt;", "<")
-				.replace("&amp;", "&")
-				.replace(" ", "` `") + "`"
-			)
-			author = normalize_name(msg.author)
-
 			await self.send_webhook(
 				chat.chat_webhook,
-				"`[{}]` `[{}]` {}".format(
-					msg.community.name, author, content
+				self.prettify_message(
+					msg.author, msg.content, msg.community.name
 				)
 			)
 
+			author = normalize_name(msg.author)
 			if author != "Parkour#8558" and msg.content[0] == ".":
 				args = msg.content.split(" ")
 				cmd = args.pop(0).lower()[1:]

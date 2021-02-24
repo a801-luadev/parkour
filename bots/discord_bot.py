@@ -41,6 +41,7 @@ class env:
 
 	mod_chat = 711955597100056628
 	mapper_chat = 722189771631231029
+	tribe_chat = 814226915702866002
 
 	mapper_role = 669594612834369546
 	map_advice = 768925497056165888
@@ -538,7 +539,7 @@ class Client(discord.Client):
 
 			await msg.delete()
 
-		elif msg.channel.id in (env.mod_chat, env.mapper_chat):
+		elif msg.channel.id in (env.mod_chat, env.mapper_chat, env.tribe_chat):
 			# Message prefixes
 			if msg.content.startswith("!m "):
 				content = msg.content[3:]
@@ -548,7 +549,11 @@ class Client(discord.Client):
 				if msg.content.lower() == "/who":
 					await self.proxy.sendTo({
 						"type": "who_chat",
-						"chat": "mod" if msg.channel.id == env.mod_chat else "mapper"
+						"chat": (
+							"mod" if msg.channel.id == env.mod_chat else
+							"mapper" if msg.channel.id == env.mapper_chat else
+							"tribe"
+						)
 					}, "parkour")
 				return
 
@@ -577,8 +582,10 @@ class Client(discord.Client):
 
 			if msg.channel.id == env.mod_chat:
 				channel = "#mod"
-			else:
+			elif msg.channel.id == env.mapper_chat:
 				channel = "#mapper"
+			else:
+				channel = "*"
 
 			await self.proxy.sendTo({"type": "message", "channel": channel, "msg": content}, "parkour")
 
