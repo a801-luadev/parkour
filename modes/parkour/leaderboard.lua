@@ -125,7 +125,7 @@ onEvent("GameDataLoaded", function(data)
 		local new_reset = os.date("%d/%m/%Y", ts - now.wday * 24 * 60 * 60 * 1000)
 		if new_reset ~= timed_maps.week.last_reset then
 			if new_reset == "28/02/2021" then
-				translatedChatMessage("double_maps")
+				translatedChatMessage("double_maps_start")
 			elseif new_reset == "07/03/2021" then
 				translatedChatMessage("double_maps_end")
 			end

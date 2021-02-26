@@ -64,8 +64,8 @@ translations.br = {
 	easter_egg_11 = "<ch>Vamos para a cama mais cedo, o tempo vai passar mais rápido!",
 	easter_egg_12 = "<ch>Paciência é uma virtude",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Você ganha duas vezes mais vitórias e todos os poderes estão disponíveis na semana de aniversário do Parkour!",
-	double_maps_start = "<rose>É A SEMANA DE ANIVERSÁRIO DO PARKOUR! Você ganha duas vezes mais vitórias e todos os poderes foram ativados. Muito obrigado por jogar com a gente!",
+	double_maps = "<bv>Você ganhará duas vezes mais vitórias e todos os poderes estão disponíveis na semana de aniversário do Parkour!",
+	double_maps_start = "<rose>É A SEMANA DE ANIVERSÁRIO DO PARKOUR! Você ganhará duas vezes mais vitórias e todos os poderes foram ativados. Muito obrigado por jogar com a gente!",
 	double_maps_end = "<rose>A semana de aniversário do Parkour terminou. Muito obrigado por jogar com a gente!",
 
 	-- Records
