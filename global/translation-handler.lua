@@ -54,3 +54,7 @@ onEvent("NewPlayer", function(player)
 		player_langs[player] = translations[room.community]
 	end
 end)
+
+onEvent("PlayerLeft", function(player)
+	player_langs[player] = nil
+end)
