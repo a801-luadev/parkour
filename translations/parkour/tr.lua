@@ -49,6 +49,25 @@ translations.tr = {
 	forum_topic = "<rose>Modül hakkında daha fazla bilgi edinmek için bağlantıya gidin: %s",
 	report = "<j>Bir oyuncuyu bildirmek mi istiyorsun? <t><b>/c Parkour#8558 .report KullanıcıAdı#Kod</b></t>",
 
+	-- Easter Eggs
+	easter_egg_0  = "<ch>Ve geri sayım başlıyor...",
+	easter_egg_1  = "<ch>24 saatten daha az kaldı!",
+	easter_egg_2  = "<ch>Vay be, bayağı erkencisin! Çok mu heyecanlandın?",
+	easter_egg_3  = "<ch>Bir sürprizim var...",
+	easter_egg_4  = "<ch>Birazdan ne olacak biliyor musun...?",
+	easter_egg_5  = "<ch>Saat işliyor...",
+	easter_egg_6  = "<ch>Sürpriz yakın!",
+	easter_egg_7  = "<ch>Parti başlamak üzere...",
+	easter_egg_8  = "<ch>Saatini kontrol et, zamanı geldi mi?",
+	easter_egg_9  = "<ch>Dikkatli ol, zaman geçiyor...",
+	easter_egg_10 = "<ch>Arkana yaslan ve rahatla, yarın vaktinde devam edecek!",
+	easter_egg_11 = "<ch>Hadi artık yat, böylece zaman daha hızlı geçecek!",
+	easter_egg_12 = "<ch>Sabır erdemdir",
+	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
+	double_maps = "<bv>Çifte haritalar ve bütün güçler Parkur'un doğum günü haftası için açıldı!",
+	double_maps_start = "<rose>ŞU AN PARKUR'UN DOĞUM GÜNÜ HAFTASI! Çifte haritalar ve bütün güçler açıldı. Bizimle oynadığın için teşekkürler!",
+	double_maps_end = "<rose>Parkur'un doğum günü haftası bitti. Bizimle oynadığın için teşekkürler!",
+
 	-- Records
 	records_enabled = "<v>[#] <d>Rekor modu bu odada açık. İstatistikleriniz bu odada sayılmaz ve güçlerinizi kullanamazsınız!\nRekorlar hakkında daha fazla bilgi edinmek için <b>%s</b>  .",
 	records_admin = "<v>[#] <d>Bu rekor odasının yöneticisisiniz. <b>!map</b>, <b>!setcp</b>, <b>!pw</b> ve <b>!time</b> komutlarını kullanabilirsiniz.",

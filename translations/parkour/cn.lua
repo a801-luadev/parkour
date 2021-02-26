@@ -48,6 +48,25 @@ translations.cn = {
 	forum_topic = "<rose>更多關於這個小遊戲的資訊可以查看: %s",
 	report = "<j>想舉報玩家? <t><b>/c Parkour#8558 .report 玩家名字#0000</b></t>",
 
+	-- Easter Eggs
+	easter_egg_0  = "<ch>所以要開始倒數了...",
+	easter_egg_1  = "<ch>剩下時間少於 24 小時!",
+	easter_egg_2  = "<ch>哇, 你挺早的! 你是不是太興奮了?",
+	easter_egg_3  = "<ch>一個驚喜在等待你...",
+	easter_egg_4  = "<ch>你知道接下來將會發生什麼...?",
+	easter_egg_5  = "<ch>時間滴答滴答在過著...",
+	easter_egg_6  = "<ch>驚喜快要到了!",
+	easter_egg_7  = "<ch>派對很快要開始...",
+	easter_egg_8  = "<ch>查看你的時鐘, 是時候了嗎?",
+	easter_egg_9  = "<ch>注意, 時間在一直走...",
+	easter_egg_10 = "<ch>坐下來放鬆一下, 馬上就到明天了!",
+	easter_egg_11 = "<ch>一起早點到床上, 會使時間過得更快!",
+	easter_egg_12 = "<ch>最重要是耐心",
+	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
+	double_maps = "<bv>雙倍地圖計算而且所有能力都可以在這 parkour 生日週裡使用!",
+	double_maps_start = "<rose>這週是 PARKOUR 的生日! 雙倍地圖計算而且所有能力都已被激活使用。感謝跟我們一起遊玩!",
+	double_maps_end = "<rose>Parkour 的生日週已完結。感謝各位的遊玩!",
+
 	-- Records
 	records_enabled = "<v>[#] <d>記錄模式已在這房間啟用。數據不會被記錄而且不能使用能力!\n你可以在這裡查看更多關於記錄模式的資訊: <b>%s</b>",
 	records_admin = "<v>[#] <d>你是這房間的管理員。你可以使用以下指令 <b>!map</b>, <b>!setcp</b>, <b>!pw</b> and <b>!time</b>。",

@@ -49,6 +49,25 @@ translations.ro = {
 	forum_topic = "<rose>Pentru mai multe informații despre modul vizitează link-ul: %s",
 	report = "<j>Vrei să raportezi un jucător? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
 
+	-- Easter Eggs
+	easter_egg_0  = "<ch>Numărătoarea a început...",
+	easter_egg_1  = "<ch>Au mai rămas mai puțin de 24 de ore!",
+	easter_egg_2  = "<ch>Wow, ai venit cam devreme! Ești prea nerăbdător?",
+	easter_egg_3  = "<ch>O surpriză vă așteaptă...",
+	easter_egg_4  = "<ch>Ai vreo idee de ce va avea loc...?",
+	easter_egg_5  = "<ch>Ceasul continuă să ticăie...",
+	easter_egg_6  = "<ch>Surpriza e aproape!",
+	easter_egg_7  = "<ch>Petrecerea e pe cale să înceapă...",
+	easter_egg_8  = "<ch>Verifică ceasul, e timpul?",
+	easter_egg_9  = "<ch>Ai grijă, timpul trece...",
+	easter_egg_10 = "<ch>Relaxează-te, va fi mâine în curând!",
+	easter_egg_11 = "<ch>Hai să ne culcăm devreme, va face timpul să treacă mai repede!",
+	easter_egg_12 = "<ch>Răbdarea e o virtute",
+	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
+	double_maps = "<bv>Hărți duble și toate puterile deblocate pentru aniversarea parkourului!",
+	double_maps_start = "<rose>E SĂPTĂMÂNA ANIVERSĂRII PARKOUR! Hărți duble și toate puterile deblocate vă așteaptă. Mulțumim că joci parkour!",
+	double_maps_end = "<rose>Săptămâna aniversării Parkour s-a sfârșit. Mulțumim că joci parkour!",
+
 	-- Records
 	records_enabled = "<v>[#] <d>Modul de record a fost pornit pe această sală. Statisticile nu vor conta iar puterile sunt dezactivate!\nPoți afla mai multe pe <b>%s</b>",
 	records_admin = "<v>[#] <d>Ești un administrator pe această sală de recorduri. Poți folosi comenzile <b>!map</b>, <b>!setcp</b>, <b>!pw</b> și <b>!time</b>.",

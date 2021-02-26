@@ -669,7 +669,7 @@ function bindNecessary(player)
 	local player_keys = keys[player]
 	local power, key
 	for index = 1, #powers do
-		power = getPowerUpgrade(completed, pos, powers[index], true, review_mode)
+		power = getPowerUpgrade(completed, pos, powers[index], true, review_mode or timed_maps.week.last_reset == "28/02/2021")
 
 		if (power and
 			(power.isVisual or (not records_admins and submode ~= "smol"))) then
@@ -854,10 +854,15 @@ onEvent("PlayerWon", function(player)
 		not is_tribe and
 		not review_mode) then
 
+		local map_count = 1
+		if timed_maps.week.last_reset == "28/02/2021" then
+			map_count = 2
+		end
+
 		local file = players_file[player]
-		file.c = file.c + 1
+		file.c = file.c + map_count
 		file.hour[#file.hour + 1] = math.floor((os.time() - file.hour_r) / 10000) -- convert to ms and count every 10s
-		file.week[1] = file.week[1] + 1
+		file.week[1] = file.week[1] + map_count
 
 		local hour_count = #file.hour
 

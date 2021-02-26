@@ -49,6 +49,25 @@ translations.hu = {
 	forum_topic = "<rose>Ha szeretnél több információt a modulról látogasd meg a linket: %s",
 	report = "<j>Jelenteni szeretnél egy parkour játékost? <t><b>/c Parkour#8558 .report Felhasználónév0000</b></t>",
 
+	-- Easter Eggs
+	easter_egg_0  = "<ch>Szóval a visszaszámlálás elkezdődött...",
+	easter_egg_1  = "<ch>Kevesebb, mint 24 óra maradt hátra!",
+	easter_egg_2  = "<ch>Wow, korán érkeztél! Túl izgatott vagy?",
+	easter_egg_3  = "<ch>A meglepetés már vár...",
+	easter_egg_4  = "<ch>Tudod, hogy mi fog történni...?",
+	easter_egg_5  = "<ch>Az óra ketyeg tovább...",
+	easter_egg_6  = "<ch>A meglepetés már közel!",
+	easter_egg_7  = "<ch>A party épphogy kezdődik...",
+	easter_egg_8  = "<ch>Csekkold az órád, eljött már az idő?",
+	easter_egg_9  = "<ch>Légy óvatos, az idő eltelik...",
+	easter_egg_10 = "<ch>Csak dőlj hátra és pihenj, nemsoká holnap lesz!",
+	easter_egg_11 = "<ch>Feküdj le hamar, úgy gyorsabban telik az idő!",
+	easter_egg_12 = "<ch>A türelem egy jó tulajdonság",
+	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
+	double_maps = "<bv>Duplán számítanak a pályák, és az összes erő elérhető lesz a parkour szülinapi hetén!",
+	double_maps_start = "<rose>ELJÖTT A PARKOUR SZÜLINAPI HETE! Duplán számítanak a pályák, és az összes erő elérhető. Köszönjük, hogy velünk játszol!",
+	double_maps_end = "<rose>A parkour szülinapi hete véget ért. Köszönjük, hogy velünk játszol!",
+
 	-- Records
 	records_enabled = "<v>[#] <d>Rekord mód lett aktiválva ebben a szobában. Az adatok nem számítanak és a képességek nem engedélyezettek!\nTöbb információt találhatsz a Rekordról itt: <b>%s</b>",
 	records_admin = "<v>[#] <d>Egy adminisztrátor vagy ebben a Rekord szobában. Használhatod a <b>!map</b>, <b>!setcp</b>, <b>!pw</b> és <b>!time</b> parancsokat.",

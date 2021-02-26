@@ -49,6 +49,25 @@ translations.en = {
 	forum_topic = "<rose>For more information about the module visit this link: %s",
 	report = "<j>Want to report a parkour player? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
 
+	-- Easter Eggs
+	easter_egg_0  = "<ch>So the countdown begins...",
+	easter_egg_1  = "<ch>Less than 24 hours remaining!",
+	easter_egg_2  = "<ch>Woah, you're quite early! Are you too excited?",
+	easter_egg_3  = "<ch>A surprise is awaiting...",
+	easter_egg_4  = "<ch>Do you know what's about to happen...?",
+	easter_egg_5  = "<ch>The clock continues to tick...",
+	easter_egg_6  = "<ch>The surprise is near!",
+	easter_egg_7  = "<ch>The party is about to begin...",
+	easter_egg_8  = "<ch>Check your clock, is it time yet?",
+	easter_egg_9  = "<ch>Be careful, time is passing by...",
+	easter_egg_10 = "<ch>Just sit back and relax, it'll be tomorrow in no time!",
+	easter_egg_11 = "<ch>Let's go to bed early, it'll make the time faster!",
+	easter_egg_12 = "<ch>Patience is a virtue",
+	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
+	double_maps = "<bv>Double maps and all powers are available for parkour's birthday week!",
+	double_maps_start = "<rose>IT'S PARKOUR'S BIRTHDAY WEEK! Double maps and all powers have been activated. Thank you for playing with us!",
+	double_maps_end = "<rose>Parkour's birthday week has ended. Thank you for playing with us!",
+
 	-- Records
 	records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
 	records_admin = "<v>[#] <d>You're an administrator of this records room. You can use the commands <b>!map</b>, <b>!setcp</b>, <b>!pw</b> and <b>!time</b>.",

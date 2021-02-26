@@ -49,6 +49,25 @@ translations.id = {
     forum_topic = "<rose>Untuk informasi lebih lanjut mengenai modul kunjungi tautan: %s",
     report = "<j>Ingin melaporkan seorang pemain? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
 
+    -- Easter Eggs
+    easter_egg_0  = "<ch>Jadi penghitung waktu mundur dimulai...",
+    easter_egg_1  = "<ch>Kurang dari 24 jam lagi!",
+    easter_egg_2  = "<ch>Woah, anda terlalu cepat! Apakah anda bersemangat?",
+    easter_egg_3  = "<ch>Sebuah kejutan sedang menunggu...",
+    easter_egg_4  = "<ch>Apakah anda mengetahui apa yang akan terjadi...?",
+    easter_egg_5  = "<ch>Jam terus berjalan...",
+    easter_egg_6  = "<ch>Kejutannya sudah dekat!",
+    easter_egg_7  = "<ch>Perayaannya akan segera dimulai...",
+    easter_egg_8  = "<ch>Cek jam anda, apakah sudah waktunya?",
+    easter_egg_9  = "<ch>Hati-hati, waktu terus berlalu...",
+    easter_egg_10 = "<ch>Cukup duduk dan rileks, itu akan terjadi besok!",
+    easter_egg_11 = "<ch>Ayo pergi tidur lebih cepat, itu akan membuat waktu lebih cepat!",
+    easter_egg_12 = "<ch>Kesabaran adalah sebuah kebajikan",
+    easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
+    double_maps = "<bv>Peta ganda data semua kekuatan tersedia untuk minggu ulang tahun parkour!",
+    double_maps_start = "<rose>HARI INI ADALAH MINGGU ULANG TAHUN PARKUR! Peta ganda dan semua kekuatan telah diaktifkan. Terima kasih telah bermain dengan kami!",
+    double_maps_end = "<rose>Minggu ulang tahun parkur berakhir. Terima kasih telah bermain bersama kami!",
+
     -- Records
     records_enabled = "<v>[#] <d>Mode rekor diaktifkan di room ini. Statistik tidak dihitung dan kekuatan tidak diaktifkan!\nAnda bisa mencari informasi lebih lanjut mengenai rekor di <b>%s</b>",
     records_admin = "<v>[#] <d>Anda adalah admin di ruangan rekor ini. Anda bisa menggunakan perintah <b>!map</b>, <b>!setcp</b>, <b>!pw</b> dan <b>!time</b>.",

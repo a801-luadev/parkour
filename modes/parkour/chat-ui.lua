@@ -3,6 +3,7 @@
 local fetching_player_room = {}
 local roompw = {}
 local fastest = {}
+local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 
 local GameInterface
 local setNameColor
@@ -479,6 +480,9 @@ onEvent("PlayerDataParsed", function(player, data)
 	translatedChatMessage("forum_topic", player, links.forum)
 	translatedChatMessage("report", player)
 	translatedChatMessage("donate", player)
+	if timed_maps.week.last_reset == "28/02/2021" then
+		translatedChatMessage("double_maps", player)
+	end
 
 	checkRoomRequest(player, data)
 
@@ -508,6 +512,14 @@ onEvent("Loop", function()
 
 	for idx = 1, count do
 		fetching_player_room[to_remove[idx]] = nil
+	end
+
+	if now >= next_easter_egg then
+		next_easter_egg = now + math.random(30, 60) * 60 * 1000
+
+		if os.date("%d/%m/%Y", now + 60 * 60 * 1000) == "28/02/2021" then
+			translatedChatMessage("easter_egg_" .. math.random(0, 13))
+		end
 	end
 end)
 
