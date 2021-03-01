@@ -856,11 +856,11 @@ onEvent("PlayerWon", function(player)
 
 		local map_count = 1
 		if timed_maps.week.last_reset == "28/02/2021" then
-			map_count = 1
+			map_count = 2
 		end
 
 		local file = players_file[player]
-		file.c = file.c + map_count
+		file.c = file.c + 1
 		file.hour[#file.hour + 1] = math.floor((os.time() - file.hour_r) / 10000) -- convert to ms and count every 10s
 		file.week[1] = file.week[1] + map_count
 
