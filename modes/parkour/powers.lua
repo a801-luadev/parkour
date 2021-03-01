@@ -856,7 +856,7 @@ onEvent("PlayerWon", function(player)
 
 		local map_count = 1
 		if timed_maps.week.last_reset == "28/02/2021" then
-			map_count = 2
+			map_count = 1
 		end
 
 		local file = players_file[player]
