@@ -64,7 +64,7 @@ translations.es = {
 	easter_egg_11 = "<ch>Iré a dormir temprano, ¡el tiempo pasará más rápido!",
 	easter_egg_12 = "<ch>La paciencia es una virtud",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>¡Los mapas cuentan doble y todos los poderes están disponibles por la semana del cumpleaños de parkour!",
+	double_maps = "<bv>Los mapas cuentan doble el sábado (GMT+2) y todos los poderes están activados por la semana del cumpleaños de parkour!",
 	double_maps_start = "<rose>¡ES EL CUMPLEAÑOS DE PARKOUR! Los mapas cuentan doble y todos los poderes están disponibles. ¡Muchas gracias por jugar con nosotros!",
 	double_maps_end = "<rose>El cumpleaños de parkour acaba de terminar. ¡Muchas gracias por jugar con nosotros!",
 
