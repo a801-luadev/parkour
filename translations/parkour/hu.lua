@@ -64,7 +64,7 @@ translations.hu = {
 	easter_egg_11 = "<ch>Feküdj le hamar, úgy gyorsabban telik az idő!",
 	easter_egg_12 = "<ch>A türelem egy jó tulajdonság",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Duplán számítanak a pályák, és az összes erő elérhető lesz a parkour szülinapi hetén!",
+	double_maps = "<bv>Dupla pályák egész Szombaton (GMT+2) és az összes erő aktiválva van a parkour szülinapi hetén!",
 	double_maps_start = "<rose>ELJÖTT A PARKOUR SZÜLINAPI HETE! Duplán számítanak a pályák, és az összes erő elérhető. Köszönjük, hogy velünk játszol!",
 	double_maps_end = "<rose>A parkour szülinapi hete véget ért. Köszönjük, hogy velünk játszol!",
 
