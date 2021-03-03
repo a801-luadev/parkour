@@ -64,9 +64,9 @@ translations.fr = {
 	easter_egg_11 = "<ch>Allons dormir plus tôt, ça accélérera le temps !",
 	easter_egg_12 = "<ch>La patience est une vertue",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Les maps doubles et tous les pouvoirs sont disponibles pour le semaine d'anniversaire de parkour !",
-	double_maps_start = "<rose>C'EST LA SEMAINE D'ANNIVERSAIRE DE PARKOUR! Les double maps et tous les pouvoirs ont été activés. Merci de jouer avec nous !",
-	double_maps_end = "<rose>La semaine d'anniversaire de parkour est terminée. Merci de jouer avec nous !",
+	double_maps = "<bv>Maps doubles Samedi (GMT+2) et tous les pouvoirs sont disponibles pour le semaine d'anniversaire de parkour!",
+	double_maps_start = "<rose>C'EST LA SEMAINE D'ANNIVERSAIRE DE PARKOUR! Les double maps et tous les pouvoirs ont été activés. Merci de jouer avec nous!",
+	double_maps_end = "<rose>La semaine d'anniversaire de parkour est terminée. Merci de jouer avec nous!",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Le mode de records a été activé dans ce salon. Les statistiques ne compteront pas et les pouvoirs sont désactivés !\nTu peux trouver plus d'informations à propos des records sur <b>%s</b>",
