@@ -63,7 +63,7 @@ translations.cn = {
 	easter_egg_11 = "<ch>一起早點到床上, 會使時間過得更快!",
 	easter_egg_12 = "<ch>最重要是耐心",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>雙倍地圖計算而且所有能力都可以在這 parkour 生日週裡使用!",
+	double_maps = "<bv>雙倍地圖計算將會在星期六 (GMT+2) 開始, 而且所有能力都可以在這 parkour 生日週使用!",
 	double_maps_start = "<rose>這週是 PARKOUR 的生日! 雙倍地圖計算而且所有能力都已被激活使用。感謝跟我們一起遊玩!",
 	double_maps_end = "<rose>Parkour 的生日週已完結。感謝各位的遊玩!",
 
