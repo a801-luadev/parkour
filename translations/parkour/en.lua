@@ -64,7 +64,7 @@ translations.en = {
 	easter_egg_11 = "<ch>Let's go to bed early, it'll make the time go faster!",
 	easter_egg_12 = "<ch>Patience is a virtue",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Double maps and all powers are available for parkour's birthday week!",
+	double_maps = "<bv>Double maps on Saturday (GMT+2) and all powers are available for parkour's birthday week!",
 	double_maps_start = "<rose>IT'S PARKOUR'S BIRTHDAY WEEK! Double maps and all powers have been activated. Thank you for all the support and for playing this module!",
 	double_maps_end = "<rose>Parkour's birthday week has ended. Thank you for all the support and for playing this module!",
 
