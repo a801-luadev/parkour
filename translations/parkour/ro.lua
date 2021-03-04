@@ -64,7 +64,7 @@ translations.ro = {
 	easter_egg_11 = "<ch>Hai să ne culcăm devreme, va face timpul să treacă mai repede!",
 	easter_egg_12 = "<ch>Răbdarea e o virtute",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Hărți duble și toate puterile deblocate pentru aniversarea parkourului!",
+	double_maps = "<bv>Hărți duble Sâmbătă (GMT+2) și toate puterile puterile deblocate în săptămâna aniversării parkour!",
 	double_maps_start = "<rose>E SĂPTĂMÂNA ANIVERSĂRII PARKOUR! Hărți duble și toate puterile deblocate vă așteaptă. Mulțumim că joci parkour!",
 	double_maps_end = "<rose>Săptămâna aniversării Parkour s-a sfârșit. Mulțumim că joci parkour!",
 
