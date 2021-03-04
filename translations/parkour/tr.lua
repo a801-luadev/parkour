@@ -64,7 +64,7 @@ translations.tr = {
 	easter_egg_11 = "<ch>Hadi artık yat, böylece zaman daha hızlı geçecek!",
 	easter_egg_12 = "<ch>Sabır erdemdir",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Çifte haritalar ve bütün güçler Parkur'un doğum günü haftası için açıldı!",
+	double_maps = "<bv>Çifte haritalar cumartesi (GMT+2) açılıyor ve tüm güçler parkur'un doğum haftası için açık!",
 	double_maps_start = "<rose>ŞU AN PARKUR'UN DOĞUM GÜNÜ HAFTASI! Çifte haritalar ve bütün güçler açıldı. Bizimle oynadığın için teşekkürler!",
 	double_maps_end = "<rose>Parkur'un doğum günü haftası bitti. Bizimle oynadığın için teşekkürler!",
 
