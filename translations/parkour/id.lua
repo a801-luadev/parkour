@@ -64,7 +64,7 @@ translations.id = {
     easter_egg_11 = "<ch>Ayo pergi tidur lebih cepat, itu akan membuat waktu lebih cepat!",
     easter_egg_12 = "<ch>Kesabaran adalah sebuah kebajikan",
     easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-    double_maps = "<bv>Peta ganda data semua kekuatan tersedia untuk minggu ulang tahun parkour!",
+    double_maps = "<bv>Peta ganda pada hari Minggu (GMT+2) dan semua kekuatan  tersedia untuk minggu ulang tahun parkur!",
     double_maps_start = "<rose>HARI INI ADALAH MINGGU ULANG TAHUN PARKUR! Peta ganda dan semua kekuatan telah diaktifkan. Terima kasih telah bermain dengan kami!",
     double_maps_end = "<rose>Minggu ulang tahun parkur berakhir. Terima kasih telah bermain bersama kami!",
 
