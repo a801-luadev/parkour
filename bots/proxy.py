@@ -241,6 +241,7 @@ class Server:
 	async def client_identified(self, client):
 		"""Triggered when a client has identificated correctly"""
 		if client.name in self.clients:
+			client.name = None
 			client.close()
 			return
 
@@ -249,7 +250,8 @@ class Server:
 		self.loop.create_task(client.receive_loop())
 
 	async def connection_lost(self, client):
-		del self.clients[client.name]
+		if client.name != None:
+			del self.clients[client.name]
 
 
 if __name__ == '__main__':
