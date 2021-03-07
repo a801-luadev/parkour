@@ -66,7 +66,7 @@ do
 			end
 
 			local x = self.x + 370
-			if not (data or players_file[player]).hidden then
+			if not (data or players_file[profile]).hidden then
 				for index = 1, #staff do
 					if ranks[ staff[index][1] ][profile] then
 						container._count = container._count + 1
