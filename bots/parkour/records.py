@@ -148,12 +148,62 @@ class Records(aiotfm.Client):
 			record=record, threshold=threshold,
 			room=room, maps=hour_maps
 		))
-
+	
+	async def on_whisper_command(self, whisper, author, ranks, cmd, args):
+		if await super().on_whisper_command(
+			whisper, author, ranks, cmd, args
+		):
+			return True
+		
+		if cmd == "recbadge":
+			if not ranks["admin"]:
+				return True
+			
+			if len(args) < 2 or not args[1].isdigit():
+				await whisper.reply("Invalid syntax.")
+				return True
+			
+			name = args[0]
+			records = int(args[1])
+			
+			if records >= 9 * 5 or not (records == 1 or records % 5 == 0):
+				await whisper.reply("Invalid records badge.")
+				return True
+			
+			await self.send_callback(
+				RECORD_BADGES,
+				"{}\x00{}"
+				.format(name, records)
+			)
+			await whisper.reply("Gave {} records badge to {}.".format(name, records))
+		
+		else:
+			return False
+		
+		return True
+	
 	async def handle_proxy_packet(self, client, packet):
 		if await super().handle_proxy_packet(client, packet):
 			return True
-
-		if client == "records":
+		
+		if client == "discord":
+			if packet["type"] == "send-records-badge":
+				name = packet["name"]
+				records = packet["records"]
+				
+				if records >= 9 * 5 or not (records == 1 or records % 5 == 0):
+					return True
+			
+				await self.send_callback(
+					RECORD_BADGES,
+					"{}\x00{}"
+					.format(name, records)
+				)
+				
+			else:
+				return False
+		
+		elif client == "records":
 			if packet["type"] == "records":
 				name = packet["name"] # name
 				records = packet["records"] # records quantity
