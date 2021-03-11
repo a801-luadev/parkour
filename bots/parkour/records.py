@@ -175,7 +175,7 @@ class Records(aiotfm.Client):
 				"{}\x00{}"
 				.format(name, records)
 			)
-			await whisper.reply("Gave {} records badge to {}.".format(name, records))
+			await whisper.reply("Gave {} records badge to {}.".format(records, name))
 		
 		else:
 			return False
