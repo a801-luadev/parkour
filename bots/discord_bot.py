@@ -741,8 +741,18 @@ class Client(discord.Client):
 
 			if msg.channel.id != env.private_channel:
 				return
-
-			if cmd == "!runtime":
+			
+			if cmd == "!records":
+				if leg(args) < 2 or not args[1].isdigit():
+					return await msg.channel.send("Invalid syntax.")
+				
+				await self.proxy.sendTo({
+					"type": "send-records-badge",
+					"name": args[0],
+					"records": int(args[1])
+				}, "parkour")
+							      
+			elif cmd == "!runtime":
 				await self.proxy.sendTo({"type": "runtime", "channel": msg.channel.id}, "tocubot")
 
 			elif cmd == "!token":
