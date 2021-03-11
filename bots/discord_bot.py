@@ -743,7 +743,7 @@ class Client(discord.Client):
 				return
 			
 			if cmd == "!records":
-				if leg(args) < 2 or not args[1].isdigit():
+				if len(args) < 2 or not args[1].isdigit():
 					return await msg.channel.send("Invalid syntax.")
 				
 				await self.proxy.sendTo({
