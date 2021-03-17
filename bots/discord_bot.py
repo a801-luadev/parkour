@@ -24,7 +24,7 @@ class env:
 	json_link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/tech/json/init.lua"
 
 	guild_id = 669593764305829898
-	tocu_id = 212634414021214209
+	tocu_id = 436703225140346881
 
 	public_commands = 726716371018186802
 
