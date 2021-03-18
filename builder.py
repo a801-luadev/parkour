@@ -63,8 +63,5 @@ if not os.path.isdir("builds/" + month_year):
 	os.mkdir("builds/" + month_year)
 
 # Save built script
-path = "builds/{}/{}".format(month_year, now.strftime("%d---%H-%M-%S"))
-with open(path + ".lua", "wb") as file:
-	file.write(script)
 with open("builds/latest.lua", "wb") as file:
 	file.write(script)
