@@ -206,21 +206,17 @@ class Client(aiotfm.Client):
 		await self.set_busy(False)
 
 	async def load_lua_script(self, packet):
-		for field in ("json", "link"):
-			if field in packet:
-				async with aiohttp.ClientSession() as session:
-					async with session.get(packet[field]) as resp:
-						packet[field] = (await resp.read()).decode()
+		lib = []
+		for link in packet["libraries"]:
+			async with aiohttp.ClientSession() as session:
+				async with session.get(link) as resp:
+					decode = (await resp.read()).decode()
+					lib.append(decode)
+		
+		if "script" in packet:
+			lib.append(packet["script"])
 
-		if "link" in packet:
-			script = packet["link"]
-		else:
-			script = packet["script"]
-
-		if "json" in packet:
-			script = packet["json"] + "\n" + script
-
-		await self.loadLua(script)
+		await self.loadLua("\n".join(lib))
 
 	async def load_script(self, packet):
 		if "link" in packet:

@@ -14,6 +14,9 @@ import string
 import json
 
 
+raw_github = "https://raw.githubusercontent.com/a801-luadev/parkour/master/{}"
+
+
 class env:
 	proxy_token = os.getenv("PROXY_TOKEN")
 	proxy_ip = os.getenv("PROXY_IP")
@@ -21,7 +24,10 @@ class env:
 
 	token = os.getenv("DISCORD_TOKEN")
 
-	json_link = "https://raw.githubusercontent.com/a801-luadev/parkour/master/tech/json/init.lua"
+	class links:
+		json = raw_github.format("tech/json/init.lua")
+		file = raw_github.format("tech/filemanager/init.lua")
+		file_struct = raw_github.format("modes/parkour/filemanagers.lua")
 
 	guild_id = 669593764305829898
 	tocu_id = 436703225140346881
@@ -886,11 +892,13 @@ class Client(discord.Client):
 		# tfm.
 		# If we provide a script, the bot has to access the page treat the content as the script.
 		script, link = None, None
-		if args[0].startswith("http") or (args[0] == "json" and args[1].startswith("http")):
-			if args[0] == "json":
-				link = args[1]
-			else:
-				link = args[0]
+		libraries = ("json", "file")
+		load = set()
+		while args[0].lower() in libraries:
+			load.add(args.pop(0).lower())
+
+		if args[0].startswith("http"):
+			link = args[0]
 
 		# If we don't provide a link, we need to check for the script in the message
 		else:
@@ -906,11 +914,16 @@ class Client(discord.Client):
 			}
 
 			# Append json script
-			if len(args) > 1 and args[0] == "json":
-				packet["json"] = env.json_link
+			libraries = []
+			for lib in load:
+				libraries.append(getattr(env.links, lib))
+
+				if lib == "file":  # we need to load two files for this lib
+					libraries.append(env.links.file_struct)
+			packet["libraries"] = libraries
 
 			if link is not None:
-				packet["link"] = link
+				packet["libraries"].append(link)
 			else:
 				packet["script"] = script
 
