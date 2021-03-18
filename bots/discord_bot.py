@@ -518,7 +518,7 @@ class Client(discord.Client):
 			author, code, perm, xml = (None, None, None, None)
 
 		if author is None:
-			await channel.send("The map does not exist or can't be loded.")
+			await channel.send("The map does not exist or can't be loaded.")
 
 		await self.set_busy(False)
 
