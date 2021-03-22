@@ -733,7 +733,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 				power[index].cooldown_x, power[index].cooldown_y,
 
 				players_file[player].settings[3] == 1
-			)) and (power.isVisual or (not records_admins and submode ~= "smol")) then
+			)) and (power[index].isVisual or (not records_admins and submode ~= "smol")) then
 				power[index].fnc(player, key, down, x, y)
 
 				if not power[index].isVisual then
