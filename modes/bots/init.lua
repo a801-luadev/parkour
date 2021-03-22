@@ -82,7 +82,9 @@ local pdata_actions = {
 	records = function(player, data)
 		local newbadge = records[player]
 		records[player] = nil
+		
 		if not data.badges then return false end
+		
 		if data.badges[6] < newbadge or newbadge == 0 then
 			data.badges[6] = newbadge
 
