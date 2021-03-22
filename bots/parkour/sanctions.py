@@ -91,7 +91,7 @@ class Sanctions(aiotfm.Client):
 		except Exception:
 			await self.send_webhook(
 				env.webhooks.sanctions,
-				"<@212634414021214209> ```python{}```"
+				"<@436703225140346881> ```python{}```"
 				.format(traceback.format_exc())
 			)
 
