@@ -82,6 +82,7 @@ local pdata_actions = {
 	records = function(player, data)
 		local newbadge = records[player]
 		records[player] = nil
+		if not data.badges then return false end
 		if data.badges[6] < newbadge or newbadge == 0 then
 			data.badges[6] = newbadge
 
@@ -503,7 +504,7 @@ onEvent("PacketReceived", function(channel, id, packet, map, time)
 		_room = enlargeName(_room)
 		addTextArea(
 			packets.send_webhook,
-			"**`[CRASH]:`** `" .. _room .. "` has crashed. <@212634414021214209>: `" .. event .. "`, `" .. errormsg .. "`",
+			"**`[CRASH]:`** `" .. _room .. "` has crashed. <@436703225140346881>: `" .. event .. "`, `" .. errormsg .. "`",
 			parkour_bot
 		)
 
