@@ -46,7 +46,7 @@ class Logs(aiotfm.Client):
 			event, message = packet.split("\x00", 1)
 			await self.send_webhook(
 				env.webhooks.private,
-				"**`[BOTCRASH]:`** <@212634414021214209>: `{}`, `{}`"
+				"**`[BOTCRASH]:`** <@436703225140346881>: `{}`, `{}`"
 				.format(event, message)
 			)
 
