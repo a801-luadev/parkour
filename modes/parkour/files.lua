@@ -401,7 +401,7 @@ onEvent("GameStart", function()
 	file_index = file_index % total_files + 1
 	file_id = files[file_index]
 
-	ts = ts + 60 * 60 * 1000
+	--ts = ts + 60 * 60 * 1000
 	local now = os.date("*t", ts / 1000) -- os.date is weird in tfm, *t accepts seconds, %d/%m/%Y accepts ms
 	now.wday = now.wday - 1
 	if now.wday == 0 then

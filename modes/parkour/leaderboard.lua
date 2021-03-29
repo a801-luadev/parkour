@@ -115,7 +115,7 @@ onEvent("GameDataLoaded", function(data)
 		checkPlayersPosition(false)
 	end
 	if data.weekranking then
-		local ts = os.time() + 60 * 60 * 1000
+		local ts = os.time() --+ 60 * 60 * 1000
 		local now = os.date("*t", ts / 1000)
 		now.wday = now.wday - 1
 		if now.wday == 0 then
