@@ -99,10 +99,10 @@ do
 
 		if self.default then -- on
 			switch.x = self.x + 16
-			switch.color = {0xbeb17d, 0xbeb17d, 1}
+			switch.color = {0x9bc346, 0x9bc346, 1}
 		else -- off
 			switch.x = self.x + 3
-			switch.color = {0x78462b, 0x78462b, 1}
+			switch.color = {0xb84c36, 0xb84c36, 1}
 		end
 
 		interface:addTextArea({
