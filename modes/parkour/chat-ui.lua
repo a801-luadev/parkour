@@ -266,6 +266,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				file.c = file.c - quantity
 			elseif action == "set" then
 				file.c = quantity
+			elseif action == "migrate" then
+				file.c = file.c + quantity
+				file.migrated = true
 			else
 				return tfm.exec.chatMessage("<v>[#] <r>" .. action .. " doesnt look like an action wtf", player)
 			end
