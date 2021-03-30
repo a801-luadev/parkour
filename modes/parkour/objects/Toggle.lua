@@ -70,7 +70,7 @@ do
 						txt.id, "", player,
 						interface.x + self.x + 16, txt.y,
 						txt.width, txt.height,
-						0xbeb17d, 0xbeb17d, 1,
+						0x9bc346, 0x9bc346, 1,
 						interface.fixed
 					)
 				else
@@ -78,7 +78,7 @@ do
 						txt.id, "", player,
 						interface.x + self.x + 3, txt.y,
 						txt.width, txt.height,
-						0x78462b, 0x78462b, 1,
+						0xb84c36, 0xb84c36, 1,
 						interface.fixed
 					)
 				end
