@@ -6828,6 +6828,9 @@ local function initialize_parkour() -- so it uses less space after building
 					file.c = file.c - quantity
 				elseif action == "set" then
 					file.c = quantity
+				elseif action == "migrate" then
+					file.c = file.c + quantity
+					file.migrated = true
 				else
 					return tfm.exec.chatMessage("<v>[#] <r>" .. action .. " doesnt look like an action wtf", player)
 				end
@@ -7559,10 +7562,10 @@ local function initialize_parkour() -- so it uses less space after building
 
 			if self.default then -- on
 				switch.x = self.x + 16
-				switch.color = {0xbeb17d, 0xbeb17d, 1}
+				switch.color = {0x9bc346, 0x9bc346, 1}
 			else -- off
 				switch.x = self.x + 3
-				switch.color = {0x78462b, 0x78462b, 1}
+				switch.color = {0xb84c36, 0xb84c36, 1}
 			end
 
 			interface:addTextArea({
