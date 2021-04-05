@@ -549,7 +549,7 @@ class Client(discord.Client):
 			# Message prefixes
 			if msg.content.startswith("!m "):
 				content = msg.content[3:]
-			elif msg.content.startswith(","):
+			elif msg.content.startswith("." if msg.channel.id == env.tribe_chat else ","):
 				content = msg.content[1:]
 			else:
 				if msg.content.lower() == "/who":
