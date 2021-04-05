@@ -174,7 +174,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		return
 
 	elseif cmd == "submit" then
-		if not records_admins then return end
+		--[[if not records_admins then return end
 		local map = tonumber(string.sub(room.currentMap, 2))
 
 		if fastest.player ~= player then
@@ -218,7 +218,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			 room.shortName .. "\000" ..
 			 checkpoint_info.version)
 		)
-		tfm.exec.chatMessage("<v>[#] <d>Your record will be submitted shortly.", player)
+		tfm.exec.chatMessage("<v>[#] <d>Your record will be submitted shortly.", player)]]
+		tfm.exec.chatMessage("<v>[#] <d>Sorry, record submissions will be disabled until further notice.", player)
 		return
 
 	elseif cmd == "pause" then -- logged
