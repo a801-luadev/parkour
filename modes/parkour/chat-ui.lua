@@ -219,6 +219,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			 checkpoint_info.version)
 		)
 		tfm.exec.chatMessage("<v>[#] <d>Your record will be submitted shortly.", player)]]
+		
 		tfm.exec.chatMessage("<v>[#] <d>Sorry, record submissions will be disabled until further notice.", player)
 		return
 
