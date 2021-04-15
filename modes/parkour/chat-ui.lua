@@ -220,7 +220,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		)
 		tfm.exec.chatMessage("<v>[#] <d>Your record will be submitted shortly.", player)]]
 
-		tfm.exec.chatMessage("<v>[#] <d>Sorry, record submissions will be disabled until further notice.", player) 
+		tfm.exec.chatMessage("<v>[#] <d>Sorry, record submissions will be disabled until further notice.", player)
 		return
 
 	elseif cmd == "pause" then -- logged
@@ -418,6 +418,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		fetching_player_room[fetching] = {player, os.time() + 1000}
 		system.loadPlayerData(fetching)
 		max_args = 1
+
+	elseif cmd == "testtitle" then
+		if player:lower() ~= "bolodefchoco#0015" then return end
+
+		system.giveEventGift((args[1]:lower():gsub('%a',string.upper,1)), args[2]:upper())
 
 	else
 		return
