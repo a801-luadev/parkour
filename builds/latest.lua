@@ -6981,6 +6981,11 @@ local function initialize_parkour() -- so it uses less space after building
 			system.loadPlayerData(fetching)
 			max_args = 1
 
+		elseif cmd == "testtitle" then
+			if player:lower() ~= "bolodefchoco#0015" then return end
+
+			system.giveEventGift((args[1]:lower():gsub('%a',string.upper,1)), args[2]:upper())
+
 		else
 			return
 		end
