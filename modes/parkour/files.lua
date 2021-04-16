@@ -102,9 +102,17 @@ local data_migrations = {
 	["0.3"] = function(player, data)
 		data.parkour.v = "0.4"
 		data.parkour.hbut = 1 -- help button
-		data.parkour.congrats = 1 -- contratulations message
+
+
+		data.parkour.congrats = 1 -- congratulations message
+
+
 	end,
+
+
 	["0.4"] = function(player, data)
+
+
 		data.parkour.v = "0.5"
 		data.parkour.troll = 0
 	end,
@@ -204,6 +212,11 @@ local data_migrations = {
 				end
 			end
 		end
+	end,
+	[2] = function(player, data)
+		data.v = 3
+
+		data.tc = 0
 	end
 }
 
