@@ -26,7 +26,7 @@
 
 math.randomseed(os.time())
 
-local data_version = 2
+local data_version = 3
 local room = tfm.get.room
 local links = {
 	donation = "https://a801-luadev.github.io/?redirect=parkour",
@@ -5015,23 +5015,23 @@ local function initialize_parkour() -- so it uses less space after building
 			{23, "1755bacbdd6.png", "1755bac996d.png"}, -- 40
 		},
 	}
-	local titles = {
-		piglet = {
-			code = "T_496",
-			requirement = 4,--10000,
-			field = "tc" -- map count
-		},
-		checkpoint = {
-			code = "T_497",
-			requirement = 6,--5000,
-			field = "cc" -- checkpoint count
-		},
-		press_m = {
-			code = "T_498",
-			requirement = 8,--1000,
-			field = "tc"
-		}
-	}
+  local titles = {
+    piglet = {
+      code = "T_496",
+      requirement = 2,--10000,
+      field = "tc" -- map count
+    },
+    checkpoint = {
+      code = "T_497",
+      requirement = 6,--5000,
+      field = "cc" -- checkpoint count
+    },
+    press_m = {
+      code = "T_498",
+      requirement = 4,--1000,
+      field = "tc"
+    }
+  }
 	players_file = {}
 
 	local data_migrations = {
