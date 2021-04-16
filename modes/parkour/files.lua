@@ -73,6 +73,12 @@ local badges = { -- badge id, small image, big image
 		{23, "1755bacbdd6.png", "1755bac996d.png"}, -- 40
 	},
 }
+local titles = {
+	piglet = {
+		code = "T_666",
+		requirement = 666 -- map count
+	}
+}
 players_file = {}
 
 local data_migrations = {
@@ -103,12 +109,8 @@ local data_migrations = {
 		data.parkour.v = "0.4"
 		data.parkour.hbut = 1 -- help button
 
-
 		data.parkour.congrats = 1 -- congratulations message
-
-
 	end,
-
 
 	["0.4"] = function(player, data)
 
@@ -216,7 +218,8 @@ local data_migrations = {
 	[2] = function(player, data)
 		data.v = 3
 
-		data.tc = 0
+		data.tc = 0 -- map counter for titles
+		data.cc = 0 -- checkpoint counter for titles
 	end
 }
 
