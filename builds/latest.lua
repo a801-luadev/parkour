@@ -3920,7 +3920,7 @@ local function initialize_parkour() -- so it uses less space after building
 			map = selectMap(maps.sections_high, maps.list_high, maps.high_count)
 		end
 
-		tfm.exec.newGame(7653641)
+		tfm.exec.newGame(7690348)
 	end
 
 	local function invalidMap(arg)
@@ -4327,7 +4327,9 @@ local function initialize_parkour() -- so it uses less space after building
 
 		if field < title.requirement then
 			local newValue = field + sumValue
-
+tfm.exec.chatMessage("sum value", sumValue)
+tfm.exec.chatMessage("new value", newValue)
+tfm.exec.chatMessage("req", title.requirement)
 			if newValue >= title.requirement then
 				system.giveEventGift(player, title.code)
 

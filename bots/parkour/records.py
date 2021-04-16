@@ -188,7 +188,7 @@ class Records(aiotfm.Client):
 
 		tc = pid_cache.get("tc")
 		cc = pid_cache.get("cc")
-		if not (tc and cc)
+		if not (tc and cc):
 			return None
 
 		msg = (
