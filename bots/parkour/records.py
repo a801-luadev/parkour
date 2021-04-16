@@ -177,7 +177,7 @@ class Records(aiotfm.Client):
 		))
 
 	async def handle_player_title_victory(self, pid, name, field_value, sum_value, field_name):
-		if not self.pending_title_victory_cache[pid]:
+		if self.pending_title_victory_cache.get(pid) is None:
 			self.pending_title_victory_cache[pid] = { }
 
 		pid_cache = self.pending_title_victory_cache[pid]
