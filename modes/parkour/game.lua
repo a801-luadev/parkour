@@ -136,6 +136,17 @@ local function checkBan(player, data, id)
 	end
 end
 
+local function checkTitleAndNextFieldValue(player, title, srcValue, _playerData)
+	local field = _playerData[title.field]
+	local newValue = field + srcValue
+
+	if (field < title.requirement) and (newValue >= title.requirement) then
+		system.giveEventGift(player, title.code)
+	end
+
+	return newValue
+end
+
 onEvent("NewPlayer", function(player)
 	spec_mode[player] = nil
 	in_room[player] = true
@@ -269,6 +280,8 @@ onEvent("PlayerWon", function(player)
 
 	victory_count = victory_count + 1
 	victory._last_level[player] = false
+
+	
 
 	if victory_count == player_count and not less_time then
 		tfm.exec.setGameTime(5)
