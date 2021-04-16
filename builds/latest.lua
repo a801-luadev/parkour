@@ -6394,10 +6394,10 @@ local function initialize_parkour() -- so it uses less space after building
 			local file = players_file[player]
 			file.c = file.c + map_overall
 	
-			file.tc = checkTitleAndNextFieldValue(player, title.press_m, map_overall, file, id)
-			file.tc = checkTitleAndNextFieldValue(player, title.piglet, map_overall, file, id)
-		
-			file.cc = checkTitleAndNextFieldValue(player, title.checkpoint, #levels - 1 --[[total checkpoints but spawn]], file, id)
+			file.tc = checkTitleAndNextFieldValue(player, titles.press_m, map_overall, file, id)
+			file.tc = checkTitleAndNextFieldValue(player, titles.piglet, map_overall, file, id)
+	
+			file.cc = checkTitleAndNextFieldValue(player, titles.checkpoint, #levels - 1 --[[total checkpoints but spawn]], file, id)
 	
 			file.hour[#file.hour + 1] = math.floor((os.time() - file.hour_r) / 10000) -- convert to ms and count every 10s
 			file.week[1] = file.week[1] + map_weekly
