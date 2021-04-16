@@ -76,18 +76,18 @@ local badges = { -- badge id, small image, big image
 local titles = {
 	piglet = {
 		code = "T_496",
-		requirement = 4,--10000,
+		requirement = 2,--10000,
 		field = "tc" -- map count
 	},
 	checkpoint = {
 		code = "T_497",
 		requirement = 6,--5000,
-		filed = "cc" -- checkpoint count
+		field = "cc" -- checkpoint count
 	},
 	press_m = {
 		code = "T_498",
-		requirement = 8,--1000,
-		filed = "tc"
+		requirement = 4,--1000,
+		field = "tc"
 	}
 }
 players_file = {}
