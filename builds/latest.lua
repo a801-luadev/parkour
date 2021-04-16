@@ -4349,7 +4349,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 				     rshift(sumValue, 7 * 2)       ,
 				band(rshift(sumValue, 7 * 1), 0x7f),
-				band(       sumValue        , 0x7f),
+				band(       sumValue        , 0x7f)
 			) .. player .. title.field .. "\000")
 	
 			return newValue

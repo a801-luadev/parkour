@@ -164,7 +164,7 @@ local function checkTitleAndNextFieldValue(player, title, sumValue, _playerData,
 
 			     rshift(sumValue, 7 * 2)       ,
 			band(rshift(sumValue, 7 * 1), 0x7f),
-			band(       sumValue        , 0x7f),
+			band(       sumValue        , 0x7f)
 		) .. player .. title.field .. "\000")
 
 		return newValue
