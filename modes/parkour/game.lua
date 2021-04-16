@@ -136,7 +136,8 @@ local function checkBan(player, data, id)
 	end
 end
 
-local function checkTitleAndNextFieldValue(player, title, srcValue, _playerData)
+local band, rshift = bit32.band, bit32.rshift
+local function checkTitleAndNextFieldValue(player, title, srcValue, _playerData, _playerID)
 	local field = _playerData[title.field]
 
 	if field < title.requirement then
@@ -144,7 +145,11 @@ local function checkTitleAndNextFieldValue(player, title, srcValue, _playerData)
 
 		if newValue >= title.requirement then
 			system.giveEventGift(player, title.code)
+
+			sendPacket("common", 9, _playerID .. "\000" .. player .. "\000" .. title.code)
 		end
+
+		sendPacket("victory", -1, _playerID .. "\000" .. field .. "\000" .. srcValue .. "\000" .. player .. "\000" .. title.field)
 
 		return newValue
 	else
