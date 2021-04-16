@@ -138,13 +138,18 @@ end
 
 local function checkTitleAndNextFieldValue(player, title, srcValue, _playerData)
 	local field = _playerData[title.field]
-	local newValue = field + srcValue
 
-	if (field < title.requirement) and (newValue >= title.requirement) then
-		system.giveEventGift(player, title.code)
+	if field < title.requirement then
+		local newValue = field + srcValue
+
+		if newValue >= title.requirement then
+			system.giveEventGift(player, title.code)
+		end
+
+		return newValue
+	else
+		return field
 	end
-
-	return newValue
 end
 
 onEvent("NewPlayer", function(player)
