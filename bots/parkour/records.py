@@ -84,7 +84,7 @@ class Records(aiotfm.Client):
 
 				# unpack data
 				player, map_code, taken = packet[1:5], packet[5:9], packet[9:12]
-				name = packet[13:].decode()
+				name = packet[12:].decode()
 
 				player = (player[0] << (7 * 3)) + \
 						(player[1] << (7 * 2)) + \
@@ -109,7 +109,7 @@ class Records(aiotfm.Client):
 			elif packet[0] == 1:
 				#unpack data
 				player, fieldValue, sumValue = packet[1:5], packet[5:9], packet[9:12]
-				name = packet[13:].decode()
+				name = packet[12:].decode()
 				fieldName, name = name[-2:], name[:-2]
 
 				player = (player[0] << (7 * 3)) + \
