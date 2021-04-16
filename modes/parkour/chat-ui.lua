@@ -73,6 +73,8 @@ onEvent("PlayerWon", function(player)
 		local band, rshift = bit32.band, bit32.rshift
 
 		sendPacket("victory", -1, string.char(
+			band(0, 0x7f),
+
 			     rshift(id, 7 * 3)       ,
 			band(rshift(id, 7 * 2), 0x7f),
 			band(rshift(id, 7 * 1), 0x7f),
