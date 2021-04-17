@@ -197,12 +197,19 @@ class Records(aiotfm.Client):
 			"totalizing {cc_field_value}."
 		)
 
+		tc_sum_value = tc["sum_value"]
+		tc_field_value = tc["field_value"]
+		cc_sum_value = cc["sum_value"]
+		cc_field_value = cc["field_value"]
+
+		del self.pending_title_victory_cache[pid]
+
 		await self.send_webhook(env.webhooks.game_title_data, msg.format(
 			name=name, pid=pid,
-			tc_sum_value = tc["sum_value"],
-			tc_field_value = tc["field_value"],
-			cc_sum_value = cc["sum_value"],
-			cc_field_value = cc["field_value"]
+			tc_sum_value = tc_sum_value,
+			tc_field_value = tc_field_value,
+			cc_sum_value = cc_sum_value,
+			cc_field_value = cc_field_value
 		))
 
 	async def on_whisper_command(self, whisper, author, ranks, cmd, args):
