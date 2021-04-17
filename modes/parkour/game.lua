@@ -136,43 +136,6 @@ local function checkBan(player, data, id)
 	end
 end
 
-local band, rshift = bit32.band, bit32.rshift
-local function checkTitleAndNextFieldValue(player, title, sumValue, _playerData, _playerID)
-	local field = _playerData[title.field]
-
-	if field < title.requirement then
-		local newValue = field + sumValue
-
-		if newValue >= title.requirement then
-			system.giveEventGift(player, title.code)
-
-			sendPacket("common", 9, _playerID .. "\000" .. player .. "\000" .. title.code)
-		end
-
-		sendPacket("victory", -1, string.char(
-			band(2, 0x7f),
-
-			     rshift(_playerID, 7 * 3)       ,
-			band(rshift(_playerID, 7 * 2), 0x7f),
-			band(rshift(_playerID, 7 * 1), 0x7f),
-			band(       _playerID        , 0x7f),
-
-			     rshift(newValue, 7 * 3)       ,
-			band(rshift(newValue, 7 * 2), 0x7f),
-			band(rshift(newValue, 7 * 1), 0x7f),
-			band(       newValue        , 0x7f),
-
-			     rshift(sumValue, 7 * 2)       ,
-			band(rshift(sumValue, 7 * 1), 0x7f),
-			band(       sumValue        , 0x7f)
-		) .. player .. title.field .. "\000")
-
-		return newValue
-	else
-		return field
-	end
-end
-
 onEvent("NewPlayer", function(player)
 	spec_mode[player] = nil
 	in_room[player] = true
@@ -306,8 +269,6 @@ onEvent("PlayerWon", function(player)
 
 	victory_count = victory_count + 1
 	victory._last_level[player] = false
-
-
 
 	if victory_count == player_count and not less_time then
 		tfm.exec.setGameTime(5)
