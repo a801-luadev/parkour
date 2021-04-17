@@ -14,6 +14,12 @@ Congratulations to the highest achieving Weekly Leaderboard players!
 > 🥈 [{}] `{}`: **{}** completed maps
 > 🥉 [{}] `{}`: **{}** completed maps"""
 
+TITLES = {
+	"T_496": "Piglet",
+	"T_497": "Checkpoint!",
+	"T_498": "Press M"
+}
+
 SEND_WEBHOOK = (3 << 8) + 255
 WEEKLY_RESET = (12 << 8) + 255
 COMMAND_LOG = (26 << 8) + 255
@@ -85,8 +91,8 @@ class Logs(aiotfm.Client):
 			await self.send_webhook(
 				env.webhooks.game_title,
 
-				"**`[TITLE UNLOCKED]`** `{}` `({})` `{}`"
-				.format(player_name, player_id, title_code)
+				"**[TITLE]** `{}` `({})` has just unlocked the `«{}»` title."
+				.format(player_name, player_id, TITLES.get(title_code, title_code))
 			)
 
 		else:

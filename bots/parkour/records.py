@@ -15,11 +15,14 @@ RECORD_BADGES = (17 << 8) + 255
 RECORD_SUBMISSION = (16 << 8) + 255
 PLAYER_VICTORY = (21 << 8) + 255
 
+FIELD_NAMES = {
+	"tc": [ "completed", "map" ],
+	"cc": [ "collected", "checkpoint" ],
+}
 
 class Records(aiotfm.Client):
 	def __init__(self, *args, **kwargs):
 		self.victory_cache = {}
-		self.pending_title_victory_cache = {}
 
 		super().__init__(*args, **kwargs)
 
@@ -178,39 +181,18 @@ class Records(aiotfm.Client):
 		))
 
 	async def handle_player_title_victory(self, pid, name, field_value, sum_value, field_name):
-		if self.pending_title_victory_cache.get(pid) is None:
-			self.pending_title_victory_cache[pid] = { }
-
-		pid_cache = self.pending_title_victory_cache[pid]
-		pid_cache[field_name] = {
-			"field_value": field_value,
-			"sum_value": sum_value
-		}
-
-		tc = pid_cache.get("tc")
-		cc = pid_cache.get("cc")
-		if not (tc and cc):
-			return None
-
 		msg = (
-			"**`[SUS]:`** `{name}` (`{pid}`) got +{tc_sum_value} TC (title map count), "
-			"totalizing {tc_field_value} and +{cc_sum_value} CC (title checkpoints count), "
-			"totalizing {cc_field_value}."
+			"**`[SUS]:`**  `{name}` (`{pid}`) {connector} **+{sum_value}** {field_name}. (total: **{field_value}**)"
 		)
 
-		tc_sum_value = tc["sum_value"]
-		tc_field_value = tc["field_value"]
-		cc_sum_value = cc["sum_value"]
-		cc_field_value = cc["field_value"]
-
-		del self.pending_title_victory_cache[pid]
+		field_info = FIELD_NAMES.get(field_name, [ "", "" ])
 
 		await self.send_webhook(env.webhooks.game_title_data, msg.format(
 			name=name, pid=pid,
-			tc_sum_value = tc_sum_value,
-			tc_field_value = tc_field_value,
-			cc_sum_value = cc_sum_value,
-			cc_field_value = cc_field_value
+			connector = field_info[0],
+			sum_value = sum_value,
+			field_name = field_info[1],
+			field_value = field_value
 		))
 
 	async def on_whisper_command(self, whisper, author, ranks, cmd, args):

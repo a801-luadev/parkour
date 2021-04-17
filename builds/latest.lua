@@ -5030,17 +5030,17 @@ local function initialize_parkour() -- so it uses less space after building
 	local titles = {
 		piglet = {
 			code = "T_496",
-			requirement = 2,--10000,
+			requirement = 6000,
 			field = "tc" -- map count
 		},
 		checkpoint = {
 			code = "T_497",
-			requirement = 6,--5000,
+			requirement = 3000,
 			field = "cc" -- checkpoint count
 		},
 		press_m = {
 			code = "T_498",
-			requirement = 4,--1000,
+			requirement = 10,
 			field = "tc"
 		}
 	}
@@ -9458,7 +9458,7 @@ local function initialize_parkour() -- so it uses less space after building
 					)
 				end,
 				alpha = 0,
-				x = 5, y = 65,
+				x = 5, y = 70,
 				width = 185, height = 70
 			})
 	
