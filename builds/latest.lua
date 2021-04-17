@@ -4327,14 +4327,16 @@ local function initialize_parkour() -- so it uses less space after building
 
 		if field < title.requirement then
 			local newValue = field + sumValue
-tfm.exec.chatMessage("sum value" .. sumValue)
-tfm.exec.chatMessage("new value" .. newValue)
-tfm.exec.chatMessage("req" .. title.requirement)
+tfm.exec.chatMessage(player .. " sum value " .. sumValue)
+tfm.exec.chatMessage(player .. " new value " .. newValue)
+tfm.exec.chatMessage(player .. " req " .. title.requirement)
 			if newValue >= title.requirement then
+tfm.exec.chatMessage(player .. " title " .. title.code)
 				system.giveEventGift(player, title.code)
 
 				sendPacket("common", 9, _playerID .. "\000" .. player .. "\000" .. title.code)
 			end
+tfm.exec.chatMessage("-------------------")
 
 			sendPacket("victory", -1, string.char(
 				band(2, 0x7f),
