@@ -22,7 +22,7 @@ do
 	}
 	local images = {}
 
-	Profile = Interface.new(200, 50, 400, 300, true)
+	Profile = Interface.new(200, 50, 400, 360, true)
 		:setShowCheck(function(self, player, profile, data)
 			local file = data or players_file[profile]
 			return (file
@@ -30,7 +30,7 @@ do
 		end)
 
 		:addImage({
-			image = "173f32a90da.png",
+			image = "178de11fd0c.png",
 			target = ":1",
 			x = -5, y = -5
 		})
@@ -78,7 +78,7 @@ do
 
 			x = self.x + 15
 			local limit = x + 40 * 9
-			local y = self.y + 180
+			local y = self.y + 205
 			local pbg = (data or players_file[profile]).badges
 			if pbg then
 				local badge
@@ -121,26 +121,32 @@ do
 			canUpdate = true,
 			text = function(self, player, profile, data)
 				local file = (data or players_file[profile])
+				local displayStats = (not file.private_maps or player == profile or (perms[player] and perms[player].see_private_maps))
 
 				return translatedMessage(
 					"profile", player,
 					file.private_maps and translatedMessage("private_maps", player) or "",
-					(not file.private_maps or player == profile or (perms[player] and perms[player].see_private_maps)) and
-					translatedMessage("map_count", player, file.c, file.week[1], #file.hour) or "",
+
+					displayStats and translatedMessage("map_count", player, file.c, file.week[1], #file.hour) or "",
+
 					profile == player and string.format(
 						"<a href='event:prof_maps:%s'><j>[%s]</j></a>",
 						file.private_maps and "public" or "private",
 						translatedMessage(file.private_maps and "make_public" or "make_private", player)
 					) or "",
+
 					leaderboard[profile] and ("#" .. leaderboard[profile]) or "N/A",
-					weekleaderboard[profile] and ("#" .. weekleaderboard[profile]) or "N/A"
+
+					weekleaderboard[profile] and ("#" .. weekleaderboard[profile]) or "N/A",
+
+					displayStats and translatedMessage("title_count", player, file.tc, file.cc) or ""
 				)
 			end,
-			alpha = 0, height = 100
+			alpha = 0, height = 150
 		})
 
 		:addTextArea({
-			x = 5, y = 150,
+			x = 5, y = 175,
 			canUpdate = true,
 			text = function(self, player, profile, data)
 				local count = 0
@@ -163,7 +169,7 @@ do
 			:onClick(function(self, player)
 				self.parent:remove(player)
 			end)
-			:setPosition(10, 275):setSize(380, 15)
+			:setPosition(10, 300):setSize(380, 15)
 		)
 
 	onEvent("ParsedTextAreaCallback", function(id, player, action, args)

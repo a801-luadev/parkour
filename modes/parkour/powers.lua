@@ -843,7 +843,8 @@ onEvent("PlayerDataUpdated", function(player, data)
 end)
 
 onEvent("PlayerWon", function(player)
-	if bans[ room.playerList[player].id ] then return end
+	local id = room.playerList[player].id
+	if bans[ id ] then return end
 	if victory[player] then return end
 	if not players_file[player] then return end
 
@@ -855,15 +856,25 @@ onEvent("PlayerWon", function(player)
 		not review_mode) then
 
 		local map_overall, map_weekly = 1, 1
+		--[=[
 		if timed_maps.week.last_reset == "28/02/2021" then
 			map_weekly = 2
 		end
 		if os.date("%d/%m/%Y", os.time() + 60 * 60 * 1000) == "06/03/2021" then
 			map_overall = 2
 		end
+		]=]
 
 		local file = players_file[player]
 		file.c = file.c + map_overall
+
+		file.tc = math.max(
+			checkTitleAndNextFieldValue(player, titles.press_m, map_overall, file, id),
+			checkTitleAndNextFieldValue(player, titles.piglet, map_overall, file, id)
+		)
+
+		file.cc = checkTitleAndNextFieldValue(player, titles.checkpoint, #levels - 1 --[[total checkpoints but spawn]], file, id)
+
 		file.hour[#file.hour + 1] = math.floor((os.time() - file.hour_r) / 10000) -- convert to ms and count every 10s
 		file.week[1] = file.week[1] + map_weekly
 

@@ -162,7 +162,7 @@ do
 				)
 			end,
 			alpha = 0,
-			x = 5, y = 65,
+			x = 5, y = 70,
 			width = 185, height = 70
 		})
 

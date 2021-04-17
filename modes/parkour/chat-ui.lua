@@ -73,6 +73,8 @@ onEvent("PlayerWon", function(player)
 		local band, rshift = bit32.band, bit32.rshift
 
 		sendPacket("victory", -1, string.char(
+			band(1, 0x7f),
+
 			     rshift(id, 7 * 3)       ,
 			band(rshift(id, 7 * 2), 0x7f),
 			band(rshift(id, 7 * 1), 0x7f),
@@ -418,11 +420,6 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		fetching_player_room[fetching] = {player, os.time() + 1000}
 		system.loadPlayerData(fetching)
 		max_args = 1
-
-	elseif cmd == "testtitle" then
-		if player:lower() ~= "bolodefchoco#0015" then return end
-
-		system.giveEventGift((args[1]:lower():gsub('%a',string.upper,1)), args[2]:upper())
 
 	else
 		return
