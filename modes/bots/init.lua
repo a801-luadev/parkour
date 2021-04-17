@@ -46,7 +46,6 @@ local packets = {
 	global_poll = bit.lshift(28, 8) + 255,
 	load_player_data = bit.lshift(29, 8) + 255,
 	save_player_data = bit.lshift(30, 8) + 255,
-	log_title = bit.lshift(31, 8) + 255,
 
 	module_crash = bit.lshift(255, 8) + 255
 }
@@ -557,8 +556,6 @@ onEvent("PacketReceived", function(channel, id, packet, map, time)
 
 	elseif id == 8 then
 		addTextArea(packets.poll_vote, packet, parkour_bot)
-	elseif id == 9 then
-		addTextArea(packets.log_title, packet, parkour_bot)
 	end
 end)
 

@@ -33,8 +33,6 @@ class env:
 
 		suspects_norecord = os.getenv("SUSPECTS_NORECORD_WEBHOOK")
 		game_victory = os.getenv("GAME_VICTORY_WEBHOOK")
-		game_title_data = os.getenv("GAME_TITLE_DATA")
-		game_title = os.getenv("GAME_TITLE")
 
 		commands = os.getenv("COMMAND_LOG_WEBHOOK")
 
