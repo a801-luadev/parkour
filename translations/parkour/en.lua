@@ -107,7 +107,9 @@ translations.en = {
 	private_maps = "<bl>This player's map count is private. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
 	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 				"Overall leaderboard position: <b><v>%s</v></b>\n\n" ..
-				"Weekly leaderboard position: <b><v>%s</v></b>"),
+				"Weekly leaderboard position: <b><v>%s</v></b>\n\n" ..
+				"<b><j>«!»</j></b> Finished maps: <b><v>%s</v></b>\n\n" ..
+				"<b><j>«!»</j></b> Collected checkpoints: <b><v>%s</v></b>"),
 	map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "Badges are accomplishments a player can get. Click over them to see their description.",
 	help_private_maps = "This player doesn't like to share their map count publicly! You can hide them too in your profile.",

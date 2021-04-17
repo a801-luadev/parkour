@@ -22,7 +22,7 @@ do
 	}
 	local images = {}
 
-	Profile = Interface.new(200, 50, 400, 300, true)
+	Profile = Interface.new(200, 50, 400, 330, true)
 		:setShowCheck(function(self, player, profile, data)
 			local file = data or players_file[profile]
 			return (file
@@ -125,22 +125,30 @@ do
 				return translatedMessage(
 					"profile", player,
 					file.private_maps and translatedMessage("private_maps", player) or "",
+
 					(not file.private_maps or player == profile or (perms[player] and perms[player].see_private_maps)) and
 					translatedMessage("map_count", player, file.c, file.week[1], #file.hour) or "",
+
 					profile == player and string.format(
 						"<a href='event:prof_maps:%s'><j>[%s]</j></a>",
 						file.private_maps and "public" or "private",
 						translatedMessage(file.private_maps and "make_public" or "make_private", player)
 					) or "",
+
 					leaderboard[profile] and ("#" .. leaderboard[profile]) or "N/A",
-					weekleaderboard[profile] and ("#" .. weekleaderboard[profile]) or "N/A"
+
+					weekleaderboard[profile] and ("#" .. weekleaderboard[profile]) or "N/A",
+
+					profile == player and file.tc or "",
+
+					profile == player and file.cc or ""
 				)
 			end,
 			alpha = 0, height = 100
 		})
 
 		:addTextArea({
-			x = 5, y = 150,
+			x = 5, y = 180,
 			canUpdate = true,
 			text = function(self, player, profile, data)
 				local count = 0
@@ -163,7 +171,7 @@ do
 			:onClick(function(self, player)
 				self.parent:remove(player)
 			end)
-			:setPosition(10, 275):setSize(380, 15)
+			:setPosition(10, 305):setSize(380, 15)
 		)
 
 	onEvent("ParsedTextAreaCallback", function(id, player, action, args)
