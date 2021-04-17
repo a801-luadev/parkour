@@ -5035,7 +5035,7 @@ local function initialize_parkour() -- so it uses less space after building
 		},
 		checkpoint = {
 			code = "T_497",
-			requirement = 3000,
+			requirement = 300,
 			field = "cc" -- checkpoint count
 		},
 		press_m = {
