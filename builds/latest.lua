@@ -7079,7 +7079,6 @@ local function initialize_parkour() -- so it uses less space after building
 			fetching_player_room[fetching] = {player, os.time() + 1000}
 			system.loadPlayerData(fetching)
 			max_args = 1
-	
 		else
 			return
 		end
