@@ -62,10 +62,11 @@ class Records(aiotfm.Client):
 			)
 
 		elif tid == PLAYER_VICTORY:
-			now = time.time()
 			packet = packet.encode()
 
-			if packet[0] == 0:
+			if packet[0] == 1:
+				now = time.time()
+
 				# check for cache
 				if packet in self.victory_cache: # duplicated
 					to_delete = []
@@ -106,7 +107,7 @@ class Records(aiotfm.Client):
 						player, name, map_code, taken / 1000
 					)
 				)
-			elif packet[0] == 1:
+			elif packet[0] == 2:
 				#unpack data
 				player, fieldValue, sumValue = packet[1:5], packet[5:9], packet[9:12]
 				name = packet[12:].decode()

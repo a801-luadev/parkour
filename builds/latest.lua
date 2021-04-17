@@ -4337,7 +4337,7 @@ tfm.exec.chatMessage("req" .. title.requirement)
 			end
 
 			sendPacket("victory", -1, string.char(
-				band(1, 0x7f),
+				band(2, 0x7f),
 
 				     rshift(_playerID, 7 * 3)       ,
 				band(rshift(_playerID, 7 * 2), 0x7f),
@@ -6712,7 +6712,7 @@ tfm.exec.chatMessage("req" .. title.requirement)
 			local band, rshift = bit32.band, bit32.rshift
 
 			sendPacket("victory", -1, string.char(
-				band(0, 0x7f),
+				band(1, 0x7f),
 
 				     rshift(id, 7 * 3)       ,
 				band(rshift(id, 7 * 2), 0x7f),
