@@ -868,8 +868,10 @@ onEvent("PlayerWon", function(player)
 		local file = players_file[player]
 		file.c = file.c + map_overall
 
-		file.tc = checkTitleAndNextFieldValue(player, titles.press_m, map_overall, file, id)
-		file.tc = checkTitleAndNextFieldValue(player, titles.piglet, map_overall, file, id)
+		file.tc = math.max(
+			checkTitleAndNextFieldValue(player, titles.press_m, map_overall, file, id),
+			checkTitleAndNextFieldValue(player, titles.piglet, map_overall, file, id)
+		)
 
 		file.cc = checkTitleAndNextFieldValue(player, titles.checkpoint, #levels - 1 --[[total checkpoints but spawn]], file, id)
 
