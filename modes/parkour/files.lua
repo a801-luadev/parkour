@@ -81,7 +81,7 @@ local titles = {
 	},
 	checkpoint = {
 		code = "T_497",
-		requirement = 300,
+		requirement = 30,
 		field = "cc" -- checkpoint count
 	},
 	press_m = {
