@@ -1616,7 +1616,7 @@ local function initialize_parkour() -- so it uses less space after building
 		bigBox = "Caixa grande",
 		trampoline = "Trampolim",
 		toilet = "Vaso Sanitário",
-		pig = "Porco",
+		pig = "Leitão",
 		sink = "Pia",
 		bathtub = "Banheira",
 		campfire = "Fogueira",
@@ -1924,7 +1924,9 @@ local function initialize_parkour() -- so it uses less space after building
 		private_maps = "<bl>This player's map count is private. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
 		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
 					"Overall leaderboard position: <b><v>%s</v></b>\n\n" ..
-					"Weekly leaderboard position: <b><v>%s</v></b>"),
+					"Weekly leaderboard position: <b><v>%s</v></b>\n\n" ..
+					"<b><j>«!»</j></b> Finished maps: <b><v>%s</v></b>\n\n" ..
+					"<b><j>«!»</j></b> Collected checkpoints: <b><v>%s</v></b>"),
 		map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 		help_badge = "Badges are accomplishments a player can get. Click over them to see their description.",
 		help_private_maps = "This player doesn't like to share their map count publicly! You can hide them too in your profile.",
@@ -1996,7 +1998,7 @@ local function initialize_parkour() -- so it uses less space after building
 		bigBox = "Big box",
 		trampoline = "Trampoline",
 		toilet = "Toilet",
-		pig = "Pig",
+		pig = "Piglet",
 		sink = "Sink",
 		bathtub = "Bathtub",
 		campfire = "Campfire",
@@ -2029,7 +2031,7 @@ local function initialize_parkour() -- so it uses less space after building
 		rules = "Reglas",
 		contribute = "Contribuir",
 		changelog = "Novedades",
-		help_help = "<p align = 'center'><font size = '14'>¡Bienvenido a <T>#parkour!</T></font></p>\n<font size = '12'><p align='center'><J>Tu objetivo es alcanzar todos los puntos de control hasta que completes el mapa.</J></p>\n\n<N>• Presiona la tecla <O>O</O>, escribe <O>!op</O> o clickea el <O>botón de configuración</O> para abrir el <T>menú de opciones</T>.\n• Presiona la tecla <O>P</O> o clickea el <O>ícono de la mano</O> arriba a la derecha para abrir el <T>menú de poderes</T>.\n• Presiona la tecla <O>L</O> o escribe <O>!lb</O> para abrir el <T>ranking</T>.\n• Presiona la tecla <O>M</O> o <O>Delete</O> como atajo para <T>/mort</T>, podes alternarlas en el menú de <J>Opciones</J>.\n• Para conocer más acerca de nuestro <O>staff</O> y las <O>reglas de parkour</O>, clickea en las pestañas de <T>Staff</T> y <T>Reglas</T>.\n• Click <a href='event:discord'><o>here</o></a> to get the discord invite link and <a href='event:map_submission'><o>here</o></a> to get the map submission topic link.\n• Use <o>up</o> and <o>down</o> arrow keys when you need to scroll.\n\n<p align = 'center'><font size = '13'><T>¡Las contribuciones están abiertas! Para más detalles, ¡clickea en la pestaña <O>Contribuir</O>!</T></font></p>",
+		help_help = "<p align = 'center'><font size = '14'>¡Bienvenido a <T>#parkour!</T></font></p>\n<font size = '12'><p align='center'><J>Tu objetivo es alcanzar todos los checkpoints hasta que completes el mapa.</J></p>\n\n<N>• Presiona la tecla <O>O</O>, escribe <O>!op</O> o clickea el <O>botón de configuración</O> para abrir el <T>menú de opciones</T>.\n• Presiona la tecla <O>P</O> o clickea el <O>ícono de la mano</O> arriba a la derecha para abrir el <T>menú de poderes</T>.\n• Presiona la tecla <O>L</O> o escribe <O>!lb</O> para abrir el <T>ranking</T>.\n• Presiona la tecla <O>M</O> o <O>Delete</O> como atajo para <T>/mort</T>, podes alternarlas en el menú de <J>Opciones</J>.\n• Para conocer más acerca de nuestro <O>staff</O> y las <O>reglas de parkour</O>, clickea en las pestañas de <T>Staff</T> y <T>Reglas</T>.\n• Click <a href='event:discord'><o>here</o></a> to get the discord invite link and <a href='event:map_submission'><o>here</o></a> to get the map submission topic link.\n• Use <o>up</o> and <o>down</o> arrow keys when you need to scroll.\n\n<p align = 'center'><font size = '13'><T>¡Las contribuciones están abiertas! Para más detalles, ¡clickea en la pestaña <O>Contribuir</O>!</T></font></p>",
 		help_staff = "<p align = 'center'><font size = '13'><r>NOTA: El staff de Parkour NO ES staff de Transformice y NO TIENEN ningún poder en el juego, sólamente dentro del módulo.</r>\nEl staff de Parkour se asegura de que el módulo corra bien con la menor cantidad de problemas, y siempre están disponibles para ayudar a los jugadores cuando sea necesario.</font></p>\nPuedes escribir <D>!staff</D> en el chat para ver la lista de staff.\n\n<font color = '#E7342A'>Administradores:</font> Son los responsables de mantener el módulo añadiendo nuevas actualizaciones y arreglando bugs.\n\n<font color = '#D0A9F0'>Lideres de Equipos:</font> Ellos supervisan los equipos de Moderadores y Mappers, asegurándose de que hagan un buen trabajo. También son los responsables de reclutar nuevos miembros al staff.\n\n<font color = '#FFAAAA'>Moderadores:</font> Son los responsables de ejercer las reglas del módulo y sancionar a quienes no las sigan.\n\n<font color = '#25C059'>Mappers:</font> Son los responsables de revisar, añadir y quitar mapas en el módulo para asegurarse de que tengas un buen gameplay.",
 		help_rules = "<font size = '13'><B><J>Todas las reglas en los Terminos y Condiciones de Transformice también aplican a #parkour</J></B></font>\n\nSi encuentras algún jugador rompiendo estas reglas, susurra a los moderadores de parkour en el juego. Si no hay moderadores online, es recomendable reportarlo en discord.\nCuando reportes, por favor agrega el servidor, el nombre de la sala, y el nombre del jugador.\n• Ej: en-#parkour10 Blank#3495 trollear\nEvidencia, como fotos, videos y gifs ayudan y son apreciados, pero no son necesarios.\n\n<font size = '11'>• No se permite el uso de <font color = '#ef1111'>hacks, glitches o bugs</font>\n• <font color = '#ef1111'>Farmear con VPN</font> será considerado un <B>abuso</B> y no está permitido. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nCualquier persona rompiendo estas reglas será automáticamente baneado.</B></font></p>\n\n<font size = '12'>Transformice acepta el concepto de trollear. Pero <font color='#cc2222'><B>no está permitido en #parkour.</B></font></font>\n\n<p align = 'center'><J>Trollear es cuando un jugador intencionalmente usa sus poderes o consumibles para hacer que otros jugadores no completen el mapa.</j></p>\n• Trollear como venganza <B>no es una razón válida</B> para trollear a alguien y aún así seras sancionado.\n• Ayudar a jugadores que no quieren completar el mapa con ayuda y no parar cuando te lo piden también es considerado trollear.\n• <J>Si un jugador no quiere ayuda, por favor ayuda a otros jugadores</J>. Sin embargo, si otro jugador necesita ayuda en el mismo punto, puedes ayudarlos [a los dos].\n\nSi un jugador es atrapado trolleando, será sancionado en base de tiempo. Trollear repetidas veces llevará a sanciones más largas y severas.",
 		help_contribute = "<font size='14'>\n<p align='center'>El equipo de administración de parkour ama el codigo abierto porque <t>ayuda a la comunidad</t>. Podés <o>ver</o> y <o>modificar</o> el código de parkour en <o><u><a href='event:github'>GitHub</a></u></o>.\n\nMantener el módulo es <t>estrictamente voluntario</t>, por lo que cualquier ayuda con respecto al <t>código</t>, <t>reportes de bugs</t>, <t>sugerencias</t> y <t>creación de mapas</t> siempre será <u>bienvenida y apreciada</u>.\nPodés <vp>reportar bugs</vp> y <vp>dar sugerencias</vp> en <o><u><a href='event:discord'>Discord</a></u></o> y/o <o><u><a href='event:github'>GitHub</a></u></o>.\nPodés <vp>enviar tus mapas</vp> en nuestro <o><u><a href='event:map_submission'>Hilo del Foro</a></u></o>.\n\nMantener parkour no es caro, pero tampoco es gratis. Realmente apreciaríamos si pudieras ayudarnos <t>donando cualquier cantidad</t> <o><u><a href='event:donate'>aquí</a></u></o>.\n<u>Todas las donaciones serán destinadas a mejorar el módulo.</u></p>",
@@ -9798,7 +9800,7 @@ local function initialize_parkour() -- so it uses less space after building
 		}
 		local images = {}
 	
-		Profile = Interface.new(200, 50, 400, 300, true)
+		Profile = Interface.new(200, 50, 400, 330, true)
 			:setShowCheck(function(self, player, profile, data)
 				local file = data or players_file[profile]
 				return (file
@@ -9901,22 +9903,30 @@ local function initialize_parkour() -- so it uses less space after building
 					return translatedMessage(
 						"profile", player,
 						file.private_maps and translatedMessage("private_maps", player) or "",
+	
 						(not file.private_maps or player == profile or (perms[player] and perms[player].see_private_maps)) and
 						translatedMessage("map_count", player, file.c, file.week[1], #file.hour) or "",
+	
 						profile == player and string.format(
 							"<a href='event:prof_maps:%s'><j>[%s]</j></a>",
 							file.private_maps and "public" or "private",
 							translatedMessage(file.private_maps and "make_public" or "make_private", player)
 						) or "",
+	
 						leaderboard[profile] and ("#" .. leaderboard[profile]) or "N/A",
-						weekleaderboard[profile] and ("#" .. weekleaderboard[profile]) or "N/A"
+	
+						weekleaderboard[profile] and ("#" .. weekleaderboard[profile]) or "N/A",
+	
+						profile == player and file.tc or "",
+	
+						profile == player and file.cc or ""
 					)
 				end,
 				alpha = 0, height = 100
 			})
 	
 			:addTextArea({
-				x = 5, y = 150,
+				x = 5, y = 180,
 				canUpdate = true,
 				text = function(self, player, profile, data)
 					local count = 0
@@ -9939,7 +9949,7 @@ local function initialize_parkour() -- so it uses less space after building
 				:onClick(function(self, player)
 					self.parent:remove(player)
 				end)
-				:setPosition(10, 275):setSize(380, 15)
+				:setPosition(10, 305):setSize(380, 15)
 			)
 	
 		onEvent("ParsedTextAreaCallback", function(id, player, action, args)
