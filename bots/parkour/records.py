@@ -15,11 +15,6 @@ RECORD_BADGES = (17 << 8) + 255
 RECORD_SUBMISSION = (16 << 8) + 255
 PLAYER_VICTORY = (21 << 8) + 255
 
-FIELD_NAMES = {
-	"tc": [ "completed", "map" ],
-	"cc": [ "collected", "checkpoint" ],
-}
-
 class Records(aiotfm.Client):
 	def __init__(self, *args, **kwargs):
 		self.victory_cache = {}
@@ -65,89 +60,68 @@ class Records(aiotfm.Client):
 			)
 
 		elif tid == PLAYER_VICTORY:
+			now = time.time()
+
+			# check for cache
+			if packet in self.victory_cache: # duplicated
+				to_delete = []
+
+				for victory_data, expire in self.victory_cache.items():
+					if now >= expire:
+						to_delete.append(victory_data)
+
+				for victory_data in to_delete:
+					del self.victory_cache[victory_data]
+
+				if packet in self.victory_cache: # didn't expire
+					return
+
+			self.victory_cache[packet] = now + 600.0 # cache for 10 minutes
+
+			# unpack data
 			packet = packet.encode()
+			player, map_code, taken = packet[:4], packet[4:8], packet[8:11]
+			map_checkpoints, player_checkpoints = packet[12], packet[12:14]
+			name = packet[14:].decode()
 
-			if packet[0] == 1:
-				now = time.time()
+			player = (player[0] << (7 * 3)) + \
+					(player[1] << (7 * 2)) + \
+					(player[2] << (7 * 1)) + \
+					player[3]
 
-				# check for cache
-				if packet in self.victory_cache: # duplicated
-					to_delete = []
+			map_code = (map_code[0] << (7 * 3)) + \
+						(map_code[1] << (7 * 2)) + \
+						(map_code[2] << (7 * 1)) + \
+						map_code[3]
 
-					for victory_data, expire in self.victory_cache.items():
-						if now >= expire:
-							to_delete.append(victory_data)
+			taken = (taken[0] << (7 * 2)) + \
+					(taken[1] << (7 * 1)) + \
+					taken[2]
 
-					for victory_data in to_delete:
-						del self.victory_cache[victory_data]
+			player_checkpoints = (player_checkpoints[0] << (7 * 1)) + \
+					player_checkpoints[1]
 
-					if packet in self.victory_cache: # didn't expire
-						return
-
-				self.victory_cache[packet] = now + 600.0 # cache for 10 minutes
-
-				# unpack data
-				player, map_code, taken = packet[1:5], packet[5:9], packet[9:12]
-				name = packet[12:].decode()
-
-				player = (player[0] << (7 * 3)) + \
-						(player[1] << (7 * 2)) + \
-						(player[2] << (7 * 1)) + \
-						player[3]
-
-				map_code = (map_code[0] << (7 * 3)) + \
-							(map_code[1] << (7 * 2)) + \
-							(map_code[2] << (7 * 1)) + \
-							map_code[3]
-
-				taken = (taken[0] << (7 * 2)) + \
-						(taken[1] << (7 * 1)) + \
-						taken[2]
-
-				# handle victory
-				self.loop.create_task(
-					self.handle_player_victory(
-						player, name, map_code, taken / 1000
-					)
+			# handle victory
+			self.loop.create_task(
+				self.handle_player_victory(
+					player, name, map_code, taken / 1000,
+					map_checkpoints, player_checkpoints
 				)
-			elif packet[0] == 2:
-				#unpack data
-				player, fieldValue, sumValue = packet[1:5], packet[5:9], packet[9:12]
-				name = packet[12:].decode()
-				fieldName, name = name[-2:], name[:-2]
-
-				player = (player[0] << (7 * 3)) + \
-						(player[1] << (7 * 2)) + \
-						(player[2] << (7 * 1)) + \
-						player[3]
-
-				fieldValue = (fieldValue[0] << (7 * 3)) + \
-							(fieldValue[1] << (7 * 2)) + \
-							(fieldValue[2] << (7 * 1)) + \
-							fieldValue[3]
-
-				sumValue = (sumValue[0] << (7 * 2)) + \
-						(sumValue[1] << (7 * 1)) + \
-						sumValue[2]
-
-				# handle victory
-				self.loop.create_task(
-					self.handle_player_title_victory(
-						player, name, fieldValue, sumValue, fieldName
-					)
-				)
+			)
 		else:
 			return False
 		return True
 
-	async def handle_player_victory(self, pid, name, code, taken):
+	async def handle_player_victory(self, pid, name, code, taken, map_checkpoints, \
+		player_checkpoints):
 		records = await self.get_map_records(code)
 
 		msg = (
 			"**`[SUS]:`** `{name}` (`{pid}`) (`{maps}` maps/hour) "
 			"completed the map `@{code}` in the room `{room}` "
 			"in `{taken}` seconds. - "
-			"Map record: `{record}` (threshold `{threshold}`)"
+			"Map record: `{record}` (threshold `{threshold}`) - "
+			"Checkpoints: `{player_checkpoints} (map had `{map_checkpoints}`)`"
 		)
 
 		if not records:
@@ -177,22 +151,9 @@ class Records(aiotfm.Client):
 			name=name, pid=pid,
 			code=code, taken=taken,
 			record=record, threshold=threshold,
-			room=room, maps=hour_maps
-		))
-
-	async def handle_player_title_victory(self, pid, name, field_value, sum_value, field_name):
-		msg = (
-			"**`[SUS]:`**  `{name}` (`{pid}`) {connector} **+{sum_value}** {field_name}. (total: **{field_value}**)"
-		)
-
-		field_info = FIELD_NAMES.get(field_name, [ "", "" ])
-
-		await self.send_webhook(env.webhooks.game_title_data, msg.format(
-			name=name, pid=pid,
-			connector = field_info[0],
-			sum_value = sum_value,
-			field_name = field_info[1],
-			field_value = field_value
+			room=room, maps=hour_maps,
+			player_checkpoints = player_checkpoints,
+			map_checkpoints = map_checkpoints
 		))
 
 	async def on_whisper_command(self, whisper, author, ranks, cmd, args):

@@ -149,24 +149,6 @@ local function checkTitleAndNextFieldValue(player, title, sumValue, _playerData,
 			sendPacket("common", 9, _playerID .. "\000" .. player .. "\000" .. title.code)
 		end
 
-		sendPacket("victory", -1, string.char(
-			band(2, 0x7f),
-
-			     rshift(_playerID, 7 * 3)       ,
-			band(rshift(_playerID, 7 * 2), 0x7f),
-			band(rshift(_playerID, 7 * 1), 0x7f),
-			band(       _playerID        , 0x7f),
-
-			     rshift(newValue, 7 * 3)       ,
-			band(rshift(newValue, 7 * 2), 0x7f),
-			band(rshift(newValue, 7 * 1), 0x7f),
-			band(       newValue        , 0x7f),
-
-			     rshift(sumValue, 7 * 2)       ,
-			band(rshift(sumValue, 7 * 1), 0x7f),
-			band(       sumValue        , 0x7f)
-		) .. player .. title.field .. "\000")
-
 		return newValue
 	else
 		return field
