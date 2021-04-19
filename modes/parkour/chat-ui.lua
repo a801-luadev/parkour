@@ -88,7 +88,7 @@ onEvent("PlayerWon", function(player)
 			rshift(packedTime, 7 * 1) % 0x80,
 			       packedTime         % 0x80,
 
-			(#levels - 1) % 180, -- total checkpoints in the map
+			(#levels - 1) % 0x80, -- total checkpoints in the map
 
 			rshift(file.cc, 7 * 1)       ,
 			       file.cc         % 0x80,
