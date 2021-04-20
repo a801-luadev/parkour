@@ -84,8 +84,6 @@ class Records(aiotfm.Client):
 			map_checkpoints, player_checkpoints = packet[11:12], packet[12:14]
 			name = packet[14:].decode()
 
-			print(packet[11], packet[11:12], packet[12], packet[11:12][0] << (7 * 1))
-
 			player = (player[0] << (7 * 3)) + \
 					(player[1] << (7 * 2)) + \
 					(player[2] << (7 * 1)) + \
