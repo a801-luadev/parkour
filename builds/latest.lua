@@ -1105,7 +1105,7 @@ channels = {
 	},
 	victory = { -- to bots (all victory logs, high traffic)
 		room.name == "*#parkour4bots", true, 10000,
-		"(............[^\000]+)\000",
+		"(..............[^\000]+)\000",
 		"A_801#0015", "Celes#6009"
 	},
 	bots = { -- from bots (all orders, low traffic)
@@ -2807,18 +2807,18 @@ local function initialize_parkour() -- so it uses less space after building
 		max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 
 		-- Help window
-		help = "Помощь",
-		staff = "Команда модераторов",
-		rules = "Правила",
-		contribute = "Содействие",
-		changelog = "Изменения",
-		help_help = "<p align = 'center'><font size = '14'>Добро пожаловать в <T>#parkour!</T></font></p>\n<font size = '12'><p align='center'><J>Ваша цель - собрать все чекпоинты, чтобы завершить карту.</J></p>\n\n<N>• Нажмите <O>O</O>, введите <O>!op</O> или нажмите на <O> шестеренку</O> чтобы открыть <T>меню настроек</T>.\n• Нажмите <O>P</O> или нажмите на <O>руку</O> в правом верхнем углу, чтобы открыть <T>меню со способностями</T>.\n• Нажмите <O>L</O> или введите <O>!lb</O> чтобы открыть <T>Список лидеров</T>.\n• Нажмите <O>M</O> или <O>Delete</O> чтобы не прописывать <T>/mort</T>.\n• Чтобы узнать больше о нашей <O>команде</O> и о <O>правилах паркура</O>, нажми на <T>Команда</T> и <T>Правила</T>.\n• Нажмите <a href='event:discord'><o>here</o></a> чтобы получить ссылку на приглашение в наш Дискорд канал. Нажмите <a href='event:map_submission'><o>here</o></a> чтобы получить ссылку на тему отправки карты.\n• Используйте клавиши <o>вверх</o> и <o>вниз</o> чтобы листать меню.\n\n<p align = 'center'><font size = '13'><T>Вкладки теперь открыты! Для получения более подробной информации, нажмите на вкладку <O>Содействие</O> !</T></font></p>",
-		help_staff = "<p align = 'center'><font size = '13'><r>ОБЯЗАННОСТИ: Команда Паркура НЕ команда Transformice и НЕ имеет никакой власти в самой игре, только внутри модуля.</r>\nКоманда Parkour обеспечивают исправную работу модуля с минимальными проблемами и всегда готова помочь игрокам в случае необходимости.</font></p>\nВы можете ввести <D>!staff</D> в чат, чтобы увидеть нашу команду.\n\n<font color = '#E7342A'>Администраторы:</font> Hесут ответственность за поддержку самого модуля, добавляя новые обновления и исправляя ошибки.\n\n<font color = '#D0A9F0'>Руководители команд:</font> Kонтролируют команды модераторов и картостроителей, следя за тем, чтобы они хорошо выполняли свою работу. Они также несут ответственность за набор новых членов в команду.\n\n<font color = '#FFAAAA'>Модераторы:</font> Hесут ответственность за соблюдение правил модуля и наказывают тех, кто не следует им.\n\n<font color = '#25C059'>Картостроители:</font> Oтвечают за просмотр, добавление и удаление карт в модуле, обеспечивая вам приятный игровой процесс.",
-		help_rules = "<font size = '13'><B><J>Все правила пользователя и условия Transformice также применяются к #parkour </J></B></font>\n\nЕсли вы обнаружили, что кто-то нарушает эти правила, напишите нашим модераторам. Если модераторов нет в сети, вы можете сообщить об этом на на нашем сервере в Discord\nПри составлении репорта, пожалуйста, укажите сервер, имя комнаты и имя игрока.\n• Пример: en-#parkour10 Blank#3495 троллинг\nДоказательства, такие как скриншоты, видео и гифки, полезны и ценны, но не обязательны.\n\n<font size = '11'>• <font color = '#ef1111'>читы, глюки или баги</font> не должны использоваться в комнатах #parkour\n• <font color = '#ef1111'>Фарм через VPN</font> считается <B>нарушением</B> и не допускается. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nЛюбой, кто пойман за нарушение этих правил, будет немедленно забанен.</B></font></p>\n\n<font size = '12'>Transformice позволяет концепцию троллинга. Однако, <font color='#cc2222'><B>мы не допустим этого в паркуре.</B></font></font>\n\n<p align = 'center'><J>Троллинг - это когда игрок намеренно использует свои силы или инвентарь, чтобы помешать другим игрокам пройти/закончить карту.</J></p>\n• Троллинг ради мести <B>не является веской причиной,</B> для троллинга кого-либо и вы все равно будете наказаны.\n• Принудительная помощь игрокам, которые пытаются пройти карту самостоятельно и отказываюся от помощи, когда их об этом просят, также считается троллингом. \n• <J>Если игрок не хочет помогать или предпочитает играть в одиночку на карте, постарайтесь помочь другим игрокам</J>. Однако, если другой игрок нуждается в помощи на том же чекпоинте, что и соло игрок, вы можете помочь им [обоим].\n\nЕсли игрок пойман за троллингом, он будет наказан на временной основе. Обратите внимание, что повторный троллинг приведет к более длительным и суровым наказаниям.",
-		help_contribute = "<font size='14'>\n<p align='center'>Команда управления паркуром предпочитает открытый исходный код, потому что он <t>помогает сообществу</t>. Вы можете <o>посмотреть</o> и <o>улучшить</o> исходный код на <o><u><a href='event:github'>GitHub</a></u></o>.\nПоддержание модуля<t>строго добровольно</t>, так что любая помощь в отношении <t>code</t>, <t>баг репортов</t>, <t>предложений</t> and <t>созданию карт</t> is always <u>приветствуется и ценится</u>.\nВы можете <vp>оставлять жалобу</vp> и <vp>предлагать улучшения</vp> в нашем <o><u><a href='event:discord'>Дискорде</a></u></o> и/или в <o><u><a href='event:github'>GitHub</a></u></o>.\nВы можете <vp>отправить свои карты</vp> на нашем <o><u><a href='event:map_submission'>форуме</a></u></o>.\n\nПоддержание паркура не дорогое, но и не бесплатное. Мы будем рады, если вы поможете нам <t>любой суммой</t> <o><u><a href='event:donate'>here</a></u></o>.\n<u>Все пожертвования пойдут на улучшение модуля.</u></p>",
-		help_changelog = "<font size='13'><p align='center'><o>Version 2.10.0 - 17/04/2021</o></p>\n\n<font size='11'>• <font size='13'><b><j>THREE</J></b> brand new Transformice titles that can only be unlocked by playing <font color='#1A7EC9'><b>#parkour</b></font>!</font>\n• Two new statuses added to the profile.\n• Minor text adjustments.",
+		help = "Pomoc",
+		staff = "Obsługa",
+		rules = "Zasady",
+		contribute = "Udział",
+		changelog = "Aktualności",
+		help_help = "<p align = 'center'><font size = '14'>Witamy w <T>#parkour!</T></font></p>\n<font size = '12'><p align='center'><J>Twoim celem jest dotarcie do wszystkich punktów kontrolnych, dopóki nie ukończysz mapy.</J></p>\n\n<N>• Naciśnij <O>O</O>, napisz <O>!op</O> Lub kliknij <O>przycisk konfiguracji</O> aby otworzyć <T>menu opcji</T>.\n• Naciśnij <O>P</O> lub kliknij <O>ikonę dłoni</O> w prawym górnym rogu, aby otworzyć <T>menu mocy</T>.\n• Naciśnij <O>L</O> lub napisz <O>!lb</O> aby otworzyć <T>tabelę wyników</T>.\n• Naciśnij <O>M</O> lub <O>Delete</O> klawisz do <T>/mort</T>, możesz przełączać klawisze w <J>Options</J> menu.\n• Aby dowiedzieć się więcej o naszym <O>personelu</O> oraz <O>zasadach na parkourze</O>, kliknij na <T>obsługę</T> i <T>zasady</T> .\n• Kliknij <a href='event:discord'><o>tutaj</o></a> aby uzyskać link zapraszający zgodny i <a href='event:map_submission'><o>tutaj</o></a> aby uzyskać link do tematu przesyłania mapy.\n• Użyj strzałki w <o>góre</o> i w <o>dół</o>, kiedy musisz przewijać.\n\n<p align = 'center'><font size = '13'><T>Udziały są teraz otwarte! Aby uzyskać więcej informacji, kliknij <O>Udział</O>!</T></font></p>",
+		help_staff = "<p align = 'center'><font size = '13'><r>WYJAŚNIAMY: Personel Parkour NIE JEST personelem Transformice i NIE MA żadnej mocy w samej grze, tylko w module.</r>\nPersonel w Parkour zapewnnia, że moduł działa płynnie przy minimalnych problemach i są zawsze dostępni, aby pomóc graczom w razie potrzeby.</font></p>\nAby zobaczyć listę aktywnych osób z personelu napisz <D>!staff</D> na czacie.\n\n<font color = '#E7342A'>Administratorzy:</font> Są odpowiedzialni za utrzymanie samego modułu poprzez dodawanie nowych aktualizacji i naprawianie błędów.\n\n<font color = '#D0A9F0'>Kierownicy zespołów:</font> Nadzorują zespoły moderatorów i twórców map, upewniając się, że dobrze wykonują swoje zadania. Odpowiadają również za rekrutację nowych członków do zespołu pracowników.\n\n<font color = '#FFAAAA'>Moderatoratorzy:</font> Są odpowiedzialni za egzekwowanie zasad modułu i karanie osób, które ich nie przestrzegają.\n\n<font color = '#25C059'>Mapperzy:</font> Są odpowiedzialni za przeglądanie, dodawanie i usuwanie map w modułach, aby zapewnić przyjemną rozgrywkę.",
+		help_rules = "<font size = '13'><B><J>Wszystkie zasady zawarte w Regulaminie Transformice dotyczą również #parkour</J></B></font>\n\nJeśli zauważysz, że jakiś gracz łamie te zasady, napisz do moderatorów parkour w grze. Jeżeli nie ma moderatorów w grze to możesz ich zgłosić na nayszm serwerze discord.\nPodczas zgłaszania prosimy o podanie serwera, nazwy pokoju i nazwy gracza.\n• Na przykład: en-#parkour10 Blank#3495 trolling\nDowody, takie jak zrzuty ekranu, filmy i gify, są pomocne i doceniane, ale nie są konieczne.\n\n<font size = '11'>• Zakazane jest używanie: <font color = '#ef1111'>hack, usterek oraz błędów.</font>\n• <font color = '#ef1111'>VPN farmowanie</font> będzie uważany za <B>wykorzystywanie</B> i nie jest dozwolone. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nKażdy przyłapany na łamaniu tych zasad zostanie natychmiast zbanowany.</B></font></p>\n\n<font size = '12'>Transformice zezwala na trollowanie. Jednak, <font color='#cc2222'><B> zabronione jest to na parkourze.</B></font></font>\n\n<p align = 'center'><J>Trolling ma miejsce, gdy gracz celowo użył swoich mocy lub materiałów eksploatacyjnych, aby uniemożliwić innym graczom ukończenie mapy.</j></p>\n•Trolling w każdej formie jest zabroniony nie ważne czy w formie <B>zemsty czy zabawy</B>.\n• Za trollowanie uważa się również wymuszanie pomocy gdy gracz sam próbuje przejść mapę i prosi abyś przestał mu pomagać a ty odmawiasz.\n• <J>Jeśli gracz nie chce pomocy lub woli ukończyć sam mape, postaraj się pomóc innym graczom</J>. Jeśli jednak inny gracz potrzebuje pomocy w tym samym punkcie kontrolnym, co gracz solo, możesz im pomóc [obu].\n\nJeśli gracz zostanie przyłapany na trollowaniu, zostanie ukarany na czas. Pamiętaj, że wielokrotne trollowanie doprowadzi do dłuższych i surowszych kar.",
+		help_contribute = "<font size='14'>\n<p align='center'>Zespół zarządzający w parkour uwielbia otwarte kody, ponieważ <t>pomagają społeczności</t>. Możesz <o>zobaczyć</o> i <o>modyfikować</o> kod źródłowy na <o><u><a href='event:github'>GitHub</a></u></o>.\n\nUtrzymanie modułu jest <t>dobrowolne</t>, więc wszelka pomoc dotycząca <t>kodów</t>, <t>zgłaszania błędów</t>, <t>propozycje</t> oraz <t>tworzenie map</t> jest zawsze <u>mile widziane i doceniane</u>.\nMożesz <vp>zgłaszać błędy</vp> oraz <vp>dać propozycje</vp> na <o><u><a href='event:discord'>Discord</a></u></o> lub <o><u><a href='event:github'>GitHub</a></u></o>.\n<vp>Swoje mapy możesz przesyłać</vp> w naszym <o><u><a href='event:map_submission'>wątku na forum</a></u></o>.\n\nUtrzymanie parkour nie jest drogie, ale też nie darmowe. Możesz nam pomóc <t>przekazując dowolną kwotę</t> <o><u><a href='event:donate'>tutaj</a></u></o>.\n<u>Wszystkie darowizny zostaną przeznaczone na ulepszenie modułu.</u></p>",
+		help_changelog = "<font size='13'><p align='center'><o>Version 2.10.0 - 17/04/2021</o></p>\n\n<font size='11'>• <font size='13'><b><j>Trzy</J></b>zupełnie nowe tytuły które możesz odblokować grając tylko na<font color='#1A7EC9'><b>#parkour</b></font>!</font>\n•Dodano dwa nowe statusy do profilu.\n•Małe poprawki tekstu.",
 
-		-- Congratulation messages
+    -- Congratulation messages
 		reached_level = "<d>Поздравляем! Вы достигли уровня <vp>%s</vp>. (<t>%ss</t>)",
 		finished = "<d><o>%s</o> завершил паркур за <vp>%s</vp> секунд, <fc>поздравляем!",
 		unlocked_power = "<ce><d>%s</d> разблокировал способность <vp>%s</vp>.",
@@ -2858,101 +2858,105 @@ local function initialize_parkour() -- so it uses less space after building
 		double_maps_end = "<rose>Неделя рождения паркура закончилась. Спасибо за то, что играешь с нами!",
 
 		-- Records
-		records_enabled = "<v>[#] <d>RВ этой комнате включен режим рекордов. Статистика не учитывается, а умения отключены!\nВы можете найти больше информации в <b>%s</b>",
-		records_admin = "<v>[#] <d>Вы администратор этой комнаты. Вы можете использовать команды <b>!map</b>, <b>!setcp</b>, <b>!pw</b> и <b>!time</b>.",
-		records_completed = "<v>[#] <d>Вы прошли карту! Если вы хотите сделать это заново, введите <b>!redo</b>.",
-		records_submit = "<v>[#] <d>Вот Это Да! Похоже, ты быстрее всех прошел карту. Если хочешь поделиться своим рекордом, введи  <b>!submit</b>.",
-		records_invalid_map = "<v>[#] <r>Похоже, эта карта не в ротации паркура ... Вы не можете сохранить рекорд для нее!",
-		records_not_fastest = "<v>[#] <r>Кажется, ты не самый быстрый игрок в комнате ...",
-		records_already_submitted = "<v>[#] <r>Вы уже отправили свой рекорд для этой карты!",
-		records_submitted = "<v>[#] <d>Ваш рекорд на этой карте <b>%s</b> был сохранен.",
-
+		records_enabled = "<v>[#] <d> W tym pokoju włączony jest tryb rekordów.  Statystyki się nie liczą, a uprawnienia nie są włączone!\nWięcej informacji na temat rekordów można znaleźć w <b>%s</b>",
+		records_admin = "<v>[#] <d>Jesteś administratorem tego pokoju z rekordami.  Możesz użyć poleceń <b>!map</b>, <b>!setcp</b>, <b>!pw</b> and <b>!time</b>.",
+		records_completed = "<v>[#] <d>Ukończyłeś mapę!  Jeśli chcesz to zrobić ponownie, wpisz <b>!redo</b>.",
+		records_submit = "<v>[#] <d>Łał! Wygląda na to, że miałeś najszybszy czas w pokoju. Jeśli chcesz przesłać swój rekord, wpisz <b>!submit</b>.",
+		records_invalid_map = "<v>[#] <r>Wygląda na to, że na tej mapie nie ma rotacji parkour... Nie możesz przesłać jej rekordu!",
+		records_not_fastest = "<v>[#] <r>Wygląda na to, że nie jesteś najszybszym graczem w pokoju...",
+		records_already_submitted = "<v>[#] <r>Już przesłałeś swój rekord na tej mapie!",
+		records_submitted = "<v>[#] <d>Twój rekord na mapie <b>%s</b> został przesłany.",
+	
 		-- Miscellaneous
-		afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
-		options = "<p align='center'><font size='20'>Параметры Паркура</font></p>\n\nИспользуйте <b>QWERTY</b> на клавиатуре (отключить if <b>AZERTY</b>)\n\nИспользуйте <b>M</b> горячую клавишу <b>/mort</b> (отключить <b>DEL</b>)\n\nПоказать ваше время перезарядки\n\nПоказать кнопку способностей\n\nПоказать кнопку помощь\n\nПоказать объявление о завершении карты\n\nПоказать символ помощь не нужна",
-		cooldown = "<v>[#] <r>Подождите несколько минут, чтобы повторить действие.",
-		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> клавиатура" ..
-						 "\n\n<b>Hide</b> map count" ..
-						 "\n\nUse <b>default key</b>"),
-		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты" ..
-						"<font size='5'>\n\n</font>разблокированы" ..
+		afk_popup = "\n<p align='center'><font size='30'><bv><b>JESTEŚ W TRYBIE AFK</b></bv>\nPORUSZAJ SIĘ ABY, GRAĆ DALEJ</font>\n\n<font size='30'><u><t>Przypomnienie:</t></u></font>\n\n<font size='15'><r>Gracze z czerwoną linią nad nimi nie chcą pomocy!\nTrollowanie/blokowanie innych graczy w parkour jest zabronione!<d>\nDołącz na nasz <cep><a href='event:discord'>serwer discord</a></cep>!\nChcesz współtworzyć kod?  Zobacz nasz <cep><a href='event:github'>magazyn githuba </a></cep>\nCzy masz dobrą mapę do przesłania?  Opublikujją w naszym <cep><a href='event:map_submission'>temacie przesyłania map</a></cep>\nSprawdź nasz <cep><a href='event:forum'>watek na forum</a></cep> żeby dowiedzieć się więcej\nWesprzyj nas przez <cep><a href='event:donate'>darowizmy!</a></cep>",
+		options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<b>M</b> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy",
+		cooldown = "<v>[#] <r>Poczekaj kilka sekund, zanim zrobisz to ponownie.",
+		power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> klawiatura" ..
+						 "\n\n<b>pokaż</b> liczbę map" ..
+						 "\n\nUżyj <b>domyślnego klawisza</b> "),
+		unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ukończyć <v>%s</v> mapę" ..
+						"<font size='5'>\n\n</font>odblokować" ..
 						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты" ..
-						"<font size='5'>\n\n</font>обновлены" ..
-						"<font size='5'>\n\n</font><v>%s</v>"),
-		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v>" ..
-						"<font size='5'>\n\n</font>разбокирован" ..
-						"<font size='5'>\n\n</font><v>%s</v>"),
-		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v>" ..
-						"<font size='5'>\n\n</font>обновлен" ..
-						"<font size='5'>\n\n</font><v>%s</v>"),
+		upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ukończyć<v>%s</v> mapę" ..
+						 "<font size='5'>\n\n</font>uaktualnić do" ..
+						 "<font size='5'>\n\n</font><v>%s</v>"),
+		unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ranga<v>%s</v>" ..
+							 "<font size='5'>\n\n</font>odblokować" ..
+							 "<font size='5'>\n\n</font><v>%s</v>"),
+		upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ranga <v>%s</v>" ..
+							 "<font size='5'>\n\n</font>uaktualnić do" ..
+							 "<font size='5'>\n\n</font><v>%s</v>"),
 		maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					 "<font size='5'>\n\n</font>Пройденые карты"),
+					 "<font size='5'>\n\n</font>Ukończone mapy"),
 		overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-						"<font size='5'>\n\n</font>Общая таблица лидеров"),
+						"<font size='5'>\n\n</font>Ogólny ranking"),
 		weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					   "<font size='5'>\n\n</font>Еженедельная таблица лидеров"),
-		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
-		private_maps = "<bl>Количество карт этого игрока является частным.<a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
+					   "<font size='5'>\n\n</font>Tygodniowa tablica wyników"),
+		badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Odznaki (%s): <a href='event:_help:badge'><j>[?]</j></a>",
+		private_maps = "<bl>Liczba map tego gracza jest prywatna. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
 		profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
-					"Общая таблица лидеров: <b><v>%s</v></b>\n\n" ..
-					"Еженедельначя таблица лидеров: <b><v>%s</v></b>\n\n%s"),
-		map_count = "Количество карт: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
-		help_badge = "Значки - это достижение, которое может получить игрок. Нажмите на них, чтобы увидеть их описание.",
-		help_private_maps = "Этот игрок не любит публично публиковать количество своих карт! Вы также можете скрыть их в своем профиле.",
-		help_yellow_maps = "Желтым цветом обозначены карты, завершенные на этой неделе.",
-		help_red_maps = "Карты красного цвета - это карты, завершенные за последний час.",
-		help_badge_1 = "Этот игрок в прошлом был сотрудником паркура.",
-		help_badge_2 = "Этот игрок находится или был на странице 1 общей таблицы лидеров.",
-		help_badge_3 = "Этот игрок находится или был на странице 2 общей таблицы лидеров.",
-		help_badge_4 = "Этот игрок находится или был на странице 3 общей таблицы лидеров.",
-		help_badge_5 = "Этот игрок находится или был на странице 4 общей таблицы лидеров.",
-		help_badge_6 = "Этот игрок находится или был на странице 5 общей таблицы лидеров.",
-		help_badge_7 = "Этот игрок был в еженедельной таблицы лидеров.",
-		help_badge_8 = "У этого игрока рекорд - 30 карт в час.",
-		help_badge_9 = "У этого игрока рекорд - 35 карт в час.",
-		help_badge_10 = "У этого игрока рекорд - 40 карт в час.",
-		help_badge_11 = "У этого игрока рекорд - 45 карт в час.",
-		help_badge_12 = "У этого игрока рекорд - 50 карт в час.",
-		help_badge_13 = "У этого игрока рекорд - 55 карт в час.",
-		help_badge_14 = "Этот пользователь подтвердил свою учетную запись на официальном канале сервера паркура (нажмите <b>!discord</b>).",
-		help_badge_15 = "Этот игрок показал лучшее время на 1 карте.",
-		help_badge_16 = "Этот игрок показал лучшее время на 5 картах.",
-		help_badge_17 = "Этот игрок показал лучшее время на 10 картах.",
-		help_badge_18 = "Этот игрок показал лучшее время на 15 картах.",
-		help_badge_19 = "Этот игрок показал лучшее время на 20 картах.",
-		help_badge_20 = "Этот игрок показал лучшее время на 25 картах.",
-		help_badge_21 = "Этот игрок показал лучшее время на 30 картах.",
-		help_badge_22 = "Этот игрок показал лучшее время на 35 картах.",
-		help_badge_23 = "Этот игрок показал лучшее время на 40 картах.",
-		make_public = "сделать публичным",
-		make_private = "сделать приватым",
-		moderators = "Модераторы",
-		mappers = "Maпперы",
-		managers = "Mенеджеры",
-		administrators = "Администрация",
-		close = "Закрыть",
-		cant_load_bot_profile = "<v>[#] <r>You can't see this bot's profile since #parkour uses it internally to work properly.",
-		cant_load_profile = "<v>[#] <r>The player <b>%s</b> seems to be offline or does not exist.",
-		like_map = "Do you like this map?",
-		yes = "Yes",
-		no = "No",
-		idk = "I don't know",
-		unknown = "Неизвестно",
-		powers = "Способности",
-		press = "<vp>Нажмите %s",
-		click = "<vp>Щелчок левой кнопкой мыши",
-		ranking_pos = "Рейтинг #%s",
-		completed_maps = "<p align='center'><BV><B>Пройденные карты: %s</B></p></BV>",
-		leaderboard = "Таблица лидеров",
-		position = "<V><p align=\"center\">Должность",
-		username = "<V><p align=\"center\">Имя пользователя",
-		community = "<V><p align=\"center\">Сообщество",
-		completed = "<V><p align=\"center\">Пройденные карты",
-		overall_lb = "В целом",
-		weekly_lb = "Еженедельно",
-		new_lang = "<v>[#] <d>Язык установлен на Русский",
-
+					"Ogólna pozycja w tabeli liderów: <b><v>%s</v></b>\n\n" ..
+					"Tygodniowa pozycja w tabeli liderów: <b><v>%s</v></b>\n\n%s"),
+		map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
+		title_count = ("<b><j>«!»</j></b> Ukończone Mapy:<b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
+					"<b><j>«!»</j></b>Zebrane Punkty Kontrolne<b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
+		help_badge = "Odznaki to osiągnięcie, które gracz może zdobyć. Kliknij je, aby zobaczyć ich opis.",
+		help_private_maps = "Ten gracz nie lubi publicznie udostępniać liczby swoich map! Możesz je również ukryć w swoim profilu.",
+		help_yellow_maps = "Ilość map w kolorze żółtym oznacza ilość ukończonych map w tym tygodniu.",
+		help_red_maps = "Ilość map w kolorze czerwonym oznacza ilość ukończonych map w ciągu ostatniej godziny.",
+		help_map_count_title = "Możesz otrzymać<b>Transformice</b>Tytuły przechodząc mapy parkour!",
+		help_checkpoint_count_title = "Możesz otrzymać<b>Transformice</b>Tytuły zbierając wszystkie punkty kontrolne na mapach parkour!",
+		help_badge_1 = "Ten gracz był w przeszłości członkiem zespołu parkour. ",
+		help_badge_2 = "Ten gracz jest lub był na pierwszej stronie ogólnej tabeli wyników.",
+		help_badge_3 = "Ten gracz jest lub był na stronie 2 ogólnej tabeli wyników.",
+		help_badge_4 = "Ten gracz jest lub był na stronie 3 ogólnej tabeli wyników.",
+		help_badge_5 = "Ten gracz jest lub był na stronie 4 ogólnej tabeli wyników.",
+		help_badge_6 = "Ten gracz jest lub był na stronie 5 ogólnej tabeli wyników.",
+		help_badge_7 = "Ten gracz był na podium na koniec tygodniowej tabeli liderów.",
+		help_badge_8 = "Ten gracz ma rekord 30 map na godzinę.",
+		help_badge_9 = "Ten gracz ma rekord 35 map na godzinę.",
+		help_badge_10 = "Ten gracz ma rekord 40 map na godzinę.",
+		help_badge_11 = "Ten gracz ma rekord 45 map na godzinę.",
+		help_badge_12 = "Ten gracz ma rekord 50 map na godzinę.",
+		help_badge_13 = "Ten gracz ma rekord 55 map na godzinę.",
+		help_badge_14 = "Ten gracz zweryfikował swoje konto na naszym oficjalnym Discordzie (napisz <b>!discord</b>).",
+		help_badge_15 = "Ten gracz uzyskał najszybszy czas na 1 mapie.",
+		help_badge_16 = "Ten gracz uzyskał najszybszy czas na 5 mapch.",
+		help_badge_17 = "Ten gracz uzyskał najszybszy czas na 10 mapch.",
+		help_badge_18 = "Ten gracz uzyskał najszybszy czas na 15 mapch.",
+		help_badge_19 = "Ten gracz uzyskał najszybszy czas na 20 mapch.",
+		help_badge_20 = "Ten gracz uzyskał najszybszy czas na 25 mapch.",
+		help_badge_21 = "Ten gracz uzyskał najszybszy czas na 30 mapch.",
+		help_badge_22 = "Ten gracz uzyskał najszybszy czas na 35 mapch.",
+		help_badge_23 = "Ten gracz uzyskał najszybszy czas na 40 mapch.",
+		make_public = " pokaż",
+		make_private = "ukryj",
+		moderators = "Moderatorzy",
+		mappers = "Maperzy",
+		managers = "Menedżerowie",
+		administrators = "Administratorzy",
+		close = "Zamknij",
+		cant_load_bot_profile = "<v>[#] <r>Nie możesz zobaczyć profilu tego bota, ponieważ #parkour używa go wewnętrznie do prawidłowego działania.",
+		cant_load_profile = "<v>[#] <r>Gracz <b>%s</b> wydaje się być offline lub nie istnieje.",
+		like_map = "Podoba ci się ta mapa?",
+		yes = "Tak",
+		no = "Nie",
+		idk = "Nie wiem",
+		unknown = "Nieznany",
+		powers = "Moce",
+		press = "<vp>Naciśnij %s",
+		click = "<vp>Lewy przycisk",
+		ranking_pos = "Rang #%s",
+		completed_maps = "<p align='center'><BV><B>Ukończone mapy: %s</B></p></BV>",
+		leaderboard = "Tabela liderów",
+		position = "<V><p align=\"center\">Pozycja",
+		username = "<V><p align=\"center\">Nazwa",
+		community = "<V><p align=\"center\">Społeczność",
+		completed = "<V><p align=\"center\">Ukończone mapy",
+		overall_lb = "Ogólnie",
+		weekly_lb = "Co tydzień",
+		new_lang = "<v>[#] <d>Ustawiono język Polski",
+	
 		-- Power names
 		balloon = "Шар",
 		masterBalloon = "Мастер шар",
@@ -4369,24 +4373,6 @@ local function initialize_parkour() -- so it uses less space after building
 
 				sendPacket("common", 9, _playerID .. "\000" .. player .. "\000" .. title.code)
 			end
-
-			sendPacket("victory", -1, string.char(
-				band(2, 0x7f),
-
-				     rshift(_playerID, 7 * 3)       ,
-				band(rshift(_playerID, 7 * 2), 0x7f),
-				band(rshift(_playerID, 7 * 1), 0x7f),
-				band(       _playerID        , 0x7f),
-
-				     rshift(newValue, 7 * 3)       ,
-				band(rshift(newValue, 7 * 2), 0x7f),
-				band(rshift(newValue, 7 * 1), 0x7f),
-				band(       newValue        , 0x7f),
-
-				     rshift(sumValue, 7 * 2)       ,
-				band(rshift(sumValue, 7 * 1), 0x7f),
-				band(       sumValue        , 0x7f)
-			) .. player .. title.field .. "\000")
 
 			return newValue
 		else
@@ -6408,7 +6394,8 @@ local function initialize_parkour() -- so it uses less space after building
 		local id = room.playerList[player].id
 		if bans[ id ] then return end
 		if victory[player] then return end
-		if not players_file[player] then return end
+		local file = players_file[player]
+		if not file then return end
 
 		if (count_stats and
 			room.uniquePlayers >= min_save and
@@ -6427,7 +6414,6 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 			]=]
 
-			local file = players_file[player]
 			file.c = file.c + map_overall
 
 			file.tc = math.max(
@@ -6729,7 +6715,9 @@ local function initialize_parkour() -- so it uses less space after building
 		local id = room.playerList[player].id
 		if bans[id] then return end
 		if victory[player] then return end
-		if not players_file[player] then return end
+
+		local file = players_file[player]
+		if not file then return end
 
 		victory[player] = true
 		setNameColor(player) -- just in case PlayerRespawn triggers first
@@ -6748,21 +6736,24 @@ local function initialize_parkour() -- so it uses less space after building
 			local band, rshift = bit32.band, bit32.rshift
 
 			sendPacket("victory", -1, string.char(
-				band(1, 0x7f),
-
-				     rshift(id, 7 * 3)       ,
-				band(rshift(id, 7 * 2), 0x7f),
-				band(rshift(id, 7 * 1), 0x7f),
-				band(       id        , 0x7f),
-
-				     rshift(map, 7 * 3)       ,
-				band(rshift(map, 7 * 2), 0x7f),
-				band(rshift(map, 7 * 1), 0x7f),
-				band(       map        , 0x7f),
-
-				     rshift(packedTime, 7 * 2)       ,
-				band(rshift(packedTime, 7 * 1), 0x7f),
-				band(       packedTime        , 0x7f)
+				rshift(id, 7 * 3)       ,
+				rshift(id, 7 * 2) % 0x80,
+				rshift(id, 7 * 1) % 0x80,
+				       id         % 0x80,
+	
+				rshift(map, 7 * 3)       ,
+				rshift(map, 7 * 2) % 0x80,
+				rshift(map, 7 * 1) % 0x80,
+				       map         % 0x80,
+	
+				rshift(packedTime, 7 * 2)       ,
+				rshift(packedTime, 7 * 1) % 0x80,
+				       packedTime         % 0x80,
+	
+				(#levels - 1) % 0x80, -- total checkpoints in the map
+	
+				rshift(file.cc, 7 * 1)       ,
+				       file.cc         % 0x80
 			) .. player .. "\000")
 		end
 		if not fastest.record or taken < fastest.record then
@@ -6780,8 +6771,8 @@ local function initialize_parkour() -- so it uses less space after building
 				translatedChatMessage("records_submit", player)
 			end
 		end
-
-		if players_file[player].settings[7] == 0 then
+	
+		if file.settings[7] == 0 then
 			translatedChatMessage("finished", player, player, taken)
 		end
 
@@ -6815,7 +6806,8 @@ local function initialize_parkour() -- so it uses less space after building
 			for index = 1, #powers do
 				power = powers[index]
 
-				if players_file[player].c == power.maps then
+				if file.c == power.maps then
+
 					for _player in next, in_room do
 						translatedChatMessage("unlocked_power", _player, player, translatedMessage(power.name, _player))
 					end

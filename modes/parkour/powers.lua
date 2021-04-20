@@ -846,7 +846,8 @@ onEvent("PlayerWon", function(player)
 	local id = room.playerList[player].id
 	if bans[ id ] then return end
 	if victory[player] then return end
-	if not players_file[player] then return end
+	local file = players_file[player]
+	if not file then return end
 
 	if (count_stats and
 		room.uniquePlayers >= min_save and
@@ -865,7 +866,6 @@ onEvent("PlayerWon", function(player)
 		end
 		]=]
 
-		local file = players_file[player]
 		file.c = file.c + map_overall
 
 		file.tc = math.max(

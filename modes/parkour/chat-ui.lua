@@ -54,7 +54,8 @@ onEvent("PlayerWon", function(player)
 	local id = room.playerList[player].id
 	if bans[id] then return end
 	if victory[player] then return end
-	if not players_file[player] then return end
+	local file = players_file[player]
+	if not file then return end
 
 	victory[player] = true
 	setNameColor(player) -- just in case PlayerRespawn triggers first
@@ -73,21 +74,24 @@ onEvent("PlayerWon", function(player)
 		local band, rshift = bit32.band, bit32.rshift
 
 		sendPacket("victory", -1, string.char(
-			band(1, 0x7f),
+			rshift(id, 7 * 3)       ,
+			rshift(id, 7 * 2) % 0x80,
+			rshift(id, 7 * 1) % 0x80,
+			       id         % 0x80,
 
-			     rshift(id, 7 * 3)       ,
-			band(rshift(id, 7 * 2), 0x7f),
-			band(rshift(id, 7 * 1), 0x7f),
-			band(       id        , 0x7f),
+			rshift(map, 7 * 3)       ,
+			rshift(map, 7 * 2) % 0x80,
+			rshift(map, 7 * 1) % 0x80,
+			       map         % 0x80,
 
-			     rshift(map, 7 * 3)       ,
-			band(rshift(map, 7 * 2), 0x7f),
-			band(rshift(map, 7 * 1), 0x7f),
-			band(       map        , 0x7f),
+			rshift(packedTime, 7 * 2)       ,
+			rshift(packedTime, 7 * 1) % 0x80,
+			       packedTime         % 0x80,
 
-			     rshift(packedTime, 7 * 2)       ,
-			band(rshift(packedTime, 7 * 1), 0x7f),
-			band(       packedTime        , 0x7f)
+			(#levels - 1) % 0x80, -- total checkpoints in the map
+
+			rshift(file.cc, 7 * 1)       ,
+			       file.cc         % 0x80
 		) .. player .. "\000")
 	end
 	if not fastest.record or taken < fastest.record then
@@ -106,7 +110,7 @@ onEvent("PlayerWon", function(player)
 		end
 	end
 
-	if players_file[player].settings[7] == 0 then
+	if file.settings[7] == 0 then
 		translatedChatMessage("finished", player, player, taken)
 	end
 
@@ -140,7 +144,7 @@ onEvent("PlayerWon", function(player)
 		for index = 1, #powers do
 			power = powers[index]
 
-			if players_file[player].c == power.maps then
+			if file.c == power.maps then
 				for _player in next, in_room do
 					translatedChatMessage("unlocked_power", _player, player, translatedMessage(power.name, _player))
 				end
