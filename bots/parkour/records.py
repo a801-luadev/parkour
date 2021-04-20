@@ -123,7 +123,7 @@ class Records(aiotfm.Client):
 			"completed the map `@{code}` in the room `{room}` "
 			"in `{taken}` seconds. - "
 			"Map record: `{record}` (threshold `{threshold}`) - "
-			"Checkpoints: `{player_checkpoints}` (map had `{map_checkpoints}`)`"
+			"Checkpoints: `{player_checkpoints}` (map had `{map_checkpoints}`)"
 		)
 
 		if not records:
