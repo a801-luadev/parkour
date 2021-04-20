@@ -91,8 +91,7 @@ onEvent("PlayerWon", function(player)
 			(#levels - 1) % 0x80, -- total checkpoints in the map
 
 			rshift(file.cc, 7 * 1)       ,
-			       file.cc         % 0x80,
-
+			       file.cc         % 0x80
 		) .. player .. "\000")
 	end
 	if not fastest.record or taken < fastest.record then

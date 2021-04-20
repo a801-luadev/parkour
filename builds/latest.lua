@@ -1105,7 +1105,7 @@ channels = {
 	},
 	victory = { -- to bots (all victory logs, high traffic)
 		room.name == "*#parkour4bots", true, 10000,
-		"(............[^\000]+)\000",
+		"(..............[^\000]+)\000",
 		"A_801#0015", "Celes#6009"
 	},
 	bots = { -- from bots (all orders, low traffic)
@@ -2994,7 +2994,7 @@ local function initialize_parkour() -- so it uses less space after building
 		help_staff = "<p align = 'center'><font size = '13'><r>WYJAŚNIAMY: Personel Parkour NIE JEST personelem Transformice i NIE MA żadnej mocy w samej grze, tylko w module.</r>\nPersonel w Parkour zapewnnia, że moduł działa płynnie przy minimalnych problemach i są zawsze dostępni, aby pomóc graczom w razie potrzeby.</font></p>\nAby zobaczyć listę aktywnych osób z personelu napisz <D>!staff</D> na czacie.\n\n<font color = '#E7342A'>Administratorzy:</font> Są odpowiedzialni za utrzymanie samego modułu poprzez dodawanie nowych aktualizacji i naprawianie błędów.\n\n<font color = '#D0A9F0'>Kierownicy zespołów:</font> Nadzorują zespoły moderatorów i twórców map, upewniając się, że dobrze wykonują swoje zadania. Odpowiadają również za rekrutację nowych członków do zespołu pracowników.\n\n<font color = '#FFAAAA'>Moderatoratorzy:</font> Są odpowiedzialni za egzekwowanie zasad modułu i karanie osób, które ich nie przestrzegają.\n\n<font color = '#25C059'>Mapperzy:</font> Są odpowiedzialni za przeglądanie, dodawanie i usuwanie map w modułach, aby zapewnić przyjemną rozgrywkę.",
 		help_rules = "<font size = '13'><B><J>Wszystkie zasady zawarte w Regulaminie Transformice dotyczą również #parkour</J></B></font>\n\nJeśli zauważysz, że jakiś gracz łamie te zasady, napisz do moderatorów parkour w grze. Jeżeli nie ma moderatorów w grze to możesz ich zgłosić na nayszm serwerze discord.\nPodczas zgłaszania prosimy o podanie serwera, nazwy pokoju i nazwy gracza.\n• Na przykład: en-#parkour10 Blank#3495 trolling\nDowody, takie jak zrzuty ekranu, filmy i gify, są pomocne i doceniane, ale nie są konieczne.\n\n<font size = '11'>• Zakazane jest używanie: <font color = '#ef1111'>hack, usterek oraz błędów.</font>\n• <font color = '#ef1111'>VPN farmowanie</font> będzie uważany za <B>wykorzystywanie</B> i nie jest dozwolone. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nKażdy przyłapany na łamaniu tych zasad zostanie natychmiast zbanowany.</B></font></p>\n\n<font size = '12'>Transformice zezwala na trollowanie. Jednak, <font color='#cc2222'><B> zabronione jest to na parkourze.</B></font></font>\n\n<p align = 'center'><J>Trolling ma miejsce, gdy gracz celowo użył swoich mocy lub materiałów eksploatacyjnych, aby uniemożliwić innym graczom ukończenie mapy.</j></p>\n•Trolling w każdej formie jest zabroniony nie ważne czy w formie <B>zemsty czy zabawy</B>.\n• Za trollowanie uważa się również wymuszanie pomocy gdy gracz sam próbuje przejść mapę i prosi abyś przestał mu pomagać a ty odmawiasz.\n• <J>Jeśli gracz nie chce pomocy lub woli ukończyć sam mape, postaraj się pomóc innym graczom</J>. Jeśli jednak inny gracz potrzebuje pomocy w tym samym punkcie kontrolnym, co gracz solo, możesz im pomóc [obu].\n\nJeśli gracz zostanie przyłapany na trollowaniu, zostanie ukarany na czas. Pamiętaj, że wielokrotne trollowanie doprowadzi do dłuższych i surowszych kar.",
 		help_contribute = "<font size='14'>\n<p align='center'>Zespół zarządzający w parkour uwielbia otwarte kody, ponieważ <t>pomagają społeczności</t>. Możesz <o>zobaczyć</o> i <o>modyfikować</o> kod źródłowy na <o><u><a href='event:github'>GitHub</a></u></o>.\n\nUtrzymanie modułu jest <t>dobrowolne</t>, więc wszelka pomoc dotycząca <t>kodów</t>, <t>zgłaszania błędów</t>, <t>propozycje</t> oraz <t>tworzenie map</t> jest zawsze <u>mile widziane i doceniane</u>.\nMożesz <vp>zgłaszać błędy</vp> oraz <vp>dać propozycje</vp> na <o><u><a href='event:discord'>Discord</a></u></o> lub <o><u><a href='event:github'>GitHub</a></u></o>.\n<vp>Swoje mapy możesz przesyłać</vp> w naszym <o><u><a href='event:map_submission'>wątku na forum</a></u></o>.\n\nUtrzymanie parkour nie jest drogie, ale też nie darmowe. Możesz nam pomóc <t>przekazując dowolną kwotę</t> <o><u><a href='event:donate'>tutaj</a></u></o>.\n<u>Wszystkie darowizny zostaną przeznaczone na ulepszenie modułu.</u></p>",
-		help_changelog = "<font size='13'><p align='center'><o>Version 2.10.0 - 17/04/2021</o></p>\n\n<font size='11'>• <font size='13'><b><j>THREE</J></b> brand new Transformice titles that can only be unlocked by playing <font color='#1A7EC9'><b>#parkour</b></font>!</font>\n• Two new statuses added to the profile.\n• Minor text adjustments.",
+		help_changelog = "<font size='13'><p align='center'><o>Version 2.10.0 - 17/04/2021</o></p>\n\n<font size='11'>• <font size='13'><b><j>Trzy</J></b>zupełnie nowe tytuły które możesz odblokować grając tylko na<font color='#1A7EC9'><b>#parkour</b></font>!</font>\n•Dodano dwa nowe statusy do profilu.\n•Małe poprawki tekstu.",
 	
 		-- Congratulation messages
 		reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<t>%ss</t>)",
@@ -3076,10 +3076,14 @@ local function initialize_parkour() -- so it uses less space after building
 					"Ogólna pozycja w tabeli liderów: <b><v>%s</v></b>\n\n" ..
 					"Tygodniowa pozycja w tabeli liderów: <b><v>%s</v></b>\n\n%s"),
 		map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
+		title_count = ("<b><j>«!»</j></b> Ukończone Mapy:<b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
+					"<b><j>«!»</j></b>Zebrane Punkty Kontrolne<b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
 		help_badge = "Odznaki to osiągnięcie, które gracz może zdobyć. Kliknij je, aby zobaczyć ich opis.",
 		help_private_maps = "Ten gracz nie lubi publicznie udostępniać liczby swoich map! Możesz je również ukryć w swoim profilu.",
 		help_yellow_maps = "Ilość map w kolorze żółtym oznacza ilość ukończonych map w tym tygodniu.",
 		help_red_maps = "Ilość map w kolorze czerwonym oznacza ilość ukończonych map w ciągu ostatniej godziny.",
+		help_map_count_title = "Możesz otrzymać<b>Transformice</b>Tytuły przechodząc mapy parkour!",
+		help_checkpoint_count_title = "Możesz otrzymać<b>Transformice</b>Tytuły zbierając wszystkie punkty kontrolne na mapach parkour!",
 		help_badge_1 = "Ten gracz był w przeszłości członkiem zespołu parkour. ",
 		help_badge_2 = "Ten gracz jest lub był na pierwszej stronie ogólnej tabeli wyników.",
 		help_badge_3 = "Ten gracz jest lub był na stronie 2 ogólnej tabeli wyników.",
@@ -4353,24 +4357,6 @@ local function initialize_parkour() -- so it uses less space after building
 	
 				sendPacket("common", 9, _playerID .. "\000" .. player .. "\000" .. title.code)
 			end
-	
-			sendPacket("victory", -1, string.char(
-				band(2, 0x7f),
-	
-				     rshift(_playerID, 7 * 3)       ,
-				band(rshift(_playerID, 7 * 2), 0x7f),
-				band(rshift(_playerID, 7 * 1), 0x7f),
-				band(       _playerID        , 0x7f),
-	
-				     rshift(newValue, 7 * 3)       ,
-				band(rshift(newValue, 7 * 2), 0x7f),
-				band(rshift(newValue, 7 * 1), 0x7f),
-				band(       newValue        , 0x7f),
-	
-				     rshift(sumValue, 7 * 2)       ,
-				band(rshift(sumValue, 7 * 1), 0x7f),
-				band(       sumValue        , 0x7f)
-			) .. player .. title.field .. "\000")
 	
 			return newValue
 		else
@@ -6392,7 +6378,8 @@ local function initialize_parkour() -- so it uses less space after building
 		local id = room.playerList[player].id
 		if bans[ id ] then return end
 		if victory[player] then return end
-		if not players_file[player] then return end
+		local file = players_file[player]
+		if not file then return end
 	
 		if (count_stats and
 			room.uniquePlayers >= min_save and
@@ -6411,7 +6398,6 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 			]=]
 	
-			local file = players_file[player]
 			file.c = file.c + map_overall
 	
 			file.tc = math.max(
@@ -6713,7 +6699,8 @@ local function initialize_parkour() -- so it uses less space after building
 		local id = room.playerList[player].id
 		if bans[id] then return end
 		if victory[player] then return end
-		if not players_file[player] then return end
+		local file = players_file[player]
+		if not file then return end
 	
 		victory[player] = true
 		setNameColor(player) -- just in case PlayerRespawn triggers first
@@ -6732,21 +6719,24 @@ local function initialize_parkour() -- so it uses less space after building
 			local band, rshift = bit32.band, bit32.rshift
 	
 			sendPacket("victory", -1, string.char(
-				band(1, 0x7f),
+				rshift(id, 7 * 3)       ,
+				rshift(id, 7 * 2) % 0x80,
+				rshift(id, 7 * 1) % 0x80,
+				       id         % 0x80,
 	
-				     rshift(id, 7 * 3)       ,
-				band(rshift(id, 7 * 2), 0x7f),
-				band(rshift(id, 7 * 1), 0x7f),
-				band(       id        , 0x7f),
+				rshift(map, 7 * 3)       ,
+				rshift(map, 7 * 2) % 0x80,
+				rshift(map, 7 * 1) % 0x80,
+				       map         % 0x80,
 	
-				     rshift(map, 7 * 3)       ,
-				band(rshift(map, 7 * 2), 0x7f),
-				band(rshift(map, 7 * 1), 0x7f),
-				band(       map        , 0x7f),
+				rshift(packedTime, 7 * 2)       ,
+				rshift(packedTime, 7 * 1) % 0x80,
+				       packedTime         % 0x80,
 	
-				     rshift(packedTime, 7 * 2)       ,
-				band(rshift(packedTime, 7 * 1), 0x7f),
-				band(       packedTime        , 0x7f)
+				(#levels - 1) % 0x80, -- total checkpoints in the map
+	
+				rshift(file.cc, 7 * 1)       ,
+				       file.cc         % 0x80
 			) .. player .. "\000")
 		end
 		if not fastest.record or taken < fastest.record then
@@ -6765,7 +6755,7 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 		end
 	
-		if players_file[player].settings[7] == 0 then
+		if file.settings[7] == 0 then
 			translatedChatMessage("finished", player, player, taken)
 		end
 	
@@ -6799,7 +6789,7 @@ local function initialize_parkour() -- so it uses less space after building
 			for index = 1, #powers do
 				power = powers[index]
 	
-				if players_file[player].c == power.maps then
+				if file.c == power.maps then
 					for _player in next, in_room do
 						translatedChatMessage("unlocked_power", _player, player, translatedMessage(power.name, _player))
 					end

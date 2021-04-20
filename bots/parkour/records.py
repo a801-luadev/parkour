@@ -81,7 +81,7 @@ class Records(aiotfm.Client):
 			# unpack data
 			packet = packet.encode()
 			player, map_code, taken = packet[:4], packet[4:8], packet[8:11]
-			map_checkpoints, player_checkpoints = packet[12], packet[12:14]
+			map_checkpoints, player_checkpoints = packet[11:12], packet[12:14]
 			name = packet[14:].decode()
 
 			player = (player[0] << (7 * 3)) + \
