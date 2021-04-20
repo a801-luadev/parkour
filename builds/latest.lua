@@ -6749,7 +6749,7 @@ local function initialize_parkour() -- so it uses less space after building
 				rshift(packedTime, 7 * 1) % 0x80,
 				       packedTime         % 0x80,
 
-				(#levels - 1) % 0x80, -- total checkpoints in the map
+				(#levels - 1), -- total checkpoints in the map
 
 				rshift(file.cc, 7 * 1)       ,
 				       file.cc         % 0x80
