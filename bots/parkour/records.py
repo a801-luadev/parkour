@@ -158,7 +158,7 @@ class Records(aiotfm.Client):
 			+ ("Map record: `{record}` " if record != "none" else "")
 			+ "(threshold `{threshold}`) - "
 			+ ("Checkpoints: `{player_checkpoints}` (map had `{map_checkpoints}`) - " \
-			 	if MAXIMUM_CHECKPOINTS > map_checkpoints else "")
+			 	if MAXIMUM_CHECKPOINTS > player_checkpoints else "")
 			+ ("Finished maps: `{total_maps}`" \
 				if MAXIMUM_FINISHED_MAPS > total_maps else "")
 		)
