@@ -1105,7 +1105,7 @@ channels = {
 	},
 	victory = { -- to bots (all victory logs, high traffic)
 		room.name == "*#parkour4bots", true, 10000,
-		"(..............[^\000]+)\000",
+		"(................[^\000]+)\000",
 		"A_801#0015", "Celes#6009"
 	},
 	bots = { -- from bots (all orders, low traffic)
@@ -6752,7 +6752,10 @@ local function initialize_parkour() -- so it uses less space after building
 				(#levels - 1), -- total checkpoints in the map
 
 				rshift(file.cc, 7 * 1)       ,
-				       file.cc         % 0x80
+				       file.cc         % 0x80, -- has to be 24b if it goes above 60k
+
+				rshift(file.tc, 7 * 1)       ,
+				       file.tc         % 0x80 -- has to be 24b if it goes above 60k
 			) .. player .. "\000")
 		end
 		if not fastest.record or taken < fastest.record then
