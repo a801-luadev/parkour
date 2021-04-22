@@ -91,7 +91,10 @@ onEvent("PlayerWon", function(player)
 			(#levels - 1), -- total checkpoints in the map
 
 			rshift(file.cc, 7 * 1)       ,
-			       file.cc         % 0x80
+			       file.cc         % 0x80, -- has to be 24b if it goes above 60k
+
+			rshift(file.tc, 7 * 1)       ,
+			       file.tc         % 0x80 -- has to be 24b if it goes above 60k
 		) .. player .. "\000")
 	end
 	if not fastest.record or taken < fastest.record then

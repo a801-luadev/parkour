@@ -15,6 +15,9 @@ RECORD_BADGES = (17 << 8) + 255
 RECORD_SUBMISSION = (16 << 8) + 255
 PLAYER_VICTORY = (21 << 8) + 255
 
+MAXIMUM_CHECKPOINTS = 3000
+MAXIMUM_FINISHED_MAPS = 10000
+
 class Records(aiotfm.Client):
 	def __init__(self, *args, **kwargs):
 		self.victory_cache = {}
@@ -82,7 +85,8 @@ class Records(aiotfm.Client):
 			packet = packet.encode()
 			player, map_code, taken = packet[:4], packet[4:8], packet[8:11]
 			map_checkpoints, player_checkpoints = packet[11:12], packet[12:14]
-			name = packet[14:].decode()
+			total_maps = packet[14:16]
+			name = packet[16:].decode()
 
 			player = (player[0] << (7 * 3)) + \
 					(player[1] << (7 * 2)) + \
@@ -103,11 +107,15 @@ class Records(aiotfm.Client):
 			player_checkpoints = (player_checkpoints[0] << (7 * 1)) + \
 					player_checkpoints[1]
 
+			total_maps = (total_maps[0] << (7 * 1)) + \
+				total_maps[1]
+
 			# handle victory
 			self.loop.create_task(
 				self.handle_player_victory(
 					player, name, map_code, taken / 1000,
-					map_checkpoints, player_checkpoints
+					map_checkpoints, player_checkpoints,
+					total_maps
 				)
 			)
 		else:
@@ -115,16 +123,8 @@ class Records(aiotfm.Client):
 		return True
 
 	async def handle_player_victory(self, pid, name, code, taken, map_checkpoints, \
-		player_checkpoints):
+		player_checkpoints, total_maps):
 		records = await self.get_map_records(code)
-
-		msg = (
-			"**`[SUS]:`** `{name}` (`{pid}`) (`{maps}` maps/hour) "
-			"completed the map `@{code}` in the room `{room}` "
-			"in `{taken}` seconds. - "
-			"Map record: `{record}` (threshold `{threshold}`) - "
-			"Checkpoints: `{player_checkpoints}` (map had `{map_checkpoints}`)"
-		)
 
 		if not records:
 			webhook = env.webhooks.suspects_norecord
@@ -147,7 +147,21 @@ class Records(aiotfm.Client):
 				room, hour_maps = file["room"], len(file["hour"])
 
 		if room is None:
-			room, hour_maps = "unknown", "unknown"
+			room, hour_maps = None, None
+
+		msg = (
+			"**`[SUS]:`** `{name}` (`{pid}`) "
+			+ ("(`{maps}` maps/hour) " if hour_maps else "")
+			+ "completed the map `@{code}` "
+			+ ("in the room `{room}` " if room else "")
+			+ "in `{taken}` seconds. - "
+			+ ("Map record: `{record}` " if record != "none" else "")
+			+ "(threshold `{threshold}`) - "
+			+ ("Checkpoints: `{player_checkpoints}` (map had `{map_checkpoints}`) - " \
+			 	if MAXIMUM_CHECKPOINTS > map_checkpoints else "")
+			+ ("Finished maps: `{total_maps}`" \
+				if MAXIMUM_FINISHED_MAPS > total_maps else "")
+		)
 
 		await self.send_webhook(webhook, msg.format(
 			name=name, pid=pid,
@@ -155,7 +169,8 @@ class Records(aiotfm.Client):
 			record=record, threshold=threshold,
 			room=room, maps=hour_maps,
 			player_checkpoints = player_checkpoints,
-			map_checkpoints = map_checkpoints
+			map_checkpoints = map_checkpoints,
+			total_maps = total_maps
 		))
 
 	async def on_whisper_command(self, whisper, author, ranks, cmd, args):
