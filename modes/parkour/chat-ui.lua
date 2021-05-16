@@ -406,7 +406,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		return
 
 	elseif cmd == "forcestats" then -- logged
-		if not perms[player].force_stats then return end
+		if not perms[player] or not perms[player].force_stats then return end
 
 		if records_admins then
 			return tfm.exec.chatMessage("<v>[#] <r>you can't forcestats in a records room", player)
