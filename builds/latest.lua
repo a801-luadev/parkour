@@ -7097,7 +7097,7 @@ local function initialize_parkour() -- so it uses less space after building
 	end)
 
 	onEvent("ColorPicked", function(id, player, color)
-		if not perms[player].set_name_color then return end
+		if not perms[player] or not perms[player].set_name_color then return end
 		if color == -1 then return end
 
 		for name, data in next, room.playerList do
