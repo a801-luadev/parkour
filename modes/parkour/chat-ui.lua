@@ -56,6 +56,7 @@ onEvent("PlayerWon", function(player)
 	if victory[player] then return end
 	local file = players_file[player]
 	if not file then return end
+	if not levels then return end
 
 	victory[player] = true
 	setNameColor(player) -- just in case PlayerRespawn triggers first
