@@ -110,7 +110,7 @@ translations.es = {
 				"Posición semanal: <b><v>%s</v></b>\n\n%s"),
 	map_count = "Cantidad de mapas: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	title_count = ("<b><j>«!»</j></b> Mapas completados: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
-				"<b><j>«!»</j></b> Checkpoints obttenidos: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
+				"<b><j>«!»</j></b> Checkpoints obtenidos: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
 	help_badge = "Las insignias son logros que un usuario puede obtener. Clickéalas para ver su descripción.",
 	help_private_maps = "¡A este jugador no le gusta compartir su cantidad de mapas! Podés esconder la tuya en tu perfil.",
 	help_yellow_maps = "Los mapas en amarillo fueron completados en esta semana.",
