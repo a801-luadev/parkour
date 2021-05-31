@@ -146,7 +146,7 @@ local function newMap()
 		map = selectMap(maps.sections_high, maps.list_high, maps.high_count)
 	end
 
-	tfm.exec.newGame(map, is_test and math.random(3000000) <= 1000000)
+	tfm.exec.newGame(map, math.random(3000000) <= 1000000)
 end
 
 local function invalidMap(arg)
