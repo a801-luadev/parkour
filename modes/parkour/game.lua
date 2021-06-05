@@ -211,6 +211,7 @@ onEvent("Keyboard", function(player, key)
 		if players_level[player] == 1 and not times.generated[player] then
 			times.generated[player] = now
 			times.checkpoint[player] = now
+			tfm.exec.freezePlayer(player, false)
 		end
 		times.movement[player] = now
 
@@ -304,6 +305,12 @@ onEvent("PlayerRespawn", function(player)
 	if bans[room.playerList[player].id] then return tfm.exec.killPlayer(player) end
 	if (not levels) or (not players_level[player]) then return end
 
+	if (players_level[player] == 1
+		and not times.generated[player]
+		and records_admins) then
+		tfm.exec.freezePlayer(player, true)
+	end
+
 	local level = levels[ players_level[player] ]
 	if not level then return end
 	tfm.exec.movePlayer(player, level.x, level.y)
@@ -347,6 +354,12 @@ onEvent("NewGame", function()
 			players_level[player] = 1
 			changePlayerSize(player, size)
 			tfm.exec.setPlayerScore(player, 1, false)
+		end
+
+		if records_admins then
+			for player in next, in_room do
+				tfm.exec.freezePlayer(player, true)
+			end
 		end
 	end
 
