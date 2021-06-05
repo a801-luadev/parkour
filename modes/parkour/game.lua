@@ -211,7 +211,9 @@ onEvent("Keyboard", function(player, key)
 		if players_level[player] == 1 and not times.generated[player] then
 			times.generated[player] = now
 			times.checkpoint[player] = now
-			tfm.exec.freezePlayer(player, false)
+			if records_admins then
+				tfm.exec.freezePlayer(player, false)
+			end
 		end
 		times.movement[player] = now
 
