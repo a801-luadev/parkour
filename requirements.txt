@@ -1,1 +1,1 @@
-aiotfm
+aiotfm>=1.4.2
