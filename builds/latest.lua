@@ -11964,5 +11964,3 @@ for player in next, room.playerList do
 end
 
 initializingModule = false
-
-system.giveEventGift("Support#0801", "T_498")
