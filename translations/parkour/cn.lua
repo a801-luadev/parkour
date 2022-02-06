@@ -80,7 +80,7 @@ translations.cn = {
 	-- Miscellaneous
 	mod_apps = "<j>Parkour 管理員申請現正開放! 請查看這連結: <rose>%s",
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>你正在掛機模式</b></bv>\n隨意移動來復活</font>\n\n<font size='30'><u><t>提示:</t></u></font>\n\n<font size='15'><r>玩家頭上的紅線表示他們不想被協助!\n在parkour惡作劇/阻礙其他玩家通關是不被允許的!<d>\n加入我們的 <cep><a href='event:discord'>discord 伺服器</a></cep>!\n想在編程上貢獻? 查看 <cep><a href='event:github'>github 編程庫</a></cep> 吧。\n你有好的地圖想提交嗎? 在我們的 <cep><ahref='event:map_submission'>地圖提交帖子</a></cep> 上留言吧。\n查看我們的 <cep><a href='event:forum'>官方帖子</a></cep> 來得到更多資訊!\n透過 <cep><a href='event:donate'>捐款</a></cep> 支持我們吧!",
-	options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <b>M</b> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示",
+	options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示",
 	cooldown = "<v>[#] <r>請等候幾秒再重新嘗試。",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> 鍵盤" ..
 					 "\n\n<b>隱藏</b> 地圖通過數" ..

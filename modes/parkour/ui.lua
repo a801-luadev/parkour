@@ -140,7 +140,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	if interface then
 		toggleInterface(interface, player)
 
-	elseif key == 77 or key == 46 then
+	elseif key == players_file[player].settings[2] or key == 46 then
 		if not checkCooldown(player, "keyMort", 1000) then return end
 
 		tfm.exec.killPlayer(player)
@@ -507,7 +507,7 @@ onEvent("NewGame", function(player)
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	bindKeyboard(player, data.settings[2] == 1 and 77 or 46, true, true)
+	bindKeyboard(player, data.settings[2], true, true)
 
 	if data.settings[8] == 1 then
 		no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)

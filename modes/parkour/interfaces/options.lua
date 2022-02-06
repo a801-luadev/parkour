@@ -1,9 +1,15 @@
 local no_help
 local OptionsInterface = Interface.new(168, 46, 465, 330, true)
+OptionsInterface
 	:loadTemplate(WindowBackground)
-
 	:addTextArea({
-		translation = "options",
+		text = function(self, player)
+			return translatedMessage("options", player)
+				:format(string.char(
+					players_file[player].settings[2] == 46 and 77
+					or players_file[player].settings[2]
+				))
+		end,
 		alpha = 0
 	})
 	:loadComponent(
@@ -38,19 +44,24 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 	)
 	:loadComponent(
 		Toggle.new(435, 81, false)
-		:onToggle(function(self, player, state) -- M or DEL for mort
-			players_file[player].settings[2] = state and 1 or 0
+		:onToggle(function(self, player, state) -- Any or M or DEL for mort
+			local previous_key = players_file[player].settings[2]
+			local key = state and (previous_key ~= 46 and previous_key or 77) or 46
+			players_file[player].settings[2] = key
 
 			if state then
-				bindKeyboard(player, 77, true, true)
+				bindKeyboard(player, key, true, true)
 				bindKeyboard(player, 46, true, false)
 			else
-				bindKeyboard(player, 77, true, false)
+				bindKeyboard(player, previous_key, true, false)
 				bindKeyboard(player, 46, true, true)
 			end
+
+			OptionsInterface:remove(player)
+			OptionsInterface:show(player)
 		end)
 		:onUpdate(function(self, player)
-			local setting = players_file[player].settings[2] == 1
+			local setting = players_file[player].settings[2] ~= 46
 			if (self.state[player] and not setting) or (not self.state[player] and setting) then
 				self:toggle(player)
 			end
@@ -129,3 +140,34 @@ local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 			end
 		end)
 	)
+
+onEvent("ParsedTextAreaCallback", function(id, player, action, args)
+	if not OptionsInterface.open[player] then return end
+
+	if action == "keyboardmort" and not Keyboard.open[player] then
+		if not checkCooldown(player, "changeKeys", 1000) then return end
+
+		local qwerty = players_file[player].settings[5] == 1
+
+		Keyboard:show(player, qwerty, numkey, keyname) -- numkey, keyname
+	elseif Keyboard.open[player] and action == "keyboard" then
+		if not checkCooldown(player, "changeKeys", 1000) then return end
+
+		local binding = keyboard.bindings[args]
+		if not binding then return end
+
+		local previous_key = players_file[player].settings[2]
+		players_file[player].settings[2] = binding
+
+		bindKeyboard(player, previous_key, true, false)
+		bindKeyboard(player, binding, true, true)
+
+		savePlayerData(player)
+
+		Keyboard:remove(player)
+
+		-- Update key
+		OptionsInterface:remove(player)
+		OptionsInterface:show(player)
+	end
+end)

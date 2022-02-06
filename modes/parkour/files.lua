@@ -231,6 +231,11 @@ local data_migrations = {
 
 		data.tc = 0 -- map counter for titles
 		data.cc = 0 -- checkpoint counter for titles
+	end,
+	[3] = function(player, data)
+		data.v = 4
+
+		data.settings[2] = (data.settings == 1 and 77 or 46)
 	end
 }
 
