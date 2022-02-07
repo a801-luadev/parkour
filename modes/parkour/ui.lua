@@ -140,7 +140,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	if interface then
 		toggleInterface(interface, player)
 
-	elseif key == players_file[player].settings[2] or key == 46 then
+	elseif key == (players_file[player] and players_file[player].settings[2]) or key == 46 then
 		if not checkCooldown(player, "keyMort", 1000) then return end
 
 		tfm.exec.killPlayer(player)
