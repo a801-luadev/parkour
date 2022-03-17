@@ -3960,7 +3960,7 @@ local function initialize_parkour() -- so it uses less space after building
 			map = selectMap(maps.sections_high, maps.list_high, maps.high_count)
 		end
 
-		tfm.exec.newGame(map, math.random(3000000) <= 1000000)
+		tfm.exec.newGame(map, not records_admins and math.random(3000000) <= 1000000)
 	end
 
 	local function invalidMap(arg)
@@ -4180,7 +4180,7 @@ local function initialize_parkour() -- so it uses less space after building
 					translatedChatMessage("invalid_syntax", player)
 					return
 				end
-				tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped" and not records_cond)
+				tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped" and not records_admins)
 			elseif os.time() < map_change_cd and not review_mode then
 				tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", player)
 			else
