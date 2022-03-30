@@ -247,7 +247,7 @@ do
 			:onClick(function(self, player)
 				local args = self.parent.args[player]
 				self.parent:update(player, weekleaderboard, 0, true)
-			end)]]
+			end) ]]
 
 			:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
 				if weekly then
