@@ -241,7 +241,8 @@ do
 				end
 			end):setPosition(72, 300):setSize(155, 20)
 		):loadComponent( -- Weekly button
-			Button.new():setTranslation("weekly_lb")
+			Button.new():setText("Disabled :D")
+			--Button.new():setTranslation("weekly_lb")
 
 			:onClick(function(self, player)
 				local args = self.parent.args[player]
