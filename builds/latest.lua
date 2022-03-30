@@ -10333,12 +10333,12 @@ local function initialize_parkour() -- so it uses less space after building
 				end):setPosition(72, 300):setSize(155, 20)
 			):loadComponent( -- Weekly button
 				Button.new():setText("Disabled :D")
-				--Button.new():setTranslation("weekly_lb")
+				--[[ Button.new():setTranslation("weekly_lb")
 
 				:onClick(function(self, player)
 					local args = self.parent.args[player]
 					self.parent:update(player, weekleaderboard, 0, true)
-				end)
+				end) ]]
 
 				:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
 					if weekly then
