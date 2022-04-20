@@ -23,7 +23,7 @@ channels = {
 	victory = { -- to bots (all victory logs, high traffic)
 		room.name == "*#parkour4bots", true, 10000,
 		"(................[^\000]+)\000",
-		"A_801#0015", "Celes#6009"
+		"Funcorp#0801", "Delphilante#1225"
 	},
 	bots = { -- from bots (all orders, low traffic)
 		room.name ~= "*#parkour4bots", false, 10000,
