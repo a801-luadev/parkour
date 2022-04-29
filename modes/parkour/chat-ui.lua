@@ -554,7 +554,10 @@ onEvent("PacketReceived", function(channel, id, packet)
 			end
 		end
 	elseif id == 7 then -- remote room announcement
-		local targetRoom, targetPlayer, msg = string.match(packet, "^([^\000]+)\000([^\000]+)\000(.+)$")
+		local targetRoom, targetPlayer, msg = string.match(
+			packet,
+			"^([^\000]+)\000([^\000]+)\000(.+)$"
+		)
 		-- an announcement might target a room, a player or both
 		if room.name == targetRoom then
 			-- targets a room
