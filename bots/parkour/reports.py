@@ -15,6 +15,7 @@ class Reports(aiotfm.Client):
 		self.reports = {}
 		self.reported = []
 		self.reporters = []
+		self.handled_reports = {}
 
 		super().__init__(*args, **kwargs)
 
@@ -30,7 +31,7 @@ class Reports(aiotfm.Client):
 
 			for report, data in self.reports.items():
 				# reporter, reported, sent to discord,
-				# discord date, expiration date
+				# discord date, expiration date, report room
 
 				if not data[2] and now >= data[3]:
 					data[2] = True
@@ -45,6 +46,15 @@ class Reports(aiotfm.Client):
 
 			for report in to_remove:
 				del self.reports[report]
+
+			to_remove = []
+
+			for report, data in self.handled_reports.items():
+				if now >= data[4]: # expired
+					to_remove.append(report)
+
+			for report in to_remove:
+				del self.handled_reports[report]
 
 			await asyncio.sleep(30.0)
 
@@ -102,10 +112,14 @@ class Reports(aiotfm.Client):
 					silent = False
 
 				if rep_id not in self.reports:
-					return await channel.send("Report id {} not found".format(rep_id))
+					await channel.send("Report id {} not found".format(rep_id))
+					return True
 
 				report = self.reports[rep_id]
 				del self.reports[rep_id]
+
+				self.handled_reports[rep_id] = report
+				report[4] = time.time() + 60 * 30  # set new expiration
 
 				file = await self.load_player_file(report[1])
 				if file is None:
@@ -128,6 +142,33 @@ class Reports(aiotfm.Client):
 						report[0],
 						"A parkour moderator is now handling your report."
 					)
+
+			elif cmd == "done":
+				if (not ranks["admin"]
+					and not ranks["mod"]
+					and not ranks["trainee"]):
+					return True
+
+				if not args or not args[0].isdigit():
+					await channel.send("Usage: .done [id]")
+					return True
+
+				rep_id = int(args[0])
+				if not rep_id in self.handled_reports:
+					await channel.send("Report id {} has not been handled yet".format(rep_id))
+					return True
+
+				report = self.handled_reports[rep_id]
+				del self.handled_reports[rep_id]
+
+				reporter, target, room = report[0], report[1], report[5]
+				message = "<vi>[#parkour] <d>{} has been sanctioned.".format(target)
+				await self.broadcast_module(
+					7,
+					"{}\x00{}\x00{}".format(room, reporter, message)
+				)
+
+				await channel.send("Announcement has been sent.")
 
 			else:
 				return False
@@ -227,7 +268,7 @@ class Reports(aiotfm.Client):
 			now = time.time()
 			self.reports[report] = [
 				author, reported, online == 0,
-				now + 60 * 5, now + 60 * 30
+				now + 60 * 5, now + 60 * 30, file["room"]
 			]
 			self.reported.append(reported)
 			self.reporters.append((now + 60 * 5, author))

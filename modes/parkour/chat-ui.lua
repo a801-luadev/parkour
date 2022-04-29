@@ -75,27 +75,27 @@ onEvent("PlayerWon", function(player)
 		local band, rshift = bit32.band, bit32.rshift
 
 		sendPacket("victory", -1, string.char(
-			rshift(id, 7 * 3)       ,
+			rshift(id, 7 * 3),
 			rshift(id, 7 * 2) % 0x80,
 			rshift(id, 7 * 1) % 0x80,
-			       id         % 0x80,
+			id % 0x80,
 
-			rshift(map, 7 * 3)       ,
+			rshift(map, 7 * 3),
 			rshift(map, 7 * 2) % 0x80,
 			rshift(map, 7 * 1) % 0x80,
-			       map         % 0x80,
+			map % 0x80,
 
-			rshift(packedTime, 7 * 2)       ,
+			rshift(packedTime, 7 * 2),
 			rshift(packedTime, 7 * 1) % 0x80,
-			       packedTime         % 0x80,
+			packedTime % 0x80,
 
 			(#levels - 1), -- total checkpoints in the map
 
-			rshift(file.cc, 7 * 1)       ,
-			       file.cc         % 0x80, -- has to be 24b if it goes above 60k
+			rshift(file.cc, 7 * 1),
+			file.cc % 0x80, -- has to be 24b if it goes above 60k
 
-			rshift(file.tc, 7 * 1)       ,
-			       file.tc         % 0x80 -- has to be 24b if it goes above 60k
+			rshift(file.tc, 7 * 1),
+			file.tc % 0x80-- has to be 24b if it goes above 60k
 		) .. player .. "\000")
 	end
 	if not fastest.record or taken < fastest.record then
@@ -222,11 +222,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		sendPacket(
 			"common", 6,
 			(map .. "\000" ..
-			 player .. "\000" ..
-			 room.playerList[player].id .. "\000" ..
-			 math.floor(fastest.record * 100) .. "\000" ..
-			 room.shortName .. "\000" ..
-			 checkpoint_info.version)
+				player .. "\000" ..
+				room.playerList[player].id .. "\000" ..
+				math.floor(fastest.record * 100) .. "\000" ..
+				room.shortName .. "\000" ..
+				checkpoint_info.version)
 		)
 		tfm.exec.chatMessage("<v>[#] <d>Your record will be submitted shortly.", player)
 
@@ -422,7 +422,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		local fetching = capitalize(args[1])
-		fetching_player_room[fetching] = {player, os.time() + 1000}
+		fetching_player_room[fetching] = { player, os.time() + 1000 }
 		system.loadPlayerData(fetching)
 		max_args = 1
 
@@ -552,6 +552,17 @@ onEvent("PacketReceived", function(channel, id, packet)
 			else
 				sendPacket("common", 5, room.shortName .. "\000")
 			end
+		end
+	elseif id == 7 then -- remote room announcement
+		local targetRoom, targetPlayer, msg = string.match(packet, "^([^\000]+)\000([^\000]+)\000(.+)$")
+		-- an announcement might target a room, a player or both
+		if room.name == targetRoom then
+			-- targets a room
+			tfm.exec.chatMessage(msg)
+
+		elseif players_file[targetPlayer] then
+			-- targets a player (regardless of the room)
+			tfm.exec.chatMessage(msg, targetPlayer)
 		end
 	end
 end)
