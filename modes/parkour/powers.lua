@@ -164,7 +164,7 @@ powers = {
 		default = {5, 4}, -- SPACE
 
 		fnc = function(player, key, down, x, y)
-			tfm.exec.movePlayer(player, 0, 0, true, 0, -50, false)
+			tfm.exec.movePlayer(player, 0, 0, true, nil, -50, false)
 		end
 	},
 	{
