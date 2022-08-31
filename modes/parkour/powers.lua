@@ -176,11 +176,11 @@ powers = {
 		smallX = 0, smallY = 0,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 8,
-		cooldown_y = 373,
+		cooldown_x = 1,
+		cooldown_y = 1,
 		cooldown_img = "17127e682ff.png",
 
-		cooldown = 1000,
+		cooldown = 1,
 		default = {4, 1}, -- SHIFT
 
 		fnc = function(player, key, down, x, y)
