@@ -69,7 +69,8 @@ class Reports(aiotfm.Client):
 
 		await self.send_channel(
 			env.report_channel,
-			"@everyone `{}` reported `{}` (room: `{}`, report id: `{}`). "
+			"<@&669594936135516160> `{}` reported `{}` "
+			"(room: `{}`, report id: `{}`). "
 			"Connect to the game and use the handle command in modchat."
 			.format(reporter, reported, room, report)
 		)
