@@ -298,8 +298,6 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			Staff:show(player)
 		end
 
-		translatedChatMessage("report", player)
-
 	elseif cmd == "hide" then
 		if not perms[player] or not perms[player].hide then return end
 		if ranks.hidden[player] then

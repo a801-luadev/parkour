@@ -490,7 +490,6 @@ onEvent("PlayerDataParsed", function(player, data)
 
 	translatedChatMessage("welcome", player)
 	translatedChatMessage("forum_topic", player, links.forum)
-	translatedChatMessage("report", player)
 	translatedChatMessage("donate", player)
 	if timed_maps.week.last_reset == "28/02/2021" then
 		translatedChatMessage("double_maps", player)

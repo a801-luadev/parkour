@@ -25,8 +25,8 @@
 
 
 math.randomseed(os.time())
-
-local data_version = 4
+tfm.get.room.name = tfm.get.room.name:gsub('^@', '*') -- TODO remove this temporary fix
+local data_version = 5
 local room = tfm.get.room
 local links = {
 	donation = "https://a801-luadev.github.io/?redirect=parkour",

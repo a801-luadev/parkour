@@ -158,7 +158,11 @@ end
 onEvent("NewPlayer", function(player)
 	spec_mode[player] = nil
 	in_room[player] = true
-	player_count = player_count + 1
+	
+	if player:sub(1,1) ~= "*" then
+		player_count = player_count + 1
+	end
+
 	cp_available[player] = 0
 	times.movement[player] = os.time()
 
@@ -236,8 +240,9 @@ onEvent("PlayerLeft", function(player)
 
 	if spec_mode[player] then return end
 
-	player_count = player_count - 1
-
+	if player:sub(1,1) ~= "*" then
+		player_count = player_count - 1
+	end
 	if victory[player] then
 		victory_count = victory_count - 1
 	elseif player_count == victory_count and not less_time then

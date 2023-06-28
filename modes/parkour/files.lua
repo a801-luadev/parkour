@@ -236,6 +236,12 @@ local data_migrations = {
 		data.v = 4
 
 		data.settings[2] = (data.settings == 1 and 77 or 46)
+	end,
+	[4] = function(player, data)
+		data.v = 5
+
+		data.bancount = 0
+        --data.playerid = tfm.get.room.playerList[player].id
 	end
 }
 
@@ -393,6 +399,8 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if room.playerList[player] then
 		players_file[player].commu = room.playerList[player].community
+		players_file[player].bancount = data.bancount
+		players_file[player].playerid = room.playerList[player].id
 	end
 
 	eventPlayerDataParsed(player, data)
@@ -419,7 +427,7 @@ onEvent("Loop", function()
 	local now = os.time()
 	if now >= next_file_load then
 		system.loadFile(file_id)
-		next_file_load = now + math.random(60500, 63000)
+		next_file_load = now + math.random(10500, 11000)
 		file_index = file_index % total_files + 1
 		file_id = files[file_index]
 	end
@@ -429,7 +437,7 @@ onEvent("GameStart", function()
 	system.loadFile(file_id)
 	local ts = os.time()
 
-	next_file_load = ts + math.random(60500, 90500)
+	next_file_load = ts + math.random(10500, 30500)
 	file_index = file_index % total_files + 1
 	file_id = files[file_index]
 
