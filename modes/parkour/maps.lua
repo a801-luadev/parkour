@@ -342,23 +342,16 @@ onEvent("NewGame", function()
 end)
 
 function checkMapBug()
-	local stucked_player = 0
-	local mice_count = 0 
-	for playername, player in pairs(tfm.get.room.playerList) do
-		local xplayer = tfm.get.room.playerList[playername].x
-		local yplayer = tfm.get.room.playerList[playername].y
-		if xplayer == 0 and yplayer == 0 then
-			stucked_player = stucked_player + 1
-		end
-		mice_count = mice_count + 1
-	end
-	if stucked_player == mice_count then
-		newMap()
-		tfm.exec.chatMessage("<v>[#] <r>Look like there is an issue with the map, just skipping.", nil)
-	end
+    for _, player in next, room.playerList do
+        if player.x ~= 0 or player.y ~= 0 then
+            return
+        end
+    end
+    newMap()
+    tfm.exec.chatMessage("<v>[#] <r>Looks like there is an issue with the map, just skipping.", nil)
 end
 
-mapbug_counter = 0 
+local mapbug_counter = 0  
 onEvent("Loop", function(elapsed, remaining)
 	-- Changes the map when needed
 	if (is_invalid and os.time() >= is_invalid) or remaining < 500 then

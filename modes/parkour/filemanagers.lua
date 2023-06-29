@@ -41,7 +41,7 @@ local filemanagers = {
 				}
 			}
 		}
-	}):prepare(),
+	}):disableValidityChecks():prepare(),
 
 	["21"] = FileManager.new({
 		type = "dictionary",
@@ -91,7 +91,7 @@ local filemanagers = {
 				}
 			}
 		}
-	}):prepare(),
+	}):disableValidityChecks():prepare(),
 
 	["22"] = FileManager.new({
 		type = "dictionary",
@@ -111,5 +111,5 @@ local filemanagers = {
 				}
 			}
 		}
-	}):prepare()
+	}):disableValidityChecks():prepare()
 }

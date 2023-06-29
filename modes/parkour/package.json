@@ -27,6 +27,6 @@
 	{"type": "require-dir", "dir": "modes/parkour/interfaces", "recursive": false},
 	{"type": "require-file", "file": "modes/parkour/ui.lua"},
 
-	{"type": "require-file", "file": "modes/parkour/init.lua"},
-	{"type": "require-file", "file": "modes/parkour/moderation.lua"}
+	{"type": "require-file", "file": "modes/parkour/moderation.lua"},
+	{"type": "require-file", "file": "modes/parkour/init.lua"}
 ]

@@ -25,7 +25,6 @@
 
 
 math.randomseed(os.time())
-tfm.get.room.name = tfm.get.room.name:gsub('^@', '*') -- TODO remove this temporary fix
 local data_version = 5
 local room = tfm.get.room
 local links = {

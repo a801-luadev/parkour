@@ -399,7 +399,6 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	if room.playerList[player] then
 		players_file[player].commu = room.playerList[player].community
-		players_file[player].bancount = data.bancount
 		players_file[player].playerid = room.playerList[player].id
 	end
 
