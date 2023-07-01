@@ -157,8 +157,8 @@ local function checkBanRequest(player, data)
 	if fetch then
 
 		if fetch[3] == "bancount" then
-			tfm.exec.chatMessage(data.bancount, fetch[1])
 			tfm.exec.chatMessage("<v>[#] <r>"..player.. " have " ..data.bancount.. " bans in record.", fetch[1]) 
+			ban_request[player] = nil
 			return
 		end
 
@@ -166,6 +166,7 @@ local function checkBanRequest(player, data)
 			data.bancount = 0
 			system.savePlayerData(player, data)
 			tfm.exec.chatMessage("<v>[#] <r>"..player.. "'s bans has been reset", fetch[1]) 
+			ban_request[player] = nil
 			return
 		end
 
@@ -378,6 +379,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 	elseif cmd == "setrank" then -- !setrank username ranks
 		if not ranks.admin[player] and not ranks.bot[player] then return end
+		if args[1] == player then return tfm.exec.chatMessage("<v>[#] <r>You can't change your rank.", player)  return end
 		local p = args[1]
 		local newranks = {}
 		local id = 0
