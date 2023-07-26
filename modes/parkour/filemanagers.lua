@@ -42,7 +42,7 @@ local filemanagers = {
 			}
 		}
 	}):disableValidityChecks():prepare(),
-	
+
 	["21"] = FileManager.new({
 		type = "dictionary",
 		map = {
@@ -92,7 +92,7 @@ local filemanagers = {
 			}
 		}
 	}):disableValidityChecks():prepare(),
-	
+
 	["22"] = FileManager.new({
 		type = "dictionary",
 		map = {
@@ -112,7 +112,7 @@ local filemanagers = {
 			},
 		}
 	}):disableValidityChecks():prepare(),
-	
+
 	["23"] = FileManager.new({
 		type = "dictionary",
 		map = {
@@ -139,7 +139,7 @@ local filemanagers = {
 			}
 		}
 	}):disableValidityChecks():prepare(),
-	
+
 	["24"] = FileManager.new({
 		type = "dictionary",
 		map = {
