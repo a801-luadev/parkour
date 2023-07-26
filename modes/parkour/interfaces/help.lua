@@ -304,6 +304,7 @@ do
 		})
 
 	onEvent("TextAreaCallback", function(id, player, cb)
+		if not checkCooldown(player, "helpscroll", 1000) then return end
 		if cb == "help_scroll_up" then
 			eventKeyboard(player, 1, true, 0, 0)
 		elseif cb == "help_scroll_down" then

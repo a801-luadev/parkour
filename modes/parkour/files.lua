@@ -18,13 +18,19 @@ local files = {
 
 		- lowmaps     (3)
 		- banned      (3)
+
+		- sanction    (4)
+
+		- weekly      (5)
 	]]
 
 	[1] = 20, -- maps, ranks, chats
 	[2] = 21, -- ranking, weekranking
 	[3] = 22, -- lowmaps, banned
+	[4] = 23, -- sanction
+	[5] = 24 -- weekly
 }
-local total_files = 3
+local total_files = 5
 local file_index = 1
 local file_id = files[file_index]
 local updating = {}
@@ -241,7 +247,9 @@ local data_migrations = {
 		data.v = 5
 
 		data.bancount = 0
-        --data.playerid = tfm.get.room.playerList[player].id
+		data.lastsanction = nil
+		data.bannedby = nil
+		--data.playerid = tfm.get.room.playerList[player].id
 	end
 }
 
@@ -385,7 +393,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 				old[field] = data[field]
 			end
 		end
-		eventPlayerDataUpdated(player, data)
+		eventPlayerDataUpdated(player, old)
 
 		if to_save[player] then
 			to_save[player] = false
@@ -416,8 +424,8 @@ end)
 
 onEvent("FileLoaded", function(id, data)
 	data = filemanagers[id]:load(data)
-	eventGameDataLoaded(data)
-	if data.ranking or data.weekranking then -- the only file that can get written by rooms
+	eventGameDataLoaded(data, id)
+	if data.ranking or data.weekly then -- the only file that can get written by rooms
 		eventSavingFile(id, data) -- if it is reaching a critical point, it will pause and then save the file
 	end
 end)
@@ -447,7 +455,6 @@ onEvent("GameStart", function()
 		now.wday = 7
 	end
 	timed_maps.week.last_reset = os.date("%d/%m/%Y", ts - now.wday * 24 * 60 * 60 * 1000)
-	timed_maps.week.next_reset = os.date("%d/%m/%Y", ts + (7 - now.wday) * 24 * 60 * 60 * 1000)
 end)
 
 onEvent("NewPlayer", function(player)

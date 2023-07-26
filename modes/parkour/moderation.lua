@@ -1,94 +1,91 @@
 local files = {
 	[1] = 20, -- maps, ranks, chats
-	[2] = 22 -- lowmaps, banned
+	[2] = 22, -- lowmaps, banned
+	[3] = 23 -- sanction
 }
 
-local loaded = false
-local saving = {}
 local to_do = {}
-local ban_request = {}
+local pdataRequest = {}
+local sanctions_file = {}
+local maps_loaded = false
 
-local file_actions = {
-	ban_change = {2, true, function(data, id, value, old)
-		id = tostring(id)
-		if not old or tonumber(old) == data.banned[id] then
-			data.banned[id] = value
-		end
-	end},
-
-    high_map_change = {1, true, function(data, map, add)
-		for index = #data.maps, 1, -1 do
-			if data.maps[index] == map then
-				if not add then
-					table.remove(data.maps, index)
-				end
-				return
-			end
-		end
-
-		if add then
-			data.maps[#data.maps + 1] = map
-		end
-	end},
-
-	low_map_change = {2, true, function(data, map, add)
-		for index = 1, #data.lowmaps do
-			if data.lowmaps[index] == map then
-				if not add then
-					table.remove(data.lowmaps, index)
-				end
-				return
-			end
-		end
-
-		if add then
-			data.lowmaps[#data.lowmaps + 1] = map
-		end
-	end},
-
-    modify_rank = {1, true, function(data, player, newrank)
-		data.ranks[player] = newrank
-	end},
-}
-
-local function schedule(action, arg1, arg2, arg3)
-	to_do[#to_do + 1] = {file_actions[action], arg1, arg2, arg3}
-	next_file_check = os.time() + 4000
+local function schedule(fileid, save, callback)
+	to_do[#to_do + 1] = { fileid, save, callback }
 end
 
+local function schedule_player(name, save, callback, timeoutCallback)
+	if players_file[name] then
+		callback(players_file[name])
+		if save then 
+			system.savePlayerData(name, json.encode(players_file[name]))
+		end
+	else
+		pdataRequest[name] = { callback, os.time() + 1000, save, timeoutCallback }
+		system.loadPlayerData(name)
+	end
+end
 
-onEvent("FileLoaded", function(file, data)
-	data = filemanagers[file]:load(data)
-	file = tonumber(file)
-	local save = false
-
-	local action
-	for index = 1, #to_do do
-		action = to_do[index][1]
-		if files[action[1]] == file then
-			if action[2] then
-				save = true
-			end
-
-			action[3](data, to_do[index][2], to_do[index][3])
-			to_do[index] = nil
+local function updateMapList(mapList, map, add)
+	for index = #mapList, 1, -1 do
+		if mapList[index] == map then
+			table.remove(mapList, index)
+			break
 		end
 	end
-	for index = #to_do, 1, -1 do
+	
+	if add then
+		mapList[#mapList + 1] = map
+	end
+end
+
+local function sendBanLog(playerName, time, moderator, minutes)
+	if not time then
+		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been unbanned.", moderator)
+	elseif time > 2 then
+		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned for " .. minutes .. " minutes.", moderator)
+	elseif time == 2 then
+		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned permanently.", moderator)
+	elseif time == 1 then
+		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned. (pending)", moderator)
+	else
+		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been unbanned. (pending)", moderator)
+	end
+end
+
+onEvent("GameDataLoaded", function(data, fileid)
+	fileid = tonumber(fileid)
+	local action
+	local save
+	local len = #to_do
+	
+	for index = 1, len do
+		action = to_do[index]
+		if files[action[1]] == fileid then
+			action[3](data)
+			save = action[2]
+			to_do[index] = false
+		end
+	end
+	
+	for index = len, 1, -1 do
 		if not to_do[index] then
 			table.remove(to_do, index)
 		end
 	end
+	
+	if data.lowmaps then
+		maps_loaded = true
+	end
+	
+	if data.sanction then
+		sanctions_file = data.sanction
 
-	eventGameDataLoaded(data)
-
-	if data.banned then
 		local now = os.time()
 		local count, to_remove = 0
-
+		
 		-- wipe expired bans
-		for id, value in next, data.banned do
-			if value > 1 and now >= value then
+		for id, sanctiondata in pairs(data.sanction) do
+			if sanctiondata.time and sanctiondata.time > 2 and now >= sanctiondata.time then
 				if count == 0 then
 					count = 1
 					to_remove = {id}
@@ -98,350 +95,623 @@ onEvent("FileLoaded", function(file, data)
 				end
 			end
 		end
-
+		
 		for index = 1, count do
-			data.banned[to_remove[index]] = nil
+			local id = to_remove[index]
+			if data.sanction[id] then
+				data.sanction[id] = nil
+			end
+		end
+		
+		local playerList = room.playerList
+		local id, banInfo, banDays
+		
+		for player, pdata in next, players_file do
+			if playerList[player] and in_room[player] then
+				id = tostring(playerList[player].id)
+				banInfo = id and data.sanction[id]
+				
+				if banInfo and banInfo.timestamp ~= pdata.lastsanction then
+					if banInfo.time == 1 then -- !ban
+						pdata.bancount = pdata.bancount + 1
+						
+						if pdata.bancount == 1 then
+							pdata.banned = now + 86400000 -- 1 day
+						elseif pdata.bancount == 2 then
+							pdata.banned = now + 86400000 * 7
+						elseif pdata.bancount == 3 then
+							pdata.banned = now + 86400000 * 30
+						else
+							pdata.banned = 2 -- permanent ban
+						end
+					elseif banInfo.time == 0 then -- !punban
+						pdata.banned = nil
+					elseif banInfo.time == -1 then -- !unban
+						pdata.bancount = pdata.bancount - 1
+						pdata.banned = nil
+					else
+						pdata.banned = banInfo.time
+					end
+					
+					pdata.lastsanction = banInfo.timestamp
+					pdata.bannedby = banInfo.info
+					
+					savePlayerData(player)
+					
+					if pdata.banned == nil then
+						data.sanction[id] = nil
+						save = true
+					else
+						banInfo.time = pdata.banned
+						save = true
+					end
+					
+					local minutes = pdata.banned and math.floor((pdata.banned - os.time()) / 1000 / 60)
+					for moderator in pairs(room.playerList) do
+						if ranks.admin[moderator] or ranks.mod[moderator] then
+							sendBanLog(player, pdata.banned, moderator, minutes)
+						end
+					end
+				end
+				
+				if pdata.banned and (pdata.banned == 2 or os.time() < pdata.banned) then
+					if pdata.banned == 2 then
+						translatedChatMessage("permbanned", player)
+					else
+						local minutes = math.floor((pdata.banned - os.time()) / 1000 / 60)
+						translatedChatMessage("tempbanned", player, minutes)
+					end
+				end
+			end
 		end
 	end
-
+	
 	if save then
-		eventSavingFile(tostring(file), data)
+		eventSavingFile(tostring(fileid), data)
 	end
 end)
 
-function in_table(value, tbl)
-    for _, v in ipairs(tbl) do
-        if v == value then
-            return true
-        end
-    end
-    return false
-end
-
-local function banPlayer(player, data, requester, ban)
-	if not data.bancount or not data.playerid then 
-		tfm.exec.chatMessage("<v>[#] <r>"..player.. " must have joined any parkour room after the last update. [v"..data.v.."]", requester) 
-		return
-	end
-
-	if ban then
-		if data.banned and (data.banned == 2 or os.time() < data.banned) then tfm.exec.chatMessage("<v>[#] <r>"..player.. " has already banned.", requester) return end
-			data.bancount = data.bancount + 1
-			if data.bancount < 4 then
-				data.banned = os.time()+tonumber((data.bancount)*1440)*60*1000
-				schedule("ban_change", data.playerid, data.banned)
-				tfm.exec.chatMessage("<v>[#] <r>"..player.. " has banned for " ..((data.bancount)*1440).. " minutes.", requester)
-			else
-				schedule("ban_change", data.playerid, 1)
-				data.banned = 2
-				tfm.exec.chatMessage("<v>[#] <r>"..player.. " has permbanned.", requester)
-			end
-		system.savePlayerData(player, json.encode(data))
-	else
-		if data.banned and (data.banned == 2 or os.time() < data.banned) then 
-			data.banned = nil
-			schedule("ban_change", data.playerid, 0)
-			tfm.exec.chatMessage("<v>[#] <r>"..player.. " has unbanned.", requester)
-
-			data.bancount = data.bancount - 1
+local function playerDataRequests(player, data)
+	local fetchData = pdataRequest[player]
+	if fetchData then
+		fetchData[1](data)
+		
+		if fetchData[3] then
 			system.savePlayerData(player, json.encode(data))
-		else
-			tfm.exec.chatMessage("<v>[#] <r>"..player.. " not banned (yet).", requester) 
-			return 
 		end
+		
+		pdataRequest[player] = nil
 	end
 end
 
-local function checkBanRequest(player, data)
-	local fetch = ban_request[player]
-	if fetch then
-
-		if fetch[3] == "bancount" then
-			tfm.exec.chatMessage("<v>[#] <r>"..player.. " have " ..data.bancount.. " bans in record.", fetch[1]) 
-			ban_request[player] = nil
-			return
-		end
-
-		if fetch[3] == "resetbancount" then
-			data.bancount = 0
-			system.savePlayerData(player, data)
-			tfm.exec.chatMessage("<v>[#] <r>"..player.. "'s bans has been reset", fetch[1]) 
-			ban_request[player] = nil
-			return
-		end
-
-		local isban = fetch[3]
-		local requester = fetch[1]
-		if isban then
-			banPlayer(player, data, requester, true)
+local function updateSanctions(playerID, playerName, time, moderator, minutes)
+	schedule(3, true, function(data)
+		local now = os.time()
+		
+		playerID = tostring(playerID)
+		playerName = playerName or playerID
+		time = time or (now + minutes * 60 * 1000)
+		
+		local baninfo = data.sanction[playerID]
+		if time > 0 then
+			if baninfo and (baninfo.time == 1 or baninfo.time > now) then
+				tfm.exec.chatMessage("<v>[#] <r>" .. playerName .. " is banned already.", moderator)
+				return
+			end
 		else
-			banPlayer(player, data, requester, false)
+			if not baninfo or baninfo.time < 1 then
+				tfm.exec.chatMessage("<v>[#] <r>" .. playerName .. " doesn't seem to be banned.", moderator)
+				return
+			end
 		end
-		ban_request[player] = nil
-	end
+
+		data.sanction[playerID] = {
+			timestamp = now,
+			time = time,
+			info = moderator,
+		}
+		
+		sendBanLog(playerName, time, moderator, minutes)
+	end)
 end
 
-function showChatCommands(p, command, args)
+local function logCommand(p, command, args)
 	local commandtext = table.concat(args, " ")
 	for playername, player in pairs(tfm.get.room.playerList) do
 		if ranks.admin[playername] or ranks.mod[playername] then
-			tfm.exec.chatMessage("<BL>Ξ ["..p.."]<N2> !"..command.." "..commandtext, playername)
+			tfm.exec.chatMessage("<BL>Ξ [" .. p .. "]<N2> !" .. command .. " " .. commandtext, playername)
 		end
 	end
 end
 
-onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
-	local max_args = quantity
-	if cmd == "ban" or cmd == "unban" then -- for mods / !ban Username and !unban Username 
-		if not ranks.admin[player] and not perms[player].ban then return end
-
-		if quantity < 1 then 
-			return translatedChatMessage("invalid_syntax", player)
+local function handleBan(player, cmd, quantity, args)
+	if not ranks.admin[player] and (not perms[player] or not perms[player].ban) then
+		return
+	end
+	
+	if quantity < 1 then
+		return translatedChatMessage("invalid_syntax", player)
+	end
+	
+	logCommand(player, cmd, args)
+	
+	local targetPlayer = args[1]
+	local moderator = player
+	local time = cmd == 'ban' and 1 or -1 -- ban time changes depending on players previous bans
+	
+	-- Ban by player id
+	if tonumber(targetPlayer) then
+		tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
+		updateSanctions(targetPlayer, nil, time, moderator)
+		return
+	end
+	
+	targetPlayer = capitalize(targetPlayer)
+	if not string.find(targetPlayer, "#", 1, true) then
+		targetPlayer = targetPlayer .. "#0000"
+	end
+	
+	tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
+	-- Ban a player using their name (in the room)
+	local roomPlayer = room.playerList[targetPlayer]
+	if roomPlayer then
+		updateSanctions(roomPlayer.id, targetPlayer, time, moderator)
+		return
+	end
+	
+	-- Ban a player using their name
+	schedule_player(targetPlayer, false, function(pdata)
+		if not pdata.bancount or not pdata.playerid then
+			tfm.exec.chatMessage("<v>[#] <r>The player cannot be (un)banned this way, try player id.", player)
+			return
 		end
 		
-		requestplayer = capitalize(args[1])
-		if not string.find(requestplayer, "#", 1, true) then
-			requestplayer = requestplayer .. "#0000"
-		end
+		updateSanctions(pdata.playerid, targetPlayer, time, moderator)
+	end, function()
+		tfm.exec.chatMessage("<v>[#] <r>Player doesn't seem to be online, try player id.", player)
+	end)
+end
 
-		showChatCommands(player, cmd, args)
-
-		if players_file[args[1]] then 
-			banPlayer(args[1], players_file[args[1]],player, cmd == "ban")
+local function handleAdminBan(player, cmd, quantity, args)
+	if not ranks.admin[player] then
+		return
+	end
+	
+	if cmd == "pban" and quantity < 2 then
+		return translatedChatMessage("invalid_syntax", player)
+	end
+	
+	if cmd == "punban"  and quantity < 1 then
+		return translatedChatMessage("invalid_syntax", player)
+	end
+	
+	local minutes = tonumber(args[2])
+	local targetPlayer = args[1]
+	local playerID = tonumber(targetPlayer)
+	
+	if cmd == "pban" and not minutes or minutes < 0 then
+		return translatedChatMessage("invalid_syntax", player)
+	end
+	
+	local sanctionTime
+	
+	if cmd == "pban" then
+		if minutes == 1 then
+			sanctionTime = 2
 		else
-			ban_request[args[1]] = {player, os.time() + 1000, cmd == "ban"}
-			system.loadPlayerData(args[1])
+			sanctionTime = nil
 		end
+	else
+		sanctionTime = 0
+	end
 
-	elseif cmd == "pban" or cmd == "punban" then -- only admins / !pban [username or id] [minutes or 1 for perm] - !punban [username or id]
-		if not ranks.admin[player] then return end
-
-		if quantity < 1 then 
-			return translatedChatMessage("invalid_syntax", player)
-		end
-
-		local minutes = args[2]
-		if not tonumber(args[1]) then 
-			local p = args[1] and tfm.get.room.playerList[args[1]]
-			playerid = p and p.id or nil
-
-			if playerid == nil then 
-				return tfm.exec.chatMessage("<v>[#] <r>You must be in the same room as the player to ban them using their username. \n<v>[>] <J>/c Recordsbot#8598 id "..args[1], player)
-			end
-		else
-			playerid = args[1]
-		end
-
-		if cmd == "punban" then 
-			schedule("ban_change", playerid, 0)
-			tfm.exec.chatMessage("<v>[#] <r>"..playerid.. " has unbanned.", player)
-		else
-			if minutes == 1 then
-				schedule("ban_change", playerid, 1)
-				return tfm.exec.chatMessage("<v>[#] <r>"..playerid.. " has permbanned.", player)
-			else
-				if not tonumber(minutes) then 
-					return tfm.exec.chatMessage(minutes .. " doesnt look like a number ", player)
-				end
-				minutes = os.time()+tonumber(minutes)*60*1000
-				schedule("ban_change", playerid, minutes)
-				tfm.exec.chatMessage("<v>[#] <r>" ..playerid.. " has banned for " ..(tonumber(args[2])).. " minutes", player)
-			end
-		end
-
-	elseif cmd == "addmap" or cmd == "removemap" then -- !addmap code [low/high] or !removemap code
-		if not ranks.admin[player] and not ranks.mapper[player] and not ranks.manager[player] then
+	-- Ban using name (must be in the same room)
+	tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
+	if not playerID then
+		local roomPlayer = room.playerList[targetPlayer]
+		
+		if not roomPlayer then
+			tfm.exec.chatMessage("<v>[#] <r>You cannot ban a player with their player name if you don't share the same room. Please use their player ID instead.", player)
 			return
 		end
+		
+		updateSanctions(roomPlayer.id, targetPlayer, sanctionTime, player, minutes)
+		
+		return
+	end
+	
+	-- Ban by player id
+	updateSanctions(playerID, nil, sanctionTime, player, minutes)
+end
 
-		if quantity < 1 then 
-			return translatedChatMessage("invalid_syntax", player)
-		end
-
-		showChatCommands(player, cmd, args)
-
-		local mapcode = args[1]
-
+local function handleMap(player, cmd, quantity, args)
+	if not ranks.admin[player] and not ranks.mapper[player] and not ranks.manager[player] then
+		return
+	end
+	
+	local addmap = cmd == "addmap" and true or false
+	logCommand(player, cmd, args)
+	
+	if not maps_loaded then
+		tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds.", player)
+		return
+	end
+	
+	if addmap and quantity < 2 then
+		return translatedChatMessage("invalid_syntax", player)
+	end
+	
+	if not addmap and quantity < 1 then
+		return translatedChatMessage("invalid_syntax", player)
+	end
+	
+	local mapcode = args[1]
+	if not tonumber(mapcode) then
+		mapcode = mapcode:gsub("^@", "")
 		if not tonumber(mapcode) then
-			mapcode = mapcode:gsub("^@", "")
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid map code", player)
 		end
-
-		for i=1, #to_do do
-			if tonumber(to_do[i][2]) == tonumber(mapcode) then
-				return tfm.exec.chatMessage("<v>[#] <r>Please wait for a minute before taking any action with the same map.", player)
-			end
+	end
+	
+	for i = 1, #to_do do
+		if to_do[i] and tonumber(to_do[i][2]) == tonumber(mapcode) then
+			tfm.exec.chatMessage("<v>[#] <r>Please wait for a minute before taking any action with the same map.", player)
+			return
 		end
-
-		if cmd == "addmap" then
-			local rotation = args[2]
-
-			if in_table(tonumber(mapcode), maps.list_low) or in_table(tonumber(mapcode), maps.list_high) then
-				tfm.exec.chatMessage("<v>[#] <r>Map @"..mapcode.." is already in rotation.", player)
-				return
-			end
-
-			if quantity < 2 then 
-				return tfm.exec.chatMessage("<v>[#] <r>!addmap [code] [low/high]", player)
-			end
-
-			if rotation ~= "low" and rotation ~= "high" then 
-				return tfm.exec.chatMessage("<v>[#] <r>Select a priority option: low, high", player)
-			end
-
-			if not tonumber(mapcode) then
-				return tfm.exec.chatMessage("<v>[#] <r>"..mapcode.." doesn't look like a map code!?", player)  
-			end
-
-			schedule(rotation .. "_map_change", tonumber(mapcode), true)
-			tfm.exec.chatMessage("<v>[#] <r>Map @"..mapcode.." added to the "..rotation.." priority list.", player)
+	end
+	
+	if addmap then
+		local rotation = args[2]
+		if rotation ~= "low" and rotation ~= "high" then
+			tfm.exec.chatMessage("<v>[#] <r>Select a priority: low, high", player)
+			return
+		end
+		
+		if in_table(mapcode, maps.list_low) or in_table(mapcode, maps.list_high) then
+			tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " is already in rotation.", player)
+			return
+		end
+		
+		if rotation == "low" then
+			schedule(2, true, function(data)
+				updateMapList(data.lowmaps, mapcode, true)
+				tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " added to the " .. rotation .. " priority list.", player)
+			end)
 		else
-			mapcode = tonumber(mapcode)
-			if quantity < 1 then 
-				return tfm.exec.chatMessage("<v>[#] <r>!removemap [code]", player)
+			schedule(1, true, function(data)
+				updateMapList(data.maps, mapcode, true)
+				tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " added to the " .. rotation .. " priority list.", player)
+			end)
+		end
+		
+	else
+		for i = 1, #args do
+			mapcode = args[i]:gsub("^@", "")
+			mapcode = mapcode and tonumber(mapcode) 
+			if not mapcode then
+				return tfm.exec.chatMessage("<v>[#] <r>Invalid map code: "..args[i], player)
 			end
+			args[i] = mapcode
+		end
+		
+		local removeHigh = {}
+		local removeLow = {}
+		local notFound = {}
 
-			if quantity > 2 then -- bulk remove
-				for i = 1, #args do
-					if not tonumber(args[i]) then
-						args[i] = args[i]:gsub("^@", "")
-					end
-				end
-
-				for y = 1, #args do 
-					if in_table(tonumber(args[y]), maps.list_low) then
-						schedule("low_map_change", tonumber(args[y]), false)
-						tfm.exec.chatMessage("<v>[#] <r>Map @"..args[y].." removed from the low priority list.", player)
-						
-					elseif in_table(tonumber(args[y]), maps.list_high) then
-						schedule("high_map_change", tonumber(args[y]), false)
-						tfm.exec.chatMessage("<v>[#] <r>Map @"..args[y].." removed from the high priority list.", player)
-
-					else
-						tfm.exec.chatMessage("<v>[#] <r>Map @"..args[y].." is not found in any map priority list.", player)
-					end
-				end
-			return end
-
-			if in_table(mapcode, maps.list_low) then
-				schedule("low_map_change", tonumber(mapcode), false)
-				tfm.exec.chatMessage("<v>[#] <r>Map @"..mapcode.." removed from the low priority list.", player)
-				return
-			end
-
+		for i = 1, #args do
+			mapcode = args[i]
 			if in_table(mapcode, maps.list_high) then
-				schedule("high_map_change", tonumber(mapcode), false)
-				tfm.exec.chatMessage("<v>[#] <r>Map @"..mapcode.." removed from the high priority list.", player)
-				return
-			end
-
-			tfm.exec.chatMessage("<v>[#] <r>Map @"..mapcode.." is not found in any map priority list.", player)
-		end
-
-	elseif cmd == "bancount" then -- only admins / !bancount username or !bancount username reset to reset bancount
-		if not ranks.admin[player] then return end
-		if quantity < 1 then 
-			return tfm.exec.chatMessage("<v>[#] <r>!bancount username or !bancount username reset", player) 
-		end
-
-		showChatCommands(player, cmd, args)
-
-			if not tonumber(args[1]) then
-				requestplayer = capitalize(args[1])
-				if not string.find(requestplayer, "#", 1, true) then
-					requestplayer = requestplayer .. "#0000"
-				end
-			end
-
-			if quantity < 2 then 
-				if players_file[requestplayer] then 
-					local file = players_file[args[1]]
-					local getPlayerBanCount = file.bancount
-					tfm.exec.chatMessage("<v>[#] <r>"..args[1].. " have " ..getPlayerBanCount.. " bans in record.", player) 
-				else
-					ban_request[requestplayer] = {player, os.time() + 1000, "bancount"}
-					system.loadPlayerData(requestplayer)
-				end
-			return
-			end
-
-			if args[2] == "reset" then
-				if players_file[requestplayer] then 
-					local file = players_file[args[1]]
-					file.bancount = 0
-					savePlayerData(requestplayer)
-					tfm.exec.chatMessage("<v>[#] <r>"..args[1].. "'s bans has been reset", player) 
-				else
-					ban_request[requestplayer] = {player, os.time() + 1000, "resetbancount"}
-					system.loadPlayerData(requestplayer)
-				end
-			return
-		end 
-
-	elseif cmd == "setrank" then -- !setrank username ranks
-		if not ranks.admin[player] and not ranks.bot[player] then return end
-		if args[1] == player then return tfm.exec.chatMessage("<v>[#] <r>You can't change your rank.", player)  return end
-		local p = args[1]
-		local newranks = {}
-		local id = 0
-
-		if quantity < 2 then 
-			return tfm.exec.chatMessage("<v>[#] <r>!setrank username ranks", player) 
-		end
-
-		if args[2] ~= "none" then
-			for i=2, #args do
-				if ranks_id[args[i]] then
-					id = id + ranks_id[args[i]]
-					newranks[args[i]] = true
-				else
-					return tfm.exec.chatMessage("<v>[#] <r>Invalid rank: "..args[i] , player)
-				end
+				removeHigh[1 + #removeHigh] = mapcode
+			elseif in_table(mapcode, maps.list_low) then
+				removeLow[1 + #removeLow] = mapcode
+			else
+				notFound[1 + #notFound] = mapcode
 			end
 		end
-
-		if id == 0 then
-			player_ranks[p] = nil
-			id = nil
-			tfm.exec.chatMessage("<v>[#] <r>All ranks removed from "..p , player)
-		else
-			player_ranks[p] = newranks
-			tfm.exec.chatMessage("<v>[#] <r>Ranks has been set." , player)
+		
+		if #notFound > 0 then
+			tfm.exec.chatMessage("<v>[#] <r>Could not find following maps in any of the priority lists: " .. table.concat(notFound, ", "), player)
+		end
+		
+		if #removeHigh > 0 or #removeLow > 0 then
+			tfm.exec.chatMessage("<v>[#] <j>Scheduled remaining maps to be removed.", player)
+		end
+		
+		if #removeHigh > 0 then
+			schedule(1, true, function(data)
+				for i = 1, #removeHigh do
+					updateMapList(data.maps, removeHigh[i], false)
+				end
+				tfm.exec.chatMessage("<v>[#] <j>Following maps are removed from the low priority list: " .. table.concat(removeHigh, ", "), player)
+			end)
 		end
 
-		schedule("modify_rank", p, id)
-end end)
+		if #removeLow > 0 then
+			schedule(2, true, function(data)
+				for i = 1, #removeLow do
+					updateMapList(data.lowmaps, removeLow[i], false)
+				end
+				tfm.exec.chatMessage("<v>[#] <j>Following maps are removed from the high priority list: " .. table.concat(removeLow, ", "), player)
+			end)
+		end
+	end
+end
 
-onEvent("PlayerDataParsed", function(player, data)
-	checkBanRequest(player, data)
-end)
+local function handleBancount(player, cmd, quantity, args)
+	if not ranks.admin[player] and not ranks.bot[player] then
+		return
+	end
+	
+	if quantity < 1 then
+		translatedChatMessage("invalid_syntax", player)
+		return
+	end
+	
+	local requestplayer = capitalize(args[1])
+	if not string.find(requestplayer, "#", 1, true) then
+		requestplayer = requestplayer .. "#0000"
+	end
+	
+	if quantity < 2 then
+		schedule_player(requestplayer, false, function(pdata)
+			tfm.exec.chatMessage("<v>[#] <r>" .. requestplayer .. " have " .. pdata.bancount .. " bans in record.", player)
+		end)
+	elseif args[2] == "reset" then
+		schedule_player(requestplayer, true, function(pdata)
+			pdata.bancount = 0
+			tfm.exec.chatMessage("<v>[#] <r>" .. requestplayer .. "'s ban count has been reset.", player)
+		end)
+	end
+end
 
-onEvent("OutPlayerDataParsed", checkBanRequest)
-
-
-onEvent("Loop", function(elapsed)
-	local now = os.time()
-
-	local to_remove, count = {}, 0
-	for player, data in next, ban_request do
-		if now >= data[2] then
-			count = count + 1
-			to_remove[count] = player
-			translatedChatMessage("cant_load_profile", data[1], player)
+local function handleSetrank(player, cmd, quantity, args)
+	if not ranks.admin[player] and not ranks.bot[player] then
+		return
+	end
+	
+	if args[1] == player then
+		return tfm.exec.chatMessage("<v>[#] <r>You can't change your rank.", player)
+	end
+	
+	local targetPlayer = capitalize(args[1])
+	local newRanks = {}
+	local ID = 0
+	
+	if not string.find(targetPlayer, "#", 1, true) then
+		targetPlayer = targetPlayer .. "#0000"
+	end
+	
+	if quantity < 2 then
+		translatedChatMessage("invalid_syntax", player)
+		return
+	end
+	
+	if args[2] ~= "none" then
+		for i = 2, #args do
+			if ranks_id[args[i]] then
+				ID = ID + ranks_id[args[i]]
+				newRanks[args[i]] = true
+			else
+				return tfm.exec.chatMessage("<v>[#] <r>Invalid rank: " .. args[i], player)
+			end
 		end
 	end
 
+	if ID == 0 then
+		player_ranks[targetPlayer] = nil
+		ID = nil
+		tfm.exec.chatMessage("<v>[#] <r>All ranks removed from " .. targetPlayer, player)
+	else
+		player_ranks[targetPlayer] = newRanks
+		tfm.exec.chatMessage("<v>[#] <r>Ranks has been set.", player)
+	end
+	
+	schedule(1, true, function(data)
+		data.ranks[targetPlayer] = ID
+	end)
+end
+
+local function handleBanInfo(player, cmd, quantity, args)
+	if not ranks.admin[player] and not ranks.bot[player] then
+		return
+	end
+	
+	if quantity < 1 then
+		translatedChatMessage("invalid_syntax", player)
+		return
+	end
+	
+	local requestplayer = capitalize(args[1])
+	if not string.find(requestplayer, "#", 1, true) then
+		requestplayer = requestplayer .. "#0000"
+	end
+	
+	schedule_player(requestplayer, false, function(pdata)
+		if pdata.bannedby and pdata.banned then
+			local minutes = math.floor((pdata.banned - os.time()) / 1000 / 60)
+			local banCount = pdata.bancount or "none"
+			tfm.exec.chatMessage("<v>[#] <j>" .. requestplayer .. " has been banned for <V>" .. minutes .. " <j>minutes by <V>"..pdata.bannedby.." <j>and have <V>"..banCount.." <j>bans in record.", player)
+		else
+			tfm.exec.chatMessage("<v>[#] <j>" .. requestplayer .. " has no ban.", player)
+		end
+	end)
+end
+
+local function fileActions(player, cmd, quantity, args)
+	if not ranks.admin[player] and not ranks.bot[player] then
+		return
+	end
+
+	if quantity < 2 then
+		translatedChatMessage("invalid_syntax", player)
+		return
+	end
+
+	local fileName = args[1]
+
+	if fileName == "weekly" then
+		local fileAction = args[2]
+		if fileAction == "view" then
+			if weeklyfile and weeklyfile.ts and weeklyfile.cw then
+				local currentWeek =  table.concat(weeklyfile.cw, ",")
+				tfm.exec.chatMessage("<v>[#] <j>Timestamp: "..weeklyfile.ts, player)
+				tfm.exec.chatMessage("<v>[#] <j>Current week: "..currentWeek, player)
+
+				if not weeklyfile.lw then return end
+
+				local lastWeek =  table.concat(weeklyfile.lw, ",")
+				tfm.exec.chatMessage("<v>[#] <j>Last week: "..lastWeek, player)
+			else
+				tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet or does not exist.", player)
+			end
+
+		elseif fileAction == "last" then
+			tfm.exec.chatMessage("<v>[#] <j>Last weekly reset: "..timed_maps.week.last_reset, player)
+
+		elseif fileAction == "add" then
+
+			if quantity < 3 then
+				translatedChatMessage("invalid_syntax", player)
+				return
+			end
+
+			local count = tonumber(args[4]) or 100
+
+			local requestplayer = capitalize(args[3])
+			if not string.find(requestplayer, "#", 1, true) then
+				requestplayer = requestplayer .. "#0000"
+			end
+
+			schedule_player(requestplayer, true, function(pdata)
+				pdata.week[1] = pdata.week[1] + count
+				tfm.exec.chatMessage("<v>[#] <j>"..requestplayer.."'s new weekly count: "..pdata.week[1], player)
+			end)
+		end
+	end
+
+	if fileName == "sanction" then
+		if not sanctions_file then 
+			tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet.", player)
+			return
+		end
+
+		local fileAction = args[2]
+
+		if fileAction == "list" then
+			local page = tonumber(args[3]) or 1
+			local page_size = 180
+
+			local playerIDs, len = {}, 0
+			for playerID in next, sanctions_file do
+				len = len + 1
+				playerIDs[len] = playerID
+			end
+			table.sort(playerIDs)
+
+			local totalPages = math.ceil(len / page_size)
+
+			if not page or page < 1 or page > totalPages then
+				tfm.exec.chatMessage("<v>[#] <j>Invalid page number. Available pages: 1 - " .. totalPages, player)
+				return
+			end
+
+			local startIndex = (page - 1) * page_size + 1
+			local endIndex = math.min(startIndex + page_size - 1, len)
+			local message = table.concat(playerIDs, ', ', startIndex, endIndex)
+
+			tfm.exec.chatMessage("<v>[#] <j>" ..message, player)
+		else
+			if not tonumber(args[2]) then
+				tfm.exec.chatMessage("<v>[#] <j>"..args[2].." doesn't seem like player id?", player)
+				return
+			end
+
+			if not sanctions_file[args[2]] then 
+				tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet or does not exist.", player)
+				return
+			end
+
+			local playerFile = sanctions_file[args[2]]
+			tfm.exec.chatMessage("<v>[#] <j>Timestamp: "..playerFile.timestamp, player)
+			tfm.exec.chatMessage("<v>[#] <j>Time: "..playerFile.time, player)
+			tfm.exec.chatMessage("<v>[#] <j>Info: "..playerFile.info, player)
+		end
+	end
+end
+
+local function migrateBans(player, cmd, quantity, args)
+	if not ranks.admin[player] and not ranks.bot[player] then
+		return
+	end
+
+	schedule(2, false, function(bdata)
+		tfm.exec.chatMessage("<v>[#] <j>Fetched.", player)
+		schedule(3, true, function(sdata)
+			for playerID, times in pairs(bdata.banned) do
+				if times == 1 then times = 2 end
+				sdata.sanction[playerID] = {
+					timestamp = 0,
+					time = times,
+					info = "-",
+				}
+			end
+			tfm.exec.chatMessage("<v>[#] <j>Migrated.", player)
+		end)
+	end)
+
+end
+
+local commandDispatch = {
+	["ban"] = handleBan,
+	["unban"] = handleBan,
+	["pban"] = handleAdminBan,
+	["punban"] = handleAdminBan,
+	["addmap"] = handleMap,
+	["removemap"] = handleMap,
+	["bancount"] = handleBancount,
+	["setrank"] = handleSetrank,
+	["baninfo"] = handleBanInfo,
+	["migratebans"] = migrateBans,
+	["file"] = fileActions
+}
+
+onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
+	if not player or not cmd or not quantity or not args then
+		return
+	end
+	
+	local commandHandler = commandDispatch[cmd]
+	if not commandHandler then
+		return
+	end
+	
+	commandHandler(player, cmd, quantity, args)
+end)
+
+onEvent("PlayerDataParsed", playerDataRequests)
+onEvent("OutPlayerDataParsed", playerDataRequests)
+
+onEvent("Loop", function(elapsed)
+	local now = os.time()
+	
+	local to_remove, count = {}, 0
+	for player, data in next, pdataRequest do
+		if now >= data[2] then
+			count = count + 1
+			to_remove[count] = player
+		end
+	end
+	
+	local name
 	for idx = 1, count do
-		ban_request[to_remove[idx]] = nil
+		name = to_remove[idx]
+		if pdataRequest[name][4] then
+			pdataRequest[name][4](name)
+		end
+		pdataRequest[name] = nil
 	end
 end)
 
 onEvent("GameStart", function()
-	system.disableChatCommandDisplay("ban")
-	system.disableChatCommandDisplay("unban")
-	system.disableChatCommandDisplay("pban")
-	system.disableChatCommandDisplay("punban")
-	system.disableChatCommandDisplay("addmap")
-	system.disableChatCommandDisplay("removemap")
-	system.disableChatCommandDisplay("bancount")
-	system.disableChatCommandDisplay("setrank")
+	system.disableChatCommandDisplay(nil)
 end)

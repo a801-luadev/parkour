@@ -432,6 +432,7 @@ do
 		if not PowersInterface.open[player] then return end
 
 		if action == "power" then
+			if not checkCooldown(player, "showpowers", 1000) then return end
 			page = tonumber(args)
 
 			if page > 0 and page <= #powers then
