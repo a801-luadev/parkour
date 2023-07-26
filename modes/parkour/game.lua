@@ -68,7 +68,7 @@ local function showStats()
 		not records_admins and
 		not is_tribe and
 		not review_mode) and "<v>Stats count" or "<r>Stats don't count"
-	
+
 	ui.setMapName(string.format(
 		"<j>%s<bl> - %s<g>   |   %s",
 		room.xmlMapInfo.author, room.currentMap, text
@@ -82,7 +82,7 @@ local function enableSpecMode(player, enable)
 	if enable then
 		spec_mode[player] = true
 		tfm.exec.killPlayer(player)
-		
+
 		player_count = player_count - 1
 		if victory[player] then
 			victory_count = victory_count - 1
@@ -94,7 +94,7 @@ local function enableSpecMode(player, enable)
 		spec_mode[player] = nil
 
 		if (not levels) or (not players_level[player]) then return end
-		
+
 		local level = levels[ players_level[player] ]
 
 		tfm.exec.respawnPlayer(player)
@@ -146,7 +146,7 @@ local function checkTitleAndNextFieldValue(player, title, sumValue, _playerData,
 
 		if newValue >= title.requirement then
 			system.giveEventGift(player, title.code)
-			
+
 			sendPacket("common", 9, _playerID .. "\000" .. player .. "\000" .. title.code)
 		end
 
@@ -310,7 +310,7 @@ onEvent("PlayerRespawn", function(player)
 
 	if (players_level[player] == 1
 		and not times.generated[player]
-		records_admins) then
+		and records_admins) then
 		tfm.exec.freezePlayer(player, true)
 	end
 
@@ -490,7 +490,7 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 
 		local next_level = levels[bonus + 1]
 		addCheckpointImage(player, next_level.x, next_level.y)
-		
+
 		tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
 	end
 
