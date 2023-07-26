@@ -309,8 +309,8 @@ onEvent("PlayerRespawn", function(player)
 	if (not levels) or (not players_level[player]) then return end
 
 	if (players_level[player] == 1
-			and not times.generated[player]
-			records_admins) then
+		and not times.generated[player]
+		records_admins) then
 		tfm.exec.freezePlayer(player, true)
 	end
 
@@ -393,10 +393,10 @@ onEvent("Loop", function()
 				if spec_mode[name] or player.id == 0 or bans[player.id] then
 					tfm.exec.killPlayer(name)
 				elseif (player_count > 4
-							and not records_admins
-							and not review_mode
-							and not victory[name]
-							now >= times.movement[name] + 120000) then -- 2 mins afk
+						and not records_admins
+						and not review_mode
+						and not victory[name]
+						now >= times.movement[name] + 120000) then -- 2 mins afk
 					enableSpecMode(name, true)
 					AfkInterface:show(name)
 				end
@@ -503,11 +503,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	if cmd == "review" then
 		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
 		local normal_cond = (perms[player] and
-												perms[player].enable_review and
-												not records_admins and
+							perms[player].enable_review and
+							records_admins and
 
-												(string.find(room.lowerName, "review") or
-												ranks.admin[player]))
+							(string.find(room.lowerName, "review") or
+							ranks.admin[player]))
 		if not tribe_cond and not normal_cond then
 			return tfm.exec.chatMessage("<v>[#] <r>You can't toggle review mode in this room.", player)
 		end
