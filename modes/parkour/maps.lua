@@ -341,7 +341,7 @@ onEvent("NewGame", function()
 	end
 end)
 
-function checkMapBug()
+local function checkMapBug()
     for _, player in next, room.playerList do
         if player.x ~= 0 or player.y ~= 0 then
             return
