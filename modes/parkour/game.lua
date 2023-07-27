@@ -396,7 +396,7 @@ onEvent("Loop", function()
 						and not records_admins
 						and not review_mode
 						and not victory[name]
-						now >= times.movement[name] + 120000) then -- 2 mins afk
+						and now >= times.movement[name] + 120000) then -- 2 mins afk
 					enableSpecMode(name, true)
 					AfkInterface:show(name)
 				end
@@ -504,7 +504,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
 		local normal_cond = (perms[player] and
 							perms[player].enable_review and
-							records_admins and
+							not records_admins and
 
 							(string.find(room.lowerName, "review") or
 							ranks.admin[player]))
