@@ -126,15 +126,13 @@ onEvent("GameDataLoaded", function(data)
 
 		local new_reset = os.date("%d/%m/%Y", ts - now.wday * 24 * 60 * 60 * 1000)
 		if new_reset ~= data.weekly.ts then
-			if new_reset == "28/02/2021" then
-				translatedChatMessage("double_maps_start")
-			elseif new_reset == "07/03/2021" then
-				translatedChatMessage("double_maps_end")
-			end
 
 			if #weekleaderboard > 2 and weekleaderboard[1][3] > 30 then
 				data.weekly.lw = data.weekly.cw
-				data.weekly.cw = {weekleaderboard[1][1], weekleaderboard[2][1], weekleaderboard[3][1]}
+				data.weekly.cw = {}
+				data.weekly.cw[tostring(weekleaderboard[1][1])] = true
+				data.weekly.cw[tostring(weekleaderboard[2][1])] = true
+				data.weekly.cw[tostring(weekleaderboard[3][1])] = true
 			end
 
 			data.weekly.ts = new_reset
@@ -170,13 +168,11 @@ local function in_table(value, tbl)
 end
 
 local function checkWeeklyWinners(player, data)
-	if not weeklyfile.lw or not weeklyfile.cw then return end
+	local id = tostring(room.playerList[player].id)
 
-	local roomPlayer = room.playerList[player]
-	local lwIndex = in_table(tonumber(roomPlayer.id), weeklyfile.lw)
-	local cwIndex = in_table(tonumber(roomPlayer.id), weeklyfile.cw)
-
-	if not lwIndex and not cwIndex then return end
+	if (not weeklyfile.lw or not weeklyfile.lw[id]) and (not weeklyfile.cw or not weeklyfile.cw[id]) then 
+		return
+	end
 
 	if data.badges[3] ~= 1 then
 		players_file[player].badges[3] = 1

@@ -175,16 +175,16 @@ local filemanagers = {
 					},
 					{
 						name = "cw",
-						type = "array",
+						type = "dictionary",
 						objects = {
-							type= "number" 
+							type= "boolean"
 						}
 					},
 					{
 						name = "lw",
-						type = "array",
+						type = "dictionary",
 						objects = {
-							type= "number" 
+							type= "boolean"
 						}
 					}
 				}

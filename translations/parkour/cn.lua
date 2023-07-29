@@ -27,7 +27,7 @@ translations.cn = {
 	help_staff = "<p align = 'center'><font size = '13'><r>免責聲明: Parkour 的職員並不是 Transformice 職員而且在遊戲裡沒有任何權力, 只負責這小遊戲的規管。</r>\nParkour 職員確保小遊戲減少錯誤而運作順暢, 而且可以在有需要時協助玩家。</font></p>\n你可以在聊天框輸入 <D>!staff</D> 來查看職員列表。\n\n<font color = '#E7342A'>工作人員:</font> 他們負責透過更新及修復滴漏洞來維護小遊戲。\n\n<font color = '#D0A9F0'>小隊主管:</font> 他們會觀察管理團隊及地圖團隊, 確保他們在工作上的表現。他們也負責招募新成員加入職員團隊中。\n\n<font color = '#FFAAAA'>管理員:</font> 他們負責執行小遊戲裡的規則以及處分違反規則的玩家。\n\n<font color = '#25C059'>地圖管理員:</font> 他們負責審核, 新增, 以及移除小遊戲裡的地圖來確保你可以享受遊戲過程。",
 	help_rules = "<font size = '13'><B><J>所有適用於 Transformice 的條款及細則也適用於 #parkour</J></B></font>\n\n如果你發現任何玩家違反這些規則, 可以在遊戲中私聊 parkour 的管理員。如果沒有管理員在線, 你可以在 discord 伺服器中舉報事件。\n當你舉報的時候, 請提供你所在的伺服器, 房間名稱, 以及玩家名稱。\n• 例如: en-#parkour10 Blank#3495 trolling\n證明, 例如是截圖, 錄象以及gif圖能有效協助舉報, 但不是一定需要的。\n\n<font size = '11'>• 任何 <font color = '#ef1111'>外掛, 瑕疵或漏洞</font> 是不能在 #parkour 房間中使用\n• <font color = '#ef1111'>VPN 刷數據</font> 會被當作 <B>利用漏洞</B> 而不被允許的。 <p align = 'center'><font color = '#cc2222' size = '12'><B>\n任何人被抓到違反規則會被即時封禁。</B></font></p>\n\n<font size = '12'>Transformice 允許搗蛋行為。但是, <font color='#cc2222'><B>我們不允許在 parkour 的搗蛋行為。</B></font></font>\n\n<p align = 'center'><J>惡作劇是指一個玩家有意圖地使用能力或消耗品來阻止其他玩家完成地圖。</j></p>\n• 復仇性的搗蛋行為 <B>並不是一個合理解釋</B> 來搗亂別人而因此你也會被處分。\n• 強迫想自理的玩家接受協助而當他說不用之後仍舊沒有停止此行為也會被視作搗蛋。\n• <J>如果一個玩家不想被協助或是想自理通關, 請你盡力協助其他玩家。</J> 但是如果有另外的玩家需要協助而剛好跟自理玩家在同一個重生點, 你可以協助他們 [兩人]。\n\n如果玩家惡作劇被抓, 會被處分基於時間的懲罰。重覆的搗蛋行為會引至更長及更嚴重的處分。",
 	help_contribute = "<font size='14'>\n<p align='center'>Parkour 管理團隊喜愛開放原始碼是因為它能夠<t>協助社群</t>。 你可以在 <o><u><a href='event:github'>GitHub</a></u></o> <o>查看</o> 以及 <o>修改</o> 原始碼。\n\n維護這個小遊戲是 <t>義務性質</t>, 所以任何在 <t>編程</t>, <t>漏洞回饋</t>, <t>建議</t> 及 <t>地圖創作</t> 上提供的幫助將會是十分 <u>歡迎而且非常感激</u>。\n你可以在 <o><u><a href='event:discord'>Discord</a></u></o> 及/或 <o><u><a href='event:github'>GitHub</a></u></o> <vp>匯報漏洞</vp> 和 <vp>提供意見</vp>。\n你可以在我們的 <o><u><a href='event:map_submission'>論壇帖子</a></u></o> 中 <vp>提交你的地圖</vp>。\n\n維護 Parkour 不是很花費, 但也不完全是免費。我們希望你能夠在 <o><u><a href='event:donate'>這裡</a></u></o> <t>捐贈任何金額</t> 來支持我們。\n<u>所有捐款會用來改善這個小遊戲。</u></p>",
-	help_changelog = "<font size='13'><p align='center'><o>Version 2.10.0 - 17/04/2021</o></p>\n\n<font size='11'>• <font size='13'><b><j>三個</J></b> 全新的 Transformice 稱號只可以在<font color='#1A7EC9'><b>#parkour</b></font>遊玩而解鎖!</font>\n• 在個資中加入兩項新的資訊。\n• 調整細微文字格式。",
+	help_changelog = "<font size='13'><p align='center'><o>版本 2.12.0 - 31/07/2023</o></p>\n\n<font size='11'>• <font size='13'>再次植入每周排行榜, 現在可以使用這功能了。\n<font size='11'>• <font size='13'>達成每周排行榜首位的玩家現在會自動得到對應的徽章。\n<font size='11'>• <font size='13'>修復了幾個小漏洞。",
 
 	-- Congratulation messages
 	reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。 (<t>%ss</t>)",
@@ -184,7 +184,7 @@ translations.cn = {
 	trampoline = "彈床",
 	toilet = "馬桶",
 	pig = "豬",
-	sink = "下沉",
+	sink = "洗手盤",
 	bathtub = "浴缸",
 	campfire = "營火",
 	chair = "椅子",

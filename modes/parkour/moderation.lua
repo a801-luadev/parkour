@@ -53,14 +53,13 @@ local function sendBanLog(playerName, time, moderator, minutes)
 end
 
 onEvent("GameDataLoaded", function(data, fileid)
-	fileid = tonumber(fileid)
 	local action
 	local save
 	local len = #to_do
 
 	for index = 1, len do
 		action = to_do[index]
-		if files[action[1]] == fileid then
+		if files[action[1]] == tonumber(fileid) then
 			action[3](data)
 			save = action[2]
 			to_do[index] = false
@@ -166,8 +165,8 @@ onEvent("GameDataLoaded", function(data, fileid)
 		end
 	end
 
-	if save then
-		eventSavingFile(tostring(fileid), data)
+	if save or (data.ranking or data.weekly) then
+		eventSavingFile(fileid, data)
 	end
 end)
 
@@ -553,13 +552,25 @@ local function fileActions(player, cmd, quantity, args)
 		local fileAction = args[2]
 		if fileAction == "view" then
 			if weeklyfile and weeklyfile.ts and weeklyfile.cw then
-				local currentWeek =  table.concat(weeklyfile.cw, ",")
+				local currentList = {}
+
+				for name in pairs(weeklyfile.cw) do
+					table.insert(currentList, name)
+				end
+
+				local currentWeek =  table.concat(currentList, ",")
 				tfm.exec.chatMessage("<v>[#] <j>Timestamp: "..weeklyfile.ts, player)
 				tfm.exec.chatMessage("<v>[#] <j>Current week: "..currentWeek, player)
 
 				if not weeklyfile.lw then return end
+				
+				local lastList = {}
 
-				local lastWeek =  table.concat(weeklyfile.lw, ",")
+				for name in pairs(weeklyfile.lw) do
+					table.insert(lastList, name)
+				end
+
+				local lastWeek =  table.concat(lastList, ",")
 				tfm.exec.chatMessage("<v>[#] <j>Last week: "..lastWeek, player)
 			else
 				tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet or does not exist.", player)
