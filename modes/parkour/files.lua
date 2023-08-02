@@ -14,23 +14,17 @@ local files = {
 		- chats       (1)
 
 		- ranking     (2)
-		- weekranking (2)
+		- weekly      (2)
 
 		- lowmaps     (3)
-		- banned      (3)
-
-		- sanction    (4)
-
-		- weekly      (5)
+		- sanction    (3)
 	]]
 
 	[1] = 20, -- maps, ranks, chats
-	[2] = 21, -- ranking, weekranking
-	[3] = 22, -- lowmaps, banned
-	[4] = 23, -- sanction
-	[5] = 24 -- weekly
+	[2] = 21, -- ranking, weekly
+	[3] = 22, -- lowmaps, sanction
 }
-local total_files = 5
+local total_files = 3
 local file_index = 1
 local file_id = files[file_index]
 local updating = {}

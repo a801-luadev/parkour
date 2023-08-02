@@ -1,7 +1,7 @@
 local files = {
 	[1] = 20, -- maps, ranks, chats
-	[2] = 22, -- lowmaps, banned
-	[3] = 23 -- sanction
+	[2] = 21,  -- ranking, weekly
+	[3] = 22 -- lowmaps, sanction
 }
 
 local to_do = {}
@@ -38,13 +38,46 @@ local function updateMapList(mapList, map, add)
 	end
 end
 
+local function in_table(value, tbl)
+	for _, v in ipairs(tbl) do
+		if v == value then
+			return true
+		end
+	end
+	return false
+end
+
+local function checkWeeklyWinners(player, data)
+	local id = tostring(room.playerList[player].id)
+
+	if not weeklyfile or not weeklyfile.wl or not weeklyfile.wl[id] then 
+		return
+	end
+
+	if data.badges[3] ~= 1 then
+		players_file[player].badges[3] = 1
+		NewBadgeInterface:show(player, 3, 1)
+		savePlayerData(player)
+	end
+
+	schedule(2, true, function(data)
+		data.weekly.wl[id] = nil
+	end)
+end
+
 local function sendBanLog(playerName, time, moderator, minutes)
+	local player = nil
+
+	if ranks.hidden[moderator] then 
+		player = moderator
+	end
+
 	if not time then
-		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been unbanned.", moderator)
+		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been unbanned.", player)
 	elseif time > 2 then
-		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned for " .. minutes .. " minutes.", moderator)
+		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned for " .. minutes .. " minutes.", player)
 	elseif time == 2 then
-		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned permanently.", moderator)
+		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned permanently.", player)
 	elseif time == 1 then
 		tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned. (pending)", moderator)
 	else
@@ -372,7 +405,7 @@ local function handleMap(player, cmd, quantity, args)
 		end
 
 		if rotation == "low" then
-			schedule(2, true, function(data)
+			schedule(3, true, function(data)
 				updateMapList(data.lowmaps, mapcode, true)
 				tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " added to the " .. rotation .. " priority list.", player)
 			end)
@@ -426,7 +459,7 @@ local function handleMap(player, cmd, quantity, args)
 		end
 
 		if #removeLow > 0 then
-			schedule(2, true, function(data)
+			schedule(3, true, function(data)
 				for i = 1, #removeLow do
 					updateMapList(data.lowmaps, removeLow[i], false)
 				end
@@ -551,27 +584,16 @@ local function fileActions(player, cmd, quantity, args)
 	if fileName == "weekly" then
 		local fileAction = args[2]
 		if fileAction == "view" then
-			if weeklyfile and weeklyfile.ts and weeklyfile.cw then
+			if weeklyfile and weeklyfile.ts and weeklyfile.wl then
 				local currentList = {}
 
-				for name in pairs(weeklyfile.cw) do
+				for name in pairs(weeklyfile.wl) do
 					table.insert(currentList, name)
 				end
 
 				local currentWeek =  table.concat(currentList, ",")
 				tfm.exec.chatMessage("<v>[#] <j>Timestamp: "..weeklyfile.ts, player)
 				tfm.exec.chatMessage("<v>[#] <j>Current week: "..currentWeek, player)
-
-				if not weeklyfile.lw then return end
-				
-				local lastList = {}
-
-				for name in pairs(weeklyfile.lw) do
-					table.insert(lastList, name)
-				end
-
-				local lastWeek =  table.concat(lastList, ",")
-				tfm.exec.chatMessage("<v>[#] <j>Last week: "..lastWeek, player)
 			else
 				tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet or does not exist.", player)
 			end
@@ -650,28 +672,6 @@ local function fileActions(player, cmd, quantity, args)
 	end
 end
 
-local function migrateBans(player, cmd, quantity, args)
-	if not ranks.admin[player] and not ranks.bot[player] then
-		return
-	end
-
-	schedule(2, false, function(bdata)
-		tfm.exec.chatMessage("<v>[#] <j>Fetched.", player)
-		schedule(3, true, function(sdata)
-			for playerID, times in pairs(bdata.banned) do
-				if times == 1 then times = 2 end
-				sdata.sanction[playerID] = {
-					timestamp = 0,
-					time = times,
-					info = "-",
-				}
-			end
-			tfm.exec.chatMessage("<v>[#] <j>Migrated.", player)
-		end)
-	end)
-
-end
-
 local commandDispatch = {
 	["ban"] = handleBan,
 	["unban"] = handleBan,
@@ -682,7 +682,6 @@ local commandDispatch = {
 	["bancount"] = handleBancount,
 	["setrank"] = handleSetrank,
 	["baninfo"] = handleBanInfo,
-	["migratebans"] = migrateBans,
 	["file"] = fileActions
 }
 
@@ -699,6 +698,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	commandHandler(player, cmd, quantity, args)
 end)
 
+onEvent("PlayerDataParsed", checkWeeklyWinners)
 onEvent("PlayerDataParsed", playerDataRequests)
 onEvent("OutPlayerDataParsed", playerDataRequests)
 

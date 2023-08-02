@@ -128,11 +128,9 @@ onEvent("GameDataLoaded", function(data)
 		if new_reset ~= data.weekly.ts then
 
 			if #weekleaderboard > 2 and weekleaderboard[1][3] > 30 then
-				data.weekly.lw = data.weekly.cw
-				data.weekly.cw = {}
-				data.weekly.cw[tostring(weekleaderboard[1][1])] = true
-				data.weekly.cw[tostring(weekleaderboard[2][1])] = true
-				data.weekly.cw[tostring(weekleaderboard[3][1])] = true
+				data.weekly.wl[tostring(weekleaderboard[1][1])] = true
+				data.weekly.wl[tostring(weekleaderboard[2][1])] = true
+				data.weekly.wl[tostring(weekleaderboard[3][1])] = true
 			end
 
 			data.weekly.ts = new_reset
@@ -157,29 +155,3 @@ onEvent("GameDataLoaded", function(data)
 		checkPlayersPosition(true)
 	end
 end)
-
-local function in_table(value, tbl)
-	for _, v in ipairs(tbl) do
-		if v == value then
-			return true
-		end
-	end
-	return false
-end
-
-local function checkWeeklyWinners(player, data)
-	local id = tostring(room.playerList[player].id)
-
-	if (not weeklyfile.lw or not weeklyfile.lw[id]) and (not weeklyfile.cw or not weeklyfile.cw[id]) then 
-		return
-	end
-
-	if data.badges[3] ~= 1 then
-		players_file[player].badges[3] = 1
-		NewBadgeInterface:show(player, 3, 1)
-		savePlayerData(player)
-	end
-end
-
-
-onEvent("PlayerDataParsed", checkWeeklyWinners)

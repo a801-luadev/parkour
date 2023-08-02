@@ -41,7 +41,7 @@ local filemanagers = {
 				}
 			}
 		}
-	}):disableValidityChecks():prepare(),
+	}):prepare(),
 
 	["21"] = FileManager.new({
 		type = "dictionary",
@@ -68,81 +68,6 @@ local filemanagers = {
 					}
 				}
 			},
-			{
-				name = "weekranking",
-				type = "array",
-				objects = {
-					type = "array",
-					map = {
-						{
-							type = "number"
-						},
-						{
-							type = "string",
-						},
-						{
-							type = "number"
-						},
-						{
-							type = "string",
-							length = 2
-						}
-					}
-				}
-			}
-		}
-	}):disableValidityChecks():prepare(),
-
-	["22"] = FileManager.new({
-		type = "dictionary",
-		map = {
-			{
-				name = "lowmaps",
-				type = "array",
-				objects = {
-					type = "number"
-				}
-			},
-			{
-				name = "banned",
-				type = "dictionary",
-				objects = {
-					type = "number"
-				}
-			},
-		}
-	}):disableValidityChecks():prepare(),
-
-	["23"] = FileManager.new({
-		type = "dictionary",
-		map = {
-			{
-				name = "sanction",
-				type = "dictionary",
-				objects = {
-					type = "dictionary",
-					map = {
-						{
-							name = "timestamp",
-							type = "number",
-						},
-						{
-							name = "time",
-							type = "number",
-						},
-						{
-							name = "info",
-							type = "string",
-						}
-					}
-				}
-			}
-		}
-	}):disableValidityChecks():prepare(),
-
-	["24"] = FileManager.new({
-		type = "dictionary",
-		map = {
 			{
 				name = "weekly",
 				type = "dictionary",
@@ -174,14 +99,7 @@ local filemanagers = {
 						type = "string"
 					},
 					{
-						name = "cw",
-						type = "dictionary",
-						objects = {
-							type= "boolean"
-						}
-					},
-					{
-						name = "lw",
+						name = "wl",
 						type = "dictionary",
 						objects = {
 							type= "boolean"
@@ -190,5 +108,39 @@ local filemanagers = {
 				}
 			}
 		}
-	}):disableValidityChecks():prepare()
+	}):prepare(),
+
+	["22"] = FileManager.new({
+		type = "dictionary",
+		map = {
+			{
+				name = "lowmaps",
+				type = "array",
+				objects = {
+					type = "number"
+				}
+			},
+			{
+				name = "sanction",
+				type = "dictionary",
+				objects = {
+					type = "dictionary",
+					map = {
+						{
+							name = "timestamp",
+							type = "number",
+						},
+						{
+							name = "time",
+							type = "number",
+						},
+						{
+							name = "info",
+							type = "string",
+						}
+					}
+				}
+			},
+		}
+	}):prepare(),
 }
