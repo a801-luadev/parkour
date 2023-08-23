@@ -279,6 +279,7 @@ onEvent("PlayerDied", function(player)
 	if (not levels) or (not players_level[player]) then return end
 
 	local level = levels[ players_level[player] ]
+	tfm.exec.linkMice(player, player, false)
 
 	if not spec_mode[player] then
 		tfm.exec.respawnPlayer(player)
@@ -294,6 +295,7 @@ onEvent("PlayerWon", function(player)
 
 	victory_count = victory_count + 1
 	victory._last_level[player] = false
+	tfm.exec.linkMice(player, player, false)
 
 	if victory_count == player_count and not less_time then
 		tfm.exec.setGameTime(5)
@@ -357,6 +359,7 @@ onEvent("NewGame", function()
 			players_level[player] = 1
 			changePlayerSize(player, size)
 			tfm.exec.setPlayerScore(player, 1, false)
+			tfm.exec.linkMice(player, player, false)
 		end
 
 		if records_admins then
@@ -429,10 +432,12 @@ onEvent("Loop", function()
 							tfm.exec.setPlayerScore(name, level_id, false)
 						end
 						tfm.exec.removeImage(checkpoints[name])
+						
+						tfm.exec.linkMice(player, player, false)
 
 						if level_id == last_level then
+							translatedChatMessage("reached_level", name, level_id-1, taken)
 							if victory[name] then -- !cp
-								translatedChatMessage("reached_level", name, level_id, taken)
 							else
 								victory._last_level[name] = true
 								tfm.exec.giveCheese(name)
@@ -441,7 +446,7 @@ onEvent("Loop", function()
 								tfm.exec.movePlayer(name, next_level.x, next_level.y)
 							end
 						else
-							translatedChatMessage("reached_level", name, level_id, taken)
+							translatedChatMessage("reached_level", name, level_id-1, taken)
 							addCheckpointImage(name, levels[level_id + 1].x, levels[level_id + 1].y)
 						end
 					end
@@ -473,10 +478,11 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 		tfm.exec.setPlayerScore(player, bonus, false)
 	end
 	tfm.exec.removeImage(checkpoints[player])
+	tfm.exec.linkMice(player, player, false)
 
 	if bonus == #levels then
+		translatedChatMessage("reached_level", player, bonus-1, taken)
 		if victory[player] then -- !cp
-			translatedChatMessage("reached_level", player, bonus, taken)
 		else
 			victory._last_level[player] = true
 			tfm.exec.giveCheese(player)
@@ -486,7 +492,7 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 			return
 		end
 	else
-		translatedChatMessage("reached_level", player, bonus, taken)
+		translatedChatMessage("reached_level", player, bonus-1, taken)
 
 		local next_level = levels[bonus + 1]
 		addCheckpointImage(player, next_level.x, next_level.y)

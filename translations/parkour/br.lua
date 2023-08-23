@@ -188,5 +188,6 @@ translations.br = {
 	bathtub = "Banheira",
 	campfire = "Fogueira",
 	chair = "Cadeira",
+	link = "Alma gêmea",
 }
 translations.pt = translations.br

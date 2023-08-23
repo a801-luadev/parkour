@@ -184,4 +184,6 @@ translations.he = {
 	bathtub = "אמבטיה",
 	campfire = "מדורה",
 	chair = "כסא",
+	link = "נפש תאומה",
+
 }

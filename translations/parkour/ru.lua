@@ -184,4 +184,5 @@ translations.ru = {
 	bathtub = "Ванна",
 	campfire = "Костёр",
 	chair = "Стул",
+	link = "Партнер",
 }

@@ -30,7 +30,7 @@ translations.id = {
     help_changelog = "<font size='13'><p align='center'><o>Versi 2.12.0 - 01/08/2023</o></p>\n\n<font size='11'>• <font size='13'>Fitur peringkat mingguan telah dipulihkan dan kini tersedia.\n<font size='11'>• <font size='13'>Pemain yang meraih posisi teratas pada peringkat mingguan sekarang mendapatkan lencana masing-masing secara otomatis.\n<font size='11'>• <font size='13'>Beberapa bug minor telah diperbaiki.",
 
     -- Congratulation messages
-    reached_level = "<d>Selamat! anda telah meraih level <vp>%s</vp>. (<t>%ss</t>)",
+    reached_level = "<d>Selamat! Kamu telah menyelesaikan level <vp>%s</vp>. (<t>%ss</t>)",
     finished = "<d><o>%s</o> telah menyelesaikan parkour dalam <vp>%s</vp> detik, <fc>selamat!",
     unlocked_power = "<ce><d>%s</d> telah membuka kemampuan <vp>%s</vp>.",
 
@@ -48,6 +48,7 @@ translations.id = {
     tempbanned = "<r>Anda telah diblokir dari #parkour selama %s menit.",
     forum_topic = "<rose>Untuk informasi lebih lanjut mengenai modul kunjungi tautan: %s",
     report = "<j>Ingin melaporkan seorang pemain? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
+    killed = "<v>[#] <r>Kamu dibatasi dalam menggunakan kekuatan selama %s menit karena melanggar aturan parkur. Pelanggaran yang berlanjut akan mendapatkan hukuman ban. Mohon menekan <b>H</b> untuk melihat aturan.",
 
     -- Easter Eggs
     easter_egg_0  = "<ch>Jadi penghitung waktu mundur dimulai...",
@@ -188,4 +189,6 @@ translations.id = {
     bathtub = "Bak Mandi",
     campfire = "Api Unggun",
     chair = "Kursi",
+    link = "Jodoh",
+
 }

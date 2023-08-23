@@ -30,7 +30,7 @@ translations.cn = {
 	help_changelog = "<font size='13'><p align='center'><o>版本 2.12.0 - 01/08/2023</o></p>\n\n<font size='11'>• <font size='13'>再次植入每周排行榜, 現在可以使用這功能了。\n<font size='11'>• <font size='13'>達成每周排行榜首位的玩家現在會自動得到對應的徽章。\n<font size='11'>• <font size='13'>修復了幾個小漏洞。",
 
 	-- Congratulation messages
-	reached_level = "<d>恭喜! 你到達了第 <vp>%s</vp> 個重生點。 (<t>%ss</t>)",
+	reached_level = "<d>恭喜! 你已經到達重生點 <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> 在 <vp>%s</vp> 秒內完成了地圖, <fc>恭喜!",
 	unlocked_power = "<ce><d>%s</d> 解鎖了 <vp>%s</vp> 能力。",
 
@@ -47,6 +47,7 @@ translations.cn = {
 	tempbanned = "<r>你已經在 #parkour 被封禁了 %s 分鐘。",
 	forum_topic = "<rose>更多關於這個小遊戲的資訊可以查看: %s",
 	report = "<j>想舉報玩家? <t><b>/c Parkour#8558 .report 玩家名字#0000</b></t>",
+	killed = "<v>[#] <r>因為你違反了 parkour 規則, 你現在被禁止在 %s 分鐘內使用你的能力。持續違反規則會導致被封禁遊玩此小遊戲。請按 <b>H鍵</b> 查看規則。",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>所以要開始倒數了...",
@@ -188,5 +189,7 @@ translations.cn = {
 	bathtub = "浴缸",
 	campfire = "營火",
 	chair = "椅子",
+	link = "伴侣",
+
 }
 translations.ch = translations.cn

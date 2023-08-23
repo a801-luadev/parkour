@@ -30,7 +30,7 @@ translations.pl = {
 	help_changelog = "<font size='13'><p align='center'><o>Wersja 2.12.0 - 01/08/2023</o></p>\n\n<font size='11'>• <font size='13'>Cotygodniowy ranking został naprawiony i znów działa.\n<font size='11'>• <font size='13'>Gracze którzy zdobędą top pozycje w rankingu tygodniowym automatycznie otrzymają odznakę.\n<font size='11'>• <font size='13'>Naprawiono kilka minimalnych błędów.",
 
 	-- Congratulation messages
-	reached_level = "<d>Gratulacje! Osiągnąłeś poziom <vp>%s</vp>. (<t>%ss</t>)",
+	reached_level = "<d>Gratulacje! Ukończyłeś poziom <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> skończyłeś parkour w <vp>%s</vp> sekundach, <fc>Gratulacje!",
 	unlocked_power = "<ce><d>%s</d> odblokował <vp>%s</vp> moc.",
 
@@ -48,6 +48,7 @@ translations.pl = {
 	tempbanned = "<r>Zostałeś zbanowany na #parkour na %s minut.",
 	forum_topic = "<rose>Więcej informacji o module znajdziesz pod tym linkiem: %s",
 	report = "<j>Chcesz zgłosić gracza? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
+	killed = "<v>[#] <r>Zostałeś zawieszony w używaniu swoich mocy na %s minut z powodu naruszenia regulaminu parkour. Dalsze naruszanie zasada zakończy się banem. Naciśnij  <b>H</b> żeby zobaczyć zasady.",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Więc, odliczanie się rozpoczęło...",
@@ -188,4 +189,6 @@ translations.pl = {
 	bathtub = "Wanna",
 	campfire = "Ognisko",
 	chair = "Krzesło",
+	link = "Partner/ka",
+
 }

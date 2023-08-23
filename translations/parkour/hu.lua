@@ -30,7 +30,7 @@ translations.hu = {
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.12.0 - 01/08/2023</o></p>\n\n<font size='11'>• <font size='13'>A heti rangsorolásos rendszer visszaállt és most újra elérhető.\n<font size='11'>• <font size='13'>Azok a játékosok, akik dobogós helyezést érnek el a heti rangsorolásban, mostantól automatikusan megkapják a tisztelgő jelvényeket.\n<font size='11'>• <font size='13'>Számos apró hiba javításra került.",
 
 	-- Congratulation messages
-	reached_level = "<d>Gratulálunk! Elérted a(z) <vp>%s</vp>. ellenőrző pontot. (<t>%ss</t>)",
+	reached_level = "<d>Gratulálunk! Elérted a következő szintet: <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> befejezte a parkour pályát <vp>%s</vp> másodperc alatt. <fc>Gratulálunk!",
 	unlocked_power = "<ce><d>%s</d> feloldotta a(z) <vp>%s</vp> képességet.",
 
@@ -48,6 +48,7 @@ translations.hu = {
 	tempbanned = "<r>Ki lettél tiltva %s másodpercre a #parkour-ból.",
 	forum_topic = "<rose>Ha szeretnél több információt a modulról látogasd meg a linket: %s",
 	report = "<j>Jelenteni szeretnél egy parkour játékost? <t><b>/c Parkour#8558 .report Felhasználónév0000</b></t>",
+	killed = "<v>[#] <r>A parkour szabályainak megsértése miatt %s percig nem használhatod képességeidet. A szabályok folyamatos megsértése kitiltást von maga után. Nyomd meg a <b>H</b> gombot a szabályok áttekintéséhez.",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Szóval a visszaszámlálás elkezdődött...",
@@ -188,4 +189,5 @@ translations.hu = {
 	bathtub = "Fürdőkád",
 	campfire = "Tábortűz",
 	chair = "Szék",
+	link = "Lélektárs",
 }

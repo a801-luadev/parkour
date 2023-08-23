@@ -447,6 +447,39 @@ powers = {
 		end
 	},
 	{
+		name = "link", maps = 6000,
+
+		small = "18a1f4da09f.png", big = "18a1f4d198c.png",
+		lockedSmall = "18a1f563110.png", lockedBig = "18a1f4e3528.png",
+		smallX = 0, smallY = 10,
+		bigX = 0, bigY = 20,
+
+		cooldown_x = 308,
+		cooldown_y = 377,
+		cooldown_img = "18a1f569408.png",
+
+		cooldown = 60000,
+		default = {4, 9}, -- M
+
+		cond = function(player, key, down, x, y)
+			local soulmate = tfm.get.room.playerList[player].spouseName
+
+			if not soulmate or not in_room[soulmate] then return false end
+
+			local soulmateInfo = tfm.get.room.playerList[soulmate]
+			local distance = math.sqrt(math.pow(x - soulmateInfo.x, 2) + math.pow(y - soulmateInfo.y, 2))
+
+			local soulmate_check = not soulmateInfo.isDead and distance < 200
+
+			return soulmate_check
+		end,
+
+		fnc = function(player, key, down, x, y)
+			local soulmate = tfm.get.room.playerList[player].spouseName
+			tfm.exec.linkMice(player, soulmate, true)
+		end
+	},
+	{
 		name = "sink", ranking = 70,
 
 		small = "173deeb1e05.png", big = "173deeac174.png",
@@ -726,7 +759,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	local power = keys.triggers[player][key]
 	if power then
 		for index = 1, power._count do
-			if power[index] and (not power[index].cooldown or checkCooldown(
+			if power[index] and (not power[index].cond or power[index].cond(player, key, down, x, y)) and (not power[index].cooldown or checkCooldown(
 				player, power[index].name, power[index].cooldown,
 
 				power[index].cooldown_img,

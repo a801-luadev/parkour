@@ -188,4 +188,6 @@ translations.ro = {
 	bathtub = "Cadă",
 	campfire = "Foc de tabără",
 	chair = "Scaun",
+	link = "Suflet pereche",
+
 }
