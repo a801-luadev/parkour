@@ -8,6 +8,7 @@ local to_do = {}
 local pdataRequest = {}
 local sanctions_file = {}
 local maps_loaded = false
+local sanctions_loaded = false
 
 local function schedule(fileid, save, callback)
 	to_do[#to_do + 1] = { fileid, save, callback }
@@ -154,6 +155,8 @@ onEvent("GameDataLoaded", function(data, fileid)
 				end
 			end
 		end
+
+		sanctions_loaded = true
 	end
 
 	if save or (data.ranking or data.weekly) then
@@ -405,7 +408,7 @@ local function handleMap(player, cmd, quantity, args)
 			end
 			args[i] = mapcode
 		end
-		
+
 		local removeHigh = {}
 		local removeLow = {}
 		local notFound = {}
@@ -467,16 +470,14 @@ local function handleBancount(player, cmd, quantity, args)
 
 		if in_room[requestplayer] then
 			requestplayer = tostring(room.playerList[requestplayer].id)
-		end
-
-		if not requestplayer then
+		else
 			tfm.exec.chatMessage("<v>[#] <r>"..requestplayer.." is not here. Try player id.", player)
 			return
 		end
 	end
 
 	if quantity < 2 then
-		if sanctions_file then
+		if sanctions_loaded then
 			if sanctions_file[requestplayer] and sanctions_file[requestplayer].time then
 
 				local minutes

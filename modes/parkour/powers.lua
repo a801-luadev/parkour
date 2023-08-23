@@ -9,6 +9,15 @@ local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local used_powers = {_count = 0}
 
+local function capitalize(str)
+	local first = string.sub(str, 1, 1)
+	if first == "+" then
+		return "+" .. string.upper(string.sub(str, 2, 2)) .. string.lower(string.sub(str, 3))
+	else
+		return string.upper(first) .. string.lower(string.sub(str, 2))
+	end
+end
+
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
 	if not keybindings[player] then
@@ -459,10 +468,11 @@ powers = {
 		cooldown_img = "18a1f569408.png",
 
 		cooldown = 60000,
-		default = {4, 9}, -- M
+		default = {2, 8}, -- U
 
 		cond = function(player, key, down, x, y)
 			local soulmate = tfm.get.room.playerList[player].spouseName
+			soulmate = soulmate and capitalize(soulmate)
 
 			if not soulmate or not in_room[soulmate] then return false end
 
