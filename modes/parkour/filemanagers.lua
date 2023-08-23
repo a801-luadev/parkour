@@ -41,7 +41,7 @@ local filemanagers = {
 				}
 			}
 		}
-	}):prepare(),
+	}):disableValidityChecks():prepare(),
 
 	["21"] = FileManager.new({
 		type = "dictionary",
@@ -108,39 +108,7 @@ local filemanagers = {
 				}
 			}
 		}
-	}):prepare(),
+	}):disableValidityChecks():prepare(),
 
-	["22"] = FileManager.new({
-		type = "dictionary",
-		map = {
-			{
-				name = "lowmaps",
-				type = "array",
-				objects = {
-					type = "number"
-				}
-			},
-			{
-				name = "sanction",
-				type = "dictionary",
-				objects = {
-					type = "dictionary",
-					map = {
-						{
-							name = "timestamp",
-							type = "number",
-						},
-						{
-							name = "time",
-							type = "number",
-						},
-						{
-							name = "info",
-							type = "string",
-						}
-					}
-				}
-			},
-		}
-	}):prepare(),
+	["23"] = SanctionFileManager,
 }

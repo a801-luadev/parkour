@@ -1,6 +1,7 @@
 [
 	{"type": "require-file", "file": "modes/parkour/command-log.lua"},
 
+	{"type": "require-file", "file": "modes/parkour/sanctionfilemanager.lua"},
 	{"type": "require-file", "file": "modes/parkour/filemanagers.lua"},
 
 	{"type": "require-dir", "dir": "translations/parkour", "recursive": false},

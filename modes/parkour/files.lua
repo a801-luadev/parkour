@@ -22,7 +22,7 @@ local files = {
 
 	[1] = 20, -- maps, ranks, chats
 	[2] = 21, -- ranking, weekly
-	[3] = 22, -- lowmaps, sanction
+	[3] = 23, -- lowmaps, sanction
 }
 local total_files = 3
 local file_index = 1
@@ -346,20 +346,6 @@ onEvent("PlayerDataLoaded", function(player, data)
 			end
 
 			merged.kill = data.kill
-
-			if merged.killed ~= data.killed then
-				merged.killed = data.killed
-				translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
-				if os.time() < data.killed then
-					no_powers[player] = true
-					unbind(player)
-				else
-					no_powers[player] = false
-					if victory[player] then
-						bindNecessary(player)
-					end
-				end
-			end
 
 			local p_badges = data.badges
 			for index = 1, #badges do
