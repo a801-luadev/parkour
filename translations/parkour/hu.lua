@@ -168,6 +168,8 @@ translations.hu = {
 	overall_lb = "Teljes",
 	weekly_lb = "Heti",
 	new_lang = "<v>[#] <d>A játék nyelvét Magyarra változtattad",
+	room = "Szoba",
+	time = "Idő",
 
 	-- Power names
 	balloon = "Léggömb",

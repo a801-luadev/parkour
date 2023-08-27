@@ -44,7 +44,7 @@ do
 				return false
 			end
 			if not data then
-				self:show(player, leaderboard, 0, false)
+				self:show(player, leaderboard, 0, 2)
 				return false
 			end
 			return true
@@ -78,7 +78,15 @@ do
 		}):addTextArea({
 			x = 350, y = 54,
 			width = 105, height = 20,
-			translation = "completed",
+			canUpdate = true,
+			text = function(self, player, data, page, weekly)
+
+				if weekly == 3 then
+					return translatedMessage("time", player)
+				else
+					return translatedMessage("completed", player)
+				end
+			end,
 			alpha = 0
 		})
 
@@ -211,11 +219,12 @@ do
 
 			:onClick(function(self, player, data, page, weekly)
 				local args = self.parent.args[player]
-				self.parent:update(player, args[1], math.min(args[2] + 1, args[3] and 1 or 4), args[3])
+				-- args[3] = weekly, args[2] = page, args[1] = data
+				self.parent:update(player, args[1], math.min(args[2] + 1, args[3] == 1 and 1 or args[3] == 2 and 4 or args[3] == 3 and 0), args[3])
 			end)
 
 			:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
-				if page == (weekly and 1 or 4) then
+				if (page == 1 and weekly == 1) or (page == 4 and weekly == 2) or (page == 0 and weekly == 3) then
 					self:disable(player)
 				else
 					self:enable(player)
@@ -231,31 +240,48 @@ do
 
 			:onClick(function(self, player)
 				local args = self.parent.args[player]
-				self.parent:update(player, leaderboard, 0, false)
+				self.parent:update(player, leaderboard, 0, 2)
 			end):canUpdate(true)
 			:onUpdate(function(self, player, data, page, weekly)
-				if not weekly then
+				if weekly == 2 then
 					self:disable(player)
 				else
 					self:enable(player)
 				end
-			end):setPosition(72, 300):setSize(155, 20)
+			end):setPosition(85, 300):setSize(90, 20)
 		):loadComponent( -- Weekly button
 			Button.new():setTranslation("weekly_lb")
 
 			:onClick(function(self, player)
 				local args = self.parent.args[player]
-				self.parent:update(player, weekleaderboard, 0, true)
+				self.parent:update(player, weekleaderboard, 0, 1)
 			end)
 
 			:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
-				if weekly then
+				if weekly == 1 then
 					self:disable(player)
 				else
 					self:enable(player)
 				end
 			end) 
 
-			:setPosition(242, 300):setSize(155, 20)
+			:setPosition(190, 300):setSize(90, 20)
+		):loadComponent( -- Room button
+			Button.new():setTranslation("room")
+
+			:onClick(function(self, player)
+				local args = self.parent.args[player]
+				self.parent:update(player, roomleaderboard, 0, 3)
+			end)
+
+			:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
+				if weekly == 3 then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end) 
+
+			:setPosition(295, 300):setSize(90, 20)
 		)
 end

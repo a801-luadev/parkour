@@ -168,6 +168,8 @@ translations.cn = {
 	overall_lb = "主要排名",
 	weekly_lb = "每周排名",
 	new_lang = "<v>[#] <d>語言已被更換成 繁體中文",
+	room = "房間",
+	time = "時間",
 
 	-- Power names
 	balloon = "氣球",

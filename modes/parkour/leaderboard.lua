@@ -5,18 +5,24 @@ leaderboard = {}
 weekleaderboard = {}
 -- {id, name, completed_maps, community}
 weeklyfile = {}
+roomleaderboard = {}
 local default_leaderboard_user = {0, nil, 0, "xx"}
 
 local function leaderboardSort(a, b)
 	return a[3] > b[3]
 end
 
+local function roomLeaderboardSort(a, b)
+	return a[3] < b[3]
+end
+
 local remove, sort = table.remove, table.sort
 
-local function checkPlayersPosition(week)
-	local max_lb_rows = week and max_weekleaderboard_rows or max_leaderboard_rows
-	local lb = week and weekleaderboard or leaderboard
-	local totalRankedPlayers = #lb
+local function checkPlayersPosition(lbtype) -- 1 = weekly 2 = overall 3 = room
+	if lbtype == 3 then return end
+	local max_lb_rows = lbtype == 1 and max_weekleaderboard_rows or lbtype == 2 and max_leaderboard_rows
+	local lb = lbtype == 1 and weekleaderboard or lbtype == 2 and leaderboard
+	local totalRankedPlayers = #lb or 0
 	local cachedPlayers = {}
 
 	local playerId, position
@@ -48,7 +54,7 @@ local function checkPlayersPosition(week)
 		playerFile = players_file[player]
 
 		if playerFile then
-			completedMaps = week and playerFile.week[1] or playerFile.c
+			completedMaps = lbtype == 1 and playerFile.week[1] or lbtype == 2 and playerFile.c
 			playerData = room.playerList[player]
 			if playerData then
 				playerId = playerData.id
@@ -79,7 +85,7 @@ local function checkPlayersPosition(week)
 		lb[index] = nil
 	end
 
-	if not week then
+	if lbtype == 2 then
 		local name, badges, badge
 		for pos = 1, #lb do
 			name = lb[pos][2]
@@ -113,7 +119,7 @@ onEvent("GameDataLoaded", function(data)
 
 		leaderboard = data.ranking
 
-		checkPlayersPosition(false)
+		checkPlayersPosition(2)
 	end
 
 	if data.weekly then
@@ -152,6 +158,30 @@ onEvent("GameDataLoaded", function(data)
 		weeklyfile = data.weekly
 		weekleaderboard = data.weekly.ranks
 
-		checkPlayersPosition(true)
+		checkPlayersPosition(1)
+	end
+end)
+
+onEvent("LeaderboardUpdate", function(player, time)
+	local playerData = room.playerList[player]
+	local completedTime = tonumber(time)
+
+	if playerData then
+		local playerId = playerData.id
+		local playerCommunity = playerData.community
+		local playerCount = not #roomleaderboard and 0 or #roomleaderboard
+
+		roomleaderboard[playerCount + 1] = {
+			playerId,
+			player,
+			completedTime,
+			playerCommunity
+		}
+
+		sort(roomleaderboard, roomLeaderboardSort)
+
+		if #roomleaderboard > 14 then
+			roomleaderboard[15] = nil
+		end
 	end
 end)

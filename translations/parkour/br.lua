@@ -167,6 +167,8 @@ translations.br = {
 	overall_lb = "Geral",
 	weekly_lb = "Semanal",
 	new_lang = "<v>[#] <d>Idioma definido para Português",
+	room = "Sala",
+	time = "Tempo",
 
 	-- Power names
 	balloon = "Balão",

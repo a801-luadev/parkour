@@ -168,6 +168,8 @@ translations.es = {
 	overall_lb = "General",
 	weekly_lb = "Semanal",
 	new_lang = "<v>[#] <d>Lenguaje cambiado a Español",
+	room = "Sala",
+	time = "Tiempo",
 
 	-- Power names
 	balloon = "Globo",

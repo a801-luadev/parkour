@@ -168,6 +168,8 @@ translations.id = {
     overall_lb = "Keseluruhan",
     weekly_lb = "Mingguan",
     new_lang = "<v>[#] <d>Bahasa telah diubah ke Bahasa Indonesia",
+    room = "Ruangan",
+    time = "Waktu",
 
     -- Power names
     balloon = "Balon",

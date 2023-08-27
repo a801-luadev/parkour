@@ -168,6 +168,8 @@ translations.pl = {
 	overall_lb = "Ogólnie",
 	weekly_lb = "Co tydzień",
 	new_lang = "<v>[#] <d>Ustawiono język Polski",
+	room = "Pokój",
+	time = "Czas",
 
 	-- Power names
 	balloon = "Balon",

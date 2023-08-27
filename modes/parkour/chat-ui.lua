@@ -124,6 +124,8 @@ onEvent("PlayerWon", function(player)
 		end
 	end
 
+	eventLeaderboardUpdate(player, taken)
+
 	if records_admins then
 		tfm.exec.chatMessage(
 			"<v>[#] <d>" .. room.currentMap .. " - CP: " ..

@@ -168,6 +168,8 @@ translations.fr = {
 	overall_lb = "Permanent",
 	weekly_lb = "Hebdomadaire",
 	new_lang = "<v>[#] <d>Langue changée vers Français",
+	room = "Salon",
+	time = "Temps",
 
 	-- Power names
 	balloon = "Ballon",

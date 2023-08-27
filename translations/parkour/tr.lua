@@ -169,6 +169,8 @@ translations.tr = {
 	overall_lb = "Genel",
 	weekly_lb = "Haftalık",
 	new_lang = "<v>[#] <d>Diliniz Türkçe olarak ayarlandı",
+	room = "Oda",
+	time = "Süre",
 
 	-- Power names
 	balloon = "Balon",

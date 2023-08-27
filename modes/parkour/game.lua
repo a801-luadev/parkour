@@ -315,6 +315,8 @@ onEvent("PlayerRespawn", function(player)
 		and records_admins) then
 		tfm.exec.freezePlayer(player, true)
 	end
+	
+	tfm.exec.linkMice(player, player, false)
 
 	local level = levels[ players_level[player] ]
 	if not level then return end
@@ -322,6 +324,7 @@ onEvent("PlayerRespawn", function(player)
 end)
 
 onEvent("NewGame", function()
+	roomleaderboard = {}
 	check_position = 6
 	victory_count = 0
 	victory = {_last_level = {}}
@@ -437,8 +440,7 @@ onEvent("Loop", function()
 
 						if level_id == last_level then
 							translatedChatMessage("reached_level", name, level_id-1, taken)
-							if victory[name] then -- !cp
-							else
+							if not victory[name] then -- !cp
 								victory._last_level[name] = true
 								tfm.exec.giveCheese(name)
 								tfm.exec.playerVictory(name)
@@ -482,8 +484,7 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 
 	if bonus == #levels then
 		translatedChatMessage("reached_level", player, bonus-1, taken)
-		if victory[player] then -- !cp
-		else
+		if not victory[player] then -- !cp
 			victory._last_level[player] = true
 			tfm.exec.giveCheese(player)
 			tfm.exec.playerVictory(player)
