@@ -154,6 +154,7 @@ translations.cn = {
 	yes = "是",
 	no = "不是",
 	idk = "我不知道",
+	vote_map = "<font color='#ffffff' size='13'><b>你喜歡這地圖嗎? <font size='14'><a href='event:mapPollYes'><PT>是</a> <a href='event:mapPollidk'><N>我不知道</a> <a href='event:mapPollNo'><R>不是</a>",
 	unknown = "不明物",
 	powers = "能力",
 	press = "<vp>按 %s",

@@ -154,6 +154,7 @@ translations.pl = {
 	yes = "Tak",
 	no = "Nie",
 	idk = "Nie wiem",
+	vote_map = "<font color='#ffffff' size='13'><b>Podoba ci się ta mapa? <font size='14'><a href='event:mapPollYes'><PT>Tak</a> <a href='event:mapPollidk'><N>Nie wiem</a> <a href='event:mapPollNo'><R>Nie</a>",
 	unknown = "Nieznany",
 	powers = "Moce",
 	press = "<vp>Naciśnij %s",

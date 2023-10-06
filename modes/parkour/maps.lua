@@ -139,6 +139,8 @@ local function newMap()
 	count_stats = not review_mode
 	map_change_cd = os.time() + 20000
 
+	if review_mode then return end
+
 	local map
 	if math.random((maps.low_count + maps.high_count * 2) * 1000000) <= (maps.low_count * 1000000) then -- 1/3
 		map = selectMap(maps.sections_low, maps.list_low, maps.low_count)
@@ -342,13 +344,22 @@ onEvent("NewGame", function()
 end)
 
 local function checkMapBug()
-    for _, player in next, room.playerList do
-        if player.x ~= 0 or player.y ~= 0 then
-            return
-        end
-    end
-    newMap()
-    tfm.exec.chatMessage("<v>[#] <r>Looks like there is an issue with the map, just skipping.", nil)
+	local mouseCount = 0
+	local glitchedMouseCount = 0
+
+	for _, player in next, room.playerList do
+		mouseCount = mouseCount + 1
+		if player.x == 0 and player.y == 0 then
+			glitchedMouseCount = glitchedMouseCount + 1
+		end
+	end
+
+	if glitchedMouseCount < mouseCount / 2 then
+		return
+	end
+	
+	newMap()
+	tfm.exec.chatMessage("<v>[#] <r>Looks like there is an issue with the map, just skipping.", nil)
 end
 
 local mapbug_counter = 0  

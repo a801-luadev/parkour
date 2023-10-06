@@ -153,6 +153,7 @@ translations.ro = {
 	yes = "Da",
 	no = "Nu",
 	idk = "Nu știu bro, nu-s de aici",
+	vote_map = "<font color='#ffffff' size='13'><b>Îți place această hartă? <font size='14'><a href='event:mapPollYes'><PT>Da</a> <a href='event:mapPollidk'><N>Nu știu</a> <a href='event:mapPollNo'><R>Nu</a>",
 	unknown = "Necunoscut",
 	powers = "Puteri",
 	press = "<vp>Apasă %s",

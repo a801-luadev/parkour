@@ -154,6 +154,7 @@ translations.id = {
     yes = "Ya",
     no = "Tidak",
     idk = "Tidak tahu",
+    vote_map = "<font color='#ffffff' size='13'><b>Apakah anda menyukai peta ini? <font size='14'><a href='event:mapPollYes'><PT>Ya</a> <a href='event:mapPollidk'><N>Tidak tahu</a> <a href='event:mapPollNo'><R>Tidak</a>",
     unknown = "Tidak diketahui",
     powers = "Kemampuan",
     press = "<vp>Tekan %s",

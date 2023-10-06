@@ -8,6 +8,7 @@ local cooldowns = {}
 local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local used_powers = {_count = 0}
+local map_review = false
 
 local function capitalize(str)
 	local first = string.sub(str, 1, 1)
@@ -850,7 +851,7 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 
 	if victory[player] then
-		if not no_powers[player] then
+		if not no_powers[player] and not map_review then
 			bindNecessary(player)
 		end
 	else
@@ -869,7 +870,7 @@ onEvent("PlayerDataUpdated", function(player, data)
 			unbind(player)
 		end
 		translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
-	elseif no_powers[player] then
+	elseif no_powers[player] and map_review == false then
 		no_powers[player] = nil
 		if victory[player] then
 			bindNecessary(player)
@@ -940,7 +941,7 @@ onEvent("PlayerWon", function(player)
 		savePlayerData(player)
 	end
 
-	if not no_powers[player] then
+	if not no_powers[player] and not map_review then
 		bindNecessary(player)
 	end
 end)
@@ -992,3 +993,36 @@ onEvent("NewGame", function()
 		unbind(player)
 	end
 end)
+
+onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
+	if not ranks.admin[player] and not ranks.mapper[player] and not ranks.manager[player] then
+		return
+	end
+
+	if cmd == "disablepowers" then
+		for player in pairs(room.playerList) do
+			map_review = true
+			no_powers[player] = true
+			unbind(player)
+		end
+		tfm.exec.chatMessage("<J>Powers disabled.")
+	elseif cmd == "enablepowers" then
+		for player in pairs(room.playerList) do
+			map_review = false
+			no_powers[player] = nil
+			bindNecessary(player)
+		end
+		tfm.exec.chatMessage("<J>Powers enabled.")
+	end
+	
+end)
+
+onEvent("NewPlayer", function(player)
+	if map_review then
+		no_powers[player] = true
+		unbind(player)
+	else
+		return
+	end
+end)
+

@@ -149,6 +149,7 @@ translations.he = {
 	yes = "כן",
 	no = "לא",
 	idk = "לא יודע",
+	vote_map = "<font color='#ffffff' size='13'><b>האם אתה אוהב את המפה הזו? <font size='14'><a href='event:mapPollYes'><PT>כן</a> <a href='event:mapPollidk'><N>לא יודע</a> <a href='event:mapPollNo'><R>לא</a>",
 	unknown = "לא ידוע",
 	powers = "כוחות",
 	press = "<vp>לחץ %s",

@@ -154,6 +154,7 @@ translations.fr = {
 	yes = "Oui",
 	no = "Non",
 	idk = "Je ne sais pas",
+	vote_map = "<font color='#ffffff' size='13'><b>Aimez-vous cette carte? <font size='14'><a href='event:mapPollYes'><PT>Oui</a> <a href='event:mapPollidk'><N>Je ne sais pas</a> <a href='event:mapPollNo'><R>Non</a>",
 	unknown = "Inconnu",
 	powers = "Pouvoirs",
 	press = "<vp>Appuyer sur %s",

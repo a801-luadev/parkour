@@ -154,6 +154,7 @@ translations.hu = {
 	yes = "Igen",
 	no = "Nem",
 	idk = "Nem tudom",
+	vote_map = "<font color='#ffffff' size='13'><b>Tetszik ez a pálya? <font size='14'><a href='event:mapPollYes'><PT>Igen</a> <a href='event:mapPollidk'><N>Nem tudom</a> <a href='event:mapPollNo'><R>Nem</a>",
 	unknown = "Ismeretlen",
 	powers = "Képességek",
 	press = "<vp>Nyomd meg: %s",

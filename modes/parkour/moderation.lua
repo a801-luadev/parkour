@@ -212,10 +212,12 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 				minutes = 43200
 			else
 				time = 2 -- permanent ban
+				minutes = 2
 			end
 		elseif time == -1 then
 			sanctionLevel = math.max(0, sanctionLevel - 1)
 			time = 0
+			minutes = 0
 		end
 
 		data.sanction[playerID] = {
@@ -225,11 +227,12 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 			level = sanctionLevel
 		}
 
+		sendPacket("common", 9, playerName .. "\000" .. time .. "\000" .. moderator .. "\000" .. minutes)
 		sendBanLog(playerName, time, moderator, minutes)
 	end)
 end
 
-local function logCommand(p, command, args)
+local function inGameLogCommand(p, command, args)
 	local commandtext = table.concat(args, " ")
 	for playername, player in pairs(tfm.get.room.playerList) do
 		if ranks.admin[playername] or ranks.mod[playername] then
@@ -247,11 +250,13 @@ local function handleBan(player, cmd, quantity, args)
 		return translatedChatMessage("invalid_syntax", player)
 	end
 
-	logCommand(player, cmd, args)
+	inGameLogCommand(player, cmd, args)
 
 	local targetPlayer = args[1]
 	local moderator = player
 	local time = cmd == 'ban' and 1 or -1 -- ban time changes depending on players previous bans
+
+	logCommand(player, cmd, math.min(quantity, 2), args)
 
 	-- Ban by player id
 	if tonumber(targetPlayer) then
@@ -344,7 +349,14 @@ local function handleMap(player, cmd, quantity, args)
 	end
 
 	local addmap = cmd == "addmap" and true or false
-	logCommand(player, cmd, args)
+
+	inGameLogCommand(player, cmd, args)
+
+	if addmap then
+		logCommand(player, "addmap", math.min(quantity, 3), args)
+	else
+		logCommand(player, "removemap", math.min(quantity, 2), args)
+	end
 
 	if not maps_loaded then
 		tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds.", player)
@@ -539,7 +551,7 @@ local function warnPlayer(player, cmd, quantity, args)
 		return
 	end
 
-	logCommand(player, cmd, args)
+	inGameLogCommand(player, cmd, args)
 
 	if quantity < 2 then
 		translatedChatMessage("invalid_syntax", player)
@@ -556,6 +568,11 @@ local function warnPlayer(player, cmd, quantity, args)
 	
 	if not string.find(requestplayer, "#", 1, true) then
 		requestplayer = requestplayer .. "#0000"
+	end
+
+	if not ranks.admin[player] then
+		logCommand(player, "kill", math.min(quantity, 2), args)
+		sendPacket("common", 10, requestplayer .. "\000" .. killedTime .. "\000" .. player)
 	end
 
 	schedule_player(requestplayer, true, function(pdata)
@@ -752,6 +769,15 @@ local function fileActions(player, cmd, quantity, args)
 	end
 end
 
+function roomAnnouncement(player, cmd, quantity, args)
+	if not ranks.admin[player] and not ranks.manager[player] then
+		return
+	end
+
+	local announcementtext = table.concat(args, " ")
+	tfm.exec.chatMessage("<ROSE>Ξ [Parkour] <N>"..announcementtext)
+end
+
 local commandDispatch = {
 	["ban"] = handleBan,
 	["unban"] = handleBan,
@@ -763,7 +789,8 @@ local commandDispatch = {
 	["setrank"] = handleSetrank,
 	["baninfo"] = handleBanInfo,
 	["file"] = fileActions,
-	["kill"] = warnPlayer
+	["kill"] = warnPlayer,
+	["announcement"] = roomAnnouncement,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)

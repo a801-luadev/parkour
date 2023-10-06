@@ -153,6 +153,7 @@ translations.br = {
 	yes = "Sim",
 	no = "Não",
 	idk = "Não sei",
+	vote_map = "<font color='#ffffff' size='13'><b>Você gosta deste mapa? <font size='14'><a href='event:mapPollYes'><PT>Sim</a> <a href='event:mapPollidk'><N>Não sei</a> <a href='event:mapPollNo'><R>Não</a>",
 	unknown = "Desconhecido",
 	powers = "Poderes",
 	press = "<vp>Aperte %s",

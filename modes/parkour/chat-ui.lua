@@ -69,35 +69,6 @@ onEvent("PlayerWon", function(player)
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (times.generated[player] or times.map_start)) / 1000
 
-	if not records_admins and count_stats and not review_mode and not is_tribe then
-		local map = tonumber((string.gsub(room.currentMap, "@", "", 1)))
-		local packedTime = taken * 1000
-		local band, rshift = bit32.band, bit32.rshift
-
-		sendPacket("victory", -1, string.char(
-			rshift(id, 7 * 3),
-			rshift(id, 7 * 2) % 0x80,
-			rshift(id, 7 * 1) % 0x80,
-			id % 0x80,
-
-			rshift(map, 7 * 3),
-			rshift(map, 7 * 2) % 0x80,
-			rshift(map, 7 * 1) % 0x80,
-			map % 0x80,
-
-			rshift(packedTime, 7 * 2),
-			rshift(packedTime, 7 * 1) % 0x80,
-			packedTime % 0x80,
-
-			(#levels - 1), -- total checkpoints in the map
-
-			rshift(file.cc, 7 * 1),
-			file.cc % 0x80, -- has to be 24b if it goes above 60k
-
-			rshift(file.tc, 7 * 1),
-			file.tc % 0x80-- has to be 24b if it goes above 60k
-		) .. player .. "\000")
-	end
 	if not fastest.record or taken < fastest.record then
 		local old = fastest.player
 
@@ -221,16 +192,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		fastest.submitted = true
 		fastest.wait_send = true
-		sendPacket(
-			"common", 6,
-			(map .. "\000" ..
-				player .. "\000" ..
-				room.playerList[player].id .. "\000" ..
-				math.floor(fastest.record * 100) .. "\000" ..
-				room.shortName .. "\000" ..
-				checkpoint_info.version)
-		)
-		tfm.exec.chatMessage("<v>[#] <d>Your record will be submitted shortly.", player)
+		
+		tfm.exec.chatMessage("<v>[#] <d>You can't send record with this way, check Records Discord server: https://discord.gg/zbjVYAxYzp", player)
 
 	elseif cmd == "pause" then -- logged
 		if not ranks.admin[player] then return end
