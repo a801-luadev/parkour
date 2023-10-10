@@ -201,7 +201,7 @@ onEvent("NewPlayer", function(player)
 		end
 	end
 
-	if records_admins then
+	if records_admins or review_mode then
 		bindKeyboard(player, 66, true, true) -- B key
 	end
 
@@ -225,7 +225,7 @@ onEvent("Keyboard", function(player, key)
 			AfkInterface:remove(player)
 		end
 
-	elseif records_admins and key == 66 then
+	elseif (records_admins or review_mode) and key == 66 then
 		if checkCooldown(player, "redo_key", 500) then
 			eventParsedChatCommand(player, "redo")
 		end
@@ -503,6 +503,7 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 
 	if level.stop then
 		tfm.exec.movePlayer(player, 0, 0, true, 1, 1, false)
+		tfm.exec.killPlayer(player)
 	end
 end)
 
@@ -523,8 +524,14 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		review_mode = not review_mode
 		if review_mode then
 			tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
+			for playername, player in pairs(tfm.get.room.playerList) do
+				bindKeyboard(playername, 66, true, true)
+			end
 		else
 			tfm.exec.chatMessage("<v>[#] <d>Review mode disabled by " .. player .. ".")
+			for playername, player in pairs(tfm.get.room.playerList) do
+				bindKeyboard(playername, 66, true, false)
+			end
 		end
 		showStats()
 
@@ -597,7 +604,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.setGameTime(time)
 
 	elseif cmd == "redo" then
-		if not records_admins or not times.generated[player] then return end
+		if not (records_admins or review_mode) or not times.generated[player] then return end
 
 		if checkpoint_info.version == 1 then
 			tfm.exec.removeBonus(players_level[player] + 1, player)
