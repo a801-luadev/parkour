@@ -1672,6 +1672,8 @@ local function initialize_parkour() -- so it uses less space after building
 	    overall_lb = "Keseluruhan",
 	    weekly_lb = "Mingguan",
 	    new_lang = "<v>[#] <d>Bahasa telah diubah ke Bahasa Indonesia",
+	    room = "Ruangan",
+	    time = "Waktu",
 
 	    -- Power names
 	    balloon = "Balon",
@@ -2059,6 +2061,8 @@ local function initialize_parkour() -- so it uses less space after building
 		overall_lb = "Teljes",
 		weekly_lb = "Heti",
 		new_lang = "<v>[#] <d>A játék nyelvét Magyarra változtattad",
+		room = "Szoba",
+		time = "Idő",
 
 		-- Power names
 		balloon = "Léggömb",
@@ -2449,6 +2453,8 @@ local function initialize_parkour() -- so it uses less space after building
 		overall_lb = "Ogólnie",
 		weekly_lb = "Co tydzień",
 		new_lang = "<v>[#] <d>Ustawiono język Polski",
+		room = "Pokój",
+		time = "Czas",
 
 		-- Power names
 		balloon = "Balon",
@@ -2645,6 +2651,8 @@ local function initialize_parkour() -- so it uses less space after building
 		overall_lb = "Permanent",
 		weekly_lb = "Hebdomadaire",
 		new_lang = "<v>[#] <d>Langue changée vers Français",
+		room = "Salon",
+		time = "Temps",
 
 		-- Power names
 		balloon = "Ballon",
@@ -3030,6 +3038,8 @@ local function initialize_parkour() -- so it uses less space after building
 		overall_lb = "主要排名",
 		weekly_lb = "每周排名",
 		new_lang = "<v>[#] <d>語言已被更換成 繁體中文",
+		room = "房間",
+		time = "時間",
 
 		-- Power names
 		balloon = "氣球",
@@ -3226,6 +3236,8 @@ local function initialize_parkour() -- so it uses less space after building
 		overall_lb = "Geral",
 		weekly_lb = "Semanal",
 		new_lang = "<v>[#] <d>Idioma definido para Português",
+		room = "Sala",
+		time = "Tempo",
 
 		-- Power names
 		balloon = "Balão",
@@ -3423,6 +3435,8 @@ local function initialize_parkour() -- so it uses less space after building
 		overall_lb = "Genel",
 		weekly_lb = "Haftalık",
 		new_lang = "<v>[#] <d>Diliniz Türkçe olarak ayarlandı",
+		room = "Oda",
+		time = "Süre",
 
 		-- Power names
 		balloon = "Balon",
@@ -3618,6 +3632,8 @@ local function initialize_parkour() -- so it uses less space after building
 		overall_lb = "Overall",
 		weekly_lb = "Weekly",
 		new_lang = "<v>[#] <d>Language set to English",
+		room = "Room",
+		time = "Time",
 
 		-- Power names
 		balloon = "Balloon",
@@ -3813,6 +3829,8 @@ local function initialize_parkour() -- so it uses less space after building
 		overall_lb = "General",
 		weekly_lb = "Semanal",
 		new_lang = "<v>[#] <d>Lenguaje cambiado a Español",
+		room = "Sala",
+		time = "Tiempo",
 
 		-- Power names
 		balloon = "Globo",
@@ -4651,12 +4669,15 @@ local function initialize_parkour() -- so it uses less space after building
 			tfm.exec.freezePlayer(player, true)
 		end
 
+		tfm.exec.linkMice(player, player, false)
+
 		local level = levels[ players_level[player] ]
 		if not level then return end
 		tfm.exec.movePlayer(player, level.x, level.y)
 	end)
 
 	onEvent("NewGame", function()
+		roomleaderboard = {}
 		check_position = 6
 		victory_count = 0
 		victory = {_last_level = {}}
@@ -4772,8 +4793,7 @@ local function initialize_parkour() -- so it uses less space after building
 
 							if level_id == last_level then
 								translatedChatMessage("reached_level", name, level_id-1, taken)
-								if victory[name] then -- !cp
-								else
+								if not victory[name] then -- !cp
 									victory._last_level[name] = true
 									tfm.exec.giveCheese(name)
 									tfm.exec.playerVictory(name)
@@ -4817,8 +4837,7 @@ local function initialize_parkour() -- so it uses less space after building
 
 		if bonus == #levels then
 			translatedChatMessage("reached_level", player, bonus-1, taken)
-			if victory[player] then -- !cp
-			else
+			if not victory[player] then -- !cp
 				victory._last_level[player] = true
 				tfm.exec.giveCheese(player)
 				tfm.exec.playerVictory(player)
@@ -6655,18 +6674,24 @@ local function initialize_parkour() -- so it uses less space after building
 	weekleaderboard = {}
 	-- {id, name, completed_maps, community}
 	weeklyfile = {}
+	roomleaderboard = {}
 	local default_leaderboard_user = {0, nil, 0, "xx"}
 
 	local function leaderboardSort(a, b)
 		return a[3] > b[3]
 	end
 
+	local function roomLeaderboardSort(a, b)
+		return a[3] < b[3]
+	end
+
 	local remove, sort = table.remove, table.sort
 
-	local function checkPlayersPosition(week)
-		local max_lb_rows = week and max_weekleaderboard_rows or max_leaderboard_rows
-		local lb = week and weekleaderboard or leaderboard
-		local totalRankedPlayers = #lb
+	local function checkPlayersPosition(lbtype) -- 1 = weekly 2 = overall 3 = room
+		if lbtype == 3 then return end
+		local max_lb_rows = lbtype == 1 and max_weekleaderboard_rows or lbtype == 2 and max_leaderboard_rows
+		local lb = lbtype == 1 and weekleaderboard or lbtype == 2 and leaderboard
+		local totalRankedPlayers = #lb or 0
 		local cachedPlayers = {}
 
 		local playerId, position
@@ -6698,7 +6723,7 @@ local function initialize_parkour() -- so it uses less space after building
 			playerFile = players_file[player]
 
 			if playerFile then
-				completedMaps = week and playerFile.week[1] or playerFile.c
+				completedMaps = lbtype == 1 and playerFile.week[1] or lbtype == 2 and playerFile.c
 				playerData = room.playerList[player]
 				if playerData then
 					playerId = playerData.id
@@ -6729,7 +6754,7 @@ local function initialize_parkour() -- so it uses less space after building
 			lb[index] = nil
 		end
 
-		if not week then
+		if lbtype == 2 then
 			local name, badges, badge
 			for pos = 1, #lb do
 				name = lb[pos][2]
@@ -6763,7 +6788,7 @@ local function initialize_parkour() -- so it uses less space after building
 
 			leaderboard = data.ranking
 
-			checkPlayersPosition(false)
+			checkPlayersPosition(2)
 		end
 
 		if data.weekly then
@@ -6802,7 +6827,31 @@ local function initialize_parkour() -- so it uses less space after building
 			weeklyfile = data.weekly
 			weekleaderboard = data.weekly.ranks
 
-			checkPlayersPosition(true)
+			checkPlayersPosition(1)
+		end
+	end)
+
+	onEvent("LeaderboardUpdate", function(player, time)
+		local playerData = room.playerList[player]
+		local completedTime = tonumber(time)
+
+		if playerData then
+			local playerId = playerData.id
+			local playerCommunity = playerData.community
+			local playerCount = not #roomleaderboard and 0 or #roomleaderboard
+
+			roomleaderboard[playerCount + 1] = {
+				playerId,
+				player,
+				completedTime,
+				playerCommunity
+			}
+
+			sort(roomleaderboard, roomLeaderboardSort)
+
+			if #roomleaderboard > 14 then
+				roomleaderboard[15] = nil
+			end
 		end
 	end)
 	--[[ End of file modes/parkour/leaderboard.lua ]]--
@@ -6932,6 +6981,8 @@ local function initialize_parkour() -- so it uses less space after building
 				translatedChatMessage("finished", _player, player, taken)
 			end
 		end
+
+		eventLeaderboardUpdate(player, taken)
 
 		if records_admins then
 			tfm.exec.chatMessage(
@@ -9569,7 +9620,7 @@ local function initialize_parkour() -- so it uses less space after building
 					return false
 				end
 				if not data then
-					self:show(player, leaderboard, 0, false)
+					self:show(player, leaderboard, 0, 2)
 					return false
 				end
 				return true
@@ -9603,7 +9654,15 @@ local function initialize_parkour() -- so it uses less space after building
 			}):addTextArea({
 				x = 350, y = 54,
 				width = 105, height = 20,
-				translation = "completed",
+				canUpdate = true,
+				text = function(self, player, data, page, weekly)
+
+					if weekly == 3 then
+						return translatedMessage("time", player)
+					else
+						return translatedMessage("completed", player)
+					end
+				end,
 				alpha = 0
 			})
 
@@ -9736,11 +9795,12 @@ local function initialize_parkour() -- so it uses less space after building
 
 				:onClick(function(self, player, data, page, weekly)
 					local args = self.parent.args[player]
-					self.parent:update(player, args[1], math.min(args[2] + 1, args[3] and 1 or 4), args[3])
+					-- args[3] = weekly, args[2] = page, args[1] = data
+					self.parent:update(player, args[1], math.min(args[2] + 1, args[3] == 1 and 1 or args[3] == 2 and 4 or args[3] == 3 and 0), args[3])
 				end)
 
 				:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
-					if page == (weekly and 1 or 4) then
+					if (page == 1 and weekly == 1) or (page == 4 and weekly == 2) or (page == 0 and weekly == 3) then
 						self:disable(player)
 					else
 						self:enable(player)
@@ -9756,32 +9816,49 @@ local function initialize_parkour() -- so it uses less space after building
 
 				:onClick(function(self, player)
 					local args = self.parent.args[player]
-					self.parent:update(player, leaderboard, 0, false)
+					self.parent:update(player, leaderboard, 0, 2)
 				end):canUpdate(true)
 				:onUpdate(function(self, player, data, page, weekly)
-					if not weekly then
+					if weekly == 2 then
 						self:disable(player)
 					else
 						self:enable(player)
 					end
-				end):setPosition(72, 300):setSize(155, 20)
+				end):setPosition(85, 300):setSize(90, 20)
 			):loadComponent( -- Weekly button
 				Button.new():setTranslation("weekly_lb")
 
 				:onClick(function(self, player)
 					local args = self.parent.args[player]
-					self.parent:update(player, weekleaderboard, 0, true)
+					self.parent:update(player, weekleaderboard, 0, 1)
 				end)
 
 				:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
-					if weekly then
+					if weekly == 1 then
 						self:disable(player)
 					else
 						self:enable(player)
 					end
 				end)
 
-				:setPosition(242, 300):setSize(155, 20)
+				:setPosition(190, 300):setSize(90, 20)
+			):loadComponent( -- Room button
+				Button.new():setTranslation("room")
+
+				:onClick(function(self, player)
+					local args = self.parent.args[player]
+					self.parent:update(player, roomleaderboard, 0, 3)
+				end)
+
+				:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
+					if weekly == 3 then
+						self:disable(player)
+					else
+						self:enable(player)
+					end
+				end)
+
+				:setPosition(295, 300):setSize(90, 20)
 			)
 	end
 	--[[ End of file modes/parkour/interfaces/leaderboard.lua ]]--
