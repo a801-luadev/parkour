@@ -55,6 +55,7 @@ local ranks_permissions = {
 		load_custom_map = true,
 		enable_review = true,
 		hide = true,
+		spectate = true,
 		start_round_poll = true,
 		see_map_polls = true,
 		set_map_time_review = true
