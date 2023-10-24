@@ -171,11 +171,14 @@ translations.hu = {
 	new_lang = "<v>[#] <d>A játék nyelvét Magyarra változtattad",
 	room = "Szoba",
 	time = "Idő",
+	buy = "Buy",
+	equip = "Equip",
+	equipped = "<font size = '10'>Equipped</font>",
 
 	-- Power names
 	balloon = "Léggömb",
-	masterBalloon = "Mester Léggömb",
-	bubble = "Buborék",
+	masterBalloon = "Léggömb II",
+	bubble = "Léggömb III",
 	fly = "Repülés",
 	snowball = "Hógolyó",
 	speed = "Gyorsítás",

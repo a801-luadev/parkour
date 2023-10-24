@@ -244,6 +244,13 @@ local data_migrations = {
 		data.lastsanction = nil
 		data.bannedby = nil
 		--data.playerid = tfm.get.room.playerList[player].id
+	end,
+	[5] = function(player, data)
+		data.v = 6
+
+		data.coins = math.floor(data.c * 0.10)
+		data.skins = { ["1"] = 1, ["2"] = 1, ["7"] = 1, ["28"] = 1, ["46"] = 1 }
+		data.cskins = { 1, 2, 7, 28, 46 }
 	end
 }
 

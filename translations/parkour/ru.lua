@@ -164,11 +164,16 @@ translations.ru = {
 	overall_lb = "В целом",
 	weekly_lb = "Еженедельно",
 	new_lang = "<v>[#] <d>Язык установлен на Русский",
+	room = "Room",
+	time = "Time",
+	buy = "Buy",
+	equip = "Equip",
+	equipped = "<font size = '10'>Equipped</font>",
 
 	-- Power names
 	balloon = "Шар",
-	masterBalloon = "Мастер шар",
-	bubble = "Пузырь",
+	masterBalloon = "МШар II",
+	bubble = "Шар III",
 	fly = "Полет",
 	snowball = "Снежок",
 	speed = "Скорость",

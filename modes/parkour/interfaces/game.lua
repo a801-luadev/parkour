@@ -2,6 +2,7 @@ do
 	local settings_img = "1713705576b.png"
 	local powers_img = "17136ef539e.png"
 	local help_img = "17136f9eefd.png"
+	local shop_img = "18b597a932a.png"
 
 	GameInterface = Interface.new(0, 0, 800, 400, true)
 		:addImage({
@@ -12,6 +13,19 @@ do
 		:addTextArea({
 			text = "<a href='event:settings'><font size='50'>  </font></a>",
 			x = 767, y = 32,
+			height = 30, width = 32,
+			alpha = 0
+		})
+
+		:addImage({
+			image = shop_img,
+			target = ":1",
+			x = 744, y = 32
+		})
+
+		:addTextArea({
+			text = "<a href='event:shop_button'><font size='50'>  </font></a>",
+			x = 739, y = 32,
 			height = 30, width = 32,
 			alpha = 0
 		})
@@ -29,7 +43,7 @@ do
 				end
 			end,
 			target = ":1",
-			x = 744, y = 32
+			x = 714, y = 32
 		})
 		:addTextArea({
 			canUpdate = true,
@@ -43,7 +57,7 @@ do
 					return ""
 				end
 			end,
-			x = 739, y = 32,
+			x = 709, y = 32,
 			height = 30, width = 32,
 			alpha = 0
 		})
@@ -59,7 +73,7 @@ do
 				end
 			end,
 			target = ":1",
-			x = 714, y = 32
+			x = 684, y = 32
 		})
 		:addTextArea({
 			canUpdate = true,
@@ -71,7 +85,7 @@ do
 					return ""
 				end
 			end,
-			x = 709, y = 32,
+			x = 679, y = 32,
 			height = 30, width = 32,
 			alpha = 0
 		})

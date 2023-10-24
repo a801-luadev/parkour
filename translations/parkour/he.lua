@@ -164,11 +164,16 @@ translations.he = {
 	overall_lb = "כללי",
 	weekly_lb = "שבועי",
 	new_lang = "<v>[#] <d>השפה הוגדרה ל-עברית",
+	room = "Room",
+	time = "Time",
+	buy = "Buy",
+	equip = "Equip",
+	equipped = "<font size = '10'>Equipped</font>",
 
 	-- Power names
 	balloon = "בלון",
-	masterBalloon = "מאסטר בלון",
-	bubble = "בועה",
+	masterBalloon = "בלון II",
+	bubble = "בלון III",
 	fly = "תעופה",
 	snowball = "כדור שלג",
 	speed = "מהירות",

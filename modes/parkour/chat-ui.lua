@@ -282,6 +282,15 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			file.migrated = true
 			tfm.exec.chatMessage("<v>[#] <d>given migration flag to " .. target, player)
 
+		elseif thing == "coins" then
+			local coin_count = args[3]
+			if not tonumber(coin_count) then
+				tfm.exec.chatMessage("<v>[#] <d> doesnt look like a number", player)
+			end
+
+			file.coins = file.coins + coin_count
+			tfm.exec.chatMessage("<v>[#] <d>" .. target .. "'s new coin count: " .. file.coins, player)
+
 		elseif thing == "namecolor" then
 			if not perms[player].set_name_color then
 				return tfm.exec.chatMessage("<v>[#] <r>u cant set a player's namecolor", player)

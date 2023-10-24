@@ -171,11 +171,14 @@ translations.fr = {
 	new_lang = "<v>[#] <d>Langue changée vers Français",
 	room = "Salon",
 	time = "Temps",
+	buy = "Buy",
+	equip = "Equip",
+	equipped = "<font size = '10'>Equipped</font>",
 
 	-- Power names
 	balloon = "Ballon",
-	masterBalloon = "Ballon Maître",
-	bubble = "Bulle",
+	masterBalloon = "Ballon II",
+	bubble = "Ballon III",
 	fly = "Voler",
 	snowball = "Boule de neige",
 	speed = "Accélération",

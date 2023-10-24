@@ -201,7 +201,7 @@ onEvent("NewPlayer", function(player)
 		end
 	end
 
-	if records_admins or review_mode then
+	if records_admins then
 		bindKeyboard(player, 66, true, true) -- B key
 	end
 
@@ -225,7 +225,7 @@ onEvent("Keyboard", function(player, key)
 			AfkInterface:remove(player)
 		end
 
-	elseif (records_admins or review_mode) and key == 66 then
+	elseif records_admins and key == 66 then
 		if checkCooldown(player, "redo_key", 500) then
 			eventParsedChatCommand(player, "redo")
 		end
@@ -524,14 +524,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		review_mode = not review_mode
 		if review_mode then
 			tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
-			for playername, player in pairs(tfm.get.room.playerList) do
-				bindKeyboard(playername, 66, true, true)
-			end
 		else
 			tfm.exec.chatMessage("<v>[#] <d>Review mode disabled by " .. player .. ".")
-			for playername, player in pairs(tfm.get.room.playerList) do
-				bindKeyboard(playername, 66, true, false)
-			end
 		end
 		showStats()
 

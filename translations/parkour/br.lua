@@ -170,11 +170,14 @@ translations.br = {
 	new_lang = "<v>[#] <d>Idioma definido para Português",
 	room = "Sala",
 	time = "Tempo",
+	buy = "Buy",
+	equip = "Equip",
+	equipped = "<font size = '10'>Equipped</font>",
 
 	-- Power names
 	balloon = "Balão",
-	masterBalloon = "Balão Mestre",
-	bubble = "Bolha",
+	masterBalloon = "Balão II",
+	bubble = "Balão III",
 	fly = "Voar",
 	snowball = "Bola de Neve",
 	speed = "Velocidade",

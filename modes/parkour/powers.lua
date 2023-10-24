@@ -233,7 +233,19 @@ powers = {
 		default = {2, 2}, -- Q, A
 
 		fnc = function(player, key, down, x, y)
-			despawnableObject(2000, 28, x, y + 10)
+			local skinID = players_file[player].cskins[4] or 28
+
+			if shop_skins[tostring(skinID)] then
+				local obj_id = despawnableObject(2000, skinID, x, y + 10)
+				addNewTimer(
+					2000,
+					tfm.exec.removeImage,
+					tfm.exec.addImage(shop_skins[tostring(skinID)].img, "#"..obj_id, x, y, nil, 1, 1, 0, 1, shop_skins[tostring(skinID)].x, shop_skins[tostring(skinID)].y)
+				)
+				return
+			end
+
+			despawnableObject(2000, skinID, x, y + 10)
 		end,
 
 		upgrades = {
@@ -244,10 +256,22 @@ powers = {
 				smallX = 0, smallY = 10,
 				bigX = 0, bigY = 10,
 
-				cooldown_img = "17127e62809.png",
+				cooldown_img = "17127e5b2d5.png",
 
 				fnc = function(player, key, down, x, y)
-					despawnableObject(3000, 2804, x, y + 10)
+					local skinID = players_file[player].cskins[4] or 28
+
+					if shop_skins[tostring(skinID)] then
+						local obj_id = despawnableObject(3000, skinID, x, y + 10)
+						addNewTimer(
+							4000,
+							tfm.exec.removeImage,
+							tfm.exec.addImage(shop_skins[tostring(skinID)].img, "#"..obj_id, 0, 0, nil, 1, 1, 0, 1, shop_skins[tostring(skinID)].x, shop_skins[tostring(skinID)].y)
+						)
+						return
+					end
+
+					despawnableObject(3000, skinID, x, y + 10)
 				end
 			},
 			{
@@ -257,10 +281,22 @@ powers = {
 				smallX = 0, smallY = 0,
 				bigX = 0, bigY = 0,
 
-				cooldown_img = "17127e5ca47.png",
+				cooldown_img = "17127e5b2d5.png",
 
 				fnc = function(player, key, down, x, y)
-					despawnableObject(4000, 59, x, y + 12)
+					local skinID = players_file[player].cskins[4] or 28
+
+					if shop_skins[tostring(skinID)] then
+						local obj_id = despawnableObject(4000, skinID, x, y + 10)
+						addNewTimer(
+							4000,
+							tfm.exec.removeImage,
+							tfm.exec.addImage(shop_skins[tostring(skinID)].img, "#"..obj_id, 0, 0, nil, 1, 1, 0, 1, shop_skins[tostring(skinID)].x, shop_skins[tostring(skinID)].y)
+						)
+						return
+					end
+
+					despawnableObject(4000, skinID, x, y + 10)
 				end
 			},
 		}
@@ -299,7 +335,19 @@ powers = {
 		default = {4, 3}, -- Z, W
 
 		fnc = function(player, key, down, x, y)
-			despawnableObject(3000, 1, x, y + 10)
+			local skinID = players_file[player].cskins[1] or 1
+
+			if shop_skins[tostring(skinID)] then
+				local obj_id = despawnableObject(3000, 1, x, y + 10)
+				addNewTimer(
+					3000,
+					tfm.exec.removeImage,
+					tfm.exec.addImage(shop_skins[tostring(skinID)].img, "#"..obj_id, 0, 0, nil, 1, 1, 0, 1, shop_skins[tostring(skinID)].x, shop_skins[tostring(skinID)].y)
+				)
+				return
+			end
+
+			despawnableObject(3000, skinID, x, y + 10)
 		end
 	},
 	{
@@ -356,6 +404,22 @@ powers = {
 		default = {5, 1}, -- CTRL
 
 		fnc = function(player, key, down, x, y)
+			local skinID = players_file[player].cskins[5] or 46
+
+			if shop_skins[tostring(skinID)] then
+				local angle = 90
+				
+				if skinID == 351 then angle = -90 end
+
+				local obj_id = despawnableObject(4000, 46, x + (facing[player] and 20 or -20), y - 30, angle)
+				addNewTimer(
+					4000,
+					tfm.exec.removeImage,
+					tfm.exec.addImage(shop_skins[tostring(skinID)].img, "#"..obj_id, 0, 0, nil, 1, 1, 0, 1, shop_skins[tostring(skinID)].x, shop_skins[tostring(skinID)].y)
+				)
+				return
+			end
+
 			despawnableObject(4000, 46, x + (facing[player] and 20 or -20), y - 30, 90)
 		end
 	},
@@ -375,7 +439,19 @@ powers = {
 		default = {4, 7}, -- B
 
 		fnc = function(player, key, down, x, y)
-			despawnableObject(4000, 2, x, y + 10, 0)
+			local skinID = players_file[player].cskins[2] or 2
+
+			if shop_skins[tostring(skinID)] then
+				local obj_id = despawnableObject(4000, skinID, x, y + 10, 0)
+				addNewTimer(
+					4000,
+					tfm.exec.removeImage,
+					tfm.exec.addImage(shop_skins[tostring(skinID)].img, "#"..obj_id, 0, 0, nil, 1, 1, 0, 1, shop_skins[tostring(skinID)].x, shop_skins[tostring(skinID)].y)
+				)
+				return
+			end
+
+			despawnableObject(4000, skinID, x, y + 10, 0)
 		end
 	},
 	{
@@ -394,7 +470,19 @@ powers = {
 		default = {4, 8}, -- N
 
 		fnc = function(player, key, down, x, y)
-			despawnableObject(4000, 701, x, y + 10, 0)
+			local skinID = players_file[player].cskins[3] or 7
+
+			if shop_skins[tostring(skinID)] then
+				local obj_id = despawnableObject(4000, skinID, x, y + 10, 0)
+				addNewTimer(
+					4000,
+					tfm.exec.removeImage,
+					tfm.exec.addImage(shop_skins[tostring(skinID)].img, "#"..obj_id, 0, 0, nil, 1, 1, 0, 1, shop_skins[tostring(skinID)].x, shop_skins[tostring(skinID)].y)
+				)
+				return
+			end
+
+			despawnableObject(4000, skinID, x, y + 10, 0)
 		end
 	},
 	{
@@ -911,6 +999,7 @@ onEvent("PlayerWon", function(player)
 		]=]
 
 		file.c = file.c + map_overall
+		file.coins = file.coins + 1
 
 		file.tc = math.max(
 			checkTitleAndNextFieldValue(player, titles.press_m, map_overall, file, id),

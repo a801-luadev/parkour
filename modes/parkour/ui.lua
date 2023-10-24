@@ -4,7 +4,7 @@ local interfaces = {
 	[72] = HelpInterface,
 	[76] = LeaderboardInterface,
 	[79] = OptionsInterface,
-	[80] = PowersInterface
+	[80] = PowersInterface,
 }
 local interfaces_ordered = {_count = 0}
 local profile_request = {}
@@ -356,6 +356,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				system.loadPlayerData(request)
 			end
 		end
+	elseif cmd == "shop" then
+		toggleInterface(ShopInterface, player)
 	end
 end)
 
@@ -422,6 +424,8 @@ onEvent("RawTextAreaCallback", function(id, player, callback)
 
 	elseif callback == "powers" then
 		toggleInterface(PowersInterface, player)
+	elseif callback == "shop_button" then
+		toggleInterface(ShopInterface, player)
 	end
 end)
 

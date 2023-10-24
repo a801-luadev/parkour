@@ -20,6 +20,7 @@
 	{"type": "require-file", "file": "modes/parkour/powers.lua"},
 
 	{"type": "require-file", "file": "modes/parkour/leaderboard.lua"},
+	{"type": "require-file", "file": "modes/parkour/shop.lua"},
 
 	{"type": "require-file", "file": "modes/parkour/chat-ui.lua"},
 

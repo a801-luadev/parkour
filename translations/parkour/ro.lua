@@ -168,11 +168,16 @@ translations.ro = {
 	overall_lb = "În general",
 	weekly_lb = "Săptămânal",
 	new_lang = "<v>[#] <d>Limbă a fost setată în Română",
+	room = "Room",
+	time = "Time",
+	buy = "Buy",
+	equip = "Equip",
+	equipped = "<font size = '10'>Equipped</font>",
 
 	-- Power names
 	balloon = "Balon",
-	masterBalloon = "Balon Maestru",
-	bubble = "Balonaș",
+	masterBalloon = "Balon II",
+	bubble = "Balon III",
 	fly = "Zboară",
 	snowball = "Bulgăre",
 	speed = "Viteză",
