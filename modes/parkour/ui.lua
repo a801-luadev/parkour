@@ -38,6 +38,9 @@ local function closeAllInterfaces(player)
 	if Staff.open[player] then
 		Staff:remove(player)
 	end
+	if ShopInterface.open[player] then
+		ShopInterface:remove(player)
+	end
 end
 
 local function checkProfileRequest(player, data)
