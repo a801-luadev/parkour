@@ -5,6 +5,7 @@ local interfaces = {
 	[76] = LeaderboardInterface,
 	[79] = OptionsInterface,
 	[80] = PowersInterface,
+	[85] = ShopInterface,
 }
 local interfaces_ordered = {_count = 0}
 local profile_request = {}
@@ -40,7 +41,7 @@ local function closeAllInterfaces(player)
 	end
 	if ShopInterface.open[player] then
 		ShopInterface:remove(player)
-	end
+	e
 end
 
 local function checkProfileRequest(player, data)
