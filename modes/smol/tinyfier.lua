@@ -16,6 +16,10 @@ local function tinyfy(prop, val)
 	return prop .. '="' .. (tonumber(val) / 2) .. '"'
 end
 
+local function tinyfyPoints(prop, x, y)
+	return " " .. prop .. '="' .. (tonumber(x) / 2) .. "," .. (tonumber(y) / 2) .. '"'
+end
+
 local newGame = tfm.exec.newGame
 function tfm.exec.newGame(arg)
 	is_smol = false
@@ -51,6 +55,7 @@ onEvent("NewGame", function()
 		next_xml = string.gsub(
 			room.xmlMapInfo.xml, '([XYLH])%s*=%s*"([^"]+)"', tinyfy
 		)
+		next_xml = next_xml:gsub(' (P%d)%s*=%s*"(.-),(.-)"', tinyfyPoints) -- joints
 
 		local chair = string.match(
 			next_xml,

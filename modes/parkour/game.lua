@@ -21,6 +21,7 @@ local checkpoints = {}
 local players_file
 review_mode = false
 local cp_available = {}
+local map_name
 
 local checkpoint_info = {
 	version = 1, -- 0 = old, 1 = new
@@ -60,7 +61,7 @@ end
 local function showStats()
 	-- Shows if stats count or not
 
-	if not room.xmlMapInfo then return end
+	if not map_name then return end
 
 	local text = (count_stats and
 		room.uniquePlayers >= min_save and
@@ -70,8 +71,8 @@ local function showStats()
 		not review_mode) and "<v>Stats count" or "<r>Stats don't count"
 
 	ui.setMapName(string.format(
-		"<j>%s<bl> - %s<g>   |   %s",
-		room.xmlMapInfo.author, room.currentMap, text
+		"%s<g>   |   %s",
+		map_name, text
 	))
 end
 
@@ -358,6 +359,18 @@ onEvent("NewGame", function()
 	times.generated = {}
 	times.map_start = os.time()
 	checkpoint_info.version = checkpoint_info.next_version
+
+  local info = room.xmlMapInfo
+  local xml = info and info.xml
+  local code = room.currentMap
+  local smolified = info and info.author == '#Module'
+
+  code = code:sub(1, 1) == '@' and code:sub(2) or code
+
+  -- xmlMapInfo doesn't reset if the map doesn't have an xml
+  if xml and tostring(info.mapCode) == code and not smolified then
+		map_name = ("<J>%s <BL>- %s"):format(info.author, room.currentMap)
+	end
 
 	if submode == "smol" then
 		count_stats = false
