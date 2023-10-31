@@ -3,10 +3,15 @@ import datetime
 import json
 import os
 import re
+import sys
 
 # Reading the script
 with open("init.lua", "rb") as file:
 	script = file.read()
+
+if '--polyfill' in sys.argv:
+	with open("polyfill.lua", "rb") as file:
+		script = file.read() + script
 
 # Evaluating tags (building the code)
 def eval_tag(data, indent):
