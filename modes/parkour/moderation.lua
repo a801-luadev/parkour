@@ -778,6 +778,61 @@ function roomAnnouncement(player, cmd, quantity, args)
 	tfm.exec.chatMessage("<ROSE>Ξ [Parkour] <N>"..announcementtext)
 end
 
+local function editCoins(player, cmd, quantity, args)
+	if not ranks.admin[player] then
+		return
+	end
+
+	if quantity < 2 then
+		translatedChatMessage("invalid_syntax", player)
+		return
+	end
+
+	local playerName = args[1]
+	local action = args[2]
+
+	if action == "show" then
+		local result = ""
+		for key, value in pairs(players_file[playerName].skins) do
+			result = result .. key .. ", "
+		end
+		result = result:sub(1, -3)
+		
+		tfm.exec.chatMessage("Current coins " ..players_file[playerName].coins)
+		tfm.exec.chatMessage("Skins " ..result)
+
+	elseif action == "default" then
+		players_file[playerName].cskins = { 1, 2, 7, 28, 46 }
+		savePlayerData(playerName)
+		tfm.exec.chatMessage("<v>[#] <j>Current skins set default for " ..playerName, player)
+
+	elseif action == "refund" then
+		if quantity < 3 then
+			translatedChatMessage("invalid_syntax", player)
+			return
+		end
+
+		local skinType = tonumber(args[3])
+		local skinNumber = tonumber(args[4])
+
+		local selectedSkin = shop_items[skinType][skinNumber]
+		
+		players_file[playerName].skins[tostring(selectedSkin.id)] = nil
+		players_file[playerName].coins = players_file[playerName].coins + tonumber(selectedSkin.price)
+
+		for i = #players_file[playerName].cskins, 1, -1 do
+			if players_file[playerName].cskins[i] == tonumber(selectedSkin.id) then
+				players_file[playerName].cskins[i] = shop_items[skinType][1].id
+			end
+		end
+
+		savePlayerData(playerName)
+		tfm.exec.chatMessage("<v>[#] <j>Refunded " ..selectedSkin.price.. " coins (" ..skinType.. "/" ..skinNumber..") to the "..playerName, player)
+
+	end
+end
+
+
 local commandDispatch = {
 	["ban"] = handleBan,
 	["unban"] = handleBan,
@@ -791,6 +846,7 @@ local commandDispatch = {
 	["file"] = fileActions,
 	["kill"] = warnPlayer,
 	["announcement"] = roomAnnouncement,
+	["coins"] = editCoins,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)

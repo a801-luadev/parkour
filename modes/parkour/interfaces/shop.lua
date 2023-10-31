@@ -10,6 +10,11 @@ do
 		:loadTemplate(WindowBackground)
 		:setShowCheck(function(self, player, page, data)
 			if not data then
+
+				if players_file[player].c >= 400 then
+					shop_items[4][1].image = "173db16a824.png"
+				end
+
 				shopPage[player] = 1
 				self:show(player, 1, shop_items[1])
 				return false

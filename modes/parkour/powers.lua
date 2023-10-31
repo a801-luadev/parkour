@@ -286,6 +286,8 @@ powers = {
 				fnc = function(player, key, down, x, y)
 					local skinID = players_file[player].cskins[4] or 28
 
+					if skinID == 28 then skinID = 59 end
+
 					if shop_skins[tostring(skinID)] then
 						local obj_id = despawnableObject(4000, skinID, x, y + 10)
 						addNewTimer(

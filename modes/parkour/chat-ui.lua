@@ -283,9 +283,15 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.chatMessage("<v>[#] <d>given migration flag to " .. target, player)
 
 		elseif thing == "coins" then
+			
+			if quantity < 2 then
+				return translatedChatMessage("invalid_syntax", player)
+			end
+
 			local coin_count = args[3]
 			if not tonumber(coin_count) then
 				tfm.exec.chatMessage("<v>[#] <d> doesnt look like a number", player)
+				return
 			end
 
 			file.coins = file.coins + coin_count

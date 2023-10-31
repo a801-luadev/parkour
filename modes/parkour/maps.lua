@@ -54,6 +54,8 @@ local is_invalid = false
 local count_stats = true
 local map_change_cd = 0
 
+current_map = nil
+
 local levels
 local perms
 local review_mode
@@ -147,7 +149,7 @@ local function newMap()
 	else
 		map = selectMap(maps.sections_high, maps.list_high, maps.high_count)
 	end
-
+	current_map = map
 	tfm.exec.newGame(map, not records_admins and math.random(3000000) <= 1000000)
 end
 
