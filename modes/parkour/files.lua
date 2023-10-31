@@ -26,6 +26,7 @@ local files = {
 }
 local total_files = 3
 local file_index = 1
+local settings_length = 10
 local file_id = files[file_index]
 local updating = {}
 local timed_maps = {
@@ -308,6 +309,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 		hidden[player] = commu
 	end
 
+	data.settings.__len = settings_length
 	eventOutPlayerDataParsed(player, data)
 end)
 
@@ -359,7 +361,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 				if badges[index].filePriority then
 					if merged.badges[index] ~= p_badges[index] then
 						merged.badges[index] = p_badges[index]
-						NewBadgeInterface:show(player, index, math.max(p_badges[index], 1))
+						NewBadgeInterface:show(player, index, math.max(p_badges[index] or 1, 1))
 					end
 				end
 			end
@@ -371,7 +373,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 					for index = 1, #badges do
 						if merged.badges[index] ~= p_badges[index] then
 							NewBadgeInterface:show(
-								player, index, math.max(p_badges[index], 1)
+								player, index, math.max(p_badges[index] or 1, 1)
 							)
 						end
 					end
@@ -391,6 +393,8 @@ onEvent("PlayerDataLoaded", function(player, data)
 
 	players_file[player] = data
 	players_file[player].room = room.name
+	players_file[player].settings.__len = settings_length
+	players_file[player].badges.__len = #badges
 
 	if room.playerList[player] then
 		players_file[player].commu = room.playerList[player].community

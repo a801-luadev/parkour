@@ -95,7 +95,8 @@ local function encode_table(val)--, stack)
     --   error("invalid table: sparse array")
     -- end
     -- Encode
-    for i = 1, #val do
+    local len = val.__len or #val
+    for i = 1, len do
       res[i] = encode(val[i])--, stack)
     end
     --stack[val] = nil
