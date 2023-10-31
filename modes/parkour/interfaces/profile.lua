@@ -83,7 +83,7 @@ do
 			if pbg then
 				local badge
 				for index = 1, #badges do
-					if pbg[index] > 0 then
+					if pbg[index] and pbg[index] > 0 then
 						badge = badges[index][pbg[index]]
 
 						container._count = container._count + 1
@@ -153,7 +153,7 @@ do
 				local pbg = (data or players_file[profile]).badges
 				if pbg then
 					for index = 1, #badges do
-						if pbg[index] > 0 then
+						if pbg[index] and pbg[index] > 0 then
 							count = count + 1
 						end
 					end
