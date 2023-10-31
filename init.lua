@@ -32,7 +32,7 @@ local links = {
 	github = "https://github.com/a801-luadev/parkour",
 	discord = "https://discord.gg/QRCjyVyg7B",
 	maps = "https://atelier801.com/topic?f=6&t=887284",
-	records = "https://tfmrecords.tk/",
+	records = "https://tfmrecords.com/",
 	forum = "https://atelier801.com/topic?f=6&t=892086",
 	mod_apps = "https://bit.ly/parkourmods",
 }
