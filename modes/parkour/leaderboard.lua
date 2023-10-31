@@ -139,13 +139,15 @@ onEvent("GameDataLoaded", function(data)
 				data.weekly.wl[tostring(weekleaderboard[3][1])] = true
 			end
 
-			sendPacket(
-				"common", 4,
-				timed_maps.week.last_reset .. "\000" .. os.date("%d/%m/%Y", ts - 24 * 60 * 60 * 1000) ..
-				"\000" .. weekleaderboard[1][4] .. "\000" .. weekleaderboard[1][2] .. "\000" .. weekleaderboard[1][3] ..
-				"\000" .. weekleaderboard[2][4] .. "\000" .. weekleaderboard[2][2] .. "\000" .. weekleaderboard[2][3] ..
-				"\000" .. weekleaderboard[3][4] .. "\000" .. weekleaderboard[3][2] .. "\000" .. weekleaderboard[3][3]
-			)
+			if #weekleaderboard > 2 then
+				sendPacket(
+					"common", 4,
+					timed_maps.week.last_reset .. "\000" .. os.date("%d/%m/%Y", ts - 24 * 60 * 60 * 1000) ..
+					"\000" .. weekleaderboard[1][4] .. "\000" .. weekleaderboard[1][2] .. "\000" .. weekleaderboard[1][3] ..
+					"\000" .. weekleaderboard[2][4] .. "\000" .. weekleaderboard[2][2] .. "\000" .. weekleaderboard[2][3] ..
+					"\000" .. weekleaderboard[3][4] .. "\000" .. weekleaderboard[3][2] .. "\000" .. weekleaderboard[3][3]
+				)
+			end
 
 			data.weekly.ts = new_reset
 			data.weekly.ranks = {}
