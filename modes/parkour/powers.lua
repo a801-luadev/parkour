@@ -867,7 +867,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 				power[index].cooldown_x, power[index].cooldown_y,
 
 				players_file[player].settings[3] == 1
-			)) and (power[index].isVisual or (not records_admins and submode ~= "smol")) then
+			)) and (power[index].isVisual or (not records_admins and submode ~= "smol" and not map_review)) then
 				power[index].fnc(player, key, down, x, y)
 
 				if not power[index].isVisual then
@@ -891,7 +891,7 @@ onEvent("Mouse", function(player, x, y)
 			power.cooldown_x, power.cooldown_y,
 
 			players_file[player].settings[3] == 1
-		)) and (power.isVisual or (not records_admins and submode ~= "smol")) then
+		)) and (power.isVisual or (not records_admins and submode ~= "smol" and not map_review)) then
 			power.fnc(player, x, y)
 
 			if not power.isVisual then
@@ -941,7 +941,7 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 
 	if victory[player] then
-		if not no_powers[player] and not map_review then
+		if not no_powers[player] then
 			bindNecessary(player)
 		end
 	else
@@ -960,7 +960,7 @@ onEvent("PlayerDataUpdated", function(player, data)
 			unbind(player)
 		end
 		translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
-	elseif no_powers[player] and map_review == false then
+	elseif no_powers[player] then
 		no_powers[player] = nil
 		if victory[player] then
 			bindNecessary(player)
@@ -1032,7 +1032,7 @@ onEvent("PlayerWon", function(player)
 		savePlayerData(player)
 	end
 
-	if not no_powers[player] and not map_review then
+	if not no_powers[player] then
 		bindNecessary(player)
 	end
 end)
@@ -1091,29 +1091,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	end
 
 	if cmd == "disablepowers" then
-		for player in pairs(room.playerList) do
 			map_review = true
-			no_powers[player] = true
-			unbind(player)
-		end
 		tfm.exec.chatMessage("<J>Powers disabled.")
 	elseif cmd == "enablepowers" then
-		for player in pairs(room.playerList) do
 			map_review = false
-			no_powers[player] = nil
-			bindNecessary(player)
-		end
 		tfm.exec.chatMessage("<J>Powers enabled.")
-	end
-	
-end)
-
-onEvent("NewPlayer", function(player)
-	if map_review then
-		no_powers[player] = true
-		unbind(player)
-	else
-		return
 	end
 end)
 

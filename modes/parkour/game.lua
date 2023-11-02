@@ -157,29 +157,6 @@ local function checkTitleAndNextFieldValue(player, title, sumValue, _playerData,
 	end
 end
 
-function showMapPoll(player)
-	if not victory[player] then return end
-	local questionText = translatedMessage("vote_map", player)
-	ui.addTextArea(991, questionText, player, 5, 375, 0, 0, 0x101010, 0, 0.5, true)
-end
-
-onEvent("TextAreaCallback", function(id, player, cb)
-	local cMap = current_map
-	local pID =  tfm.get.room.playerList[player].id
-	local completedMaps = players_file[player].c
-
-	if cb == "mapPollYes" then
-		sendPacket("common", 11, cMap .. "\000" .. pID .. "\000" .. player .. "\000" .. completedMaps .. "\000" .. "yes")
-		ui.removeTextArea(991, player)
-	elseif cb == "mapPollidk" then
-		sendPacket("common", 11, cMap .. "\000" .. pID .. "\000" .. player .. "\000" .. completedMaps .. "\000" .. "idk")
-		ui.removeTextArea(991, player)
-	elseif cb == "mapPollNo" then
-		sendPacket("common", 11, cMap .. "\000" .. pID .. "\000" .. player .. "\000" .. completedMaps .. "\000" .. "no")
-		ui.removeTextArea(991, player)
-	end
-end)
-
 onEvent("NewPlayer", function(player)
 	spec_mode[player] = nil
 	in_room[player] = true
@@ -290,7 +267,6 @@ onEvent("PlayerLeft", function(player)
 			end
 		end
 	end
-	ui.removeTextArea(991, player)
 	showStats()
 end)
 
@@ -326,8 +302,6 @@ onEvent("PlayerWon", function(player)
 		less_time = true
 		return
 	end
-
-	showMapPoll(player)
 end)
 
 onEvent("PlayerRespawn", function(player)
@@ -414,7 +388,6 @@ onEvent("NewGame", function()
 	for player in next, spec_mode do
 		tfm.exec.killPlayer(player)
 	end
-	ui.removeTextArea(991, player)
 	showStats()
 end)
 

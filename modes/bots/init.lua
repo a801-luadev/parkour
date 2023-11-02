@@ -16,7 +16,6 @@ local packets = {
 	command_log = bit.lshift(26, 8) + 255,
 	ban_logs = bit.lshift(32, 8) + 255,
 	kill_logs = bit.lshift(33, 8) + 255,
-	map_votes = bit.lshift(34, 8) + 255,
 }
 
 local parkour_bot = "Parkour#0568"
@@ -60,9 +59,6 @@ onEvent("PacketReceived", function(channel, id, packet, map, time)
 
 	elseif id == 10 then
 		addTextArea(packets.kill_logs, packet, parkour_bot)
-		
-	elseif id == 11 then
-		addTextArea(packets.map_votes, packet, parkour_bot)
 	end
 end)
 

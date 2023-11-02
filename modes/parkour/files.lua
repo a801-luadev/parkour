@@ -26,7 +26,7 @@ local files = {
 }
 local total_files = 3
 local file_index = 1
-local settings_length = 10
+local settings_length = 8
 local file_id = files[file_index]
 local updating = {}
 local timed_maps = {
@@ -56,12 +56,12 @@ local badges = { -- badge id, small image, big image
 		{13, "1745a54869e.png", "1745afc5c2e.png"}, -- 55
 	},
 	[5] = { -- discord
-		filePriority = true, -- always takes the value from the file
+		-- filePriority = true, -- always takes the value from the file
 
 		{14, "1746ef93af1.png", "1746ef8f813.png"},
 	},
 	[6] = { -- records
-		filePriority = true,
+		-- filePriority = true,
 
 		{15, "1755b8540b8.png", "1755b851704.png"}, -- 1
 		{16, "1755b858a36.png", "1755b85628e.png"}, -- 5
