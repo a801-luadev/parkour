@@ -1,5 +1,5 @@
 do
-  local DEBUG_PRINTS = true
+  local DEBUG_PRINTS = false
 
   local loader = string.match(({ pcall(0) })[2], "^(.-)%.")
   local ranks = {
@@ -14,6 +14,79 @@ do
   tfm.get.room.isTribeHouse = false
 
 
+  -- Tribe House Alternatives
+  if tfm.exec.getPlayerSync() == nil then
+    tfm.exec.chatMessage = function(message, playerName)
+      print(tostring(playerName) .. ' -- ' .. tostring(message))
+    end
+
+    local timers, timerCount = {}, 0
+
+    system.newTimer = function(callback, time, loop, arg1, arg2, arg3, arg4)
+      time = tonumber(time)
+      if type(callback) ~= "function" or not time or time < 500 then
+        error(debug.traceback())
+        return
+      end
+
+      timerCount = 1 + timerCount
+      timers[timerCount] = { callback, time, loop, arg1, arg2, arg3, arg4 }
+      timers[timerCount][0] = os.time() + time
+      return timerCount
+    end
+
+    system.removeTimer = function(timerId)
+      if timerId then
+        timers[timerId] = nil
+      end
+    end
+
+    local eventLoop
+
+    local function loop(...)
+      local dead, count = {}, 0
+      local now = os.time()
+
+      for id, args in next, timers do
+        if now >= args[0] then
+          args[1](args[4], args[5], args[6], args[7])
+
+          if args[3] then
+            args[0] = now + args[2]
+          else
+            count = 1 + count
+            dead[count] = id
+          end
+        end
+      end
+
+      for i=1, count do
+        timers[dead[i]] = nil
+      end
+
+      eventLoop(...)
+    end
+
+    setmetatable(_G, {
+      __index = function(tbl, key)
+        if key == 'eventLoop' then
+          return loop
+        end
+
+        return rawget(tbl, key)
+      end,
+      __newindex = function(tbl, key, val)
+        if key == 'eventLoop' then
+          eventLoop = val
+          return
+        end
+
+        return rawset(_G, key, val)
+      end,
+    })
+  end
+
+
   -- Player Data
 	local pdata = {}
 
@@ -24,7 +97,9 @@ do
       print("<ROSE>==================")
     end
 
-		eventPlayerDataLoaded(name, pdata[name] or "")
+    if eventPlayerDataLoaded then
+      system.newTimer(eventPlayerDataLoaded, 500, false, name, pdata[name] or "")
+    end
 	end
 
 	system.savePlayerData = function(name, data)
@@ -51,7 +126,7 @@ do
     end
 
     if eventFileLoaded then
-      eventFileLoaded(id, files[id])
+      system.newTimer(eventFileLoaded, 500, false, id, files[id])
     end
   end
 
@@ -66,7 +141,7 @@ do
     end
 
     if eventFileSaved then
-      eventFileSaved(id)
+      system.newTimer(eventFileSaved, 500, false, id)
     end
   end
 
