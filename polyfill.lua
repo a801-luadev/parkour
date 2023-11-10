@@ -14,6 +14,14 @@ do
   tfm.get.room.isTribeHouse = false
 
 
+  -- Chat Message Alternative
+  if tfm.exec.getPlayerSync() == nil then
+    tfm.exec.chatMessage = function(message, playerName)
+      print(tostring(playerName) .. ' -- ' .. tostring(message))
+    end
+  end
+
+
   -- Player Data
 	local pdata = {}
 
