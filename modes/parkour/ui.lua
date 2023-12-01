@@ -6,6 +6,7 @@ local interfaces = {
 	[79] = OptionsInterface,
 	[80] = PowersInterface,
 	[190] = ShopInterface,
+	[188] = QuestsInterface,
 }
 local interfaces_ordered = {_count = 0}
 local profile_request = {}
@@ -41,6 +42,9 @@ local function closeAllInterfaces(player)
 	end
 	if ShopInterface.open[player] then
 		ShopInterface:remove(player)
+	end
+	if QuestsInterface.open[player] then
+		QuestsInterface:remove(player)
 	end
 end
 
@@ -142,6 +146,7 @@ end)
 onEvent("Keyboard", function(player, key, down, x, y)
 	local interface = interfaces[key]
 	if interface then
+		if players_file[player].settings[9] == 1 then return end
 		toggleInterface(interface, player)
 
 	elseif key == (players_file[player] and players_file[player].settings[2]) or key == 46 then
@@ -362,6 +367,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 	elseif cmd == "shop" then
 		toggleInterface(ShopInterface, player)
+	elseif cmd == "quests" then
+		toggleInterface(QuestsInterface, player, 1)
 	end
 end)
 
@@ -439,6 +446,38 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 		if not emote then return end
 
 		tfm.exec.playEmote(player, emote)
+	elseif action == "change_quest" then
+		local questID, questType = args:match("(%d+):(%d+)") -- questType (1: daily - 2: weekly) 
+		questID = tonumber(questID)
+		
+		local isWeekly = tonumber(questType) == 2 and true or false
+
+		players_file[player].quests[questID].skp = 0
+		local newQuests = fillQuests(players_file[player], players_file[player].quests, isWeekly, true)
+		newQuests[questID].skp = os.time()
+
+		players_file[player].quests = newQuests
+
+		for i = 1, #newQuests do
+			if newQuests[i].id == 6 then
+				if not power_quest[player] then
+					power_quest[player] = {}
+				end
+
+				if i <= 4 then
+					power_quest[player].d = newQuests[i].pr
+					power_quest[player].di = i
+				else
+					power_quest[player].w = newQuests[i].pr
+					power_quest[player].wi = i
+				end
+			end
+		end
+
+		savePlayerData(player)
+
+		closeAllInterfaces(player)
+		QuestsInterface:show(player, tonumber(questType))
 	end
 end)
 
@@ -467,6 +506,10 @@ onEvent("PlayerWon", function(player)
 	if (current_poll
 		and not current_poll.voters[player]) then
 		showPoll(player)
+	end
+	
+	if QuestsInterface.open[player] then
+		QuestsInterface:remove(player)
 	end
 end)
 

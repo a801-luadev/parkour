@@ -79,9 +79,24 @@ translations.es = {
 	records_already_submitted = "<v>[#] <r>¡Ya enviaste un récord para este mapa!",
 	records_submitted = "<v>[#] <d>Tu récord para el mapa <b>%s</b> ha sido enviado.",
 
+	-- Quests
+	daily_q = "Diaria",
+	weekly_q = "Semanal",
+	daily_quests = "<p align='center'><font size='20'><B><D>Misiones Diarias</D></B></font>",
+	weekly_quests = "<p align='center'><font size='20'><B><D>Misiones Semanales</D></B></font>",
+	quest_1 = "Completar <B><D>%s/%s</D></B> mapas.",
+	quest_2 = "Conseguir <B><D>%s/%s</D></B> checkpoints.",
+	quest_3 = "Completa un mapa en primer lugar <B><D>%s/%s</D></B> veces.",
+	quest_4 = "Completa un mapa en menos de <B><D>%s</D></B> segundos.",
+	quest_5 = "Completa el mapa <B><D>@%s</D></B>",
+	quest_6 = "Usa el poder <PT><b>%s</b></PT> <B><D>%s/%s</D></B> veces.",
+	next_reset = "<b><D>Reinicio:\n</b></D>%s",
+	quest_completed = "<b><D>¡Felicitaciones!</D></b> \n¡Completaste una misión %s!",
+	quest_reset = "<V>[#]</V> <O>Tus misiones %s fueron reiniciadas.</O>",
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>ESTÁS EN MODO AFK</b></bv>\nMUÉVETE PARA REAPARECER</font>\n\n<font size='30'><u><t>Recordatorios:</t></u></font>\n\n<font size='15'><r>¡Los jugadores con una línea roja sobre ellos no quieren ayuda!\n¡Trollear/bloquear a otros jugadores en parkour NO está permitido!<d>\n¡Únete a nuestro <cep><a href='event:discord'>servidor de discord</a></cep>!\n¿Quieres contribuir con código? Vé a nuestro <cep><a href='event:github'>repositorio de github</a></cep>\n¿Tienes un buen mapa para enviar? Envíalo a nuestro <cep><a href='event:map_submission'>hilo de presentaciones de mapas</a></cep>\n¡Checkea nuestro <cep><a href='event:forum'>hilo oficial</a></cep> para más información!\n¡Ayúdanos <cep><a href='event:donate'>donando!</a></cep>",
-	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa\n\nMostrar indicador para no recibir ayuda",
+	options = "<p align='center'><font size='20'>Opciones de Parkour</font></p>\n\nUsar teclado <b>QWERTY</b> (desactivar si usas <b>AZERTY</b>)\n\nUsar la tecla <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> como atajo para <b>/mort</b> (desactivar si usas <b>DEL</b>)\n\nMostrar tiempos de espera de tus poderes\n\nMostrar el botón de poderes\n\nMostrar el botón de ayuda\n\nMostrar mensajes al completar un mapa\n\nMostrar indicador para no recibir ayuda\n\nDisable all UI (leaderboard, help, shop etc.) hotkeys",
 	cooldown = "<v>[#] <r>Espera unos segundos antes de hacer eso de nuevo.",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Teclado <b>QWERTY</b>" ..
 					 "\n\n<b>Esconder</b> cantidad de mapas" ..

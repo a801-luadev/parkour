@@ -35,10 +35,8 @@ local ranks
 local bindKeyboard
 
 local changePlayerSize = function() end
-if string.find(room.name, "test", 1, true) then
-	-- only enable on testing rooms
-	changePlayerSize = tfm.exec.changePlayerSize
-end
+-- only enable on testing rooms
+changePlayerSize = tfm.exec.changePlayerSize
 
 local function addCheckpointImage(player, x, y)
 	if not x then
@@ -532,6 +530,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>You can't toggle review mode in this room.", player)
 		end
 
+		if review_mode and disable_powers then
+			disable_powers = false
+			tfm.exec.chatMessage("<v>[#] <d>Powers enabled by " .. player .. ".")
+		end
+
 		count_stats = false
 		review_mode = not review_mode
 		if review_mode then
@@ -544,7 +547,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	elseif cmd == "cp" then
 		local checkpoint = tonumber(args[1])
 		if not checkpoint then
-			return translatedChatMessage("invalid_syntax", player)
+			if players_level[args[1]] then
+				checkpoint = players_level[args[1]]
+			else
+				return translatedChatMessage("invalid_syntax", player)
+			end
 		end
 
 		if checkpoint == 0 then
@@ -614,7 +621,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.setGameTime(time)
 
 	elseif cmd == "redo" then
-		if not (records_admins or review_mode) or not times.generated[player] then return end
+		if not (records_admins or review_mode) then return end
 
 		if checkpoint_info.version == 1 then
 			tfm.exec.removeBonus(players_level[player] + 1, player)

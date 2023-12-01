@@ -791,6 +791,10 @@ local function editCoins(player, cmd, quantity, args)
 	local playerName = args[1]
 	local action = args[2]
 
+	if not in_room[playerName] then
+		return tfm.exec.chatMessage(playerName.." is not here.", player)
+	end
+
 	if action == "show" then
 		local result = ""
 		for key, value in pairs(players_file[playerName].skins) do
@@ -798,8 +802,8 @@ local function editCoins(player, cmd, quantity, args)
 		end
 		result = result:sub(1, -3)
 		
-		tfm.exec.chatMessage("Current coins " ..players_file[playerName].coins)
-		tfm.exec.chatMessage("Skins " ..result)
+		tfm.exec.chatMessage("Current coins: " ..players_file[playerName].coins, player)
+		tfm.exec.chatMessage("Skins: " ..result, player)
 
 	elseif action == "default" then
 		players_file[playerName].cskins = { 1, 2, 7, 28, 46 }
@@ -816,6 +820,14 @@ local function editCoins(player, cmd, quantity, args)
 		local skinNumber = tonumber(args[4])
 
 		local selectedSkin = shop_items[skinType][skinNumber]
+
+		if (not skinType or not skinNumber) or (not tonumber(skinType) or not tonumber(skinNumber)) or (selectedSkin == nil) then
+			return tfm.exec.chatMessage("Invalid skin type or skin number.", player)
+		end
+
+		if not players_file[playerName].skins[tostring(selectedSkin.id)] then
+			return tfm.exec.chatMessage("The player doesn't have this skin. ", player)
+		end
 		
 		players_file[playerName].skins[tostring(selectedSkin.id)] = nil
 		players_file[playerName].coins = players_file[playerName].coins + tonumber(selectedSkin.price)

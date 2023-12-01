@@ -8,7 +8,9 @@ local cooldowns = {}
 local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local used_powers = {_count = 0}
-local map_review = false
+disable_powers = false
+local first_player = nil
+
 
 local function capitalize(str)
 	local first = string.sub(str, 1, 1)
@@ -163,6 +165,7 @@ local powers
 powers = {
 	{
 		name = "fly", maps = 5,
+		id = 1,
 		isVisual = true,
 
 		small = "173db50edf6.png", big = "173db512e9c.png", -- icons
@@ -179,6 +182,7 @@ powers = {
 	},
 	{
 		name = "speed", maps = 10,
+		id = 2,
 		isVisual = true,
 
 		small = "173db21af6a.png", big = "173db214773.png",
@@ -199,6 +203,7 @@ powers = {
 	},
 	{
 		name = "snowball", maps = 15,
+		id = 3,
 
 		small = "173db1165c1.png", big = "173db111ba4.png",
 		lockedSmall = "173db118b89.png", lockedBig = "173db114395.png",
@@ -219,6 +224,7 @@ powers = {
 	},
 	{
 		name = "balloon", maps = 20,
+		id = 4,
 
 		small = "173db033fb8.png", big = "173db02a545.png",
 		lockedSmall = "173db039519.png", lockedBig = "173db035f01.png",
@@ -251,6 +257,7 @@ powers = {
 		upgrades = {
 			{
 				name = "masterBalloon", maps = 200,
+				id = 4,
 
 				small = "173db167a26.png", big = "173db165783.png",
 				smallX = 0, smallY = 10,
@@ -276,6 +283,7 @@ powers = {
 			},
 			{
 				name = "bubble", maps = 400,
+				id = 4,
 
 				small = "173db16a824.png", big = "173db175547.png",
 				smallX = 0, smallY = 0,
@@ -305,6 +313,7 @@ powers = {
 	},
 	{
 		name = "teleport", maps = 35,
+		id = 5,
 		isVisual = true,
 
 		small = "173db226b7a.png", big = "173db21f2b7.png",
@@ -323,6 +332,7 @@ powers = {
 	},
 	{
 		name = "smallbox", maps = 50,
+		id = 6,
 
 		small = "173db0ecb64.png", big = "173db0cd7fb.png",
 		lockedSmall = "173db0d3c0b.png", lockedBig = "173db0d172b.png",
@@ -354,6 +364,7 @@ powers = {
 	},
 	{
 		name = "cloud", maps = 100,
+		id = 7,
 
 		small = "173db14a1d6.png", big = "173db145497.png",
 		lockedSmall = "173db15baf3.png", lockedBig = "173db15868b.png",
@@ -373,6 +384,7 @@ powers = {
 	},
 	{
 		name = "rip", maps = 700,
+		id = 8,
 
 		small = "173db33e169.png", big = "173db33602c.png",
 		lockedSmall = "173db3407b0.png", lockedBig = "173db33ac9c.png",
@@ -392,6 +404,7 @@ powers = {
 	},
 	{
 		name = "choco", maps = 1500,
+		id = 9,
 
 		small = "173db2812bc.png", big = "173db27b241.png",
 		lockedSmall = "173db2853a0.png", lockedBig = "173db27dba6.png",
@@ -427,6 +440,7 @@ powers = {
 	},
 	{
 		name = "bigBox", maps = 2500,
+		id = 10,
 
 		small = "173db0ecb64.png", big = "173db0cd7fb.png",
 		lockedSmall = "173db0d3c0b.png", lockedBig = "173db0d172b.png",
@@ -458,6 +472,7 @@ powers = {
 	},
 	{
 		name = "trampoline", maps = 4000,
+		id = 11,
 
 		small = "173db3307ed.png", big = "173db3288d3.png",
 		lockedSmall = "173db3335b7.png", lockedBig = "173db32e496.png",
@@ -489,6 +504,7 @@ powers = {
 	},
 	{
 		name = "pig", maps = 5000,
+		id = 12,
 
 		small = "173deea75bd.png", big = "173deea2cc0.png",
 		lockedSmall = "173deea9a02.png", lockedBig = "173deea4edc.png",
@@ -548,6 +564,7 @@ powers = {
 	},
 	{
 		name = "link", maps = 6000,
+		id = 13,
 
 		small = "18a1f4da09f.png", big = "18a1f4d198c.png",
 		lockedSmall = "18a1f563110.png", lockedBig = "18a1f4e3528.png",
@@ -582,6 +599,7 @@ powers = {
 	},
 	{
 		name = "sink", ranking = 70,
+		id = 14,
 
 		small = "173deeb1e05.png", big = "173deeac174.png",
 		lockedSmall = "173deeb3dac.png", lockedBig = "173deeaf781.png",
@@ -615,6 +633,7 @@ powers = {
 		upgrades = {
 			{
 				name = "toilet", ranking = 56,
+				id = 14,
 
 				small = "173db3f2c95.png", big = "173db3f0d81.png",
 				smallX = 0, smallY = -10,
@@ -657,6 +676,7 @@ powers = {
 			},
 			{
 				name = "bathtub", ranking = 42,
+				id = 14,
 
 				small = "173deeb8924.png", big = "173deeb6576.png",
 				smallX = 0, smallY = 5,
@@ -699,6 +719,7 @@ powers = {
 	},
 	{
 		name = "campfire", ranking = 28,
+		id = 15,
 		isVisual = true,
 
 		small = "173dee9c5d9.png", big = "173dee98c61.png",
@@ -728,6 +749,7 @@ powers = {
 	},
 	{
 		name = "chair", ranking = 14,
+		id = 16,
 
 		small = "1745a769e88.png", big = "1745a765105.png",
 		lockedSmall = "1745a76c506.png", lockedBig = "1745a7675e6.png",
@@ -867,8 +889,34 @@ onEvent("Keyboard", function(player, key, down, x, y)
 				power[index].cooldown_x, power[index].cooldown_y,
 
 				players_file[player].settings[3] == 1
-			)) and (power[index].isVisual or (not records_admins and submode ~= "smol" and not map_review)) then
+			)) and (power[index].isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
 				power[index].fnc(player, key, down, x, y)
+
+				if (count_stats and
+				room.uniquePlayers >= min_save and
+				player_count >= min_save and
+				not records_admins and
+				not is_tribe and
+				not review_mode) then
+					if power_quest[player] and (power_quest[player].w or power_quest[player].d) then
+						local save = false
+						local file = players_file[player].quests
+						if power_quest[player].w and power_quest[player].w == power[index].id then
+							quests[6].updateProgress(player, file[power_quest[player].wi], true)
+							save = true
+						end
+						if power_quest[player].d and power_quest[player].d == power[index].id then
+							quests[6].updateProgress(player, file[power_quest[player].di], false)
+							save = true
+						end
+
+						-- TODO: queue for save power quest
+						if save then
+							local randomTime = math.random(1000, 10000)
+							addNewTimer(randomTime, savePlayerData, player) -- temporary solution
+						end
+					end
+				end
 
 				if not power[index].isVisual then
 					used_powers._count = used_powers._count + 1
@@ -891,7 +939,7 @@ onEvent("Mouse", function(player, x, y)
 			power.cooldown_x, power.cooldown_y,
 
 			players_file[player].settings[3] == 1
-		)) and (power.isVisual or (not records_admins and submode ~= "smol" and not map_review)) then
+		)) and (power.isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
 			power.fnc(player, x, y)
 
 			if not power.isVisual then
@@ -967,6 +1015,26 @@ onEvent("PlayerDataUpdated", function(player, data)
 		end
 	end
 
+	if data.quests then
+		if power_quest[player] then return end
+		for i = 1, #data.quests do
+			if data.quests[i].id == 6 then
+
+				if not power_quest[player] then
+					power_quest[player] = {}
+				end
+
+				if i <= 4 then
+					power_quest[player].d = data.quests[i].pr
+					power_quest[player].di = i
+				else
+					power_quest[player].w = data.quests[i].pr
+					power_quest[player].wi = i
+				end
+			end
+		end
+	end
+
 	-- don't loop infinitely
 	-- calling savePlayerData loads data first, so this will get triggered again
 	-- and it will call savePlayerData again, which will load again and trigger
@@ -1029,6 +1097,21 @@ onEvent("PlayerWon", function(player)
 			end
 		end
 
+		if first_player == nil then
+			first_player = player
+		end
+
+		if file.quests then
+			for questIndex = 1, #file.quests do
+				local questID = file.quests[questIndex].id
+				local isWeekly = questIndex > 4
+
+				if questID < 6 then
+					quests[file.quests[questIndex].id].updateProgress(player, file.quests[questIndex], isWeekly)
+				end
+			end
+		end
+		
 		savePlayerData(player)
 	end
 
@@ -1039,6 +1122,7 @@ end)
 
 onEvent("NewGame", function()
 	local now = os.time()
+	first_player = nil
 
 	local to_remove, count = {}, 0
 	for player in next, no_powers do
@@ -1091,11 +1175,17 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	end
 
 	if cmd == "disablepowers" then
-			map_review = true
-		tfm.exec.chatMessage("<J>Powers disabled.")
+		if not review_mode then
+			return tfm.exec.chatMessage("<v>[#] <r>Enable review mode first.", player) 
+		end
+		disable_powers = true
+		tfm.exec.chatMessage("<v>[#] <d>Powers disabled by " .. player .. ".")
 	elseif cmd == "enablepowers" then
-			map_review = false
-		tfm.exec.chatMessage("<J>Powers enabled.")
+		if not review_mode then
+			return tfm.exec.chatMessage("<r>[#] Enable review mode first.", player) 
+		end
+		disable_powers = false
+		tfm.exec.chatMessage("<v>[#] <d>Powers enabled by " .. player .. ".")
 	end
 end)
 

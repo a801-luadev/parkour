@@ -64,6 +64,12 @@ if records_admins and submode == "smol" then
 	records_admins = nil
 end
 
+if records_admins then
+	tfm.exec.playerVictory = function(name)
+		eventPlayerWon(name)
+	end
+end
+
 local function selectMap(sections, list, count)
 	if sections._map_pointer > maps_per_section then
 		-- All maps played, reset sections
@@ -345,36 +351,10 @@ onEvent("NewGame", function()
 	end
 end)
 
-local function checkMapBug()
-	local mouseCount = 0
-	local glitchedMouseCount = 0
-
-	for _, player in next, room.playerList do
-		mouseCount = mouseCount + 1
-		if player.x == 0 and player.y == 0 then
-			glitchedMouseCount = glitchedMouseCount + 1
-		end
-	end
-
-	if glitchedMouseCount < mouseCount / 2 then
-		return
-	end
-	
-	newMap()
-	tfm.exec.chatMessage("<v>[#] <r>Looks like there is an issue with the map, just skipping.", nil)
-end
-
-local mapbug_counter = 0  
 onEvent("Loop", function(elapsed, remaining)
 	-- Changes the map when needed
 	if (is_invalid and os.time() >= is_invalid) or remaining < 500 then
 		newMap()
-	end
-
-	mapbug_counter = mapbug_counter + 1 
-	if mapbug_counter == 10 then
-		checkMapBug()
-		mapbug_counter = 0 
 	end
 end)
 
@@ -396,6 +376,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				translatedChatMessage("invalid_syntax", player)
 				return
 			end
+			current_map = args[1]
 			tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped" and not records_admins)
 		elseif os.time() < map_change_cd and not review_mode then
 			tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", player)

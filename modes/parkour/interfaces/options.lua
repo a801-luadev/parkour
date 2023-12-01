@@ -140,12 +140,29 @@ OptionsInterface
 			end
 		end)
 	)
+	:loadComponent(
+		Toggle.new(435, 237, false)
+		:onToggle(function(self, player, state) -- disable ui hotkeys
+			players_file[player].settings[9] = state and 1 or nil
+		end)
+		:onUpdate(function(self, player)
+			local setting = players_file[player].settings[9] == 1
+			if (self.state[player] and not setting) or (not self.state[player] and setting) then
+				self:toggle(player)
+			end
+		end)
+	)
 
 onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 	if not OptionsInterface.open[player] then return end
 
-	if action == "keyboardmort" and not Keyboard.open[player] then
+	if action == "keyboardmort" then
 		if not checkCooldown(player, "changeKeys", 1000) then return end
+
+		if Keyboard.open[player] then
+			Keyboard:remove(player)
+			return
+		end
 
 		local qwerty = players_file[player].settings[5] == 1
 

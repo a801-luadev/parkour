@@ -79,9 +79,24 @@ translations.fr = {
 	records_already_submitted = "<v>[#] <r>Tu as déjà envoyé ton record pour cette carte!",
 	records_submitted = "<v>[#] <d>Ton record pour la carte <b>%s</b> a été envoyé.",
 
+	-- Quests
+	daily_q = "Quotidien",
+	weekly_q = "Hebdomadaire",
+	daily_quests = "<p align='center'><font size='20'><B><D>Missions quotidiennes</D></B></font>",
+	weekly_quests = "<p align='center'><font size='20'><B><D>Missions hebdomadaires</D></B></font>",
+	quest_1 = "Terminez <B><D>%s/%s</D></B> cartes.",
+	quest_2 = "Passez<B><D>%s/%s</D></B> points de sauvegarde.",
+	quest_3 = "Soyez le premier à compléter une carte <B><D>%s/%s</D></B> fois.",
+	quest_4 = "Terminez une carte en moins de <B><D>%s</D></B> secondes.",
+	quest_5 = "Terminez la carte <B><D>@%s</D></B>",
+	quest_6 = "Utilisez le pouvoir <PT><b>%s</b></PT> <B><D>%s/%s</D></B> fois.",
+	next_reset = "<b><D>Réinitialiser :\n</b></D>%s",
+	quest_completed = "<b><D>Félicitations !</D></b> \nVous avez complété une mission %s!",
+	quest_reset = "<V>[#]</V> <O>Vos missions %s ont été réinitialisées.</O>",
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>VOUS ÊTES DÉSORMAIS AFK</b></bv>\nBOUGEZ POUR REAPPARAÎTRE</font>\n\n<font size='30'><u><t>Rappels:</t></u></font>\n\n<font size='15'><r>Les joueurs avec une ligne rouge au-dessus d'eux ne veulent pas d'aide!\nTroller/bloquer des joueurs est interdit dans parkour!<d>\nRejoins notre <cep><a href='event:discord'>serveur Discord</a></cep>!\nEnvie de contribuer au code? Viens voir notre <cep><a href='event:github'>GitHub</a></cep>\nTu as une bonne carte à nous proposer? Viens la poster sur notre <cep><a href='event:map_submission'>sujet de proposition de cartes</a></cep>\nJettes un oeil à notre <cep><a href='event:forum'>sujet officiel</a></cep> pour plus d'informations!\nSoutiens le module en faisant un <cep><a href='event:donate'>don!</a></cep>",
-	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.",
+	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.\n\nDisable all UI (leaderboard, help, shop etc.) hotkeys",
 	cooldown = "<v>[#] <r>Attends quelques secondes avant de pouvoir recommencer.",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Clavier <b>QWERTY</b>" ..
 					 "\n\n<b>Cacher</b> le nombre de cartes" ..

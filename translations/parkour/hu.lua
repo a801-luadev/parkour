@@ -79,9 +79,24 @@ translations.hu = {
 	records_already_submitted = "<v>[#] <r>Már beküldted a rekordod ehhez a pályához!",
 	records_submitted = "<v>[#] <d>A <b>%s</b> rekordod ehhez a pályához be lett küldve.",
 
+	-- Quests
+	daily_q = "Napi",
+	weekly_q = "Heti",
+	daily_quests = "<p align='center'><font size='20'><B><D>Napi küldetések</D></B></font>",
+	weekly_quests = "<p align='center'><font size='20'><B><D>Heti küldetések</D></B></font>",
+	quest_1 = "Teljesíts  <B><D>%s/%s</D></B> pályát.",
+	quest_2 = "Gyűjts <B><D>%s/%s</D></B> checkpointot.",
+	quest_3 = "Teljesítsd bármelyik pályát az első helyen <B><D>%s/%s</D></B> alkalommal.",
+	quest_4 = "Teljesíts egy pályát kevesebb mint <B><D>%s</D></B> másodperc alatt.",
+	quest_5 = "Teljesítsd ezt a pályát: <B><D>@%s</D></B>",
+	quest_6 = "Használd a/z <PT><b>%s</b></PT> képességet <B><D>%s/%s</D></B> alkalommal.",
+	next_reset = "<b><D>Frissül:\n</b></D>%s",
+	quest_completed = "<b><D>Gratulálunk!</D></b> \nTeljesítetted a %s küldetést!",
+	quest_reset = "<V>[#]</V> <O>A %s küldetéseid frissültek.</O>",
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MÓDBAN VAGY</b></bv>\nMOZOGJ HOGY ÚJRAÉLEDJ</font>\n\n<font size='30'><u><t>Emlékeztetők:</t></u></font>\n\n<font size='15'><r>A játékosok piros vonallal a fejük felett nem kérnek segítséget!\nTrollkodás/blokkolás más játékosokkal szemben a parkourban NEM megengedett!<d>\nCsatlakozz a <cep><a href='event:discord'>discord szerverünkhöz</a></cep>!\nSzertnél közreműködni kódolással? Tekintsd meg a <cep><a href='event:github'>github gyűjteményünket</a></cep>\nVan egy jó pályád amit bemutatnál? Posztold ki a <cep><a href='event:map_submission'>pálya beadvány témához</a></cep>\nCsekkold le a <cep><a href='event:forum'>official topic fület</a></cep> több információért!\nTámogass minket <cep><a href='event:donate'>adománnyal!</a></cep>",
-	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot",
+	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot\n\nDisable all UI (leaderboard, help, shop etc.) hotkeys",
 	cooldown = "<v>[#] <r>Várj néhány másodpercet, mielőtt újra ezt tennéd.",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> billentyűzet" ..
 					 "\n\nTeljesített pályák <b>elrejtése</b>" ..

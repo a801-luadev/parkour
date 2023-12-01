@@ -79,9 +79,24 @@ translations.id = {
     records_already_submitted = "<v>[#] <r>Anda sudah mengirimkan rekor anda untuk peta ini!",
     records_submitted = "<v>[#] <d>Rekor anda untuk peta <b>%s</b> telah dikirim.",
 
+    -- Quests
+    daily_q = "Harian",
+    weekly_q = "Mingguan",
+    daily_quests = "<p align='center'><font size='20'><B><D>Kegiatan Harian</D></B></font>",
+    weekly_quests = "<p align='center'><font size='20'><B><D>Kegiatan Mingguan</D></B></font>",
+    quest_1 = "Menyelesaikan <B><D>%s/%s</D></B> peta.",
+    quest_2 = "Kumpulkan <B><D>%s/%s</D></B> checkpoin.",
+    quest_3 = "Selesaikan peta apa saja di posisi pertama <B><D>%s/%s</D></B> kali.",
+    quest_4 = "Selesaikan peta di bawah <B><D>%s</D></B> detik.",
+    quest_5 = "Selesaikan peta <B><D>@%s</D></B>",
+    quest_6 = "Menggunakan kekuatan <PT><b>%s</b></PT> <B><D>%s/%s</D></B> kali.",
+    next_reset = "<b><D>Atur ulang:\n</b></D>%s",
+    quest_completed = "<b><D>Selamat!</D></b> \nKamu menyelesaikan kegiatan %s!",
+    quest_reset = "<V>[#]</V> <O>Kegiatan %s kamu sudah di atur ulang.</O>",
+
     -- Miscellaneous
     afk_popup = "\n<p align='center'><font size='30'><bv><b>ANDA DALAM MODE AFK</b></bv>\nPINDAH UNTUK RESPAWN</font>\n\n<font size='30'><u><t>Pengingat:</t></u></font>\n\n<font size='15'><r>Pemain dengan simbol merah tidak menginginkan bantuan!\nTrolling/pemblokiran pemain lain di parkur TIDAK dizinkan!<d>\nBergabung dengan <cep><a href='event:discord'>discord server</a> kami</cep>!\nIngin berkontribusi dengan kode? Lihat <cep><a href='event:github'>repository github</a> kami</cep>\nKamu memiliki peta bagus untuk diajukan? Posting di <cep><a href='event:map_submission'>topik pengajuan peta</a> kami</cep>\nCek <cep><a href='event:forum'>topik resmi</a></cep> kami untuk informasi lebih lanjut!\nDukung kami dengan <cep><a href='event:donate'>donasi!</a></cep>",
-    options = "<p align='center'><font size='20'>Opsi Parkour</font></p>\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nTekan <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> hotkey untuk <b>/mort</b> (jika dinonaktifkan menjadi <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan anda\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nAktifkan pengumuman penyelesaian peta\n\nAktifkan simbol tidak memerlukan bantuan",
+    options = "<p align='center'><font size='20'>Opsi Parkour</font></p>\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nTekan <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> hotkey untuk <b>/mort</b> (jika dinonaktifkan menjadi <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan anda\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nAktifkan pengumuman penyelesaian peta\n\nAktifkan simbol tidak memerlukan bantuan\n\nDisable all UI (leaderboard, help, shop etc.) hotkeys",
     cooldown = "<v>[#] <r>Mohon Tunggu beberapa detik untuk melakukan-nya kembali.",
     power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Keyboard <b>QWERTY</b>" ..
                     "\n\n<b>Tutup</b> penghitung peta" ..

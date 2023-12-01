@@ -79,9 +79,24 @@ translations.pl = {
 	records_already_submitted = "<v>[#] <r>Już przesłałeś swój rekord na tej mapie!",
 	records_submitted = "<v>[#] <d>Twój rekord na mapie <b>%s</b> został przesłany.",
 
+	-- Quests
+	daily_q = "Codzienne",
+	weekly_q = "Tygodniowe",
+	daily_quests = "<p align='center'><font size='20'><B><D>Codzienne zadania</D></B></font>",
+	weekly_quests= "<p align='center'><font size='20'><B><D>Tygodniowe zadania</D></B></font>",
+	quest_1 = "Ukończone <B><D>%s/%s</D></B> maps.",
+	quest_2 = "Zbierz <B><D>%s/%s</D></B> punkty kontrolne.",
+	quest_3 = "Ukończ dowolną mapę jako pierwszy <B><D>%s/%s</D></B>Czasowe.",
+	quest_4 = "Ukończ mapę poniżej <B><D>%s</D></B> sekund.",
+	quest_5 = "Ukończ mapę<B><D>@%s</D></B>",
+	quest_6 = "Użyj <PT><b>%s</b></PT>moc <B><D>%s/%s</D></B>razy.",
+	next_reset = "<b><D>Reset:\n</b></D>%s",
+	quest_completed = "<b><D>Gratulacje!</D></b>\nUkończyłeś % zadanie!",
+	quest_reset = "<V>[#]</V> <O>Twoje %s zadania zostały zresetowane.</O>",
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>JESTEŚ W TRYBIE AFK</b></bv>\nPORUSZAJ SIĘ ABY, GRAĆ DALEJ</font>\n\n<font size='30'><u><t>Przypomnienie:</t></u></font>\n\n<font size='15'><r>Gracze z czerwoną linią nad nimi nie chcą pomocy!\nTrollowanie/blokowanie innych graczy w parkour jest zabronione!<d>\nDołącz na nasz <cep><a href='event:discord'>serwer discord</a></cep>!\nChcesz współtworzyć kod?  Zobacz nasz <cep><a href='event:github'>magazyn githuba </a></cep>\nCzy masz dobrą mapę do przesłania?  Opublikujją w naszym <cep><a href='event:map_submission'>temacie przesyłania map</a></cep>\nSprawdź nasz <cep><a href='event:forum'>watek na forum</a></cep> żeby dowiedzieć się więcej\nWesprzyj nas przez <cep><a href='event:donate'>darowizmy!</a></cep>",
-	options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy",
+	options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy\n\nDisable all UI (leaderboard, help, shop etc.) hotkeys",
 	cooldown = "<v>[#] <r>Poczekaj kilka sekund, zanim zrobisz to ponownie.",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> klawiatura" ..
 					 "\n\n<b>pokaż</b> liczbę map" ..

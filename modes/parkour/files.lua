@@ -4,6 +4,8 @@ local no_powers
 local unbind
 local bindNecessary
 local NewBadgeInterface
+local CompletedQuestsInterface
+local QuestsInterface
 local to_save = {}
 local files = {
 	--[[
@@ -26,7 +28,7 @@ local files = {
 }
 local total_files = 3
 local file_index = 1
-local settings_length = 8
+local settings_length = 9
 local file_id = files[file_index]
 local updating = {}
 local timed_maps = {
@@ -91,6 +93,11 @@ local titles = {
 		field = "tc"
 	}
 }
+
+local quests
+local fillQuests
+local power_quest = {}
+
 players_file = {}
 
 local data_migrations = {
@@ -252,8 +259,39 @@ local data_migrations = {
 		data.coins = math.floor(data.c * 0.10)
 		data.skins = { ["1"] = 1, ["2"] = 1, ["7"] = 1, ["28"] = 1, ["46"] = 1 }
 		data.cskins = { 1, 2, 7, 28, 46 }
+	end,
+	[6] = function(player, data)
+		data.v = 7
+
+		local questList = {}
+		local dailyQuests = fillQuests(data, questList, false)
+		local allQuests = fillQuests(data, dailyQuests, true)
+
+		data.quests = allQuests
 	end
 }
+
+local function getQuestsResetTime()
+	local currentTime = os.time() + 3600000
+	local currentDate = os.date("*t", currentTime / 1000)
+	local day = 24 * 60 * 60 * 1000
+
+	currentDate.wday = currentDate.wday - 1
+
+	if currentDate.wday == 0 then
+		currentDate.wday = 7
+	end
+
+	local last_daily_reset = math.floor(currentTime / day) * day
+	local next_daily_reset = math.ceil(currentTime / day) * day
+
+	local last_weekly_reset = last_daily_reset - currentDate.wday * day
+	local next_weekly_reset = last_weekly_reset + 7 * day
+
+	local reset_times = {last_daily_reset, last_weekly_reset, next_daily_reset, next_weekly_reset}
+
+	return reset_times
+end
 
 function savePlayerData(player)
 	if not players_file[player] then return end
@@ -399,6 +437,64 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if room.playerList[player] then
 		players_file[player].commu = room.playerList[player].community
 		players_file[player].playerid = room.playerList[player].id
+	end
+
+	if players_file[player].quests then
+		local reset_time = getQuestsResetTime() -- reset_time = {last_daily_reset, last_weekly_reset, next_daily_reset, next_weekly_reset}
+
+		local isDailyReset = false
+		local isWeeklyReset = false
+		local questTable = players_file[player].quests
+
+		for i = 1, #questTable do
+			local quest = questTable[i]
+		
+			if i <= 4 then
+				if (quest.ts and quest.ts < reset_time[1]) or (quest.skp and quest.skp > 1 and quest.skp < reset_time[1]) then
+					isDailyReset = true
+				end
+			else
+				if (quest.ts and quest.ts < reset_time[2]) or (quest.skp and quest.skp > 1 and quest.skp < reset_time[2]) then
+					isWeeklyReset = true
+				end
+			end
+		end
+
+		if isDailyReset or isWeeklyReset then
+			if isDailyReset then
+				local daily_text = translatedMessage("daily_q", player)
+				daily_text = daily_text:lower()
+				translatedChatMessage("quest_reset", player, daily_text)
+
+				questTable = fillQuests(players_file[player], questTable, false)
+			end
+		
+			if isWeeklyReset then
+				local weekly_text = translatedMessage("weekly_q", player)
+				weekly_text = weekly_text:lower()
+
+				translatedChatMessage("quest_reset", player, weekly_text)
+				questTable = fillQuests(players_file[player], questTable, true)
+			end
+		end
+
+		for questID = 1, #questTable do
+			if questTable[questID].id == 6 then
+				if not power_quest[player] then
+					power_quest[player] = {}
+				end
+
+				if questID <= 4 then
+					power_quest[player].d = questTable[questID].pr
+					power_quest[player].di = questID
+				else
+					power_quest[player].w = questTable[questID].pr
+					power_quest[player].wi = questID
+				end
+			end
+		end	
+
+		players_file[player].quests = questTable
 	end
 
 	eventPlayerDataParsed(player, data)
