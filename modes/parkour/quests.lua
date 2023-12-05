@@ -22,6 +22,8 @@ local function removeCompletedQuestUI(player)
 end
 
 local function completeQuest(player, questData, isWeekly, questID)
+	if not questData then return end
+
 	if QuestsInterface.open[player] then
 		QuestsInterface:remove(player)
 	end
@@ -301,8 +303,13 @@ function fillQuests(data, questList, isWeekly, skipQuest)
 	end
 
 	for i = min, max do
-		if not questList[i] or (not skipQuest and (questList[i].ts and questList[i].ts < reset_time)) or 
-			(skipQuest and questList[i].skp and questList[i].skp == 0) then
+		if (not skipQuest and questList[i] and questList[i].skp and questList[i].skp ~= 0 and questList[i].skp < reset_time) then
+			if questList[i].skp then
+				questList[i].skp = nil 
+			end
+		end
+
+		if not questList[i] or (not skipQuest and (questList[i].ts and questList[i].ts < reset_time)) or (skipQuest and questList[i].skp and questList[i].skp == 0) then
 
 			local randomIndex = math.random(#availableQuests)
 			local randomQuest = availableQuests[randomIndex]
@@ -327,19 +334,6 @@ function fillQuests(data, questList, isWeekly, skipQuest)
 
 			table.remove(availableQuests, randomIndex)
 		end
-
-		if (not skipQuest and questList[i].ts and questList[i].ts < reset_time) or 
-		   (questList[i].skp and questList[i].skp < reset_time) then
-
-			if questList[i].ts then
-				questList[i].ts = nil
-			end
-			if questList[i].skp then
-				questList[i].skp = nil 
-			end
-
-		end
 	end
-
 	return questList
 end

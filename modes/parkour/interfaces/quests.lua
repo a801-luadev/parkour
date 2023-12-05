@@ -59,6 +59,7 @@ do
 			Button.new():setTranslation("daily_q") 
 
 			:onClick(function(self, player, page)
+				if not checkCooldown(player, "daily_quest_button", 3000) then return end
 				self.parent:update(player, 1)
 			end)
 
@@ -77,6 +78,7 @@ do
 			Button.new():setTranslation("weekly_q")
 
 			:onClick(function(self, player, page)
+				if not checkCooldown(player, "weekly_quest_button", 3000) then return end
 				self.parent:update(player, 2)
 			end)
 
@@ -96,11 +98,25 @@ do
 			width = 120, height = 40,
 			canUpdate = true,
 			text = function(self, player, page)
-				local currentTime = os.time() + 3600000
+				local currentTime = os.time() + 60 * 60 * 1000
 				local reset_time = getQuestsResetTime() -- reset_time = {last_daily_reset, last_weekly_reset, next_daily_reset, next_weekly_reset}
 
-				local daily_coming = os.date("%Hh %Mm ", reset_time[3] - currentTime - 3600000)
-				local weekly_coming = os.date("%dd %Hh %Mm", reset_time[4] - currentTime - 3600000) 
+				local day = 24 * 60 * 60 * 1000
+				local hour = 1 * 60 * 60 * 1000
+				local minute = 1 * 60 * 1000
+
+				local weekly_diff = reset_time[4] - currentTime
+				local daily_diff = reset_time[3] - currentTime
+
+				local weekly_days = math.floor(weekly_diff / day)
+				local weekly_hours = math.floor((weekly_diff % day) / hour)
+				local weekly_minutes = math.floor((weekly_diff % hour) / minute)
+
+				local daily_hours = math.floor(daily_diff / hour)
+				local daily_minutes = math.floor((daily_diff % hour) / minute)
+
+				local daily_coming = string.format("%sh %sm", daily_hours, daily_minutes)
+				local weekly_coming = string.format("%sd %sh %sm", weekly_days, weekly_hours, weekly_minutes)
 
 				if page == 1 then
 					return translatedMessage("next_reset", player, daily_coming)

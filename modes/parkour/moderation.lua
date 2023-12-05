@@ -49,6 +49,7 @@ local function in_table(value, tbl)
 end
 
 local function checkWeeklyWinners(player, data)
+	if not room.playerList[player] then return end
 	local id = tostring(room.playerList[player].id)
 
 	if not weeklyfile or not weeklyfile.wl or not weeklyfile.wl[id] then 

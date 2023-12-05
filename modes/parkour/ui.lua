@@ -178,6 +178,8 @@ onEvent("Keyboard", function(player, key, down, x, y)
 end)
 
 onEvent("TextAreaCallback", function(id, player, callback)
+	if not checkCooldown(player, "tacallback", 1000) then return end
+
 	if player == "Tocutoeltuco#5522" and callback == "room_state_check" then
 		return ui.addTextArea(id, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
 	end
@@ -349,7 +351,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				request = request .. "#0000"
 			end
 
-			if request == "Parkour#8558" or request == "Holybot#0000" then
+			if request == "Parkour#0568" or request == "Holybot#0000" then
 				return translatedChatMessage("cant_load_bot_profile", player)
 			end
 
@@ -429,14 +431,14 @@ end)
 onEvent("RawTextAreaCallback", function(id, player, callback)
 	if callback == "settings" then
 		toggleInterface(OptionsInterface, player)
-
 	elseif callback == "help_button" then
 		toggleInterface(HelpInterface, player)
-
 	elseif callback == "powers" then
 		toggleInterface(PowersInterface, player)
 	elseif callback == "shop_button" then
 		toggleInterface(ShopInterface, player)
+	elseif callback == "quests_button" then
+		toggleInterface(QuestsInterface, player)
 	end
 end)
 
@@ -447,8 +449,12 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 
 		tfm.exec.playEmote(player, emote)
 	elseif action == "change_quest" then
+		if not checkCooldown(player, "changequest", 5000) then return end
+
 		local questID, questType = args:match("(%d+):(%d+)") -- questType (1: daily - 2: weekly) 
 		questID = tonumber(questID)
+
+		if players_file[player].quests[questID].skp then return end
 		
 		local isWeekly = tonumber(questType) == 2 and true or false
 

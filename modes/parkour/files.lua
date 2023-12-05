@@ -272,14 +272,14 @@ local data_migrations = {
 }
 
 local function getQuestsResetTime()
-	local currentTime = os.time() + 3600000
-	local currentDate = os.date("*t", currentTime / 1000)
+	local currentTime = os.time() + 60 * 60 * 1000
+	local currentDate = os.date("*t", os.time() / 1000)
 	local day = 24 * 60 * 60 * 1000
 
-	currentDate.wday = currentDate.wday - 1
+	currentDate.wday = currentDate.wday - 2
 
-	if currentDate.wday == 0 then
-		currentDate.wday = 7
+	if currentDate.wday == -1 then
+		currentDate.wday = 6
 	end
 
 	local last_daily_reset = math.floor(currentTime / day) * day
@@ -288,7 +288,7 @@ local function getQuestsResetTime()
 	local last_weekly_reset = last_daily_reset - currentDate.wday * day
 	local next_weekly_reset = last_weekly_reset + 7 * day
 
-	local reset_times = {last_daily_reset, last_weekly_reset, next_daily_reset, next_weekly_reset}
+	local reset_times = {last_daily_reset - 60 * 60 * 1000, last_weekly_reset - 60 * 60 * 1000, next_daily_reset, next_weekly_reset}
 
 	return reset_times
 end

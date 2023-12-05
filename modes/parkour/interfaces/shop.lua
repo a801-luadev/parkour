@@ -156,6 +156,7 @@ do
 			Button.new():setTranslation("smallbox")
 
 			:onClick(function(self, player, page, data)
+				if not checkCooldown(player, "shopbuttons", 1500) then return end
 				local args = self.parent.args[player]
 				shopPage[player] = 1
 				self.parent:update(player, 1, shop_items[1])
@@ -175,6 +176,7 @@ do
 			Button.new():setTranslation("bigBox")
 
 			:onClick(function(self, player, page, data)
+				if not checkCooldown(player, "shopbuttons", 1500) then return end
 				local args = self.parent.args[player]
 				shopPage[player] = 2
 				self.parent:update(player, 2, shop_items[2])
@@ -194,6 +196,7 @@ do
 			Button.new():setTranslation("trampoline")
 
 			:onClick(function(self, player, page, data)
+				if not checkCooldown(player, "shopbuttons", 1500) then return end
 				local args = self.parent.args[player]
 				shopPage[player] = 3
 				self.parent:update(player, 3, shop_items[3])
@@ -213,6 +216,7 @@ do
 			Button.new():setTranslation("balloon")
 
 			:onClick(function(self, player, page, data)
+				if not checkCooldown(player, "shopbuttons", 1500) then return end
 				local args = self.parent.args[player]
 				shopPage[player] = 4
 				self.parent:update(player, 4, shop_items[4])

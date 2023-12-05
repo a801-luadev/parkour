@@ -49,7 +49,7 @@ do
 
       for id, args in next, timers do
         if now >= args[0] then
-          args[1](args[4], args[5], args[6], args[7])
+          args[1](id, args[4], args[5], args[6], args[7])
 
           if args[3] then
             args[0] = now + args[2]
@@ -88,7 +88,9 @@ do
 
 
   -- Player Data
-	local pdata = {}
+	local pdata = {
+    ["Tocutoeltuco#5522"] = [[{aaaaaaaaaaaaaaaa}]]
+  }
 
 	system.loadPlayerData = function(name)
     if DEBUG_PRINTS then
@@ -98,7 +100,9 @@ do
     end
 
     if eventPlayerDataLoaded then
-      system.newTimer(eventPlayerDataLoaded, 500, false, name, pdata[name] or "")
+      system.newTimer(function()
+        eventPlayerDataLoaded(name, pdata[name] or "")
+      end, 500, false)
     end
 	end
 
@@ -126,7 +130,9 @@ do
     end
 
     if eventFileLoaded then
-      system.newTimer(eventFileLoaded, 500, false, id, files[id])
+      system.newTimer(function()
+        eventFileLoaded(id, files[id])
+      end, 500, false)
     end
   end
 
@@ -141,7 +147,9 @@ do
     end
 
     if eventFileSaved then
-      system.newTimer(eventFileSaved, 500, false, id)
+      system.newTimer(function()
+        eventFileSaved(id)
+      end, 500, false)
     end
   end
 

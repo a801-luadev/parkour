@@ -107,6 +107,7 @@ do
 			Button.new():setTranslation("help")
 
 			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
 				scroll_info[player] = 1
 				self.parent:update(player, "help")
 			end)
@@ -125,6 +126,7 @@ do
 			Button.new():setTranslation("staff")
 
 			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
 				scroll_info[player] = 1
 				self.parent:update(player, "staff")
 			end)
@@ -143,6 +145,7 @@ do
 			Button.new():setTranslation("rules")
 
 			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
 				scroll_info[player] = 1
 				self.parent:update(player, "rules")
 			end)
@@ -161,6 +164,7 @@ do
 			Button.new():setTranslation("contribute")
 
 			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
 				scroll_info[player] = 1
 				self.parent:update(player, "contribute")
 			end)
@@ -179,6 +183,7 @@ do
 			Button.new():setTranslation("changelog")
 
 			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
 				scroll_info[player] = 1
 				self.parent:update(player, "changelog")
 			end)
@@ -304,7 +309,7 @@ do
 		})
 
 	onEvent("TextAreaCallback", function(id, player, cb)
-		if not checkCooldown(player, "helpscroll", 1000) then return end
+		if not checkCooldown(player, "helpscroll", 4000) then return end
 		if cb == "help_scroll_up" then
 			eventKeyboard(player, 1, true, 0, 0)
 		elseif cb == "help_scroll_down" then

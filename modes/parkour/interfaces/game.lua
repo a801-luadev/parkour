@@ -3,6 +3,7 @@ do
 	local powers_img = "17136ef539e.png"
 	local help_img = "17136f9eefd.png"
 	local shop_img = "18b597a932a.png"
+	local quests_img = "18c3b94e9a4.png"
 
 	GameInterface = Interface.new(0, 0, 800, 400, true)
 		:addImage({
@@ -31,6 +32,19 @@ do
 		})
 
 		:addImage({
+			image = quests_img,
+			target = ":1",
+			x = 714, y = 32
+		})
+
+		:addTextArea({
+			text = "<a href='event:quests_button'><font size='50'>  </font></a>",
+			x = 709, y = 32,
+			height = 30, width = 32,
+			alpha = 0
+		})
+
+		:addImage({
 			canUpdate = true,
 			image = function(self, player)
 				local file = players_file[player]
@@ -43,7 +57,7 @@ do
 				end
 			end,
 			target = ":1",
-			x = 714, y = 32
+			x = 684, y = 32
 		})
 		:addTextArea({
 			canUpdate = true,
@@ -57,7 +71,7 @@ do
 					return ""
 				end
 			end,
-			x = 709, y = 32,
+			x = 679, y = 32,
 			height = 30, width = 32,
 			alpha = 0
 		})
@@ -73,7 +87,7 @@ do
 				end
 			end,
 			target = ":1",
-			x = 684, y = 32
+			x = 654, y = 32
 		})
 		:addTextArea({
 			canUpdate = true,
@@ -85,7 +99,7 @@ do
 					return ""
 				end
 			end,
-			x = 679, y = 32,
+			x = 649, y = 32,
 			height = 30, width = 32,
 			alpha = 0
 		})
