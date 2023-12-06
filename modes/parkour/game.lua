@@ -34,6 +34,17 @@ local savePlayerData
 local ranks
 local bindKeyboard
 
+local lastOpenedMap
+
+do
+	local newGame = tfm.exec.newGame
+	tfm.exec.newGame = function(code, reversed)
+		code = tostring(code)
+		lastOpenedMap = code:sub(1, 1) == '@' and code:sub(2) or code
+		newGame(code, reversed)
+	end
+end
+
 local changePlayerSize = function() end
 -- only enable on testing rooms
 changePlayerSize = tfm.exec.changePlayerSize
@@ -342,6 +353,11 @@ onEvent("NewGame", function()
   -- xmlMapInfo doesn't reset if the map doesn't have an xml
   if xml and tostring(info.mapCode) == code and not smolified then
 		map_name = ("<J>%s <BL>- %s"):format(info.author, room.currentMap)
+	end
+
+	-- prevent /np abuse
+	if code ~= lastOpenedMap then
+		count_stats = false
 	end
 
 	if submode == "smol" then
