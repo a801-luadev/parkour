@@ -177,7 +177,7 @@ powers = {
 		default = {5, 4}, -- SPACE
 
 		fnc = function(player, key, down, x, y)
-			tfm.exec.movePlayer(player, 0, 0, true, nil, -50, false)
+			tfm.exec.movePlayer(player, 0, 0, true, nil, -5 * map_gravity, false)
 		end
 	},
 	{
@@ -931,7 +931,7 @@ onEvent("Mouse", function(player, x, y)
 	if not victory[player] or not players_file[player] then return end
 
 	local power = powers.teleport
-	if players_file[player].c >= power.maps then
+	if players_file[player].c >= power.maps or review_mode then
 		if (not power.cooldown or checkCooldown(
 			player, power.name, power.cooldown,
 

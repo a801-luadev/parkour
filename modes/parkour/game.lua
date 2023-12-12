@@ -22,6 +22,7 @@ local players_file
 review_mode = false
 local cp_available = {}
 local map_name
+local map_gravity = 10
 
 local checkpoint_info = {
 	version = 1, -- 0 = old, 1 = new
@@ -353,6 +354,7 @@ onEvent("NewGame", function()
   -- xmlMapInfo doesn't reset if the map doesn't have an xml
   if xml and tostring(info.mapCode) == code and not smolified then
 		map_name = ("<J>%s <BL>- %s"):format(info.author, room.currentMap)
+		map_gravity = tonumber(xml:match('G=".-,(.-)"')) or 10
 	end
 
 	-- prevent /np abuse
