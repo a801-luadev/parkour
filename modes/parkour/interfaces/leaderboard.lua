@@ -196,6 +196,13 @@ do
 			color = {0x203F43, 0x193E46, 1}
 		})
 
+		:addTextArea({
+			text = "<a href='event:leaderboard_button'><font color='#b84c36' size='15'><b>X</b></font></a>",
+			alpha = 0,
+			x = 440, y = 5,
+			width = 20, height = 20
+		})
+
 		-- Pagination buttons
 		:loadComponent( -- Left arrow
 			Button.new():setText("&lt;")

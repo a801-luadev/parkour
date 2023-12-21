@@ -50,7 +50,7 @@ do
 			width = 300, height = 15,
 			text = function(self, player)
 				return ("<a href='event:" .. closeButton.callback ..
-						"'><p align='center'> Close")
+						"'><p align='center'>".. translatedMessage("close", player))
 			end,
 			alpha = 0
 		})

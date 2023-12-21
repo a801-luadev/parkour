@@ -100,6 +100,13 @@ do
 		})
 
 		:addTextArea({
+			text = "<a href='event:powers'><font color='#b84c36' size='15'><b>X</b></font></a>",
+			alpha = 0,
+			x = 665, y = 0,
+			width = 20, height = 20
+		})
+
+		:addTextArea({
 			text = function(self, player, power)
 				return translatedMessage("weekly_info", player, weekleaderboard[player] and ("#" .. weekleaderboard[player]) or "N/A")
 			end,

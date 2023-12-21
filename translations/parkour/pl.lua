@@ -94,6 +94,18 @@ translations.pl = {
 	quest_completed = "<b><D>Gratulacje!</D></b>\nUkończyłeś %s zadanie!",
 	quest_reset = "<V>[#]</V> <O>Twoje %s zadania zostały zresetowane.</O>",
 
+	-- Christmas
+	find_gift1 = "<ch>Mikołaj właśnie wpadł! Poluj na prezenty które znajdują się na mapie żeby zdobyć niespodziankę!",
+    find_gift2 = "<ch>Święta na całego! Na mapie pojawiły się w magiczny sposób prezenty leć je znaleźć",
+    find_gift3 = "<ch>Ho, ho, ho! Pomocnik Mikołaja zostawił ci prezent leć go znaleźć na obecnej mapie!",
+    find_gift4 = "<ch>Duch świąt unosi się w powietrzu! Znajdź prezent świąteczny ukryty na tej mapie!",
+    find_gift5 = "<ch>Wesołych Świąt! Elfy ukryły dla ciebie prezent czy jesteś w stanie go znaleźć?",
+    found_gift1 = "<ch>Brawo! <J>%s</J>otworzył prezent i znalazł w nim %s monet!",
+    found_gift2 = "<ch>Brawo, <J>%s</J>! >Właśnie wygrałeś <J>%s</J> błyszczące monety z prezentu od Mikołaja!",
+    found_gift3 = "<ch>  Wygrał <J>%s</J>! <J>%s</J> złote monety, dzięki Mikołajowi!",
+    found_gift4 = "<ch> Gratulacje dla <J>%s</J> wygranej <J>%s</J> ,monet!  Duch Bożego narodzenia jaśnieje!",
+    found_gift5 = "<ch> Prezentem od świętego Mikołaja został obdarowany <J>%s</J> a w nim <J>%s</J> olśniewających monet!",
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>JESTEŚ W TRYBIE AFK</b></bv>\nPORUSZAJ SIĘ ABY, GRAĆ DALEJ</font>\n\n<font size='30'><u><t>Przypomnienie:</t></u></font>\n\n<font size='15'><r>Gracze z czerwoną linią nad nimi nie chcą pomocy!\nTrollowanie/blokowanie innych graczy w parkour jest zabronione!<d>\nDołącz na nasz <cep><a href='event:discord'>serwer discord</a></cep>!\nChcesz współtworzyć kod?  Zobacz nasz <cep><a href='event:github'>magazyn githuba </a></cep>\nCzy masz dobrą mapę do przesłania?  Opublikujją w naszym <cep><a href='event:map_submission'>temacie przesyłania map</a></cep>\nSprawdź nasz <cep><a href='event:forum'>watek na forum</a></cep> żeby dowiedzieć się więcej\nWesprzyj nas przez <cep><a href='event:donate'>darowizmy!</a></cep>",
 	options = "<p align='center'><font size='20'>Parkour Opcje</font></p>\n\nUżyj <b>QWERTY</b> klawiatura (wyłącz jeśli <b>AZERTY</b>)\n\nUżyj klawisza<J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> zamiast <b>/mort</b> (wyłącz <b>DEL</b>)\n\nPokaż swoje czasy odnowienia mocy\n\nPokaż przycisk mocy\n\nPokaż przycisk pomocy\n\nPokaż ogłoszenia o ukończeniu mapy\n\nPokaż symbol bez pomocy\n\nWylączoną klawisze dla całego interfejsu (tabela liderów, pomoc, sklep, itd.)",
@@ -189,6 +201,7 @@ translations.pl = {
 	buy = "Kup",
 	equip = "Wyposaż",
 	equipped = "<font size = '10'>Wyposażono</font>",
+	saving = "<p align='right'> Zapisywanie...",
 
 	-- Power names
 	balloon = "Balon",

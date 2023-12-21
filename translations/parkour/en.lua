@@ -93,7 +93,19 @@ translations.en = {
 	next_reset = "<b><D>Reset:\n</b></D>%s",
 	quest_completed = "<b><D>Congratulations!</D></b> \nYou've completed a %s quest!",
 	quest_reset = "<V>[#]</V> <O>Your %s quests have been reset.</O>",
-	
+
+	-- Christmas
+	find_gift1 = "<ch>Santa has just dropped by! Hunt for the Christmas gift on the map and unwrap a surprise!",
+	find_gift2 = "<ch>Jingle all the way! A special Christmas gift has magically appeared on the map – go find it!",
+	find_gift3 = "<ch>Ho, ho, ho! Santa's little helper has left a gift for you to find on the current map!",
+	find_gift4 = "<ch>The Christmas spirit is in the air! Find the Christmas gift hidden on this map!",
+	find_gift5 = "<ch>Merry Parkourmas! The elves have hidden a gift for you. Can you find it?",
+	found_gift1 = "<ch>Hooray! <J>%s</J> has unwrapped the gift and found %s coins inside!",
+	found_gift2 = "<ch>Hurray, <J>%s</J>! You have just won <J>%s</J> shiny coins from Santa's magical gift!",
+	found_gift3 = "<ch>It's a win for <J>%s</J>! <J>%s</J> coins richer thanks to Santa!",
+	found_gift4 = "<ch>Congratulations to <J>%s</J> on winning <J>%s</J> coins! The Christmas spirit is shining bright!",
+	found_gift5 = "<ch>Santa's gift has bestowed <J>%s</J> with <J>%s</J> dazzling coins!",
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
 	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements\n\nShow no help symbol\n\nDisable hotkeys for all interfaces (leaderboard, help, shop, etc.)",
@@ -189,6 +201,7 @@ translations.en = {
 	buy = "Buy",
 	equip = "Equip",
 	equipped = "<font size = '10'>Equipped</font>",
+	saving = "<p align='right'>Saving...",
 
 	-- Power names
 	balloon = "Balloon",

@@ -24,6 +24,11 @@ local cp_available = {}
 local map_name
 local map_gravity = 10
 
+local gifts = {}
+local gift_conditions = {_complete = math.random(4, 8), _completed = 0, _ts = os.time() + math.random(15, 30) * 60 * 1000}
+local save_queue = { __first = "", __last = ""}
+local saveQueueCounter = 0
+
 local checkpoint_info = {
 	version = 1, -- 0 = old, 1 = new
 	radius = 15 ^ 2, -- radius of 15px
@@ -120,6 +125,87 @@ local function enableSpecMode(player, enable)
 	showStats()
 end
 
+local function queueForSave(player)
+	if save_queue[player] then return end
+
+	if save_queue.__first == "" then
+		save_queue[player] = ""
+		save_queue.__first = player
+		save_queue.__last = player
+	else
+		save_queue[player] = ""
+		save_queue[save_queue.__last] = player
+		save_queue.__last = player
+	end
+
+	local savingMessage = translatedMessage("saving", player)
+	ui.addTextArea(987, savingMessage, player, 670, 380, 120, 20, nil, 0, 0, true)
+end
+
+local function saveFromQueue()
+	if not save_queue then return end
+	if save_queue.__first == "" then return end
+
+	savePlayerData(save_queue.__first)
+	ui.removeTextArea(987, save_queue.__first)
+
+	local oldfirst = save_queue.__first
+
+	save_queue.__first = save_queue[save_queue.__first]
+
+	save_queue[oldfirst] = nil
+end
+
+local function addRandomGift()
+	local gift_x = math.random(50, 1580) 
+	local gift_y = math.random(50, 700)
+	local msg = math.random(1, 5)
+
+	for player in next, in_room do
+		gifts[player] = tfm.exec.addImage("18c73e40d6d.png", "!1", gift_x - 15 , gift_y - 20, player)
+		tfm.exec.addBonus(0, gift_x, gift_y, 999, 0, false, player)
+		translatedChatMessage("find_gift" .. msg, player)
+	end
+
+	gift_conditions = {_complete = math.random(4, 8), _completed = 0, _ts = os.time() + math.random(15, 30) * 60 * 1000}
+end
+
+local function giftCollected(player)
+	if not players_file[player] then return end
+	if not gifts[player] then return end
+
+	local prizes = {10, 50, 100, 250, 500, 750, 1000}
+	local chances = {8600, 1000, 200, 139, 50, 10, 1}
+
+	local randomValue = math.random(0, 100 * 100)
+
+	local totalChance = 0
+	local prize = 0
+    for i, chance in ipairs(chances) do
+        totalChance = totalChance + chance
+        if randomValue <= totalChance then
+            prize = prizes[i]
+			break
+        end
+    end
+	
+	local msg = math.random(1, 5)
+	if prize > 50 then
+		for p in next, in_room do
+			translatedChatMessage("found_gift" .. msg, p, player, prize)
+		end
+	else
+		translatedChatMessage("found_gift" .. msg, player, player, prize)
+	end
+
+	players_file[player].coins = players_file[player].coins + prize
+	queueForSave(player)
+
+	tfm.exec.removeBonus(999, player)
+	tfm.exec.removeImage(gifts[player])
+	gifts[player] = nil
+end
+
 local function checkBan(player, data, id)
 	if not id then
 		id = room.playerList[player]
@@ -168,6 +254,7 @@ local function checkTitleAndNextFieldValue(player, title, sumValue, _playerData,
 end
 
 onEvent("NewPlayer", function(player)
+	ui.removeTextArea(987, nil)
 	spec_mode[player] = nil
 	in_room[player] = true
 
@@ -405,9 +492,32 @@ onEvent("NewGame", function()
 		tfm.exec.killPlayer(player)
 	end
 	showStats()
+
+	if (count_stats and
+		room.uniquePlayers >= min_save and
+		player_count >= min_save and
+		not records_admins and
+		not is_tribe and
+		not review_mode) then
+			
+		gift_conditions._completed = gift_conditions._completed + 1
+		
+		if gift_conditions._completed >= gift_conditions._complete and os.time() > gift_conditions._ts then
+			addRandomGift()
+		end
+	end
+
 end)
 
 onEvent("Loop", function()
+	if save_queue.__first ~= "" then 
+		saveQueueCounter = saveQueueCounter + 1
+		if saveQueueCounter == 8 then
+			saveFromQueue()
+			saveQueueCounter = 0
+		end
+	end
+
 	if not levels then return end
 
 	if check_position > 0 then
@@ -488,6 +598,7 @@ end)
 
 onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if checkpoint_info.version ~= 1 then return end
+	if bonus == 999 then return giftCollected(player) end
 	if not levels then return end
 	local level = levels[bonus]
 	if not level then return end

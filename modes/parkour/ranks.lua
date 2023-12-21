@@ -68,7 +68,6 @@ local ranks_permissions = {
 		use_tracker = true
 	},
 	translator = {
-		change_map = true,
 		hide = true
 	},
 	hidden = {}

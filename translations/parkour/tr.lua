@@ -95,6 +95,18 @@ translations.tr = {
 	quest_completed = "<b><D>Tebrikler!</D></b> \nBir %s görev tamamladınız!",
 	quest_reset = "<V>[#]</V> <O>%s görevleriniz sıfırlandı.</O>",
 
+	-- Christmas
+	find_gift1 = "<ch>Noel Baba'nın parkur partisi başladı! Haritada saklı hediyeyi bul ve sürprizini aç!",
+	find_gift2 = "<ch>Zil sesleri çalıyor! Haritada sihirli bir yılbaşı hediyesi belirdi – bulmak için hazır mısın?",
+	find_gift3 = "<ch>Ho, ho, ho! Noel Baba'nın küçük yardımcısı, haritada bulmanız için bir hediye bıraktı!",
+	find_gift4 = "<ch>Yılbaşı coşkusu her tarafa yayıldı! Bu haritada saklı yılbaşı hediyesini bulun!",
+	find_gift5 = "<ch>Mutlu Parkurlar! Elf'ler senin için bir hediye sakladı. Onu bulabilir misin?",
+	found_gift1 = "<ch>Yaşasın! <J>%s</J> hediye kutusunu açtı ve içinde <J>%s</J> coin buldu!",
+	found_gift2 = "<ch>Tebrikler, <J>%s</J>! Noel Baba'nın sihirli hediyesinden <J>%s</J> coin kazandın!",
+	found_gift3 = "<J>%s</J> <ch>şanslı gününde! Yılbaşı hediyesi sayesinde <J>%s</J> coin daha zengin!",
+	found_gift4 = "<ch>Tebrikler, <J>%s</J>! <J>%s</J> coin kazandın!",
+	found_gift5 = "<ch>Muazzam! <J>%s</J>, Noel Baba'nın sürpriz hediyesini açtın ve <J>%s</J> coin kaptın!",
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MODDASIN</b></bv>\nYENİDEN DOĞMAK İÇİN HAREKET ET. </font>\n\n<font size='30'><u><t>Hatırlatıcılar:</t></u></font>\n\n<font size='15'><r>Üzerinde kırmızı çizgi olan oyuncular yardım istemiyordur!\nParkurdaki diğer oyuncuları trollemek/engellemek YASAKTIR!<d>\n<cep><a href='event:discord'>Discord</a></cep>'umuza katıl!\nKodumuza katkıda bulunmak mı istiyorsun? <cep><a href='event:github'>Github depomuza</a></cep> bir bak\nSunacak iyi bir haritanız mı var? <cep><a href='event:map_submission'>Harita öneri başlığımıza</a></cep> gönderin!\nDaha fazla bilgi için<cep><a href='event:forum'>resmi başlığımıza</a></cep> bakın!\nBizi desteklemek için <cep><a href='event:donate'>bağış yap!</a></cep>",
 	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\n<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n<b>/mort</b>'un kısayolu <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\nBeceri bekleme sürelerini göster.\n\nBeceriler simgesini göster.\n\nYardım butonunu göster.\n\nHarita bitirme duyurularını göster.\n\nYardım istemiyorum simgesini göster.\n\nTüm arayüzler (liderlik tablosu, yardım, market vb.) için kısayol tuşlarını devre dışı bırak.",	
@@ -190,6 +202,7 @@ translations.tr = {
 	buy = "Satın Al",
 	equip = "Kullan",
 	equipped = "<font size = '10'>Kullanıldı</font>",
+	saving = "<p align='right'>Kaydediliyor...",
 
 	-- Power names
 	balloon = "Balon",

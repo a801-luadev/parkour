@@ -439,6 +439,8 @@ onEvent("RawTextAreaCallback", function(id, player, callback)
 		toggleInterface(ShopInterface, player)
 	elseif callback == "quests_button" then
 		toggleInterface(QuestsInterface, player)
+	elseif callback == "leaderboard_button" then
+		toggleInterface(LeaderboardInterface, player)
 	end
 end)
 

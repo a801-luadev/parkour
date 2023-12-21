@@ -177,7 +177,7 @@ powers = {
 		default = {5, 4}, -- SPACE
 
 		fnc = function(player, key, down, x, y)
-			tfm.exec.movePlayer(player, 0, 0, true, nil, -5 * map_gravity, false)
+			tfm.exec.movePlayer(player, 0, 0, true, nil, -50 * (map_gravity == 0 and 0 or (map_gravity > 0 and 1 or -1)), false)
 		end
 	},
 	{
@@ -246,7 +246,7 @@ powers = {
 				addNewTimer(
 					2000,
 					tfm.exec.removeImage,
-					tfm.exec.addImage(shop_skins[tostring(skinID)].img, "#"..obj_id, x, y, nil, 1, 1, 0, 1, shop_skins[tostring(skinID)].x, shop_skins[tostring(skinID)].y)
+					tfm.exec.addImage(shop_skins[tostring(skinID)].img, "#"..obj_id, 0, 0, nil, 1, 1, 0, 1, shop_skins[tostring(skinID)].x, shop_skins[tostring(skinID)].y)
 				)
 				return
 			end
@@ -910,10 +910,8 @@ onEvent("Keyboard", function(player, key, down, x, y)
 							save = true
 						end
 
-						-- TODO: queue for save power quest
 						if save then
-							local randomTime = math.random(1000, 10000)
-							addNewTimer(randomTime, savePlayerData, player) -- temporary solution
+							queueForSave(player)
 						end
 					end
 				end

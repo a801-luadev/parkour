@@ -93,6 +93,18 @@ translations.cn = {
 	quest_completed = "<b><D>恭喜!</D></b> \n你已經完成了一項%s任務!",
 	quest_reset = "<V>[#]</V> <O>你的%s任務已經被重置了。</O>",
 
+	-- Christmas
+	find_gift1 = "<ch>聖誕老人來了! 在地圖中找尋聖誕禮物然後打開看看有什麼驚喜吧!",
+    find_gift2 = "<ch>聖誕鈴聲滿路上! 有一個聖誕禮物神奇地出現在地圖上了 - 找尋它吧!",
+    find_gift3 = "<ch>呵, 呵, 呵! 聖誕老人的小助手在現在的地圖中留下了一個禮物給你找尋!",
+    find_gift4 = "<ch>空氣中充滿著濃厚的聖誕氣氛! 找出在這地圖中隱藏著的禮物吧!",
+    find_gift5 = "<ch>聖誕跑酷快樂! 小精靈們給你藏起了一份禮物。你能找到它嗎?",
+    found_gift1 = "<ch>好耶! <J>%s</J> 打開了禮物而且在裡面找到了 %s 枚金幣!",
+    found_gift2 = "<ch>好耶, <J>%s</J>! 你剛剛從聖誕老人神奇的禮物中得到了 <J>%s</J> 枚金光閃閃的金幣!",
+    found_gift3 = "<ch>是 <J>%s</J> 的勝利! 感謝聖誕老人, 他獲得了更富有的 <J>%s</J> 枚金幣!",
+    found_gift4 = "<ch>恭喜 <J>%s</J> 得到了 <J>%s</J> 枚金幣! 聖誕氣氛更濃烈了!",
+    found_gift5 = "<ch>聖誕老人的禮物賜給了 <J>%s</J> <J>%s</J> 枚非常吸引的金幣!",
+
 	-- Miscellaneous
 	mod_apps = "<j>Parkour 管理員申請現正開放! 請查看這連結: <rose>%s",
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>你正在掛機模式</b></bv>\n隨意移動來復活</font>\n\n<font size='30'><u><t>提示:</t></u></font>\n\n<font size='15'><r>玩家頭上的紅線表示他們不想被協助!\n在parkour惡作劇/阻礙其他玩家通關是不被允許的!<d>\n加入我們的 <cep><a href='event:discord'>discord 伺服器</a></cep>!\n想在編程上貢獻? 查看 <cep><a href='event:github'>github 編程庫</a></cep> 吧。\n你有好的地圖想提交嗎? 在我們的 <cep><ahref='event:map_submission'>地圖提交帖子</a></cep> 上留言吧。\n查看我們的 <cep><a href='event:forum'>官方帖子</a></cep> 來得到更多資訊!\n透過 <cep><a href='event:donate'>捐款</a></cep> 支持我們吧!",
@@ -192,6 +204,8 @@ translations.cn = {
 	buy = "買",
 	equip = "裝備",
 	equipped = "已裝備",
+	saving = "<p align='right'>儲存中...",
+
 
 	-- Power names
 	balloon = "氣球",

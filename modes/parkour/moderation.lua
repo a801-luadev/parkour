@@ -845,6 +845,18 @@ local function editCoins(player, cmd, quantity, args)
 	end
 end
 
+local function setChristmasMap(player, cmd, quantity, args)
+	if not ranks.admin[player] then
+		return
+	end
+
+	gift_conditions._completed = gift_conditions._complete - 1
+	gift_conditions._ts = os.time()
+end
+
+local function disableSnow(player, cmd, quantity, args)
+	tfm.exec.snow(0, 10)
+end
 
 local commandDispatch = {
 	["ban"] = handleBan,
@@ -860,6 +872,8 @@ local commandDispatch = {
 	["kill"] = warnPlayer,
 	["announcement"] = roomAnnouncement,
 	["coins"] = editCoins,
+	["christmas"] = setChristmasMap,
+	["snow"] = disableSnow,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
