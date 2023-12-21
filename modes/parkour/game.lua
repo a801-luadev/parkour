@@ -46,9 +46,13 @@ do
 	end
 end
 
-local changePlayerSize = function() end
--- only enable on testing rooms
-changePlayerSize = tfm.exec.changePlayerSize
+local changePlayerSize = function(name, size)
+	size = tonumber(size)
+	if name and size and victory[name] and size > 1 then
+		size = 1
+	end
+	return tfm.exec.changePlayerSize(name, size)
+end
 
 local function addCheckpointImage(player, x, y)
 	if not x then
