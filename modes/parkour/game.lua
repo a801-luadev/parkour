@@ -51,9 +51,13 @@ do
 	end
 end
 
-local changePlayerSize = function() end
--- only enable on testing rooms
-changePlayerSize = tfm.exec.changePlayerSize
+local changePlayerSize = function(name, size)
+	size = tonumber(size)
+	if name and size and victory[name] and size > 1 then
+		size = 1
+	end
+	return tfm.exec.changePlayerSize(name, size)
+end
 
 local function addCheckpointImage(player, x, y)
 	if not x then
@@ -435,6 +439,11 @@ onEvent("NewGame", function()
   local xml = info and info.xml
   local code = room.currentMap
   local smolified = info and info.author == '#Module'
+	local original_author = xml:match('%s+PKAUTHOR="(.-)"%s*')
+
+	if original_author and original_author ~= '#Module' then
+		info.author = original_author:gsub('<', ''):gsub('&', '')
+	end
 
   code = code:sub(1, 1) == '@' and code:sub(2) or code
 
