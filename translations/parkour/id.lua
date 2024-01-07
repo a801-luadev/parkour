@@ -49,6 +49,7 @@ translations.id = {
     forum_topic = "<rose>Untuk informasi lebih lanjut mengenai modul kunjungi tautan: %s",
     report = "<j>Ingin melaporkan seorang pemain? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
     killed = "<v>[#] <r>Kamu dibatasi dalam menggunakan kekuatan selama %s menit karena melanggar aturan parkur. Pelanggaran yang berlanjut akan mendapatkan hukuman ban. Mohon menekan <b>H</b> untuk melihat aturan.",
+    mapper_event = "<CE><B>Kontes Pembuatan Peta Parkour 2024:</B>\n<n>Tunjukkan kreativitas kamu dalam pembuatan peta untuk kesempatan memenangkan <D>koin keju <n>dan <pt>koin parkour<n>!\n<R>Pengajuan dibuka sampai <B>31 Januari 2024</B>.\n<PS>Untuk informasi lebih lanjut, kunjungi: %s",
 
     -- Easter Eggs
     easter_egg_0  = "<ch>Jadi penghitung waktu mundur dimulai...",

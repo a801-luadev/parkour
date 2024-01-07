@@ -49,7 +49,7 @@ translations.tr = {
 	forum_topic = "<rose>Modül hakkında daha fazla bilgi edinmek için bağlantıya gidin: %s",
 	report = "<j>Bir oyuncuyu bildirmek mi istiyorsun? <t><b>/c Parkour#8558 .report KullanıcıAdı#Kod</b></t>",
 	killed = "<v>[#] <r>#Parkour kurallarını ihlal ettiğiniz için becerilerinizi %s dakika süreyle kullanamazsınız. Devam eden kural ihlalleri uzaklaştırma ile sonuçlanacaktır. Kuralları incelemek için lütfen <b>H</b> tuşuna basın.",
-
+	mapper_event = "<CE><B>Parkour harita yapma yarışması 2024:</B>\n<n>Yaratıcı haritalar yaparak <D>peynir <n>ve <pt>parkour coin <n>kazanma şansı yakalayın!\n<R>Harita gönderimleri <B>31 Ocak 2024</B>'e kadar açık.\n<PS>Daha fazla bilgi için, şu adresi ziyaret edin: %s",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Ve geri sayım başlıyor...",
