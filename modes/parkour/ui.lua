@@ -77,40 +77,21 @@ end
 
 function setNameColor(player)
 	local file = players_file[player]
-	if file then
-		if file.hidden then
-			tfm.exec.setNameColor(
-				player,
-
-				fastest.player == player and 0xFFFFFF
-				or victory[player] and 0xFFFF00
-				or (room.xmlMapInfo and player == room.xmlMapInfo.author) and 0x10FFF3
-				or 0x148DE6
-			)
-			return
-		elseif file.namecolor then
-			tfm.exec.setNameColor(
-				player,
-
-				fastest.player == player and 0xFFFFFF
-				or victory[player] and 0xFFFF00
-				or file.namecolor
-			)
-			return
-		end
-	end
 
 	tfm.exec.setNameColor(
 		player,
 
 		fastest.player == player and 0xFFFFFF -- fastest
 		or victory[player] and 0xFFFF00 -- has won
+		or file and file.namecolor -- custom
 
-		or (ranks.admin[player] or ranks.bot[player]) and 0xE7342A -- admin / bot
-		or ranks.manager[player] and 0xD0A9F0 -- manager
-		or (ranks.mod[player] or ranks.trainee[player]) and 0xFFAAAA -- moderator
-		or ranks.mapper[player] and 0x25C059 -- mapper
-		or ranks.translator[player] and 0xE0B856 -- translator
+		or file and not file.hidden and (
+			(ranks.admin[player] or ranks.bot[player]) and 0xE7342A -- admin / bot
+			or ranks.manager[player] and 0xD0A9F0 -- manager
+			or (ranks.mod[player] or ranks.trainee[player]) and 0xFFAAAA -- moderator
+			or ranks.mapper[player] and 0x25C059 -- mapper
+			or ranks.translator[player] and 0xE0B856 -- translator
+		)
 		
 		or (room.xmlMapInfo and player == room.xmlMapInfo.author) and 0x10FFF3 -- author of the map
 		or 0x148DE6 -- default
