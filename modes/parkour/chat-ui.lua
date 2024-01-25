@@ -395,11 +395,12 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		max_args = 0
 
 	elseif cmd == "room" then -- logged
-		if not perms[player] or not perms[player].get_player_room then return end
+		if quantity == 0 or capitalize(args[1]) == player then
+            tfm.exec.chatMessage("<v>[#] <d>" .. room.name, player)
+            return
+        end
 
-		if quantity == 0 then
-			return translatedChatMessage("invalid_syntax", player)
-		end
+		if not perms[player] or not perms[player].get_player_room then return end
 
 		local fetching = capitalize(args[1])
 		fetching_player_room[fetching] = { player, os.time() + 1000 }

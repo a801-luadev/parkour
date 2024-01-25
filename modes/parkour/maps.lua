@@ -147,8 +147,6 @@ local function newMap()
 	count_stats = not review_mode
 	map_change_cd = os.time() + 20000
 
-	if review_mode then return end
-
 	local map
 	if math.random((maps.low_count + maps.high_count * 2) * 1000000) <= (maps.low_count * 1000000) then -- 1/3
 		map = selectMap(maps.sections_low, maps.list_low, maps.low_count)
@@ -352,6 +350,8 @@ onEvent("NewGame", function()
 end)
 
 onEvent("Loop", function(elapsed, remaining)
+	if review_mode then return end
+
 	-- Changes the map when needed
 	if (is_invalid and os.time() >= is_invalid) or remaining < 500 then
 		newMap()

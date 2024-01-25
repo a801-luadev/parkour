@@ -76,26 +76,26 @@ local function toggleInterface(interface, player)
 end
 
 function setNameColor(player)
-	local file = players_file[player]
+    local file = players_file[player]
 
-	tfm.exec.setNameColor(
-		player,
+    tfm.exec.setNameColor(
+        player,
 
-		fastest.player == player and 0xFFFFFF -- fastest
-		or victory[player] and 0xFFFF00 -- has won
-		or file and file.namecolor -- custom
+        fastest.player == player and 0xFFFFFF -- fastest
+        or victory[player] and 0xFFFF00 -- has won
 
-		or file and not file.hidden and (
-			(ranks.admin[player] or ranks.bot[player]) and 0xE7342A -- admin / bot
-			or ranks.manager[player] and 0xD0A9F0 -- manager
-			or (ranks.mod[player] or ranks.trainee[player]) and 0xFFAAAA -- moderator
-			or ranks.mapper[player] and 0x25C059 -- mapper
-			or ranks.translator[player] and 0xE0B856 -- translator
-		)
-		
-		or (room.xmlMapInfo and player == room.xmlMapInfo.author) and 0x10FFF3 -- author of the map
-		or 0x148DE6 -- default
-	)
+        or file and not file.hidden and (
+            file.namecolor -- custom
+            or (ranks.admin[player] or ranks.bot[player]) and 0xE7342A -- admin / bot
+            or ranks.manager[player] and 0xD0A9F0 -- manager
+            or (ranks.mod[player] or ranks.trainee[player]) and 0xFFAAAA -- moderator
+            or ranks.mapper[player] and 0x25C059 -- mapper
+            or ranks.translator[player] and 0xE0B856 -- translator
+        )
+        
+        or (room.xmlMapInfo and player == room.xmlMapInfo.author) and 0x10FFF3 -- author of the map
+        or 0x148DE6 -- default
+    )
 end
 
 local function showPoll(player)
@@ -276,6 +276,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 					if not requested[member] then
 						requested[member] = true
+						dont_parse_data[member] = true
 						system.loadPlayerData(member)
 					end
 				end
@@ -352,6 +353,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		toggleInterface(ShopInterface, player)
 	elseif cmd == "quests" then
 		toggleInterface(QuestsInterface, player, 1)
+	elseif cmd == "powers" then
+		toggleInterface(PowersInterface, player)
 	end
 end)
 
@@ -605,6 +608,8 @@ onEvent("Loop", function(elapsed)
 		local commu, players, list
 		local rank_name, rank, info
 		local player, tbl, hide
+		dont_parse_data = {}
+		
 		for i = 1, #shown_ranks do
 			rank_name = shown_ranks[i]
 			rank = ranks[rank_name]

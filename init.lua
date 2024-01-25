@@ -59,6 +59,19 @@ local function enlargeName(name)
 	end
 end
 
+local function generateRandomString(length)
+    local chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    local randomString = ""
+    
+    for i = 1, length do
+        local randomIndex = math.random(1, #chars)
+        randomString = randomString .. string.sub(chars, randomIndex, randomIndex)
+    end
+    
+    return randomString
+end
+
+
 {% require-package "translations" %}
 {% require-package "global" %}
 
@@ -81,6 +94,14 @@ else
 	submode = string.match(room.name, "^[^a-zA-Z]-([a-z_]+)", pos)
 	if submode then
 		flags = string.sub(room.name, pos + #submode + 2)
+	end
+
+	local nameLength = string.len(room.name)
+	if nameLength > 45 then 
+		local password = generateRandomString(10)
+		tfm.exec.setRoomPassword(password)
+		tfm.exec.chatMessage("<ROSE><b>[WARNING]</b> The room name exceeds the allowed length of <b>45</b> characters. Please choose a shorter name.", nil)
+		return 
 	end
 
 	if room.name == "*#parkour4bots" then

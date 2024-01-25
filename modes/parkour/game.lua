@@ -267,8 +267,11 @@ onEvent("NewPlayer", function(player)
 	cp_available[player] = 0
 	times.movement[player] = os.time()
 
-	for key = 0, 2 do
+	for key = 0, 3 do
 		bindKeyboard(player, key, true, true)
+		if key == 3 then
+			bindKeyboard(player, key, false, true)
+		end
 	end
 
 	if levels then

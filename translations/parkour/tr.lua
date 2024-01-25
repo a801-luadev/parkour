@@ -4,10 +4,10 @@ translations.tr = {
 
 	-- Error messages
 	corrupt_map= "<r>Harita bozulmuş. Başka bir tane yükleniyor.",
-	corrupt_map_vanilla = "<r>[ERROR] <n>Bu harita hakkında bilgi alınamıyor.",
-	corrupt_map_mouse_start= "<r>[ERROR] <n>Bu haritanın bir başlangıç noktası olması gerekiyor (fare başlangıç noktası).",
-	corrupt_map_needing_chair= "<r>[ERROR] <n>Haritanın bitiş koltuğu olması gerekiyor.",
-	corrupt_map_missing_checkpoints = "<r>[ERROR] <n>Haritada en az bir kontrol noktası olması gerekiyor(sarı çivi).",
+	corrupt_map_vanilla = "<r>[HATA] <n>Bu harita hakkında bilgi alınamıyor.",
+	corrupt_map_mouse_start= "<r>[HATA] <n>Bu haritanın bir başlangıç noktası olması gerekiyor (fare başlangıç noktası).",
+	corrupt_map_needing_chair= "<r>[HATA] <n>Haritanın bitiş koltuğu olması gerekiyor.",
+	corrupt_map_missing_checkpoints = "<r>[HATA] <n>Haritada en az bir kontrol noktası olması gerekiyor(sarı çivi).",
 	corrupt_data = "<r>Maalesef, sizin verileriniz kayboldu ve sıfırlandı.",
 	min_players = "<r>Verinizin kaydedilebilmesi için odada en az 4 farklı oyuncunun bulunması gerekmektedir. <bl>[%s/%s]",
 	tribe_house = "<r>Veri kabile evlerinde işlenmeyecektir..",
@@ -16,6 +16,8 @@ translations.tr = {
 	emergency_mode = "<r>Acil durum modu başlatılıyor, yeni oyunculara izin verilmemektedir. Lütfen başka bir #parkour odasına geçin.",
 	leaderboard_not_loaded = "<r>Lider tablosu henüz yüklenemedi. Lütfen bekleyin.",
 	max_power_keys = "<v>[#] <r>Aynı tuşta sadece %s güç bulundurabilirsin",
+	room_name_length = "<ROSE><b>[HATA]</b> Oda adı, izin verilen <b>45</b karakter uzunluğunu aşıyor. Lütfen daha kısa bir oda adı seçin.",
+
 
 	-- Help window
 	help = "Yardım",

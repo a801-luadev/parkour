@@ -154,7 +154,7 @@ local function fixHourCount(player, data)
 	end
 
 	if player and (save or offset > 0) then
-		savePlayerData(player)
+		queueForSave(player)
 	end
 
 	return save or offset > 0

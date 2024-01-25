@@ -323,6 +323,7 @@ local function handleAdminBan(player, cmd, quantity, args)
 		end
 	else
 		sanctionTime = 0
+		minutes = 0
 	end
 
 	-- Ban using name (must be in the same room)
@@ -858,6 +859,93 @@ local function disableSnow(player, cmd, quantity, args)
 	tfm.exec.snow(0, 10)
 end
 
+local function linkMouse(player, cmd, quantity, args)
+	if not ranks.admin[player] then
+		return
+	end
+
+	if not args[1] then return end
+	if not args[2] then 
+		args[2] = player
+	end
+
+	local firstPlayer = args[1]
+	local secondPlayer = args[2]
+
+	tfm.exec.linkMice(firstPlayer, secondPlayer, true)
+end
+
+local function changeMouseSize(player, cmd, quantity, args)
+	if not ranks.admin[player] then return end
+
+	local target = args[1]
+	local size = tonumber(args[2])
+	if not room.playerList[target] or not size then
+		return translatedChatMessage("invalid_syntax", player)
+	end
+
+	tfm.exec.changePlayerSize(target, size)
+	return
+end
+
+local mouseImages = {}
+local function addMouseImage(player, cmd, quantity, args)
+	if not ranks.admin[player] then 
+		if mouseImages[player] then
+			tfm.exec.removeImage(mouseImages[player][2], false)
+			tfm.exec.killPlayer(player)
+			mouseImages[player] = nil
+		end
+		return 
+	end
+
+	local playerName = args[1]
+	local imageURL = args[2]
+
+	if imageURL == "remove" then
+		mouseImages[args[1]] = nil
+	end
+
+	if not room.playerList[playerName] or not imageURL then
+		return translatedChatMessage("invalid_syntax", player)
+	end
+
+	if mouseImages[playerName] then
+		tfm.exec.removeImage(mouseImages[playerName][2], false)
+	end
+	
+	local imageID = tfm.exec.addImage(imageURL, '%'..playerName, 0, 0, nil, 1, 1, 0, 1, 0.5, 0.5, false)
+	mouseImages[playerName] = {imageURL, imageID, 1}
+end
+
+onEvent("Keyboard", function(player, key, down)
+	if not mouseImages[player] then return end
+
+	if key == 2 then
+		tfm.exec.removeImage(mouseImages[player][2], false)
+		local imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, 1, 1, 0, 1, 0.5, 0.5, false)
+		mouseImages[player][2] = imageID
+		mouseImages[player][3] = 1
+	elseif key == 0 then
+		tfm.exec.removeImage(mouseImages[player][2], false)
+		local imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, -1, 1, 0, 1, -0.5, 0.5, false)
+		mouseImages[player][2] = imageID
+		mouseImages[player][3] = -1
+	elseif key == 3 then
+		tfm.exec.removeImage(mouseImages[player][2], false)
+		local anchorX = mouseImages[player][3] == 1 and 0.5 or -0.5
+		local imageID
+
+		if down then
+			imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, mouseImages[player][3], 0.5, 0, 1, anchorX, 0.5, false)
+		else
+			imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, mouseImages[player][3], 1, 0, 1, anchorX, 0.5, false)
+		end
+
+		mouseImages[player][2] = imageID
+	end
+end)
+
 local commandDispatch = {
 	["ban"] = handleBan,
 	["unban"] = handleBan,
@@ -874,6 +962,9 @@ local commandDispatch = {
 	["coins"] = editCoins,
 	["christmas"] = setChristmasMap,
 	["snow"] = disableSnow,
+	["link"] = linkMouse,
+	["size"] = changeMouseSize,
+	["image"] = addMouseImage,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)

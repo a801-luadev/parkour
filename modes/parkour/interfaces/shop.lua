@@ -3,6 +3,7 @@ do
 	local shop_images = {}
 	local coin_images = {}
 	local shopPage = {}
+	local isSave = {}
 	
 	local closeButton = Button.new()
 	ShopInterface = Interface.new(50, 35, 700, 350, true)
@@ -26,7 +27,11 @@ do
 		:loadComponent(
 			closeButton:setText("")
 			:onClick(function(self, player)
-				savePlayerData(player)
+				if isSave[player] then
+					savePlayerData(player)
+					isSave[player] = nil
+				end
+
 				self.parent:remove(player)
 			end)
 			:setPosition(150, 330):setSize(400, 10)
@@ -281,6 +286,7 @@ do
 			local player_coin = players_file[player].coins
 			local itemID = shop_items[shopPage[player]][buyButton].id
 			itemID = tostring(itemID)
+			isSave[player] = true
 
 			local args = self.parent.args[player]
 

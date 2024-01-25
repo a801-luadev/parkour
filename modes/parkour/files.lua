@@ -97,6 +97,7 @@ local titles = {
 local quests
 local fillQuests
 local power_quest = {}
+local dont_parse_data = {}
 
 players_file = {}
 
@@ -325,6 +326,20 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if channels[player] then return end
 	if in_room[player] then return end
 
+	if dont_parse_data[player] then
+		dont_parse_data[player] = nil
+		local isHidden = data:find('"hidden":true')
+		local commu = data:match('"commu":"(.-)"') or "xx"
+
+		if isHidden then
+			hidden[player] = commu
+		else
+			online[player] = commu
+		end
+
+		return
+	end
+
 	if data == "" then
 		data = {}
 	else
@@ -354,6 +369,20 @@ end)
 onEvent("PlayerDataLoaded", function(player, data)
 	if channels[player] then return end
 	if not in_room[player] then return end
+
+	if dont_parse_data[player] then
+		dont_parse_data[player] = nil
+		local isHidden = data:find('"hidden":true')
+		local commu = data:match('"commu":"(.-)"') or room.community
+
+		if isHidden then
+			hidden[player] = commu
+		else
+			online[player] = commu
+		end
+
+		return
+	end
 
 	if data == "" then
 		data = {}
