@@ -698,6 +698,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if checkpoint == 0 then
 			checkpoint = #levels
 		end
+		
+		if checkpoint < 0 and checkpoint >= #levels*-1 then
+			checkpoint = #levels + checkpoint 
+		end
 
 		if not levels[checkpoint] then return end
 

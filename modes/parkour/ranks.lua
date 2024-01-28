@@ -25,6 +25,7 @@ local ranks_permissions = {
 	admin = {
 		set_checkpoint_version = true,
 		set_name_color = true
+		give_command = true
 	}, -- will get every permission
 	bot = {
 		set_checkpoint_version = true
@@ -36,7 +37,6 @@ local ranks_permissions = {
 		hide = true,
 		handle_map_polls = true,
 		see_map_polls = true,
-		give_command = true
 	},
 	mod = {
 		ban = true,
