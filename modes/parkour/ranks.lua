@@ -24,7 +24,7 @@ local ranks_id = {
 local ranks_permissions = {
 	admin = {
 		set_checkpoint_version = true,
-		set_name_color = true
+		set_name_color = true,
 		give_command = true
 	}, -- will get every permission
 	bot = {
