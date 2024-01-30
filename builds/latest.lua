@@ -6438,7 +6438,7 @@ local function initialize_parkour() -- so it uses less space after building
 	local ranks_permissions = {
 		admin = {
 			set_checkpoint_version = true,
-			set_name_color = true
+			set_name_color = true,
 			give_command = true
 		}, -- will get every permission
 		bot = {
@@ -15338,7 +15338,7 @@ else
 		local ranks_permissions = {
 			admin = {
 				set_checkpoint_version = true,
-				set_name_color = true
+				set_name_color = true,
 				give_command = true
 			}, -- will get every permission
 			bot = {
