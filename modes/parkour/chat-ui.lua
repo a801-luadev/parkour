@@ -473,10 +473,6 @@ onEvent("PlayerDataParsed", function(player, data)
 	translatedChatMessage("forum_topic", player, links.forum)
 	translatedChatMessage("donate", player)
 
-	if os.time() < os.time({year=2024,month=2,day=1,hour=5}) then
-		translatedChatMessage("mapper_event", player, links.mapper_event)
-	end
-
 	if timed_maps.week.last_reset == "28/02/2021" then
 		translatedChatMessage("double_maps", player)
 	end

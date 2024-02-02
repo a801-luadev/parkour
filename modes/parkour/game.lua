@@ -505,19 +505,19 @@ onEvent("NewGame", function()
 	end
 	showStats()
 
-	if (count_stats and
-		room.uniquePlayers >= min_save and
-		player_count >= min_save and
-		not records_admins and
-		not is_tribe and
-		not review_mode) then
+	-- if (count_stats and
+	-- 	room.uniquePlayers >= min_save and
+	-- 	player_count >= min_save and
+	-- 	not records_admins and
+	-- 	not is_tribe and
+	-- 	not review_mode) then
 			
-		gift_conditions._completed = gift_conditions._completed + 1
+	-- 	gift_conditions._completed = gift_conditions._completed + 1
 		
-		if gift_conditions._completed >= gift_conditions._complete and os.time() > gift_conditions._ts then
-			addRandomGift()
-		end
-	end
+	-- 	if gift_conditions._completed >= gift_conditions._complete and os.time() > gift_conditions._ts then
+	-- 		addRandomGift()
+	-- 	end
+	-- end
 
 end)
 
