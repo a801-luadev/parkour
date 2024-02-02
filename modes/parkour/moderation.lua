@@ -902,47 +902,55 @@ local function addMouseImage(player, cmd, quantity, args)
 	local playerName = args[1]
 	local imageURL = args[2]
 
-	if imageURL == "remove" then
-		mouseImages[args[1]] = nil
-	end
-
-	if not room.playerList[playerName] or not imageURL then
+	if not playerName or not imageURL or not room.playerList[playerName] then
 		return translatedChatMessage("invalid_syntax", player)
 	end
+
+	local scale = tonumber(args[3]) or 1
+	local offsetX = tonumber(args[4]) or 0
+	local offsetY = tonumber(args[5]) or 0
+	local opacity = tonumber(args[6]) or 1
 
 	if mouseImages[playerName] then
 		tfm.exec.removeImage(mouseImages[playerName][2], false)
 	end
-	
-	local imageID = tfm.exec.addImage(imageURL, '%'..playerName, 0, 0, nil, 1, 1, 0, 1, 0.5, 0.5, false)
-	mouseImages[playerName] = {imageURL, imageID, 1}
+
+	if imageURL == "remove" then
+		mouseImages[playerName] = nil
+		return
+	end
+
+	local imageID = tfm.exec.addImage(imageURL, '%'..playerName, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
+	mouseImages[playerName] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity}
 end
 
 onEvent("Keyboard", function(player, key, down)
-	if not mouseImages[player] then return end
+	local img = mouseImages[player]
+
+	if not img then return end
 
 	if key == 2 then
-		tfm.exec.removeImage(mouseImages[player][2], false)
-		local imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, 1, 1, 0, 1, 0.5, 0.5, false)
-		mouseImages[player][2] = imageID
-		mouseImages[player][3] = 1
+		tfm.exec.removeImage(img[2], false)
+		local imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[4], img[4], 0, img[7], 0.5, 0.5, false)
+		img[2] = imageID
+		img[3] = 1
 	elseif key == 0 then
-		tfm.exec.removeImage(mouseImages[player][2], false)
-		local imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, -1, 1, 0, 1, -0.5, 0.5, false)
-		mouseImages[player][2] = imageID
-		mouseImages[player][3] = -1
+		tfm.exec.removeImage(img[2], false)
+		local imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, -img[4], img[4], 0, img[7], -0.5, 0.5, false)
+		img[2] = imageID
+		img[3] = -1
 	elseif key == 3 then
-		tfm.exec.removeImage(mouseImages[player][2], false)
-		local anchorX = mouseImages[player][3] == 1 and 0.5 or -0.5
+		tfm.exec.removeImage(img[2], false)
+		local anchorX = img[3] == 1 and 0.5 or -0.5
 		local imageID
 
 		if down then
-			imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, mouseImages[player][3], 0.5, 0, 1, anchorX, 0.5, false)
+			imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[3] * img[4], img[4] / 2.0, 0, img[7], anchorX, 0.5, false)
 		else
-			imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, mouseImages[player][3], 1, 0, 1, anchorX, 0.5, false)
+			imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[3] * img[4], img[4], 0, img[7], anchorX, 0.5, false)
 		end
 
-		mouseImages[player][2] = imageID
+		img[2] = imageID
 	end
 end)
 
