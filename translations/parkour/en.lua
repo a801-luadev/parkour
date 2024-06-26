@@ -204,6 +204,7 @@ translations.en = {
 	equip = "Equip",
 	equipped = "<font size = '10'>Equipped</font>",
 	saving = "<p align='right'>Saving...",
+	new_image = "<J>Your appearance has been changed. You can turn it back to normal by typing !image",
 
 	-- Power names
 	balloon = "Balloon",

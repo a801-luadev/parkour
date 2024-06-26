@@ -890,14 +890,16 @@ end
 
 local mouseImages = {}
 local function addMouseImage(player, cmd, quantity, args)
-	if not ranks.admin[player] then 
+	if quantity == 0 then
 		if mouseImages[player] then
 			tfm.exec.removeImage(mouseImages[player][2], false)
 			tfm.exec.killPlayer(player)
 			mouseImages[player] = nil
 		end
-		return 
+		return
 	end
+
+	if not ranks.admin[player] then return end
 
 	local playerName = args[1]
 	local imageURL = args[2]
@@ -918,6 +920,8 @@ local function addMouseImage(player, cmd, quantity, args)
 	if imageURL == "remove" then
 		mouseImages[playerName] = nil
 		return
+	elseif not mouseImages[playerName] or mouseImages[playerName][1] ~= imageURL then
+		translatedChatMessage("new_image", playerName)
 	end
 
 	local imageID = tfm.exec.addImage(imageURL, '%'..playerName, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
