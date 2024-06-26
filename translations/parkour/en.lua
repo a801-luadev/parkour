@@ -4,6 +4,8 @@ translations.en = {
 
 	-- Error messages
 	corrupt_map = "<r>Corrupt map. Loading another.",
+	corrupt_map_no_perm = "<r>[ERROR] <n>This map is not protected properly.",
+	corrupt_map_hole = "<r>[ERROR] <n>Parkour maps cannot contain a mouse hole.",
 	corrupt_map_vanilla = "<r>[ERROR] <n>Can not get information of this map.",
 	corrupt_map_mouse_start = "<r>[ERROR] <n>This map needs to have a start position (mouse spawn point).",
 	corrupt_map_needing_chair = "<r>[ERROR] <n>The map needs to have the end chair.",
