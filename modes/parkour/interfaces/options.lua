@@ -5,10 +5,10 @@ OptionsInterface
 	:addTextArea({
 		text = function(self, player)
 			return translatedMessage("options", player)
-				:format(string.char(
+				:format((keyboard.bindings[
 					players_file[player].settings[2] == 46 and 77
 					or players_file[player].settings[2]
-				))
+				] or "?"):gsub('\n', ' '))
 		end,
 		alpha = 0
 	})
