@@ -188,7 +188,7 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 
 		local baninfo = data.sanction[playerID]
 		if time > 0 then
-			if baninfo and (baninfo.time == 2 or baninfo.time > now) then
+			if baninfo and (baninfo.time == 2 or baninfo.time > now) and not minutes then
 				tfm.exec.chatMessage("<v>[#] <r>" .. playerName .. " is banned already.", moderator)
 				return
 			end
