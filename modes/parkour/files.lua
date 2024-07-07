@@ -244,7 +244,7 @@ local data_migrations = {
 	[3] = function(player, data)
 		data.v = 4
 
-		data.settings[2] = (data.settings == 1 and 77 or 46)
+		data.settings[2] = (data.settings[2] == 1 and 77 or 46)
 	end,
 	[4] = function(player, data)
 		data.v = 5
