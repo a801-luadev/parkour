@@ -66,6 +66,7 @@ end
 
 if records_admins then
 	tfm.exec.playerVictory = function(name)
+		tfm.exec.removeCheese(name)
 		eventPlayerWon(name)
 	end
 end
