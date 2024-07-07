@@ -318,6 +318,32 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		savePlayerData(target)
 
+	elseif cmd == "roommod" then
+		if not records_admins or records_admins[player] ~= true then
+			return
+		end
+
+		local target = args[1]
+		if quantity < 1 or records_admins[target] or not room.playerList[target] then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		records_admins[target] = 1
+		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is a room mod now.")
+
+	elseif cmd == "deroommod" then
+		if not records_admins or records_admins[player] ~= true then
+			return
+		end
+
+		local target = args[1]
+		if quantity < 1 or records_admins[target] ~= 1 then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		records_admins[target] = nil
+		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is not a room mod anymore.")
+
 	elseif cmd == "pw" then
 		if not records_admins or not records_admins[player] then
 			if not perms[player] or not perms[player].enable_review then return end
