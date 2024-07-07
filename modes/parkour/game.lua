@@ -711,6 +711,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				return translatedChatMessage("cooldown", player)
 			end
 		end
+		if not players_level[player] then return end
 
 		if checkpoint_info.version == 1 then
 			tfm.exec.removeBonus(players_level[player] + 1, player)
@@ -767,6 +768,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 	elseif cmd == "redo" then
 		if not (records_admins or review_mode) then return end
+		if not players_level[player] then return end
 
 		if checkpoint_info.version == 1 then
 			tfm.exec.removeBonus(players_level[player] + 1, player)
