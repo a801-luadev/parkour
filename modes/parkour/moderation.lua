@@ -635,6 +635,7 @@ local function handleSetrank(player, cmd, quantity, args)
 	schedule(1, true, function(data)
 		data.ranks[targetPlayer] = ID
 	end)
+	logCommand(player, cmd, math.min(quantity, 2), args)
 end
 
 local function handleBanInfo(player, cmd, quantity, args)
