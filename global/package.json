@@ -9,6 +9,10 @@
 	},
 	{
 		"type": "require-file",
+		"file": "global/packets.lua"
+	},
+	{
+		"type": "require-file",
 		"file": "global/event-handler.lua"
 	},
 	{
