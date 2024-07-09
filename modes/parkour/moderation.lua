@@ -958,6 +958,85 @@ onEvent("Keyboard", function(player, key, down)
 	end
 end)
 
+local function handleReport(playerName, cmd, quantity, args)
+	local pdata = players_file[playerName]
+	local player = room.playerList[playerName]
+	if not pdata or not player or not pdata.report then
+		return
+	end
+
+	if quantity < 2 then
+		return translatedChatMessage("cmd_usage_report", playerName)
+	end
+
+	local reportedName = args[1]:lower():gsub('^+?[a-z]', string.upper)
+	local reportedPlayer = room.playerList[reportedName]
+	if not reportedPlayer then
+		return translatedChatMessage("reported_not_here", playerName)
+	end
+	if reportedPlayer.id == 0 or bans[reportedPlayer.id] then
+		return translatedChatMessage("reported_invalid", playerName)
+	end
+
+	local reason = table.concat(args, ' ', 2, quantity)
+	if #reason < 5 then
+		return translatedChatMessage("reason_too_short", playerName)
+	end
+
+	local timestamp = os_time()
+	sendPacket(
+		"common", packets.rooms.report,
+		timestamp .. "\000" ..
+		player.id .. "\000" ..
+		playerName .. "\000" ..
+		reportedPlayer.id .. "\000" ..
+		reportedName .. "\000" ..
+		room.shortName .. "\000" ..
+		reason
+	)
+	translatedChatMessage("report_done", playerName)
+end
+
+local function handleKarma(playerName, cmd, quantity, args)
+	if not ranks.admin[playerName] and not ranks.mod[playerName] then
+		return
+	end
+
+	if quantity < 1 then
+		return translatedChatMessage("invalid_syntax", playerName)
+	end
+
+	local target = args[1]:lower():gsub('^+?[a-z]', string.upper)
+	local pdata = players_file[target]
+	if not room.playerList[target] or not pdata then
+		return translatedChatMessage("invalid_syntax", playerName)
+	end
+
+	if quatity == 1 then
+		if pdata.report then
+			tfm.exec.chatMessage('<v>[#] <vp>' .. target .. ' can use !report.', playerName)
+		else
+			tfm.exec.chatMessage('<v>[#] <r>' .. target .. ' cannot use !report.', playerName)
+		end
+		return
+	end
+
+	local yes = args[2] == 'yes'
+	if not yes and args[2] ~= 'no' then
+		return translatedChatMessage("invalid_syntax", playerName)
+	end
+
+	if pdata.report == yes then
+		tfm.exec.chatMessage('<v>[#] <bl>Nothing changed.', playerName)
+		return
+	end
+
+	pdata.report = yes
+	savePlayerData(target)
+	tfm.exec.chatMessage('<v>[#] <n>Done.', playerName)
+	logCommand(player, cmd, math.min(quantity, 2), args)
+end
+
 local commandDispatch = {
 	["ban"] = handleBan,
 	["unban"] = handleBan,
@@ -977,6 +1056,8 @@ local commandDispatch = {
 	["link"] = linkMouse,
 	["size"] = changeMouseSize,
 	["image"] = addMouseImage,
+	["report"] = handleReport,
+	["karma"] = handleKarma,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)

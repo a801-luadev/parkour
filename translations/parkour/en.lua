@@ -53,6 +53,11 @@ translations.en = {
 	report = "<j>Want to report a parkour player? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
 	killed = "<v>[#] <r>You are restricted from using your powers for %s minutes due to your violation of parkour rules. Continued rule violations will result in a ban. Please press <b>H</b> to review the rules.",
 	mapper_event = "<CE><B>Parkour mapmaking contest 2024:</B>\n<n>Show us your creativity in map-making for a chance to win <D>cheese coins <n>and <pt>parkour coins<n>!\n<R>Submissions open until <B>January 31, 2024</B>.\n<PS>For more information, visit: %s",
+	cmd_usage_report = "<j>Usage: <bl>!report [Player#1234] [reason]",
+	reported_not_here = "<bl>Reported player must be in this room.",
+	reported_invalid = "<bl>This player cannot be reported.",
+	reason_too_short = "<bl>Report reason is too short.",
+	report_done = "<j>Thank you for your report.",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Finally the countdown begins...",
