@@ -719,9 +719,33 @@ local function fileActions(player, cmd, quantity, args)
 				tfm.exec.chatMessage("<v>[#] <j>"..requestplayer.."'s new weekly count: "..pdata.week[1], player)
 			end)
 		end
-	end
+	elseif fileName == "staff" then
+		local rankName = args[2]
+		if rankName == "all" then
+			local list, count
+			for staffName, hasRanks in next, player_ranks do
+				list, count = {}, 0
+				for rankName in next, hasRanks do
+					count = count + 1
+					list[count] = rankName
+				end
+				tfm.exec.chatMessage("<v>[#] <v>" .. staffName .. "<bl>: " .. table.concat(list, ' '), player)
+			end
+			return
+		end
 
-	if fileName == "sanction" then
+		local list = ranks[rankName]
+		if not list then
+			tfm.exec.chatMessage("<v>[#] <r>Invalid rank namme.", player)
+			return
+		end
+
+		tfm.exec.chatMessage("<v>[#] <j>" .. rankName .. ":", player)
+		for staffName in next, list do
+			tfm.exec.chatMessage(staffName, player)
+		end
+
+	elseif fileName == "sanction" then
 		if not sanctions_file then 
 			tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet.", player)
 			return
