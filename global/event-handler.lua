@@ -73,14 +73,12 @@ do
 
 	local function callListeners(evt, a, b, c, d, e, offset)
 		for index = offset, evt._count do
-			evt[index](a, b, c, d, e)
-
 			if not initializingModule and os_time() >= stoppingAt then
 				if index < evt._count then
 					-- If this event didn't end, we need to resume from
 					-- where it has been left!
 					scheduled._count = scheduled._count + 1
-					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, index + 1}
+					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, index}
 				end
 
 				paused = true
@@ -88,6 +86,8 @@ do
 				translatedChatMessage("paused_events")
 				break
 			end
+
+			evt[index](a, b, c, d, e)
 		end
 	end
 
