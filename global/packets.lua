@@ -7,9 +7,10 @@ packets.rooms = {
   pw_response = 5,
   command_log = 7,
   poll_answer = 8,
-  ban_logs = 9,
+  title_logs = 9,
   kill_logs = 10,
   report = 11,
+  ban_logs = 12,
 }
 
 packets.bots = {

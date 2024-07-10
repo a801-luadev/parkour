@@ -228,7 +228,7 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 			level = sanctionLevel
 		}
 
-		sendPacket("common", 9, playerName .. "\000" .. time .. "\000" .. moderator .. "\000" .. minutes)
+		sendPacket("common", packets.rooms.ban_logs, playerName .. "\000" .. time .. "\000" .. moderator .. "\000" .. minutes)
 		sendBanLog(playerName, time, moderator, minutes)
 	end)
 end
