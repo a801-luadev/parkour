@@ -719,6 +719,23 @@ local function fileActions(player, cmd, quantity, args)
 				tfm.exec.chatMessage("<v>[#] <j>"..requestplayer.."'s new weekly count: "..pdata.week[1], player)
 			end)
 		end
+	elseif fileName == "maps" then
+		local category = args[2]
+		local len
+		if category == "all" or category == "high" then
+			len = #maps.list_high
+			tfm.exec.chatMessage("<v>[#] <v>high maps: " .. tostring(len), player)
+			for i=1, len, 20 do
+				tfm.exec.chatMessage("<v>[#] <bl>" .. table.concat(maps.list_high, ' ', i, math.min(i+19, len)), player)
+			end
+		end
+		if category == "all" or category == "low" then
+			len = #maps.list_low
+			tfm.exec.chatMessage("<v>[#] <v>low maps: " .. tostring(len), player)
+			for i=1, len, 20 do
+				tfm.exec.chatMessage("<v>[#] <bl>" .. table.concat(maps.list_low, ' ', i, math.min(i+19, len)), player)
+			end
+		end
 	elseif fileName == "staff" then
 		local rankName = args[2]
 		if rankName == "all" then
