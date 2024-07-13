@@ -572,8 +572,14 @@ local function warnPlayer(player, cmd, quantity, args)
 		requestplayer = requestplayer .. "#0000"
 	end
 
+	if not in_room[requestplayer] then
+		tfm.exec.chatMessage("<v>[#] <r>" ..requestplayer.. " isn't here.", player)
+		return
+	end
+
+	logCommand(player, "kill", math.min(quantity, 2), args)
+
 	if not ranks.admin[player] then
-		logCommand(player, "kill", math.min(quantity, 2), args)
 		sendPacket("common", 10, requestplayer .. "\000" .. killedTime .. "\000" .. player)
 	end
 
