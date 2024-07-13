@@ -1025,7 +1025,7 @@ local function handleReport(playerName, cmd, quantity, args)
 		return translatedChatMessage("reason_too_short", playerName)
 	end
 
-	local timestamp = os_time()
+	local timestamp = os.time()
 	sendPacket(
 		"common", packets.rooms.report,
 		timestamp .. "\000" ..
@@ -1076,7 +1076,7 @@ local function handleKarma(playerName, cmd, quantity, args)
 	pdata.report = yes
 	savePlayerData(target)
 	tfm.exec.chatMessage('<v>[#] <n>Done.', playerName)
-	logCommand(player, cmd, math.min(quantity, 2), args)
+	logCommand(playerName, cmd, math.min(quantity, 2), args)
 end
 
 local commandDispatch = {
