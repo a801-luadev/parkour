@@ -319,7 +319,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		savePlayerData(target)
 
 	elseif cmd == "roommod" then
-		if not records_admins or records_admins[player] ~= true then
+		local has_perm = perms[player] and not perms[player].change_roommod
+		local is_owner = records_admins and records_admins[player]
+		if not has_perm and not is_owner then
 			return
 		end
 
@@ -331,8 +333,15 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		records_admins[target] = 1
 		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is a room mod now.")
 
+		-- don't log room owner actions
+		if is_owner then
+			return
+		end
+
 	elseif cmd == "deroommod" then
-		if not records_admins or records_admins[player] ~= true then
+		local has_perm = perms[player] and not perms[player].change_roommod
+		local is_owner = records_admins and records_admins[player]
+		if not has_perm and not is_owner then
 			return
 		end
 
@@ -343,6 +352,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		records_admins[target] = nil
 		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is not a room mod anymore.")
+
+		-- don't log room owner actions
+		if is_owner then
+			return
+		end
 
 	elseif cmd == "pw" then
 		if not records_admins or not records_admins[player] then
