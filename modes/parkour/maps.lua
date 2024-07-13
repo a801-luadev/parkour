@@ -356,7 +356,7 @@ onEvent("NewGame", function()
 end)
 
 onEvent("Loop", function(elapsed, remaining)
-	if review_mode then return end
+	if review_mode or records_admins then return end
 
 	-- Changes the map when needed
 	if (is_invalid and os.time() >= is_invalid) or remaining < 500 then
