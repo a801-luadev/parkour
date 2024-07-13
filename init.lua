@@ -71,6 +71,21 @@ local function generateRandomString(length)
     return randomString
 end
 
+do
+	local loadPlayerData = system.loadPlayerData
+	system.loadPlayerData = function(playerName, ...)
+		if not playerName then return end
+		if tostring(playerName):sub(1, 1) == '*' then return end
+		return loadPlayerData(playerName, ...)
+	end
+
+	local savePlayerData = system.savePlayerData
+	system.savePlayerData = function(playerName, ...)
+		if not playerName then return end
+		if tostring(playerName):sub(1, 1) == '*' then return end
+		return savePlayerData(playerName, ...)
+	end
+end
 
 {% require-package "translations" %}
 {% require-package "global" %}

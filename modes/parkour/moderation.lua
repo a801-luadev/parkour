@@ -1016,7 +1016,7 @@ local function handleReport(playerName, cmd, quantity, args)
 	if not reportedPlayer then
 		return translatedChatMessage("reported_not_here", playerName)
 	end
-	if reportedPlayer.id == 0 or bans[reportedPlayer.id] then
+	if reportedPlayer.id == 0 or reportedName:sub(1, 1) == "*" or bans[reportedPlayer.id] then
 		return translatedChatMessage("reported_invalid", playerName)
 	end
 

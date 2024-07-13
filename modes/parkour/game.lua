@@ -378,7 +378,7 @@ onEvent("PlayerDied", function(player)
 	local info = room.playerList[player]
 
 	if not info then return end
-	if info.id == 0 then return end
+	if info.id == 0 or player:sub(1, 1) == "*" then return end
 	if bans[info.id] then return end
 	if (not levels) or (not players_level[player]) then return end
 
@@ -546,7 +546,7 @@ onEvent("Loop", function()
 		for name in next, in_room do
 			player = room.playerList[name]
 			if player then
-				if spec_mode[name] or player.id == 0 or bans[player.id] then
+				if spec_mode[name] or player.id == 0 or name:sub(1, 1) == "*" or bans[player.id] then
 					tfm.exec.killPlayer(name)
 				elseif (player_count > 4
 						and not records_admins
