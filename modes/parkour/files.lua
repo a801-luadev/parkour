@@ -6,7 +6,6 @@ local bindNecessary
 local NewBadgeInterface
 local CompletedQuestsInterface
 local QuestsInterface
-local to_save = {}
 local files = {
 	--[[
 		File values:
@@ -30,7 +29,6 @@ local total_files = 3
 local file_index = 1
 local settings_length = 9
 local file_id = files[file_index]
-local updating = {}
 local timed_maps = {
 	week = {},
 	hour = {}
@@ -294,13 +292,18 @@ local function getQuestsResetTime()
 	return reset_times
 end
 
-function savePlayerData(player)
+function savePlayerData(player, delay)
 	if not players_file[player] then return end
 
-	if not to_save[player] then
-		to_save[player] = true
-		system.loadPlayerData(player)
+	if delay then
+		queueForSave(player)
+		return
 	end
+
+	system.savePlayerData(
+		player,
+		json.encode(players_file[player])
+	)
 end
 
 local function updateData(player, data)
@@ -412,49 +415,6 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	if players_file[player] then
-		local merged = players_file[player]
-		local fields = updating[player]
-		updating[player] = nil
-
-		if not fields or fields == "auto" then
-			if data.report ~= nil then
-				merged.report = data.report
-			end
-
-			merged.kill = data.kill
-
-			local p_badges = data.badges
-			for index = 1, #badges do
-				if badges[index].filePriority then
-					if merged.badges[index] ~= p_badges[index] then
-						merged.badges[index] = p_badges[index]
-						NewBadgeInterface:show(player, index, math.max(p_badges[index] or 1, 1))
-					end
-				end
-			end
-
-		else
-			for field in string.gmatch(fields, "[^\001]+") do
-				if field == "badges" then
-					local p_badges = data.badges
-					for index = 1, #badges do
-						if merged.badges[index] ~= p_badges[index] then
-							NewBadgeInterface:show(
-								player, index, math.max(p_badges[index] or 1, 1)
-							)
-						end
-					end
-				end
-
-				merged[field] = data[field]
-			end
-		end
-		eventPlayerDataUpdated(player, merged)
-
-		if to_save[player] then
-			to_save[player] = false
-			system.savePlayerData(player, json.encode(merged))
-		end
 		return
 	end
 
@@ -526,12 +486,8 @@ onEvent("PlayerDataLoaded", function(player, data)
 		players_file[player].quests = questTable
 	end
 
+	savePlayerData(player, true)
 	eventPlayerDataParsed(player, data)
-
-	system.savePlayerData(
-		player,
-		json.encode(players_file[player])
-	)
 end)
 
 onEvent("SavingFile", function(id, data)
@@ -579,6 +535,7 @@ onEvent("PlayerDataParsed", function(player, data)
 	if data.week[2] ~= timed_maps.week.last_reset then
 		data.week[1] = 0
 		data.week[2] = timed_maps.week.last_reset
+		savePlayerData(player, true)
 	end
 end)
 
@@ -587,9 +544,41 @@ onEvent("PacketReceived", function(channel, id, packet)
 
 	if id == 2 then -- update pdata
 		local player, fields = string.match(packet, "([^\000]+)\000([^\000]+)")
-		if in_room[player] then
-			system.loadPlayerData(player)
-			updating[player] = fields
+		local pdata = players_file[player]
+		if not in_room[player] or not pdata then
+			return
 		end
+
+		local key, value, done, parsed
+		for fieldPair in fields:gmatch('([^\001]+)') do
+			key, value = fieldPair:match('([^\002]+)\002([^\002]+)')
+			done, parsed = pcall(json.decode, value)
+			if not done then
+				sendPacket(
+					"common", packets.rooms.update_error,
+					player .. "\000" .. key .. "\000" .. value
+				)
+				return
+			end
+
+			if key == "badges" then
+				local p_badges = pdata.badges
+				for index = 1, #parsed do
+					if parsed[index] ~= p_badges[index] then
+						NewBadgeInterface:show(
+							player, index, math.max(parsed[index] or 1, 1)
+						)
+					end
+				end
+			end
+
+			pdata[key] = parsed
+
+			if key == "killed" then
+				checkKill(player)
+			end
+		end
+
+		savePlayerData(player)
 	end
 end)

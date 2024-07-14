@@ -17,8 +17,8 @@ end
 local function schedule_player(name, save, callback, timeoutCallback)
 	if players_file[name] then
 		callback(players_file[name])
-		if save then 
-			system.savePlayerData(name, json.encode(players_file[name]))
+		if save then
+			savePlayerData(name)
 		end
 	else
 		pdataRequest[name] = { callback, os.time() + 1000, save, timeoutCallback }
@@ -57,13 +57,13 @@ local function checkWeeklyWinners(player, data)
 	end
 
 	if data.badges[3] ~= 1 then
-		players_file[player].badges[3] = 1
+		data.badges[3] = 1
 		NewBadgeInterface:show(player, 3, 1)
-		savePlayerData(player)
+		savePlayerData(player, true)
 	end
 
-	schedule(2, true, function(data)
-		data.weekly.wl[id] = nil
+	schedule(2, true, function(filedata)
+		filedata.weekly.wl[id] = nil
 	end)
 end
 
@@ -589,9 +589,7 @@ local function warnPlayer(player, cmd, quantity, args)
 
 		tfm.exec.chatMessage("<v>[#] <V>"..requestplayer.. " <j>can't use their powers for <b>"..killedTime.."</b> minutes.", nil)
 		translatedChatMessage("killed", requestplayer, killedTime)
-
-
-		system.loadPlayerData(requestplayer)
+		checkKill(requestplayer)
 	end)
 end
 

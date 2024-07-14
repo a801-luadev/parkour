@@ -821,10 +821,6 @@ onEvent("PlayerDataParsed", function(player, data)
 	checkBan(player, data)
 end)
 
-onEvent("PlayerDataUpdated", function(player, data)
-	checkBan(player, data)
-end)
-
 onEvent("GameDataLoaded", function(data)
 	if data.sanction then
 		local oldBans = bans

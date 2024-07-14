@@ -49,6 +49,11 @@ function bindKeyboard(player, key, down, active)
 		keyInfo[down] = keyInfo[down] - 1
 	end
 
+	if keyInfo[down] < 0 then
+		keyInfo[down] = 0
+		return
+	end
+
 	if keyInfo[down] == 1 then
 		system.bindKeyboard(player, key, down, true)
 	elseif keyInfo[down] == 0 then
@@ -870,6 +875,26 @@ function unbind(player)
 	keys.triggers[player] = nil
 end
 
+local function checkKill(player)
+	local data = players_file[player]
+	if not data then return end
+
+	local had_powers = not no_powers[player]
+	no_powers[player] = data.killed > os.time() or nil
+	if no_powers[player] then
+		translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
+	end
+
+	if victory[player] then
+		if had_powers then
+			unbind(player)
+		end
+		if not no_powers[player] then
+			bindNecessary(player)
+		end
+	end
+end
+
 onEvent("Keyboard", function(player, key, down, x, y)
 	if not victory[player] or not players_file[player] or not keys.triggers[player] then return end
 	if spec_mode[player] then return end
@@ -979,66 +1004,10 @@ onEvent("PlayerDataParsed", function(player, data)
 		end
 	end
 
-	if data.killed > os.time() then
-		no_powers[player] = true
-		translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
-	else
-		no_powers[player] = nil
-	end
+	checkKill(player)
 
-	if victory[player] then
-		if not no_powers[player] then
-			bindNecessary(player)
-		end
-	else
-		unbind(player)
-	end
-
-	-- don't save as it will trigger this twice, and this will be saved
-	-- right after this event finishes anyway
-	fixHourCount(nil, data)
-end)
-
-onEvent("PlayerDataUpdated", function(player, data)
-	if data.killed > os.time() then
-		if not no_powers[player] then
-			no_powers[player] = true
-			unbind(player)
-		end
-		translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
-	elseif no_powers[player] then
-		no_powers[player] = nil
-		if victory[player] then
-			bindNecessary(player)
-		end
-	end
-
-	if data.quests then
-		if power_quest[player] then return end
-		for i = 1, #data.quests do
-			if data.quests[i].id == 6 then
-
-				if not power_quest[player] then
-					power_quest[player] = {}
-				end
-
-				if i <= 4 then
-					power_quest[player].d = data.quests[i].pr
-					power_quest[player].di = i
-				else
-					power_quest[player].w = data.quests[i].pr
-					power_quest[player].wi = i
-				end
-			end
-		end
-	end
-
-	-- don't loop infinitely
-	-- calling savePlayerData loads data first, so this will get triggered again
-	-- and it will call savePlayerData again, which will load again and trigger
-	-- this again.
 	if fixHourCount(nil, data) then
-		to_save[player] = true
+		savePlayerData(player, true)
 	end
 end)
 

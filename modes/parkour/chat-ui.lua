@@ -443,6 +443,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if not perms[player] or not perms[player].get_player_room then return end
 
 		local fetching = capitalize(args[1])
+		if in_room[fetching] then
+			tfm.exec.chatMessage("<v>[#] <d>" .. fetching .. " is here ._.", player)
+			return
+		end
+
 		fetching_player_room[fetching] = { player, os.time() + 1000 }
 		system.loadPlayerData(fetching)
 		max_args = 1
@@ -528,8 +533,6 @@ onEvent("PlayerDataParsed", function(player, data)
 		end
 	end
 end)
-
-onEvent("PlayerDataUpdated", checkRoomRequest)
 
 onEvent("Loop", function()
 	local now = os.time()
