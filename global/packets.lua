@@ -12,6 +12,7 @@ packets.rooms = {
   report = 11,
   ban_logs = 12,
   update_error = 13,
+  lock_fixed = 14,
 }
 
 packets.bots = {

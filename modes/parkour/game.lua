@@ -342,6 +342,18 @@ onEvent("PlayerLeft", function(player)
 	in_room[player] = nil
 	times.movement[player] = nil
 
+	if room.maxPlayers ~= room.moduleMaxPlayers then
+		sendPacket(
+			"common",
+			packets.room.lock_fixed,
+			room.shortName .. "\000" ..
+			room.maxPlayers .. "\000" ..
+			room.moduleMaxPlayers .. "\000" ..
+			player
+		)
+		tfm.exec.setRoomMaxPlayers(room.moduleMaxPlayers)
+	end
+
 	if spec_mode[player] then return end
 
 	player_count = player_count - 1

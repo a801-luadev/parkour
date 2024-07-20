@@ -87,6 +87,16 @@ do
 	end
 end
 
+do
+	room.moduleMaxPlayers = 50
+	local setRoomMaxPlayers = tfm.exec.setRoomMaxPlayers
+	function tfm.exec.setRoomMaxPlayers(maxPlayers)
+		local ret = setRoomMaxPlayers(maxPlayers)
+		room.moduleMaxPlayers = room.maxPlayers
+		return ret
+	end
+end
+
 {% require-package "translations" %}
 {% require-package "global" %}
 
