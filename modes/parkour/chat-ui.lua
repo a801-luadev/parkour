@@ -515,6 +515,7 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 
 	translatedChatMessage("welcome", player)
+	tfm.exec.chatMessage("<rose>" .. links.discord, player)
 	translatedChatMessage("forum_topic", player, links.forum)
 	translatedChatMessage("donate", player)
 
