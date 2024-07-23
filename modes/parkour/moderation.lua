@@ -9,6 +9,7 @@ local pdataRequest = {}
 local sanctions_file = {}
 local maps_loaded = false
 local sanctions_loaded = false
+local reported = {}
 
 local function schedule(fileid, save, callback)
 	to_do[#to_do + 1] = { fileid, save, callback }
@@ -1015,7 +1016,14 @@ end)
 local function handleReport(playerName, cmd, quantity, args)
 	local pdata = players_file[playerName]
 	local player = room.playerList[playerName]
-	if not pdata or not player or not pdata.report then
+	if not pdata or not player or not pdata.report or bans[player.id] then
+		return
+	end
+
+	local timestamp = os.time()
+	local regDate = player.registrationDate
+	-- Accounts registered less than 1 week ago
+	if not regDate or regDate > timestamp - 7 * 24 * 60 * 60 * 1000 then
 		return
 	end
 
@@ -1028,7 +1036,7 @@ local function handleReport(playerName, cmd, quantity, args)
 	if not reportedPlayer then
 		return translatedChatMessage("reported_not_here", playerName)
 	end
-	if reportedPlayer.id == 0 or reportedName:sub(1, 1) == "*" or bans[reportedPlayer.id] then
+	if reportedPlayer.id == 0 or reportedName:sub(1, 1) == "*" or bans[reportedPlayer.id] or reportedName == playerName then
 		return translatedChatMessage("reported_invalid", playerName)
 	end
 
@@ -1037,7 +1045,16 @@ local function handleReport(playerName, cmd, quantity, args)
 		return translatedChatMessage("reason_too_short", playerName)
 	end
 
-	local timestamp = os.time()
+	if reported[reportedName] then
+		if reported[reportedName][playerName] then
+			return translatedChatMessage("report_done", playerName)
+		end
+	else
+		reported[reportedName] = {}
+	end
+
+	reported[reportedName][playerName] = true
+
 	sendPacket(
 		"common", packets.rooms.report,
 		timestamp .. "\000" ..
@@ -1130,6 +1147,10 @@ end)
 onEvent("PlayerDataParsed", checkWeeklyWinners)
 onEvent("PlayerDataParsed", playerDataRequests)
 onEvent("OutPlayerDataParsed", playerDataRequests)
+
+onEvent("PlayerLeft", function(player)
+	reported[player] = nil
+end)
 
 onEvent("Loop", function(elapsed)
 	local now = os.time()
