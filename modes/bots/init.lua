@@ -16,6 +16,7 @@ local callbacks = {
 	load_map = bit.lshift(11, 8) + 255,
 	load_file = bit.lshift(40, 8) + 255,
 	load_pdata = bit.lshift(41, 8) + 255,
+	send_update = bit.lshift(42, 8) + 255,
 }
 local textareas = {
 	heartbeat = 1 + 255,
@@ -33,6 +34,12 @@ onEvent("TextAreaCallback", function(id, player, data)
 		if not packet_id then return end
 
 		eventSendingPacket(packet_id, packet)
+
+	elseif id == callbacks.send_update then
+		local seconds = tonumber(data)
+		if not seconds then return end
+
+		eventSendingPacket(packets.bots.game_update, os.time() + seconds * 1000)
 
 	elseif id == callbacks.load_map then
 		tfm.exec.newGame(data)
