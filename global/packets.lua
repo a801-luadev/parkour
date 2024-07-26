@@ -24,4 +24,5 @@ packets.bots = {
   cm_announce = 5,
   pw_request = 6,
   room_announce = 7,
+  change_lock = 8,
 }
