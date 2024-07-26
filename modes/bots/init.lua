@@ -9,6 +9,7 @@ end
 
 local loading_file_time = os.time() + 11000
 local loading_file_id
+local pdata_requested = {}
 
 local bit = bit or bit32
 local callbacks = {
@@ -60,6 +61,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 		loading_file_id = file_id
 
 	elseif id == callbacks.load_pdata then
+		pdata_requested[data] = os.time() + 2000
 		system.loadPlayerData(data)
 	end
 end)
@@ -89,6 +91,17 @@ onEvent("Loop", function()
 		loading_file_time = os.time() + 11000
 		loading_file_id = nil
 	end
+
+	local clear = {}
+	local now = os.time()
+	for name, ts in next, pdata_requested do
+		if now > ts then
+			clear[1+#clear] = name
+		end
+	end
+	for i=1, #clear do
+		pdata_requested[clear[i]] = nil
+	end
 end)
 
 onEvent("FileLoaded", function(file, data)
@@ -96,6 +109,8 @@ onEvent("FileLoaded", function(file, data)
 end)
 
 onEvent("PlayerDataLoaded", function(player, file)
+	if not pdata_requested[player] then return end
+	pdata_requested[player] = nil
 	tfm.exec.playMusic(tostring(file), 'pdata:' .. tostring(player), 0, false, false, parkour_bot)
 end)
 
