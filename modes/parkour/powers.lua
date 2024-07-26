@@ -1011,6 +1011,32 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 end)
 
+onEvent("PlayerDataUpdated", function(player, data)
+	checkKill(player)
+
+	if data.quests then
+		for i = 1, #data.quests do
+			if data.quests[i].id == 6 then
+				if not power_quest[player] then
+					power_quest[player] = {}
+				end
+
+				if i <= 4 then
+					power_quest[player].d = data.quests[i].pr
+					power_quest[player].di = i
+				else
+					power_quest[player].w = data.quests[i].pr
+					power_quest[player].wi = i
+				end
+			end
+		end
+	end
+
+	if fixHourCount(nil, data) then
+		savePlayerData(player, true)
+	end
+end)
+
 onEvent("PlayerWon", function(player)
 	local id = room.playerList[player].id
 	if bans[ id ] then return end

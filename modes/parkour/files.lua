@@ -304,6 +304,7 @@ function savePlayerData(player, delay)
 		player,
 		json.encode(players_file[player])
 	)
+	eventPlayerDataUpdated(player, players_file[player])
 end
 
 local function updateData(player, data)

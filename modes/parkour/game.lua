@@ -700,6 +700,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		showStats()
 
 	elseif cmd == "cp" then
+		if not levels then return end
 		local checkpoint = tonumber(args[1])
 		if not checkpoint then
 			if players_level[args[1]] then
@@ -832,6 +833,10 @@ onEvent("PlayerDataParsed", function(player, data)
 		tfm.exec.chatMessage("<v>[#] <d>Your spec mode has been carried to this room since it's enabled.", player)
 	end
 
+	checkBan(player, data)
+end)
+
+onEvent("PlayerDataUpdated", function(player, data)
 	checkBan(player, data)
 end)
 
