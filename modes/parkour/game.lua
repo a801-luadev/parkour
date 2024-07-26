@@ -41,6 +41,7 @@ local ranks
 local bindKeyboard
 
 local lastOpenedMap
+local lastPlayerLeft
 
 do
 	local newGame = tfm.exec.newGame
@@ -264,6 +265,18 @@ onEvent("NewPlayer", function(player)
 
 	player_count = player_count + 1
 
+	if player_count > room.moduleMaxPlayers then
+		sendPacket(
+			"common",
+			packets.rooms.lock_fixed,
+			room.shortName .. "\000" ..
+			player_count .. "\000" ..
+			room.moduleMaxPlayers .. "\000" ..
+			(lastPlayerLeft or player)
+		)
+		tfm.exec.setRoomMaxPlayers(room.moduleMaxPlayers)
+	end
+
 	cp_available[player] = 0
 	times.movement[player] = os.time()
 
@@ -341,18 +354,7 @@ onEvent("PlayerLeft", function(player)
 	players_file[player] = nil
 	in_room[player] = nil
 	times.movement[player] = nil
-
-	if room.maxPlayers ~= room.moduleMaxPlayers then
-		sendPacket(
-			"common",
-			packets.room.lock_fixed,
-			room.shortName .. "\000" ..
-			room.maxPlayers .. "\000" ..
-			room.moduleMaxPlayers .. "\000" ..
-			player
-		)
-		tfm.exec.setRoomMaxPlayers(room.moduleMaxPlayers)
-	end
+	lastPlayerLeft = player
 
 	if spec_mode[player] then return end
 
