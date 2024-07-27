@@ -771,8 +771,8 @@ local function fileActions(player, cmd, quantity, args)
 		end
 
 		tfm.exec.chatMessage("<v>[#] <j>" .. rankName .. ":", player)
-		for staffName in next, list do
-			tfm.exec.chatMessage(staffName, player)
+		for i=1, list._count, 10 do
+			tfm.exec.chatMessage(table.concat(list, ' ', i, math.min(i+9, list._count)), player)
 		end
 
 	elseif fileName == "sanction" then
