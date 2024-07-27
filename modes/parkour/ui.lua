@@ -77,6 +77,7 @@ end
 
 function setNameColor(player)
     local file = players_file[player]
+		if not file then return end
 
     tfm.exec.setNameColor(
         player,
@@ -127,6 +128,7 @@ end)
 onEvent("Keyboard", function(player, key, down, x, y)
 	local interface = interfaces[key]
 	if interface then
+		if not players_file[player] then return end
 		if players_file[player].settings[9] == 1 then return end
 		toggleInterface(interface, player)
 
@@ -297,6 +299,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>You're a hidden staff. You can't use this command.", player)
 		end
 
+		if not players_file[player] then return end
+
 		players_file[player].hidden = not players_file[player].hidden
 
 		if players_file[player].hidden then
@@ -440,6 +444,7 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 		local questID, questType = args:match("(%d+):(%d+)") -- questType (1: daily - 2: weekly) 
 		questID = tonumber(questID)
 
+		if not players_file[player] then return end
 		if players_file[player].quests[questID].skp then return end
 		
 		local isWeekly = tonumber(questType) == 2 and true or false

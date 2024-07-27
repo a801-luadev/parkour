@@ -848,7 +848,7 @@ local function editCoins(player, cmd, quantity, args)
 	local playerName = args[1]
 	local action = args[2]
 
-	if not in_room[playerName] then
+	if not in_room[playerName] or not players_file[playerName] then
 		return tfm.exec.chatMessage(playerName.." is not here.", player)
 	end
 

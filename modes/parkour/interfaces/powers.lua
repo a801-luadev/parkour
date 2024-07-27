@@ -447,6 +447,7 @@ do
 			end
 		elseif Keyboard.open[player] and action == "keyboard" then
 			if not checkCooldown(player, "changeKeys", 1000) then return end
+			if not players_file[player] then return end
 
 			local binding = keyboard.bindings[args]
 			if binding then

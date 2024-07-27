@@ -33,7 +33,7 @@ local function completeQuest(player, questData, isWeekly, questID)
 	local file = players_file[player]
 	local questPrize = quests[questID].prize(player, isWeekly)
 
-	if not questPrize then return end
+	if not questPrize or not file then return end
 
 	questData.ts = os.time()
 	file.coins = file.coins + questPrize
