@@ -558,7 +558,7 @@ local function handleBancount(player, cmd, quantity, args)
 end
 
 local function warnPlayer(player, cmd, quantity, args)
-	if not ranks.admin[player] and not ranks.bot[player] and not ranks.mod[player] then
+	if not ranks.admin[player] and (not perms[player] or not perms[player].kill) then
 		return
 	end
 

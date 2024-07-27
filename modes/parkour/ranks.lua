@@ -67,6 +67,7 @@ local ranks_permissions = {
 		see_hidden_staff = true,
 	},
 	trainee = {
+		ban = true,
 		kill = true,
 		spectate = true,
 		get_player_room = true,
