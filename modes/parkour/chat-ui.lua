@@ -319,7 +319,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		savePlayerData(target)
 
 	elseif cmd == "roommod" then
-		local has_perm = perms[player] and not perms[player].change_roommod
+		local has_perm = perms[player] and perms[player].change_roommod
 		local is_owner = records_admins and records_admins[player]
 		if not has_perm and not is_owner then
 			return
@@ -339,7 +339,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 	elseif cmd == "deroommod" then
-		local has_perm = perms[player] and not perms[player].change_roommod
+		local has_perm = perms[player] and perms[player].change_roommod
 		local is_owner = records_admins and records_admins[player]
 		if not has_perm and not is_owner then
 			return
