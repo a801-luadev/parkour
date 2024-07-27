@@ -40,7 +40,7 @@ onEvent("TextAreaCallback", function(id, player, data)
 		local seconds = tonumber(data)
 		if not seconds then return end
 
-		eventSendingPacket(packets.bots.game_update, os.time() + seconds * 1000)
+		eventSendingPacket(packets.bots.game_update, tostring(os.time() + seconds * 1000))
 
 	elseif id == callbacks.load_map then
 		tfm.exec.newGame(data)
