@@ -42,12 +42,13 @@ do
 			event._count = 0
 		end
 
+		tfm.exec.chatMessage(name .. " - " .. msg)
+
 		if room.name == "*#parkour4bots" then
-			ui.addTextArea(bit32.lshift(255, 8) + 255, name .. "\000" .. msg)
+			ui.addTextArea(0, "*4bots\000" .. name .. "\000" .. msg)
 			return
 		end
 
-		tfm.exec.chatMessage(name .. " - " .. msg)
 		translatedChatMessage("emergency_mode")
 
 		if is_tribe then return end
