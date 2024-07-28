@@ -18,7 +18,8 @@ channels = {
 	common = { -- to bots (common data, low traffic)
 		room.name == "*#parkour4bots", true, 10000,
 		false,
-		"Funcorp#0801", "Delphilante#1225"
+		"Funcorp#0801", "Delphilante#1225",
+		"Recordsbot#8598",
 	},
 	victory = { -- to bots (all victory logs, high traffic)
 		room.name == "*#parkour4bots", true, 10000,
