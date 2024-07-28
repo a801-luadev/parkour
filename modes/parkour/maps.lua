@@ -251,7 +251,12 @@ onEvent("NewGame", function()
 	-- checkpoints are
 
 	levels = {}
-	if not room.xmlMapInfo then return invalidMap("vanilla") end
+	if not room.xmlMapInfo or tonumber(room.currentMap) or tonumber(room.xmlMapInfo.mapCode) ~= tonumber(tostring(room.currentMap):sub(2)) then
+		if not room.xmlMapInfo then
+			return
+		end
+		return invalidMap("vanilla")
+	end
 	local xml = room.xmlMapInfo.xml
 
 	local hole = string.match(xml, '<T%s+.-/>')
