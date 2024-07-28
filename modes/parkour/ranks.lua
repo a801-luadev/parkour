@@ -70,6 +70,7 @@ local ranks_permissions = {
 		ban = true,
 		kill = true,
 		spectate = true,
+		change_map = true,
 		get_player_room = true,
 		see_private_maps = true,
 		use_tracker = true,
