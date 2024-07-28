@@ -868,48 +868,6 @@ onEvent("GameDataLoaded", function(data)
 	end
 end)
 
-onEvent("PacketReceived", function(channel, id, packet)
-	if channel ~= "bots" then return end
-
-	if id == 3 then -- !ban
-		local player, val = string.match(packet, "^([^\000]+)\000[^\000]+\000([^\000]+)$")
-		local file, data = players_file[player], room.playerList[player]
-		if in_room[player] and data and file then
-			file.banned = val == "1" and 2 or tonumber(val)
-			bans[data.id] = file.banned == 2 or os.time() < file.banned
-
-			if bans[data.id] then
-				if not spec_mode[player] then
-					spec_mode[player] = true
-					tfm.exec.killPlayer(player)
-
-					player_count = player_count - 1
-					showStats()
-					if victory[player] then
-						victory_count = victory_count - 1
-					elseif player_count == victory_count and not less_time then
-						tfm.exec.setGameTime(5)
-						less_time = true
-					end
-				end
-
-				if file.banned == 2 then
-					translatedChatMessage("permbanned", player)
-				else
-					local minutes = math.floor((file.banned - os.time()) / 1000 / 60)
-					translatedChatMessage("tempbanned", player, minutes)
-				end
-
-			elseif spec_mode[player] then
-				enableSpecMode(player, false)
-			end
-
-			savePlayerData(player)
-			sendPacket("common", 2, data.id .. "\000" .. val)
-		end
-	end
-end)
-
 onEvent("GameStart", function()
 	tfm.exec.disablePhysicalConsumables(true)
 	tfm.exec.setRoomMaxPlayers(room_max_players)
