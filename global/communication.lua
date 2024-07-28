@@ -19,7 +19,7 @@ channels = {
 		room.name == "*#parkour4bots", true, 10000,
 		false,
 		"Funcorp#0801", "Delphilante#1225",
-		"Recordsbot#8598",
+		"Recordsbot#8598", "Buildtool#0800",
 	},
 	victory = { -- to bots (all victory logs, high traffic)
 		room.name == "*#parkour4bots", true, 10000,
