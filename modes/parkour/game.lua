@@ -780,6 +780,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		tfm.exec.setGameTime(time)
+		inGameLogCommand(player, "time", args)
 
 	elseif cmd == "redo" then
 		if not (records_admins or review_mode) then return end

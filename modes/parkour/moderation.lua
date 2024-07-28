@@ -242,7 +242,7 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 	end)
 end
 
-local function inGameLogCommand(p, command, args)
+function inGameLogCommand(p, command, args)
 	local commandtext = table.concat(args, " ")
 	for playername, player in pairs(tfm.get.room.playerList) do
 		if ranks.admin[playername] or ranks.mod[playername] then

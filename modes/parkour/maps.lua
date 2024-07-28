@@ -396,6 +396,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				-- legitimate review mode
 				return
 			end
+			inGameLogCommand(player, "map", args)
 			logCommand(player, "map", math.min(quantity, 2), args)
 		end
 	end

@@ -5,3 +5,5 @@ local function logCommand(author, cmd, quantity, args)
 
 	sendPacket("common", 7, room.shortName .. "\000" .. author .. "\000" .. cmd)
 end
+
+local function inGameLogCommand()end
