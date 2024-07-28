@@ -37,6 +37,7 @@ local read = {}
 local write = {}
 
 local tbl
+local channelBots = {}
 for name, data in next, channels do
 	if name ~= "canRead" then
 		tbl = data[1] and read or write
@@ -55,7 +56,7 @@ for name, data in next, channels do
 			-- last id in pipe
 			tbl[name][ data[index] ] = 0
 
-			channels[ data[index] ] = tbl[name]
+			channelBots[ data[index] ] = tbl[name]
 		end
 
 		tbl[name].pipes = #data - 4
@@ -66,6 +67,10 @@ for name, data in next, channels do
 			tbl[name].retries = #data - 4
 		end
 	end
+end
+
+for key, val in next, channelBots do
+	channels[key] = val
 end
 
 local next_load = os.time() + 10000
