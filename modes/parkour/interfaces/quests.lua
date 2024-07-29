@@ -2,6 +2,7 @@ do
 
 	local isQuestSkipped = {}
 	local function checkQuestSkipped(player)
+		if not players_file[player] then return end
 		if not players_file[player].quests then return end
 
 		isQuestSkipped[player] = {

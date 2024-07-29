@@ -48,13 +48,15 @@ do
 			canUpdate = true,
 			image = function(self, player)
 				local file = players_file[player]
-				if file.settings[4] == 1 then
-					return powers_img
-				elseif file.settings[6] == 1 then
-					return help_img
-				else
-					return "a.png"
+				if file then
+					if file.settings[4] == 1 then
+						return powers_img
+					end
+					if file.settings[6] == 1 then
+						return help_img
+					end
 				end
+				return "a.png"
 			end,
 			target = ":1",
 			x = 684, y = 32
@@ -63,13 +65,15 @@ do
 			canUpdate = true,
 			text = function(self, player)
 				local file = players_file[player]
-				if file.settings[4] == 1 then
-					return "<a href='event:powers'><font size='50'>  </font></a>"
-				elseif file.settings[6] == 1 then
-					return "<a href='event:help_button'><font size='50'>  </font></a>"
-				else
-					return ""
+				if file then
+					if file.settings[4] == 1 then
+						return "<a href='event:powers'><font size='50'>  </font></a>"
+					end
+					if file.settings[6] == 1 then
+						return "<a href='event:help_button'><font size='50'>  </font></a>"
+					end
 				end
+				return ""
 			end,
 			x = 679, y = 32,
 			height = 30, width = 32,
@@ -80,7 +84,7 @@ do
 			canUpdate = true,
 			image = function(self, player)
 				local file = players_file[player]
-				if file.settings[4] == 1 and file.settings[6] == 1 then
+				if file and file.settings[4] == 1 and file.settings[6] == 1 then
 					return help_img
 				else
 					return "a.png"

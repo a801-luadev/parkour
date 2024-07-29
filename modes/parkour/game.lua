@@ -41,6 +41,7 @@ local ranks
 local bindKeyboard
 
 local lastOpenedMap
+local lastPlayerLeft
 
 do
 	local newGame = tfm.exec.newGame
@@ -264,6 +265,18 @@ onEvent("NewPlayer", function(player)
 
 	player_count = player_count + 1
 
+	if player_count > room.moduleMaxPlayers then
+		sendPacket(
+			"common",
+			packets.rooms.lock_fixed,
+			room.shortName .. "\000" ..
+			player_count .. "\000" ..
+			room.moduleMaxPlayers .. "\000" ..
+			(lastPlayerLeft or player)
+		)
+		tfm.exec.setRoomMaxPlayers(room.moduleMaxPlayers)
+	end
+
 	cp_available[player] = 0
 	times.movement[player] = os.time()
 
@@ -341,6 +354,7 @@ onEvent("PlayerLeft", function(player)
 	players_file[player] = nil
 	in_room[player] = nil
 	times.movement[player] = nil
+	lastPlayerLeft = player
 
 	if spec_mode[player] then return end
 
@@ -378,7 +392,7 @@ onEvent("PlayerDied", function(player)
 	local info = room.playerList[player]
 
 	if not info then return end
-	if info.id == 0 then return end
+	if info.id == 0 or player:sub(1, 1) == "*" then return end
 	if bans[info.id] then return end
 	if (not levels) or (not players_level[player]) then return end
 
@@ -546,7 +560,7 @@ onEvent("Loop", function()
 		for name in next, in_room do
 			player = room.playerList[name]
 			if player then
-				if spec_mode[name] or player.id == 0 or bans[player.id] then
+				if spec_mode[name] or player.id == 0 or name:sub(1, 1) == "*" or bans[player.id] then
 					tfm.exec.killPlayer(name)
 				elseif (player_count > 4
 						and not records_admins
@@ -686,6 +700,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		showStats()
 
 	elseif cmd == "cp" then
+		if not levels then return end
 		local checkpoint = tonumber(args[1])
 		if not checkpoint then
 			if players_level[args[1]] then
@@ -711,6 +726,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				return translatedChatMessage("cooldown", player)
 			end
 		end
+		if not players_level[player] then return end
 
 		if checkpoint_info.version == 1 then
 			tfm.exec.removeBonus(players_level[player] + 1, player)
@@ -764,9 +780,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		tfm.exec.setGameTime(time)
+		inGameLogCommand(player, "time", args)
 
 	elseif cmd == "redo" then
 		if not (records_admins or review_mode) then return end
+		if not players_level[player] then return end
 
 		if checkpoint_info.version == 1 then
 			tfm.exec.removeBonus(players_level[player] + 1, player)
@@ -846,48 +864,6 @@ onEvent("GameDataLoaded", function(data)
 					enableSpecMode(player, false)
 				end
 			end
-		end
-	end
-end)
-
-onEvent("PacketReceived", function(channel, id, packet)
-	if channel ~= "bots" then return end
-
-	if id == 3 then -- !ban
-		local player, val = string.match(packet, "^([^\000]+)\000[^\000]+\000([^\000]+)$")
-		local file, data = players_file[player], room.playerList[player]
-		if in_room[player] and data and file then
-			file.banned = val == "1" and 2 or tonumber(val)
-			bans[data.id] = file.banned == 2 or os.time() < file.banned
-
-			if bans[data.id] then
-				if not spec_mode[player] then
-					spec_mode[player] = true
-					tfm.exec.killPlayer(player)
-
-					player_count = player_count - 1
-					showStats()
-					if victory[player] then
-						victory_count = victory_count - 1
-					elseif player_count == victory_count and not less_time then
-						tfm.exec.setGameTime(5)
-						less_time = true
-					end
-				end
-
-				if file.banned == 2 then
-					translatedChatMessage("permbanned", player)
-				else
-					local minutes = math.floor((file.banned - os.time()) / 1000 / 60)
-					translatedChatMessage("tempbanned", player, minutes)
-				end
-
-			elseif spec_mode[player] then
-				enableSpecMode(player, false)
-			end
-
-			savePlayerData(player)
-			sendPacket("common", 2, data.id .. "\000" .. val)
 		end
 	end
 end)

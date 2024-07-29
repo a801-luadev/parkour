@@ -42,12 +42,13 @@ do
 			event._count = 0
 		end
 
+		tfm.exec.chatMessage(name .. " - " .. msg)
+
 		if room.name == "*#parkour4bots" then
-			ui.addTextArea(bit32.lshift(255, 8) + 255, name .. "\000" .. msg)
+			ui.addTextArea(0, "*4bots\000" .. name .. "\000" .. msg)
 			return
 		end
 
-		tfm.exec.chatMessage(name .. " - " .. msg)
 		translatedChatMessage("emergency_mode")
 
 		if is_tribe then return end
@@ -73,14 +74,12 @@ do
 
 	local function callListeners(evt, a, b, c, d, e, offset)
 		for index = offset, evt._count do
-			evt[index](a, b, c, d, e)
-
 			if not initializingModule and os_time() >= stoppingAt then
 				if index < evt._count then
 					-- If this event didn't end, we need to resume from
 					-- where it has been left!
 					scheduled._count = scheduled._count + 1
-					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, index + 1}
+					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, index}
 				end
 
 				paused = true
@@ -88,6 +87,8 @@ do
 				translatedChatMessage("paused_events")
 				break
 			end
+
+			evt[index](a, b, c, d, e)
 		end
 	end
 

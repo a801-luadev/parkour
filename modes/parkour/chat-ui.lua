@@ -318,6 +318,46 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		savePlayerData(target)
 
+	elseif cmd == "roommod" then
+		local has_perm = perms[player] and perms[player].change_roommod
+		local is_owner = records_admins and records_admins[player]
+		if not has_perm and not is_owner then
+			return
+		end
+
+		local target = args[1]
+		if quantity < 1 or records_admins[target] or not room.playerList[target] then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		records_admins[target] = 1
+		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is a room mod now.")
+
+		-- don't log room owner actions
+		if is_owner then
+			return
+		end
+
+	elseif cmd == "deroommod" then
+		local has_perm = perms[player] and perms[player].change_roommod
+		local is_owner = records_admins and records_admins[player]
+		if not has_perm and not is_owner then
+			return
+		end
+
+		local target = args[1]
+		if quantity < 1 or records_admins[target] ~= 1 then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		records_admins[target] = nil
+		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is not a room mod anymore.")
+
+		-- don't log room owner actions
+		if is_owner then
+			return
+		end
+
 	elseif cmd == "pw" then
 		if not records_admins or not records_admins[player] then
 			if not perms[player] or not perms[player].enable_review then return end
@@ -403,6 +443,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if not perms[player] or not perms[player].get_player_room then return end
 
 		local fetching = capitalize(args[1])
+		if in_room[fetching] then
+			tfm.exec.chatMessage("<v>[#] <d>" .. fetching .. " is here ._.", player)
+			return
+		end
+
 		fetching_player_room[fetching] = { player, os.time() + 1000 }
 		system.loadPlayerData(fetching)
 		max_args = 1
@@ -470,6 +515,7 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 
 	translatedChatMessage("welcome", player)
+	tfm.exec.chatMessage("<rose>" .. links.discord, player)
 	translatedChatMessage("forum_topic", player, links.forum)
 	translatedChatMessage("donate", player)
 
@@ -488,8 +534,6 @@ onEvent("PlayerDataParsed", function(player, data)
 		end
 	end
 end)
-
-onEvent("PlayerDataUpdated", checkRoomRequest)
 
 onEvent("Loop", function()
 	local now = os.time()

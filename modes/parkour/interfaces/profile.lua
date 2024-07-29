@@ -175,6 +175,7 @@ do
 	onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 		if action == "prof_maps" then
 			if not checkCooldown(player, "mapsToggle", 500) then return end
+			if not players_file[player] then return end
 
 			if args == "public" then
 				players_file[player].private_maps = nil

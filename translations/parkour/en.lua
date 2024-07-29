@@ -4,6 +4,8 @@ translations.en = {
 
 	-- Error messages
 	corrupt_map = "<r>Corrupt map. Loading another.",
+	corrupt_map_no_perm = "<r>[ERROR] <n>This map is not protected properly.",
+	corrupt_map_hole = "<r>[ERROR] <n>Parkour maps cannot contain a mouse hole.",
 	corrupt_map_vanilla = "<r>[ERROR] <n>Can not get information of this map.",
 	corrupt_map_mouse_start = "<r>[ERROR] <n>This map needs to have a start position (mouse spawn point).",
 	corrupt_map_needing_chair = "<r>[ERROR] <n>The map needs to have the end chair.",
@@ -51,6 +53,11 @@ translations.en = {
 	report = "<j>Want to report a parkour player? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
 	killed = "<v>[#] <r>You are restricted from using your powers for %s minutes due to your violation of parkour rules. Continued rule violations will result in a ban. Please press <b>H</b> to review the rules.",
 	mapper_event = "<CE><B>Parkour mapmaking contest 2024:</B>\n<n>Show us your creativity in map-making for a chance to win <D>cheese coins <n>and <pt>parkour coins<n>!\n<R>Submissions open until <B>January 31, 2024</B>.\n<PS>For more information, visit: %s",
+	cmd_usage_report = "<j>Usage: <bl>!report [Player#1234] [reason]",
+	reported_not_here = "<bl>Reported player must be in this room.",
+	reported_invalid = "<bl>This player cannot be reported.",
+	reason_too_short = "<bl>Report reason is too short.",
+	report_done = "<j>Thank you for your report.",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Finally the countdown begins...",
@@ -204,6 +211,7 @@ translations.en = {
 	equip = "Equip",
 	equipped = "<font size = '10'>Equipped</font>",
 	saving = "<p align='right'>Saving...",
+	new_image = "<J>Your appearance has been changed. You can turn it back to normal by typing !image",
 
 	-- Power names
 	balloon = "Balloon",

@@ -71,6 +71,24 @@ local function generateRandomString(length)
     return randomString
 end
 
+do
+	local savePlayerData = system.savePlayerData
+	system.savePlayerData = function(playerName, ...)
+		if not playerName then return end
+		if tostring(playerName):sub(1, 1) == '*' then return end
+		return savePlayerData(playerName, ...)
+	end
+end
+
+do
+	room.moduleMaxPlayers = 50
+	local setRoomMaxPlayers = tfm.exec.setRoomMaxPlayers
+	function tfm.exec.setRoomMaxPlayers(maxPlayers)
+		local ret = setRoomMaxPlayers(maxPlayers)
+		room.moduleMaxPlayers = room.maxPlayers
+		return ret
+	end
+end
 
 {% require-package "translations" %}
 {% require-package "global" %}

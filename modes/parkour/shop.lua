@@ -1,8 +1,17 @@
+local is_christmas_time
+
+do
+	local day = tonumber(os.date("%d"))
+	local month = tonumber(os.date("%m"))
+
+	is_christmas_time = (month == 12 and day >= 15) or (month == 1 and day <= 15)
+end
+
 shop_items = {
 	{ -- smallbox
 		{
 			price = 0,
-			image = "18c72bd8ad1.png",
+			image = is_christmas_time and "18c72bd8ad1.png" or "18b59d0c458.png",
 			id = 1,
 		},
 		{
@@ -94,7 +103,7 @@ shop_items = {
 	{ -- bigbox
 		{
 			price = 0,
-			image = "18c72bd3975.png",
+			image = is_christmas_time and "18c72bd3975.png" or "18b59d0c458.png",
 			id = 2,
 		},
 		{
@@ -186,7 +195,7 @@ shop_items = {
 	{ -- trampoline
 		{
 			price = 0,
-			image = "18c72bddd28.png",
+			image = is_christmas_time and "18c72bddd28.png" or "18b2b460ab3.png",
 			id = 7,
 		},
 		{
@@ -278,7 +287,7 @@ shop_items = {
 	{ -- balloon
 		{
 			price = 0,
-			image = "18c72bb89a4.png",
+			image = is_christmas_time and  "18c72bb89a4.png" or "18b31269b0a.png",
 			id = 28,
 		},
 		{
@@ -370,7 +379,7 @@ shop_items = {
 	{ -- plank
 		{
 			price = 0,
-			image = "18c72bfa272.png",
+			image = is_christmas_time and "18c72bfa272.png" or "173db2812bc.png",
 			id = 46,
 		},
 		{
@@ -462,12 +471,6 @@ shop_items = {
 }
 
 shop_skins = {
-	["1"] = {img = "18c72bad79e.png", x = 0.5, y = 0.50},
-	["2"] = {img = "18c72ba3321.png", x = 0.5, y = 0.50},
-	["7"] = {img = "18c72bb2589.png", x = 0.5, y = 0.52},
-	["28"] = {img = "18c72bccb7c.png", x = 0.5, y = 0.30},
-	["46"] = {img = "18c72ba881a.png", x = 0.5, y = 0.52},
-
 	["143"] = {img = "18b40057d3b.png", x = 0.5, y = 0.52},
 	["144"] = {img = "18b4005cd84.png", x = 0.5, y = 0.52},
 	["145"] = {img = "18b40061bab.png", x = 0.5, y = 0.52},
@@ -561,3 +564,11 @@ shop_skins = {
 	["2858"] = {img = "18b401c0154.png", x = 0.5, y = 0.52},
 	["2859"] = {img = "18b401c4f6e.png", x = 0.5, y = 0.52},
 }
+
+if is_christmas_time then
+	shop_skins["1"] = {img = "18c72bad79e.png", x = 0.5, y = 0.50}
+	shop_skins["2"] = {img = "18c72ba3321.png", x = 0.5, y = 0.50}
+	shop_skins["7"] = {img = "18c72bb2589.png", x = 0.5, y = 0.52}
+	shop_skins["28"] = {img = "18c72bccb7c.png", x = 0.5, y = 0.30}
+	shop_skins["46"] = {img = "18c72ba881a.png", x = 0.5, y = 0.52}
+end

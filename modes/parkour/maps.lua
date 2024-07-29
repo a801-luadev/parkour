@@ -66,6 +66,7 @@ end
 
 if records_admins then
 	tfm.exec.playerVictory = function(name)
+		tfm.exec.removeCheese(name)
 		eventPlayerWon(name)
 	end
 end
@@ -142,7 +143,6 @@ local function selectMap(sections, list, count)
 	return list[map]
 end
 
-local is_test = string.find(room.name, "test", 1, true)
 local function newMap()
 	count_stats = not review_mode
 	map_change_cd = os.time() + 20000
@@ -160,6 +160,7 @@ end
 local function invalidMap(arg)
 	levels = nil
 	is_invalid = os.time() + 3000
+	tfm.exec.chatMessage("<r>" .. room.currentMap)
 	translatedChatMessage("corrupt_map")
 	translatedChatMessage("corrupt_map_" .. arg)
 end
@@ -250,8 +251,18 @@ onEvent("NewGame", function()
 	-- checkpoints are
 
 	levels = {}
-	if not room.xmlMapInfo then return invalidMap("vanilla") end
+	if not room.xmlMapInfo or tonumber(room.currentMap) or tonumber(room.xmlMapInfo.mapCode) ~= tonumber(tostring(room.currentMap):sub(2)) then
+		if not room.xmlMapInfo then
+			return
+		end
+		return invalidMap("vanilla")
+	end
 	local xml = room.xmlMapInfo.xml
+
+	local hole = string.match(xml, '<T%s+.-/>')
+	if hole then
+		return invalidMap("hole")
+	end
 
 	local count = 1
 	local mouse_start = string.match(xml, '<DS%s+(.-)%s+/>')
@@ -333,7 +344,7 @@ onEvent("NewGame", function()
 		and not review_mode
 		and room.xmlMapInfo.permCode ~= 41
 		and room.xmlMapInfo.author ~= "#Module") then
-		is_invalid = os.time() + 3000
+		invalidMap("no_perm")
 		return
 	end
 	is_invalid = false
@@ -350,7 +361,7 @@ onEvent("NewGame", function()
 end)
 
 onEvent("Loop", function(elapsed, remaining)
-	if review_mode then return end
+	if review_mode or records_admins then return end
 
 	-- Changes the map when needed
 	if (is_invalid and os.time() >= is_invalid) or remaining < 500 then
@@ -390,6 +401,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				-- legitimate review mode
 				return
 			end
+			inGameLogCommand(player, "map", args)
 			logCommand(player, "map", math.min(quantity, 2), args)
 		end
 	end

@@ -37,6 +37,8 @@ local ranks_permissions = {
 		hide = true,
 		handle_map_polls = true,
 		see_map_polls = true,
+		change_roommod = true,
+		see_hidden_staff = true,
 	},
 	mod = {
 		ban = true,
@@ -48,7 +50,9 @@ local ranks_permissions = {
 		kill = true,
 		see_private_maps = true,
 		use_tracker = true,
-		hide = true
+		hide = true,
+		change_roommod = true,
+		see_hidden_staff = true,
 	},
 	mapper = {
 		change_map = true,
@@ -58,14 +62,19 @@ local ranks_permissions = {
 		spectate = true,
 		start_round_poll = true,
 		see_map_polls = true,
-		set_map_time_review = true
+		set_map_time_review = true,
+		change_roommod = true,
+		see_hidden_staff = true,
 	},
 	trainee = {
+		ban = true,
 		kill = true,
 		spectate = true,
+		change_map = true,
 		get_player_room = true,
 		see_private_maps = true,
-		use_tracker = true
+		use_tracker = true,
+		see_hidden_staff = true,
 	},
 	translator = {
 		hide = true

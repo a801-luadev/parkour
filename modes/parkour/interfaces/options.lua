@@ -5,10 +5,10 @@ OptionsInterface
 	:addTextArea({
 		text = function(self, player)
 			return translatedMessage("options", player)
-				:format(string.char(
+				:format((keyboard.bindings[
 					players_file[player].settings[2] == 46 and 77
 					or players_file[player].settings[2]
-				))
+				] or "?"):gsub('\n', ' '))
 		end,
 		alpha = 0
 	})
@@ -164,7 +164,7 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 			return
 		end
 
-		local qwerty = players_file[player].settings[5] == 1
+		local qwerty = players_file[player] and players_file[player].settings[5] == 1
 
 		Keyboard:show(player, qwerty, numkey, keyname) -- numkey, keyname
 	elseif Keyboard.open[player] and action == "keyboard" then
@@ -172,6 +172,7 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 
 		local binding = keyboard.bindings[args]
 		if not binding then return end
+		if not players_file[player] then return end
 
 		local previous_key = players_file[player].settings[2]
 		players_file[player].settings[2] = binding
