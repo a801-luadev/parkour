@@ -221,7 +221,7 @@ local function checkBan(player, data, id)
 	end
 
 	if data.banned and (data.banned == 2 or os.time() < data.banned) then
-		bans[id] = true
+		bans[id] = data.lastsanction
 
 		enableSpecMode(player, true)
 
@@ -232,8 +232,12 @@ local function checkBan(player, data, id)
 			translatedChatMessage("tempbanned", player, minutes)
 		end
 	elseif bans[id] then
-		bans[id] = false
-		enableSpecMode(player, false)
+		if not data.lastsanction or bans[id] > data.lastsanction then
+			enableSpecMode(player, true)
+		else
+			bans[id] = false
+			enableSpecMode(player, false)
+		end
 	elseif id == 0 then
 		enableSpecMode(player, true)
 	end
@@ -408,6 +412,7 @@ onEvent("PlayerDied", function(player)
 end)
 
 onEvent("PlayerWon", function(player)
+	if not room.playerList[player] then return end
 	if bans[ room.playerList[player].id ] then return end
 	if victory[player] then return end
 
@@ -848,7 +853,7 @@ onEvent("GameDataLoaded", function(data)
 		for pid, value in pairs(data.sanction) do
 			if value and value.time then
 				if value.time == 1 or value.time == 2 or os.time() < value.time then
-					bans[tonumber(pid)] = true
+					bans[tonumber(pid)] = value.timestamp
 				end
 			end
 		end
