@@ -248,7 +248,12 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 			playerName .. "\000" ..
 			time .. "\000" ..
 			moderator .. "\000" ..
-			minutes
+			minutes .. "\000" ..
+			-- prev sanction
+			(baninfo and baninfo.timestamp or "-") .. "\000" ..
+			(baninfo and baninfo.time or "-") .. "\000" ..
+			(baninfo and baninfo.info or "-") .. "\000" ..
+			(baninfo and baninfo.level or "-")
 		)
 		sendBanLog(playerName, time, moderator, minutes)
 	end)
@@ -728,18 +733,33 @@ local function warnPlayer(player, cmd, quantity, args)
 		requestplayer = requestplayer .. "#0000"
 	end
 
-	if not in_room[requestplayer] then
+	local roomPlayer = room.playerList[requestplayer]
+	if not in_room[requestplayer] or not roomPlayer then
 		tfm.exec.chatMessage("<v>[#] <r>" ..requestplayer.. " isn't here.", player)
 		return
 	end
 
 	logCommand(player, "kill", math.min(quantity, 2), args)
-
-	if not ranks.admin[player] then
-		sendPacket("common", 10, requestplayer .. "\000" .. killedTime .. "\000" .. player)
-	end
+	sendPacket(
+		"common",
+		packets.rooms.kill_logs,
+		requestplayer .. "\000" ..
+		killedTime .. "\000" ..
+		player .. "\000" ..
+		roomPlayer.id
+	)
 
 	schedule_player(requestplayer, true, function(pdata)
+		sendPacket(
+			"common",
+			packets.rooms.prev_kill,
+			requestplayer .. "\000" ..
+			roomPlayer.id .. "\000" ..
+			pdata.killed .. "\000" ..
+			pdata.kill .. "\000" ..
+			(pdata.killedby or '-')
+		)
+
 		pdata.killedby = player
 		pdata.killed = os.time() + killedTime * 60 * 1000
 		pdata.kill = killedTime
