@@ -267,6 +267,7 @@ local data_migrations = {
 		local allQuests = fillQuests(data, dailyQuests, true)
 
 		data.quests = allQuests
+		--data.killedby
 	end
 }
 

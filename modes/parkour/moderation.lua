@@ -740,6 +740,7 @@ local function warnPlayer(player, cmd, quantity, args)
 	end
 
 	schedule_player(requestplayer, true, function(pdata)
+		pdata.killedby = player
 		pdata.killed = os.time() + killedTime * 60 * 1000
 		pdata.kill = killedTime
 
