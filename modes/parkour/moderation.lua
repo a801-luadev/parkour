@@ -518,7 +518,7 @@ local function printSanctions(target, kind, name, pid, timestamp, time, level, m
 		onDate = "on <bl>" .. os.date("%B %d %Y %H:%M.%S", timestamp) .. "</bl> (france time) "
 	end
 
-	if minutes then
+	if time and minutes then
 		forMinutes = "for <v>" .. minutes .. "</v> minutes "
 	end
 
@@ -616,9 +616,9 @@ local function handleSanctions(player, cmd, quantity, args)
 					'powerban',
 					targetName,
 					pdata.playerid,
-					pdata.killed and pdata.kill and
+					pdata.killed ~= 0 and pdata.kill ~= 0 and
 					(pdata.killed - pdata.kill * 60 * 1000) or nil,
-					pdata.killed,
+					pdata.killed ~= 0 and pdata.killed or nil,
 					'-',
 					pdata.killedby,
 					pdata.kill
