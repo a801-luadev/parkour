@@ -53,6 +53,7 @@ local ranks_permissions = {
 		hide = true,
 		change_roommod = true,
 		see_hidden_staff = true,
+		view_sanctions = true,
 	},
 	mapper = {
 		change_map = true,
@@ -75,6 +76,7 @@ local ranks_permissions = {
 		see_private_maps = true,
 		use_tracker = true,
 		see_hidden_staff = true,
+		view_sanctions = true,
 	},
 	translator = {
 		hide = true
