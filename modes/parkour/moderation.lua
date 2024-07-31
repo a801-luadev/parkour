@@ -339,6 +339,8 @@ local function handleAdminBan(player, cmd, quantity, args)
 		return translatedChatMessage("invalid_syntax", player)
 	end
 
+	inGameLogCommand(player, cmd, args)
+
 	local sanctionTime
 
 	if cmd == "pban" then
@@ -588,6 +590,8 @@ local function handleSanctions(player, cmd, quantity, args)
 				return
 			end
 
+			inGameLogCommand(player, cmd, args)
+
 			tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
 			schedule(3, true, function(data)
 				local file = data.sanction and data.sanction[targetID]
@@ -775,6 +779,8 @@ local function handleSetrank(player, cmd, quantity, args)
 		return
 	end
 
+	inGameLogCommand(player, cmd, args)
+
 	if args[1] == player then
 		tfm.exec.chatMessage("<v>[#] <r>You can't change your rank.", player)
 		return
@@ -859,6 +865,8 @@ local function fileActions(player, cmd, quantity, args)
 				translatedChatMessage("invalid_syntax", player)
 				return
 			end
+
+			inGameLogCommand(player, cmd, args)
 
 			local count = tonumber(args[4]) or 100
 
@@ -980,6 +988,8 @@ function roomAnnouncement(player, cmd, quantity, args)
 		return
 	end
 
+	inGameLogCommand(player, cmd, args)
+
 	local announcementtext = table.concat(args, " ")
 	tfm.exec.chatMessage("<ROSE>Ξ [Parkour] <N>"..announcementtext)
 end
@@ -1010,6 +1020,7 @@ local function editCoins(player, cmd, quantity, args)
 		
 		tfm.exec.chatMessage("Current coins: " ..players_file[playerName].coins, player)
 		tfm.exec.chatMessage("Skins: " ..result, player)
+		return
 
 	elseif action == "default" then
 		players_file[playerName].cskins = { 1, 2, 7, 28, 46 }
@@ -1025,9 +1036,8 @@ local function editCoins(player, cmd, quantity, args)
 		local skinType = tonumber(args[3])
 		local skinNumber = tonumber(args[4])
 
-		local selectedSkin = shop_items[skinType][skinNumber]
-
-		if (not skinType or not skinNumber) or (not tonumber(skinType) or not tonumber(skinNumber)) or (selectedSkin == nil) then
+		local selectedSkin = skinType and skinNumber and shop_items[skinType] and shop_items[skinType][skinNumber]
+		if not selectedSkin then
 			return tfm.exec.chatMessage("Invalid skin type or skin number.", player)
 		end
 
@@ -1048,6 +1058,8 @@ local function editCoins(player, cmd, quantity, args)
 		tfm.exec.chatMessage("<v>[#] <j>Refunded " ..selectedSkin.price.. " coins (" ..skinType.. "/" ..skinNumber..") to the "..playerName, player)
 
 	end
+
+	inGameLogCommand(player, cmd, args)
 end
 
 local function setChristmasMap(player, cmd, quantity, args)
@@ -1232,7 +1244,7 @@ local function handleKarma(playerName, cmd, quantity, args)
 		return translatedChatMessage("invalid_syntax", playerName)
 	end
 
-	if quatity == 1 then
+	if quantity == 1 then
 		if pdata.report then
 			tfm.exec.chatMessage('<v>[#] <vp>' .. target .. ' can use !report.', playerName)
 		else
@@ -1240,6 +1252,8 @@ local function handleKarma(playerName, cmd, quantity, args)
 		end
 		return
 	end
+
+	inGameLogCommand(playerName, cmd, args)
 
 	local yes = args[2] == 'yes'
 	if not yes and args[2] ~= 'no' then
