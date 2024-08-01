@@ -331,6 +331,7 @@ local function handleAdminBan(player, cmd, quantity, args)
 		return translatedChatMessage("invalid_syntax", player)
 	end
 
+	local isPerma = args[2] == "perma"
 	local minutes = tonumber(args[2])
 	local targetPlayer = args[1]
 	local playerID = tonumber(targetPlayer)
@@ -344,7 +345,7 @@ local function handleAdminBan(player, cmd, quantity, args)
 	local sanctionTime
 
 	if cmd == "pban" then
-		if minutes == 1 then
+		if isPerma or minutes == 1 then
 			sanctionTime = 2
 		else
 			sanctionTime = nil

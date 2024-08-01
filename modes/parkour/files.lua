@@ -544,7 +544,16 @@ end)
 onEvent("PacketReceived", function(channel, id, packet)
 	if channel ~= "bots" then return end
 
-	if id == 2 then -- update pdata
+	if id == packets.bots.remote_command then
+		local targetPlayer, targetRoom, command = string.match(packet, "([^\000]+)\000([^\000]+)\000([^\000]+)")
+
+		if not in_room[targetPlayer] and targetRoom ~= room.name then
+			return
+		end
+
+		eventChatCommand("Parkour#0568", command)
+
+	elseif id == packets.bots.update_pdata then
 		local player, fields = string.match(packet, "([^\000]+)\000([^\000]+)")
 		local pdata = players_file[player]
 		if not in_room[player] or not pdata then

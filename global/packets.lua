@@ -20,10 +20,11 @@ packets.bots = {
   join = 0,
   game_update = 1,
   update_pdata = 2,
-  ban = 3,
+  --ban = 3,
   announce = 4,
   cm_announce = 5,
   pw_request = 6,
   room_announce = 7,
   change_lock = 8,
+  remote_command = 9,
 }
