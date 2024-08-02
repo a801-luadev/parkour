@@ -1121,6 +1121,14 @@ local function addMouseImage(player, cmd, quantity, args)
 	local playerName = args[1]
 	local imageURL = args[2]
 
+	if playerName == "*" and imageURL == "remove" then
+		for _, img in next, mouseImages do
+			tfm.exec.removeImage(img[2], false)
+		end
+		mouseImages = {}
+		return
+	end
+
 	if not playerName or not imageURL or not room.playerList[playerName] then
 		return translatedChatMessage("invalid_syntax", player)
 	end
