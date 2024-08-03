@@ -534,8 +534,12 @@ onEvent("PlayerDataParsed", function(player, data)
 	translatedChatMessage("forum_topic", player, links.forum)
 	translatedChatMessage("donate", player)
 
-	if timed_maps.week.last_reset == "28/02/2021" then
-		translatedChatMessage("double_maps", player)
+	if is_before_anniversary then
+		translatedChatMessage("anniversary", player)
+	elseif is_anniversary then
+		translatedChatMessage("anniversary_start", player)
+	elseif is_after_anniversary then
+		translatedChatMessage("anniversary_end", player)
 	end
 
 	checkRoomRequest(player, data)

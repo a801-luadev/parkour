@@ -43,6 +43,33 @@ local bindKeyboard
 local lastOpenedMap
 local lastPlayerLeft
 
+-- anniversary on march 6
+local is_anniversary, is_before_anniversary, is_after_anniversary
+do
+	local now = os.time()
+	local date_current = os.date("*t", now / 1000)
+
+	local function anniversaryTime(day)
+		return os.time({ year=date_current.year, month=3, day=6+day })
+	end
+
+	local date_anniversary = os.date("*t", anniversaryTime(0) / 1000)
+	local wday = date_anniversary.wday - 1
+
+	if wday == 0 then
+		wday = 7
+	end
+
+	local week_before = anniversaryTime(1 - wday - 7)
+	local anniversary_week = anniversaryTime(1 - wday)
+	local week_after = anniversaryTime(7 + 1 - wday)
+	local week_after_end = anniversaryTime(7 + 1 - wday + 3)
+
+	is_before_anniversary = now >= week_before and now < anniversary_week
+	is_anniversary = now >= anniversary_week and now < week_after
+	is_after_anniversary = now >= week_after and now < week_after_end
+end
+
 do
 	local newGame = tfm.exec.newGame
 	tfm.exec.newGame = function(code, reversed)
