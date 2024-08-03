@@ -29,10 +29,8 @@ local total_files = 3
 local file_index = 1
 local settings_length = 9
 local file_id = files[file_index]
-local timed_maps = {
-	week = {},
-	hour = {}
-}
+local WEEKLY_RESET_INIT = 1722204000000
+local last_weekly_reset_ts
 local badges = { -- badge id, small image, big image
 	[1] = { -- former staff
 		{ 1, "1745f43783e.png", "1745f432e33.png"},
@@ -139,7 +137,7 @@ local data_migrations = {
 	["0.5"] = function(player, data)
 		data.parkour.v = "0.6"
 		data.parkour.week_c = 0 -- completed maps this week
-		data.parkour.week_r = timed_maps.week.last_reset -- last week reset
+		data.parkour.week_r = last_weekly_reset_ts -- last week reset
 		data.parkour.hour_c = 0 -- completed maps this hour
 		data.parkour.hour_r = os.time() + 60 * 60 * 1000 -- next hour reset
 		data.parkour.help = 0 -- doesn't want help?
@@ -519,13 +517,10 @@ onEvent("GameStart", function()
 	file_index = file_index % total_files + 1
 	file_id = files[file_index]
 
-	--ts = ts + 60 * 60 * 1000
-	local now = os.date("*t", ts / 1000) -- os.date is weird in tfm, *t accepts seconds, %d/%m/%Y accepts ms
-	now.wday = now.wday - 1
-	if now.wday == 0 then
-		now.wday = 7
-	end
-	timed_maps.week.last_reset = os.date("%d/%m/%Y", ts - now.wday * 24 * 60 * 60 * 1000)
+	-- os.date is weird in tfm, *t accepts seconds, %d/%m/%Y accepts ms
+	-- so we just don't use it here
+	local a_week = 7 * 24 * 60 * 60 * 1000
+	last_weekly_reset_ts = WEEKLY_RESET_INIT + a_week * math.floor((ts - WEEKLY_RESET_INIT) / a_week)
 end)
 
 onEvent("NewPlayer", function(player)
@@ -534,9 +529,14 @@ onEvent("NewPlayer", function(player)
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
-	if data.week[2] ~= timed_maps.week.last_reset then
+	if data.week[2] ~= last_weekly_reset_ts then
+		-- TODO can remove this after aug 5 
+		if not tonumber(data.week[2]) and last_weekly_reset_ts == WEEKLY_RESET_INIT then
+			return
+		end
+
 		data.week[1] = 0
-		data.week[2] = timed_maps.week.last_reset
+		data.week[2] = last_weekly_reset_ts
 		savePlayerData(player, true)
 	end
 end)

@@ -69,6 +69,10 @@ local function checkWeeklyWinners(player, data)
 		return
 	end
 
+	if os.time() < weeklyfile.wl[id] then
+		return
+	end
+
 	if data.badges[3] ~= 1 then
 		data.badges[3] = 1
 		NewBadgeInterface:show(player, 3, 1)
@@ -844,21 +848,35 @@ local function fileActions(player, cmd, quantity, args)
 		local fileAction = args[2]
 		if fileAction == "view" then
 			if weeklyfile and weeklyfile.ts and weeklyfile.wl then
-				local currentList = {}
+				tfm.exec.chatMessage(('<v>[#] <j>Timestamp: %s <bl>(%s)'):format(
+					tonumber(weeklyfile.ts) and os.date("%Y %B %d", weeklyfile.ts) or '???',
+					tostring(weeklyfile.ts)
+				), player)
+				tfm.exec.chatMessage("<v>[#] <j>Unclaimed badge winners:", player)
 
-				for name in pairs(weeklyfile.wl) do
-					table.insert(currentList, name)
+				for name, ts in next, weeklyfile.wl do
+					tfm.exec.chatMessage(('<v>%s<bl>: %s <g>(%s)'):format(
+						name,
+						tonumber(ts) and os.date("%Y %B %d", ts) or '???',
+						tostring(ts)
+					), player)
 				end
-
-				local currentWeek =  table.concat(currentList, ",")
-				tfm.exec.chatMessage("<v>[#] <j>Timestamp: "..weeklyfile.ts, player)
-				tfm.exec.chatMessage("<v>[#] <j>Current week: "..currentWeek, player)
 			else
 				tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet or does not exist.", player)
 			end
 
 		elseif fileAction == "last" then
-			tfm.exec.chatMessage("<v>[#] <j>Last weekly reset: "..timed_maps.week.last_reset, player)
+			local date = "???"
+			if last_weekly_reset_ts then
+				date = os.date("%Y %B %d", last_weekly_reset_ts)
+			end
+			tfm.exec.chatMessage(
+				("<v>[#] <j>Last weekly reset: <j>%s <bl>(%s)"):format(
+					date,
+					tostring(last_weekly_reset_ts)
+				),
+				player
+			)
 
 		elseif fileAction == "add" then
 

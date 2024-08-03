@@ -124,37 +124,35 @@ onEvent("GameDataLoaded", function(data)
 
 	if data.weekly then
 		local ts = os.time() --+ 60 * 60 * 1000
-		local now = os.date("*t", ts / 1000)
-		now.wday = now.wday - 1
-		if now.wday == 0 then
-			now.wday = 7
-		end
+		local file_reset = tonumber(data.weekly.ts) or WEEKLY_RESET_INIT
+		local a_day = 24 * 60 * 60 * 1000
+		local a_week = 7 * a_day
 
-		local new_reset = os.date("%d/%m/%Y", ts - now.wday * 24 * 60 * 60 * 1000)
-		if new_reset ~= data.weekly.ts then
-
+		local new_reset = WEEKLY_RESET_INIT + a_week * math.floor((ts - WEEKLY_RESET_INIT) / a_week)
+		if ts - file_reset >= a_week then
 			if #weekleaderboard > 2 and weekleaderboard[1][3] > 30 then
-				data.weekly.wl[tostring(weekleaderboard[1][1])] = true
-				data.weekly.wl[tostring(weekleaderboard[2][1])] = true
-				data.weekly.wl[tostring(weekleaderboard[3][1])] = true
+				local unlocks_at = ts + a_day
+				data.weekly.wl[tostring(weekleaderboard[1][1])] = unlocks_at
+				data.weekly.wl[tostring(weekleaderboard[2][1])] = unlocks_at
+				data.weekly.wl[tostring(weekleaderboard[3][1])] = unlocks_at
 			end
 
 			if #weekleaderboard > 2 then
 				sendPacket(
 					"common", 4,
-					timed_maps.week.last_reset .. "\000" .. os.date("%d/%m/%Y", ts - 24 * 60 * 60 * 1000) ..
+					os.date("%d/%m/%Y", file_reset) .. "\000" .. os.date("%d/%m/%Y", ts - a_day) ..
 					"\000" .. weekleaderboard[1][4] .. "\000" .. weekleaderboard[1][2] .. "\000" .. weekleaderboard[1][3] ..
 					"\000" .. weekleaderboard[2][4] .. "\000" .. weekleaderboard[2][2] .. "\000" .. weekleaderboard[2][3] ..
 					"\000" .. weekleaderboard[3][4] .. "\000" .. weekleaderboard[3][2] .. "\000" .. weekleaderboard[3][3]
 				)
 			end
 
-			data.weekly.ts = new_reset
+			data.weekly.ts = tostring(new_reset)
 			data.weekly.ranks = {}
 		end
 
-		if timed_maps.week.last_reset ~= new_reset then
-			timed_maps.week.last_reset = new_reset
+		if last_weekly_reset_ts ~= new_reset then
+			last_weekly_reset_ts = new_reset
 
 			for player, data in next, players_file do
 				if data.week[2] ~= new_reset then
