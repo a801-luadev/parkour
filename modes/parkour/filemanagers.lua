@@ -102,7 +102,7 @@ local filemanagers = {
 						name = "wl",
 						type = "dictionary",
 						objects = {
-							type= "boolean"
+							type= "number"
 						}
 					}
 				}

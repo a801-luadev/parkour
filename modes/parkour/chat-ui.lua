@@ -2,11 +2,18 @@
 
 local fetching_player_room = {}
 local roompw = {}
+local roomcreators = {}
 local fastest = {}
 local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 
 local GameInterface
 local setNameColor
+
+do
+	for name in next, room.playerList do
+		roomcreators[1 + #roomcreators] = name
+	end
+end
 
 local function capitalize(str)
 	local first = string.sub(str, 1, 1)
@@ -358,6 +365,14 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			return
 		end
 
+	elseif cmd == "creators" then
+		if not perms[player] or not perms[player].view_creators then return end
+
+		tfm.exec.chatMessage("<v>[#] <bl>People in the room when the module was loaded:", player)
+		for i=1, #roomcreators, 10 do
+			tfm.exec.chatMessage("<v>[#] <bl>" .. table.concat(roomcreators, ' ', i, math.min(i+9, #roomcreators)), player)
+		end
+
 	elseif cmd == "pw" then
 		if not records_admins or not records_admins[player] then
 			if not perms[player] or not perms[player].enable_review then return end
@@ -519,8 +534,12 @@ onEvent("PlayerDataParsed", function(player, data)
 	translatedChatMessage("forum_topic", player, links.forum)
 	translatedChatMessage("donate", player)
 
-	if timed_maps.week.last_reset == "28/02/2021" then
-		translatedChatMessage("double_maps", player)
+	if is_before_anniversary then
+		translatedChatMessage("anniversary", player)
+	elseif is_anniversary then
+		translatedChatMessage("anniversary_start", player)
+	elseif is_after_anniversary then
+		translatedChatMessage("anniversary_end", player)
 	end
 
 	checkRoomRequest(player, data)

@@ -541,7 +541,7 @@ onEvent("NewGame", function(player)
 
 	if global_poll then
 		-- execute as bot as it has all the permissions
-		eventParsedChatCommand("Tocutoeltuco#5522", "poll", 1, {"start"})
+		eventParsedChatCommand("Parkour#0568", "poll", 1, {"start"})
 	end
 
 	for player in next, in_room do

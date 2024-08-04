@@ -43,6 +43,33 @@ local bindKeyboard
 local lastOpenedMap
 local lastPlayerLeft
 
+-- anniversary on march 6
+local is_anniversary, is_before_anniversary, is_after_anniversary
+do
+	local now = os.time()
+	local date_current = os.date("*t", now / 1000)
+
+	local function anniversaryTime(day)
+		return os.time({ year=date_current.year, month=3, day=6+day })
+	end
+
+	local date_anniversary = os.date("*t", anniversaryTime(0) / 1000)
+	local wday = date_anniversary.wday - 1
+
+	if wday == 0 then
+		wday = 7
+	end
+
+	local week_before = anniversaryTime(1 - wday - 7)
+	local anniversary_week = anniversaryTime(1 - wday)
+	local week_after = anniversaryTime(7 + 1 - wday)
+	local week_after_end = anniversaryTime(7 + 1 - wday + 3)
+
+	is_before_anniversary = now >= week_before and now < anniversary_week
+	is_anniversary = now >= anniversary_week and now < week_after
+	is_after_anniversary = now >= week_after and now < week_after_end
+end
+
 do
 	local newGame = tfm.exec.newGame
 	tfm.exec.newGame = function(code, reversed)
@@ -221,7 +248,7 @@ local function checkBan(player, data, id)
 	end
 
 	if data.banned and (data.banned == 2 or os.time() < data.banned) then
-		bans[id] = true
+		bans[id] = data.lastsanction
 
 		enableSpecMode(player, true)
 
@@ -232,8 +259,12 @@ local function checkBan(player, data, id)
 			translatedChatMessage("tempbanned", player, minutes)
 		end
 	elseif bans[id] then
-		bans[id] = false
-		enableSpecMode(player, false)
+		if not data.lastsanction or bans[id] > data.lastsanction then
+			enableSpecMode(player, true)
+		else
+			bans[id] = false
+			enableSpecMode(player, false)
+		end
 	elseif id == 0 then
 		enableSpecMode(player, true)
 	end
@@ -272,7 +303,8 @@ onEvent("NewPlayer", function(player)
 			room.shortName .. "\000" ..
 			player_count .. "\000" ..
 			room.moduleMaxPlayers .. "\000" ..
-			(lastPlayerLeft or player)
+			(lastPlayerLeft or "-") "\000" ..
+			player
 		)
 		tfm.exec.setRoomMaxPlayers(room.moduleMaxPlayers)
 	end
@@ -408,6 +440,7 @@ onEvent("PlayerDied", function(player)
 end)
 
 onEvent("PlayerWon", function(player)
+	if not room.playerList[player] then return end
 	if bans[ room.playerList[player].id ] then return end
 	if victory[player] then return end
 
@@ -848,7 +881,7 @@ onEvent("GameDataLoaded", function(data)
 		for pid, value in pairs(data.sanction) do
 			if value and value.time then
 				if value.time == 1 or value.time == 2 or os.time() < value.time then
-					bans[tonumber(pid)] = true
+					bans[tonumber(pid)] = value.timestamp
 				end
 			end
 		end

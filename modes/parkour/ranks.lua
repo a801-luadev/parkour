@@ -25,7 +25,8 @@ local ranks_permissions = {
 	admin = {
 		set_checkpoint_version = true,
 		set_name_color = true,
-		give_command = true
+		give_command = true,
+		view_creators = true,
 	}, -- will get every permission
 	bot = {
 		set_checkpoint_version = true
@@ -53,6 +54,7 @@ local ranks_permissions = {
 		hide = true,
 		change_roommod = true,
 		see_hidden_staff = true,
+		view_sanctions = true,
 	},
 	mapper = {
 		change_map = true,
@@ -75,6 +77,7 @@ local ranks_permissions = {
 		see_private_maps = true,
 		use_tracker = true,
 		see_hidden_staff = true,
+		view_sanctions = true,
 	},
 	translator = {
 		hide = true
