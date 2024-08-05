@@ -303,7 +303,7 @@ onEvent("NewPlayer", function(player)
 			room.shortName .. "\000" ..
 			player_count .. "\000" ..
 			room.moduleMaxPlayers .. "\000" ..
-			(lastPlayerLeft or "-") "\000" ..
+			(lastPlayerLeft or "-") .. "\000" ..
 			player
 		)
 		tfm.exec.setRoomMaxPlayers(room.moduleMaxPlayers)
