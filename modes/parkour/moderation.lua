@@ -711,7 +711,7 @@ local function handleSanctions(player, cmd, quantity, args)
 		end)
 		if not is_cached then
 			tfm.exec.chatMessage(
-				("<v>[#] <bl>Checking file data for %s's sanctions..."):format(targetName),
+				("<v>[#] <bl>Checking file data for %s's sanctions..."):format(targetID),
 				player
 			)
 		end
