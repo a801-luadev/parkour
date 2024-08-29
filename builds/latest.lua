@@ -1,3 +1,674 @@
+do
+  local DEBUG_PRINTS = false
+
+  local loader = string.match(({ pcall(0) })[2], "^(.-)%.")
+  local ranks = {
+    [loader] = 1,
+  }
+  local maps = { 4612890, 7631757, 5027504, 7673383 }
+  local lowmaps = { 7692171, 7690882, 7692589 }
+
+  -- Room
+	tfm.get.room.name = "*#parkour0test"
+	tfm.get.room.uniquePlayers = 4
+  tfm.get.room.isTribeHouse = false
+
+
+  -- Tribe House Alternatives
+  if tfm.exec.getPlayerSync() == nil then
+    tfm.exec.chatMessage = function(message, playerName)
+      print(tostring(playerName) .. ' -- ' .. tostring(message))
+    end
+
+    local timers, timerCount = {}, 0
+
+    system.newTimer = function(callback, time, loop, arg1, arg2, arg3, arg4)
+      time = tonumber(time)
+      if type(callback) ~= "function" or not time or time < 500 then
+        error(debug.traceback())
+        return
+      end
+
+      timerCount = 1 + timerCount
+      timers[timerCount] = { callback, time, loop, arg1, arg2, arg3, arg4 }
+      timers[timerCount][0] = os.time() + time
+      return timerCount
+    end
+
+    system.removeTimer = function(timerId)
+      if timerId then
+        timers[timerId] = nil
+      end
+    end
+
+    local eventLoop
+
+    local function loop(...)
+      local dead, count = {}, 0
+      local now = os.time()
+
+      for id, args in next, timers do
+        if now >= args[0] then
+          args[1](id, args[4], args[5], args[6], args[7])
+
+          if args[3] then
+            args[0] = now + args[2]
+          else
+            count = 1 + count
+            dead[count] = id
+          end
+        end
+      end
+
+      for i=1, count do
+        timers[dead[i]] = nil
+      end
+
+      eventLoop(...)
+    end
+
+    setmetatable(_G, {
+      __index = function(tbl, key)
+        if key == 'eventLoop' then
+          return loop
+        end
+
+        return rawget(tbl, key)
+      end,
+      __newindex = function(tbl, key, val)
+        if key == 'eventLoop' then
+          eventLoop = val
+          return
+        end
+
+        return rawset(_G, key, val)
+      end,
+    })
+  end
+
+
+  -- Player Data
+	local pdata = {
+    ["Tocutoeltuco#5522"] = [[{"v":7,"hour_r":1713634097913,"coins":892299,"killed":0,"cc":0,"cskins":[164,212,703,2840,309],"skins":{"2838":1,"1":1,"2855":1,"333":1,"324":1,"46":1,"314":1,"319":1,"125":1,"2805":1,"336":1,"327":1,"325":1,"317":1,"158":1,"147":1,"246":1,"28":1,"2807":1,"142":1,"358":1,"229":1,"164":1,"347":1,"161":1,"261":1,"126":1,"707":1,"361":1,"355":1,"150":1,"253":1,"351":1,"251":1,"203":1,"140":1,"2825":1,"313":1,"703":1,"2823":1,"709":1,"2859":1,"109":1,"165":1,"706":1,"2842":1,"350":1,"713":1,"702":1,"708":1,"162":1,"309":1,"230":1,"2844":1,"360":1,"704":1,"260":1,"701":1,"2801":1,"263":1,"157":1,"257":1,"2806":1,"256":1,"705":1,"212":1,"2840":1,"219":1,"2820":1,"2":1,"222":1,"712":1,"7":1,"2824":1,"2841":1,"718":1,"2857":1,"138":1,"2827":1,"244":1,"241":1,"722":1,"710":1,"154":1,"116":1,"228":1,"716":1,"720":1,"128":1,"717":1},"bancount":0,"week":[0,"14/04/2024"],"report":true,"settings":[1,46,1,1,1,1,1,0,null],"hour":{},"c":0,"keys":{},"badges":[0,1,0,0,0,0],"kill":0,"quests":[{"id":3,"pg":0,"tg":7},{"id":4,"pg":0,"tg":60},{"id":5,"pg":0,"tg":233},{"id":2,"pg":0,"tg":170},{"id":2,"pg":0,"tg":710},{"id":4,"pg":0,"tg":40},{"id":1,"pg":0,"tg":155},{"id":5,"pg":0,"tg":325}],"room":"*#parkour0test","commu":"en","playerid":5419276,"tc":0}]]
+  }
+
+	system.loadPlayerData = function(name)
+    if DEBUG_PRINTS then
+      print("<J>Loading player data for " .. name)
+      print(tostring(pdata[name] or ""):gsub('&', '&amp;'):gsub('<', '&lt;'))
+      print("<ROSE>==================")
+    end
+
+    if eventPlayerDataLoaded then
+      system.newTimer(function()
+        eventPlayerDataLoaded(name, pdata[name] or pdata["Tocutoeltuco#5522"])
+      end, 500, false)
+    end
+	end
+
+	system.savePlayerData = function(name, data)
+    if DEBUG_PRINTS then
+      print("<J>Savig player data for " .. name)
+      print(tostring(data):gsub('&', '&amp;'):gsub('<', '&lt;'))
+      print("<ROSE>==================")
+    end
+
+		pdata[name] = tostring(data)
+	end
+
+
+  -- Files
+  local files = {}
+
+  system.loadFile = function(id)
+    id = tostring(id)
+
+    if DEBUG_PRINTS then
+      print("<J>Loading file-" .. id)
+      print(tostring(files[id]):gsub('&', '&amp;'):gsub('<', '&lt;'))
+      print("<ROSE>==================")
+    end
+
+    if eventFileLoaded then
+      system.newTimer(function()
+        eventFileLoaded(id, files[id])
+      end, 500, false)
+    end
+  end
+
+  system.saveFile = function(data, id)
+    id = tostring(id)
+    files[id] = data
+
+    if DEBUG_PRINTS then
+      print("<J>Saving file-" .. id)
+      print(tostring(files[id]):gsub('&', '&amp;'):gsub('<', '&lt;'))
+      print("<ROSE>==================")
+    end
+
+    if eventFileSaved then
+      system.newTimer(function()
+        eventFileSaved(id)
+      end, 500, false)
+    end
+  end
+
+
+  -- Parkour Files
+  --[[ File tech/filemanager/init.lua ]]--
+  local FileManager
+  do
+  	FileManager = {}
+  	FileManager.__index = FileManager
+  
+  	local string_byte = string.byte
+  	local string_char = string.char
+  	local string_sub = string.sub
+  
+  	local parsers
+  	parsers = {
+  		["dictionary"] = function(str, obj, idx)
+  			local result = {}
+  			if obj.length then -- premade dict!
+  				local child
+  				for i = 1, obj.length do
+  					child = obj.map[i]
+  					result[child.name], idx = parsers[child.type](str, child, idx)
+  				end
+  			else
+  				local length
+  				length, idx = parsers.number(str, nil, idx)
+  
+  				local strparser = parsers.string
+  				local parser, child = parsers[obj.objects.type], obj.objects
+  				local name
+  				for i = 1, length do
+  					name, idx = strparser(str, nil, idx)
+  					result[name], idx = parser(str, child, idx)
+  				end
+  			end
+  			return result, idx
+  		end,
+  
+  		["array"] = function(str, obj, idx)
+  			local result = {}
+  			if obj.length then -- premade map!
+  				local child
+  				for i = 1, obj.length do
+  					child = obj.map[i]
+  					result[i], idx = parsers[child.type](str, child, idx)
+  				end
+  			else
+  				local length
+  				length, idx = parsers.number(str, nil, idx)
+  
+  				local parser, child = parsers[obj.objects.type], obj.objects
+  				for i = 1, length do
+  					result[i], idx = parser(str, child, idx)
+  				end
+  			end
+  			return result, idx
+  		end,
+  
+  		["boolean"] = function(str, obj, idx)
+  			return string_sub(str, idx, idx) == "1", idx + 1
+  		end,
+  
+  		["string"] = function(str, obj, idx)
+  			local length = obj and obj.length
+  			if not length then
+  				length, idx = parsers.number(str, nil, idx)
+  			end
+  
+  			return string_sub(str, idx, idx - 1 + length), idx + length
+  		end,
+  
+  		["number"] = function(str, obj, idx)
+  			local length = string_byte(str, idx)
+  			return tonumber(string_sub(str, idx + 1, idx + length)), idx + 1 + length
+  		end
+  	}
+  
+  	local writers
+  	writers = {
+  		["dictionary"] = function(data, obj, str)
+  			if obj.length then -- premade map
+  				local child
+  				for i = 1, obj.length do
+  					child = obj.map[i]
+  					str = writers[child.type](data[child.name], child, str)
+  				end
+  			else
+  				local _str = ""
+  				local length = 0
+  
+  				local strwriter = writers.string
+  				local writer, child = writers[obj.objects.type], obj.objects
+  				for key, value in next, data do
+  					_str = strwriter(key, nil, _str)
+  					_str = writer(value, child, _str)
+  					length = length + 1
+  				end
+  
+  				str = writers.number(length, nil, str) .. _str
+  			end
+  			return str
+  		end,
+  
+  		["array"] = function(data, obj, str)
+  			if obj.length then -- premade map
+  				local child
+  				for i = 1, obj.length do
+  					child = obj.map[i]
+  					str = writers[child.type](data[i], child, str)
+  				end
+  			else
+  				local length = #data
+  				str = writers.number(length, nil, str)
+  
+  				local writer, child = writers[obj.objects.type], obj.objects
+  				for i = 1, #data do
+  					str = writer(data[i], child, str)
+  				end
+  			end
+  			return str
+  		end,
+  
+  		["boolean"] = function(data, obj, str)
+  			return str .. (data and "1" or "0")
+  		end,
+  
+  		["string"] = function(data, obj, str)
+  			if not (obj and obj.length) then
+  				str = writers.number(#data, nil, str)
+  			end
+  			return str .. data
+  		end,
+  
+  		["number"] = function(data, obj, str)
+  			local encoded = tostring(data)
+  			return str .. string_char(#encoded) .. encoded
+  		end
+  	}
+  
+  	local prepare_object
+  	function prepare_object(obj)
+  		assert(obj.type, "every object must have a type")
+  
+  		if obj.type == "dictionary" then
+  			assert(obj.objects or obj.map, "a dictionary must have either a premade map or an objects list")
+  			assert(not (obj.objects and obj.map), "a dictionary can't have both a premade map and an objects list")
+  			assert(not obj.length, "a dictionary can't have the length variable set to it")
+  
+  			if obj.map then
+  				obj.length = #obj.map
+  
+  				local child
+  				for index = 1, obj.length do
+  					child = obj.map[index]
+  					assert(child.name, "every object in the map of a dictionary must have a name")
+  
+  					prepare_object(child)
+  				end
+  			else
+  				assert(not obj.objects.name, "the object type in a dynamic dictionary can't have a premade name")
+  
+  				prepare_object(obj.objects)
+  			end
+  
+  		elseif obj.type == "array" then
+  			assert(obj.objects or obj.map, "an array must have either a premade map or an objects list")
+  			assert(not (obj.objects and obj.map), "an array can't have both a premade map and an objects list")
+  			assert(not obj.length, "an array can't have the length variable set to it")
+  
+  			if obj.map then
+  				obj.length = #obj.map
+  
+  				local child
+  				for index = 1, obj.length do
+  					prepare_object(obj.map[index])
+  				end
+  			else
+  				prepare_object(obj.objects)
+  			end
+  
+  		elseif obj.type == "boolean" then
+  			-- nothing
+  
+  		elseif obj.type == "string" then
+  			if obj.length then
+  				assert(type(obj.length) == "number", "length attribute of a string must be either nil or a number")
+  			end
+  
+  		elseif obj.type == "number" then
+  			-- nothing
+  
+  		else
+  			error("unknown object type: '" .. obj.type .. "'")
+  		end
+  	end
+  
+  	local validity_checks
+  	function validity_checks(data, obj)
+  		local data_type = type(data)
+  
+  		if obj.type == "dictionary" then
+  			assert(data_type == "table", "object must be a table in order to be casted to a dictionary")
+  			if obj.length then
+  				local length = 0
+  
+  				local valid
+  				for key, value in next, data do
+  					valid = false
+  					length = length + 1
+  					for i = 1, obj.length do
+  						if obj.map[i].name == key then
+  							valid = true
+  							validity_checks(value, obj.map[i])
+  							break
+  						end
+  					end
+  					assert(valid, "table must have the same keys as the premade dictionary map")
+  				end
+  
+  				assert(length == obj.length, "table must have the same length as the premade dictionary map")
+  			else
+  				local object = obj.objects
+  				for key, value in next, data do
+  					assert(type(key) == "string", "table indexes must be strings in order to be casted to a dynamic dictionary")
+  					validity_checks(value, object)
+  				end
+  			end
+  
+  		elseif obj.type == "array" then
+  			assert(data_type == "table", "object must be a table in order to be casted to a array")
+  			if obj.length then
+  				assert(#data == obj.length, "table must have the same length as the premade array map")
+  
+  				for i = 1, #data do
+  					validity_checks(data[i], obj.map[i])
+  				end
+  			else
+  				local object = obj.objects
+  				for i = 1, #data do
+  					validity_checks(data[i], object)
+  				end
+  			end
+  
+  		elseif obj.type == "boolean" then
+  			-- no specific type needed
+  
+  		elseif obj.type == "string" then
+  			assert(data_type == "string", "object must be a string in order to be written as one")
+  			if obj.length then
+  				assert(#data == obj.length, "string must have the same length as the allocated for the string")
+  			end
+  
+  		elseif obj.type == "number" then
+  			assert(data_type == "number", "object must be a number in order to be written as one")
+  		end
+  	end
+  
+  	function FileManager.new(struct)
+  		return setmetatable({
+  			ready = false,
+  			struct = struct,
+  			validity = true
+  		}, FileManager)
+  	end
+  
+  	function FileManager:disableValidityChecks()
+  		self.validity = false
+  		return self
+  	end
+  
+  	function FileManager:prepare()
+  		prepare_object(self.struct)
+  		self.ready = true
+  		return self
+  	end
+  
+  	function FileManager:load(string)
+  		assert(self.ready, "FileManager needs to be prepared before using it")
+  		return parsers[self.struct.type](string, self.struct, 1)
+  	end
+  
+  	function FileManager:check(data)
+  		validity_checks(data, self.struct)
+  		return self
+  	end
+  
+  	function FileManager:dump(data)
+  		assert(self.ready, "FileManager needs to be prepared before using it")
+  
+  		if self.validity then
+  			self:check(data)
+  		end
+  
+  		return writers[self.struct.type](data, self.struct, "")
+  	end
+  end
+  --[[ End of file tech/filemanager/init.lua ]]--
+  --[[ File modes/parkour/sanctionfilemanager.lua ]]--
+  local function string_split(str, deli)
+      local parts, len = {}, 0
+      for part in str:gmatch('[^'..deli..']+') do
+          len = len + 1
+          parts[len] = part
+      end
+      return parts
+  end
+  
+  local SanctionFileManager = {
+      lastupdate = "",
+      lastdata = nil,
+  
+      load = function(self, str)
+          local data = string_split(str, "\1")
+  
+          if self.lastupdate == data[1] then
+              return self.lastdata
+          end
+  
+          local lowmaps = string_split(data[2], "\2")
+          local sanctionList = string_split(data[3], "\2")
+  
+          for i=1, #lowmaps do
+              lowmaps[i] = tonumber(lowmaps[i])
+          end
+  
+          local sanctionDict = {}
+          local sanction
+  
+          for i=1, #sanctionList do
+              sanction = string_split(sanctionList[i], "\3")
+              sanctionDict[sanction[1]] = {
+                  timestamp = tonumber(sanction[2]),
+                  time = tonumber(sanction[3]),
+                  info = sanction[4] or "UNKNOWN",
+                  level = tonumber(sanction[5]),
+              }
+          end
+  
+          self.lastupdate = data[1]
+          self.lastdata = {
+              lowmaps = lowmaps,
+              sanction = sanctionDict,
+          }
+  
+          return self.lastdata
+      end,
+  
+      dump = function(self, data)
+          local lowmaps = table.concat(data.lowmaps, "\2")
+          local sanctionList, len = {}, 0
+  
+          for name, sanction in next, data.sanction do
+              len = len + 1
+              sanctionList[len] = table.concat({
+                  name,
+                  sanction.timestamp,
+                  sanction.time,
+                  sanction.info,
+                  sanction.level,
+              }, "\3")
+          end
+  
+          return table.concat({ os.time(), lowmaps, table.concat(sanctionList, "\2") }, "\1")
+      end,
+  }
+  --[[ End of file modes/parkour/sanctionfilemanager.lua ]]--
+  --[[ File modes/parkour/filemanagers.lua ]]--
+  local filemanagers = {
+  	["20"] = FileManager.new({
+  		type = "dictionary",
+  		map = {
+  			{
+  				name = "maps",
+  				type = "array",
+  				objects = {
+  					type = "number"
+  				}
+  			},
+  			{
+  				name = "ranks",
+  				type = "dictionary",
+  				objects = {
+  					type = "number"
+  				}
+  			},
+  			-- commented because the file is missing migration
+  			-- {
+  			-- 	name = "map_polls",
+  			-- 	type = "array",
+  			-- 	objects = {
+  			-- 		type = "number"
+  			-- 	}
+  			-- },
+  			{
+  				name = "chats",
+  				type = "dictionary",
+  				map = {
+  					{
+  						name = "mod",
+  						type = "string",
+  						length = 10
+  					},
+  					{
+  						name = "mapper",
+  						type = "string",
+  						length = 10
+  					}
+  				}
+  			}
+  		}
+  	}):disableValidityChecks():prepare(),
+  
+  	["21"] = FileManager.new({
+  		type = "dictionary",
+  		map = {
+  			{
+  				name = "ranking",
+  				type = "array",
+  				objects = {
+  					type = "array",
+  					map = {
+  						{
+  							type = "number"
+  						},
+  						{
+  							type = "string",
+  						},
+  						{
+  							type = "number"
+  						},
+  						{
+  							type = "string",
+  							length = 2
+  						}
+  					}
+  				}
+  			},
+  			{
+  				name = "weekly",
+  				type = "dictionary",
+  				map = {
+  					{
+  						name = "ranks",
+  						type = "array",
+  						objects = {
+  							type = "array",
+  							map = {
+  								{
+  									type = "number"
+  								},
+  								{
+  									type = "string",
+  								},
+  								{
+  									type = "number"
+  								},
+  								{
+  									type = "string",
+  									length = 2
+  								}
+  							}
+  						}
+  					},
+  					{
+  						name = "ts",
+  						type = "string"
+  					},
+  					{
+  						name = "wl",
+  						type = "dictionary",
+  						objects = {
+  							type= "number"
+  						}
+  					}
+  				}
+  			}
+  		}
+  	}):disableValidityChecks():prepare(),
+  
+  	["23"] = SanctionFileManager,
+  }
+  --[[ End of file modes/parkour/filemanagers.lua ]]--
+
+  local function saveFile(id, data)
+    system.saveFile(filemanagers[tostring(id)]:dump(data), id)
+  end
+
+	saveFile(20, {
+		maps = maps,
+		ranks = ranks,
+		chats = {
+			mod = "",
+			mapper = "",
+		},
+	})
+
+	saveFile(21, {
+		ranking = {},
+		weekly = {
+      ranks = {},
+      ts = "1/1/2020",
+      wl = {}
+    },
+	})
+
+	saveFile(23, {
+		lowmaps = lowmaps,
+		sanction = {
+      ["1"] = {
+        timestamp = 0,
+        time = os.time() + 1000 * 60 * 60 * 24,
+        info = "-",
+        level = 1,
+      }
+    },
+	})
+end
 --
 -- Parkour v2
 -- MIT License
@@ -71,6 +742,24 @@ local function generateRandomString(length)
     return randomString
 end
 
+do
+	local savePlayerData = system.savePlayerData
+	system.savePlayerData = function(playerName, ...)
+		if not playerName then return end
+		if tostring(playerName):sub(1, 1) == '*' then return end
+		return savePlayerData(playerName, ...)
+	end
+end
+
+do
+	room.moduleMaxPlayers = 50
+	local setRoomMaxPlayers = tfm.exec.setRoomMaxPlayers
+	function tfm.exec.setRoomMaxPlayers(maxPlayers)
+		local ret = setRoomMaxPlayers(maxPlayers)
+		room.moduleMaxPlayers = room.maxPlayers
+		return ret
+	end
+end
 
 --[[ Package translations ]]--
 --[[ File translations/init.lua ]]--
@@ -797,6 +1486,38 @@ do
 end
 --[[ End of file tech/filemanager/init.lua ]]--
 --[[ End of package tech/filemanager ]]--
+--[[ File global/packets.lua ]]--
+local packets = {}
+
+packets.rooms = {
+  crash = 0,
+  hourly_record = 3,
+  weekly_reset = 4,
+  pw_response = 5,
+  command_log = 7,
+  poll_answer = 8,
+  title_logs = 9,
+  kill_logs = 10,
+  report = 11,
+  ban_logs = 12,
+  update_error = 13,
+  lock_fixed = 14,
+  prev_kill = 15,
+}
+
+packets.bots = {
+  join = 0,
+  game_update = 1,
+  update_pdata = 2,
+  --ban = 3,
+  announce = 4,
+  cm_announce = 5,
+  pw_request = 6,
+  room_announce = 7,
+  change_lock = 8,
+  remote_command = 9,
+}
+--[[ End of file global/packets.lua ]]--
 --[[ File global/event-handler.lua ]]--
 local translatedChatMessage
 local channels, sendPacket, pipeHandler, channelHandler
@@ -842,12 +1563,13 @@ do
 			event._count = 0
 		end
 
+		tfm.exec.chatMessage(name .. " - " .. msg)
+
 		if room.name == "*#parkour4bots" then
-			ui.addTextArea(bit32.lshift(255, 8) + 255, name .. "\000" .. msg)
+			ui.addTextArea(0, "*4bots\000" .. name .. "\000" .. msg)
 			return
 		end
 
-		tfm.exec.chatMessage(name .. " - " .. msg)
 		translatedChatMessage("emergency_mode")
 
 		if is_tribe then return end
@@ -873,14 +1595,12 @@ do
 
 	local function callListeners(evt, a, b, c, d, e, offset)
 		for index = offset, evt._count do
-			evt[index](a, b, c, d, e)
-
 			if not initializingModule and os_time() >= stoppingAt then
 				if index < evt._count then
 					-- If this event didn't end, we need to resume from
 					-- where it has been left!
 					scheduled._count = scheduled._count + 1
-					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, index + 1}
+					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, index}
 				end
 
 				paused = true
@@ -888,6 +1608,8 @@ do
 				translatedChatMessage("paused_events")
 				break
 			end
+
+			evt[index](a, b, c, d, e)
 		end
 	end
 
@@ -1115,7 +1837,8 @@ channels = {
 	common = { -- to bots (common data, low traffic)
 		room.name == "*#parkour4bots", true, 10000,
 		false,
-		"Funcorp#0801", "Delphilante#1225"
+		"Funcorp#0801", "Delphilante#1225",
+		"Recordsbot#8598", "Buildtool#0800",
 	},
 	victory = { -- to bots (all victory logs, high traffic)
 		room.name == "*#parkour4bots", true, 10000,
@@ -1133,6 +1856,7 @@ local read = {}
 local write = {}
 
 local tbl
+local channelBots = {}
 for name, data in next, channels do
 	if name ~= "canRead" then
 		tbl = data[1] and read or write
@@ -1151,7 +1875,7 @@ for name, data in next, channels do
 			-- last id in pipe
 			tbl[name][ data[index] ] = 0
 
-			channels[ data[index] ] = tbl[name]
+			channelBots[ data[index] ] = tbl[name]
 		end
 
 		tbl[name].pipes = #data - 4
@@ -1162,6 +1886,10 @@ for name, data in next, channels do
 			tbl[name].retries = #data - 4
 		end
 	end
+end
+
+for key, val in next, channelBots do
+	channels[key] = val
 end
 
 local next_load = os.time() + 10000
@@ -1329,6 +2057,8 @@ local function initialize_parkour() -- so it uses less space after building
 	
 		sendPacket("common", 7, room.shortName .. "\000" .. author .. "\000" .. cmd)
 	end
+	
+	local function inGameLogCommand()end
 	--[[ End of file modes/parkour/command-log.lua ]]--
 	--[[ File modes/parkour/sanctionfilemanager.lua ]]--
 	local function string_split(str, deli)
@@ -1504,7 +2234,7 @@ local function initialize_parkour() -- so it uses less space after building
 							name = "wl",
 							type = "dictionary",
 							objects = {
-								type= "boolean"
+								type= "number"
 							}
 						}
 					}
@@ -1989,6 +2719,8 @@ local function initialize_parkour() -- so it uses less space after building
 	
 		-- Error messages
 		corrupt_map = "<r>Corrupt map. Loading another.",
+		corrupt_map_no_perm = "<r>[ERROR] <n>This map is not protected properly.",
+		corrupt_map_hole = "<r>[ERROR] <n>Parkour maps cannot contain a mouse hole.",
 		corrupt_map_vanilla = "<r>[ERROR] <n>Can not get information of this map.",
 		corrupt_map_mouse_start = "<r>[ERROR] <n>This map needs to have a start position (mouse spawn point).",
 		corrupt_map_needing_chair = "<r>[ERROR] <n>The map needs to have the end chair.",
@@ -2036,6 +2768,11 @@ local function initialize_parkour() -- so it uses less space after building
 		report = "<j>Want to report a parkour player? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
 		killed = "<v>[#] <r>You are restricted from using your powers for %s minutes due to your violation of parkour rules. Continued rule violations will result in a ban. Please press <b>H</b> to review the rules.",
 		mapper_event = "<CE><B>Parkour mapmaking contest 2024:</B>\n<n>Show us your creativity in map-making for a chance to win <D>cheese coins <n>and <pt>parkour coins<n>!\n<R>Submissions open until <B>January 31, 2024</B>.\n<PS>For more information, visit: %s",
+		cmd_usage_report = "<j>Usage: <bl>!report [Player#1234] [reason]",
+		reported_not_here = "<bl>Reported player must be in this room.",
+		reported_invalid = "<bl>This player cannot be reported.",
+		reason_too_short = "<bl>Report reason is too short.",
+		report_done = "<j>Thank you for your report.",
 	
 		-- Easter Eggs
 		easter_egg_0  = "<ch>Finally the countdown begins...",
@@ -2052,9 +2789,9 @@ local function initialize_parkour() -- so it uses less space after building
 		easter_egg_11 = "<ch>Let's go to bed early, it'll make the time go faster!",
 		easter_egg_12 = "<ch>Patience is a virtue",
 		easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-		double_maps = "<bv>Double maps on Saturday (GMT+2) and all powers are available for parkour's birthday week!",
-		double_maps_start = "<rose>IT'S PARKOUR'S BIRTHDAY WEEK! Double maps and all powers have been activated. Thank you for all the support and for playing this module!",
-		double_maps_end = "<rose>Parkour's birthday week has ended. Thank you for all the support and for playing this module!",
+		anniversary = "<bv>Double parkour coins next week (France time) and all powers are available for parkour's birthday week!",
+		anniversary_start = "<rose>IT'S PARKOUR'S BIRTHDAY WEEK! Double parkour coins and all powers have been activated. Thank you for all the support and for playing this module!",
+		anniversary_end = "<rose>Parkour's birthday week has ended. Thank you for all the support and for playing this module!",
 	
 		-- Records
 		records_enabled = "<v>[#] <d>Records mode is enabled in this room. Stats won't count and powers aren't enabled!\nYou can find more information about records in <b>%s</b>",
@@ -2189,6 +2926,7 @@ local function initialize_parkour() -- so it uses less space after building
 		equip = "Equip",
 		equipped = "<font size = '10'>Equipped</font>",
 		saving = "<p align='right'>Saving...",
+		new_image = "<J>Your appearance has been changed. You can turn it back to normal by typing !image",
 	
 		-- Power names
 		balloon = "Balloon",
@@ -4552,6 +5290,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 	if records_admins then
 		tfm.exec.playerVictory = function(name)
+			tfm.exec.removeCheese(name)
 			eventPlayerWon(name)
 		end
 	end
@@ -4628,7 +5367,6 @@ local function initialize_parkour() -- so it uses less space after building
 		return list[map]
 	end
 	
-	local is_test = string.find(room.name, "test", 1, true)
 	local function newMap()
 		count_stats = not review_mode
 		map_change_cd = os.time() + 20000
@@ -4646,6 +5384,7 @@ local function initialize_parkour() -- so it uses less space after building
 	local function invalidMap(arg)
 		levels = nil
 		is_invalid = os.time() + 3000
+		tfm.exec.chatMessage("<r>" .. room.currentMap)
 		translatedChatMessage("corrupt_map")
 		translatedChatMessage("corrupt_map_" .. arg)
 	end
@@ -4736,8 +5475,18 @@ local function initialize_parkour() -- so it uses less space after building
 		-- checkpoints are
 	
 		levels = {}
-		if not room.xmlMapInfo then return invalidMap("vanilla") end
+		if not room.xmlMapInfo or tonumber(room.currentMap) or tonumber(room.xmlMapInfo.mapCode) ~= tonumber(tostring(room.currentMap):sub(2)) then
+			if not room.xmlMapInfo then
+				return
+			end
+			return invalidMap("vanilla")
+		end
 		local xml = room.xmlMapInfo.xml
+	
+		local hole = string.match(xml, '<T%s+.-/>')
+		if hole then
+			return invalidMap("hole")
+		end
 	
 		local count = 1
 		local mouse_start = string.match(xml, '<DS%s+(.-)%s+/>')
@@ -4819,7 +5568,7 @@ local function initialize_parkour() -- so it uses less space after building
 			and not review_mode
 			and room.xmlMapInfo.permCode ~= 41
 			and room.xmlMapInfo.author ~= "#Module") then
-			is_invalid = os.time() + 3000
+			invalidMap("no_perm")
 			return
 		end
 		is_invalid = false
@@ -4836,7 +5585,7 @@ local function initialize_parkour() -- so it uses less space after building
 	end)
 	
 	onEvent("Loop", function(elapsed, remaining)
-		if review_mode then return end
+		if review_mode or records_admins then return end
 	
 		-- Changes the map when needed
 		if (is_invalid and os.time() >= is_invalid) or remaining < 500 then
@@ -4876,6 +5625,7 @@ local function initialize_parkour() -- so it uses less space after building
 					-- legitimate review mode
 					return
 				end
+				inGameLogCommand(player, "map", args)
 				logCommand(player, "map", math.min(quantity, 2), args)
 			end
 		end
@@ -4897,10 +5647,17 @@ local function initialize_parkour() -- so it uses less space after building
 	onEvent("PacketReceived", function(channel, id, packet)
 		if channel ~= "bots" then return end
 	
-		if id == 0 then
+		if id == packets.bots.join then
 			if packet == room.shortName then
 				tfm.exec.setRoomMaxPlayers(room_max_players + 10)
 				addNewTimer(15000, tfm.exec.setRoomMaxPlayers, room_max_players)
+			end
+		elseif id == packets.bots.change_lock then
+			local roomName, limit = string.match(packet, "^([^\000]+)\000([^\000]+)$")
+			if roomName == room.shortName then
+				limit = tonumber(limit)
+				if not limit then return end
+				tfm.exec.setRoomMaxPlayers(limit)
 			end
 		end
 	end)
@@ -4949,6 +5706,34 @@ local function initialize_parkour() -- so it uses less space after building
 	local bindKeyboard
 	
 	local lastOpenedMap
+	local lastPlayerLeft
+	
+	-- anniversary on march 6
+	local is_anniversary, is_before_anniversary, is_after_anniversary
+	do
+		local now = os.time()
+		local date_current = os.date("*t", now / 1000)
+	
+		local function anniversaryTime(day)
+			return os.time({ year=date_current.year, month=3, day=6+day })
+		end
+	
+		local date_anniversary = os.date("*t", anniversaryTime(0) / 1000)
+		local wday = date_anniversary.wday - 1
+	
+		if wday == 0 then
+			wday = 7
+		end
+	
+		local week_before = anniversaryTime(1 - wday - 7)
+		local anniversary_week = anniversaryTime(1 - wday)
+		local week_after = anniversaryTime(7 + 1 - wday)
+		local week_after_end = anniversaryTime(7 + 1 - wday + 3)
+	
+		is_before_anniversary = now >= week_before and now < anniversary_week
+		is_anniversary = now >= anniversary_week and now < week_after
+		is_after_anniversary = now >= week_after and now < week_after_end
+	end
 	
 	do
 		local newGame = tfm.exec.newGame
@@ -5128,7 +5913,7 @@ local function initialize_parkour() -- so it uses less space after building
 		end
 	
 		if data.banned and (data.banned == 2 or os.time() < data.banned) then
-			bans[id] = true
+			bans[id] = data.lastsanction
 	
 			enableSpecMode(player, true)
 	
@@ -5139,8 +5924,12 @@ local function initialize_parkour() -- so it uses less space after building
 				translatedChatMessage("tempbanned", player, minutes)
 			end
 		elseif bans[id] then
-			bans[id] = false
-			enableSpecMode(player, false)
+			if not data.lastsanction or bans[id] > data.lastsanction then
+				enableSpecMode(player, true)
+			else
+				bans[id] = false
+				enableSpecMode(player, false)
+			end
 		elseif id == 0 then
 			enableSpecMode(player, true)
 		end
@@ -5171,6 +5960,19 @@ local function initialize_parkour() -- so it uses less space after building
 		in_room[player] = true
 	
 		player_count = player_count + 1
+	
+		if player_count > room.moduleMaxPlayers then
+			sendPacket(
+				"common",
+				packets.rooms.lock_fixed,
+				room.shortName .. "\000" ..
+				player_count .. "\000" ..
+				room.moduleMaxPlayers .. "\000" ..
+				(lastPlayerLeft or "-") .. "\000" ..
+				player
+			)
+			tfm.exec.setRoomMaxPlayers(room.moduleMaxPlayers)
+		end
 	
 		cp_available[player] = 0
 		times.movement[player] = os.time()
@@ -5249,6 +6051,7 @@ local function initialize_parkour() -- so it uses less space after building
 		players_file[player] = nil
 		in_room[player] = nil
 		times.movement[player] = nil
+		lastPlayerLeft = player
 	
 		if spec_mode[player] then return end
 	
@@ -5286,7 +6089,7 @@ local function initialize_parkour() -- so it uses less space after building
 		local info = room.playerList[player]
 	
 		if not info then return end
-		if info.id == 0 then return end
+		if info.id == 0 or player:sub(1, 1) == "*" then return end
 		if bans[info.id] then return end
 		if (not levels) or (not players_level[player]) then return end
 	
@@ -5302,6 +6105,7 @@ local function initialize_parkour() -- so it uses less space after building
 	end)
 	
 	onEvent("PlayerWon", function(player)
+		if not room.playerList[player] then return end
 		if bans[ room.playerList[player].id ] then return end
 		if victory[player] then return end
 	
@@ -5413,19 +6217,19 @@ local function initialize_parkour() -- so it uses less space after building
 		end
 		showStats()
 	
-		if (count_stats and
-			room.uniquePlayers >= min_save and
-			player_count >= min_save and
-			not records_admins and
-			not is_tribe and
-			not review_mode) then
+		-- if (count_stats and
+		-- 	room.uniquePlayers >= min_save and
+		-- 	player_count >= min_save and
+		-- 	not records_admins and
+		-- 	not is_tribe and
+		-- 	not review_mode) then
 				
-			gift_conditions._completed = gift_conditions._completed + 1
+		-- 	gift_conditions._completed = gift_conditions._completed + 1
 			
-			if gift_conditions._completed >= gift_conditions._complete and os.time() > gift_conditions._ts then
-				addRandomGift()
-			end
-		end
+		-- 	if gift_conditions._completed >= gift_conditions._complete and os.time() > gift_conditions._ts then
+		-- 		addRandomGift()
+		-- 	end
+		-- end
 	
 	end)
 	
@@ -5454,7 +6258,7 @@ local function initialize_parkour() -- so it uses less space after building
 			for name in next, in_room do
 				player = room.playerList[name]
 				if player then
-					if spec_mode[name] or player.id == 0 or bans[player.id] then
+					if spec_mode[name] or player.id == 0 or name:sub(1, 1) == "*" or bans[player.id] then
 						tfm.exec.killPlayer(name)
 					elseif (player_count > 4
 							and not records_admins
@@ -5594,6 +6398,7 @@ local function initialize_parkour() -- so it uses less space after building
 			showStats()
 	
 		elseif cmd == "cp" then
+			if not levels then return end
 			local checkpoint = tonumber(args[1])
 			if not checkpoint then
 				if players_level[args[1]] then
@@ -5619,6 +6424,7 @@ local function initialize_parkour() -- so it uses less space after building
 					return translatedChatMessage("cooldown", player)
 				end
 			end
+			if not players_level[player] then return end
 	
 			if checkpoint_info.version == 1 then
 				tfm.exec.removeBonus(players_level[player] + 1, player)
@@ -5672,9 +6478,11 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 	
 			tfm.exec.setGameTime(time)
+			inGameLogCommand(player, "time", args)
 	
 		elseif cmd == "redo" then
 			if not (records_admins or review_mode) then return end
+			if not players_level[player] then return end
 	
 			if checkpoint_info.version == 1 then
 				tfm.exec.removeBonus(players_level[player] + 1, player)
@@ -5738,7 +6546,7 @@ local function initialize_parkour() -- so it uses less space after building
 			for pid, value in pairs(data.sanction) do
 				if value and value.time then
 					if value.time == 1 or value.time == 2 or os.time() < value.time then
-						bans[tonumber(pid)] = true
+						bans[tonumber(pid)] = value.timestamp
 					end
 				end
 			end
@@ -5754,48 +6562,6 @@ local function initialize_parkour() -- so it uses less space after building
 						enableSpecMode(player, false)
 					end
 				end
-			end
-		end
-	end)
-	
-	onEvent("PacketReceived", function(channel, id, packet)
-		if channel ~= "bots" then return end
-	
-		if id == 3 then -- !ban
-			local player, val = string.match(packet, "^([^\000]+)\000[^\000]+\000([^\000]+)$")
-			local file, data = players_file[player], room.playerList[player]
-			if in_room[player] and data and file then
-				file.banned = val == "1" and 2 or tonumber(val)
-				bans[data.id] = file.banned == 2 or os.time() < file.banned
-	
-				if bans[data.id] then
-					if not spec_mode[player] then
-						spec_mode[player] = true
-						tfm.exec.killPlayer(player)
-	
-						player_count = player_count - 1
-						showStats()
-						if victory[player] then
-							victory_count = victory_count - 1
-						elseif player_count == victory_count and not less_time then
-							tfm.exec.setGameTime(5)
-							less_time = true
-						end
-					end
-	
-					if file.banned == 2 then
-						translatedChatMessage("permbanned", player)
-					else
-						local minutes = math.floor((file.banned - os.time()) / 1000 / 60)
-						translatedChatMessage("tempbanned", player, minutes)
-					end
-	
-				elseif spec_mode[player] then
-					enableSpecMode(player, false)
-				end
-	
-				savePlayerData(player)
-				sendPacket("common", 2, data.id .. "\000" .. val)
 			end
 		end
 	end)
@@ -5823,7 +6589,6 @@ local function initialize_parkour() -- so it uses less space after building
 	local NewBadgeInterface
 	local CompletedQuestsInterface
 	local QuestsInterface
-	local to_save = {}
 	local files = {
 		--[[
 			File values:
@@ -5847,11 +6612,8 @@ local function initialize_parkour() -- so it uses less space after building
 	local file_index = 1
 	local settings_length = 9
 	local file_id = files[file_index]
-	local updating = {}
-	local timed_maps = {
-		week = {},
-		hour = {}
-	}
+	local WEEKLY_RESET_INIT = 1722204000000
+	local last_weekly_reset_ts
 	local badges = { -- badge id, small image, big image
 		[1] = { -- former staff
 			{ 1, "1745f43783e.png", "1745f432e33.png"},
@@ -5958,7 +6720,7 @@ local function initialize_parkour() -- so it uses less space after building
 		["0.5"] = function(player, data)
 			data.parkour.v = "0.6"
 			data.parkour.week_c = 0 -- completed maps this week
-			data.parkour.week_r = timed_maps.week.last_reset -- last week reset
+			data.parkour.week_r = last_weekly_reset_ts -- last week reset
 			data.parkour.hour_c = 0 -- completed maps this hour
 			data.parkour.hour_r = os.time() + 60 * 60 * 1000 -- next hour reset
 			data.parkour.help = 0 -- doesn't want help?
@@ -6061,7 +6823,7 @@ local function initialize_parkour() -- so it uses less space after building
 		[3] = function(player, data)
 			data.v = 4
 	
-			data.settings[2] = (data.settings == 1 and 77 or 46)
+			data.settings[2] = (data.settings[2] == 1 and 77 or 46)
 		end,
 		[4] = function(player, data)
 			data.v = 5
@@ -6086,6 +6848,7 @@ local function initialize_parkour() -- so it uses less space after building
 			local allQuests = fillQuests(data, dailyQuests, true)
 	
 			data.quests = allQuests
+			--data.killedby
 		end
 	}
 	
@@ -6111,13 +6874,19 @@ local function initialize_parkour() -- so it uses less space after building
 		return reset_times
 	end
 	
-	function savePlayerData(player)
+	function savePlayerData(player, delay)
 		if not players_file[player] then return end
 	
-		if not to_save[player] then
-			to_save[player] = true
-			system.loadPlayerData(player)
+		if delay then
+			queueForSave(player)
+			return
 		end
+	
+		system.savePlayerData(
+			player,
+			json.encode(players_file[player])
+		)
+		eventPlayerDataUpdated(player, players_file[player])
 	end
 	
 	local function updateData(player, data)
@@ -6229,49 +6998,6 @@ local function initialize_parkour() -- so it uses less space after building
 		end
 	
 		if players_file[player] then
-			local merged = players_file[player]
-			local fields = updating[player]
-			updating[player] = nil
-	
-			if not fields or fields == "auto" then
-				if data.report ~= nil then
-					merged.report = data.report
-				end
-	
-				merged.kill = data.kill
-	
-				local p_badges = data.badges
-				for index = 1, #badges do
-					if badges[index].filePriority then
-						if merged.badges[index] ~= p_badges[index] then
-							merged.badges[index] = p_badges[index]
-							NewBadgeInterface:show(player, index, math.max(p_badges[index] or 1, 1))
-						end
-					end
-				end
-	
-			else
-				for field in string.gmatch(fields, "[^\001]+") do
-					if field == "badges" then
-						local p_badges = data.badges
-						for index = 1, #badges do
-							if merged.badges[index] ~= p_badges[index] then
-								NewBadgeInterface:show(
-									player, index, math.max(p_badges[index] or 1, 1)
-								)
-							end
-						end
-					end
-	
-					merged[field] = data[field]
-				end
-			end
-			eventPlayerDataUpdated(player, merged)
-	
-			if to_save[player] then
-				to_save[player] = false
-				system.savePlayerData(player, json.encode(merged))
-			end
 			return
 		end
 	
@@ -6343,12 +7069,8 @@ local function initialize_parkour() -- so it uses less space after building
 			players_file[player].quests = questTable
 		end
 	
+		savePlayerData(player, true)
 		eventPlayerDataParsed(player, data)
-	
-		system.savePlayerData(
-			player,
-			json.encode(players_file[player])
-		)
 	end)
 	
 	onEvent("SavingFile", function(id, data)
@@ -6378,13 +7100,10 @@ local function initialize_parkour() -- so it uses less space after building
 		file_index = file_index % total_files + 1
 		file_id = files[file_index]
 	
-		--ts = ts + 60 * 60 * 1000
-		local now = os.date("*t", ts / 1000) -- os.date is weird in tfm, *t accepts seconds, %d/%m/%Y accepts ms
-		now.wday = now.wday - 1
-		if now.wday == 0 then
-			now.wday = 7
-		end
-		timed_maps.week.last_reset = os.date("%d/%m/%Y", ts - now.wday * 24 * 60 * 60 * 1000)
+		-- os.date is weird in tfm, *t accepts seconds, %d/%m/%Y accepts ms
+		-- so we just don't use it here
+		local a_week = 7 * 24 * 60 * 60 * 1000
+		last_weekly_reset_ts = WEEKLY_RESET_INIT + a_week * math.floor((ts - WEEKLY_RESET_INIT) / a_week)
 	end)
 	
 	onEvent("NewPlayer", function(player)
@@ -6393,21 +7112,68 @@ local function initialize_parkour() -- so it uses less space after building
 	end)
 	
 	onEvent("PlayerDataParsed", function(player, data)
-		if data.week[2] ~= timed_maps.week.last_reset then
+		if data.week[2] ~= last_weekly_reset_ts then
+			-- TODO can remove this after aug 5 
+			if not tonumber(data.week[2]) and last_weekly_reset_ts == WEEKLY_RESET_INIT then
+				return
+			end
+	
 			data.week[1] = 0
-			data.week[2] = timed_maps.week.last_reset
+			data.week[2] = last_weekly_reset_ts
+			savePlayerData(player, true)
 		end
 	end)
 	
 	onEvent("PacketReceived", function(channel, id, packet)
 		if channel ~= "bots" then return end
 	
-		if id == 2 then -- update pdata
-			local player, fields = string.match(packet, "([^\000]+)\000([^\000]+)")
-			if in_room[player] then
-				system.loadPlayerData(player)
-				updating[player] = fields
+		if id == packets.bots.remote_command then
+			local targetPlayer, targetRoom, command = string.match(packet, "([^\000]+)\000([^\000]+)\000([^\000]+)")
+	
+			if not in_room[targetPlayer] and targetRoom ~= room.name then
+				return
 			end
+	
+			eventChatCommand("Parkour#0568", command)
+	
+		elseif id == packets.bots.update_pdata then
+			local player, fields = string.match(packet, "([^\000]+)\000([^\000]+)")
+			local pdata = players_file[player]
+			if not in_room[player] or not pdata then
+				return
+			end
+	
+			local key, value, done, parsed
+			for fieldPair in fields:gmatch('([^\001]+)') do
+				key, value = fieldPair:match('([^\002]+)\002([^\002]+)')
+				done, parsed = pcall(json.decode, value)
+				if not done then
+					sendPacket(
+						"common", packets.rooms.update_error,
+						player .. "\000" .. key .. "\000" .. value
+					)
+					return
+				end
+	
+				if key == "badges" then
+					local p_badges = pdata.badges
+					for index = 1, #parsed do
+						if parsed[index] ~= p_badges[index] then
+							NewBadgeInterface:show(
+								player, index, math.max(parsed[index] or 1, 1)
+							)
+						end
+					end
+				end
+	
+				pdata[key] = parsed
+	
+				if key == "killed" then
+					checkKill(player)
+				end
+			end
+	
+			savePlayerData(player)
 		end
 	end)
 	--[[ End of file modes/parkour/files.lua ]]--
@@ -6439,7 +7205,8 @@ local function initialize_parkour() -- so it uses less space after building
 		admin = {
 			set_checkpoint_version = true,
 			set_name_color = true,
-			give_command = true
+			give_command = true,
+			view_creators = true,
 		}, -- will get every permission
 		bot = {
 			set_checkpoint_version = true
@@ -6451,6 +7218,8 @@ local function initialize_parkour() -- so it uses less space after building
 			hide = true,
 			handle_map_polls = true,
 			see_map_polls = true,
+			change_roommod = true,
+			see_hidden_staff = true,
 		},
 		mod = {
 			ban = true,
@@ -6462,7 +7231,10 @@ local function initialize_parkour() -- so it uses less space after building
 			kill = true,
 			see_private_maps = true,
 			use_tracker = true,
-			hide = true
+			hide = true,
+			change_roommod = true,
+			see_hidden_staff = true,
+			view_sanctions = true,
 		},
 		mapper = {
 			change_map = true,
@@ -6472,14 +7244,20 @@ local function initialize_parkour() -- so it uses less space after building
 			spectate = true,
 			start_round_poll = true,
 			see_map_polls = true,
-			set_map_time_review = true
+			set_map_time_review = true,
+			change_roommod = true,
+			see_hidden_staff = true,
 		},
 		trainee = {
+			ban = true,
 			kill = true,
 			spectate = true,
+			change_map = true,
 			get_player_room = true,
 			see_private_maps = true,
-			use_tracker = true
+			use_tracker = true,
+			see_hidden_staff = true,
+			view_sanctions = true,
 		},
 		translator = {
 			hide = true
@@ -6580,6 +7358,11 @@ local function initialize_parkour() -- so it uses less space after building
 			keyInfo[down] = keyInfo[down] + 1
 		else
 			keyInfo[down] = keyInfo[down] - 1
+		end
+	
+		if keyInfo[down] < 0 then
+			keyInfo[down] = 0
+			return
 		end
 	
 		if keyInfo[down] == 1 then
@@ -7358,7 +8141,7 @@ local function initialize_parkour() -- so it uses less space after building
 		local player_keys = keys[player]
 		local power, key
 		for index = 1, #powers do
-			power = getPowerUpgrade(completed, pos, powers[index], true, review_mode or timed_maps.week.last_reset == "28/02/2021")
+			power = getPowerUpgrade(completed, pos, powers[index], true, review_mode or is_anniversary)
 	
 			if (power and
 				(power.isVisual or (not records_admins and submode ~= "smol"))) then
@@ -7401,6 +8184,26 @@ local function initialize_parkour() -- so it uses less space after building
 		system.bindMouse(player, false)
 	
 		keys.triggers[player] = nil
+	end
+	
+	local function checkKill(player)
+		local data = players_file[player]
+		if not data then return end
+	
+		local had_powers = not no_powers[player]
+		no_powers[player] = data.killed > os.time() or nil
+		if no_powers[player] then
+			translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
+		end
+	
+		if victory[player] then
+			if had_powers then
+				unbind(player)
+			end
+			if not no_powers[player] then
+				bindNecessary(player)
+			end
+		end
 	end
 	
 	onEvent("Keyboard", function(player, key, down, x, y)
@@ -7512,45 +8315,19 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 		end
 	
-		if data.killed > os.time() then
-			no_powers[player] = true
-			translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
-		else
-			no_powers[player] = nil
-		end
+		checkKill(player)
 	
-		if victory[player] then
-			if not no_powers[player] then
-				bindNecessary(player)
-			end
-		else
-			unbind(player)
+		if fixHourCount(nil, data) then
+			savePlayerData(player, true)
 		end
-	
-		-- don't save as it will trigger this twice, and this will be saved
-		-- right after this event finishes anyway
-		fixHourCount(nil, data)
 	end)
 	
 	onEvent("PlayerDataUpdated", function(player, data)
-		if data.killed > os.time() then
-			if not no_powers[player] then
-				no_powers[player] = true
-				unbind(player)
-			end
-			translatedChatMessage("kill_minutes", player, math.ceil((data.killed - os.time()) / 1000 / 60))
-		elseif no_powers[player] then
-			no_powers[player] = nil
-			if victory[player] then
-				bindNecessary(player)
-			end
-		end
+		checkKill(player)
 	
 		if data.quests then
-			if power_quest[player] then return end
 			for i = 1, #data.quests do
 				if data.quests[i].id == 6 then
-	
 					if not power_quest[player] then
 						power_quest[player] = {}
 					end
@@ -7566,12 +8343,8 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 		end
 	
-		-- don't loop infinitely
-		-- calling savePlayerData loads data first, so this will get triggered again
-		-- and it will call savePlayerData again, which will load again and trigger
-		-- this again.
 		if fixHourCount(nil, data) then
-			to_save[player] = true
+			savePlayerData(player, true)
 		end
 	end)
 	
@@ -7589,28 +8362,20 @@ local function initialize_parkour() -- so it uses less space after building
 			not is_tribe and
 			not review_mode) then
 	
-			local map_overall, map_weekly = 1, 1
-			--[=[
-			if timed_maps.week.last_reset == "28/02/2021" then
-				map_weekly = 2
-			end
-			if os.date("%d/%m/%Y", os.time() + 60 * 60 * 1000) == "06/03/2021" then
-				map_overall = 2
-			end
-			]=]
+			local earned_coins = is_anniversary and 2 or 1
 	
-			file.c = file.c + map_overall
-			file.coins = file.coins + 1
+			file.c = file.c + 1
+			file.coins = file.coins + earned_coins
 	
 			file.tc = math.max(
-				checkTitleAndNextFieldValue(player, titles.press_m, map_overall, file, id),
-				checkTitleAndNextFieldValue(player, titles.piglet, map_overall, file, id)
+				checkTitleAndNextFieldValue(player, titles.press_m, 1, file, id),
+				checkTitleAndNextFieldValue(player, titles.piglet, 1, file, id)
 			)
 	
 			file.cc = checkTitleAndNextFieldValue(player, titles.checkpoint, #levels - 1 --[[total checkpoints but spawn]], file, id)
 	
 			file.hour[#file.hour + 1] = math.floor((os.time() - file.hour_r) / 10000) -- convert to ms and count every 10s
-			file.week[1] = file.week[1] + map_weekly
+			file.week[1] = file.week[1] + 1
 	
 			local hour_count = #file.hour
 	
@@ -7847,37 +8612,35 @@ local function initialize_parkour() -- so it uses less space after building
 	
 		if data.weekly then
 			local ts = os.time() --+ 60 * 60 * 1000
-			local now = os.date("*t", ts / 1000)
-			now.wday = now.wday - 1
-			if now.wday == 0 then
-				now.wday = 7
-			end
+			local file_reset = tonumber(data.weekly.ts) or WEEKLY_RESET_INIT
+			local a_day = 24 * 60 * 60 * 1000
+			local a_week = 7 * a_day
 	
-			local new_reset = os.date("%d/%m/%Y", ts - now.wday * 24 * 60 * 60 * 1000)
-			if new_reset ~= data.weekly.ts then
-	
+			local new_reset = WEEKLY_RESET_INIT + a_week * math.floor((ts - WEEKLY_RESET_INIT) / a_week)
+			if ts - file_reset >= a_week then
 				if #weekleaderboard > 2 and weekleaderboard[1][3] > 30 then
-					data.weekly.wl[tostring(weekleaderboard[1][1])] = true
-					data.weekly.wl[tostring(weekleaderboard[2][1])] = true
-					data.weekly.wl[tostring(weekleaderboard[3][1])] = true
+					local unlocks_at = ts + a_day
+					data.weekly.wl[tostring(weekleaderboard[1][1])] = unlocks_at
+					data.weekly.wl[tostring(weekleaderboard[2][1])] = unlocks_at
+					data.weekly.wl[tostring(weekleaderboard[3][1])] = unlocks_at
 				end
 	
 				if #weekleaderboard > 2 then
 					sendPacket(
 						"common", 4,
-						timed_maps.week.last_reset .. "\000" .. os.date("%d/%m/%Y", ts - 24 * 60 * 60 * 1000) ..
+						os.date("%d/%m/%Y", file_reset) .. "\000" .. os.date("%d/%m/%Y", ts - a_day) ..
 						"\000" .. weekleaderboard[1][4] .. "\000" .. weekleaderboard[1][2] .. "\000" .. weekleaderboard[1][3] ..
 						"\000" .. weekleaderboard[2][4] .. "\000" .. weekleaderboard[2][2] .. "\000" .. weekleaderboard[2][3] ..
 						"\000" .. weekleaderboard[3][4] .. "\000" .. weekleaderboard[3][2] .. "\000" .. weekleaderboard[3][3]
 					)
 				end
 	
-				data.weekly.ts = new_reset
+				data.weekly.ts = tostring(new_reset)
 				data.weekly.ranks = {}
 			end
 	
-			if timed_maps.week.last_reset ~= new_reset then
-				timed_maps.week.last_reset = new_reset
+			if last_weekly_reset_ts ~= new_reset then
+				last_weekly_reset_ts = new_reset
 	
 				for player, data in next, players_file do
 					if data.week[2] ~= new_reset then
@@ -7920,11 +8683,20 @@ local function initialize_parkour() -- so it uses less space after building
 	end)
 	--[[ End of file modes/parkour/leaderboard.lua ]]--
 	--[[ File modes/parkour/shop.lua ]]--
+	local is_christmas_time
+	
+	do
+		local day = tonumber(os.date("%d"))
+		local month = tonumber(os.date("%m"))
+	
+		is_christmas_time = (month == 12 and day >= 15) or (month == 1 and day <= 15)
+	end
+	
 	shop_items = {
 		{ -- smallbox
 			{
 				price = 0,
-				image = "18c72bd8ad1.png",
+				image = is_christmas_time and "18c72bd8ad1.png" or "18b59d0c458.png",
 				id = 1,
 			},
 			{
@@ -8016,7 +8788,7 @@ local function initialize_parkour() -- so it uses less space after building
 		{ -- bigbox
 			{
 				price = 0,
-				image = "18c72bd3975.png",
+				image = is_christmas_time and "18c72bd3975.png" or "18b59d0c458.png",
 				id = 2,
 			},
 			{
@@ -8108,7 +8880,7 @@ local function initialize_parkour() -- so it uses less space after building
 		{ -- trampoline
 			{
 				price = 0,
-				image = "18c72bddd28.png",
+				image = is_christmas_time and "18c72bddd28.png" or "18b2b460ab3.png",
 				id = 7,
 			},
 			{
@@ -8200,7 +8972,7 @@ local function initialize_parkour() -- so it uses less space after building
 		{ -- balloon
 			{
 				price = 0,
-				image = "18c72bb89a4.png",
+				image = is_christmas_time and  "18c72bb89a4.png" or "18b31269b0a.png",
 				id = 28,
 			},
 			{
@@ -8292,7 +9064,7 @@ local function initialize_parkour() -- so it uses less space after building
 		{ -- plank
 			{
 				price = 0,
-				image = "18c72bfa272.png",
+				image = is_christmas_time and "18c72bfa272.png" or "173db2812bc.png",
 				id = 46,
 			},
 			{
@@ -8384,12 +9156,6 @@ local function initialize_parkour() -- so it uses less space after building
 	}
 	
 	shop_skins = {
-		["1"] = {img = "18c72bad79e.png", x = 0.5, y = 0.50},
-		["2"] = {img = "18c72ba3321.png", x = 0.5, y = 0.50},
-		["7"] = {img = "18c72bb2589.png", x = 0.5, y = 0.52},
-		["28"] = {img = "18c72bccb7c.png", x = 0.5, y = 0.30},
-		["46"] = {img = "18c72ba881a.png", x = 0.5, y = 0.52},
-	
 		["143"] = {img = "18b40057d3b.png", x = 0.5, y = 0.52},
 		["144"] = {img = "18b4005cd84.png", x = 0.5, y = 0.52},
 		["145"] = {img = "18b40061bab.png", x = 0.5, y = 0.52},
@@ -8483,6 +9249,14 @@ local function initialize_parkour() -- so it uses less space after building
 		["2858"] = {img = "18b401c0154.png", x = 0.5, y = 0.52},
 		["2859"] = {img = "18b401c4f6e.png", x = 0.5, y = 0.52},
 	}
+	
+	if is_christmas_time then
+		shop_skins["1"] = {img = "18c72bad79e.png", x = 0.5, y = 0.50}
+		shop_skins["2"] = {img = "18c72ba3321.png", x = 0.5, y = 0.50}
+		shop_skins["7"] = {img = "18c72bb2589.png", x = 0.5, y = 0.52}
+		shop_skins["28"] = {img = "18c72bccb7c.png", x = 0.5, y = 0.30}
+		shop_skins["46"] = {img = "18c72ba881a.png", x = 0.5, y = 0.52}
+	end
 	--[[ End of file modes/parkour/shop.lua ]]--
 	--[[ File modes/parkour/quests.lua ]]--
 	local function getPlayerQuest(player, questID, isWeekly)
@@ -8520,7 +9294,7 @@ local function initialize_parkour() -- so it uses less space after building
 		local file = players_file[player]
 		local questPrize = quests[questID].prize(player, isWeekly)
 	
-		if not questPrize then return end
+		if not questPrize or not file then return end
 	
 		questData.ts = os.time()
 		file.coins = file.coins + questPrize
@@ -8834,6 +9608,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 	local fetching_player_room = {}
 	local roompw = {}
+	local roomcreators = {}
 	local fastest = {}
 	local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 	
@@ -8878,6 +9653,12 @@ local function initialize_parkour() -- so it uses less space after building
 				translatedChatMessage("tribe_house", player)
 			elseif room.uniquePlayers < min_save then
 				translatedChatMessage("min_players", player, room.uniquePlayers, min_save)
+			end
+		end
+		
+		do
+			for name in next, room.playerList do
+				roomcreators[1 + #roomcreators] = name
 			end
 		end
 	end)
@@ -9150,6 +9931,54 @@ local function initialize_parkour() -- so it uses less space after building
 	
 			savePlayerData(target)
 	
+		elseif cmd == "roommod" then
+			local has_perm = perms[player] and perms[player].change_roommod
+			local is_owner = records_admins and records_admins[player]
+			if not has_perm and not is_owner then
+				return
+			end
+	
+			local target = args[1]
+			if quantity < 1 or records_admins[target] or not room.playerList[target] then
+				return translatedChatMessage("invalid_syntax", player)
+			end
+	
+			records_admins[target] = 1
+			tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is a room mod now.")
+	
+			-- don't log room owner actions
+			if is_owner then
+				return
+			end
+	
+		elseif cmd == "deroommod" then
+			local has_perm = perms[player] and perms[player].change_roommod
+			local is_owner = records_admins and records_admins[player]
+			if not has_perm and not is_owner then
+				return
+			end
+	
+			local target = args[1]
+			if quantity < 1 or records_admins[target] ~= 1 then
+				return translatedChatMessage("invalid_syntax", player)
+			end
+	
+			records_admins[target] = nil
+			tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is not a room mod anymore.")
+	
+			-- don't log room owner actions
+			if is_owner then
+				return
+			end
+	
+		elseif cmd == "creators" then
+			if not perms[player] or not perms[player].view_creators then return end
+	
+			tfm.exec.chatMessage("<v>[#] <bl>People in the room when the module was loaded:", player)
+			for i=1, #roomcreators, 10 do
+				tfm.exec.chatMessage("<v>[#] <bl>" .. table.concat(roomcreators, ' ', i, math.min(i+9, #roomcreators)), player)
+			end
+	
 		elseif cmd == "pw" then
 			if not records_admins or not records_admins[player] then
 				if not perms[player] or not perms[player].enable_review then return end
@@ -9235,6 +10064,11 @@ local function initialize_parkour() -- so it uses less space after building
 			if not perms[player] or not perms[player].get_player_room then return end
 	
 			local fetching = capitalize(args[1])
+			if in_room[fetching] then
+				tfm.exec.chatMessage("<v>[#] <d>" .. fetching .. " is here ._.", player)
+				return
+			end
+	
 			fetching_player_room[fetching] = { player, os.time() + 1000 }
 			system.loadPlayerData(fetching)
 			max_args = 1
@@ -9302,15 +10136,16 @@ local function initialize_parkour() -- so it uses less space after building
 		end
 	
 		translatedChatMessage("welcome", player)
+		tfm.exec.chatMessage("<rose>" .. links.discord, player)
 		translatedChatMessage("forum_topic", player, links.forum)
 		translatedChatMessage("donate", player)
 	
-		if os.time() < os.time({year=2024,month=2,day=1,hour=5}) then
-			translatedChatMessage("mapper_event", player, links.mapper_event)
-		end
-	
-		if timed_maps.week.last_reset == "28/02/2021" then
-			translatedChatMessage("double_maps", player)
+		if is_before_anniversary then
+			translatedChatMessage("anniversary", player)
+		elseif is_anniversary then
+			translatedChatMessage("anniversary_start", player)
+		elseif is_after_anniversary then
+			translatedChatMessage("anniversary_end", player)
 		end
 	
 		checkRoomRequest(player, data)
@@ -9324,8 +10159,6 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 		end
 	end)
-	
-	onEvent("PlayerDataUpdated", checkRoomRequest)
 	
 	onEvent("Loop", function()
 		local now = os.time()
@@ -10606,13 +11439,15 @@ local function initialize_parkour() -- so it uses less space after building
 				canUpdate = true,
 				image = function(self, player)
 					local file = players_file[player]
-					if file.settings[4] == 1 then
-						return powers_img
-					elseif file.settings[6] == 1 then
-						return help_img
-					else
-						return "a.png"
+					if file then
+						if file.settings[4] == 1 then
+							return powers_img
+						end
+						if file.settings[6] == 1 then
+							return help_img
+						end
 					end
+					return "a.png"
 				end,
 				target = ":1",
 				x = 684, y = 32
@@ -10621,13 +11456,15 @@ local function initialize_parkour() -- so it uses less space after building
 				canUpdate = true,
 				text = function(self, player)
 					local file = players_file[player]
-					if file.settings[4] == 1 then
-						return "<a href='event:powers'><font size='50'>  </font></a>"
-					elseif file.settings[6] == 1 then
-						return "<a href='event:help_button'><font size='50'>  </font></a>"
-					else
-						return ""
+					if file then
+						if file.settings[4] == 1 then
+							return "<a href='event:powers'><font size='50'>  </font></a>"
+						end
+						if file.settings[6] == 1 then
+							return "<a href='event:help_button'><font size='50'>  </font></a>"
+						end
 					end
+					return ""
 				end,
 				x = 679, y = 32,
 				height = 30, width = 32,
@@ -10638,7 +11475,7 @@ local function initialize_parkour() -- so it uses less space after building
 				canUpdate = true,
 				image = function(self, player)
 					local file = players_file[player]
-					if file.settings[4] == 1 and file.settings[6] == 1 then
+					if file and file.settings[4] == 1 and file.settings[6] == 1 then
 						return help_img
 					else
 						return "a.png"
@@ -11338,10 +12175,10 @@ local function initialize_parkour() -- so it uses less space after building
 		:addTextArea({
 			text = function(self, player)
 				return translatedMessage("options", player)
-					:format(string.char(
+					:format((keyboard.bindings[
 						players_file[player].settings[2] == 46 and 77
 						or players_file[player].settings[2]
-					))
+					] or "?"):gsub('\n', ' '))
 			end,
 			alpha = 0
 		})
@@ -11497,7 +12334,7 @@ local function initialize_parkour() -- so it uses less space after building
 				return
 			end
 	
-			local qwerty = players_file[player].settings[5] == 1
+			local qwerty = players_file[player] and players_file[player].settings[5] == 1
 	
 			Keyboard:show(player, qwerty, numkey, keyname) -- numkey, keyname
 		elseif Keyboard.open[player] and action == "keyboard" then
@@ -11505,6 +12342,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 			local binding = keyboard.bindings[args]
 			if not binding then return end
+			if not players_file[player] then return end
 	
 			local previous_key = players_file[player].settings[2]
 			players_file[player].settings[2] = binding
@@ -12098,6 +12936,7 @@ local function initialize_parkour() -- so it uses less space after building
 				end
 			elseif Keyboard.open[player] and action == "keyboard" then
 				if not checkCooldown(player, "changeKeys", 1000) then return end
+				if not players_file[player] then return end
 	
 				local binding = keyboard.bindings[args]
 				if binding then
@@ -12326,6 +13165,7 @@ local function initialize_parkour() -- so it uses less space after building
 		onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 			if action == "prof_maps" then
 				if not checkCooldown(player, "mapsToggle", 500) then return end
+				if not players_file[player] then return end
 	
 				if args == "public" then
 					players_file[player].private_maps = nil
@@ -12347,6 +13187,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 		local isQuestSkipped = {}
 		local function checkQuestSkipped(player)
+			if not players_file[player] then return end
 			if not players_file[player].quests then return end
 	
 			isQuestSkipped[player] = {
@@ -13225,7 +14066,7 @@ local function initialize_parkour() -- so it uses less space after building
 			return function(self, player)
 				local image_x, image_y = self.parent.x + x, self.parent.y + 56
 				local imgs = images[container][player]
-				local show_hidden = perms[player] -- true for staff peeps
+				local show_hidden = perms[player] and perms[player].see_hidden_staff
 	
 				if not imgs then
 					imgs = {_count = 0}
@@ -13537,6 +14378,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 	function setNameColor(player)
 	    local file = players_file[player]
+			if not file then return end
 	
 	    tfm.exec.setNameColor(
 	        player,
@@ -13587,6 +14429,7 @@ local function initialize_parkour() -- so it uses less space after building
 	onEvent("Keyboard", function(player, key, down, x, y)
 		local interface = interfaces[key]
 		if interface then
+			if not players_file[player] then return end
 			if players_file[player].settings[9] == 1 then return end
 			toggleInterface(interface, player)
 	
@@ -13757,6 +14600,8 @@ local function initialize_parkour() -- so it uses less space after building
 				return tfm.exec.chatMessage("<v>[#] <r>You're a hidden staff. You can't use this command.", player)
 			end
 	
+			if not players_file[player] then return end
+	
 			players_file[player].hidden = not players_file[player].hidden
 	
 			if players_file[player].hidden then
@@ -13900,6 +14745,7 @@ local function initialize_parkour() -- so it uses less space after building
 			local questID, questType = args:match("(%d+):(%d+)") -- questType (1: daily - 2: weekly) 
 			questID = tonumber(questID)
 	
+			if not players_file[player] then return end
 			if players_file[player].quests[questID].skp then return end
 			
 			local isWeekly = tonumber(questType) == 2 and true or false
@@ -13996,7 +14842,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 		if global_poll then
 			-- execute as bot as it has all the permissions
-			eventParsedChatCommand("Tocutoeltuco#5522", "poll", 1, {"start"})
+			eventParsedChatCommand("Parkour#0568", "poll", 1, {"start"})
 		end
 	
 		for player in next, in_room do
@@ -14159,24 +15005,37 @@ local function initialize_parkour() -- so it uses less space after building
 	
 	local to_do = {}
 	local pdataRequest = {}
-	local sanctions_file = {}
 	local maps_loaded = false
-	local sanctions_loaded = false
+	local cached_files = {
+		[tostring(files[3])] = false,
+	}
+	local reported = {}
 	
+	-- if it doesn't require save, we can call callback right away using cache
+	-- returns true if it hits the cache
 	local function schedule(fileid, save, callback)
+		if not save and cached_files[tostring(files[fileid])] then
+			callback(cached_files[tostring(files[fileid])])
+			return true
+		end
+	
 		to_do[#to_do + 1] = { fileid, save, callback }
 	end
 	
+	-- by principle the room player is in has the most up to date player data
+	-- and changing player data outside of player's current room is not allowed
+	-- so whether you want to save it or not we can return the cached pdata
+	-- also returns true if data is from the cache
 	local function schedule_player(name, save, callback, timeoutCallback)
 		if players_file[name] then
 			callback(players_file[name])
-			if save then 
-				system.savePlayerData(name, json.encode(players_file[name]))
+			if save then
+				savePlayerData(name)
 			end
-		else
-			pdataRequest[name] = { callback, os.time() + 1000, save, timeoutCallback }
-			system.loadPlayerData(name)
+			return true
 		end
+		pdataRequest[name] = { callback, os.time() + 1000, save, timeoutCallback }
+		system.loadPlayerData(name)
 	end
 	
 	local function updateMapList(mapList, map, add)
@@ -14209,14 +15068,18 @@ local function initialize_parkour() -- so it uses less space after building
 			return
 		end
 	
-		if data.badges[3] ~= 1 then
-			players_file[player].badges[3] = 1
-			NewBadgeInterface:show(player, 3, 1)
-			savePlayerData(player)
+		if os.time() < weeklyfile.wl[id] then
+			return
 		end
 	
-		schedule(2, true, function(data)
-			data.weekly.wl[id] = nil
+		if data.badges[3] ~= 1 then
+			data.badges[3] = 1
+			NewBadgeInterface:show(player, 3, 1)
+			savePlayerData(player, true)
+		end
+	
+		schedule(2, true, function(filedata)
+			filedata.weekly.wl[id] = nil
 		end)
 	end
 	
@@ -14252,13 +15115,15 @@ local function initialize_parkour() -- so it uses less space after building
 			end
 		end
 	
+		if cached_files[fileid] ~= nil then
+			cached_files[fileid] = data
+		end
+	
 		if data.lowmaps then
 			maps_loaded = true
 		end
 	
 		if data.sanction then
-			sanctions_file = data.sanction
-	
 			local now = os.time()
 			local playerList = room.playerList
 			local id, banInfo, banDays
@@ -14309,8 +15174,6 @@ local function initialize_parkour() -- so it uses less space after building
 					end
 				end
 			end
-	
-			sanctions_loaded = true
 		end
 	
 		if save or (data.ranking or data.weekly) then
@@ -14341,7 +15204,7 @@ local function initialize_parkour() -- so it uses less space after building
 	
 			local baninfo = data.sanction[playerID]
 			if time > 0 then
-				if baninfo and (baninfo.time == 2 or baninfo.time > now) then
+				if baninfo and (baninfo.time == 2 or baninfo.time > now) and not minutes then
 					tfm.exec.chatMessage("<v>[#] <r>" .. playerName .. " is banned already.", moderator)
 					return
 				end
@@ -14381,12 +15244,25 @@ local function initialize_parkour() -- so it uses less space after building
 				level = sanctionLevel
 			}
 	
-			sendPacket("common", 9, playerName .. "\000" .. time .. "\000" .. moderator .. "\000" .. minutes)
+			sendPacket(
+				"common",
+				packets.rooms.ban_logs,
+				playerID .. "\000" ..
+				playerName .. "\000" ..
+				time .. "\000" ..
+				moderator .. "\000" ..
+				minutes .. "\000" ..
+				-- prev sanction
+				(baninfo and baninfo.timestamp or "-") .. "\000" ..
+				(baninfo and baninfo.time or "-") .. "\000" ..
+				(baninfo and baninfo.info or "-") .. "\000" ..
+				(baninfo and baninfo.level or "-")
+			)
 			sendBanLog(playerName, time, moderator, minutes)
 		end)
 	end
 	
-	local function inGameLogCommand(p, command, args)
+	function inGameLogCommand(p, command, args)
 		local commandtext = table.concat(args, " ")
 		for playername, player in pairs(tfm.get.room.playerList) do
 			if ranks.admin[playername] or ranks.mod[playername] then
@@ -14458,6 +15334,7 @@ local function initialize_parkour() -- so it uses less space after building
 			return translatedChatMessage("invalid_syntax", player)
 		end
 	
+		local isPerma = args[2] == "perma"
 		local minutes = tonumber(args[2])
 		local targetPlayer = args[1]
 		local playerID = tonumber(targetPlayer)
@@ -14466,10 +15343,12 @@ local function initialize_parkour() -- so it uses less space after building
 			return translatedChatMessage("invalid_syntax", player)
 		end
 	
+		inGameLogCommand(player, cmd, args)
+	
 		local sanctionTime
 	
 		if cmd == "pban" then
-			if minutes == 1 then
+			if isPerma or minutes == 1 then
 				sanctionTime = 2
 			else
 				sanctionTime = nil
@@ -14619,8 +15498,68 @@ local function initialize_parkour() -- so it uses less space after building
 		end
 	end
 	
-	local function handleBancount(player, cmd, quantity, args)
-		if not ranks.admin[player] and not ranks.bot[player] and not ranks.mod[player] then
+	local function printSanctions(target, kind, name, pid, timestamp, time, level, mod, minutes)
+		local banState = ""
+	
+		if not time then
+			banState = "has never been banned before "
+		elseif time == 0 then
+			banState = "was unbanned "
+		elseif time == 2 or time > os.time() then
+			banState = "is <r>currently banned</r> "
+		else
+			banState = "was banned "
+		end
+	
+		local byMod = mod and ("by <bv>" .. mod .. "</bv> ") or ""
+		local forMinutes = ""
+		local onDate = ""
+		local minRemaining = ""
+	
+		if timestamp then
+			if time then
+				if time == 2 then
+					forMinutes = "permanently "
+				elseif time > 2 then
+					local minutes = math.floor((time - timestamp) / 1000 / 60)
+					forMinutes = "for <v>" .. minutes .. "</v> minutes "
+				end
+			end
+	
+			onDate = "on <bl>" .. os.date("%B %d %Y %H:%M.%S", timestamp) .. "</bl> (france time) "
+		end
+	
+		if time and minutes then
+			forMinutes = "for <v>" .. minutes .. "</v> minutes "
+		end
+	
+		if time and time > 2 then
+			local minutes = math.floor((time - os.time()) / 1000 / 60)
+	
+			if minutes >= 0 then
+				minRemaining = "and has <v>" .. minutes .. "</v> minutes remaining "
+			end
+		end
+	
+		tfm.exec.chatMessage(
+			("<v>[#] <n>(%s) <n2>%s</n2> %s%s%s%s%s<g>[level %s] [ts %s] [pid %s]"):format(
+				kind,
+				name,
+				banState,
+				byMod,
+				forMinutes,
+				onDate,
+				minRemaining,
+				level or 0,
+				time or "-",
+				pid or "-"
+			),
+			target
+		)
+	end
+	
+	local function handleSanctions(player, cmd, quantity, args)
+		if not perms[player] or not perms[player].view_sanctions then
 			return
 		end
 	
@@ -14629,80 +15568,157 @@ local function initialize_parkour() -- so it uses less space after building
 			return
 		end
 	
-		local requestplayer = capitalize(args[1])
-		if not tonumber(requestplayer) then
-			if not string.find(requestplayer, "#", 1, true) then
-				requestplayer = requestplayer .. "#0000"
+		local targetName = capitalize(args[1])
+		local targetID = tonumber(targetName)
+	
+		if targetID then
+			targetName = nil
+		else
+			if not string.find(targetName, "#", 1, true) then
+				targetName = targetName .. "#0000"
 			end
 	
-			if in_room[requestplayer] then
-				requestplayer = tostring(room.playerList[requestplayer].id)
-			else
-				tfm.exec.chatMessage("<v>[#] <r>"..requestplayer.." is not here. Try player id.", player)
+			if room.playerList[targetName] then
+				targetID = room.playerList[targetName].id
+			end
+		end
+	
+		if targetID then
+			targetID = tostring(targetID)
+		end
+	
+		if ranks.admin[player] then
+			if args[2] == "reset" then
+				if not targetID then
+					tfm.exec.chatMessage("<v>[#] <r>You must provide a player id.", player)
+					return
+				end
+	
+				inGameLogCommand(player, cmd, args)
+	
+				tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
+				schedule(3, true, function(data)
+					local file = data.sanction and data.sanction[targetID]
+					if not file or not file.level or file.level == 0 then
+						tfm.exec.chatMessage(
+							("<v>[#] <j>%s's sanction level is already at zero."):format(
+								targetName or targetID
+							),
+							player
+						)
+						return
+					end
+	
+					file.level = 0
+					tfm.exec.chatMessage(
+						("<v>[#] <j>%s's sanction level has been reset."):format(
+							targetName or targetID
+						),
+						player
+					)
+				end)
 				return
 			end
 		end
 	
-		if quantity < 2 then
-			if sanctions_loaded then
-				if sanctions_file[requestplayer] and sanctions_file[requestplayer].time then
-	
-					local minutes
-					if sanctions_file[requestplayer].time == 0 then
-						minutes = 0
-					elseif sanctions_file[requestplayer].time == 2 then
-						minutes = 2
-					else
-						minutes = math.floor((sanctions_file[requestplayer].time - os.time()) / 1000 / 60)
-					end
-	
-					local banLevel = sanctions_file[requestplayer].level or 0
-	
-					tfm.exec.chatMessage("<v>[#] <PT>" .. capitalize(args[1]) .. " <j>have <PT>" .. banLevel .. "</PT> bans in record and currently banned for <PT>" .. minutes .. "</PT> minutes.", player)		
-				else
-					tfm.exec.chatMessage("<v>[#] <j>" .. capitalize(args[1]) .. " has no ban.", player)
-					return
+		if targetName then
+			local is_cached = schedule_player(targetName, false, function(pdata)
+				if pdata.kill or pdata.killed then
+					printSanctions(
+						player,
+						'powerban',
+						targetName,
+						pdata.playerid,
+						pdata.killed ~= 0 and pdata.kill ~= 0 and
+						(pdata.killed - pdata.kill * 60 * 1000) or nil,
+						pdata.killed ~= 0 and pdata.killed or nil,
+						'-',
+						pdata.killedby,
+						pdata.kill
+					)
 				end
-			else
-				tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
-				schedule(3, false, function(data)
-					if data.sanction and data.sanction[requestplayer] and data.sanction[requestplayer].time then
 	
-						local minutes
-						if data.sanction[requestplayer].time == 0 then
-							minutes = 0
-						elseif data.sanction[requestplayer].time == 2 then
-							minutes = 2
-						else
-							minutes = math.floor((data.sanction[requestplayer].time - os.time()) / 1000 / 60)
+				printSanctions(
+					player,
+					'pdata',
+					targetName,
+					pdata.playerid,
+					pdata.lastsanction,
+					pdata.banned,
+					pdata.bancount,
+					pdata.bannedby
+				)
+	
+				if not targetID and pdata.playerid then
+					targetID = pdata.playerid
+					local is_cached = schedule(3, false, function(data)
+						local file = data and data.sanction and data.sanction[targetID]
+						if not file then
+							tfm.exec.chatMessage(
+								("<v>[#] <r>%s not found in file data"):format(targetID),
+								player
+							)
+							return
 						end
-						
-						local banLevel = data.sanction[requestplayer].level or 0
-	
-						tfm.exec.chatMessage("<v>[#] <PT>" .. capitalize(args[1]) .. " <j>have <PT>" .. banLevel .. "</PT> bans in record and currently banned for <PT>" .. minutes .. "</PT> minutes.", player)		
-					else
-						tfm.exec.chatMessage("<v>[#] <j>" .. capitalize(args[1]) .. " has no ban.", player)
-						return
+						printSanctions(
+							player,
+							'file',
+							targetName or targetID,
+							targetID,
+							file.timestamp,
+							file.time,
+							file.level,
+							file.info
+						)
+					end)
+					if not is_cached then
+						tfm.exec.chatMessage(
+							("<v>[#] <bl>Checking file data for %s's sanctions..."):format(targetName),
+							player
+						)
 					end
-				end)
-			end
-		elseif args[2] == "reset" and ranks.admin[player] then
-			tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
-			schedule(3, true, function(data)
-				if data.sanction and data.sanction[requestplayer] and data.sanction[requestplayer].level then
-					data.sanction[requestplayer].level = 0
-	
-					tfm.exec.chatMessage("<v>[#] <j> ".. requestplayer .. "'s ban count has been reset.", player)		
-				else
-					tfm.exec.chatMessage("<v>[#] <j>" .. requestplayer .. " has no ban.", player)
-					return
 				end
 			end)
+			if not is_cached then
+				tfm.exec.chatMessage(
+					("<v>[#] <bl>Checking player data for %s's sanctions..."):format(targetName),
+					player
+				)
+			end
+		end
+	
+		if targetID then
+			local is_cached = schedule(3, false, function(data)
+				local file = data and data.sanction and data.sanction[targetID]
+				if not file then
+					tfm.exec.chatMessage(
+						("<v>[#] <r>%s not found in file data"):format(targetID),
+						player
+					)
+					return
+				end
+				printSanctions(
+					player,
+					'file',
+					targetName or targetID,
+					targetID,
+					file.timestamp,
+					file.time,
+					file.level,
+					file.info
+				)
+			end)
+			if not is_cached then
+				tfm.exec.chatMessage(
+					("<v>[#] <bl>Checking file data for %s's sanctions..."):format(targetName),
+					player
+				)
+			end
 		end
 	end
 	
 	local function warnPlayer(player, cmd, quantity, args)
-		if not ranks.admin[player] and not ranks.bot[player] and not ranks.mod[player] then
+		if not ranks.admin[player] and (not perms[player] or not perms[player].kill) then
 			return
 		end
 	
@@ -14725,20 +15741,40 @@ local function initialize_parkour() -- so it uses less space after building
 			requestplayer = requestplayer .. "#0000"
 		end
 	
-		if not ranks.admin[player] then
-			logCommand(player, "kill", math.min(quantity, 2), args)
-			sendPacket("common", 10, requestplayer .. "\000" .. killedTime .. "\000" .. player)
+		local roomPlayer = room.playerList[requestplayer]
+		if not in_room[requestplayer] or not roomPlayer then
+			tfm.exec.chatMessage("<v>[#] <r>" ..requestplayer.. " isn't here.", player)
+			return
 		end
 	
+		logCommand(player, "kill", math.min(quantity, 2), args)
+		sendPacket(
+			"common",
+			packets.rooms.kill_logs,
+			requestplayer .. "\000" ..
+			killedTime .. "\000" ..
+			player .. "\000" ..
+			roomPlayer.id
+		)
+	
 		schedule_player(requestplayer, true, function(pdata)
+			sendPacket(
+				"common",
+				packets.rooms.prev_kill,
+				requestplayer .. "\000" ..
+				roomPlayer.id .. "\000" ..
+				pdata.killed .. "\000" ..
+				pdata.kill .. "\000" ..
+				(pdata.killedby or '-')
+			)
+	
+			pdata.killedby = player
 			pdata.killed = os.time() + killedTime * 60 * 1000
 			pdata.kill = killedTime
 	
 			tfm.exec.chatMessage("<v>[#] <V>"..requestplayer.. " <j>can't use their powers for <b>"..killedTime.."</b> minutes.", nil)
 			translatedChatMessage("killed", requestplayer, killedTime)
-	
-	
-			system.loadPlayerData(requestplayer)
+			checkKill(requestplayer)
 		end)
 	end
 	
@@ -14746,6 +15782,8 @@ local function initialize_parkour() -- so it uses less space after building
 		if not ranks.admin[player] and not ranks.bot[player] then
 			return
 		end
+	
+		inGameLogCommand(player, cmd, args)
 	
 		if args[1] == player then
 			tfm.exec.chatMessage("<v>[#] <r>You can't change your rank.", player)
@@ -14788,37 +15826,10 @@ local function initialize_parkour() -- so it uses less space after building
 		schedule(1, true, function(data)
 			data.ranks[targetPlayer] = ID
 		end)
+		logCommand(player, cmd, quantity, args)
 	end
 	
-	local function handleBanInfo(player, cmd, quantity, args)
-		if not ranks.admin[player] and not ranks.bot[player] then
-			return
-		end
-	
-		if quantity < 1 then
-			translatedChatMessage("invalid_syntax", player)
-			return
-		end
-	
-		local requestplayer = capitalize(args[1])
-		if not string.find(requestplayer, "#", 1, true) then
-			requestplayer = requestplayer .. "#0000"
-		end
-	
-		schedule_player(requestplayer, false, function(pdata)
-			if pdata.bannedby then
-	            local extra = "unbanned"
-	            if pdata.banned and pdata.banned > 0 then
-	                local minutes = math.floor((pdata.banned - os.time()) / 1000 / 60)
-	                extra = "banned <V>" .. minutes .. " <j>minutes"
-	            end
-	            local banCount = pdata.bancount or "none"
-	            tfm.exec.chatMessage("<v>[#] <j>" .. requestplayer .. " has been " .. extra .. " by <V>"..pdata.bannedby.." <j>and have <V>"..banCount.." <j>bans in record.", player)
-			else
-				tfm.exec.chatMessage("<v>[#] <j>" .. requestplayer .. " has no ban.", player)
-			end
-		end)
-	end
+	local printSanctionList
 	
 	local function fileActions(player, cmd, quantity, args)
 		if not ranks.admin[player] and not ranks.bot[player] then
@@ -14836,21 +15847,35 @@ local function initialize_parkour() -- so it uses less space after building
 			local fileAction = args[2]
 			if fileAction == "view" then
 				if weeklyfile and weeklyfile.ts and weeklyfile.wl then
-					local currentList = {}
+					tfm.exec.chatMessage(('<v>[#] <j>Timestamp: %s <bl>(%s)'):format(
+						tonumber(weeklyfile.ts) and os.date("%Y %B %d", weeklyfile.ts) or '???',
+						tostring(weeklyfile.ts)
+					), player)
+					tfm.exec.chatMessage("<v>[#] <j>Unclaimed badge winners:", player)
 	
-					for name in pairs(weeklyfile.wl) do
-						table.insert(currentList, name)
+					for name, ts in next, weeklyfile.wl do
+						tfm.exec.chatMessage(('<v>%s<bl>: %s <g>(%s)'):format(
+							name,
+							tonumber(ts) and os.date("%Y %B %d", ts) or '???',
+							tostring(ts)
+						), player)
 					end
-	
-					local currentWeek =  table.concat(currentList, ",")
-					tfm.exec.chatMessage("<v>[#] <j>Timestamp: "..weeklyfile.ts, player)
-					tfm.exec.chatMessage("<v>[#] <j>Current week: "..currentWeek, player)
 				else
 					tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet or does not exist.", player)
 				end
 	
 			elseif fileAction == "last" then
-				tfm.exec.chatMessage("<v>[#] <j>Last weekly reset: "..timed_maps.week.last_reset, player)
+				local date = "???"
+				if last_weekly_reset_ts then
+					date = os.date("%Y %B %d", last_weekly_reset_ts)
+				end
+				tfm.exec.chatMessage(
+					("<v>[#] <j>Last weekly reset: <j>%s <bl>(%s)"):format(
+						date,
+						tostring(last_weekly_reset_ts)
+					),
+					player
+				)
 	
 			elseif fileAction == "add" then
 	
@@ -14858,6 +15883,8 @@ local function initialize_parkour() -- so it uses less space after building
 					translatedChatMessage("invalid_syntax", player)
 					return
 				end
+	
+				inGameLogCommand(player, cmd, args)
 	
 				local count = tonumber(args[4]) or 100
 	
@@ -14871,18 +15898,64 @@ local function initialize_parkour() -- so it uses less space after building
 					tfm.exec.chatMessage("<v>[#] <j>"..requestplayer.."'s new weekly count: "..pdata.week[1], player)
 				end)
 			end
-		end
-	
-		if fileName == "sanction" then
-			if not sanctions_file then 
-				tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet.", player)
+		elseif fileName == "maps" then
+			local category = args[2]
+			local len
+			if category == "all" or category == "high" then
+				len = #maps.list_high
+				tfm.exec.chatMessage("<v>[#] <v>high maps: " .. tostring(len), player)
+				for i=1, len, 20 do
+					tfm.exec.chatMessage("<v>[#] <bl>" .. table.concat(maps.list_high, ' ', i, math.min(i+19, len)), player)
+				end
+			end
+			if category == "all" or category == "low" then
+				len = #maps.list_low
+				tfm.exec.chatMessage("<v>[#] <v>low maps: " .. tostring(len), player)
+				for i=1, len, 20 do
+					tfm.exec.chatMessage("<v>[#] <bl>" .. table.concat(maps.list_low, ' ', i, math.min(i+19, len)), player)
+				end
+			end
+		elseif fileName == "staff" then
+			local rankName = args[2]
+			if rankName == "all" then
+				local list, count
+				for staffName, hasRanks in next, player_ranks do
+					list, count = {}, 0
+					for rankName in next, hasRanks do
+						count = count + 1
+						list[count] = rankName
+					end
+					tfm.exec.chatMessage("<v>[#] <v>" .. staffName .. "<bl>: " .. table.concat(list, ' '), player)
+				end
 				return
 			end
 	
-			local fileAction = args[2]
+			local list = ranks[rankName]
+			if not list then
+				tfm.exec.chatMessage("<v>[#] <r>Invalid rank namme.", player)
+				return
+			end
 	
+			tfm.exec.chatMessage("<v>[#] <j>" .. rankName .. ":", player)
+			for i=1, list._count, 10 do
+				tfm.exec.chatMessage(table.concat(list, ' ', i, math.min(i+9, list._count)), player)
+			end
+	
+		elseif fileName == "sanction" then
+			local fileAction = args[2]
 			if fileAction == "list" then
 				local page = tonumber(args[3]) or 1
+				printSanctionList(player, nil, page)
+			else
+				printSanctionList(player, fileAction)
+			end
+		end
+	end
+	
+	printSanctionList = function(player, targetID, page)
+		local is_cached = schedule(3, false, function(data)
+			local sanctions_file = data.sanction
+			if not targetID then
 				local page_size = 180
 	
 				local playerIDs, len = {}, 0
@@ -14905,22 +15978,26 @@ local function initialize_parkour() -- so it uses less space after building
 	
 				tfm.exec.chatMessage("<v>[#] <j>" ..message, player)
 			else
-				if not tonumber(args[2]) then
-					tfm.exec.chatMessage("<v>[#] <j>"..args[2].." doesn't seem like player id?", player)
+				if not tonumber(targetID) then
+					tfm.exec.chatMessage("<v>[#] <j>"..targetID.." doesn't seem like player id?", player)
 					return
 				end
 	
-				if not sanctions_file[args[2]] then 
+				if not sanctions_file[targetID] then 
 					tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet or does not exist.", player)
 					return
 				end
 	
-				local playerFile = sanctions_file[args[2]]
+				local playerFile = sanctions_file[targetID]
 				tfm.exec.chatMessage("<v>[#] <j>Timestamp: "..playerFile.timestamp, player)
 				tfm.exec.chatMessage("<v>[#] <j>Time: "..playerFile.time, player)
 				tfm.exec.chatMessage("<v>[#] <j>Info: "..playerFile.info, player)
 				tfm.exec.chatMessage("<v>[#] <j>Level: "..playerFile.level, player)
 			end
+		end)
+	
+		if not is_cached then
+			tfm.exec.chatMessage("<v>[#] <j>Loading the sanctions file...", player)
 		end
 	end
 	
@@ -14928,6 +16005,8 @@ local function initialize_parkour() -- so it uses less space after building
 		if not ranks.admin[player] and not ranks.manager[player] then
 			return
 		end
+	
+		inGameLogCommand(player, cmd, args)
 	
 		local announcementtext = table.concat(args, " ")
 		tfm.exec.chatMessage("<ROSE>Ξ [Parkour] <N>"..announcementtext)
@@ -14946,7 +16025,7 @@ local function initialize_parkour() -- so it uses less space after building
 		local playerName = args[1]
 		local action = args[2]
 	
-		if not in_room[playerName] then
+		if not in_room[playerName] or not players_file[playerName] then
 			return tfm.exec.chatMessage(playerName.." is not here.", player)
 		end
 	
@@ -14959,6 +16038,7 @@ local function initialize_parkour() -- so it uses less space after building
 			
 			tfm.exec.chatMessage("Current coins: " ..players_file[playerName].coins, player)
 			tfm.exec.chatMessage("Skins: " ..result, player)
+			return
 	
 		elseif action == "default" then
 			players_file[playerName].cskins = { 1, 2, 7, 28, 46 }
@@ -14974,9 +16054,8 @@ local function initialize_parkour() -- so it uses less space after building
 			local skinType = tonumber(args[3])
 			local skinNumber = tonumber(args[4])
 	
-			local selectedSkin = shop_items[skinType][skinNumber]
-	
-			if (not skinType or not skinNumber) or (not tonumber(skinType) or not tonumber(skinNumber)) or (selectedSkin == nil) then
+			local selectedSkin = skinType and skinNumber and shop_items[skinType] and shop_items[skinType][skinNumber]
+			if not selectedSkin then
 				return tfm.exec.chatMessage("Invalid skin type or skin number.", player)
 			end
 	
@@ -14997,6 +16076,8 @@ local function initialize_parkour() -- so it uses less space after building
 			tfm.exec.chatMessage("<v>[#] <j>Refunded " ..selectedSkin.price.. " coins (" ..skinType.. "/" ..skinNumber..") to the "..playerName, player)
 	
 		end
+	
+		inGameLogCommand(player, cmd, args)
 	end
 	
 	local function setChristmasMap(player, cmd, quantity, args)
@@ -15043,61 +16124,192 @@ local function initialize_parkour() -- so it uses less space after building
 	
 	local mouseImages = {}
 	local function addMouseImage(player, cmd, quantity, args)
-		if not ranks.admin[player] then 
+		if quantity == 0 then
 			if mouseImages[player] then
 				tfm.exec.removeImage(mouseImages[player][2], false)
 				tfm.exec.killPlayer(player)
 				mouseImages[player] = nil
 			end
-			return 
+			return
 		end
+	
+		if not ranks.admin[player] then return end
 	
 		local playerName = args[1]
 		local imageURL = args[2]
+		local scale = tonumber(args[3]) or 1
+		local offsetX = tonumber(args[4]) or 0
+		local offsetY = tonumber(args[5]) or 0
+		local opacity = tonumber(args[6]) or 1
 	
-		if imageURL == "remove" then
-			mouseImages[args[1]] = nil
+		if playerName == "*" then
+			if imageURL == "remove" then
+				for _, img in next, mouseImages do
+					tfm.exec.removeImage(img[2], false)
+				end
+				mouseImages = {}
+				return
+			elseif imageURL then
+				for name in next, tfm.get.room.playerList do	
+					if mouseImages[name] then
+						tfm.exec.removeImage(mouseImages[name][2], false)
+					end
+	
+					local imageID = tfm.exec.addImage(imageURL, '%'..name, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
+					mouseImages[name] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity}
+	
+					translatedChatMessage("new_image", name)
+				end
+				return
+			end
 		end
 	
-		if not room.playerList[playerName] or not imageURL then
+		if not playerName or not imageURL or not room.playerList[playerName] then
 			return translatedChatMessage("invalid_syntax", player)
 		end
+	
 	
 		if mouseImages[playerName] then
 			tfm.exec.removeImage(mouseImages[playerName][2], false)
 		end
-		
-		local imageID = tfm.exec.addImage(imageURL, '%'..playerName, 0, 0, nil, 1, 1, 0, 1, 0.5, 0.5, false)
-		mouseImages[playerName] = {imageURL, imageID, 1}
+	
+		if imageURL == "remove" then
+			mouseImages[playerName] = nil
+			return
+		elseif not mouseImages[playerName] or mouseImages[playerName][1] ~= imageURL then
+			translatedChatMessage("new_image", playerName)
+		end
+	
+		local imageID = tfm.exec.addImage(imageURL, '%'..playerName, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
+		mouseImages[playerName] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity}
 	end
 	
 	onEvent("Keyboard", function(player, key, down)
-		if not mouseImages[player] then return end
+		local img = mouseImages[player]
+	
+		if not img then return end
 	
 		if key == 2 then
-			tfm.exec.removeImage(mouseImages[player][2], false)
-			local imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, 1, 1, 0, 1, 0.5, 0.5, false)
-			mouseImages[player][2] = imageID
-			mouseImages[player][3] = 1
+			tfm.exec.removeImage(img[2], false)
+			local imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[4], img[4], 0, img[7], 0.5, 0.5, false)
+			img[2] = imageID
+			img[3] = 1
 		elseif key == 0 then
-			tfm.exec.removeImage(mouseImages[player][2], false)
-			local imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, -1, 1, 0, 1, -0.5, 0.5, false)
-			mouseImages[player][2] = imageID
-			mouseImages[player][3] = -1
+			tfm.exec.removeImage(img[2], false)
+			local imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, -img[4], img[4], 0, img[7], -0.5, 0.5, false)
+			img[2] = imageID
+			img[3] = -1
 		elseif key == 3 then
-			tfm.exec.removeImage(mouseImages[player][2], false)
-			local anchorX = mouseImages[player][3] == 1 and 0.5 or -0.5
+			tfm.exec.removeImage(img[2], false)
+			local anchorX = img[3] == 1 and 0.5 or -0.5
 			local imageID
 	
 			if down then
-				imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, mouseImages[player][3], 0.5, 0, 1, anchorX, 0.5, false)
+				imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[3] * img[4], img[4] / 2.0, 0, img[7], anchorX, 0.5, false)
 			else
-				imageID = tfm.exec.addImage(mouseImages[player][1], '%'..player, 0, 0, nil, mouseImages[player][3], 1, 0, 1, anchorX, 0.5, false)
+				imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[3] * img[4], img[4], 0, img[7], anchorX, 0.5, false)
 			end
 	
-			mouseImages[player][2] = imageID
+			img[2] = imageID
 		end
 	end)
+	
+	local function handleReport(playerName, cmd, quantity, args)
+		local pdata = players_file[playerName]
+		local player = room.playerList[playerName]
+		if not pdata or not player or not pdata.report or bans[player.id] then
+			return
+		end
+	
+		local timestamp = os.time()
+		local regDate = player.registrationDate
+		-- Accounts registered less than 1 week ago
+		if not regDate or regDate > timestamp - 7 * 24 * 60 * 60 * 1000 then
+			return
+		end
+	
+		if quantity < 2 then
+			return translatedChatMessage("cmd_usage_report", playerName)
+		end
+	
+		local reportedName = args[1]:lower():gsub('^+?[a-z]', string.upper)
+		local reportedPlayer = room.playerList[reportedName]
+		if not reportedPlayer then
+			return translatedChatMessage("reported_not_here", playerName)
+		end
+		if reportedPlayer.id == 0 or reportedName:sub(1, 1) == "*" or bans[reportedPlayer.id] or reportedName == playerName then
+			return translatedChatMessage("reported_invalid", playerName)
+		end
+	
+		local reason = table.concat(args, ' ', 2, quantity)
+		if #reason < 5 then
+			return translatedChatMessage("reason_too_short", playerName)
+		end
+	
+		if reported[reportedName] then
+			if reported[reportedName][playerName] then
+				return translatedChatMessage("report_done", playerName)
+			end
+		else
+			reported[reportedName] = {}
+		end
+	
+		reported[reportedName][playerName] = true
+	
+		sendPacket(
+			"common", packets.rooms.report,
+			timestamp .. "\000" ..
+			player.id .. "\000" ..
+			playerName .. "\000" ..
+			reportedPlayer.id .. "\000" ..
+			reportedName .. "\000" ..
+			room.shortName .. "\000" ..
+			reason
+		)
+		translatedChatMessage("report_done", playerName)
+	end
+	
+	local function handleKarma(playerName, cmd, quantity, args)
+		if not ranks.admin[playerName] and not ranks.mod[playerName] then
+			return
+		end
+	
+		if quantity < 1 then
+			return translatedChatMessage("invalid_syntax", playerName)
+		end
+	
+		local target = args[1]:lower():gsub('^+?[a-z]', string.upper)
+		local pdata = players_file[target]
+		if not room.playerList[target] or not pdata then
+			return translatedChatMessage("invalid_syntax", playerName)
+		end
+	
+		if quantity == 1 then
+			if pdata.report then
+				tfm.exec.chatMessage('<v>[#] <vp>' .. target .. ' can use !report.', playerName)
+			else
+				tfm.exec.chatMessage('<v>[#] <r>' .. target .. ' cannot use !report.', playerName)
+			end
+			return
+		end
+	
+		inGameLogCommand(playerName, cmd, args)
+	
+		local yes = args[2] == 'yes'
+		if not yes and args[2] ~= 'no' then
+			return translatedChatMessage("invalid_syntax", playerName)
+		end
+	
+		if pdata.report == yes then
+			tfm.exec.chatMessage('<v>[#] <bl>Nothing changed.', playerName)
+			return
+		end
+	
+		pdata.report = yes
+		savePlayerData(target)
+		tfm.exec.chatMessage('<v>[#] <n>Done.', playerName)
+		logCommand(playerName, cmd, math.min(quantity, 2), args)
+	end
 	
 	local commandDispatch = {
 		["ban"] = handleBan,
@@ -15106,9 +16318,10 @@ local function initialize_parkour() -- so it uses less space after building
 		["punban"] = handleAdminBan,
 		["addmap"] = handleMap,
 		["removemap"] = handleMap,
-		["bancount"] = handleBancount,
+		["bancount"] = handleSanctions,
+		["baninfo"] = handleSanctions,
+		["sanctions"] = handleSanctions,
 		["setrank"] = handleSetrank,
-		["baninfo"] = handleBanInfo,
 		["file"] = fileActions,
 		["kill"] = warnPlayer,
 		["announcement"] = roomAnnouncement,
@@ -15118,6 +16331,8 @@ local function initialize_parkour() -- so it uses less space after building
 		["link"] = linkMouse,
 		["size"] = changeMouseSize,
 		["image"] = addMouseImage,
+		["report"] = handleReport,
+		["karma"] = handleKarma,
 	}
 	
 	onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
@@ -15136,6 +16351,10 @@ local function initialize_parkour() -- so it uses less space after building
 	onEvent("PlayerDataParsed", checkWeeklyWinners)
 	onEvent("PlayerDataParsed", playerDataRequests)
 	onEvent("OutPlayerDataParsed", playerDataRequests)
+	
+	onEvent("PlayerLeft", function(player)
+		reported[player] = nil
+	end)
 	
 	onEvent("Loop", function(elapsed)
 		local now = os.time()
@@ -15300,7 +16519,7 @@ else
 								name = "wl",
 								type = "dictionary",
 								objects = {
-									type= "boolean"
+									type= "number"
 								}
 							}
 						}
@@ -15339,7 +16558,8 @@ else
 			admin = {
 				set_checkpoint_version = true,
 				set_name_color = true,
-				give_command = true
+				give_command = true,
+				view_creators = true,
 			}, -- will get every permission
 			bot = {
 				set_checkpoint_version = true
@@ -15351,6 +16571,8 @@ else
 				hide = true,
 				handle_map_polls = true,
 				see_map_polls = true,
+				change_roommod = true,
+				see_hidden_staff = true,
 			},
 			mod = {
 				ban = true,
@@ -15362,7 +16584,10 @@ else
 				kill = true,
 				see_private_maps = true,
 				use_tracker = true,
-				hide = true
+				hide = true,
+				change_roommod = true,
+				see_hidden_staff = true,
+				view_sanctions = true,
 			},
 			mapper = {
 				change_map = true,
@@ -15372,14 +16597,20 @@ else
 				spectate = true,
 				start_round_poll = true,
 				see_map_polls = true,
-				set_map_time_review = true
+				set_map_time_review = true,
+				change_roommod = true,
+				see_hidden_staff = true,
 			},
 			trainee = {
+				ban = true,
 				kill = true,
 				spectate = true,
+				change_map = true,
 				get_player_room = true,
 				see_private_maps = true,
-				use_tracker = true
+				use_tracker = true,
+				see_hidden_staff = true,
+				view_sanctions = true,
 			},
 			translator = {
 				hide = true
@@ -15440,15 +16671,21 @@ else
 			end
 		end
 		
+		local loading_file_time = os.time() + 11000
+		local loading_file_id
+		local pdata_requested = {}
+		
 		local bit = bit or bit32
-		local packets = {
+		local callbacks = {
 			send_room = bit.lshift(2, 8) + 255,
-			send_webhook = bit.lshift(3, 8) + 255,
 			load_map = bit.lshift(11, 8) + 255,
-			weekly_reset = bit.lshift(12, 8) + 255,
-			command_log = bit.lshift(26, 8) + 255,
-			ban_logs = bit.lshift(32, 8) + 255,
-			kill_logs = bit.lshift(33, 8) + 255,
+			load_file = bit.lshift(40, 8) + 255,
+			load_pdata = bit.lshift(41, 8) + 255,
+			send_update = bit.lshift(42, 8) + 255,
+		}
+		local textareas = {
+			heartbeat = 1 + 255,
+			action_error = 2 + 255,
 		}
 		
 		local parkour_bot = "Parkour#0568"
@@ -15456,22 +16693,45 @@ else
 		onEvent("TextAreaCallback", function(id, player, data)
 			if player ~= parkour_bot then return end
 		
-			if id == packets.send_room then
+			if id == callbacks.send_room then
 				local packet_id, packet = string.match(data, "^(%d+)\000(.*)$")
 				packet_id = tonumber(packet_id)
 				if not packet_id then return end
 		
 				eventSendingPacket(packet_id, packet)
 		
-			elseif id == packets.load_map then
+			elseif id == callbacks.send_update then
+				local seconds = tonumber(data)
+				if not seconds then return end
+		
+				eventSendingPacket(packets.bots.game_update, tostring(os.time() + seconds * 1000))
+		
+			elseif id == callbacks.load_map then
 				tfm.exec.newGame(data)
+		
+			elseif id == callbacks.load_file then
+				local file_id = tonumber(data)
+		
+				if not file_id or file_id < 0 or file_id > 100 then
+					addTextArea(textareas.action_error, "invalid file id", parkour_bot)
+					return
+				end
+		
+				if loading_file_id then
+					addTextArea(textareas.action_error, "already loading a file", parkour_bot)
+					return
+				end
+		
+				loading_file_id = file_id
+		
+			elseif id == callbacks.load_pdata then
+				pdata_requested[data] = os.time() + 2000
+				system.loadPlayerData(data)
 			end
-			
 		end)
 		
 		onEvent("SendingPacket", function(id, packet)
-		
-			if id == 4 then -- !announcement
+			if id == packets.bots.announce then -- !announcement
 				tfm.exec.chatMessage("<vi>[#parkour] <d>" .. packet)
 			end
 		
@@ -15481,18 +16741,41 @@ else
 		onEvent("PacketReceived", function(channel, id, packet, map, time)
 			if channel ~= "common" then return end
 		
-			if id == 4 then
-				addTextArea(packets.weekly_reset, packet, parkour_bot)
-		
-			elseif id == 7 then
-				addTextArea(packets.command_log, packet, parkour_bot)
-		
-			elseif id == 9 then
-				addTextArea(packets.ban_logs, packet, parkour_bot)
-		
-			elseif id == 10 then
-				addTextArea(packets.kill_logs, packet, parkour_bot)
+			if id <= 255 then -- see textareas
+				addTextArea(id, packet, parkour_bot)
 			end
+		end)
+		
+		onEvent("Loop", function()
+			addTextArea(textareas.heartbeat, "", parkour_bot)
+		
+			if loading_file_id and os.time() > loading_file_time then
+				system.loadFile(loading_file_id)
+		
+				loading_file_time = os.time() + 11000
+				loading_file_id = nil
+			end
+		
+			local clear = {}
+			local now = os.time()
+			for name, ts in next, pdata_requested do
+				if now > ts then
+					clear[1+#clear] = name
+				end
+			end
+			for i=1, #clear do
+				pdata_requested[clear[i]] = nil
+			end
+		end)
+		
+		onEvent("FileLoaded", function(file, data)
+			tfm.exec.playMusic(tostring(data), 'file:' .. tostring(file), 0, false, false, parkour_bot)
+		end)
+		
+		onEvent("PlayerDataLoaded", function(player, file)
+			if not pdata_requested[player] then return end
+			pdata_requested[player] = nil
+			tfm.exec.playMusic(tostring(file), 'pdata:' .. tostring(player), 0, false, false, parkour_bot)
 		end)
 		
 		tfm.exec.disableAutoNewGame(true)

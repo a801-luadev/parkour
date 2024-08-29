@@ -1138,23 +1138,37 @@ local function addMouseImage(player, cmd, quantity, args)
 
 	local playerName = args[1]
 	local imageURL = args[2]
+	local scale = tonumber(args[3]) or 1
+	local offsetX = tonumber(args[4]) or 0
+	local offsetY = tonumber(args[5]) or 0
+	local opacity = tonumber(args[6]) or 1
 
-	if playerName == "*" and imageURL == "remove" then
-		for _, img in next, mouseImages do
-			tfm.exec.removeImage(img[2], false)
+	if playerName == "*" then
+		if imageURL == "remove" then
+			for _, img in next, mouseImages do
+				tfm.exec.removeImage(img[2], false)
+			end
+			mouseImages = {}
+			return
+		elseif imageURL then
+			for name in next, tfm.get.room.playerList do	
+				if mouseImages[name] then
+					tfm.exec.removeImage(mouseImages[name][2], false)
+				end
+
+				local imageID = tfm.exec.addImage(imageURL, '%'..name, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
+				mouseImages[name] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity}
+
+				translatedChatMessage("new_image", name)
+			end
+			return
 		end
-		mouseImages = {}
-		return
 	end
 
 	if not playerName or not imageURL or not room.playerList[playerName] then
 		return translatedChatMessage("invalid_syntax", player)
 	end
 
-	local scale = tonumber(args[3]) or 1
-	local offsetX = tonumber(args[4]) or 0
-	local offsetY = tonumber(args[5]) or 0
-	local opacity = tonumber(args[6]) or 1
 
 	if mouseImages[playerName] then
 		tfm.exec.removeImage(mouseImages[playerName][2], false)

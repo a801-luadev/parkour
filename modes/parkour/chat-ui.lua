@@ -9,12 +9,6 @@ local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 local GameInterface
 local setNameColor
 
-do
-	for name in next, room.playerList do
-		roomcreators[1 + #roomcreators] = name
-	end
-end
-
 local function capitalize(str)
 	local first = string.sub(str, 1, 1)
 	if first == "+" then
@@ -53,6 +47,12 @@ onEvent("NewPlayer", function(player)
 			translatedChatMessage("tribe_house", player)
 		elseif room.uniquePlayers < min_save then
 			translatedChatMessage("min_players", player, room.uniquePlayers, min_save)
+		end
+	end
+	
+	do
+		for name in next, room.playerList do
+			roomcreators[1 + #roomcreators] = name
 		end
 	end
 end)
