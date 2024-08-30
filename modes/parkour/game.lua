@@ -296,7 +296,7 @@ onEvent("NewPlayer", function(player)
 
 	player_count = player_count + 1
 
-	if player_count > room.moduleMaxPlayers then
+	if not room.isTribeHouse and player_count > room.moduleMaxPlayers then
 		sendPacket(
 			"common",
 			packets.rooms.lock_fixed,
