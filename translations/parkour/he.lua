@@ -47,7 +47,7 @@ translations.he = {
 	permbanned = "<r>הורחקת לצמיתות מ-#parkour.",
 	tempbanned = "<r>הורחקת מ-#parkour למשך %s דקות.",
 	forum_topic = "<rose>למידע נוסף אודות פארקור כנסו לקישור: %s",
-	report = "<j>רוצים לדווח על שחקן? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
+	report = "<j>רוצים לדווח על שחקן? <t><b>!report Username#0000 [reason]</b></t>",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>הספירה מתחילה...",

@@ -46,7 +46,7 @@ translations.cn = {
 	permbanned = "<r>你已經在 #parkour 被永久封禁。",
 	tempbanned = "<r>你已經在 #parkour 被封禁了 %s 分鐘。",
 	forum_topic = "<rose>更多關於這個小遊戲的資訊可以查看: %s",
-	report = "<j>想舉報玩家? <t><b>/c Parkour#8558 .report 玩家名字#0000</b></t>",
+	report = "<j>想舉報玩家? <t><b>!report 玩家名字#0000 [reason]</b></t>",
 	killed = "<v>[#] <r>因為你違反了 parkour 規則, 你現在被禁止在 %s 分鐘內使用你的能力。持續違反規則會導致被封禁遊玩此小遊戲。請按 <b>H鍵</b> 查看規則。",
 	mapper_event = "<CE><B>Parkour地圖製作大賽 2024:</B>\n<n>在比賽中向我們展示你的製圖創意以贏得 <D>奶酪幣<n> 及 <pt>parkour 金幣<n>!\n<R>提交地圖的期限至 <B>1月 31日, 2024</B>.\n<PS>更多資訊, 可查看: %s",
 

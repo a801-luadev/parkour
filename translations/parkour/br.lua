@@ -47,7 +47,7 @@ translations.br = {
 	permbanned = "<r>Você foi banido permanentemente do #parkour.",
 	tempbanned = "<r>Você foi banido do #parkour por %s minutos.",
 	forum_topic = "<rose>Para mais informações sobre o módulo, acesse o link: %s",
-	report = "<j>Quer reportar um jogador? <t><b>/c Parkour#8558 .report NomeJogador#0000</b></t>",
+	report = "<j>Quer reportar um jogador? <t><b>!report NomeJogador#0000 [reason]</b></t>",
 	mapper_event ="<CE><B>Concurso de criação de mapas parkour 2024:</B>\n<n>Nos mostre sua criatividade na criação de mapas pela chance de ganhar <D>quejios <n>e <pt>moedas<n>!\n<R>Inscrições abertas até <B>31 de Janeiro de 2024</B>.\n<PS>Para mais informações, visite: %s", 
 
 	-- Easter Eggs

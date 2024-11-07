@@ -47,7 +47,7 @@ translations.hu = {
 	permbanned = "<r>Véglegesen ki lettél tiltva a #parkour-ból.",
 	tempbanned = "<r>Ki lettél tiltva %s másodpercre a #parkour-ból.",
 	forum_topic = "<rose>Ha szeretnél több információt a modulról látogasd meg a linket: %s",
-	report = "<j>Jelenteni szeretnél egy parkour játékost? <t><b>/c Parkour#8558 .report Felhasználónév0000</b></t>",
+	report = "<j>Jelenteni szeretnél egy parkour játékost? <t><b>!report Felhasználónév#0000 [reason]</b></t>",
 	killed = "<v>[#] <r>A parkour szabályainak megsértése miatt %s percig nem használhatod képességeidet. A szabályok folyamatos megsértése kitiltást von maga után. Nyomd meg a <b>H</b> gombot a szabályok áttekintéséhez.",
 	mapper_event = "<CE><B>Parkour pályakészítő verseny 2024:</B>\n<n>Mutasd meg a kreativitásodat pályakészítésben, hogy esélyed legyen nyerni<D>sajt érmét <n>és <pt>parkour érmét<n>!\n<R>Jelentkezni lehet eddig: <B>Január 31, 2024</B>.\n<PS>Több infóért látogass el ide: %s",
 

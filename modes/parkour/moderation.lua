@@ -1216,6 +1216,10 @@ onEvent("Keyboard", function(player, key, down)
 end)
 
 local function handleReport(playerName, cmd, quantity, args)
+	if is_tribe then
+		return
+	end
+
 	local pdata = players_file[playerName]
 	local player = room.playerList[playerName]
 	if not pdata or not player or not pdata.report or bans[player.id] then
@@ -1312,6 +1316,30 @@ local function handleKarma(playerName, cmd, quantity, args)
 	logCommand(playerName, cmd, math.min(quantity, 2), args)
 end
 
+local function skipMap(playerName, cmd, quantity, args)
+	if not perms[playerName] or not perms[playerName].skip_map then
+		return
+	end
+
+	if quantity < 1 then
+		return translatedChatMessage("invalid_syntax", playerName)
+	end
+
+	if os.time() < map_change_cd and not review_mode then
+		tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", playerName)
+		return
+	end
+
+	local reason = args[1]
+	local mapCode = room.currentMap
+	local uniquePlayers = room.uniquePlayers
+
+	sendPacket("common", packets.rooms.skip_map, room.shortName .. "\000" .. playerName .. "\000" .. reason .. "\000" .. mapCode .. "\000" .. uniquePlayers .. "\000" .. player_count .. "\000" .. victory_count)
+	
+	newMap()
+	inGameLogCommand(playerName, cmd, args)
+end
+
 local commandDispatch = {
 	["ban"] = handleBan,
 	["unban"] = handleBan,
@@ -1334,6 +1362,7 @@ local commandDispatch = {
 	["image"] = addMouseImage,
 	["report"] = handleReport,
 	["karma"] = handleKarma,
+	["skip"] = skipMap,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)

@@ -14,6 +14,7 @@ packets.rooms = {
   update_error = 13,
   lock_fixed = 14,
   prev_kill = 15,
+  skip_map = 16,
 }
 
 packets.bots = {

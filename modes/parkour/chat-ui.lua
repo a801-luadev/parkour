@@ -50,10 +50,8 @@ onEvent("NewPlayer", function(player)
 		end
 	end
 	
-	do
-		for name in next, room.playerList do
-			roomcreators[1 + #roomcreators] = name
-		end
+	if roomcreators and #roomcreators < 10 then
+		roomcreators[1 + #roomcreators] = player
 	end
 end)
 
@@ -532,8 +530,10 @@ onEvent("PlayerDataParsed", function(player, data)
 
 	translatedChatMessage("welcome", player)
 	tfm.exec.chatMessage("<rose>" .. links.discord, player)
-	translatedChatMessage("forum_topic", player, links.forum)
+	--translatedChatMessage("forum_topic", player, links.forum)
+	translatedChatMessage("report", player)
 	translatedChatMessage("donate", player)
+	
 
 	if is_before_anniversary then
 		translatedChatMessage("anniversary", player)

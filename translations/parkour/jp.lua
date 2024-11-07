@@ -47,7 +47,7 @@ translations.jp = {
 	permbanned = "<r>#parkourから永久BANされました。",
 	tempbanned = "<r>#parkourから%s分間BANされました。",
 	forum_topic = "<rose>このモジュールについて詳しくはこちら： %s",
-	report = "<j>Parkourプレイヤーを通報したい場合： <t><b>/c Parkour#8558 .report Username#0000</b></t>",
+	report = "<j>Parkourプレイヤーを通報したい場合： <t><b>!report Username#0000 [reason]</b></t>",
 	killed = "<v>[#] <r>Parkourのルールを守らなかったため、%s分間パワーを使うことできません。ルールを何回も無視し続けるとBANされます。「<b>H</b>」を押してルールを確認してください。",
 	mapper_event = "<CE><B>Parkourマップ作成コンテスト2024年：</B>\n<n>あなたの創造力を見せて、<D>チーズコイン<n>や<pt>パルクールコイン<n>がもらえますよ！\n<R>マップの提出期限は<B>2024年1月31日</B>です。\n<PS>詳細：%s",
 

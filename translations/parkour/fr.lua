@@ -47,7 +47,7 @@ translations.fr = {
 	permbanned = "<r>Tu as été banni de #parkour définitevement.",
 	tempbanned = "<r>Tu as été banni de #parkour pendant %s minutes.",
 	forum_topic = "<rose>Pour plus d'informations sur le module, visite ce lien: %s",
-	report = "<j>Besoin de signaler un joueur? <t><b>/c Parkour#8558 .report Pseudo#0000</b></t>",
+	report = "<j>Besoin de signaler un joueur? <t><b>!report Pseudo#0000 [reason]</b></t>",
 	killed = "<v>[#] <r>Vos pouvoirs ont été restreints pendant %s minutes suite à une violation du réglement de parkour. Des violations ultérieures se conclueront par un banissement. Appuyez sur <b>H</b> pour visionner les règles.",
 	mapper_event = "<CE><B>Concours de creation de cartes Parkour 2024:</B>\n<n>Mettez vos talents de créateur de cartes au service de Parkour pour tenter de gagner des <D>fromages <n> et des <pt>pièces de Parkour<n>!\n<R>Possibilité de proposer sa carte jusqu'au  <B>31 Janvier 2024</B>.\n<PS>Pour plus d'information, se rendre sur : %s",
 

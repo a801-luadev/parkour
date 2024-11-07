@@ -476,6 +476,10 @@ onEvent("PlayerRespawn", function(player)
 end)
 
 onEvent("NewGame", function()
+
+	tfm.exec.disablePhysicalConsumables(true)
+	tfm.exec.disableMinimalistMode(true)
+
 	roomleaderboard = {}
 	check_position = 6
 	victory_count = 0

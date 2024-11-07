@@ -47,7 +47,7 @@ translations.ro = {
 	permbanned = "<r>Ai fost banat permanent de la #parkour.",
 	tempbanned = "<r>Ai fost banat de la #parkour pentru %s minute.",
 	forum_topic = "<rose>Pentru mai multe informații despre modul vizitează link-ul: %s",
-	report = "<j>Vrei să raportezi un jucător? <t><b>/c Parkour#8558 .report Username#0000</b></t>",
+	report = "<j>Vrei să raportezi un jucător? <t><b>!report Username#0000 [reason]</b></t>",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Numărătoarea a început...",

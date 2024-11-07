@@ -54,6 +54,7 @@ local ranks_permissions = {
 		change_roommod = true,
 		see_hidden_staff = true,
 		view_sanctions = true,
+		skip_map = true,
 	},
 	mapper = {
 		change_map = true,
