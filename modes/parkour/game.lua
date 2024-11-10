@@ -2,6 +2,7 @@ local min_save = 4
 
 local check_position = 6
 local player_count = 0
+local actual_player_count = 0
 local victory_count = 0
 local less_time = false
 local victory = {_last_level = {}}
@@ -295,8 +296,9 @@ onEvent("NewPlayer", function(player)
 	in_room[player] = true
 
 	player_count = player_count + 1
+	actual_player_count = actual_player_count + 1
 
-	if not room.isTribeHouse and player_count > room.moduleMaxPlayers then
+	if not room.isTribeHouse and actual_player_count > room.moduleMaxPlayers then
 		sendPacket(
 			"common",
 			packets.rooms.lock_fixed,
@@ -391,6 +393,7 @@ onEvent("PlayerLeft", function(player)
 	if spec_mode[player] then return end
 
 	player_count = player_count - 1
+	actual_player_count = actual_player_count - 1
 
 	if victory[player] then
 		victory_count = victory_count - 1

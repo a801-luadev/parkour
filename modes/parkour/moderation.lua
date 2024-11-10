@@ -1334,7 +1334,7 @@ local function skipMap(playerName, cmd, quantity, args)
 	local mapCode = room.currentMap
 	local uniquePlayers = room.uniquePlayers
 
-	sendPacket("common", packets.rooms.skip_map, room.shortName .. "\000" .. playerName .. "\000" .. reason .. "\000" .. mapCode .. "\000" .. uniquePlayers .. "\000" .. player_count .. "\000" .. victory_count)
+	sendPacket("common", packets.rooms.skip_map, room.shortName .. "\000" .. playerName .. "\000" .. reason .. "\000" .. mapCode .. "\000" .. uniquePlayers .. "\000" .. player_count .. "\000" .. victory_count .. "\000" .. actual_player_count)
 	
 	newMap()
 	inGameLogCommand(playerName, cmd, args)
