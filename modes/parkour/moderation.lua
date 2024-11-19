@@ -1299,6 +1299,7 @@ local function handleKarma(playerName, cmd, quantity, args)
 	end
 
 	pdata.report = yes
+	pdata.karma = playerName
 	savePlayerData(target)
 	tfm.exec.chatMessage('<v>[#] <n>Done.', playerName)
 	logCommand(playerName, cmd, math.min(quantity, 2), args)
