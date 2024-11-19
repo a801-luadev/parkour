@@ -267,11 +267,10 @@ do
 		:setText(
 			function(self, player, page, data)				
 				local itemID = shop_items[shopPage[player]][buyButton].id
-				itemID = tostring(itemID)
 
-				if players_file[player].cskins[shopPage[player]] == tonumber(itemID) then
+				if players_file[player].cskins[shopPage[player]] == itemID then
 					return translatedMessage("equipped", player)
-				elseif players_file[player].skins[itemID] == 1 then
+				elseif default_skins[itemID] or table_find(players_file[player].skins, itemID) then
 					return translatedMessage("equip", player)
 				else
 					return translatedMessage("buy", player)
@@ -285,19 +284,18 @@ do
 			local item_price = shop_items[shopPage[player]][buyButton].price
 			local player_coin = players_file[player].coins
 			local itemID = shop_items[shopPage[player]][buyButton].id
-			itemID = tostring(itemID)
 			isSave[player] = true
 
 			local args = self.parent.args[player]
 
-			if players_file[player].skins[itemID] == 1 then
-				players_file[player].cskins[shopPage[player]] = tonumber(itemID)
+			if default_skins[itemID] or table_find(players_file[player].skins, itemID) then
+				players_file[player].cskins[shopPage[player]] = itemID
 				self.parent:update(player, args[1], args[2], 3)
 				return
 			end
 
 			if player_coin >= item_price then
-				players_file[player].skins[itemID] = 1
+				table.insert(players_file[player].skins, itemID)
 				players_file[player].coins = player_coin - item_price
 				self.parent:update(player, args[1], args[2], 1)
 			else

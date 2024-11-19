@@ -52,15 +52,6 @@ local function updateMapList(mapList, map, add)
 	end
 end
 
-local function in_table(value, tbl)
-	for _, v in ipairs(tbl) do
-		if v == value then
-			return true
-		end
-	end
-	return false
-end
-
 local function checkWeeklyWinners(player, data)
 	if not room.playerList[player] then return end
 	local id = tostring(room.playerList[player].id)
@@ -429,7 +420,7 @@ local function handleMap(player, cmd, quantity, args)
 			return
 		end
 
-		if in_table(mapcode, maps.list_low) or in_table(mapcode, maps.list_high) then
+		if table_find(maps.list_low, mapcode) or table_find(maps.list_high, mapcode) then
 			tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " is already in rotation.", player)
 			return
 		end
@@ -462,9 +453,9 @@ local function handleMap(player, cmd, quantity, args)
 
 		for i = 1, #args do
 			mapcode = args[i]
-			if in_table(mapcode, maps.list_high) then
+			if table_find(maps.list_high, mapcode) then
 				removeHigh[1 + #removeHigh] = mapcode
-			elseif in_table(mapcode, maps.list_low) then
+			elseif table_find(maps.list_low, mapcode) then
 				removeLow[1 + #removeLow] = mapcode
 			else
 				notFound[1 + #notFound] = mapcode
@@ -1031,11 +1022,7 @@ local function editCoins(player, cmd, quantity, args)
 	end
 
 	if action == "show" then
-		local result = ""
-		for key, value in pairs(players_file[playerName].skins) do
-			result = result .. key .. ", "
-		end
-		result = result:sub(1, -3)
+		local result = table.concat(players_file[playerName].skins, ', ')
 		
 		tfm.exec.chatMessage("Current coins: " ..players_file[playerName].coins, player)
 		tfm.exec.chatMessage("Skins: " ..result, player)
@@ -1060,11 +1047,12 @@ local function editCoins(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("Invalid skin type or skin number.", player)
 		end
 
-		if not players_file[playerName].skins[tostring(selectedSkin.id)] then
+		local skinsIndex = table_find(players_file[playerName].skins, selectedSkin.id)
+		if not skinsIndex then
 			return tfm.exec.chatMessage("The player doesn't have this skin. ", player)
 		end
-		
-		players_file[playerName].skins[tostring(selectedSkin.id)] = nil
+
+		table.remove(players_file[playerName].skins, skinsIndex)
 		players_file[playerName].coins = players_file[playerName].coins + tonumber(selectedSkin.price)
 
 		for i = #players_file[playerName].cskins, 1, -1 do

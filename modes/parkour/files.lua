@@ -89,6 +89,7 @@ local titles = {
 		field = "tc"
 	}
 }
+local default_skins = { [1] = 1, [2] = 1, [7] = 1, [28] = 1, [46] = 1 }
 
 local quests
 local fillQuests
@@ -266,7 +267,21 @@ local data_migrations = {
 
 		data.quests = allQuests
 		--data.killedby
-	end
+	end,
+	[7] = function(player, data)
+		data.v = 8
+		data.namecolor = nil
+
+		local skins = {}
+
+		for key in next, data.skins do
+			if not default_skins[tonumber(key)] then
+				skins[1 + #skins] = tonumber(key)
+			end
+		end
+
+		data.skins = skins
+	end,
 }
 
 local function getQuestsResetTime()

@@ -25,7 +25,7 @@
 
 
 math.randomseed(os.time())
-local data_version = 7
+local data_version = 8
 local room = tfm.get.room
 local links = {
 	donation = "https://a801-luadev.github.io/?redirect=parkour",
@@ -69,6 +69,14 @@ local function generateRandomString(length)
     end
     
     return randomString
+end
+
+local function table_find(tbl, value)
+	for index=1, #tbl do
+		if tbl[index] == value then
+			return index
+		end
+	end
 end
 
 do
