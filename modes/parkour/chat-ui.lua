@@ -528,29 +528,30 @@ onEvent("PlayerDataParsed", function(player, data)
 		player_langs[player] = translations[data.langue]
 	end
 
-	translatedChatMessage("welcome", player)
-	tfm.exec.chatMessage("<rose>" .. links.discord, player)
-	--translatedChatMessage("forum_topic", player, links.forum)
-	translatedChatMessage("report", player)
-	translatedChatMessage("donate", player)
-	
-
-	if is_before_anniversary then
-		translatedChatMessage("anniversary", player)
-	elseif is_anniversary then
-		translatedChatMessage("anniversary_start", player)
-	elseif is_after_anniversary then
-		translatedChatMessage("anniversary_end", player)
-	end
-
 	checkRoomRequest(player, data)
 
-	if records_admins then
-		translatedChatMessage("records_enabled", player, links.records)
+	if data.settings[6] == 1 then
+		translatedChatMessage("welcome", player)
+		tfm.exec.chatMessage("<rose>" .. links.discord, player)
+		--translatedChatMessage("forum_topic", player, links.forum)
+		translatedChatMessage("report", player)
+		--translatedChatMessage("donate", player)
+	
+		if is_before_anniversary then
+			translatedChatMessage("anniversary", player)
+		elseif is_anniversary then
+			translatedChatMessage("anniversary_start", player)
+		elseif is_after_anniversary then
+			translatedChatMessage("anniversary_end", player)
+		end
 
-		if string.find(room.lowerName, string.lower(player), 1, true) then
-			records_admins[player] = true
-			translatedChatMessage("records_admin", player)
+		if records_admins then
+			translatedChatMessage("records_enabled", player, links.records)
+
+			if string.find(room.lowerName, string.lower(player), 1, true) then
+				records_admins[player] = true
+				translatedChatMessage("records_admin", player)
+			end
 		end
 	end
 end)

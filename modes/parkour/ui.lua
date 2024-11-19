@@ -563,7 +563,9 @@ onEvent("PlayerDataParsed", function(player, data)
 
 	setNameColor(player)
 
-	GameInterface:show(player)
+	if data.settings[4] == 1 then
+		GameInterface:show(player)
+	end
 end)
 
 onEvent("OutPlayerDataParsed", checkProfileRequest)

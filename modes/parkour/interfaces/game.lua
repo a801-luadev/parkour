@@ -45,64 +45,24 @@ do
 		})
 
 		:addImage({
-			canUpdate = true,
-			image = function(self, player)
-				local file = players_file[player]
-				if file then
-					if file.settings[4] == 1 then
-						return powers_img
-					end
-					if file.settings[6] == 1 then
-						return help_img
-					end
-				end
-				return "a.png"
-			end,
+			image = powers_img,
 			target = ":1",
 			x = 684, y = 32
 		})
 		:addTextArea({
-			canUpdate = true,
-			text = function(self, player)
-				local file = players_file[player]
-				if file then
-					if file.settings[4] == 1 then
-						return "<a href='event:powers'><font size='50'>  </font></a>"
-					end
-					if file.settings[6] == 1 then
-						return "<a href='event:help_button'><font size='50'>  </font></a>"
-					end
-				end
-				return ""
-			end,
+			text = "<a href='event:powers'><font size='50'>  </font></a>",
 			x = 679, y = 32,
 			height = 30, width = 32,
 			alpha = 0
 		})
 
 		:addImage({
-			canUpdate = true,
-			image = function(self, player)
-				local file = players_file[player]
-				if file and file.settings[4] == 1 and file.settings[6] == 1 then
-					return help_img
-				else
-					return "a.png"
-				end
-			end,
+			image = help_img,
 			target = ":1",
 			x = 654, y = 32
 		})
 		:addTextArea({
-			canUpdate = true,
-			text = function(self, player)
-				local file = players_file[player]
-				if file.settings[4] == 1 and file.settings[6] == 1 then
-					return "<a href='event:help_button'><font size='50'>  </font></a>"
-				else
-					return ""
-				end
-			end,
+			text = "<a href='event:help_button'><font size='50'>  </font></a>",
 			x = 649, y = 32,
 			height = 30, width = 32,
 			alpha = 0

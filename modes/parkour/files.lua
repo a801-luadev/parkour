@@ -271,6 +271,8 @@ local data_migrations = {
 	[7] = function(player, data)
 		data.v = 8
 		data.namecolor = nil
+		data.settings[4] = 1
+		data.settings[6] = 1
 
 		local skins = {}
 
