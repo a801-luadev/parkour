@@ -496,7 +496,7 @@ onEvent("NewGame", function()
   local xml = info and info.xml
   local code = room.currentMap
   local smolified = info and info.author == '#Module'
-	local original_author = xml:match('%s+PKAUTHOR="(.-)"%s*')
+	local original_author = xml and xml:match('%s+PKAUTHOR="(.-)"%s*')
 
 	if original_author and original_author ~= '#Module' then
 		info.author = original_author:gsub('<', ''):gsub('&', '')
