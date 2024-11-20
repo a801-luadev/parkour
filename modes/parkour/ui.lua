@@ -154,6 +154,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 			file.settings[8] = 1
 
 			no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
+			translatedChatMessage("nohelp", player)
 		end
 
 		savePlayerData(player)

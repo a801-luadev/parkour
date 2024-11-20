@@ -133,6 +133,7 @@ OptionsInterface
 				end
 			else
 				no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
+				translatedChatMessage("nohelp", player)
 			end
 		end)
 		:onUpdate(function(self, player)
