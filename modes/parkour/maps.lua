@@ -187,7 +187,7 @@ onEvent("GameDataLoaded", function(data)
 				memory = maps[i]
 				memory.list = in_file[i]
 				memory.count = #in_file[i]
-				memory.odds = memory.count * 1000000 + (maps[i - 1] and maps[i - 1].count or 0)
+				memory.odds = memory.count * 1000000 * (i == 2 and 2 or 1) + (maps[i - 1] and maps[i - 1].odds or 0)
 
 				if memory.count == 0 then
 					memory.list = {7171137}
