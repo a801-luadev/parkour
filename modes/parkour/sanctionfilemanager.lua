@@ -18,7 +18,8 @@ local SanctionFileManager = {
             return self.lastdata
         end
 
-        local sanctionList = string_split(data[2], "\2")
+        local modList = string_split(data[2], "\2")
+        local sanctionList = string_split(data[3], "\2")
         local sanctionDict = {}
         local sanction
 
@@ -34,6 +35,7 @@ local SanctionFileManager = {
 
         self.lastupdate = data[1]
         self.lastdata = {
+            mods = modList,
             sanction = sanctionDict,
         }
 
@@ -54,6 +56,6 @@ local SanctionFileManager = {
             }, "\3")
         end
 
-        return table.concat({ os.time(), table.concat(sanctionList, "\2") }, "\1")
+        return table.concat({ os.time(), table.concat(data.mods, "\2"), table.concat(sanctionList, "\2") }, "\1")
     end,
 }

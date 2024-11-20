@@ -181,11 +181,12 @@ do
 	})
 
 	saveFile(43, {
+    mods = { 'Lays#1146' },
 		sanction = {
       ["1"] = {
         timestamp = 0,
         time = os.time() + 1000 * 60 * 60 * 24,
-        info = "-",
+        info = 0,
         level = 1,
       }
     },

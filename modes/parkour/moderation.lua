@@ -117,7 +117,7 @@ onEvent("GameDataLoaded", function(data, fileid)
 				if banInfo and banInfo.timestamp ~= pdata.lastsanction then
 					pdata.bancount = banInfo.level
 					pdata.lastsanction = banInfo.timestamp
-					pdata.bannedby = banInfo.info
+					pdata.bannedby = data.mods[banInfo.info] or banInfo.info
 					pdata.banned = banInfo.time
 
 					savePlayerData(player)
@@ -140,7 +140,7 @@ onEvent("GameDataLoaded", function(data, fileid)
                         data.sanction[tostring(id)] = {
                             timestamp = 0,
                             time = pdata.banned,
-                            info = "-",
+                            info = 0,
 							level = sanctionLevel,
                         }
                         save = true
@@ -218,10 +218,16 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 			minutes = 0
 		end
 
+		local mod_index = table_find(data.mods, moderator)
+		if not mod_index then
+			mod_index = 1 + #data.mods
+			data.mods[mod_index] = moderador
+		end
+
 		data.sanction[playerID] = {
 			timestamp = now,
 			time = time,
-			info = moderator,
+			info = mod_index,
 			level = sanctionLevel
 		}
 
@@ -236,7 +242,7 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 			-- prev sanction
 			(baninfo and baninfo.timestamp or "-") .. "\000" ..
 			(baninfo and baninfo.time or "-") .. "\000" ..
-			(baninfo and baninfo.info or "-") .. "\000" ..
+			(baninfo and baninfo.info and (data.mods[baninfo.info] or banInfo.info) or "-") .. "\000" ..
 			(baninfo and baninfo.level or "-")
 		)
 		sendBanLog(playerName, time, moderator, minutes)
@@ -601,7 +607,7 @@ local function handleSanctions(player, cmd, quantity, args)
 						file.timestamp,
 						file.time,
 						file.level,
-						file.info
+						tostring(data.mods[file.info] or file.info)
 					)
 				end)
 				if not is_cached then
@@ -638,7 +644,7 @@ local function handleSanctions(player, cmd, quantity, args)
 				file.timestamp,
 				file.time,
 				file.level,
-				file.info
+				tostring(data.mods[file.info] or file.info)
 			)
 		end)
 		if not is_cached then
@@ -919,7 +925,7 @@ printSanctionList = function(player, targetID, page)
 			local playerFile = sanctions_file[targetID]
 			tfm.exec.chatMessage("<v>[#] <j>Timestamp: "..playerFile.timestamp, player)
 			tfm.exec.chatMessage("<v>[#] <j>Time: "..playerFile.time, player)
-			tfm.exec.chatMessage("<v>[#] <j>Info: "..playerFile.info, player)
+			tfm.exec.chatMessage("<v>[#] <j>Info: "..tostring(data.mods[playerFile.info] or playerFile.info), player)
 			tfm.exec.chatMessage("<v>[#] <j>Level: "..playerFile.level, player)
 		end
 	end)
