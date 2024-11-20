@@ -1,7 +1,14 @@
 local filemanagers = {
-	["20"] = FileManager.new({
+	["40"] = FileManager.new({
 		type = "dictionary",
 		map = {
+			{
+				name = "ranks",
+				type = "dictionary",
+				objects = {
+					type = "number"
+				}
+			},
 			{
 				name = "maps",
 				type = "array",
@@ -10,36 +17,19 @@ local filemanagers = {
 				}
 			},
 			{
-				name = "ranks",
-				type = "dictionary",
+				name = "maps2",
+				type = "array",
 				objects = {
 					type = "number"
 				}
 			},
-			-- commented because the file is missing migration
-			-- {
-			-- 	name = "map_polls",
-			-- 	type = "array",
-			-- 	objects = {
-			-- 		type = "number"
-			-- 	}
-			-- },
 			{
-				name = "chats",
-				type = "dictionary",
-				map = {
-					{
-						name = "mod",
-						type = "string",
-						length = 10
-					},
-					{
-						name = "mapper",
-						type = "string",
-						length = 10
-					}
+				name = "maps3",
+				type = "array",
+				objects = {
+					type = "number"
 				}
-			}
+			},
 		}
 	}):disableValidityChecks():prepare(),
 
@@ -110,5 +100,5 @@ local filemanagers = {
 		}
 	}):disableValidityChecks():prepare(),
 
-	["23"] = SanctionFileManager,
+	["43"] = SanctionFileManager,
 }

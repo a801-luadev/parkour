@@ -10,20 +10,20 @@ local files = {
 	--[[
 		File values:
 
-		- maps        (1)
 		- ranks       (1)
-		- chats       (1)
+		- maps        (1)
+		- maps2        (1)
+		- maps3        (1)
 
 		- ranking     (2)
 		- weekly      (2)
 
-		- lowmaps     (3)
 		- sanction    (3)
 	]]
 
-	[1] = 20, -- maps, ranks, chats
+	[1] = 40, -- ranks, maps, maps2, maps3
 	[2] = 21, -- ranking, weekly
-	[3] = 23, -- lowmaps, sanction
+	[3] = 43, -- sanction
 }
 local total_files = 3
 local file_index = 1

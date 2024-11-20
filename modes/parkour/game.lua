@@ -119,8 +119,8 @@ local function showStats()
 		not review_mode) and "<v>Stats count" or "<r>Stats don't count"
 
 	ui.setMapName(string.format(
-		"%s<g>   |   %s",
-		map_name, text
+		"%s<g>   |   %s <BL>- D%s",
+		map_name, text, current_difficulty
 	))
 end
 

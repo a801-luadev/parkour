@@ -172,29 +172,6 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if fastest.submitted then
 			return translatedChatMessage("records_already_submitted", player)
 		end
-		if not count_stats then
-			local exists = false
-
-			for index = 1, maps.high_count do
-				if map == maps.list_high[index] then
-					exists = true
-					break
-				end
-			end
-
-			if not exists then
-				for index = 1, maps.low_count do
-					if map == maps.list_low[index] then
-						exists = true
-						break
-					end
-				end
-
-				if not exists then
-					return translatedChatMessage("records_invalid_map", player)
-				end
-			end
-		end
 
 		fastest.submitted = true
 		fastest.wait_send = true

@@ -1051,7 +1051,7 @@ onEvent("PlayerWon", function(player)
 		not is_tribe and
 		not review_mode) then
 
-		local earned_coins = is_anniversary and 2 or 1
+		local earned_coins = (is_anniversary and 2 or 1) * current_difficulty
 
 		file.c = file.c + 1
 		file.coins = file.coins + earned_coins

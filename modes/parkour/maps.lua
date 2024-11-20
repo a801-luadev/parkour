@@ -32,24 +32,22 @@ local first_data_load = true
 local maps_per_section = math.random(10, 20)
 local maps = {
 	polls = {_count = 0},
-
-	sections_high = {
-		_count = 0,
-		_pointer = 0,
-		_map_pointer = 1
-	},
-	sections_low = {
-		_count = 0,
-		_pointer = 0,
-		_map_pointer = 1
-	},
-
-	list_high = {7171137},
-	high_count = 1,
-
-	list_low = {7171137},
-	low_count = 1
 }
+local current_difficulty = 0
+local maplist_index = 0
+
+for i=1,3 do
+	maps[i] = {
+		sections = {
+			_count = 0,
+			_pointer = 0,
+			_map_pointer = 1,
+		},
+		list = {7171137},
+		count = 1,
+	}
+end
+
 local is_invalid = false
 local count_stats = true
 local map_change_cd = 0
@@ -140,6 +138,7 @@ local function selectMap(sections, list, count)
 		sections._map_pointer = sections._map_pointer + 1
 	end
 
+	maplist_index = map
 	return list[map]
 end
 
@@ -147,12 +146,17 @@ local function newMap()
 	count_stats = not review_mode
 	map_change_cd = os.time() + 20000
 
+	-- This might break if we move them to different files
 	local map
-	if math.random((maps.low_count + maps.high_count * 2) * 1000000) <= (maps.low_count * 1000000) then -- 1/3
-		map = selectMap(maps.sections_low, maps.list_low, maps.low_count)
-	else
-		map = selectMap(maps.sections_high, maps.list_high, maps.high_count)
+	local chosen = math.random(maps[3].odds)
+	for i=1,3 do
+		if chosen <= maps[i].odds then
+			current_difficulty = i
+			map = selectMap(maps[i].sections, maps[i].list, maps[i].count)
+			break
+		end
 	end
+
 	current_map = map
 	tfm.exec.newGame(map, not records_admins and math.random(3000000) <= 1000000)
 end
@@ -174,30 +178,39 @@ local function getTagProperties(tag)
 end
 
 onEvent("GameDataLoaded", function(data)
-	if data.maps then
-		maps.list_high = data.maps
-		maps.high_count = #data.maps
+	if data.maps or data.maps2 or data.maps3 then
+		local in_file = { data.maps, data.maps2, data.maps3 }
+		local memory, sections
 
-		if maps.high_count == 0 then
-			maps.list_high = {7171137}
-			maps.high_count = 1
-		end
+		for i=1, 3 do
+			if in_file[i] then
+				memory = maps[i]
+				memory.list = in_file[i]
+				memory.count = #in_file[i]
+				memory.odds = memory.count * 1000000 + (maps[i - 1] and maps[i - 1].count or 0)
 
-		local sections = maps.sections_high
-		if sections._count ~= 0 then
-			if sections._count ~= math.ceil(maps.high_count / maps_per_section) then
-				sections._map_pointer = maps_per_section + 1 -- reset everything
-
-			elseif sections._count == needed then
-				local section = sections[sections._count]
-				local modulo = maps.high_count % maps_per_section
-
-				if modulo == 0 then
-					modulo = maps_per_section
+				if memory.count == 0 then
+					memory.list = {7171137}
+					memory.count = 1
 				end
 
-				if section._count ~= 0 and section._count ~= modulo then
-					sections._map_pointer = maps_per_section + 1
+				sections = memory.sections
+				if sections._count ~= 0 then
+					if sections._count ~= math.ceil(memory.count / maps_per_section) then
+						sections._map_pointer = maps_per_section + 1 -- reset everything
+
+					elseif sections._count == needed then
+						local section = sections[sections._count]
+						local modulo = memory.count % maps_per_section
+
+						if modulo == 0 then
+							modulo = maps_per_section
+						end
+
+						if section._count ~= 0 and section._count ~= modulo then
+							sections._map_pointer = maps_per_section + 1
+						end
+					end
 				end
 			end
 		end
@@ -215,43 +228,22 @@ onEvent("GameDataLoaded", function(data)
 		-- so _count will be ignored
 		maps.polls._count = #data.map_polls
 	end
-
-	if data.lowmaps then
-		maps.list_low = data.lowmaps
-		maps.low_count = #data.lowmaps
-
-		if maps.low_count == 0 then
-			maps.list_low = {7171137}
-			maps.low_count = 1
-		end
-
-		local sections = maps.sections_low
-		if sections._count ~= 0 then
-			if sections._count ~= math.ceil(maps.low_count / maps_per_section) then
-				sections._map_pointer = maps_per_section + 1 -- reset everything
-
-			elseif sections._count == needed then
-				local section = sections[sections._count]
-				local modulo = maps.low_count % maps_per_section
-
-				if modulo == 0 then
-					modulo = maps_per_section
-				end
-
-				if section._count ~= 0 and section._count ~= modulo then
-					sections._map_pointer = maps_per_section + 1
-				end
-			end
-		end
-	end
 end)
 
 onEvent("NewGame", function()
+	local map_code_num = tonumber(tostring(room.currentMap):sub(2))
+
+	-- Makes sure current_difficulty is correct
+	local rotation = maps[current_difficulty]
+	if not rotation or rotation.list[maplist_index] ~= map_code_num then
+		current_difficulty = 0
+	end
+
 	-- When a map is loaded, this function reads the XML to know where the
 	-- checkpoints are
 
 	levels = {}
-	if not room.xmlMapInfo or tonumber(room.currentMap) or tonumber(room.xmlMapInfo.mapCode) ~= tonumber(tostring(room.currentMap):sub(2)) then
+	if not room.xmlMapInfo or tonumber(room.currentMap) or tonumber(room.xmlMapInfo.mapCode) ~= map_code_num then
 		if not room.xmlMapInfo then
 			return
 		end

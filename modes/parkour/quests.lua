@@ -187,7 +187,7 @@ quests = {
 			local questData = getPlayerQuest(player, 5, isWeekly)
 			if not questData then return end
 
-			local mapCode = maps.list_high[((questData.tg-1)%#maps.list_high) + 1 ] or "N/A"
+			local mapCode = maps[1].list[((questData.tg-1)%maps[1].count) + 1 ] or "N/A"
 
 			return translatedMessage("quest_5", player, mapCode)
 	  	end,
@@ -208,7 +208,7 @@ quests = {
 		
 		updateProgress = function(player, questData, isWeekly)
 			if questData and questData.ts then return end
-			if maps.list_high[((questData.tg - 1)%#maps.list_high) + 1 ] == tonumber(current_map) then
+			if maps[1].list[((questData.tg - 1)%maps[1].count) + 1 ] == tonumber(current_map) then
 				questData.pg = questData.tg
 
 				if questData.pg >= questData.tg then

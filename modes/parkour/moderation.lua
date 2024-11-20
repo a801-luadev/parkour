@@ -1,12 +1,5 @@
-local files = {
-	[1] = 20, -- maps, ranks, chats
-	[2] = 21,  -- ranking, weekly
-	[3] = 23 -- lowmaps, sanction
-}
-
 local to_do = {}
 local pdataRequest = {}
-local maps_loaded = false
 local cached_files = {
 	[tostring(files[3])] = false,
 }
@@ -109,10 +102,6 @@ onEvent("GameDataLoaded", function(data, fileid)
 
 	if cached_files[fileid] ~= nil then
 		cached_files[fileid] = data
-	end
-
-	if data.lowmaps then
-		maps_loaded = true
 	end
 
 	if data.sanction then
@@ -370,124 +359,76 @@ local function handleAdminBan(player, cmd, quantity, args)
 end
 
 local function handleMap(player, cmd, quantity, args)
-	if not ranks.admin[player] and not ranks.mapper[player] and not ranks.manager[player] then
+	if not perms[player] or not perms[player].manage_maps then
 		return
 	end
-
-	local addmap = cmd == "addmap" and true or false
 
 	inGameLogCommand(player, cmd, args)
+	logCommand(player, cmd, quantity, args)
 
-	if addmap then
-		logCommand(player, "addmap", math.min(quantity, 3), args)
-	else
-		logCommand(player, "removemap", math.min(quantity, 2), args)
+	if quantity < 2 then
+		return translatedChatMessage("invalid_syntax", player)
 	end
 
-	if not maps_loaded then
-		tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds.", player)
+	local diffMap = { diff1="maps", diff2="maps2", diff3="maps3" }
+	local rotation = diffMap[args[1]]
+	if not rotation then
+		tfm.exec.chatMessage("<v>[#] <r>Type a valid difficulty: diff1-3", player)
 		return
 	end
 
-	if addmap and quantity < 2 then
-		return translatedChatMessage("invalid_syntax", player)
-	end
+	local diffIndex = tonumber(args[1]:sub(5,5))
+	local codeMap, indexList = {}, {}
+	local mapcode, rotation_index
+	local addmap = cmd == "addmap"
 
-	if not addmap and quantity < 1 then
-		return translatedChatMessage("invalid_syntax", player)
-	end
-
-	local mapcode = args[1]
-	if not tonumber(mapcode) then
-		mapcode = mapcode:gsub("^@", "")
-		if not tonumber(mapcode) then
-			return tfm.exec.chatMessage("<v>[#] <r>Invalid map code", player)
-		end
-	end
-
-	for i = 1, #to_do do
-		if to_do[i] and tonumber(to_do[i][2]) == tonumber(mapcode) then
-			tfm.exec.chatMessage("<v>[#] <r>Please wait for a minute before taking any action with the same map.", player)
-			return
-		end
-	end
-
-	if addmap then
+	for i=2,quantity do
+		mapcode = args[i]:gsub("^@", "")
 		mapcode = tonumber(mapcode)
-		local rotation = args[2]
-		if rotation ~= "low" and rotation ~= "high" then
-			tfm.exec.chatMessage("<v>[#] <r>Select a priority: low, high", player)
-			return
+		if not mapcode then
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid map code: " .. args[i], player)
 		end
 
-		if table_find(maps.list_low, mapcode) or table_find(maps.list_high, mapcode) then
-			tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " is already in rotation.", player)
-			return
-		end
+		if not codeMap[mapcode] then
+			rotation_index = table_find(maps[diffIndex].list, mapcode)
 
-		if rotation == "low" then
-			schedule(3, true, function(data)
-				updateMapList(data.lowmaps, mapcode, true)
-				tfm.exec.chatMessage("<v>[#] <j>Map @" .. mapcode .. " added to the " .. rotation .. " priority list.", player)
-			end)
-		else
-			schedule(1, true, function(data)
-				updateMapList(data.maps, mapcode, true)
-				tfm.exec.chatMessage("<v>[#] <j>Map @" .. mapcode .. " added to the " .. rotation .. " priority list.", player)
-			end)
-		end
-
-	else
-		for i = 1, #args do
-			mapcode = args[i]:gsub("^@", "")
-			mapcode = mapcode and tonumber(mapcode) 
-			if not mapcode then
-				return tfm.exec.chatMessage("<v>[#] <r>Invalid map code: "..args[i], player)
-			end
-			args[i] = mapcode
-		end
-
-		local removeHigh = {}
-		local removeLow = {}
-		local notFound = {}
-
-		for i = 1, #args do
-			mapcode = args[i]
-			if table_find(maps.list_high, mapcode) then
-				removeHigh[1 + #removeHigh] = mapcode
-			elseif table_find(maps.list_low, mapcode) then
-				removeLow[1 + #removeLow] = mapcode
+			if addmap and rotation_index then
+				tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " is already in rotation.", player)
+				return
+			elseif not addmap and not rotation_index then
+				tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " is not in rotation.", player)
+				return
 			else
-				notFound[1 + #notFound] = mapcode
+				indexList[1 + #indexList] = rotation_index or mapcode
+				codeMap[mapcode] = true
 			end
-		end
-
-		if #notFound > 0 then
-			tfm.exec.chatMessage("<v>[#] <r>Could not find following maps in any of the priority lists: " .. table.concat(notFound, ", "), player)
-		end
-		
-		if #removeHigh > 0 or #removeLow > 0 then
-			tfm.exec.chatMessage("<v>[#] <j>Scheduled remaining maps to be removed.", player)
-		end
-
-		if #removeHigh > 0 then
-			schedule(1, true, function(data)
-				for i = 1, #removeHigh do
-					updateMapList(data.maps, removeHigh[i], false)
-				end
-				tfm.exec.chatMessage("<v>[#] <j>Following maps are removed from the high priority list: " .. table.concat(removeHigh, ", "), player)
-			end)
-		end
-
-		if #removeLow > 0 then
-			schedule(3, true, function(data)
-				for i = 1, #removeLow do
-					updateMapList(data.lowmaps, removeLow[i], false)
-				end
-				tfm.exec.chatMessage("<v>[#] <j>Following maps are removed from the low priority list: " .. table.concat(removeLow, ", "), player)
-			end)
 		end
 	end
+
+	if #indexList == 0 then
+		return
+	end
+
+	table.sort(indexList)
+	tfm.exec.chatMessage("<v>[#] <j>Scheduled and map update job.", player)
+	schedule(1, true, function(data)
+		local rotation_table = data[rotation]
+
+		if addmap then
+			for mapcode in next, codeMap do
+				rotation_table[1 + #rotation_table] = mapcode
+			end
+		else
+			local index
+			for i=#indexList, 1, -1 do
+				index = indexList[i]
+				indexList[i] = rotation_table[index]
+				table.remove(rotation_table, index)
+			end
+		end
+
+		tfm.exec.chatMessage("<v>[#] <j>Updated maps: " .. table.concat(indexList, ' '), player)
+	end)
 end
 
 local function printSanctions(target, kind, name, pid, timestamp, time, level, mod, minutes)
@@ -893,18 +834,13 @@ local function fileActions(player, cmd, quantity, args)
 	elseif fileName == "maps" then
 		local category = args[2]
 		local len
-		if category == "all" or category == "high" then
-			len = #maps.list_high
-			tfm.exec.chatMessage("<v>[#] <v>high maps: " .. tostring(len), player)
-			for i=1, len, 20 do
-				tfm.exec.chatMessage("<v>[#] <bl>" .. table.concat(maps.list_high, ' ', i, math.min(i+19, len)), player)
-			end
-		end
-		if category == "all" or category == "low" then
-			len = #maps.list_low
-			tfm.exec.chatMessage("<v>[#] <v>low maps: " .. tostring(len), player)
-			for i=1, len, 20 do
-				tfm.exec.chatMessage("<v>[#] <bl>" .. table.concat(maps.list_low, ' ', i, math.min(i+19, len)), player)
+		for j=1,3 do
+			if category == "all" or category == tostring(j) then
+				len = maps[j].count
+				tfm.exec.chatMessage("<v>[#] <v>diff" .. tostring(j) .. " maps: " .. tostring(len), player)
+				for i=1, len, 20 do
+					tfm.exec.chatMessage(table.concat(maps[j].list, ' ', i, math.min(i+19, len)), player)
+				end
 			end
 		end
 	elseif fileName == "staff" then

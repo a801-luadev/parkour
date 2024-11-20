@@ -40,6 +40,7 @@ local ranks_permissions = {
 		see_map_polls = true,
 		change_roommod = true,
 		see_hidden_staff = true,
+		manage_maps = true,
 	},
 	mod = {
 		ban = true,
