@@ -343,6 +343,12 @@ onEvent("NewPlayer", function(player)
 		changePlayerSize(player, level.size)
 		tfm.exec.setPlayerScore(player, players_level[player], false)
 
+		if level.cheese then
+			tfm.exec.giveCheese(player)
+		elseif level.uncheese then
+			tfm.exec.removeCheese(player)
+		end
+
 		local next_level = levels[ players_level[player] + 1 ]
 
 		if next_level then
@@ -476,6 +482,12 @@ onEvent("PlayerRespawn", function(player)
 	local level = levels[ players_level[player] ]
 	if not level then return end
 	tfm.exec.movePlayer(player, level.x, level.y)
+
+	if level.cheese then
+		tfm.exec.giveCheese(player)
+	elseif level.uncheese then
+		tfm.exec.removeCheese(player)
+	end
 end)
 
 onEvent("NewGame", function()
@@ -545,6 +557,12 @@ onEvent("NewGame", function()
 			changePlayerSize(player, size)
 			tfm.exec.setPlayerScore(player, 1, false)
 			tfm.exec.linkMice(player, player, false)
+
+			if levels[1].cheese then
+				tfm.exec.giveCheese(player)
+			elseif levels[1].uncheese then
+				tfm.exec.removeCheese(player)
+			end
 		end
 
 		if records_admins then
@@ -635,6 +653,12 @@ onEvent("Loop", function()
 							changePlayerSize(name, next_level.size)
 						end
 
+						if next_level.cheese then
+							tfm.exec.giveCheese(name)
+						elseif next_level.uncheese then
+							tfm.exec.removeCheese(name)
+						end
+
 						if not victory[name] then
 							tfm.exec.setPlayerScore(name, level_id, false)
 						end
@@ -679,6 +703,12 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if level.size ~= levels[ bonus - 1 ].size then
 		-- need to change the size
 		changePlayerSize(player, level.size)
+	end
+
+	if level.cheese then
+		tfm.exec.giveCheese(player)
+	elseif level.uncheese then
+		tfm.exec.removeCheese(player)
 	end
 
 	if not victory[player] then
@@ -779,6 +809,12 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.setPlayerScore(player, checkpoint, false)
 		end
 
+		if levels[checkpoint].cheese then
+			tfm.exec.giveCheese(player)
+		elseif levels[checkpoint].uncheese then
+			tfm.exec.removeCheese(player)
+		end
+
 		local next_level = levels[checkpoint + 1]
 		if checkpoints[player] then
 			tfm.exec.removeImage(checkpoints[player])
@@ -840,6 +876,12 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.setPlayerScore(player, 1, false)
 		tfm.exec.killPlayer(player)
 		tfm.exec.respawnPlayer(player)
+
+		if levels[1].cheese then
+			tfm.exec.giveCheese(player)
+		elseif levels[1].uncheese then
+			tfm.exec.removeCheese(player)
+		end
 
 		local x, y = levels[2].x, levels[2].y
 		if checkpoints[player] then

@@ -266,7 +266,9 @@ onEvent("NewGame", function()
 	local properties = getTagProperties(mouse_start)
 	levels[count] = {
 		x = properties.X, y = properties.Y,
-		size = tonumber(properties.size) or 1
+		size = tonumber(properties.size) or 1,
+		cheese = properties.cheese and properties.cheese ~= 0,
+		uncheese = properties.cheese == 0,
 	}
 
 	for tag in string.gmatch(xml, '<O%s+(.-)%s+/>') do
@@ -276,7 +278,9 @@ onEvent("NewGame", function()
 			count = count + 1
 			levels[count] = {
 				x = properties.X, y = properties.Y,
-				stop = properties.stop, size = tonumber(properties.size)
+				stop = properties.stop, size = tonumber(properties.size),
+				cheese = properties.cheese and properties.cheese ~= 0,
+				uncheese = properties.cheese == 0,
 			}
 		end
 	end
