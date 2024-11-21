@@ -45,6 +45,7 @@ for i=1,3 do
 		},
 		list = {7171137},
 		count = 1,
+		odds = 100,
 	}
 end
 
