@@ -59,6 +59,7 @@ translations.en = {
 	reason_too_short = "<bl>Report reason is too short.",
 	report_done = "<j>Thank you for your report.",
 	nohelp = "<r>You have enabled no-help (red-line), press <v>F</v> to toggle.",
+	quest_map = "<ch>Your quest map @%s is here!",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Finally the countdown begins...",

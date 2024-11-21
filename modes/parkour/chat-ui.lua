@@ -39,6 +39,10 @@ onEvent("NewGame", function()
 	elseif room.uniquePlayers < min_save then
 		translatedChatMessage("min_players", nil, room.uniquePlayers, min_save)
 	end
+
+	for player in next, room.playerList do
+		checkMapQuest(player)
+	end
 end)
 
 onEvent("NewPlayer", function(player)
@@ -53,6 +57,8 @@ onEvent("NewPlayer", function(player)
 	if roomcreators and #roomcreators < 10 then
 		roomcreators[1 + #roomcreators] = player
 	end
+
+	checkMapQuest(player)
 end)
 
 onEvent("PlayerWon", function(player)

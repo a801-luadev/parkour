@@ -15,6 +15,21 @@ local function getPlayerQuest(player, questID, isWeekly)
 	end
 end
 
+local function checkMapQuest(player)
+	local pdata = players_file[player] and players_file[player].quests
+	if not pdata then
+		return
+	end
+
+	for i=1, #pdata do
+		if pdata[i].id == 5 then
+			if maps[1].list[((pdata[i].tg-1)%maps[1].count) + 1] == tonumber(current_map) then
+				return translatedChatMessage("quest_map", player, current_map)
+			end
+		end
+	end
+end
+
 local function removeCompletedQuestUI(player)
 	if CompletedQuestsInterface.open[player] then
 		CompletedQuestsInterface:remove(player)
