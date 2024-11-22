@@ -59,6 +59,8 @@ local levels
 local perms
 local review_mode
 local records_admins = string.find(room.lowerName, "records", 1, true) and {}
+local smol_completions = submode == "smol" and { _max = 0, _maxName = nil }
+
 if records_admins and submode == "smol" then
 	records_admins = nil
 end
@@ -378,7 +380,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		local records_cond = records_admins and records_admins[player]
 		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
 		local normal_cond = perms[player] and perms[player].change_map
-		if not records_cond and not tribe_cond and not normal_cond then return end
+		local smol_cond = smol_completions and smol_completions._maxName == player
+		if not records_cond and not tribe_cond and not normal_cond and not smol_cond then return end
 
 		if quantity > 0 then
 			if not records_cond and not tribe_cond and not perms[player].load_custom_map then
@@ -405,13 +408,14 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			newMap()
 		end
 
+		inGameLogCommand(player, "map", args)
+
 		if not records_cond and not tribe_cond and normal_cond then
 			-- logged when using staff powers
 			if review_mode and perms[player].enable_review then
 				-- legitimate review mode
 				return
 			end
-			inGameLogCommand(player, "map", args)
 			logCommand(player, "map", math.min(quantity, 2), args)
 		end
 	end

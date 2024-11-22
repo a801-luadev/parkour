@@ -453,6 +453,19 @@ onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
 	if victory[player] then return end
 
+	if smol_completions and player:sub(1, 1) ~= "*" then
+		smol_completions[player] = 1 + (smol_completions[player] or 0)
+
+		if smol_completions[player] > smol_completions._max then
+			smol_completions._max = smol_completions[player]
+
+			if smol_completions._maxName ~= player then
+				smol_completions._maxName = player
+				translatedChatMessage("smol_best", nil, player, smol_completions._max)
+			end
+		end
+	end
+
 	victory_count = victory_count + 1
 	victory._last_level[player] = false
 	tfm.exec.linkMice(player, player, false)

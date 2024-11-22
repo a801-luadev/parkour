@@ -214,6 +214,7 @@ translations.en = {
 	equipped = "<font size = '10'>Equipped</font>",
 	saving = "<p align='right'>Saving...",
 	new_image = "<J>Your appearance has been changed. You can turn it back to normal by typing !image",
+	smol_best = "<j>New smol mode room leader: <v>%s</v> with <vp>%s</vp> map completions!",
 
 	-- Power names
 	balloon = "Balloon",
