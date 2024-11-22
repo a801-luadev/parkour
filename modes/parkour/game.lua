@@ -271,7 +271,6 @@ local function checkBan(player, data, id)
 	end
 end
 
-local band, rshift = bit32.band, bit32.rshift
 local function checkTitleAndNextFieldValue(player, title, sumValue, _playerData, _playerID)
 	local field = _playerData[title.field]
 

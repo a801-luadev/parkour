@@ -1,6 +1,7 @@
+local loaded_leaderboard = false
+do
 max_leaderboard_rows = 73
 local max_weekleaderboard_rows = 31
-local loaded_leaderboard = false
 leaderboard = {}
 weekleaderboard = {}
 -- {id, name, completed_maps, community}
@@ -193,3 +194,4 @@ onEvent("LeaderboardUpdate", function(player, time)
 		end
 	end
 end)
+end

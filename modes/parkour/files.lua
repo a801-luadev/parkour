@@ -1,4 +1,5 @@
-local next_file_load = os.time() + math.random(60500, 90500)
+local WEEKLY_RESET_INIT = 1722204000000
+local last_weekly_reset_ts
 local player_ranks
 local no_powers
 local unbind
@@ -6,6 +7,16 @@ local bindNecessary
 local NewBadgeInterface
 local CompletedQuestsInterface
 local QuestsInterface
+local getQuestsResetTime
+
+local badges, titles
+local default_skins = { [1] = 1, [2] = 1, [7] = 1, [28] = 1, [46] = 1 }
+
+local quests
+local fillQuests
+local power_quest = {}
+local dont_parse_data = {}
+
 local files = {
 	--[[
 		File values:
@@ -25,13 +36,15 @@ local files = {
 	[2] = 21, -- ranking, weekly
 	[3] = 43, -- sanction
 }
+
+do
 local total_files = 3
 local file_index = 1
 local settings_length = 9
 local file_id = files[file_index]
-local WEEKLY_RESET_INIT = 1722204000000
-local last_weekly_reset_ts
-local badges = { -- badge id, small image, big image
+local next_file_load = os.time() + math.random(60500, 90500)
+
+badges = { -- badge id, small image, big image
 	[1] = { -- former staff
 		{ 1, "1745f43783e.png", "1745f432e33.png"},
 	},
@@ -72,7 +85,7 @@ local badges = { -- badge id, small image, big image
 		{23, "1755bacbdd6.png", "1755bac996d.png"}, -- 40
 	},
 }
-local titles = {
+titles = {
 	piglet = {
 		code = "T_496",
 		requirement = 6000,
@@ -89,12 +102,6 @@ local titles = {
 		field = "tc"
 	}
 }
-local default_skins = { [1] = 1, [2] = 1, [7] = 1, [28] = 1, [46] = 1 }
-
-local quests
-local fillQuests
-local power_quest = {}
-local dont_parse_data = {}
 
 players_file = {}
 
@@ -286,7 +293,7 @@ local data_migrations = {
 	end,
 }
 
-local function getQuestsResetTime()
+function getQuestsResetTime()
 	local currentTime = os.time() + 60 * 60 * 1000
 	local currentDate = os.date("*t", os.time() / 1000)
 	local day = 24 * 60 * 60 * 1000
@@ -610,3 +617,4 @@ onEvent("PacketReceived", function(channel, id, packet)
 		savePlayerData(player)
 	end
 end)
+end

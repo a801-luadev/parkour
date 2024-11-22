@@ -1,11 +1,7 @@
-local is_christmas_time
-
 do
-	local day = tonumber(os.date("%d"))
-	local month = tonumber(os.date("%m"))
-
-	is_christmas_time = (month == 12 and day >= 15) or (month == 1 and day <= 15)
-end
+local day = tonumber(os.date("%d"))
+local month = tonumber(os.date("%m"))
+local is_christmas_time = (month == 12 and day >= 15) or (month == 1 and day <= 15)
 
 shop_items = {
 	{ -- smallbox
@@ -571,4 +567,5 @@ if is_christmas_time then
 	shop_skins["7"] = {img = "18c72bb2589.png", x = 0.5, y = 0.52}
 	shop_skins["28"] = {img = "18c72bccb7c.png", x = 0.5, y = 0.30}
 	shop_skins["46"] = {img = "18c72ba881a.png", x = 0.5, y = 0.52}
+end
 end

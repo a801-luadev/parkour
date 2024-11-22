@@ -1,3 +1,6 @@
+local checkMapQuest
+
+do
 local function getPlayerQuest(player, questID, isWeekly)
 	if not players_file[player] or not players_file[player].quests then
 		return false
@@ -15,7 +18,7 @@ local function getPlayerQuest(player, questID, isWeekly)
 	end
 end
 
-local function checkMapQuest(player)
+function checkMapQuest(player)
 	local pdata = players_file[player] and players_file[player].quests
 	if not pdata then
 		return
@@ -355,4 +358,5 @@ function fillQuests(data, questList, isWeekly, skipQuest)
 		end
 	end
 	return questList
+end
 end

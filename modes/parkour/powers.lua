@@ -3,23 +3,20 @@ local leaderboard
 local keyboard
 
 no_powers = {}
-local facing = {}
-local cooldowns = {}
-local obj_whitelist = {_count = 0, _index = 1}
-local keybindings = {}
 local used_powers = {_count = 0}
 disable_powers = false
 local first_player = nil
 
+local keys
+local powers
+local checkKill
+local getPowerUpgrade
 
-local function capitalize(str)
-	local first = string.sub(str, 1, 1)
-	if first == "+" then
-		return "+" .. string.upper(string.sub(str, 2, 2)) .. string.lower(string.sub(str, 3))
-	else
-		return string.upper(first) .. string.lower(string.sub(str, 2))
-	end
-end
+do
+local facing = {}
+local cooldowns = {}
+local obj_whitelist = {_count = 0, _index = 1}
+local keybindings = {}
 
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
@@ -166,7 +163,6 @@ local function fixHourCount(player, data)
 end
 
 -- in small x: positive -> towards the sides, negative -> towards the center
-local powers
 powers = {
 	{
 		name = "fly", maps = 5,
@@ -787,11 +783,11 @@ powers = {
 	},
 }
 
-local keys = {
+keys = {
 	triggers = {}
 }
 
-local function getPowerUpgrade(completed, pos, power, strict, with_review)
+function getPowerUpgrade(completed, pos, power, strict, with_review)
 	if with_review then
 		if not power.upgrades then return power end
 		return power.upgrades[#power.upgrades]
@@ -875,7 +871,7 @@ function unbind(player)
 	keys.triggers[player] = nil
 end
 
-local function checkKill(player)
+function checkKill(player)
 	local data = players_file[player]
 	if not data then return end
 
@@ -1174,3 +1170,4 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	end
 end)
 
+end

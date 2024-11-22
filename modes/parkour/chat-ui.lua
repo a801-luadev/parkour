@@ -1,22 +1,15 @@
 -- Stuff related to the chat (not keyboard nor interface)
 
-local fetching_player_room = {}
-local roompw = {}
-local roomcreators = {}
 local fastest = {}
-local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 
 local GameInterface
 local setNameColor
 
-local function capitalize(str)
-	local first = string.sub(str, 1, 1)
-	if first == "+" then
-		return "+" .. string.upper(string.sub(str, 2, 2)) .. string.lower(string.sub(str, 3))
-	else
-		return string.upper(first) .. string.lower(string.sub(str, 2))
-	end
-end
+do
+local fetching_player_room = {}
+local roompw = {}
+local roomcreators = {}
+local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 
 local function checkRoomRequest(player, data)
 	local fetch = fetching_player_room[player]
@@ -639,4 +632,5 @@ if records_admins then
 			fastest.wait_send = false
 		end
 	end)
+end
 end

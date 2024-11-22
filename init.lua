@@ -79,6 +79,15 @@ local function table_find(tbl, value)
 	end
 end
 
+local function capitalize(str)
+	local first = string.sub(str, 1, 1)
+	if first == "+" then
+		return "+" .. string.upper(string.sub(str, 2, 2)) .. string.lower(string.sub(str, 3))
+	else
+		return string.upper(first) .. string.lower(string.sub(str, 2))
+	end
+end
+
 do
 	local savePlayerData = system.savePlayerData
 	system.savePlayerData = function(playerName, ...)

@@ -1,3 +1,4 @@
+do
 local to_do = {}
 local pdataRequest = {}
 local cached_files = {
@@ -30,19 +31,6 @@ local function schedule_player(name, save, callback, timeoutCallback)
 	end
 	pdataRequest[name] = { callback, os.time() + 1000, save, timeoutCallback }
 	system.loadPlayerData(name)
-end
-
-local function updateMapList(mapList, map, add)
-	for index = #mapList, 1, -1 do
-		if mapList[index] == map then
-			table.remove(mapList, index)
-			break
-		end
-	end
-
-	if add then
-		mapList[#mapList + 1] = map
-	end
 end
 
 local function checkWeeklyWinners(player, data)
@@ -1341,3 +1329,4 @@ end)
 onEvent("GameStart", function()
 	system.disableChatCommandDisplay(nil)
 end)
+end
