@@ -58,7 +58,7 @@ translations.en = {
 	reported_invalid = "<bl>This player cannot be reported.",
 	reason_too_short = "<bl>Report reason is too short.",
 	report_done = "<j>Thank you for your report.",
-	nohelp = "<r>You have enabled no-help (red-line), press <v>F</v> to toggle.",
+	nohelp = "<r>You are now telling others you don't want help by enabling red-line. Press <v>F</v> to toggle it.",
 	quest_map = "<ch>Your quest map @%s is here!",
 
 	-- Easter Eggs
