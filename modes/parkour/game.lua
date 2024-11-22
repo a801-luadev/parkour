@@ -393,6 +393,23 @@ onEvent("Keyboard", function(player, key)
 end)
 
 onEvent("PlayerLeft", function(player)
+	if smol_completions and smol_completions._maxName == player then
+		smol_completions[smol_completions._maxName] = nil
+		smol_completions._max = 0
+		smol_completions._maxName = nil
+
+		for name, score in next, smol_completions do
+			if score > smol_completions._max then
+				smol_completions._max = score
+				smol_completions._maxName = name
+			end
+		end
+
+		if smol_completions._maxName then
+			translatedChatMessage("smol_best", nil, smol_completions._maxName, smol_completions._max)
+		end
+	end
+
 	players_file[player] = nil
 	in_room[player] = nil
 	times.movement[player] = nil
