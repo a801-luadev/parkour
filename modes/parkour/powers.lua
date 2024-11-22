@@ -854,6 +854,7 @@ function bindNecessary(player)
 
 	bindKeyboard(player, 0, true, true)
 	bindKeyboard(player, 2, true, true)
+	bindKeyboard(player, 113, true, true)
 
 	keys.triggers[player] = triggers
 end
@@ -863,6 +864,7 @@ function unbind(player)
 
 	bindKeyboard(player, 0, true, false)
 	bindKeyboard(player, 2, true, false)
+	bindKeyboard(player, 113, true, false)
 	for key in next, keys.triggers[player] do
 		bindKeyboard(player, key, true, false)
 	end
@@ -897,6 +899,31 @@ onEvent("Keyboard", function(player, key, down, x, y)
 
 	if key == 0 or key == 2 then
 		facing[player] = key == 2
+		return
+	end
+
+	if key == 113 then
+		if not checkCooldown(player, "badgeSmiley", 10000) then return end
+		local pbg = players_file[player] and players_file[player].badges
+		if not pbg then return end
+
+		local available = {}
+		for index=1, #badges do
+			if pbg[index] and pbg[index] > 0 then
+				available[1 + #available] = index
+			end
+		end
+
+		if available == 0 then return end
+
+		local index = available[math.random(#available)]
+		local badge = badges[index][pbg[index]]
+
+		addNewTimer(
+			3000,
+			tfm.exec.removeImage,
+			tfm.exec.addImage(badge[2], '$'..player, 0, -40, nil, 1, 1, 0, 1, 0.5, 0.5, false)
+		)
 		return
 	end
 
