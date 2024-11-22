@@ -62,14 +62,14 @@ local function checkProfileRequest(player, data)
 	end
 end
 
-local function toggleInterface(interface, player)
+local function toggleInterface(interface, player, arg1, arg2, arg3, arg4)
 	if not players_file[player] then return end
 	if not checkCooldown(player, "interfaceTrigger", 500) then return end
 
 	if not interface.open[player] then
 		closeAllInterfaces(player)
 
-		interface:showDefault(player)
+		interface:showDefault(player, arg1, arg2, arg3, arg4)
 	else
 		interface:remove(player)
 	end
@@ -357,9 +357,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	elseif cmd == "shop" then
 		toggleInterface(ShopInterface, player)
 	elseif cmd == "quests" then
-		toggleInterface(QuestsInterface, player, 1)
+		toggleInterface(QuestsInterface, player)
 	elseif cmd == "powers" then
-		toggleInterface(PowersInterface, player)
+		local page = math.min(#powers, math.max(1, tonumber(args[1]) or 1))
+		toggleInterface(PowersInterface, player, page)
 	end
 end)
 

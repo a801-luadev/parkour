@@ -440,9 +440,9 @@ do
 
 		if action == "power" then
 			if not checkCooldown(player, "showpowers", 1000) then return end
-			page = tonumber(args)
+			local page = tonumber(args)
 
-			if page > 0 and page <= #powers then
+			if page and page > 0 and page <= #powers then
 				PowersInterface:update(player, page)
 			end
 		elseif Keyboard.open[player] and action == "keyboard" then
