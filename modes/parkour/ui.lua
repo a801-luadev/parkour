@@ -180,13 +180,13 @@ onEvent("TextAreaCallback", function(id, player, callback)
 end)
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
-	if cmd == "lb" then
+	if cmd == "lb" or cmd == "leaderboard" then
 		toggleInterface(LeaderboardInterface, player)
 
 	elseif cmd == "help" then
 		toggleInterface(HelpInterface, player)
 
-	elseif cmd == "op" then
+	elseif cmd == "op" or cmd == "options" or cmd == "settings" then
 		toggleInterface(OptionsInterface, player)
 
 	elseif cmd == "poll" then
