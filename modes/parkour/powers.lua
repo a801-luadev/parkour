@@ -902,6 +902,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 
 	local power = keys.triggers[player][key]
 	if power then
+		if victory[player] + 5000 > os.time() then return end
 		for index = 1, power._count do
 			if power[index] and (not power[index].cond or power[index].cond(player, key, down, x, y)) and (not power[index].cooldown or checkCooldown(
 				player, power[index].name, power[index].cooldown,
