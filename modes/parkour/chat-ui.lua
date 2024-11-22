@@ -428,6 +428,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		count_stats = true
 		tfm.exec.chatMessage("<v>[#] <d>count_stats set to true", player)
 		max_args = 0
+		showStats()
 
 	elseif cmd == "room" then -- logged
 		if quantity == 0 or capitalize(args[1]) == player then

@@ -40,6 +40,7 @@ local checkCooldown
 local savePlayerData
 local ranks
 local bindKeyboard
+local showStats
 
 local lastOpenedMap
 local lastPlayerLeft
@@ -106,7 +107,7 @@ local function addCheckpointImage(player, x, y)
 	checkpoints[player] = tfm.exec.addImage(img, "!1", x - 15, y - 15, player)
 end
 
-local function showStats()
+function showStats()
 	-- Shows if stats count or not
 
 	if not map_name then return end
