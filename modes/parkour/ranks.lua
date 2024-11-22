@@ -67,6 +67,7 @@ local ranks_permissions = {
 		set_map_time_review = true,
 		change_roommod = true,
 		see_hidden_staff = true,
+		set_room_limit_review = true,
 	},
 	trainee = {
 		ban = true,

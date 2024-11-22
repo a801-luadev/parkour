@@ -379,11 +379,16 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		return
 
 	elseif cmd == "roomlimit" then -- logged
-		if not perms[player] or not perms[player].set_room_limit then return end
+		if not perms[player] or not perms[player].set_room_limit and not perms[player].set_room_limit_review then return end
 
 		local limit = tonumber(args[1])
 		if not limit then
 			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		local review_only = not perms[player].set_room_limit and perms[player].set_room_limit_review
+		if review_only and not review_mode then
+			return tfm.exec.chatMessage("<r>Enable review mode first.", player)
 		end
 
 		tfm.exec.setRoomMaxPlayers(limit)
