@@ -143,20 +143,27 @@ local function selectMap(sections, list, count)
 	return list[map]
 end
 
-local function newMap()
+local function newMap(difficulty)
 	count_stats = not review_mode
 	map_change_cd = os.time() + 20000
 
 	-- This might break if we move them to different files
 	local map
-	local chosen = math.random(maps[3].odds)
-	for i=1,3 do
-		if chosen <= maps[i].odds then
-			current_difficulty = i
-			map = selectMap(maps[i].sections, maps[i].list, maps[i].count)
-			break
+
+	if difficulty then
+		difficulty = math.min(3, math.max(1, difficulty))
+	else
+		local chosen = math.random(maps[3].odds)
+		for i=1,3 do
+			if chosen <= maps[i].odds then
+				difficulty = i
+				break
+			end
 		end
 	end
+
+	current_difficulty = difficulty
+	map = selectMap(maps[difficulty].sections, maps[difficulty].list, maps[difficulty].count)
 
 	current_map = map
 	tfm.exec.newGame(map, not records_admins and math.random(3000000) <= 1000000)
@@ -376,6 +383,12 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if quantity > 0 then
 			if not records_cond and not tribe_cond and not perms[player].load_custom_map then
 				return tfm.exec.chatMessage("<v>[#] <r>You can't load a custom map.", player)
+			end
+
+			if args[1]:sub(1, 1):lower() == 'd' then
+				local difficulty = tonumber(args[1]:sub(2))
+				newMap(difficulty)
+				return
 			end
 
 			count_stats = false
