@@ -132,6 +132,7 @@ local function enableSpecMode(player, enable)
 	if enable then
 		spec_mode[player] = true
 		tfm.exec.killPlayer(player)
+		tfm.exec.setPlayerScore(player, -1, false)
 
 		player_count = player_count - 1
 		if victory[player] then
@@ -142,6 +143,7 @@ local function enableSpecMode(player, enable)
 		end
 	else
 		spec_mode[player] = nil
+		tfm.exec.setPlayerScore(player, players_level[player] or 1, false)
 
 		if (not levels) or (not players_level[player]) then return end
 
