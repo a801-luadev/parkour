@@ -308,7 +308,7 @@ do
 			alpha = 0
 		})
 
-	onEvent("TextAreaCallback", function(id, player, cb)
+	onEvent("RawTextAreaCallback", function(id, player, cb)
 		if not checkCooldown(player, "helpscroll", 4000) then return end
 		if cb == "help_scroll_up" then
 			eventKeyboard(player, 1, true, 0, 0)
