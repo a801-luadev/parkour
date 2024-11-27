@@ -1190,6 +1190,7 @@ local function handleReport(playerName, cmd, quantity, args)
 		reason
 	)
 	translatedChatMessage("report_done", playerName)
+	inGameLogCommand(playerName, cmd, args)
 end
 
 local function handleKarma(playerName, cmd, quantity, args)
