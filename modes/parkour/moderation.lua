@@ -1259,6 +1259,25 @@ local function skipMap(playerName, cmd, quantity, args)
 	inGameLogCommand(playerName, cmd, args)
 end
 
+local function handleKick(playerName, cmd, quantity, args)
+	if playerName ~= "Parkour#0568" then
+		return
+	end
+
+	if quantity == 0 then
+		return
+	end
+
+	if args[1] == "*" then
+		for name in next, room.playerList do
+			tfm.exec.kickPlayer(name)
+		end
+		return
+	end
+
+	tfm.exec.kickPlayer(args[1])
+end
+
 local commandDispatch = {
 	["ban"] = handleBan,
 	["unban"] = handleBan,
@@ -1282,6 +1301,7 @@ local commandDispatch = {
 	["report"] = handleReport,
 	["karma"] = handleKarma,
 	["skip"] = skipMap,
+	["kick"] = handleKick,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
@@ -1299,6 +1319,11 @@ end)
 
 onEvent("PlayerDataParsed", checkWeeklyWinners)
 onEvent("PlayerDataParsed", playerDataRequests)
+onEvent("PlayerDataParsed", function(player, data)
+	if data and data.kick and (data.kick == 1 or os.time() < data.kick) then
+		tfm.exec.kickPlayer(player)
+	end
+end)
 onEvent("OutPlayerDataParsed", playerDataRequests)
 
 onEvent("PlayerLeft", function(player)
