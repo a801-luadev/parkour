@@ -144,9 +144,7 @@ do
 		}):addTextArea(textarea):addTextArea(text)
 	end
 
-	onEvent("TextAreaCallback", function(id, player, cb)
-		if not checkCooldown(player, "tacallback", 1000) then return end
-
+	onEvent("RawTextAreaCallback", function(id, player, cb)
 		local callback = callbacks[cb]
 		if callback and callback.class.enabled and callback.class.parent.open[player] then
 			callback.fnc(callback.class, player)
