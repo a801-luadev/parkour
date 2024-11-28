@@ -45,6 +45,7 @@ local ranks_permissions = {
 		ban = true,
 		unban = true,
 		spectate = true,
+		set_spectate = true,
 		get_player_room = true,
 		load_custom_map = true,
 		kill = true,

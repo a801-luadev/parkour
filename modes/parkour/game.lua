@@ -867,9 +867,20 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if not players_file[player] then return end
 		if not perms[player] or not perms[player].spectate then return end
 
-		enableSpecMode(player, not spec_mode[player])
-		players_file[player].spec = spec_mode[player]
-		savePlayerData(player)
+		if args[1] then
+			if not perms[player].set_spectate and not review_mode then return end
+			if not room.playerList[args[1]] or not players_file[args[1]] then
+				return translatedChatMessage("invalid_syntax", player)
+			end
+
+			enableSpecMode(args[1], not spec_mode[args[1]])
+			inGameLogCommand(player, cmd, args)
+			logCommand(player, cmd, quantity, args)
+		else
+			enableSpecMode(player, not spec_mode[player])
+			players_file[player].spec = spec_mode[player]
+			savePlayerData(player)
+		end
 
 	elseif cmd == "time" then
 		if not records_admins or not records_admins[player] then
