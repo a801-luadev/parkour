@@ -1075,8 +1075,11 @@ local function addMouseImage(player, cmd, quantity, args)
 				end
 
 				local imageID = tfm.exec.addImage(imageURL, '%'..name, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
-				mouseImages[name] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity}
+				if not imageID then
+					return translatedChatMessage("invalid_syntax", player)
+				end
 
+				mouseImages[name] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity}
 				translatedChatMessage("new_image", name)
 			end
 			return
@@ -1100,6 +1103,9 @@ local function addMouseImage(player, cmd, quantity, args)
 	end
 
 	local imageID = tfm.exec.addImage(imageURL, '%'..playerName, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
+	if not imageID then
+		return translatedChatMessage("invalid_syntax", player)
+	end
 	mouseImages[playerName] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity}
 end
 
