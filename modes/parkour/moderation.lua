@@ -1060,6 +1060,12 @@ local function addMouseImage(player, cmd, quantity, args)
 	local offsetX = tonumber(args[4]) or 0
 	local offsetY = tonumber(args[5]) or 0
 	local opacity = tonumber(args[6]) or 1
+	local alwaysActive = false
+
+	if imageURL then
+		alwaysActive = imageURL:sub(1, 1) == '*'
+		imageURL = alwaysActive and imageURL:sub(2) or imageURL
+	end
 
 	if playerName == "*" then
 		if imageURL == "remove" then
@@ -1074,12 +1080,15 @@ local function addMouseImage(player, cmd, quantity, args)
 					tfm.exec.removeImage(mouseImages[name][2], false)
 				end
 
-				local imageID = tfm.exec.addImage(imageURL, '%'..name, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
-				if not imageID then
-					return translatedChatMessage("invalid_syntax", player)
+				local imageID
+				if alwaysActive or victory[name] then
+					imageID = tfm.exec.addImage(imageURL, '%'..name, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
+					if not imageID then
+						return translatedChatMessage("invalid_syntax", player)
+					end
 				end
 
-				mouseImages[name] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity}
+				mouseImages[name] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity, alwaysActive}
 				translatedChatMessage("new_image", name)
 			end
 			return
@@ -1102,30 +1111,35 @@ local function addMouseImage(player, cmd, quantity, args)
 		translatedChatMessage("new_image", playerName)
 	end
 
-	local imageID = tfm.exec.addImage(imageURL, '%'..playerName, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
-	if not imageID then
-		return translatedChatMessage("invalid_syntax", player)
+	local imageID
+	if alwaysActive or victory[playerName] then
+		imageID = tfm.exec.addImage(imageURL, '%'..playerName, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
+		if not imageID then
+			return translatedChatMessage("invalid_syntax", player)
+		end
 	end
-	mouseImages[playerName] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity}
+	mouseImages[playerName] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity, alwaysActive}
 end
 
 onEvent("Keyboard", function(player, key, down)
 	local img = mouseImages[player]
 
-	if not img then return end
+	if not img or not img[8] and not victory[player] then return end
+	if not (key == 0 or key == 2 or key == 3) then return end
+
+	if img[2] then
+		tfm.exec.removeImage(img[2], false)
+	end
 
 	if key == 2 then
-		tfm.exec.removeImage(img[2], false)
 		local imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[4], img[4], 0, img[7], 0.5, 0.5, false)
 		img[2] = imageID
 		img[3] = 1
 	elseif key == 0 then
-		tfm.exec.removeImage(img[2], false)
 		local imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, -img[4], img[4], 0, img[7], -0.5, 0.5, false)
 		img[2] = imageID
 		img[3] = -1
 	elseif key == 3 then
-		tfm.exec.removeImage(img[2], false)
 		local anchorX = img[3] == 1 and 0.5 or -0.5
 		local imageID
 
