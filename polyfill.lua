@@ -13,6 +13,7 @@ do
 	tfm.get.room.name = "*#parkour0test"
 	tfm.get.room.uniquePlayers = 4
   tfm.get.room.isTribeHouse = false
+  --tfm.get.room.debugLanguage = "tr"
 
 
   -- Tribe House Alternatives
