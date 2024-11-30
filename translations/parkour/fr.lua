@@ -4,6 +4,8 @@ translations.fr = {
 
 	-- Error messages
 	corrupt_map = "<r>Carte non opérationnelle. Chargement d'une autre.",
+	corrupt_map_no_perm = "<r>[ERREUR] <n>Cette carte n'est pas correctement protégée.",
+	corrupt_map_hole = "<r>[ERREUR] <n>Une carte parkour ne peut pas contenir de trou de souris.",
 	corrupt_map_vanilla = "<r>[ERROR] <n>Impossible de récolter les informations de cette carte.",
 	corrupt_map_mouse_start = "<r>[ERROR] <n>Cette carte a besoin d'un point d'apparition (pour les souris).",
 	corrupt_map_needing_chair = "<r>[ERROR] <n>La carte a besoin d'une chaise d'arrivée (point final).",
@@ -16,6 +18,7 @@ translations.fr = {
 	emergency_mode = "<r>Mise en place du blocage d'urgence, aucun nouveau joueur ne peut rejoindre. Merci d'aller dans un autre salon #parkour.",
 	leaderboard_not_loaded = "<r>Le tableau des scores n'a pas été encore chargé. Attendez une minute.",
 	max_power_keys = "<v>[#] <r>Vous pouvez avoir maximum %s pouvoirs sur la même touche.",
+	room_name_length = "<ROSE><b>[ERREUR]</b> Le nom du salon excède la limite autorisée de <b>45</b> caractères. Merci de choisir un nom plus court.",
 
 	-- Help window
 	help = "Aide",
@@ -47,9 +50,16 @@ translations.fr = {
 	permbanned = "<r>Tu as été banni de #parkour définitevement.",
 	tempbanned = "<r>Tu as été banni de #parkour pendant %s minutes.",
 	forum_topic = "<rose>Pour plus d'informations sur le module, visite ce lien: %s",
-	report = "<j>Besoin de signaler un joueur? <t><b>!report Pseudo#0000 [reason]</b></t>",
+	report = "<j>Besoin de signaler un joueur ? <t><b>!report Pseudo#0000 [raison]</b></t>",
 	killed = "<v>[#] <r>Vos pouvoirs ont été restreints pendant %s minutes suite à une violation du réglement de parkour. Des violations ultérieures se conclueront par un banissement. Appuyez sur <b>H</b> pour visionner les règles.",
 	mapper_event = "<CE><B>Concours de creation de cartes Parkour 2024:</B>\n<n>Mettez vos talents de créateur de cartes au service de Parkour pour tenter de gagner des <D>fromages <n> et des <pt>pièces de Parkour<n>!\n<R>Possibilité de proposer sa carte jusqu'au  <B>31 Janvier 2024</B>.\n<PS>Pour plus d'information, se rendre sur : %s",
+	cmd_usage_report = "<j>Utilisation : <bl>!report [Player#1234] [reason]",
+	reported_not_here = "<bl>Le joueur signalé doit se trouver dans le salon.",
+	reported_invalid = "<bl>Ce joueur ne peut pas être signalé.",
+	reason_too_short = "<bl>La raison du signalement est trop courte.",
+	report_done = "<j>Merci d'avoir signalé un joueur.",
+	nohelp = "<r>Vous affichez désormais une barre rouge indiquant que vous ne souhaitez pas d'aide. Appuyez sur <v>F</v> pour l'activer ou la désactiver.",
+	quest_map = "<ch>La carte @%s pour une de vos quêtes est là !",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Le compte à rebours a commencé...",
@@ -69,6 +79,9 @@ translations.fr = {
 	double_maps = "<bv>Maps doubles Samedi (GMT+2) et tous les pouvoirs sont disponibles pour le semaine d'anniversaire de parkour!",
 	double_maps_start = "<rose>C'EST LA SEMAINE D'ANNIVERSAIRE DE PARKOUR! Les double maps et tous les pouvoirs ont été activés. Merci de jouer avec nous!",
 	double_maps_end = "<rose>La semaine d'anniversaire de parkour est terminée. Merci de jouer avec nous!",
+	anniversary = "<bv>Pour l'anniversaire de parkour, les pièces compteront double (heure française) et tous les pouvoirs seront débloqués !",
+	anniversary_start = "<rose>C'EST LA SEMAINE D'ANNIVERSAIRE DE PARKOUR ! Les pièces comptent double et tous les pouvoirs sont débloqués. Nous vous remercions de nous soutenir et de jouer à parkour !",
+	anniversary_end = "<rose>La semaine d'anniversaire de parkour s'est achevée. Un grand merci à tous pour votre soutien et votre fidélité à parkour !",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Le mode de records a été activé dans ce salon. Les statistiques ne compteront pas et les pouvoirs sont désactivés !\nTu peux trouver plus d'informations à propos des records sur <b>%s</b>",
@@ -95,9 +108,29 @@ translations.fr = {
 	quest_completed = "<b><D>Félicitations !</D></b> \nVous avez complété une mission %s!",
 	quest_reset = "<V>[#]</V> <O>Vos missions %s ont été réinitialisées.</O>",
 
+	-- Christmas
+	find_gift1 = "<ch>Le Père Noël vient d'arriver ! Cherchez des cadeaux de Noël sur la carte et déballe ta surprise !",
+	find_gift2 = "<ch>Vive le vent d'hiver ! Un cadeau spécial de Noël vient d'apparaître comme par magie sur la carte - allez le chercher !",
+	find_gift3 = "<ch>Ho, ho, ho! L'elf du Père Noël a laissé un cadeau sur la carte pour vous !",
+	find_gift4 = "<ch>L'esprit de Noël remplit l'air! Cherchez le cadeau de Noël caché sur la carte !",
+	find_gift5 = "<ch>Joyeux Noël ! Les elfs ont caché un cadeau pour vous. Sauriez-vous le trouver ?",
+	found_gift1 = "<ch>Hourra! <J>%s</J> a déballé son cadeau et a trouvé %s pièces dedans !",
+	found_gift2 = "<ch>Hourra , <J>%s</J> ! Vous avez trouvé <J>%s</J> pièces brillantes dans le cadeau du Père Noël !",
+	found_gift3 = "<ch>En plein dans le mille, <J>%s</J> ! <J>%s</J> pièces de plus, merci Papa Noël !",
+	found_gift4 = "<ch>Félicitations à <J>%s</J> d'avoir gagné <J>%s</J> pièces! L'esprit de Noël embaume l'air !",
+	found_gift5 = "<ch>Le cadeau de Noël a englouti <J>%s</J> de <J>%s</J> scintillantes pièces !",
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>VOUS ÊTES DÉSORMAIS AFK</b></bv>\nBOUGEZ POUR REAPPARAÎTRE</font>\n\n<font size='30'><u><t>Rappels:</t></u></font>\n\n<font size='15'><r>Les joueurs avec une ligne rouge au-dessus d'eux ne veulent pas d'aide!\nTroller/bloquer des joueurs est interdit dans parkour!<d>\nRejoins notre <cep><a href='event:discord'>serveur Discord</a></cep>!\nEnvie de contribuer au code? Viens voir notre <cep><a href='event:github'>GitHub</a></cep>\nTu as une bonne carte à nous proposer? Viens la poster sur notre <cep><a href='event:map_submission'>sujet de proposition de cartes</a></cep>\nJettes un oeil à notre <cep><a href='event:forum'>sujet officiel</a></cep> pour plus d'informations!\nSoutiens le module en faisant un <cep><a href='event:donate'>don!</a></cep>",
-	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\nUtiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\nUtiliser <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\nAffiche le temps de recharge de vos compétences\n\nAffiche les boutons pour utiliser les compétences\n\nAffiche le bouton d'aide\n\nAffiche les annonces des cartes achevées\n\nAffichage d'un indicateur pour ne pas être aidé.\n\nDésactiver les touches de contrôle pour tous les interfaces (classement, aide, magasin, etc.)",
+	options = "<p align='center'><font size='20'>Options de Parkour</font></p>\n\n" ..
+		"Utiliser le clavier <b>QWERTY</b> (désactiver si votre clavier est en <b>AZERTY</b>)\n\n" ..
+		"Utiliser <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> comme raccourci pour <b>/mort</b> (désactiver pour <b>DEL</b>)\n\n" ..
+		"Affiche le temps de recharge de vos compétences\n\n" ..
+		"Montrer les boutons d'interface\n\n" ..
+		"Message de bienvenue\n\n" ..
+		"Affiche les annonces des cartes achevées\n\n" ..
+		"Affichage d'un indicateur pour ne pas être aidé.\n\n" ..
+		"Désactiver les touches de contrôle pour tous les interfaces (classement, aide, magasin, etc.)",
 	cooldown = "<v>[#] <r>Attends quelques secondes avant de pouvoir recommencer.",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Clavier <b>QWERTY</b>" ..
 					 "\n\n<b>Cacher</b> le nombre de cartes" ..
@@ -190,6 +223,9 @@ translations.fr = {
 	buy = "Buy",
 	equip = "Equip",
 	equipped = "<font size = '10'>Equipped</font>",
+	saving = "<p align='right'>En cours de sauvegarde...",
+	new_image = "<J>Votre apparence a été changée, vous pouvez la rétablir en écrivant !image.",
+	smol_best = "<j>Nouveau champion du mode smol : %s avec %s map de complétées !",
 
 	-- Power names
 	balloon = "Ballon",
