@@ -414,11 +414,11 @@ onEvent("PlayerLeft", function(player)
 	in_room[player] = nil
 	times.movement[player] = nil
 	lastPlayerLeft = player
+	actual_player_count = actual_player_count - 1
 
 	if spec_mode[player] then return end
 
 	player_count = player_count - 1
-	actual_player_count = actual_player_count - 1
 
 	if victory[player] then
 		victory_count = victory_count - 1
