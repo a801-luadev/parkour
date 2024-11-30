@@ -4,6 +4,8 @@ translations.tr = {
 
 	-- Error messages
 	corrupt_map= "<r>Harita bozulmuş. Başka bir tane yükleniyor.",
+	corrupt_map_no_perm = "<r>[HATA] <n>Bu harita yanlış kategorilendirilmiş.",
+	corrupt_map_hole = "<r>[HATA] <n>Parkur haritalarında fare deliği bulunamaz.",
 	corrupt_map_vanilla = "<r>[HATA] <n>Bu harita hakkında bilgi alınamıyor.",
 	corrupt_map_mouse_start= "<r>[HATA] <n>Bu haritanın bir başlangıç noktası olması gerekiyor (fare başlangıç noktası).",
 	corrupt_map_needing_chair= "<r>[HATA] <n>Haritanın bitiş koltuğu olması gerekiyor.",
@@ -49,9 +51,16 @@ translations.tr = {
 	permbanned = "<r>#Parkour'dan kalıcı olarak yasaklandınız.",
 	tempbanned = "<r>#Parkour'dan %s dakika boyunca yasaklandınız.",
 	forum_topic = "<rose>Modül hakkında daha fazla bilgi edinmek için bağlantıya gidin: %s",
-	report = "<j>Bir oyuncuyu bildirmek mi istiyorsun? <t><b>!report KullanıcıAdı#Kod [sebep]</b></t>",
+	report = "<j>Bir parkur oyuncusunu rapor etmek mi istiyorsunuz? <t><b>!report KullanıcıAdı#0000 [sebep]</b></t>",
 	killed = "<v>[#] <r>#Parkour kurallarını ihlal ettiğiniz için becerilerinizi %s dakika süreyle kullanamazsınız. Devam eden kural ihlalleri uzaklaştırma ile sonuçlanacaktır. Kuralları incelemek için lütfen <b>H</b> tuşuna basın.",
 	mapper_event = "<CE><B>Parkour harita yapma yarışması 2024:</B>\n<n>Yaratıcı haritalar yaparak <D>peynir <n>ve <pt>parkour coin <n>kazanma şansı yakalayın!\n<R>Harita gönderimleri <B>31 Ocak 2024</B>'e kadar açık.\n<PS>Daha fazla bilgi için, şu adresi ziyaret edin: %s",
+	cmd_usage_report = "<j>Kullanım: <bl>!report [KullanıcıAdı#1234] [Sebep]",
+	reported_not_here = "<bl>Raporlanan oyuncu ile aynı odada olmalısınız.",
+	reported_invalid = "<bl>Bu oyuncu raporlanamaz.",
+	reason_too_short = "<bl>Rapor sebebi çok kısa.",
+	report_done = "<j>Raporunuz için teşekkürler.",
+	nohelp = "<r>Kırmızı çizgiyi etkinleştirerek diğerlerine yardım istemediğinizi bildiriyorsunuz. Açmak/kapatmak için <v>F</v> tuşuna basın.",
+	quest_map = "<ch>Görev haritanız @%s burada!",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Ve geri sayım başlıyor...",
@@ -71,6 +80,9 @@ translations.tr = {
 	double_maps = "<bv>Çifte haritalar cumartesi (GMT+2) açılıyor ve tüm güçler parkur'un doğum haftası için açık!",
 	double_maps_start = "<rose>ŞU AN PARKUR'UN DOĞUM GÜNÜ HAFTASI! Çifte haritalar ve bütün güçler açıldı. Bizimle oynadığın için teşekkürler!",
 	double_maps_end = "<rose>Parkur'un doğum günü haftası bitti. Bizimle oynadığın için teşekkürler!",
+	anniversary = "<bv>Gelecek hafta (Fransa saatiyle) iki kat Parkour coin aktif ve Parkour'un doğum günü haftasında tüm güçler açık!",
+	anniversary_start = "<rose>PARKUR'UN DOĞUM GÜNÜ HAFTASI BAŞLADI! İki kat parkur parası ve tüm güçler etkinleştirildi. Tüm desteğiniz ve bu modülü oynadığınız için teşekkürler!",
+	anniversary_end = "<rose>Parkur'un doğum günü haftası sona erdi. Tüm desteğiniz ve bu modülü oynadığınız için teşekkürler!",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Rekor modu bu odada açık. İstatistikleriniz bu odada sayılmaz ve güçlerinizi kullanamazsınız!\nRekorlar hakkında daha fazla bilgi edinmek için <b>%s</b>  .",
@@ -111,7 +123,15 @@ translations.tr = {
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MODDASIN</b></bv>\nYENİDEN DOĞMAK İÇİN HAREKET ET. </font>\n\n<font size='30'><u><t>Hatırlatıcılar:</t></u></font>\n\n<font size='15'><r>Üzerinde kırmızı çizgi olan oyuncular yardım istemiyordur!\nParkurdaki diğer oyuncuları trollemek/engellemek YASAKTIR!<d>\n<cep><a href='event:discord'>Discord</a></cep>'umuza katıl!\nKodumuza katkıda bulunmak mı istiyorsun? <cep><a href='event:github'>Github depomuza</a></cep> bir bak\nSunacak iyi bir haritanız mı var? <cep><a href='event:map_submission'>Harita öneri başlığımıza</a></cep> gönderin!\nDaha fazla bilgi için<cep><a href='event:forum'>resmi başlığımıza</a></cep> bakın!\nBizi desteklemek için <cep><a href='event:donate'>bağış yap!</a></cep>",
-	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\n<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n<b>/mort</b>'un kısayolu <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\nBeceri bekleme sürelerini göster.\n\nBeceriler simgesini göster.\n\nYardım butonunu göster.\n\nHarita bitirme duyurularını göster.\n\nYardım istemiyorum simgesini göster.\n\nTüm arayüzler (liderlik tablosu, yardım, market vb.) için kısayol tuşlarını devre dışı bırak.",	
+	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\n" ..
+		"<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n" ..
+		"<b>/mort</b>'un kısayolu <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\n" ..
+		"Beceri bekleme sürelerini göster.\n\n" ..
+		"Arayüz butonlarını göster.\n\n" ..
+		"Karşılama mesajı\n\n" ..
+		"Harita bitirme duyurularını göster.\n\n" ..
+		"Yardım istemiyorum simgesini göster.\n\n" ..
+		"Tüm arayüzler (liderlik tablosu, yardım, market vb.) için kısayol tuşlarını devre dışı bırak.",	
 	cooldown = "<v>[#] <r>Bunu tekrar yapmadan önce birkaç saniye bekleyin",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> Klavye" ..
 					 "\n\nTamamlanan harita sayısını <b>gizle</b>" ..
@@ -205,6 +225,8 @@ translations.tr = {
 	equip = "Kullan",
 	equipped = "<font size = '10'>Kullanıldı</font>",
 	saving = "<p align='right'>Kaydediliyor...",
+	new_image = "<J>Görünüşünüz değiştirildi. Normal haline döndürmek için !image yazabilirsiniz.",
+	smol_best = "<j>Yeni smol oda lideri: %s, %s harita tamamladı!",
 
 	-- Power names
 	balloon = "Balon",
