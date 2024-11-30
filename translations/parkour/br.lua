@@ -4,6 +4,8 @@ translations.br = {
 
 	-- Error messages
 	corrupt_map = "<r>Mapa corrompido. Carregando outro.",
+	corrupt_map_no_perm = "<r>[ERRO] <n>Este mapa não possui a categoria correta.",
+	corrupt_map_hole = "<r>[ERRO] <n>Mapas Parkour não podem conter tocas.",
 	corrupt_map_vanilla = "<r>[ERROR] <n>Não foi possível obter informações deste mapa.",
 	corrupt_map_mouse_start = "<r>[ERROR] <n>O mapa requer um ponto de partida (spawn).",
 	corrupt_map_needing_chair = "<r>[ERROR] <n>O mapa requer a poltrona final.",
@@ -16,6 +18,7 @@ translations.br = {
 	emergency_mode = "<r>Começando desativação de emergência, novos jogadores não serão mais permitidos. Por favor, vá para outra sala #parkour.",
 	leaderboard_not_loaded = "<r>O ranking ainda não foi carregado. Aguarde um minuto.",
 	max_power_keys = "<v>[#] <r>Você pode ter no máximo %s poderes na mesma tecla.",
+	room_name_length = "<ROSE><b>[ERRO]</b> O nome da sala excede o tamanho máximo de <b>45</b> caracteres. Por favor, escolha um nome menor.",
 
 	-- Help window
 	help = "Ajuda",
@@ -47,8 +50,15 @@ translations.br = {
 	permbanned = "<r>Você foi banido permanentemente do #parkour.",
 	tempbanned = "<r>Você foi banido do #parkour por %s minutos.",
 	forum_topic = "<rose>Para mais informações sobre o módulo, acesse o link: %s",
-	report = "<j>Quer reportar um jogador? <t><b>!report NomeJogador#0000 [reason]</b></t>",
+	report = "<j>Quer reportar um jogador de parkour? <t><b>!report Username#0000 [razão]</b></t>",
 	mapper_event ="<CE><B>Concurso de criação de mapas parkour 2024:</B>\n<n>Nos mostre sua criatividade na criação de mapas pela chance de ganhar <D>quejios <n>e <pt>moedas<n>!\n<R>Inscrições abertas até <B>31 de Janeiro de 2024</B>.\n<PS>Para mais informações, visite: %s", 
+	cmd_usage_report = "<j>Modo de uso: <bl>!report [Player#1234] [razão]",
+	reported_not_here = "<bl>O jogador reportado deve estar nessa sala.",
+	reported_invalid = "<bl>Este jogador não pode ser reportado.",
+	reason_too_short = "<bl>Motivo do report é muito pequeno.",
+	report_done = "<j>Obrigado pelo seu report.",
+	nohelp = "<r>Você está agora mostrando para os outros que não quer ajuda ao ativar a linha vermelha. Aperte <v>F</v> para desativá-la.",
+	quest_map = "<ch>O mapa da sua missão está aqui: @%s!",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>E a contagem regressiva começa...",
@@ -68,6 +78,9 @@ translations.br = {
 	double_maps = "<bv>Você ganhará duas vezes mais vitórias no Sábado (GMT+2) e todos os poderes estarão disponíveis na semana de aniversário do Parkour!",
 	double_maps_start = "<rose>É A SEMANA DE ANIVERSÁRIO DO PARKOUR! Você ganhará duas vezes mais vitórias e todos os poderes foram ativados. Muito obrigado por jogar com a gente!",
 	double_maps_end = "<rose>A semana de aniversário do Parkour terminou. Muito obrigado por jogar com a gente!",
+	anniversary = "<bv>Teremos o dobro de moedas parkour na próxima semana (horário da França) e todos os poderes disponiveis para a semana de aniversário!!",
+	anniversary_start = "<rose>É A SEMANA DE ANIVERSÁRIO DO PARKOUR! Dobro de moedas e todos os poderes liberados. Muito obrigado por todo apoio e por jogarem esse module!",
+	anniversary_end = "<rose>A semana de aniversário do parkour acabou. Muito obrigado por todo apoio e por jogarem esse module!",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Modo Records está ativado nesta sala. Dados não serão contados e poderes não estão ativados!\nVocê poderá encontrar mais informações sobre records em <b>%s</b>",
@@ -108,7 +121,15 @@ translations.br = {
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>VOCê ESTÁ NO MODO AFK</b></bv>\nMOVA-SE PARA RENASCER</font>\n\n<font size='30'><u><t>Lembretes:</t></u></font>\n\n<font size='15'><r>Jogadores com uma linha vermelha em cima deles não querem ajuda!\nTrollar/bloquear outros jogadores no parkour NÃO é permitido!<d>\nEntre em nosso <cep><a href='event:discord'>servidor no Discord</a></cep>!\nQuer contribuir com código? Veja nosso <cep><a href='event:github'>repositório no Github</a></cep>\nVocê tem um mapa bom pra enviar? Mande-o em nosso <cep><a href='event:map_submission'>tópico de submissão de mapas</a></cep>\nCheque nosso <cep><a href='event:forum'>tópico oficial no fórum</a></cep> para mais informações!\nNos apoie com <cep><a href='event:donate'>doações!</a></cep>",
-	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar o botão de poderes\n\nMostrar o botão de ajuda\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar\n\nDesative as teclas de atalho de todas as interfaces (leaderboard, help, shop, etc.)",
+	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\n" ..
+		"Usar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\n" ..
+		"Usar a tecla <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\n" ..
+		"Mostrar o delay do seu poder\n\n" ..
+		"Mostrar interface de botões\n\n" ..
+		"Mensagem de Boas-vindas\n\n" ..
+		"Mostrar mensagens de mapa completado\n\n" ..
+		"Mostrar símbolo de não ajudar\n\n" ..
+		"Desative as teclas de atalho de todas as interfaces (leaderboard, help, shop, etc.)",
 	cooldown = "<v>[#] <r>Aguarde alguns segundos antes de fazer isso novamente.",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Teclado <b>QWERTY</b>" ..
 					 "\n\n<b>Esconder</b> contagem de mapas" ..
@@ -202,6 +223,8 @@ translations.br = {
 	equip = "Equipe",
 	equipped = "<font size = '10'>Equipado</font>",
 	saving = "<p align='right'>Salvando...",
+	new_image = "<J>Sua aparência mudou. Você pode voltar ao normal escrevendo !image",
+	smol_best = "<j>Novo líder da sala smol: %s com %s mapas completados!",
 
 	-- Power names
 	balloon = "Balão",
