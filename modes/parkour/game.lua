@@ -399,7 +399,7 @@ onEvent("PlayerLeft", function(player)
 		smol_completions._maxName = nil
 
 		for name, score in next, smol_completions do
-			if score > smol_completions._max then
+			if name ~= '_maxName' and score > smol_completions._max then
 				smol_completions._max = score
 				smol_completions._maxName = name
 			end

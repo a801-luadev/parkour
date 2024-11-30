@@ -909,12 +909,12 @@ onEvent("Keyboard", function(player, key, down, x, y)
 
 		local available = {}
 		for index=1, #badges do
-			if pbg[index] and pbg[index] > 0 then
+			if badges[index] and pbg[index] and pbg[index] > 0 then
 				available[1 + #available] = index
 			end
 		end
 
-		if available == 0 then return end
+		if #available == 0 then return end
 
 		local index = available[math.random(#available)]
 		local badge = badges[index][pbg[index]]
