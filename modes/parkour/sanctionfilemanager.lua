@@ -18,13 +18,8 @@ local SanctionFileManager = {
             return self.lastdata
         end
 
-        local lowmaps = string_split(data[2], "\2")
+        local modList = string_split(data[2], "\2")
         local sanctionList = string_split(data[3], "\2")
-
-        for i=1, #lowmaps do
-            lowmaps[i] = tonumber(lowmaps[i])
-        end
-
         local sanctionDict = {}
         local sanction
 
@@ -33,14 +28,14 @@ local SanctionFileManager = {
             sanctionDict[sanction[1]] = {
                 timestamp = tonumber(sanction[2]),
                 time = tonumber(sanction[3]),
-                info = sanction[4] or "UNKNOWN",
+                info = tonumber(sanction[4]) or 0,
                 level = tonumber(sanction[5]),
             }
         end
 
         self.lastupdate = data[1]
         self.lastdata = {
-            lowmaps = lowmaps,
+            mods = modList,
             sanction = sanctionDict,
         }
 
@@ -48,7 +43,6 @@ local SanctionFileManager = {
     end,
 
     dump = function(self, data)
-        local lowmaps = table.concat(data.lowmaps, "\2")
         local sanctionList, len = {}, 0
 
         for name, sanction in next, data.sanction do
@@ -62,6 +56,6 @@ local SanctionFileManager = {
             }, "\3")
         end
 
-        return table.concat({ os.time(), lowmaps, table.concat(sanctionList, "\2") }, "\1")
+        return table.concat({ os.time(), table.concat(data.mods, "\2"), table.concat(sanctionList, "\2") }, "\1")
     end,
 }

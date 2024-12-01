@@ -48,7 +48,9 @@ do
 end
 
 onEvent("NewPlayer", function(player)
-	if room.playerList[player] then
+	if room.debugLanguage then
+		player_langs[player] = translations[room.debugLanguage]
+	elseif room.playerList[player] then
 		player_langs[player] = translations[room.playerList[player].community]
 	else
 		player_langs[player] = translations[room.community]

@@ -112,7 +112,7 @@ do
 		}):addTextArea(switch):addTextArea(click)
 	end
 
-	onEvent("TextAreaCallback", function(id, player, cb)
+	onEvent("RawTextAreaCallback", function(id, player, cb)
 		local callback = callbacks[cb]
 		if callback and callback.class.parent.open[player] then
 			if not checkCooldown(player, "simpleToggle", 500) then return end

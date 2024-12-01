@@ -1,4 +1,5 @@
-local next_file_load = os.time() + math.random(60500, 90500)
+local WEEKLY_RESET_INIT = 1722204000000
+local last_weekly_reset_ts
 local player_ranks
 local no_powers
 local unbind
@@ -6,32 +7,44 @@ local bindNecessary
 local NewBadgeInterface
 local CompletedQuestsInterface
 local QuestsInterface
+local getQuestsResetTime
+
+local badges, titles
+local default_skins = { [1] = 1, [2] = 1, [7] = 1, [28] = 1, [46] = 1 }
+
+local quests
+local fillQuests
+local power_quest = {}
+local dont_parse_data = {}
+
 local files = {
 	--[[
 		File values:
 
-		- maps        (1)
 		- ranks       (1)
-		- chats       (1)
+		- maps        (1)
+		- maps2        (1)
+		- maps3        (1)
 
 		- ranking     (2)
 		- weekly      (2)
 
-		- lowmaps     (3)
 		- sanction    (3)
 	]]
 
-	[1] = 20, -- maps, ranks, chats
+	[1] = 40, -- ranks, maps, maps2, maps3
 	[2] = 21, -- ranking, weekly
-	[3] = 23, -- lowmaps, sanction
+	[3] = 43, -- sanction
 }
+
+do
 local total_files = 3
 local file_index = 1
 local settings_length = 9
 local file_id = files[file_index]
-local WEEKLY_RESET_INIT = 1722204000000
-local last_weekly_reset_ts
-local badges = { -- badge id, small image, big image
+local next_file_load = os.time() + math.random(60500, 90500)
+
+badges = { -- badge id, small image, big image
 	[1] = { -- former staff
 		{ 1, "1745f43783e.png", "1745f432e33.png"},
 	},
@@ -72,7 +85,7 @@ local badges = { -- badge id, small image, big image
 		{23, "1755bacbdd6.png", "1755bac996d.png"}, -- 40
 	},
 }
-local titles = {
+titles = {
 	piglet = {
 		code = "T_496",
 		requirement = 6000,
@@ -89,11 +102,6 @@ local titles = {
 		field = "tc"
 	}
 }
-
-local quests
-local fillQuests
-local power_quest = {}
-local dont_parse_data = {}
 
 players_file = {}
 
@@ -266,10 +274,26 @@ local data_migrations = {
 
 		data.quests = allQuests
 		--data.killedby
-	end
+	end,
+	[7] = function(player, data)
+		data.v = 8
+		data.namecolor = nil
+		data.settings[4] = 1
+		data.settings[6] = 1
+
+		local skins = {}
+
+		for key in next, data.skins do
+			if not default_skins[tonumber(key)] then
+				skins[1 + #skins] = tonumber(key)
+			end
+		end
+
+		data.skins = skins
+	end,
 }
 
-local function getQuestsResetTime()
+function getQuestsResetTime()
 	local currentTime = os.time() + 60 * 60 * 1000
 	local currentDate = os.date("*t", os.time() / 1000)
 	local day = 24 * 60 * 60 * 1000
@@ -545,13 +569,14 @@ onEvent("PacketReceived", function(channel, id, packet)
 	if channel ~= "bots" then return end
 
 	if id == packets.bots.remote_command then
-		local targetPlayer, targetRoom, command = string.match(packet, "([^\000]+)\000([^\000]+)\000([^\000]+)")
+		local targetPlayer, targetRoom, command, executer = string.match(packet, "([^\000]+)\000([^\000]+)\000([^\000]+)\000([^\000]*)")
 
 		if not in_room[targetPlayer] and targetRoom ~= room.name then
 			return
 		end
 
-		eventChatCommand("Parkour#0568", command)
+		executer = executer == "" and "Parkour#0568" or executer
+		eventChatCommand(executer, command)
 
 	elseif id == packets.bots.update_pdata then
 		local player, fields = string.match(packet, "([^\000]+)\000([^\000]+)")
@@ -593,3 +618,4 @@ onEvent("PacketReceived", function(channel, id, packet)
 		savePlayerData(player)
 	end
 end)
+end

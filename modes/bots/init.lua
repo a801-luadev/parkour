@@ -10,6 +10,7 @@ end
 local loading_file_time = os.time() + 11000
 local loading_file_id
 local pdata_requested = {}
+local file_updates
 
 local bit = bit or bit32
 local callbacks = {
@@ -18,13 +19,37 @@ local callbacks = {
 	load_file = bit.lshift(40, 8) + 255,
 	load_pdata = bit.lshift(41, 8) + 255,
 	send_update = bit.lshift(42, 8) + 255,
+	update_file = bit.lshift(43, 8) + 255,
 }
 local textareas = {
 	heartbeat = 1 + 255,
 	action_error = 2 + 255,
+	file_updated = 3 + 255,
 }
 
 local parkour_bot = "Parkour#0568"
+
+local function apply_file_operation(data, operation)
+	local action = operation[2]
+	if action == 'sanction' then
+		local playerid, moderator = operation[3], operation[4]
+		local time, level = tonumber(operation[5]), tonumber(operation[6])
+		local mod_index = table_find(data.mods, moderator)
+
+		if not mod_index then
+			data.mods[1 + #data.mods] = moderator
+			mod_index = #data.mods
+		end
+
+		data.sanction[playerid] = {
+			timestamp = os.time(),
+			time = time,
+			info = mod_index,
+			level = level,
+		}
+		return
+	end
+end
 
 onEvent("TextAreaCallback", function(id, player, data)
 	if player ~= parkour_bot then return end
@@ -63,6 +88,19 @@ onEvent("TextAreaCallback", function(id, player, data)
 	elseif id == callbacks.load_pdata then
 		pdata_requested[data] = os.time() + 2000
 		system.loadPlayerData(data)
+
+	elseif id == callbacks.update_file then
+		local params = {}
+
+		for value in data:gmatch('[^\000]+') do
+			params[1 + #params] = value
+		end
+
+		if not file_updates then
+			file_updates = {}
+		end
+
+		file_updates[1 + #file_updates] = params
 	end
 end)
 
@@ -105,13 +143,57 @@ onEvent("Loop", function()
 end)
 
 onEvent("FileLoaded", function(file, data)
-	tfm.exec.playMusic(tostring(data), 'file:' .. tostring(file), 0, false, false, parkour_bot)
+	tfm.exec.playMusic('file:' .. tostring(file), tostring(data), 0, false, false, parkour_bot)
+
+	if not file_updates then
+		return
+	end
+
+	local manager = filemanagers[file]
+	if not manager then
+		return
+	end
+
+	local update_indices = {}
+	for i=1, #file_updates do
+		local file_id = file_updates[i][1]
+		if file_id == file then
+			update_indices[1 + #update_indices] = i
+		end
+	end
+
+	if #update_indices == 0 then
+		return
+	end
+
+	local data = manager:load(data)
+
+	for i=1, #update_indices do
+		apply_file_operation(data, file_updates[update_indices[i]])
+	end
+
+	if #file_updates == #update_indices then
+		file_updates = nil
+	else
+		for i=#update_indices, 1, -1 do
+			table.remove(file_updates, update_indices[i])
+		end
+
+		if #file_updates == 0 then
+			file_updates = nil
+		end
+	end
+
+	data = manager:dump(data)
+	system.saveFile(data, file)
+
+	addTextArea(textareas.file_updated, file, parkour_bot)
 end)
 
 onEvent("PlayerDataLoaded", function(player, file)
 	if not pdata_requested[player] then return end
 	pdata_requested[player] = nil
-	tfm.exec.playMusic(tostring(file), 'pdata:' .. tostring(player), 0, false, false, parkour_bot)
+	tfm.exec.playMusic('pdata:' .. tostring(player), tostring(file), 0, false, false, parkour_bot)
 end)
 
 tfm.exec.disableAutoNewGame(true)

@@ -3,23 +3,20 @@ local leaderboard
 local keyboard
 
 no_powers = {}
-local facing = {}
-local cooldowns = {}
-local obj_whitelist = {_count = 0, _index = 1}
-local keybindings = {}
 local used_powers = {_count = 0}
 disable_powers = false
 local first_player = nil
 
+local keys
+local powers
+local checkKill
+local getPowerUpgrade
 
-local function capitalize(str)
-	local first = string.sub(str, 1, 1)
-	if first == "+" then
-		return "+" .. string.upper(string.sub(str, 2, 2)) .. string.lower(string.sub(str, 3))
-	else
-		return string.upper(first) .. string.lower(string.sub(str, 2))
-	end
-end
+do
+local facing = {}
+local cooldowns = {}
+local obj_whitelist = {_count = 0, _index = 1}
+local keybindings = {}
 
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
@@ -166,7 +163,6 @@ local function fixHourCount(player, data)
 end
 
 -- in small x: positive -> towards the sides, negative -> towards the center
-local powers
 powers = {
 	{
 		name = "fly", maps = 5,
@@ -787,11 +783,11 @@ powers = {
 	},
 }
 
-local keys = {
+keys = {
 	triggers = {}
 }
 
-local function getPowerUpgrade(completed, pos, power, strict, with_review)
+function getPowerUpgrade(completed, pos, power, strict, with_review)
 	if with_review then
 		if not power.upgrades then return power end
 		return power.upgrades[#power.upgrades]
@@ -858,6 +854,7 @@ function bindNecessary(player)
 
 	bindKeyboard(player, 0, true, true)
 	bindKeyboard(player, 2, true, true)
+	bindKeyboard(player, 113, true, true)
 
 	keys.triggers[player] = triggers
 end
@@ -867,6 +864,7 @@ function unbind(player)
 
 	bindKeyboard(player, 0, true, false)
 	bindKeyboard(player, 2, true, false)
+	bindKeyboard(player, 113, true, false)
 	for key in next, keys.triggers[player] do
 		bindKeyboard(player, key, true, false)
 	end
@@ -875,7 +873,7 @@ function unbind(player)
 	keys.triggers[player] = nil
 end
 
-local function checkKill(player)
+function checkKill(player)
 	local data = players_file[player]
 	if not data then return end
 
@@ -904,8 +902,34 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		return
 	end
 
+	if key == 113 then
+		if not checkCooldown(player, "badgeSmiley", 10000) then return end
+		local pbg = players_file[player] and players_file[player].badges
+		if not pbg then return end
+
+		local available = {}
+		for index=1, #badges do
+			if badges[index] and pbg[index] and pbg[index] > 0 then
+				available[1 + #available] = index
+			end
+		end
+
+		if #available == 0 then return end
+
+		local index = available[math.random(#available)]
+		local badge = badges[index][pbg[index]]
+
+		addNewTimer(
+			3000,
+			tfm.exec.removeImage,
+			tfm.exec.addImage(badge[2], '$'..player, 0, -40, nil, 1, 1, 0, 1, 0.5, 0.5, false)
+		)
+		return
+	end
+
 	local power = keys.triggers[player][key]
 	if power then
+		if victory[player] + 5000 > os.time() then return end
 		for index = 1, power._count do
 			if power[index] and (not power[index].cond or power[index].cond(player, key, down, x, y)) and (not power[index].cooldown or checkCooldown(
 				player, power[index].name, power[index].cooldown,
@@ -1051,7 +1075,7 @@ onEvent("PlayerWon", function(player)
 		not is_tribe and
 		not review_mode) then
 
-		local earned_coins = is_anniversary and 2 or 1
+		local earned_coins = (is_anniversary and 2 or 1) * current_difficulty
 
 		file.c = file.c + 1
 		file.coins = file.coins + earned_coins
@@ -1070,7 +1094,15 @@ onEvent("PlayerWon", function(player)
 
 		if hour_count >= 30 and hour_count % 5 == 0 then
 			if hour_count >= 35 then
-				sendPacket("common", 3, room.shortName .. "\000" .. room.playerList[player].id .. "\000" .. player .. "\000" .. hour_count)
+				sendPacket("common", packets.rooms.hourly_record,
+					room.shortName .. "\000" ..
+					room.playerList[player].id .. "\000" ..
+					player .. "\000" ..
+					hour_count .. "\000" ..
+					(room.uniquePlayers or 1) .. "\000" ..
+					room.currentMap .. "\000" ..
+					(room.xmlMapInfo and room.xmlMapInfo.permCode or -1)
+				)
 			end
 
 			local badge = math.ceil((hour_count - 29) / 5)
@@ -1174,3 +1206,4 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	end
 end)
 
+end

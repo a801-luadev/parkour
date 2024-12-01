@@ -9,7 +9,7 @@ import sys
 with open("init.lua", "rb") as file:
 	script = file.read()
 
-if '--polyfill' in sys.argv:
+if '--polyfill' in sys.argv or '--dev' in sys.argv:
 	with open("polyfill.lua", "rb") as file:
 		script = file.read() + script
 

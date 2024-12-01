@@ -4,6 +4,8 @@ translations.jp = {
 
 	-- Error messages
 	corrupt_map = "<r>マップに問題がありました。別のマップを読み込み中。",
+	corrupt_map_no_perm = "<r>[エラー] <n>このマップは正しく保護されていません。",
+	corrupt_map_hole = "<r>[エラー] <n>Parkourマップにはネズミの穴を含めることができません。",
 	corrupt_map_vanilla = "<r>[エラー] <n>このマップの情報を読み込めませんでした。",
 	corrupt_map_mouse_start = "<r>[エラー] <n>マップにスタートポイント（ねずみの初期位置）が必要です。",
 	corrupt_map_needing_chair = "<r>[エラー] <n>マップに椅子が必要です。",
@@ -16,6 +18,7 @@ translations.jp = {
 	emergency_mode = "<r>緊急シャットダウンを実行中。他の#parkourルームへ移動してください。",
 	leaderboard_not_loaded = "<r>リーダーボードはまだ読み込み中。 しばらくお待ちください。",
 	max_power_keys = "<v>[#] <r>同じキーには最大%sつのパワーしか持つことができません。",
+	room_name_length = "<ROSE><b>[エラー]</b> ルームの名前が<b>45</b>文字を超えているようです。もっと短い名前をお選びください。",
 
 	-- Help window
 	help = "ヘルプ",
@@ -47,9 +50,16 @@ translations.jp = {
 	permbanned = "<r>#parkourから永久BANされました。",
 	tempbanned = "<r>#parkourから%s分間BANされました。",
 	forum_topic = "<rose>このモジュールについて詳しくはこちら： %s",
-	report = "<j>Parkourプレイヤーを通報したい場合： <t><b>!report Username#0000 [reason]</b></t>",
+	report = "<j>Parkourプレイヤーを通報するには <t><b>!report Username#0000 [理由]</b></t>",
 	killed = "<v>[#] <r>Parkourのルールを守らなかったため、%s分間パワーを使うことできません。ルールを何回も無視し続けるとBANされます。「<b>H</b>」を押してルールを確認してください。",
 	mapper_event = "<CE><B>Parkourマップ作成コンテスト2024年：</B>\n<n>あなたの創造力を見せて、<D>チーズコイン<n>や<pt>パルクールコイン<n>がもらえますよ！\n<R>マップの提出期限は<B>2024年1月31日</B>です。\n<PS>詳細：%s",
+	cmd_usage_report = "<j>使用法: <bl>!report [Player#1234] [理由]",
+	reported_not_here = "<bl>通報するプレイヤーはこの部屋にいなければいけません。",
+	reported_invalid = "<bl>このプレイヤーを通報することができません。",
+	reason_too_short = "<bl>通報の理由が短すぎます。",
+	report_done = "<j>ご通報ありがとうございます。",
+	nohelp = "<r>赤線を有効にすることで、他の人に助けを求めていないことを伝えています。切り替えるには <v>F</v> を押してください。",
+	quest_map = "<ch>あなたのクエストマップ @%s が来ました！",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>いよいよカウントダウンが始まった...",
@@ -69,6 +79,9 @@ translations.jp = {
 	double_maps = "<bv>土曜日（GMT+2）parkourのバースデーウィークにはダブルマップと全てのパワーが使用可能になります！",
 	double_maps_start = "<rose>Parkourのバースデーウィークがきた！ダブルマップと全てのパワーがオンになっています。応援ありがとうございます。",
 	double_maps_end = "<rose>Parkourのバースデーウィークが終わりました。いつも応援してくれて、このモジュールをプレイしてくれてありがとうございます！",
+	anniversary = "<bv>来週（フランス時間）Parkourコインが2倍になり、Parkourの誕生週にはすべてのパワーが使用可能になります！",
+	anniversary_start = "<rose>Parkourの誕生週です！Parkourコインが2倍になり、すべてのパワーが使用可能です。応援とこのモジュールをプレーしていただきありがとうございます。",
+	anniversary_end = "<rose>Parkourの誕生週が終了しました。応援とこのモジュールをプレーしていただきありがとうございます。",
 
 	-- Records
 	records_enabled = "<v>[#] <d>このルームではRecordsモードが有効です。パワーは無効で、statsも保存されません。\nRecordsについて詳しくはこちら：<b>%s</b>",
@@ -109,7 +122,15 @@ translations.jp = {
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFKモードです。</b></bv>\n復活するために動いてください。</font>\n\n<font size='30'><u><t>リマインダー：</t></u></font>\n\n<font size='15'><r>赤い線が引かれているプレイヤーは助けを求めていません。\nほかのプレイヤーの邪魔をしてはいけません。<d>\nParkourの<cep><a href='event:discord'>Discordサーバー</a></cep>に入ってみてください！\nコードで貢献したい場合、私たちの<cep><a href='event:github'>githubリポジトリ</a></cep>をご覧ください。\n提出したい良いマップはありますか。 Parkourの<cep><a href='event:map_submission'>マップ投稿トピック</a></cep>に投稿してください。 \n詳しくは私たちの<cep><a href='event:forum'>公式トピック</a></cep>をチェックしてみてください。\n<cep><a href='event:donate'>寄付</a></cep>して私たちを応援してください。",
-	options = "<p align='center'><font size='20'>設定</font></p>\n\n <b>QWERTY</b>キーボードを使用する（<b>AZERTY</b>の場合は無効にする）\n\n<b>/mort</b>のホットキーを「<J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J>」にする(無効にすると「<b>DEL</b>」になる)\n\nパワーのクールダウンを表示する\n\nパワーボタンを表示する\n\nヘルプボタンを表示する\n\nマップクリアの発表を表示する\n\n「ヘルプなし」の印をつける\n\nすべてのインターフェースのホットキーを無効にする（リーダーボード、ヘルプ、ショップ、など。）",
+	options = "<p align='center'><font size='20'>設定</font></p>\n\n" ..
+		" <b>QWERTY</b>キーボードを使用する（<b>AZERTY</b>の場合は無効にする）\n\n" ..
+		"<b>/mort</b>のホットキーを「<J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J>」にする(無効にすると「<b>DEL</b>」になる)\n\n" ..
+		"パワーのクールダウンを表示する\n\n" ..
+		"インターフェイスのボタンを表示する\n\n" ..
+		"歓迎のメッセージ\n\n" ..
+		"マップクリアの発表を表示する\n\n" ..
+		"「ヘルプなし」の印をつける\n\n" ..
+		"すべてのインターフェースのホットキーを無効にする（リーダーボード、ヘルプ、ショップ、など。）",
 	cooldown = "<v>[#] <r>もう一度実行する前に、数秒待ってください。",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b>キーボード" ..
 					 "\n\nマップの数を<b>非表示</b>" ..
@@ -203,6 +224,8 @@ translations.jp = {
 	equip = "装備する",
 	equipped = "<font size = '10'>装備中</font>",
 	saving = "<p align='right'>保存中...",
+	new_image = "<J>あなたの外見が変更されました。!imageと入力すれば元に戻せます。",
+	smol_best = "<j>新しいsmolモードのルームリーダー: %s、%sマップをクリアしました！",
 
 	-- Power names
 	balloon = "風船",

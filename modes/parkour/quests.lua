@@ -1,3 +1,6 @@
+local checkMapQuest
+
+do
 local function getPlayerQuest(player, questID, isWeekly)
 	if not players_file[player] or not players_file[player].quests then
 		return false
@@ -11,6 +14,21 @@ local function getPlayerQuest(player, questID, isWeekly)
 	for i = min, max do
 		if playerQuests[i] and playerQuests[i].id == questID then
 			return playerQuests[i]
+		end
+	end
+end
+
+function checkMapQuest(player)
+	local pdata = players_file[player] and players_file[player].quests
+	if not pdata then
+		return
+	end
+
+	for i=1, #pdata do
+		if pdata[i].id == 5 then
+			if maps[1].list[((pdata[i].tg-1)%maps[1].count) + 1] == tonumber(current_map) then
+				return translatedChatMessage("quest_map", player, current_map)
+			end
 		end
 	end
 end
@@ -187,7 +205,7 @@ quests = {
 			local questData = getPlayerQuest(player, 5, isWeekly)
 			if not questData then return end
 
-			local mapCode = maps.list_high[((questData.tg-1)%#maps.list_high) + 1 ] or "N/A"
+			local mapCode = maps[1].list[((questData.tg-1)%maps[1].count) + 1 ] or "N/A"
 
 			return translatedMessage("quest_5", player, mapCode)
 	  	end,
@@ -208,7 +226,7 @@ quests = {
 		
 		updateProgress = function(player, questData, isWeekly)
 			if questData and questData.ts then return end
-			if maps.list_high[((questData.tg - 1)%#maps.list_high) + 1 ] == tonumber(current_map) then
+			if maps[1].list[((questData.tg - 1)%maps[1].count) + 1 ] == tonumber(current_map) then
 				questData.pg = questData.tg
 
 				if questData.pg >= questData.tg then
@@ -340,4 +358,5 @@ function fillQuests(data, questList, isWeekly, skipQuest)
 		end
 	end
 	return questList
+end
 end

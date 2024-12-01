@@ -135,8 +135,14 @@ do
 		return self
 	end
 
-	function Interface:showDefault(player)
-		return self:show(player, self.defaultArgs[1], self.defaultArgs[2], self.defaultArgs[3], self.defaultArgs[4])
+	function Interface:showDefault(player, arg1, arg2, arg3, arg4)
+		return self:show(
+			player,
+			arg1 or self.defaultArgs[1],
+			arg2 or self.defaultArgs[2],
+			arg3 or self.defaultArgs[3],
+			arg4 or self.defaultArgs[4]
+		)
 	end
 
 	function Interface:show(player, arg1, arg2, arg3, arg4)

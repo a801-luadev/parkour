@@ -4,6 +4,8 @@ translations.hu = {
 
 	-- Error messages
 	corrupt_map = "<r>Sérült pálya. Egy másik pálya betöltése folyamatban...",
+	corrupt_map_no_perm = "<r>[HIBA] <n>Ez a pálya nincs megfelelően védve.",
+	corrupt_map_hole = "<r>[HIBA] <n>A parkour pályák nem tartalmazhatnak egérlyukat.",
 	corrupt_map_vanilla = "<r>[HIBA] <n>Nem található információ a pályáról.",
 	corrupt_map_mouse_start = "<r>[HIBA] <n>Ennek a pályának rendelkeznie kell egy kezdőponttal (egér spawnpointja).",
 	corrupt_map_needing_chair = "<r>[HIBA] <n>A pályának rendelkeznie kell egy fotellel.",
@@ -16,6 +18,7 @@ translations.hu = {
 	emergency_mode = "<r>Vészleállítás kezdeményezése, új játékosok nem engedélyezettek. Kérjük, menj egy másik #parkour szobába.",
 	leaderboard_not_loaded = "<r>A ranglista még nem töltött be. Várj egy percet.",
 	max_power_keys = "<v>[#] <r>Legfeljebb %s képességet használhatsz ugyanazon a billentyűgombon.",
+	room_name_length = "<ROSE><b>[HIBA]</b> A szoba neve túllépi a megengedett <b>45</b> karakterszámot. Válassz egy rövidebb nevet.",
 
 	-- Help window
 	help = "Segítség",
@@ -47,9 +50,16 @@ translations.hu = {
 	permbanned = "<r>Véglegesen ki lettél tiltva a #parkour-ból.",
 	tempbanned = "<r>Ki lettél tiltva %s másodpercre a #parkour-ból.",
 	forum_topic = "<rose>Ha szeretnél több információt a modulról látogasd meg a linket: %s",
-	report = "<j>Jelenteni szeretnél egy parkour játékost? <t><b>!report Felhasználónév#0000 [reason]</b></t>",
+	report = "<j>Szeretnél jelenteni egy parkour játékost? <t><b>!report Felhasználónév#0000 [indok]</b></t>",
 	killed = "<v>[#] <r>A parkour szabályainak megsértése miatt %s percig nem használhatod képességeidet. A szabályok folyamatos megsértése kitiltást von maga után. Nyomd meg a <b>H</b> gombot a szabályok áttekintéséhez.",
 	mapper_event = "<CE><B>Parkour pályakészítő verseny 2024:</B>\n<n>Mutasd meg a kreativitásodat pályakészítésben, hogy esélyed legyen nyerni<D>sajt érmét <n>és <pt>parkour érmét<n>!\n<R>Jelentkezni lehet eddig: <B>Január 31, 2024</B>.\n<PS>Több infóért látogass el ide: %s",
+	cmd_usage_report = "<j>Használat: <bl>!report [Játékos#1234] [indok]",
+	reported_not_here = "<bl>A jelentett játékosnak ebben a szobában kell lennie.",
+	reported_invalid = "<bl>Ezt a játékost nem lehet jelenteni.",
+	reason_too_short = "<bl>A jelentés indoka túl rövid.",
+	report_done = "<j>Köszönjük a jelentésed.",
+	nohelp = "<r>Most jelzed a többieknek, hogy nem kérsz segítséget azzal, hogy bekapcsoltad a piros vonalat. Nyomd meg ezt <v>F</v> hogy megváltoztasd.",
+	quest_map = "<ch>A küldetés pályád @%s itt van!",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Szóval a visszaszámlálás elkezdődött...",
@@ -69,6 +79,9 @@ translations.hu = {
 	double_maps = "<bv>Dupla pályák egész Szombaton (GMT+2) és az összes erő aktiválva van a parkour szülinapi hetén!",
 	double_maps_start = "<rose>ELJÖTT A PARKOUR SZÜLINAPI HETE! Duplán számítanak a pályák, és az összes erő elérhető. Köszönjük, hogy velünk játszol!",
 	double_maps_end = "<rose>A parkour szülinapi hete véget ért. Köszönjük, hogy velünk játszol!",
+	anniversary = "<bv>Dupla parkour érmék jövő héten (francia idő szerint) és minden képesség elérhető a parkour szülinapi hetén!",
+	anniversary_start = "<rose>A PARKOUR SZÜLINAPI HETE VAN! Dupla érmék és minden képesség aktiválva van. Köszönjük a támogatást, és hogy játszol a modulon!",
+	anniversary_end = "<rose>A parkour szülinapi hete véget ért. Parkour's birthday week has ended. Köszönjük a támogatást, és hogy játszol a modulon!",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Rekord mód lett aktiválva ebben a szobában. Az adatok nem számítanak és a képességek nem engedélyezettek!\nTöbb információt találhatsz a Rekordról itt: <b>%s</b>",
@@ -109,7 +122,15 @@ translations.hu = {
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MÓDBAN VAGY</b></bv>\nMOZOGJ HOGY ÚJRAÉLEDJ</font>\n\n<font size='30'><u><t>Emlékeztetők:</t></u></font>\n\n<font size='15'><r>A játékosok piros vonallal a fejük felett nem kérnek segítséget!\nTrollkodás/blokkolás más játékosokkal szemben a parkourban NEM megengedett!<d>\nCsatlakozz a <cep><a href='event:discord'>discord szerverünkhöz</a></cep>!\nSzertnél közreműködni kódolással? Tekintsd meg a <cep><a href='event:github'>github gyűjteményünket</a></cep>\nVan egy jó pályád amit bemutatnál? Posztold ki a <cep><a href='event:map_submission'>pálya beadvány témához</a></cep>\nCsekkold le a <cep><a href='event:forum'>official topic fület</a></cep> több információért!\nTámogass minket <cep><a href='event:donate'>adománnyal!</a></cep>",
-	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutassa a <b>képességek</b> gombot\n\nMutassa a <b>segítség</b> gombot\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot\n\nGyorsbillentyűk kikapcsolása (ranglista, segítség, bolt, stb.)",
+	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\n" ..
+		"Használd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\n" ..
+		"Használd az <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\n" ..
+		"Mutassa a képességek újratöltési idejét\n\n" ..
+		"Mutasd a felület gombokat\n\n" ..
+		"Üdvözlő üzenet\n\n" ..
+		"Mutassa a teljesített pályák mennyiségét\n\n" ..
+		"Jelenítse meg a <b>nincs segítség</b> szimbólumot\n\n" ..
+		"Gyorsbillentyűk kikapcsolása (ranglista, segítség, bolt, stb.)",
 	cooldown = "<v>[#] <r>Várj néhány másodpercet, mielőtt újra ezt tennéd.",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> billentyűzet" ..
 					 "\n\nTeljesített pályák <b>elrejtése</b>" ..
@@ -203,6 +224,8 @@ translations.hu = {
 	equip = "Equip",
 	equipped = "<font size = '10'>Equipped</font>",
 	saving = "<p align='right'>Mentés...",
+	new_image = "<J>A kinézeted megváltozott. Vissza tudod állítani az eredeti állapotba, ha beírod az !image parancsot",
+	smol_best = "<j>Új vezetője a smol szobának: %s , %s pálya teljesítésével!",
 
 	-- Power names
 	balloon = "Léggömb",

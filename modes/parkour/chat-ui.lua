@@ -1,22 +1,15 @@
 -- Stuff related to the chat (not keyboard nor interface)
 
-local fetching_player_room = {}
-local roompw = {}
-local roomcreators = {}
 local fastest = {}
-local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 
 local GameInterface
 local setNameColor
 
-local function capitalize(str)
-	local first = string.sub(str, 1, 1)
-	if first == "+" then
-		return "+" .. string.upper(string.sub(str, 2, 2)) .. string.lower(string.sub(str, 3))
-	else
-		return string.upper(first) .. string.lower(string.sub(str, 2))
-	end
-end
+do
+local fetching_player_room = {}
+local roompw = {}
+local roomcreators = {}
+local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 
 local function checkRoomRequest(player, data)
 	local fetch = fetching_player_room[player]
@@ -39,6 +32,10 @@ onEvent("NewGame", function()
 	elseif room.uniquePlayers < min_save then
 		translatedChatMessage("min_players", nil, room.uniquePlayers, min_save)
 	end
+
+	for player in next, room.playerList do
+		checkMapQuest(player)
+	end
 end)
 
 onEvent("NewPlayer", function(player)
@@ -53,6 +50,8 @@ onEvent("NewPlayer", function(player)
 	if roomcreators and #roomcreators < 10 then
 		roomcreators[1 + #roomcreators] = player
 	end
+
+	checkMapQuest(player)
 end)
 
 onEvent("PlayerWon", function(player)
@@ -64,7 +63,7 @@ onEvent("PlayerWon", function(player)
 	if not file then return end
 	if not levels then return end
 
-	victory[player] = true
+	victory[player] = os.time()
 	setNameColor(player) -- just in case PlayerRespawn triggers first
 
 	if records_admins then
@@ -171,29 +170,6 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 		if fastest.submitted then
 			return translatedChatMessage("records_already_submitted", player)
-		end
-		if not count_stats then
-			local exists = false
-
-			for index = 1, maps.high_count do
-				if map == maps.list_high[index] then
-					exists = true
-					break
-				end
-			end
-
-			if not exists then
-				for index = 1, maps.low_count do
-					if map == maps.list_low[index] then
-						exists = true
-						break
-					end
-				end
-
-				if not exists then
-					return translatedChatMessage("records_invalid_map", player)
-				end
-			end
 		end
 
 		fastest.submitted = true
@@ -403,11 +379,16 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		return
 
 	elseif cmd == "roomlimit" then -- logged
-		if not perms[player] or not perms[player].set_room_limit then return end
+		if not perms[player] or not perms[player].set_room_limit and not perms[player].set_room_limit_review then return end
 
 		local limit = tonumber(args[1])
 		if not limit then
 			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		local review_only = not perms[player].set_room_limit and perms[player].set_room_limit_review
+		if review_only and not review_mode then
+			return tfm.exec.chatMessage("<r>Enable review mode first.", player)
 		end
 
 		tfm.exec.setRoomMaxPlayers(limit)
@@ -447,6 +428,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		count_stats = true
 		tfm.exec.chatMessage("<v>[#] <d>count_stats set to true", player)
 		max_args = 0
+		showStats()
 
 	elseif cmd == "room" then -- logged
 		if quantity == 0 or capitalize(args[1]) == player then
@@ -528,29 +510,30 @@ onEvent("PlayerDataParsed", function(player, data)
 		player_langs[player] = translations[data.langue]
 	end
 
-	translatedChatMessage("welcome", player)
-	tfm.exec.chatMessage("<rose>" .. links.discord, player)
-	--translatedChatMessage("forum_topic", player, links.forum)
-	translatedChatMessage("report", player)
-	translatedChatMessage("donate", player)
-	
-
-	if is_before_anniversary then
-		translatedChatMessage("anniversary", player)
-	elseif is_anniversary then
-		translatedChatMessage("anniversary_start", player)
-	elseif is_after_anniversary then
-		translatedChatMessage("anniversary_end", player)
-	end
-
 	checkRoomRequest(player, data)
 
-	if records_admins then
-		translatedChatMessage("records_enabled", player, links.records)
+	if data.settings[6] == 1 then
+		translatedChatMessage("welcome", player)
+		tfm.exec.chatMessage("<rose>" .. links.discord, player)
+		--translatedChatMessage("forum_topic", player, links.forum)
+		translatedChatMessage("report", player)
+		--translatedChatMessage("donate", player)
+	
+		if is_before_anniversary then
+			translatedChatMessage("anniversary", player)
+		elseif is_anniversary then
+			translatedChatMessage("anniversary_start", player)
+		elseif is_after_anniversary then
+			translatedChatMessage("anniversary_end", player)
+		end
 
-		if string.find(room.lowerName, string.lower(player), 1, true) then
-			records_admins[player] = true
-			translatedChatMessage("records_admin", player)
+		if records_admins then
+			translatedChatMessage("records_enabled", player, links.records)
+
+			if string.find(room.lowerName, string.lower(player), 1, true) then
+				records_admins[player] = true
+				translatedChatMessage("records_admin", player)
+			end
 		end
 	end
 end)
@@ -655,4 +638,5 @@ if records_admins then
 			fastest.wait_send = false
 		end
 	end)
+end
 end

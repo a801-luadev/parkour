@@ -58,6 +58,8 @@ translations.en = {
 	reported_invalid = "<bl>This player cannot be reported.",
 	reason_too_short = "<bl>Report reason is too short.",
 	report_done = "<j>Thank you for your report.",
+	nohelp = "<r>You are now telling others you don't want help by enabling red-line. Press <v>F</v> to toggle it.",
+	quest_map = "<ch>Your quest map @%s is here!",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Finally the countdown begins...",
@@ -117,7 +119,15 @@ translations.en = {
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
-	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow powers button\n\nShow help button\n\nShow map completion announcements\n\nShow no help symbol\n\nDisable hotkeys for all interfaces (leaderboard, help, shop, etc.)",
+	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\n" ..
+		"Use <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\n" ..
+		"Use <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\n" ..
+		"Show your power cooldowns\n\n" ..
+		"Show interface buttons\n\n" ..
+		"Welcome message\n\n" ..
+		"Show map completion announcements\n\n" ..
+		"Show no help symbol\n\n" ..
+		"Disable hotkeys for all interfaces (leaderboard, help, shop, etc.)",
 	cooldown = "<v>[#] <r>Wait a few seconds before doing that again.",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> keyboard" ..
 					 "\n\n<b>Hide</b> map count" ..
@@ -212,6 +222,7 @@ translations.en = {
 	equipped = "<font size = '10'>Equipped</font>",
 	saving = "<p align='right'>Saving...",
 	new_image = "<J>Your appearance has been changed. You can turn it back to normal by typing !image",
+	smol_best = "<j>New smol mode room leader: <v>%s</v> with <vp>%s</vp> map completions!",
 
 	-- Power names
 	balloon = "Balloon",

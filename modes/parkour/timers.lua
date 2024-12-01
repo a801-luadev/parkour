@@ -1,7 +1,10 @@
+local addNewTimer
+
+do
 local timers = {}
 local aliveTimers = false
 
-local function addNewTimer(delay, fnc, arg1, arg2, arg3, arg4, arg5)
+function addNewTimer(delay, fnc, arg1, arg2, arg3, arg4, arg5)
 	aliveTimers = true
 	local list = timers[delay]
 	if list then
@@ -62,3 +65,4 @@ onEvent("NewGame", function()
 		aliveTimers = false
 	end
 end)
+end

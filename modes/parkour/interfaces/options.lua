@@ -81,10 +81,14 @@ OptionsInterface
 	)
 	:loadComponent(
 		Toggle.new(435, 133, false)
-		:onToggle(function(self, player, state) -- powers button
+		:onToggle(function(self, player, state) -- interface buttons
 			players_file[player].settings[4] = state and 1 or 0
 
-			GameInterface:update(player)
+			if state then
+				GameInterface:show(player)
+			else
+				GameInterface:remove(player)
+			end
 		end)
 		:onUpdate(function(self, player)
 			local setting = players_file[player].settings[4] == 1
@@ -95,10 +99,8 @@ OptionsInterface
 	)
 	:loadComponent(
 		Toggle.new(435, 159, false)
-		:onToggle(function(self, player, state) -- help button
+		:onToggle(function(self, player, state) -- welcome message
 			players_file[player].settings[6] = state and 1 or 0
-
-			GameInterface:update(player)
 		end)
 		:onUpdate(function(self, player)
 			local setting = players_file[player].settings[6] == 1
@@ -131,6 +133,7 @@ OptionsInterface
 				end
 			else
 				no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
+				translatedChatMessage("nohelp", player)
 			end
 		end)
 		:onUpdate(function(self, player)

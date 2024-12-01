@@ -62,14 +62,14 @@ local function checkProfileRequest(player, data)
 	end
 end
 
-local function toggleInterface(interface, player)
+local function toggleInterface(interface, player, arg1, arg2, arg3, arg4)
 	if not players_file[player] then return end
 	if not checkCooldown(player, "interfaceTrigger", 500) then return end
 
 	if not interface.open[player] then
 		closeAllInterfaces(player)
 
-		interface:showDefault(player)
+		interface:showDefault(player, arg1, arg2, arg3, arg4)
 	else
 		interface:remove(player)
 	end
@@ -154,6 +154,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 			file.settings[8] = 1
 
 			no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
+			translatedChatMessage("nohelp", player)
 		end
 
 		savePlayerData(player)
@@ -179,13 +180,13 @@ onEvent("TextAreaCallback", function(id, player, callback)
 end)
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
-	if cmd == "lb" then
+	if cmd == "lb" or cmd == "leaderboard" then
 		toggleInterface(LeaderboardInterface, player)
 
 	elseif cmd == "help" then
 		toggleInterface(HelpInterface, player)
 
-	elseif cmd == "op" then
+	elseif cmd == "op" or cmd == "options" or cmd == "settings" then
 		toggleInterface(OptionsInterface, player)
 
 	elseif cmd == "poll" then
@@ -356,9 +357,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	elseif cmd == "shop" then
 		toggleInterface(ShopInterface, player)
 	elseif cmd == "quests" then
-		toggleInterface(QuestsInterface, player, 1)
+		toggleInterface(QuestsInterface, player)
 	elseif cmd == "powers" then
-		toggleInterface(PowersInterface, player)
+		local page = math.min(#powers, math.max(1, tonumber(args[1]) or 1))
+		toggleInterface(PowersInterface, player, page)
 	end
 end)
 
@@ -563,7 +565,9 @@ onEvent("PlayerDataParsed", function(player, data)
 
 	setNameColor(player)
 
-	GameInterface:show(player)
+	if data.settings[4] == 1 then
+		GameInterface:show(player)
+	end
 end)
 
 onEvent("OutPlayerDataParsed", checkProfileRequest)

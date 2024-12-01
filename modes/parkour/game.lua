@@ -2,6 +2,7 @@ local min_save = 4
 
 local check_position = 6
 local player_count = 0
+local actual_player_count = 0
 local victory_count = 0
 local less_time = false
 local victory = {_last_level = {}}
@@ -39,6 +40,7 @@ local checkCooldown
 local savePlayerData
 local ranks
 local bindKeyboard
+local showStats
 
 local lastOpenedMap
 local lastPlayerLeft
@@ -105,7 +107,7 @@ local function addCheckpointImage(player, x, y)
 	checkpoints[player] = tfm.exec.addImage(img, "!1", x - 15, y - 15, player)
 end
 
-local function showStats()
+function showStats()
 	-- Shows if stats count or not
 
 	if not map_name then return end
@@ -118,8 +120,8 @@ local function showStats()
 		not review_mode) and "<v>Stats count" or "<r>Stats don't count"
 
 	ui.setMapName(string.format(
-		"%s<g>   |   %s",
-		map_name, text
+		"%s<g>   |   %s <BL>- D%s",
+		map_name, text, current_difficulty
 	))
 end
 
@@ -130,6 +132,7 @@ local function enableSpecMode(player, enable)
 	if enable then
 		spec_mode[player] = true
 		tfm.exec.killPlayer(player)
+		tfm.exec.setPlayerScore(player, -1, false)
 
 		player_count = player_count - 1
 		if victory[player] then
@@ -140,6 +143,7 @@ local function enableSpecMode(player, enable)
 		end
 	else
 		spec_mode[player] = nil
+		tfm.exec.setPlayerScore(player, players_level[player] or 1, false)
 
 		if (not levels) or (not players_level[player]) then return end
 
@@ -270,7 +274,6 @@ local function checkBan(player, data, id)
 	end
 end
 
-local band, rshift = bit32.band, bit32.rshift
 local function checkTitleAndNextFieldValue(player, title, sumValue, _playerData, _playerID)
 	local field = _playerData[title.field]
 
@@ -295,8 +298,9 @@ onEvent("NewPlayer", function(player)
 	in_room[player] = true
 
 	player_count = player_count + 1
+	actual_player_count = actual_player_count + 1
 
-	if not room.isTribeHouse and player_count > room.moduleMaxPlayers then
+	if not room.isTribeHouse and actual_player_count > room.moduleMaxPlayers then
 		sendPacket(
 			"common",
 			packets.rooms.lock_fixed,
@@ -341,6 +345,12 @@ onEvent("NewPlayer", function(player)
 		changePlayerSize(player, level.size)
 		tfm.exec.setPlayerScore(player, players_level[player], false)
 
+		if level.cheese then
+			tfm.exec.giveCheese(player)
+		elseif level.uncheese then
+			tfm.exec.removeCheese(player)
+		end
+
 		local next_level = levels[ players_level[player] + 1 ]
 
 		if next_level then
@@ -383,10 +393,28 @@ onEvent("Keyboard", function(player, key)
 end)
 
 onEvent("PlayerLeft", function(player)
+	if smol_completions and smol_completions._maxName == player then
+		smol_completions[smol_completions._maxName] = nil
+		smol_completions._max = 0
+		smol_completions._maxName = nil
+
+		for name, score in next, smol_completions do
+			if name ~= '_maxName' and score > smol_completions._max then
+				smol_completions._max = score
+				smol_completions._maxName = name
+			end
+		end
+
+		if smol_completions._maxName then
+			translatedChatMessage("smol_best", nil, smol_completions._maxName, smol_completions._max)
+		end
+	end
+
 	players_file[player] = nil
 	in_room[player] = nil
 	times.movement[player] = nil
 	lastPlayerLeft = player
+	actual_player_count = actual_player_count - 1
 
 	if spec_mode[player] then return end
 
@@ -444,6 +472,19 @@ onEvent("PlayerWon", function(player)
 	if bans[ room.playerList[player].id ] then return end
 	if victory[player] then return end
 
+	if smol_completions and player:sub(1, 1) ~= "*" then
+		smol_completions[player] = 1 + (smol_completions[player] or 0)
+
+		if smol_completions[player] > smol_completions._max then
+			smol_completions._max = smol_completions[player]
+
+			if smol_completions._maxName ~= player then
+				smol_completions._maxName = player
+				translatedChatMessage("smol_best", nil, player, smol_completions._max)
+			end
+		end
+	end
+
 	victory_count = victory_count + 1
 	victory._last_level[player] = false
 	tfm.exec.linkMice(player, player, false)
@@ -473,6 +514,12 @@ onEvent("PlayerRespawn", function(player)
 	local level = levels[ players_level[player] ]
 	if not level then return end
 	tfm.exec.movePlayer(player, level.x, level.y)
+
+	if level.cheese then
+		tfm.exec.giveCheese(player)
+	elseif level.uncheese then
+		tfm.exec.removeCheese(player)
+	end
 end)
 
 onEvent("NewGame", function()
@@ -493,7 +540,7 @@ onEvent("NewGame", function()
   local xml = info and info.xml
   local code = room.currentMap
   local smolified = info and info.author == '#Module'
-	local original_author = xml:match('%s+PKAUTHOR="(.-)"%s*')
+	local original_author = xml and xml:match('%s+PKAUTHOR="(.-)"%s*')
 
 	if original_author and original_author ~= '#Module' then
 		info.author = original_author:gsub('<', ''):gsub('&', '')
@@ -542,6 +589,12 @@ onEvent("NewGame", function()
 			changePlayerSize(player, size)
 			tfm.exec.setPlayerScore(player, 1, false)
 			tfm.exec.linkMice(player, player, false)
+
+			if levels[1].cheese then
+				tfm.exec.giveCheese(player)
+			elseif levels[1].uncheese then
+				tfm.exec.removeCheese(player)
+			end
 		end
 
 		if records_admins then
@@ -632,6 +685,12 @@ onEvent("Loop", function()
 							changePlayerSize(name, next_level.size)
 						end
 
+						if next_level.cheese then
+							tfm.exec.giveCheese(name)
+						elseif next_level.uncheese then
+							tfm.exec.removeCheese(name)
+						end
+
 						if not victory[name] then
 							tfm.exec.setPlayerScore(name, level_id, false)
 						end
@@ -676,6 +735,12 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if level.size ~= levels[ bonus - 1 ].size then
 		-- need to change the size
 		changePlayerSize(player, level.size)
+	end
+
+	if level.cheese then
+		tfm.exec.giveCheese(player)
+	elseif level.uncheese then
+		tfm.exec.removeCheese(player)
 	end
 
 	if not victory[player] then
@@ -733,6 +798,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
 		else
 			tfm.exec.chatMessage("<v>[#] <d>Review mode disabled by " .. player .. ".")
+			tfm.exec.setRoomMaxPlayers(room_max_players)
 		end
 		showStats()
 
@@ -776,6 +842,12 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.setPlayerScore(player, checkpoint, false)
 		end
 
+		if levels[checkpoint].cheese then
+			tfm.exec.giveCheese(player)
+		elseif levels[checkpoint].uncheese then
+			tfm.exec.removeCheese(player)
+		end
+
 		local next_level = levels[checkpoint + 1]
 		if checkpoints[player] then
 			tfm.exec.removeImage(checkpoints[player])
@@ -795,9 +867,20 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if not players_file[player] then return end
 		if not perms[player] or not perms[player].spectate then return end
 
-		enableSpecMode(player, not spec_mode[player])
-		players_file[player].spec = spec_mode[player]
-		savePlayerData(player)
+		if args[1] then
+			if not perms[player].set_spectate and not review_mode then return end
+			if not room.playerList[args[1]] or not players_file[args[1]] then
+				return translatedChatMessage("invalid_syntax", player)
+			end
+
+			enableSpecMode(args[1], not spec_mode[args[1]])
+			inGameLogCommand(player, cmd, args)
+			logCommand(player, cmd, quantity, args)
+		else
+			enableSpecMode(player, not spec_mode[player])
+			players_file[player].spec = spec_mode[player]
+			savePlayerData(player)
+		end
 
 	elseif cmd == "time" then
 		if not records_admins or not records_admins[player] then
@@ -837,6 +920,12 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.setPlayerScore(player, 1, false)
 		tfm.exec.killPlayer(player)
 		tfm.exec.respawnPlayer(player)
+
+		if levels[1].cheese then
+			tfm.exec.giveCheese(player)
+		elseif levels[1].uncheese then
+			tfm.exec.removeCheese(player)
+		end
 
 		local x, y = levels[2].x, levels[2].y
 		if checkpoints[player] then

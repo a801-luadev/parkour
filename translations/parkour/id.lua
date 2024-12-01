@@ -4,6 +4,8 @@ translations.id = {
 
     -- Error messages
     corrupt_map = "<r>Peta rusak. Sedang Memuat peta lainnya.",
+    corrupt_map_no_perm = "<r>[KESALAHAN] <n>Peta ini tidak dilindungi dengan benar.",
+    corrupt_map_hole = "<r>[KESALAHAN] <n>Peta parkour tidak boleh mengandung lubang tikus.",
     corrupt_map_vanilla = "<r>[KESALAHAN] <n>Tidak bisa mendapatkan informasi dari peta ini.",
     corrupt_map_mouse_start = "<r>[KESALAHAN] <n>Peta ini harus memiliki posisi awal (titik spawn tikus).",
     corrupt_map_needing_chair = "<r>[KESALAHAN] <n>Peta harus memiliki kursi di akhir.",
@@ -16,6 +18,7 @@ translations.id = {
     emergency_mode = "<r>Penghentian darurat, tidak ada pemain baru diizinkan. Dimohon untuk pergi ke ruangan #parkour lain.",
     leaderboard_not_loaded = "<r>Papan peringkat belum bisa dimuat. Mohon Tunggu sebentar.",
     max_power_keys = "<v>[#] <r>Anda hanya bisa memiliki paling banyak %s kemampuan dengan kata kunci yang sama.",
+    room_name_length = "<ROSE><b>[KESALAHAN]</b> Nama ruangan melebihi panjang yang diizinkan yaitu <b>45</b> karakter. Silakan pilih nama yang lebih pendek.",
 
     -- Help window
     help = "Bantuan",
@@ -47,9 +50,16 @@ translations.id = {
     permbanned = "<r>Anda telah diblokir selamanya di #parkour.",
     tempbanned = "<r>Anda telah diblokir dari #parkour selama %s menit.",
     forum_topic = "<rose>Untuk informasi lebih lanjut mengenai modul kunjungi tautan: %s",
-    report = "<j>Ingin melaporkan seorang pemain? <t><b>!report Username#0000 [reason]</b></t>",
+    report = "<j>Ingin melaporkan pemain parkour? <t><b>!report Username#0000 [alasan]</b></t>",
     killed = "<v>[#] <r>Kamu dibatasi dalam menggunakan kekuatan selama %s menit karena melanggar aturan parkur. Pelanggaran yang berlanjut akan mendapatkan hukuman ban. Mohon menekan <b>H</b> untuk melihat aturan.",
     mapper_event = "<CE><B>Kontes Pembuatan Peta Parkour 2024:</B>\n<n>Tunjukkan kreativitas kamu dalam pembuatan peta untuk kesempatan memenangkan <D>koin keju <n>dan <pt>koin parkour<n>!\n<R>Pengajuan dibuka sampai <B>31 Januari 2024</B>.\n<PS>Untuk informasi lebih lanjut, kunjungi: %s",
+    cmd_usage_report = "<j>Penggunaan: <bl>!report [Pemain#1234] [alasan]",
+    reported_not_here = "<bl>Pemain yang dilaporkan harus berada di ruangan ini.",
+    reported_invalid = "<bl>Pemain ini tidak dapat dilaporkan.",
+    reason_too_short = "<bl>Alasan laporan terlalu singkat.",
+    report_done = "<j>Terima kasih atas laporannya.",
+    nohelp = "<r>Anda sekarang memberi tahu orang lain bahwa Anda tidak ingin bantuan dengan mengaktifkan garis merah. Tekan <v>F</v> untuk mengalihkan.",
+    quest_map = "<ch>Peta quest Anda @%s ada di sini!",
 
     -- Easter Eggs
     easter_egg_0  = "<ch>Jadi penghitung waktu mundur dimulai...",
@@ -69,6 +79,9 @@ translations.id = {
     double_maps = "<bv>Peta ganda pada hari Minggu (GMT+2) dan semua kekuatan  tersedia untuk minggu ulang tahun parkur!",
     double_maps_start = "<rose>HARI INI ADALAH MINGGU ULANG TAHUN PARKUR! Peta ganda dan semua kekuatan telah diaktifkan. Terima kasih telah bermain dengan kami!",
     double_maps_end = "<rose>Minggu ulang tahun parkur berakhir. Terima kasih telah bermain bersama kami!",
+    anniversary = "<bv>Koin parkour berlipat dua minggu depan (waktu Prancis) dan semua kekuatan tersedia untuk minggu ulang tahun parkour!",
+    anniversary_start = "<rose>INILAH MINGGU ULANG TAHUN PARKOUR! Koin parkour berlipat dua dan semua kekuatan telah diaktifkan. Terima kasih atas semua dukungan dan telah memainkan modul ini!",
+    anniversary_end = "<rose>Minggu ulang tahun Parkour telah berakhir. Terima kasih atas semua dukungan dan telah memainkan modul ini!",
 
     -- Records
     records_enabled = "<v>[#] <d>Mode rekor diaktifkan di room ini. Statistik tidak dihitung dan kekuatan tidak diaktifkan!\nAnda bisa mencari informasi lebih lanjut mengenai rekor di <b>%s</b>",
@@ -95,9 +108,29 @@ translations.id = {
     quest_completed = "<b><D>Selamat!</D></b> \nKamu menyelesaikan kegiatan %s!",
     quest_reset = "<V>[#]</V> <O>Kegiatan %s kamu sudah di atur ulang.</O>",
 
+    -- Christmas
+    find_gift1 = "<ch>Santa baru saja datang! Cari hadiah Natal di peta dan buka kejutanmu!",
+    find_gift2 = "<ch>Jingle sepanjang jalan! Sebuah hadiah Natal spesial telah muncul secara ajaib di peta – pergilah menemukannya!",
+    find_gift3 = "<ch>Ho, ho, ho! Pembantu kecil Santa telah meninggalkan hadiah untukmu untuk ditemukan di peta saat ini!",
+    find_gift4 = "<ch>Semangat Natal ada di udara! Temukan hadiah Natal yang tersembunyi di peta ini!",
+    find_gift5 = "<ch>Selamat Parkourmas! Para elf telah menyembunyikan hadiah untukmu. Bisakah kamu menemukannya?",
+    found_gift1 = "<ch>Hore! <J>%s</J> telah membuka hadiah dan menemukan %s koin di dalamnya!",
+    found_gift2 = "<ch>Hore, <J>%s</J>! Kamu baru saja memenangkan <J>%s</J> koin berkilauan dari hadiah ajaib Santa!",
+    found_gift3 = "<ch>Inilah kemenangan untuk <J>%s</J>! <J>%s</J> koin lebih kaya, berkat Santa!",
+    found_gift4 = "<ch>Selamat kepada <J>%s</J> yang memenangkan <J>%s</J> koin! Semangat Natal bersinar terang!",
+    found_gift5 = "<ch>Hadiah dari Santa telah memberkahi <J>%s</J> dengan <J>%s</J> koin yang memukau!",
+
     -- Miscellaneous
     afk_popup = "\n<p align='center'><font size='30'><bv><b>ANDA DALAM MODE AFK</b></bv>\nPINDAH UNTUK RESPAWN</font>\n\n<font size='30'><u><t>Pengingat:</t></u></font>\n\n<font size='15'><r>Pemain dengan simbol merah tidak menginginkan bantuan!\nTrolling/pemblokiran pemain lain di parkur TIDAK dizinkan!<d>\nBergabung dengan <cep><a href='event:discord'>discord server</a> kami</cep>!\nIngin berkontribusi dengan kode? Lihat <cep><a href='event:github'>repository github</a> kami</cep>\nKamu memiliki peta bagus untuk diajukan? Posting di <cep><a href='event:map_submission'>topik pengajuan peta</a> kami</cep>\nCek <cep><a href='event:forum'>topik resmi</a></cep> kami untuk informasi lebih lanjut!\nDukung kami dengan <cep><a href='event:donate'>donasi!</a></cep>",
-    options = "<p align='center'><font size='20'>Opsi Parkour</font></p>\n\nGunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\nTekan <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> hotkey untuk <b>/mort</b> (jika dinonaktifkan menjadi <b>DEL</b>)\n\nPerlihatkan cooldown kemampuan anda\n\nPerlihatkan tombol kemampuan\n\nPerlihatkan tombol bantuan\n\nAktifkan pengumuman penyelesaian peta\n\nAktifkan simbol tidak memerlukan bantuan\n\nDisable all UI (leaderboard, help, shop etc.) hotkeys",
+    options = "<p align='center'><font size='20'>Opsi Parkour</font></p>\n\n" ..
+        "Gunakan keyboard <b>QWERTY</b> (nonaktifkan jika <b>AZERTY</b>)\n\n" ..
+        "Tekan <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> hotkey untuk <b>/mort</b> (jika dinonaktifkan menjadi <b>DEL</b>)\n\n" ..
+        "Perlihatkan cooldown kemampuan anda\n\n" ..
+        "Tampilkan tombol antarmuka\n\n" ..
+        "Pesan sambutan\n\n" ..
+        "Aktifkan pengumuman penyelesaian peta\n\n" ..
+        "Aktifkan simbol tidak memerlukan bantuan\n\n" ..
+        "Disable all UI (leaderboard, help, shop etc.) hotkeys",
     cooldown = "<v>[#] <r>Mohon Tunggu beberapa detik untuk melakukan-nya kembali.",
     power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Keyboard <b>QWERTY</b>" ..
                     "\n\n<b>Tutup</b> penghitung peta" ..
@@ -190,6 +223,9 @@ translations.id = {
     buy = "Beli",
     equip = "Pakai",
     equipped = "<font size = '10'>Dipakai</font>",
+    saving = "<p align='right'>Menyimpan...",
+    new_image = "<J>Penampilan Anda telah diubah. Anda dapat mengembalikannya ke normal dengan mengetik !image",
+    smol_best = "<j>Pemimpin ruangan mode smol baru: %s dengan %s penyelesaian peta!",
 
     -- Power names
     balloon = "Balon",

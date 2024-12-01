@@ -1,6 +1,3 @@
-local band = (bit or bit32).band
-local bxor = (bit or bit32).bxor
-
 ranks = {
 	admin = {_count = 0},
 	bot = {_count = 0},
@@ -21,6 +18,8 @@ local ranks_id = {
 	bot = 2 ^ 6,
 	hidden = 2 ^ 7
 }
+
+do
 local ranks_permissions = {
 	admin = {
 		set_checkpoint_version = true,
@@ -40,11 +39,13 @@ local ranks_permissions = {
 		see_map_polls = true,
 		change_roommod = true,
 		see_hidden_staff = true,
+		manage_maps = true,
 	},
 	mod = {
 		ban = true,
 		unban = true,
 		spectate = true,
+		set_spectate = true,
 		get_player_room = true,
 		load_custom_map = true,
 		kill = true,
@@ -67,6 +68,7 @@ local ranks_permissions = {
 		set_map_time_review = true,
 		change_roommod = true,
 		see_hidden_staff = true,
+		set_room_limit_review = true,
 	},
 	trainee = {
 		ban = true,
@@ -111,7 +113,7 @@ onEvent("GameDataLoaded", function(data)
 		for player, rank in next, data.ranks do
 			player_perms, _player_ranks = {}, {}
 			for name, id in next, ranks_id do
-				if band(rank, id) > 0 then
+				if bit32.band(rank, id) > 0 then
 					_player_ranks[name] = true
 					ranks[name][player] = true
 					ranks[name]._count = ranks[name]._count + 1
@@ -126,3 +128,4 @@ onEvent("GameDataLoaded", function(data)
 		end
 	end
 end)
+end
