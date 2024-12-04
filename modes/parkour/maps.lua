@@ -164,7 +164,6 @@ local function newMap(difficulty)
 		end
 	end
 
-	current_difficulty = difficulty
 	map = selectMap(maps[difficulty].sections, maps[difficulty].list, maps[difficulty].count)
 
 	current_map = map
@@ -243,10 +242,12 @@ end)
 onEvent("NewGame", function()
 	local map_code_num = tonumber(tostring(room.currentMap):sub(2))
 
-	-- Makes sure current_difficulty is correct
-	local rotation = maps[current_difficulty]
-	if not rotation or rotation.list[maplist_index] ~= map_code_num then
-		current_difficulty = 0
+	current_difficulty = 0
+	for i=1, 3 do
+		if table_find(maps[i].list, map_code_num) then
+			current_difficulty = i
+			break
+		end
 	end
 
 	-- When a map is loaded, this function reads the XML to know where the

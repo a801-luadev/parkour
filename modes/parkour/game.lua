@@ -30,6 +30,7 @@ local gift_conditions = {_complete = math.random(4, 8), _completed = 0, _ts = os
 local save_queue = { __first = "", __last = ""}
 local saveQueueCounter = 0
 
+local difficulty_color = { 'vp', 'j', 'r', 'bv' }
 local checkpoint_info = {
 	version = 1, -- 0 = old, 1 = new
 	radius = 15 ^ 2, -- radius of 15px
@@ -120,8 +121,10 @@ function showStats()
 		not review_mode) and "<v>Stats count" or "<r>Stats don't count"
 
 	ui.setMapName(string.format(
-		"%s<g>   |   %s <BL>- D%s",
-		map_name, text, current_difficulty
+		"%s<g>   |   %s <BL>- <%s>D%s",
+		map_name, text,
+		difficulty_color[current_difficulty] or 'bl',
+		current_difficulty
 	))
 end
 
