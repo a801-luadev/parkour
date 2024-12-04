@@ -55,6 +55,7 @@ local map_change_cd = 0
 
 current_map = nil
 
+local chair_pos
 local levels
 local perms
 local review_mode
@@ -296,12 +297,12 @@ onEvent("NewGame", function()
 		end
 	end
 
-	local chair = false
+	chair_pos = nil
 	for tag in string.gmatch(xml, '<P%s+(.-)%s+/>') do
 		properties = getTagProperties(tag)
 
 		if properties.T == 19 and properties.C == "329cd2" then
-			chair = true
+			chair_pos = { properties.X, properties.Y - 40 }
 			count = count + 1
 			levels[count] = {
 				x = properties.X, y = properties.Y - 40,
@@ -332,8 +333,8 @@ onEvent("NewGame", function()
 	end
 
 	if room.xmlMapInfo.author ~= "#Module" then
-		if not chair or count < 3 then -- start, at least one nail and end chair
-			return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
+		if not chair_pos or count < 3 then -- start, at least one nail and end chair
+			return invalidMap(not chair_pos and "needing_chair" or "missing_checkpoints")
 		end
 	end
 

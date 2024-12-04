@@ -61,7 +61,7 @@ onEvent("PlayerWon", function(player)
 	if not file then return end
 	if not levels then return end
 
-	victory[player] = os.time()
+	victory[player] = os.time() + 10000 * (1 + math.max(0, file.bancount or 0))
 	setNameColor(player) -- just in case PlayerRespawn triggers first
 
 	if records_admins then
