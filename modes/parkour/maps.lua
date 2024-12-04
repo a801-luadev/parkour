@@ -384,7 +384,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if not records_cond and not tribe_cond and not normal_cond and not smol_cond then return end
 
 		if quantity > 0 then
-			if not records_cond and not tribe_cond and not perms[player].load_custom_map then
+			if not records_cond and not tribe_cond and not (perms[player] and perms[player].load_custom_map) then
 				return tfm.exec.chatMessage("<v>[#] <r>You can't load a custom map.", player)
 			end
 
