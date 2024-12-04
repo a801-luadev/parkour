@@ -50,8 +50,6 @@ onEvent("NewPlayer", function(player)
 	if roomcreators and #roomcreators < 10 then
 		roomcreators[1 + #roomcreators] = player
 	end
-
-	checkMapQuest(player)
 end)
 
 onEvent("PlayerWon", function(player)
@@ -511,6 +509,7 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 
 	checkRoomRequest(player, data)
+	checkMapQuest(player)
 
 	if data.settings[6] == 1 then
 		translatedChatMessage("welcome", player)
