@@ -1012,8 +1012,38 @@ local function disableSnow(player, cmd, quantity, args)
 	tfm.exec.snow(0, 10)
 end
 
-local function linkMouse(player, cmd, quantity, args)
+local partyHost = {}
+
+local function handlePartyHost(player, cmd, quantity, args)
 	if not ranks.admin[player] then
+		return
+	end
+	if not args[1] then
+		tfm.exec.chatMessage('<j>Party Hosts:', player)
+		for name in next, partyHost do
+			tfm.exec.chatMessage(name, player)
+		end
+		return
+	end
+
+	inGameLogCommand(player, cmd, args)
+
+	if args[1] == '*' and args[2] == 'remove' then
+		partyHost = {}
+		tfm.exec.chatMessage('<r>Party host list is clear now!', player)
+		return
+	end
+
+	partyHost[args[1]] = args[2] ~= 'remove' or nil
+	if partyHost[args[1]] then
+		tfm.exec.chatMessage(('<vp>%s is a party host now!'):format(args[1]), player)
+	else
+		tfm.exec.chatMessage(('<r>%s is not a party host anymore!'):format(args[1]), player)
+	end
+end
+
+local function linkMouse(player, cmd, quantity, args)
+	if not ranks.admin[player] and not partyHost[player] then
 		return
 	end
 
@@ -1025,20 +1055,31 @@ local function linkMouse(player, cmd, quantity, args)
 	local firstPlayer = args[1]
 	local secondPlayer = args[2]
 
+	if not ranks.admin[player] and (not victory[firstPlayer] or not victory[secondPlayer]) then
+		return translatedChatMessage("invalid_syntax", player)
+	end
+
 	tfm.exec.linkMice(firstPlayer, secondPlayer, true)
+
+	if not ranks.admin[player] then
+		inGameLogCommand(player, cmd, args)
+	end
 end
 
 local function changeMouseSize(player, cmd, quantity, args)
-	if not ranks.admin[player] then return end
+	if not ranks.admin[player] and not partyHost[player] then return end
 
 	local target = args[1]
 	local size = tonumber(args[2])
-	if not room.playerList[target] or not size then
+	if not room.playerList[target] or not size or not ranks.admin[player] and not victory[target] then
 		return translatedChatMessage("invalid_syntax", player)
 	end
 
 	tfm.exec.changePlayerSize(target, size)
-	return
+
+	if not ranks.admin[player] then
+		inGameLogCommand(player, cmd, args)
+	end
 end
 
 local mouseImages = {}
@@ -1052,7 +1093,7 @@ local function addMouseImage(player, cmd, quantity, args)
 		return
 	end
 
-	if not ranks.admin[player] then return end
+	if not ranks.admin[player] and not partyHost[player] then return end
 
 	local playerName = args[1]
 	local imageURL = args[2]
@@ -1063,8 +1104,12 @@ local function addMouseImage(player, cmd, quantity, args)
 	local alwaysActive = false
 
 	if imageURL then
-		alwaysActive = imageURL:sub(1, 1) == '*'
+		alwaysActive = ranks.admin[player] and imageURL:sub(1, 1) == '*'
 		imageURL = alwaysActive and imageURL:sub(2) or imageURL
+	end
+
+	if not ranks.admin[player] then
+		inGameLogCommand(player, cmd, args)
 	end
 
 	if playerName == "*" then
@@ -1323,6 +1368,7 @@ local commandDispatch = {
 	["karma"] = handleKarma,
 	["skip"] = skipMap,
 	["kick"] = handleKick,
+	["partyhost"] = handlePartyHost,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
