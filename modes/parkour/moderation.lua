@@ -1015,7 +1015,7 @@ end
 local partyHost = {}
 
 local function handlePartyHost(player, cmd, quantity, args)
-	if not ranks.admin[player] then
+	if records_admins or not ranks.admin[player] then
 		return
 	end
 	if not args[1] then
@@ -1043,7 +1043,7 @@ local function handlePartyHost(player, cmd, quantity, args)
 end
 
 local function linkMouse(player, cmd, quantity, args)
-	if not ranks.admin[player] and not partyHost[player] then
+	if records_admins or not ranks.admin[player] and not partyHost[player] then
 		return
 	end
 
@@ -1067,7 +1067,7 @@ local function linkMouse(player, cmd, quantity, args)
 end
 
 local function changeMouseSize(player, cmd, quantity, args)
-	if not ranks.admin[player] and not partyHost[player] then return end
+	if records_admins or not ranks.admin[player] and not partyHost[player] then return end
 
 	local target = args[1]
 	local size = tonumber(args[2])
@@ -1093,7 +1093,7 @@ local function addMouseImage(player, cmd, quantity, args)
 		return
 	end
 
-	if not ranks.admin[player] and not partyHost[player] then return end
+	if records_admins or not ranks.admin[player] and not partyHost[player] then return end
 
 	local playerName = args[1]
 	local imageURL = args[2]
