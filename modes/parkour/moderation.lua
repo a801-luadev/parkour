@@ -237,11 +237,11 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 	end)
 end
 
-function inGameLogCommand(p, command, args)
-	local commandtext = table.concat(args, " ")
-	for playername, player in pairs(tfm.get.room.playerList) do
-		if ranks.admin[playername] or ranks.mod[playername] then
-			tfm.exec.chatMessage("<BL>Ξ [" .. p .. "]<N2> !" .. command .. " " .. commandtext, playername)
+function inGameLogCommand(player, command, args, extraTbl)
+	local params = table.concat(args, " ")
+	for name in next, room.playerList do
+		if ranks.admin[name] or ranks.mod[name] or extraTbl and extraTbl[name] then
+			tfm.exec.chatMessage("<BL>Ξ [" .. player .. "]<N2> !" .. command .. " " .. params, name)
 		end
 	end
 end
@@ -1066,7 +1066,7 @@ local function linkMouse(player, cmd, quantity, args)
 	tfm.exec.linkMice(firstPlayer, secondPlayer, true)
 
 	if not ranks.admin[player] then
-		inGameLogCommand(player, cmd, args)
+		inGameLogCommand(player, cmd, args, partyHost)
 	end
 end
 
@@ -1082,7 +1082,7 @@ local function changeMouseSize(player, cmd, quantity, args)
 	tfm.exec.changePlayerSize(target, size)
 
 	if not ranks.admin[player] then
-		inGameLogCommand(player, cmd, args)
+		inGameLogCommand(player, cmd, args, partyHost)
 	end
 end
 
@@ -1119,7 +1119,7 @@ local function addMouseImage(player, cmd, quantity, args)
 	end
 
 	if not ranks.admin[player] then
-		inGameLogCommand(player, cmd, args)
+		inGameLogCommand(player, cmd, args, partyHost)
 	end
 
 	if playerName == "*" then
