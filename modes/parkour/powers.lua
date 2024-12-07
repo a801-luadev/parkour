@@ -903,7 +903,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	end
 
 	if key == 113 then
-		if not checkCooldown(player, "badgeSmiley", 10000) then return end
+		if not checkCooldown(player, "badgeSmiley", 5000) then return end
 		local pbg = players_file[player] and players_file[player].badges
 		if not pbg then return end
 
