@@ -30,7 +30,7 @@ local gift_conditions = {_complete = math.random(4, 8), _completed = 0, _ts = os
 local save_queue = { __first = "", __last = ""}
 local saveQueueCounter = 0
 
-local difficulty_color = { 'vp', 'j', 'r', 'bv' }
+local difficulty_color = { 'vp', 'j', 'ch2' }
 local checkpoint_info = {
 	version = 1, -- 0 = old, 1 = new
 	radius = 15 ^ 2, -- radius of 15px
@@ -119,12 +119,19 @@ function showStats()
 		not records_admins and
 		not is_tribe and
 		not review_mode) and "<v>Stats count" or "<r>Stats don't count"
+	local colortag = difficulty_color[current_difficulty]
 
 	ui.setMapName(string.format(
-		"%s<g>   |   %s <BL>- <%s>D%s",
-		map_name, text,
-		difficulty_color[current_difficulty] or 'bl',
-		current_difficulty
+		"%s%s<g>   |   %s",
+		map_name,
+		colortag and string.format(
+			' - <%s>Difficulty %s',
+			colortag,
+			current_difficulty
+		)
+		or current_difficulty == 4 and ' - <g>In-Review'
+		or '',
+		text
 	))
 end
 

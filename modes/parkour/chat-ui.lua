@@ -423,9 +423,16 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>you can't forcestats in a records room", player)
 		end
 
+		if args[1] and args[1] ~= room.currentMap then
+			return
+		end
+
 		count_stats = true
 		tfm.exec.chatMessage("<v>[#] <d>count_stats set to true", player)
-		max_args = 0
+		args[1] = room.currentMap
+		args[2] = room.xmlMapInfo and room.xmlMapInfo.permCode or -1
+		max_args = 2
+		quantity = 2
 		showStats()
 
 	elseif cmd == "room" then -- logged

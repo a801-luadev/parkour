@@ -251,6 +251,10 @@ onEvent("NewGame", function()
 		end
 	end
 
+	if current_difficulty == 0 and room.xmlMapInfo and room.xmlMapInfo.permCode == 42 then
+		current_difficulty = 4
+	end
+
 	-- When a map is loaded, this function reads the XML to know where the
 	-- checkpoints are
 
