@@ -31,7 +31,9 @@ local parkour_bot = "Parkour#0568"
 
 local function apply_file_operation(data, operation)
 	local action = operation[2]
-	if action == 'sanction' then
+	if action == 'fetch' then
+		return
+	elseif action == 'sanction' then
 		if not data.mods then
 			return "no mods field"
 		end
@@ -42,6 +44,7 @@ local function apply_file_operation(data, operation)
 		local playerid, moderator = operation[3], operation[4]
 		local time, level = tonumber(operation[5]), tonumber(operation[6])
 		local mod_index = table_find(data.mods, moderator)
+		local now = os.time()
 
 		if not mod_index then
 			data.mods[1 + #data.mods] = moderator
@@ -57,8 +60,22 @@ local function apply_file_operation(data, operation)
 			end
 		end
 
+		if not time then
+			if sanctionLevel == 1 then
+				time = now + 86400000 -- 1 day
+			elseif sanctionLevel == 2 then
+				time = now + 86400000 * 7
+			elseif sanctionLevel == 3 then
+				time = now + 86400000 * 30
+			elseif sanctionLevel == 4 then
+				time = 2 -- permanent ban
+			else
+				time = 0 -- unban
+			end
+		end
+
 		data.sanction[playerid] = {
-			timestamp = os.time(),
+			timestamp = now,
 			time = time,
 			info = mod_index,
 			level = sanctionLevel,
@@ -207,8 +224,11 @@ onEvent("Loop", function()
 end)
 
 onEvent("FileLoaded", function(file, data)
-	if not file_updates then
+	if not file_updates or file_updates[1][1] == file and file_updates[1][2] == 'fetch' then
 		tfm.exec.playMusic('file:' .. tostring(file), tostring(data), 0, false, false, parkour_bot)
+	end
+
+	if not file_updates then
 		return
 	end
 
