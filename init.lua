@@ -135,7 +135,7 @@ else
 	if nameLength > 45 then 
 		local password = generateRandomString(10)
 		tfm.exec.setRoomPassword(password)
-		tfm.exec.chatMessage("<ROSE><b>[WARNING]</b> The room name exceeds the allowed length of <b>45</b> characters. Please choose a shorter name.", nil)
+		translatedChatMessage("room_name_length")
 		return 
 	end
 
