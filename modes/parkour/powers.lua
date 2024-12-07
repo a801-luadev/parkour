@@ -945,12 +945,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 			)) and (power[index].isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
 				power[index].fnc(player, key, down, x, y)
 
-				if (count_stats and
-				room.uniquePlayers >= min_save and
-				player_count >= min_save and
-				not records_admins and
-				not is_tribe and
-				not review_mode) then
+				if doStatsCount() then
 					if power_quest[player] and (power_quest[player].w or power_quest[player].d) then
 						local save = false
 						local file = players_file[player].quests
@@ -1072,13 +1067,7 @@ onEvent("PlayerWon", function(player)
 	local file = players_file[player]
 	if not file then return end
 
-	if (count_stats and
-		room.uniquePlayers >= min_save and
-		player_count >= min_save and
-		not records_admins and
-		not is_tribe and
-		not review_mode) then
-
+	if doStatsCount() then
 		local earned_coins = (is_anniversary and 2 or 1) * current_difficulty
 
 		file.c = file.c + 1

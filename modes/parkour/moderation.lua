@@ -1004,8 +1004,12 @@ local function setChristmasMap(player, cmd, quantity, args)
 		return
 	end
 
-	gift_conditions._completed = gift_conditions._complete - 1
-	gift_conditions._ts = os.time()
+	if not christmas then
+		return tfm.exec.chatMessage('<r>Not in christmas season', player)
+	end
+
+	christmas.nextRound()
+	tfm.exec.chatMessage('Christmas gifts will appear next round', player)
 end
 
 local function disableSnow(player, cmd, quantity, args)

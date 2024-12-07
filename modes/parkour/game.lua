@@ -25,8 +25,6 @@ local cp_available = {}
 local map_name
 local map_gravity = 10
 
-local gifts = {}
-local gift_conditions = {_complete = math.random(4, 8), _completed = 0, _ts = os.time() + math.random(15, 30) * 60 * 1000}
 local save_queue = { __first = "", __last = ""}
 local saveQueueCounter = 0
 
@@ -108,17 +106,21 @@ local function addCheckpointImage(player, x, y)
 	checkpoints[player] = tfm.exec.addImage(img, "!1", x - 15, y - 15, player)
 end
 
+local function doStatsCount()
+	return count_stats and
+		room.uniquePlayers >= min_save and
+		player_count >= min_save and
+		not records_admins and
+		not is_tribe and
+		not review_mode or force_stats_count_debug
+end
+
 function showStats()
 	-- Shows if stats count or not
 
 	if not map_name then return end
 
-	local text = (count_stats and
-		room.uniquePlayers >= min_save and
-		player_count >= min_save and
-		not records_admins and
-		not is_tribe and
-		not review_mode) and "<v>Stats count" or "<r>Stats don't count"
+	local text = doStatsCount() and "<v>Stats count" or "<r>Stats don't count"
 	local colortag = difficulty_color[current_difficulty]
 
 	ui.setMapName(string.format(
@@ -200,56 +202,6 @@ local function saveFromQueue()
 	save_queue.__first = save_queue[save_queue.__first]
 
 	save_queue[oldfirst] = nil
-end
-
-local function addRandomGift()
-	local gift_x = math.random(50, 1580) 
-	local gift_y = math.random(50, 700)
-	local msg = math.random(1, 5)
-
-	for player in next, in_room do
-		gifts[player] = tfm.exec.addImage("18c73e40d6d.png", "!1", gift_x - 15 , gift_y - 20, player)
-		tfm.exec.addBonus(0, gift_x, gift_y, 999, 0, false, player)
-		translatedChatMessage("find_gift" .. msg, player)
-	end
-
-	gift_conditions = {_complete = math.random(4, 8), _completed = 0, _ts = os.time() + math.random(15, 30) * 60 * 1000}
-end
-
-local function giftCollected(player)
-	if not players_file[player] then return end
-	if not gifts[player] then return end
-
-	local prizes = {10, 50, 100, 250, 500, 750, 1000}
-	local chances = {8600, 1000, 200, 139, 50, 10, 1}
-
-	local randomValue = math.random(0, 100 * 100)
-
-	local totalChance = 0
-	local prize = 0
-    for i, chance in ipairs(chances) do
-        totalChance = totalChance + chance
-        if randomValue <= totalChance then
-            prize = prizes[i]
-			break
-        end
-    end
-	
-	local msg = math.random(1, 5)
-	if prize > 50 then
-		for p in next, in_room do
-			translatedChatMessage("found_gift" .. msg, p, player, prize)
-		end
-	else
-		translatedChatMessage("found_gift" .. msg, player, player, prize)
-	end
-
-	players_file[player].coins = players_file[player].coins + prize
-	queueForSave(player)
-
-	tfm.exec.removeBonus(999, player)
-	tfm.exec.removeImage(gifts[player])
-	gifts[player] = nil
 end
 
 local function checkBan(player, data, id)
@@ -376,6 +328,10 @@ onEvent("NewPlayer", function(player)
 	end
 
 	showStats()
+
+	if christmas then
+		christmas.createGift(player)
+	end
 end)
 
 onEvent("Keyboard", function(player, key)
@@ -619,20 +575,9 @@ onEvent("NewGame", function()
 	end
 	showStats()
 
-	-- if (count_stats and
-	-- 	room.uniquePlayers >= min_save and
-	-- 	player_count >= min_save and
-	-- 	not records_admins and
-	-- 	not is_tribe and
-	-- 	not review_mode) then
-			
-	-- 	gift_conditions._completed = gift_conditions._completed + 1
-		
-	-- 	if gift_conditions._completed >= gift_conditions._complete and os.time() > gift_conditions._ts then
-	-- 		addRandomGift()
-	-- 	end
-	-- end
-
+	if christmas and doStatsCount() then
+		christmas.initRound()
+	end
 end)
 
 onEvent("Loop", function()
@@ -730,7 +675,14 @@ end)
 
 onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if checkpoint_info.version ~= 1 then return end
-	if bonus == 999 then return giftCollected(player) end
+	if christmas and christmas.bonusId == bonus then
+		local prize = christmas.collectGift(player)
+		if players_file[player] and prize then
+			players_file[player].coins = players_file[player].coins + prize
+			queueForSave(player)
+		end
+		return
+	end
 	if not levels then return end
 	local level = levels[bonus]
 	if not level then return end

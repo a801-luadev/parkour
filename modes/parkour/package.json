@@ -12,6 +12,8 @@
 
 	{"type": "require-file", "file": "modes/parkour/join-system.lua"},
 
+	{"type": "require-file", "file": "modes/parkour/christmas.lua"},
+
 	{"type": "require-file", "file": "modes/parkour/game.lua"},
 
 	{"type": "require-file", "file": "modes/parkour/files.lua"},
