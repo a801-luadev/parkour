@@ -120,7 +120,13 @@ function showStats()
 
 	if not map_name then return end
 
-	local text = doStatsCount() and "<v>Stats count" or "<r>Stats don't count"
+	local text = doStatsCount() and
+		"<v>Stats count" or
+		(
+			review_mode and
+			"<bv>Review Mode" or
+			"<r>Stats don't count"
+		)
 	local colortag = difficulty_color[current_difficulty]
 
 	ui.setMapName(string.format(
@@ -131,7 +137,7 @@ function showStats()
 			colortag,
 			current_difficulty
 		)
-		or current_difficulty == 4 and ' - <g>In-Review'
+		or current_difficulty == 4 and ' - <bv>In-Review'
 		or '',
 		text
 	))
