@@ -1316,7 +1316,7 @@ local function skipMap(playerName, cmd, quantity, args)
 		return
 	end
 
-	local reason = args[1]
+	local reason = table.concat(args, ' ')
 	local mapCode = room.currentMap
 	local uniquePlayers = room.uniquePlayers
 
