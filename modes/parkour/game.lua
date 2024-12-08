@@ -761,6 +761,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		else
 			tfm.exec.chatMessage("<v>[#] <d>Review mode disabled by " .. player .. ".")
 			tfm.exec.setRoomMaxPlayers(room_max_players)
+			tfm.exec.chatMessage("<v>[#] <d>Room limit is restored to " .. room_max_players, player)
 		end
 		showStats()
 
