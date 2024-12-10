@@ -518,6 +518,12 @@ onEvent("PlayerDataParsed", function(player, data)
 	checkRoomRequest(player, data)
 	checkMapQuest(player)
 
+	if records_admins then
+		if string.find(room.lowerName, string.lower(player), 1, true) then
+			records_admins[player] = true
+		end
+	end
+
 	if data.settings[6] == 1 then
 		translatedChatMessage("welcome", player)
 		tfm.exec.chatMessage("<rose>" .. links.discord, player)
@@ -536,8 +542,7 @@ onEvent("PlayerDataParsed", function(player, data)
 		if records_admins then
 			translatedChatMessage("records_enabled", player, links.records)
 
-			if string.find(room.lowerName, string.lower(player), 1, true) then
-				records_admins[player] = true
+			if records_admins[player] then
 				translatedChatMessage("records_admin", player)
 			end
 		end
