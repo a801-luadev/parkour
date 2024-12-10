@@ -237,11 +237,11 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 	end)
 end
 
-function inGameLogCommand(p, command, args)
-	local commandtext = table.concat(args, " ")
-	for playername, player in pairs(tfm.get.room.playerList) do
-		if ranks.admin[playername] or ranks.mod[playername] then
-			tfm.exec.chatMessage("<BL>Ξ [" .. p .. "]<N2> !" .. command .. " " .. commandtext, playername)
+function inGameLogCommand(player, command, args, extraTbl)
+	local params = table.concat(args, " ")
+	for name in next, room.playerList do
+		if ranks.admin[name] or ranks.mod[name] or extraTbl and extraTbl[name] then
+			tfm.exec.chatMessage("<BL>Ξ [" .. player .. "]<N2> !" .. command .. " " .. params, name)
 		end
 	end
 end
@@ -1004,16 +1004,77 @@ local function setChristmasMap(player, cmd, quantity, args)
 		return
 	end
 
-	gift_conditions._completed = gift_conditions._complete - 1
-	gift_conditions._ts = os.time()
+	if not christmas then
+		return tfm.exec.chatMessage('<r>Not in christmas season', player)
+	end
+
+	christmas.nextRound()
+	tfm.exec.chatMessage('Christmas gifts will appear next round', player)
 end
 
 local function disableSnow(player, cmd, quantity, args)
 	tfm.exec.snow(0, 10)
 end
 
+local partyHost = {}
+
+local function isPartyHost(name)
+	local time = partyHost[name]
+	if not time then return end
+	if os.time() > time then
+		partyHost[name] = nil
+		return
+	end
+	return true
+end
+
+local function handlePartyHost(player, cmd, quantity, args)
+	if records_admins or not ranks.admin[player] then
+		return
+	end
+	if not args[1] then
+		local now = os.time()
+		tfm.exec.chatMessage('<j>Party Hosts:', player)
+		for name, expires in next, partyHost do
+			if now < expires then
+				tfm.exec.chatMessage(("<v>%s<BL>: %s min"):format(name, (expires-now) / 60 / 1000), player)
+			end
+		end
+		return
+	end
+
+	inGameLogCommand(player, cmd, args)
+
+	local time = os.time() + 60 * 60 * 1000 -- 1 hour
+
+	if args[2] then
+		time = tonumber(args[2])
+		if not time and args[2] ~= "remove" then
+			tfm.exec.chatMessage('<r>Second parameter should be either "remove" or a number in minutes', player)
+			return
+		end
+
+		if time then
+			time = os.time() + time * 60 * 1000
+		end
+	end
+
+	if args[1] == '*' and args[2] == 'remove' then
+		partyHost = {}
+		tfm.exec.chatMessage('<r>Party host list is clear now!', player)
+		return
+	end
+
+	partyHost[args[1]] = time or nil
+	if partyHost[args[1]] then
+		tfm.exec.chatMessage(('<vp>%s is a party host now!'):format(args[1]), player)
+	else
+		tfm.exec.chatMessage(('<r>%s is not a party host anymore!'):format(args[1]), player)
+	end
+end
+
 local function linkMouse(player, cmd, quantity, args)
-	if not ranks.admin[player] then
+	if records_admins or not ranks.admin[player] and not isPartyHost(player) then
 		return
 	end
 
@@ -1025,34 +1086,53 @@ local function linkMouse(player, cmd, quantity, args)
 	local firstPlayer = args[1]
 	local secondPlayer = args[2]
 
+	if not ranks.admin[player] and (not victory[firstPlayer] or not victory[secondPlayer]) then
+		return tfm.exec.chatMessage('<r>Target players must complete the map', player)
+	end
+
 	tfm.exec.linkMice(firstPlayer, secondPlayer, true)
+
+	if not ranks.admin[player] then
+		inGameLogCommand(player, cmd, args, partyHost)
+	end
 end
 
 local function changeMouseSize(player, cmd, quantity, args)
-	if not ranks.admin[player] then return end
+	if records_admins or not ranks.admin[player] and not isPartyHost(player) then return end
 
 	local target = args[1]
 	local size = tonumber(args[2])
-	if not room.playerList[target] or not size then
-		return translatedChatMessage("invalid_syntax", player)
+	if not room.playerList[target] or not size or not ranks.admin[player] and not victory[target] then
+		return tfm.exec.chatMessage('<r>Target player must complete the map', player)
 	end
 
 	tfm.exec.changePlayerSize(target, size)
-	return
+
+	if not ranks.admin[player] then
+		inGameLogCommand(player, cmd, args, partyHost)
+	end
 end
 
 local mouseImages = {}
+local function applyImage(player, img, factorY)
+	if mouseImages[player] and mouseImages[player][0] then return img[2] or 0 end
+	return tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[3] * img[4] * img[9], img[4] * factorY, 0, img[7], 0.5 * img[3] * img[9], 0.5, false)
+end
 local function addMouseImage(player, cmd, quantity, args)
 	if quantity == 0 then
 		if mouseImages[player] then
-			tfm.exec.removeImage(mouseImages[player][2], false)
-			tfm.exec.killPlayer(player)
-			mouseImages[player] = nil
+			mouseImages[player][0] = not mouseImages[player][0]
+			if mouseImages[player][0] then
+				if mouseImages[player][2] then
+					tfm.exec.removeImage(mouseImages[player][2], false)
+				end
+				tfm.exec.killPlayer(player)
+			end
 		end
 		return
 	end
 
-	if not ranks.admin[player] then return end
+	if records_admins or not ranks.admin[player] and not isPartyHost(player) then return end
 
 	local playerName = args[1]
 	local imageURL = args[2]
@@ -1060,35 +1140,45 @@ local function addMouseImage(player, cmd, quantity, args)
 	local offsetX = tonumber(args[4]) or 0
 	local offsetY = tonumber(args[5]) or 0
 	local opacity = tonumber(args[6]) or 1
+	local invert = scale < 0 and -1 or 1
 	local alwaysActive = false
 
+	scale = math.abs(scale)
+
 	if imageURL then
-		alwaysActive = imageURL:sub(1, 1) == '*'
+		alwaysActive = ranks.admin[player] and imageURL:sub(1, 1) == '*'
 		imageURL = alwaysActive and imageURL:sub(2) or imageURL
+	end
+
+	if not ranks.admin[player] then
+		inGameLogCommand(player, cmd, args, partyHost)
 	end
 
 	if playerName == "*" then
 		if imageURL == "remove" then
 			for _, img in next, mouseImages do
-				tfm.exec.removeImage(img[2], false)
+				if img[2] then
+					tfm.exec.removeImage(img[2], false)
+				end
 			end
 			mouseImages = {}
 			return
 		elseif imageURL then
 			for name in next, tfm.get.room.playerList do	
-				if mouseImages[name] then
+				if mouseImages[name] and mouseImages[name][2] then
 					tfm.exec.removeImage(mouseImages[name][2], false)
 				end
 
-				local imageID
+				local img = {imageURL, nil, 1, scale, offsetX, offsetY, opacity, alwaysActive, invert}
+				img[0] = mouseImages[name] and mouseImages[name][0]
 				if alwaysActive or victory[name] then
-					imageID = tfm.exec.addImage(imageURL, '%'..name, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
-					if not imageID then
+					img[2] = applyImage(name, img, 1)
+					if not img[2] then
 						return translatedChatMessage("invalid_syntax", player)
 					end
 				end
 
-				mouseImages[name] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity, alwaysActive}
+				mouseImages[name] = img
 				translatedChatMessage("new_image", name)
 			end
 			return
@@ -1096,11 +1186,10 @@ local function addMouseImage(player, cmd, quantity, args)
 	end
 
 	if not playerName or not imageURL or not room.playerList[playerName] then
-		return translatedChatMessage("invalid_syntax", player)
+		return tfm.exec.chatMessage('<r>Target player is not in the room', player)
 	end
 
-
-	if mouseImages[playerName] then
+	if mouseImages[playerName] and mouseImages[playerName][2] then
 		tfm.exec.removeImage(mouseImages[playerName][2], false)
 	end
 
@@ -1111,20 +1200,21 @@ local function addMouseImage(player, cmd, quantity, args)
 		translatedChatMessage("new_image", playerName)
 	end
 
-	local imageID
+	local img = {imageURL, nil, 1, scale, offsetX, offsetY, opacity, alwaysActive, invert}
+	img[0] = mouseImages[playerName] and mouseImages[playerName][0]
 	if alwaysActive or victory[playerName] then
-		imageID = tfm.exec.addImage(imageURL, '%'..playerName, offsetX, offsetY, nil, scale, scale, 0, opacity, 0.5, 0.5, false)
-		if not imageID then
+		img[2] = applyImage(playerName, img, 1)
+		if not img[2] then
 			return translatedChatMessage("invalid_syntax", player)
 		end
 	end
-	mouseImages[playerName] = {imageURL, imageID, 1, scale, offsetX, offsetY, opacity, alwaysActive}
+	mouseImages[playerName] = img
 end
 
 onEvent("Keyboard", function(player, key, down)
 	local img = mouseImages[player]
 
-	if not img or not img[8] and not victory[player] then return end
+	if not img or img[0] or not img[8] and not victory[player] then return end
 	if not (key == 0 or key == 2 or key == 3) then return end
 
 	if img[2] then
@@ -1132,24 +1222,13 @@ onEvent("Keyboard", function(player, key, down)
 	end
 
 	if key == 2 then
-		local imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[4], img[4], 0, img[7], 0.5, 0.5, false)
-		img[2] = imageID
 		img[3] = 1
+		img[2] = applyImage(player, img, 1)
 	elseif key == 0 then
-		local imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, -img[4], img[4], 0, img[7], -0.5, 0.5, false)
-		img[2] = imageID
 		img[3] = -1
+		img[2] = applyImage(player, img, 1)
 	elseif key == 3 then
-		local anchorX = img[3] == 1 and 0.5 or -0.5
-		local imageID
-
-		if down then
-			imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[3] * img[4], img[4] / 2.0, 0, img[7], anchorX, 0.5, false)
-		else
-			imageID = tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[3] * img[4], img[4], 0, img[7], anchorX, 0.5, false)
-		end
-
-		img[2] = imageID
+		img[2] = applyImage(player, img, down and 0.5 or 1)
 	end
 end)
 
@@ -1270,7 +1349,7 @@ local function skipMap(playerName, cmd, quantity, args)
 		return
 	end
 
-	local reason = args[1]
+	local reason = table.concat(args, ' ')
 	local mapCode = room.currentMap
 	local uniquePlayers = room.uniquePlayers
 
@@ -1323,6 +1402,7 @@ local commandDispatch = {
 	["karma"] = handleKarma,
 	["skip"] = skipMap,
 	["kick"] = handleKick,
+	["partyhost"] = handlePartyHost,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)

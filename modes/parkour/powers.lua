@@ -79,7 +79,8 @@ function checkCooldown(player, name, long, img, x, y, show)
 	if show then
 		addNewTimer(
 			long, tfm.exec.removeImage,
-			tfm.exec.addImage(img, ":1", x, y, player)
+			tfm.exec.addImage(img, ":1", x, y, player),
+			true
 		)
 	end
 
@@ -903,7 +904,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 	end
 
 	if key == 113 then
-		if not checkCooldown(player, "badgeSmiley", 10000) then return end
+		if not checkCooldown(player, "badgeSmiley", 5000) then return end
 		local pbg = players_file[player] and players_file[player].badges
 		if not pbg then return end
 
@@ -929,9 +930,13 @@ onEvent("Keyboard", function(player, key, down, x, y)
 
 	local power = keys.triggers[player][key]
 	if power then
-		if victory[player] + 5000 > os.time() then return end
+		local nonVisualCooldown = victory[player] > os.time() and
+			chair_pos and ((x - chair_pos[1]) ^ 2 + (y - chair_pos[2]) ^ 2) <= 10000
 		for index = 1, power._count do
-			if power[index] and (not power[index].cond or power[index].cond(player, key, down, x, y)) and (not power[index].cooldown or checkCooldown(
+			if power[index] and
+			(power[index].isVisual or not nonVisualCooldown) and
+			(not power[index].cond or power[index].cond(player, key, down, x, y)) and
+			(not power[index].cooldown or checkCooldown(
 				player, power[index].name, power[index].cooldown,
 
 				power[index].cooldown_img,
@@ -941,12 +946,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 			)) and (power[index].isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
 				power[index].fnc(player, key, down, x, y)
 
-				if (count_stats and
-				room.uniquePlayers >= min_save and
-				player_count >= min_save and
-				not records_admins and
-				not is_tribe and
-				not review_mode) then
+				if doStatsCount() then
 					if power_quest[player] and (power_quest[player].w or power_quest[player].d) then
 						local save = false
 						local file = players_file[player].quests
@@ -1068,13 +1068,7 @@ onEvent("PlayerWon", function(player)
 	local file = players_file[player]
 	if not file then return end
 
-	if (count_stats and
-		room.uniquePlayers >= min_save and
-		player_count >= min_save and
-		not records_admins and
-		not is_tribe and
-		not review_mode) then
-
+	if doStatsCount() then
 		local earned_coins = (is_anniversary and 2 or 1) * current_difficulty
 
 		file.c = file.c + 1

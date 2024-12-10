@@ -4,6 +4,8 @@ translations.cn = {
 
 	-- Error messages
 	corrupt_map = "<r>地圖崩壞。正在載入另一張。",
+	corrupt_map_no_perm = "<r>[錯誤] <n>這張地圖是非保護地圖。",
+	corrupt_map_hole = "<r>[錯誤] <n>Parkour 地圖不可以放置鼠洞。",
 	corrupt_map_vanilla = "<r>[錯誤] <n>無法取得此地圖的資訊。",
 	corrupt_map_mouse_start = "<r>[錯誤] <n>此地圖需要有起始位置 (小鼠出生點)。",
 	corrupt_map_needing_chair = "<r>[錯誤] <n>地圖需要包括終點椅子。",
@@ -16,6 +18,7 @@ translations.cn = {
 	emergency_mode = "<r>正在啟動緊急終止模式, 新玩家無法加入遊戲。請前往另一個　#parkour 房間。",
 	leaderboard_not_loaded = "<r>排行榜沒被加載。請稍後片刻。",
 	max_power_keys = "<v>[#] <r>你只可以在同一個按鍵使用最多 %s 個能力。",
+	room_name_length = "<ROSE><b>[錯誤]</b> 房間名字超過了上限 <b>45</b> 個字元。請使用更短的名字。",
 
 	-- Help window
 	help = "幫助",
@@ -46,9 +49,16 @@ translations.cn = {
 	permbanned = "<r>你已經在 #parkour 被永久封禁。",
 	tempbanned = "<r>你已經在 #parkour 被封禁了 %s 分鐘。",
 	forum_topic = "<rose>更多關於這個小遊戲的資訊可以查看: %s",
-	report = "<j>想舉報玩家? <t><b>!report 玩家名字#0000 [reason]</b></t>",
+	report = "<j>想要舉報 parkour 玩家? 使用 <t><b>!report 玩家名字#0000 [原因]</b></t>",
 	killed = "<v>[#] <r>因為你違反了 parkour 規則, 你現在被禁止在 %s 分鐘內使用你的能力。持續違反規則會導致被封禁遊玩此小遊戲。請按 <b>H鍵</b> 查看規則。",
 	mapper_event = "<CE><B>Parkour地圖製作大賽 2024:</B>\n<n>在比賽中向我們展示你的製圖創意以贏得 <D>奶酪幣<n> 及 <pt>parkour 金幣<n>!\n<R>提交地圖的期限至 <B>1月 31日, 2024</B>.\n<PS>更多資訊, 可查看: %s",
+	cmd_usage_report = "<j>用法: <bl>!report [玩家#1234] [原因]",
+	reported_not_here = "<bl>你舉報的玩家需要跟你在同一個房間裡。",
+	reported_invalid = "<bl>這個玩家不能被舉報。",
+	reason_too_short = "<bl>舉報的原因太短了。",
+	report_done = "<j>謝謝你的舉報。",
+	nohelp = "<r>你現在已經展示了紅線, 這是向其他人表示不想耍被協助。可以再按 <v>F</v> 鍵取消。",
+	quest_map = "<ch>這正是你要完成的任務地圖 @%s !",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>所以要開始倒數了...",
@@ -68,6 +78,9 @@ translations.cn = {
 	double_maps = "<bv>雙倍地圖計算將會在星期六 (GMT+2) 開始, 而且所有能力都可以在這 parkour 生日週使用!",
 	double_maps_start = "<rose>這週是 PARKOUR 的生日! 雙倍地圖計算而且所有能力都已被激活使用。感謝跟我們一起遊玩!",
 	double_maps_end = "<rose>Parkour 的生日週已完結。感謝各位的遊玩!",
+	anniversary = "<bv>下星期 (法國時間) 將會是雙倍 parkour 金幣周, 而且可以使用所有能力來慶祝 parkour 生日!",
+	anniversary_start = "<rose>現在是 PARKOUR 生日周! 可以得到雙倍 parkour 金幣還有所有能力都已經啟用。 謝謝支持遊玩這個小遊戲!",
+	anniversary_end = "<rose>Parkour 生日周已完結。謝謝你們支持遊玩這個小遊戲!",
 
 	-- Records
 	records_enabled = "<v>[#] <d>記錄模式已在這房間啟用。數據不會被記錄而且不能使用能力!\n你可以在這裡查看更多關於記錄模式的資訊: <b>%s</b>",
@@ -109,7 +122,15 @@ translations.cn = {
 	-- Miscellaneous
 	mod_apps = "<j>Parkour 管理員申請現正開放! 請查看這連結: <rose>%s",
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>你正在掛機模式</b></bv>\n隨意移動來復活</font>\n\n<font size='30'><u><t>提示:</t></u></font>\n\n<font size='15'><r>玩家頭上的紅線表示他們不想被協助!\n在parkour惡作劇/阻礙其他玩家通關是不被允許的!<d>\n加入我們的 <cep><a href='event:discord'>discord 伺服器</a></cep>!\n想在編程上貢獻? 查看 <cep><a href='event:github'>github 編程庫</a></cep> 吧。\n你有好的地圖想提交嗎? 在我們的 <cep><ahref='event:map_submission'>地圖提交帖子</a></cep> 上留言吧。\n查看我們的 <cep><a href='event:forum'>官方帖子</a></cep> 來得到更多資訊!\n透過 <cep><a href='event:donate'>捐款</a></cep> 支持我們吧!",
-	options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n使用快捷鍵 <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n顯示你的能力緩衝時間\n\n顯示能力選項按鈕\n\n顯示幫助按鈕\n\n顯示完成地圖的公告\n\n顯示不用被幫助的標示\n\n隱藏所有快捷按鈕 (排行榜, 幫助, 商店等等。)",
+	options = "<p align='center'><font size='20'>Parkour 選項</font></p>\n\n" ..
+		"使用 <b>QWERTY</b> 鍵盤 (使用<b>AZERTY</b>請關閉此項)\n\n" ..
+		"使用快捷鍵 <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> 來 <b>自殺</b> (使用<b>DEL</b>請關閉此項)\n\n" ..
+		"顯示你的能力緩衝時間\n\n" ..
+		"展示介面按鈕\n\n" ..
+		"歡迎訊息\n\n" ..
+		"顯示完成地圖的公告\n\n" ..
+		"顯示不用被幫助的標示\n\n" ..
+		"隱藏所有快捷按鈕 (排行榜, 幫助, 商店等等。)",
 	cooldown = "<v>[#] <r>請等候幾秒再重新嘗試。",
 	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> 鍵盤" ..
 					 "\n\n<b>隱藏</b> 地圖通過數" ..
@@ -206,7 +227,8 @@ translations.cn = {
 	equip = "裝備",
 	equipped = "已裝備",
 	saving = "<p align='right'>儲存中...",
-
+	new_image = "<J>你的外表已經更換。你可以輸入 !image 回復正常樣子。",
+	smol_best = "<j>新的 smol 模式房間首領: %s 有 %s 次地圖完成紀錄!",
 
 	-- Power names
 	balloon = "氣球",

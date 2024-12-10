@@ -50,8 +50,6 @@ onEvent("NewPlayer", function(player)
 	if roomcreators and #roomcreators < 10 then
 		roomcreators[1 + #roomcreators] = player
 	end
-
-	checkMapQuest(player)
 end)
 
 onEvent("PlayerWon", function(player)
@@ -63,7 +61,7 @@ onEvent("PlayerWon", function(player)
 	if not file then return end
 	if not levels then return end
 
-	victory[player] = os.time()
+	victory[player] = os.time() + 10000 * (1 + math.max(0, file.bancount or 0))
 	setNameColor(player) -- just in case PlayerRespawn triggers first
 
 	if records_admins then
@@ -425,9 +423,16 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>you can't forcestats in a records room", player)
 		end
 
+		if args[1] and args[1] ~= room.currentMap then
+			return
+		end
+
 		count_stats = true
 		tfm.exec.chatMessage("<v>[#] <d>count_stats set to true", player)
-		max_args = 0
+		args[1] = room.currentMap
+		args[2] = room.xmlMapInfo and room.xmlMapInfo.permCode or -1
+		max_args = 2
+		quantity = 2
 		showStats()
 
 	elseif cmd == "room" then -- logged
@@ -511,6 +516,13 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 
 	checkRoomRequest(player, data)
+	checkMapQuest(player)
+
+	if records_admins then
+		if string.find(room.lowerName, string.lower(player), 1, true) then
+			records_admins[player] = true
+		end
+	end
 
 	if data.settings[6] == 1 then
 		translatedChatMessage("welcome", player)
@@ -530,8 +542,7 @@ onEvent("PlayerDataParsed", function(player, data)
 		if records_admins then
 			translatedChatMessage("records_enabled", player, links.records)
 
-			if string.find(room.lowerName, string.lower(player), 1, true) then
-				records_admins[player] = true
+			if records_admins[player] then
 				translatedChatMessage("records_admin", player)
 			end
 		end

@@ -24,32 +24,108 @@ local callbacks = {
 local textareas = {
 	heartbeat = 1 + 255,
 	action_error = 2 + 255,
-	file_updated = 3 + 255,
+	file_update_status = 3 + 255,
 }
 
 local parkour_bot = "Parkour#0568"
 
 local function apply_file_operation(data, operation)
 	local action = operation[2]
-	if action == 'sanction' then
+	if action == 'fetch' then
+		return
+	elseif action == 'sanction' then
+		if not data.mods then
+			return "no mods field"
+		end
+		if not data.sanction then
+			return "no sanction field"
+		end
+
 		local playerid, moderator = operation[3], operation[4]
 		local time, level = tonumber(operation[5]), tonumber(operation[6])
 		local mod_index = table_find(data.mods, moderator)
+		local now = os.time()
 
 		if not mod_index then
 			data.mods[1 + #data.mods] = moderator
 			mod_index = #data.mods
 		end
 
+		local sanctionLevel = data.sanction[playerid] or 0
+		if level then
+			if operation[6]:sub(1,1) == '+' or operation[6]:sub(1,1) == '-' then
+				sanctionLevel = math.min(4, math.max(0, sanctionLevel + level))
+			else
+				sanctionLevel = level
+			end
+		end
+
+		if not time then
+			if sanctionLevel == 1 then
+				time = now + 86400000 -- 1 day
+			elseif sanctionLevel == 2 then
+				time = now + 86400000 * 7
+			elseif sanctionLevel == 3 then
+				time = now + 86400000 * 30
+			elseif sanctionLevel == 4 then
+				time = 2 -- permanent ban
+			else
+				time = 0 -- unban
+			end
+		end
+
 		data.sanction[playerid] = {
-			timestamp = os.time(),
+			timestamp = now,
 			time = time,
 			info = mod_index,
-			level = level,
+			level = sanctionLevel,
 		}
 		return
+	elseif action == 'addmap' then
+		local list = data[operation[3]]
+		if not list then
+			return "list not found"
+		end
+		local mapcode
+		for i=4, #operation do
+			mapcode = tonumber(operation[i])
+			if not mapcode then
+				return "invalid mapcode " .. operation[i]
+			end
+			list[1+#list] = mapcode
+		end
+		return
+	elseif action == 'removemap' then
+		local list = data[operation[3]]
+		if not list then
+			return "list not found"
+		end
+		local mapcode
+		local indexList = {}
+		local index
+		for i=4, #operation do
+			mapcode = tonumber(operation[i])
+			if not mapcode then
+				return "invalid mapcode " .. operation[i]
+			end
+			index = table_find(list, mapcode)
+			if index then
+				indexList[#indexList + 1] = index
+			end
+		end
+		table.sort(indexList)
+		for i=#indexList, 1, -1 do
+			table.remove(list, indexList[i])
+		end
+		return
 	end
+	return "invalid action"
 end
+
+onEvent("NewPlayer", function(player)
+	if player ~= parkour_bot then return end
+	file_updates = nil
+end)
 
 onEvent("TextAreaCallback", function(id, player, data)
 	if player ~= parkour_bot then return end
@@ -90,6 +166,11 @@ onEvent("TextAreaCallback", function(id, player, data)
 		system.loadPlayerData(data)
 
 	elseif id == callbacks.update_file then
+		if data == "" then
+			file_updates = nil
+			return
+		end
+
 		local params = {}
 
 		for value in data:gmatch('[^\000]+') do
@@ -143,7 +224,9 @@ onEvent("Loop", function()
 end)
 
 onEvent("FileLoaded", function(file, data)
-	tfm.exec.playMusic('file:' .. tostring(file), tostring(data), 0, false, false, parkour_bot)
+	if not file_updates or file_updates[1][1] == file and file_updates[1][2] == 'fetch' then
+		tfm.exec.playMusic('file:' .. tostring(file), tostring(data), 0, false, false, parkour_bot)
+	end
 
 	if not file_updates then
 		return
@@ -151,43 +234,50 @@ onEvent("FileLoaded", function(file, data)
 
 	local manager = filemanagers[file]
 	if not manager then
-		return
-	end
-
-	local update_indices = {}
-	for i=1, #file_updates do
-		local file_id = file_updates[i][1]
-		if file_id == file then
-			update_indices[1 + #update_indices] = i
-		end
-	end
-
-	if #update_indices == 0 then
+		file_updates = nil
+		addTextArea(
+			textareas.file_update_status,
+			file .. '\000\000no manager',
+			parkour_bot
+		)
 		return
 	end
 
 	local data = manager:load(data)
+	local reason
 
-	for i=1, #update_indices do
-		apply_file_operation(data, file_updates[update_indices[i]])
-	end
-
-	if #file_updates == #update_indices then
-		file_updates = nil
-	else
-		for i=#update_indices, 1, -1 do
-			table.remove(file_updates, update_indices[i])
-		end
-
-		if #file_updates == 0 then
+	for i=1, #file_updates do
+		if file_updates[i][1] ~= file then
 			file_updates = nil
+			addTextArea(
+				textareas.file_update_status,
+				file .. '\000' .. i .. '\000file id mismatch',
+				parkour_bot
+			)
+			return
+		end
+
+		reason = apply_file_operation(data, file_updates[i])
+		if reason then
+			file_updates = nil
+			addTextArea(
+				textareas.file_update_status,
+				file .. '\000' .. i .. '\000' .. reason,
+				parkour_bot
+			)
+			return
 		end
 	end
 
+	file_updates = nil
 	data = manager:dump(data)
 	system.saveFile(data, file)
 
-	addTextArea(textareas.file_updated, file, parkour_bot)
+	addTextArea(
+		textareas.file_update_status,
+		file .. '\000' .. #update_indices .. '\000',
+		parkour_bot
+	)
 end)
 
 onEvent("PlayerDataLoaded", function(player, file)

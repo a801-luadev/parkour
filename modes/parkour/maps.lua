@@ -55,6 +55,7 @@ local map_change_cd = 0
 
 current_map = nil
 
+local chair_pos
 local levels
 local perms
 local review_mode
@@ -164,7 +165,6 @@ local function newMap(difficulty)
 		end
 	end
 
-	current_difficulty = difficulty
 	map = selectMap(maps[difficulty].sections, maps[difficulty].list, maps[difficulty].count)
 
 	current_map = map
@@ -243,10 +243,16 @@ end)
 onEvent("NewGame", function()
 	local map_code_num = tonumber(tostring(room.currentMap):sub(2))
 
-	-- Makes sure current_difficulty is correct
-	local rotation = maps[current_difficulty]
-	if not rotation or rotation.list[maplist_index] ~= map_code_num then
-		current_difficulty = 0
+	current_difficulty = 0
+	for i=1, 3 do
+		if table_find(maps[i].list, map_code_num) then
+			current_difficulty = i
+			break
+		end
+	end
+
+	if current_difficulty == 0 and room.xmlMapInfo and room.xmlMapInfo.permCode == 42 then
+		current_difficulty = 4
 	end
 
 	-- When a map is loaded, this function reads the XML to know where the
@@ -295,12 +301,12 @@ onEvent("NewGame", function()
 		end
 	end
 
-	local chair = false
+	chair_pos = nil
 	for tag in string.gmatch(xml, '<P%s+(.-)%s+/>') do
 		properties = getTagProperties(tag)
 
 		if properties.T == 19 and properties.C == "329cd2" then
-			chair = true
+			chair_pos = { properties.X, properties.Y - 40 }
 			count = count + 1
 			levels[count] = {
 				x = properties.X, y = properties.Y - 40,
@@ -331,8 +337,8 @@ onEvent("NewGame", function()
 	end
 
 	if room.xmlMapInfo.author ~= "#Module" then
-		if not chair or count < 3 then -- start, at least one nail and end chair
-			return invalidMap(not chair and "needing_chair" or "missing_checkpoints")
+		if not chair_pos or count < 3 then -- start, at least one nail and end chair
+			return invalidMap(not chair_pos and "needing_chair" or "missing_checkpoints")
 		end
 	end
 
@@ -384,7 +390,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if not records_cond and not tribe_cond and not normal_cond and not smol_cond then return end
 
 		if quantity > 0 then
-			if not records_cond and not tribe_cond and not perms[player].load_custom_map then
+			if not records_cond and not tribe_cond and not (perms[player] and perms[player].load_custom_map) then
 				return tfm.exec.chatMessage("<v>[#] <r>You can't load a custom map.", player)
 			end
 
