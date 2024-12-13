@@ -115,6 +115,15 @@ local function doStatsCount()
 		not review_mode or force_stats_count_debug
 end
 
+local function rewardSkin(player, power, id)
+	local pdata = players_file[player]
+	if table_find(pdata.skins, id) then return end
+	pdata.skins[1 + #pdata.skins] = id -- ice cube
+	for _player in next, in_room do
+		translatedChatMessage("unlocked_skin", _player, player, translatedMessage(power, _player))
+	end
+end
+
 function showStats()
 	-- Shows if stats count or not
 
@@ -688,10 +697,11 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 			pdata.coins = pdata.coins + prize
 			pdata.gifts = (pdata.gifts or 0) + 1
 			if pdata.gifts == 30 then
-				if not table_find(pdata.skins, 57.1) then
-					pdata.skins[1 + #pdata.skins] = 57.1
-					pdata.cskins[6] = 57.1
-				end
+				rewardSkin(player, "bigBox", 200.1) -- ice cube
+			elseif pdata.gifts == 60 then
+				rewardSkin(player, "cloud", 57.1) -- reindeer sleigh
+			elseif pdata.gifts == 90 then
+				rewardSkin(player, "rip", 1028) -- snowy anvil
 			end
 			queueForSave(player)
 		end

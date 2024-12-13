@@ -1,3 +1,4 @@
+shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip" }
 shop_items = {
 	{ -- smallbox
 		{
@@ -181,6 +182,11 @@ shop_items = {
 			price = 2500,
 			image = "18b53ec28e7.png",
 			id = 212,
+		},
+		{
+			price = -1,
+			image = "img@193c1beb7b2",
+			id = 200.1,
 		},
 	},
 	{ -- trampoline
@@ -458,7 +464,34 @@ shop_items = {
 			image = "18b53fdc2c8.png",
 			id = 309,
 		}
-	}
+	},
+	{
+		{
+			price = 0,
+			image = "173db14a1d6.png",
+			id = 57,
+		},
+		{
+			price = -1,
+			image = "img@193b7a44117",
+			id = 57.1,
+			scale = 0.7,
+		},
+	},
+	{
+		{
+			price = 0,
+			image = "173db33602c.png",
+			id = 90,
+			scale = 0.65,
+		},
+		{
+			price = -1,
+			image = "img@193c1e22110",
+			id = 1028,
+			scale = 0.7,
+		},
+	},
 }
 
 shop_skins = {
@@ -489,6 +522,7 @@ shop_skins = {
 	["165"] = {img = "18b400c3a16.png", x = 0.5, y = 0.52},
 	["166"] = {img = "18b400c8838.png", x = 0.5, y = 0.52},
 
+	["200.1"] = {img="img@193c1beb7b2", id=2},
 	["247"] = {img = "18b4011d953.png", x = 0.5, y = 0.52},
 	["248"] = {img = "18b401225c5.png", x = 0.5, y = 0.52},
 	["249"] = {img = "18b401273e8.png", x = 0.5, y = 0.52},
@@ -540,6 +574,8 @@ shop_skins = {
 	["720"] = {img = "18b401029ff.png", x = 0.5, y = 0.52},
 	["721"] = {img = "18b40107833.png", x = 0.5, y = 0.52},
 	["722"] = {img = "18b4010c62f.png", x = 0.5, y = 0.52},
+
+	["1028"] = {img="img@193c20b2a55", id=90},
 
 	["2845"] = {img = "18b40180a6f.png", x = 0.5, y = 0.52},
 	["2846"] = {img = "18b40185865.png", x = 0.5, y = 0.52},

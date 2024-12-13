@@ -2,30 +2,52 @@ local ShopInterface
 do	
 	local shop_images = {}
 	local coin_images = {}
-	local shopPage = {}
 	local isSave = {}
-	
-	local closeButton = Button.new()
+
 	ShopInterface = Interface.new(50, 35, 700, 350, true)
 		:setDefaultArgs("shop")
 		:loadTemplate(WindowBackground)
-		:setShowCheck(function(self, player, page, data)
-			if not data then
-
-				if players_file[player].c >= 400 then
-					shop_items[4][1].image = "173db16a824.png"
-				end
-
-				shopPage[player] = 1
-				self:show(player, 1, shop_items[1])
+		:setShowCheck(function(self, player, page, tab)
+			if not tab then
+				self:show(player, 1, 1)
 				return false
 			end
 			return true
 		end)
 
+		:addTextArea({ -- Title
+			x = 240, y = 15,
+			width = 340, height = 30,
+			canUpdate = true,
+			text = function(self, player, page, tab)
+				return "<p align='center'><font size='20'><B><D>" .. translatedMessage(shop_tabs[tab], player)
+			end,
+			alpha = 0
+		})
+
+		-- Next Tab Button
+		:loadComponent(
+			Button.new():setText(">")
+			:onClick(function(self, player)
+				local tab = self.parent.args[player][2]
+				self.parent:update(player, 1, 1 + (tab % #shop_items))
+			end)
+			:setPosition(595, 20):setSize(80, 18)
+		)
+
+		-- Prev Tab Button
+		:loadComponent(
+			Button.new():setText("&lt;")
+			:onClick(function(self, player)
+				local tab = self.parent.args[player][2]
+				self.parent:update(player, 1, tab == 1 and #shop_items or (tab - 1))
+			end)
+			:setPosition(145, 20):setSize(80, 18)
+		)
+
 		-- Close button
 		:loadComponent(
-			closeButton:setText("")
+			Button.new():setTranslation("close")
 			:onClick(function(self, player)
 				if isSave[player] then
 					savePlayerData(player)
@@ -34,18 +56,54 @@ do
 
 				self.parent:remove(player)
 			end)
-			:setPosition(150, 330):setSize(400, 10)
+			:setPosition(115, 323):setSize(465, 18)
 		)
-		
-		:addTextArea({
-			x = 150, y = 326,
-			width = 400, height = 15,
-			text = function(self, player)
-				return ("<a href='event:" .. closeButton.callback ..
-						"'><p align='center'>".. translatedMessage("close", player))
-			end,
-			alpha = 0
-		})
+
+		-- Prev Page Button
+		:loadComponent(
+			Button.new():setText("&lt;")
+			:onClick(function(self, player)
+				local page = self.parent.args[player][1]
+				local tab = self.parent.args[player][2]
+				local count = #shop_items[tab]
+				local newpage = page == 1 and (math.floor((count - 1) / 18) * 18 + 1) or (page - 18)
+				if page == newpage then return end
+				self.parent:update(player, newpage, tab)
+			end)
+			:setPosition(20, 323):setSize(80, 18)
+			:canUpdate(true):onUpdate(function(self, player)
+				local tab = self.parent.args[player][2]
+				local count = #shop_items[tab]
+				if count <= 18 then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end)
+		)
+
+		-- Next Page Button
+		:loadComponent(
+			Button.new():setText(">")
+			:onClick(function(self, player)
+				local page = self.parent.args[player][1]
+				local tab = self.parent.args[player][2]
+				local count = #shop_items[tab]
+				local newpage = (page + 18) > count and 1 or (page + 18)
+				if page == newpage then return end
+				self.parent:update(player, newpage, tab)
+			end)
+			:setPosition(595, 323):setSize(80, 18)
+			:canUpdate(true):onUpdate(function(self, player)
+				local tab = self.parent.args[player][2]
+				local count = #shop_items[tab]
+				if count <= 18 then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end)
+		)
 
 		:addImage({
 			image = "18b29f6977c.png",
@@ -57,7 +115,7 @@ do
 			x = 25, y = 15,
 			width = 100, height = 30,
 			canUpdate = true,
-			text = function(self, player, page, data)
+			text = function(self, player)
 				return ("<font size='18'><p align='right'>"..players_file[player].coins)
 			end,
 			alpha = 1,
@@ -69,26 +127,33 @@ do
 			x = 0, y = 50,
 			width = 700, height = 250,
 			alpha = 0,
-		}):onUpdate(function(self, player, page, data)
-			if not shop_images[player] then
-				shop_images[player] = {}
-			else
-				for index = 1, 18 do
-					tfm.exec.removeImage(shop_images[player][index])
-				end
+		}):onUpdate(function(self, player, page, tab)
+			local images = shop_images[player] or {}
+			shop_images[player] = images
+			for index = 1, #images do
+				tfm.exec.removeImage(images[index])
 			end
 
 			local x = 70
 			local y = 120
+			local data = shop_items[tab]
+			local item
+			local firstImage
 
-			for index = 1, #data do
-				shop_images[player][index] = tfm.exec.addImage(data[index].image, "&999", x, y, player)
-				
-                x = x + 75
+			if tab == 4 and page == 1 and players_file[player].c >= 400 then
+				firstImage = "173db16a824.png"
+			end
 
-				if index == 9 then
-					y = 250
-					x = 70
+			for index = 1, 18 do
+				item = data[page + index - 1]
+				if item then
+					images[index] = tfm.exec.addImage(index == 1 and firstImage or item.image, "&999", x, y, player, item.scale, item.scale)
+					x = x + 75
+
+					if index == 9 then
+						y = 250
+						x = 70
+					end
 				end
 			end
 		end)
@@ -98,57 +163,63 @@ do
 			x = 0, y = 50,
 			width = 700, height = 250,
 			canUpdate = true,
-			text = function(self, player, page, data)
-				if not coin_images[player] then
-					coin_images[player] = {}
-				else
-					for index = 1, 18 do
-						tfm.exec.removeImage(coin_images[player][index])
-					end
+			text = function(self, player, page, tab)
+				local images = coin_images[player] or {}
+				coin_images[player] = images
+				for index = 1, #images do
+					tfm.exec.removeImage(images[index])
 				end
 
 				local x = self.x + 25
 				local y = self.y + 15
-				for index = 1, #data do
-					local itemPrice = data[index].price or 0
+				local data = shop_items[tab]
+				local item
+				for index = 1, 18 do
+					item = data[page + index - 1]
+					if item then
+						local itemPrice = item.price or 0
 
-					--[[
-					if itemPrice >= 1000 then
-						local numString = tostring(itemPrice)
-						local numLength = string.len(numString)
-						if numLength == 4 then
-							itemPrice = numString:sub(1, 1) .. "K"
-						elseif numLength == 5 then
-							itemPrice = numString:sub(1, 2) .. "K"
-						elseif numLength == 6 then
-							itemPrice = numString:sub(1, 3) .. "K"
+						--[[
+						if itemPrice >= 1000 then
+							local numString = tostring(itemPrice)
+							local numLength = string.len(numString)
+							if numLength == 4 then
+								itemPrice = numString:sub(1, 1) .. "K"
+							elseif numLength == 5 then
+								itemPrice = numString:sub(1, 2) .. "K"
+							elseif numLength == 6 then
+								itemPrice = numString:sub(1, 3) .. "K"
+							else
+								itemPrice = itemPrice
+							end
+						]]--
+
+						if itemPrice == -1 then
+							itemPrice = translatedMessage("event", player)
 						else
-							itemPrice = itemPrice
+							images[index] = tfm.exec.addImage("18b2a0bc298.png", "&1000", x - 2, y + 2, player)
 						end
-					elseif itemPrice == -1 then
-						itemPrice = "-"
-					end
-					]]--
 
-					coin_images[player][index] = tfm.exec.addImage("18b2a0bc298.png", "&1000", x - 2, y + 2, player)
-					ui.addTextArea(
-						-10000 - index, "<b><p align='right'>"..itemPrice, player,
-						x, y, 50, 15,
-						0x14282b, 0x14282b, 1,
-						true
-					)
+						ui.addTextArea(
+							-10000 - index, "<b><p align='right'>"..itemPrice, player,
+							x, y, 50, 15,
+							0x14282b, 0x14282b, 1,
+							true
+						)
 
-					x = x + 75 
-
-					if index == 9 then
-						y = self.y + 145
-						x = self.x + 25
+						x = x + 75 
+						if index == 9 then
+							y = self.y + 145
+							x = self.x + 25
+						end
+					else
+						ui.removeTextArea(-10000 - index, player)
 					end
 				end
 				return ""
 			end,
 			alpha = 0
-		}):onRemove(function(self, player, page, data)
+		}):onRemove(function(self, player)
 			for index = 1, 18 do
 				ui.removeTextArea(-10000 - index, player)
 				tfm.exec.removeImage(shop_images[player][index])
@@ -156,163 +227,66 @@ do
 			end
 		end)
 
-		-- Tabs
-		:loadComponent( -- Small Box
-			Button.new():setTranslation("smallbox")
-
-			:onClick(function(self, player, page, data)
-				if not checkCooldown(player, "shopbuttons", 1500) then return end
-				local args = self.parent.args[player]
-				shopPage[player] = 1
-				self.parent:update(player, 1, shop_items[1])
-			end)
-
-			:canUpdate(true):onUpdate(function(self, player, page, data)
-				if page == 1 then
-					self:disable(player)
-				else
-					self:enable(player)
-				end
-			end)
-
-			:setPosition(200, 20):setSize(80, 18)
-		)
-		:loadComponent( -- Box
-			Button.new():setTranslation("bigBox")
-
-			:onClick(function(self, player, page, data)
-				if not checkCooldown(player, "shopbuttons", 1500) then return end
-				local args = self.parent.args[player]
-				shopPage[player] = 2
-				self.parent:update(player, 2, shop_items[2])
-			end)
-
-			:canUpdate(true):onUpdate(function(self, player, page, data)
-				if page == 2 then
-					self:disable(player)
-				else
-					self:enable(player)
-				end
-			end)
-
-			:setPosition(300, 20):setSize(80, 18)
-		)
-		:loadComponent( -- Trampoline
-			Button.new():setTranslation("trampoline")
-
-			:onClick(function(self, player, page, data)
-				if not checkCooldown(player, "shopbuttons", 1500) then return end
-				local args = self.parent.args[player]
-				shopPage[player] = 3
-				self.parent:update(player, 3, shop_items[3])
-			end)
-
-			:canUpdate(true):onUpdate(function(self, player, page, data)
-				if page == 3 then
-					self:disable(player)
-				else
-					self:enable(player)
-				end
-			end)
-
-			:setPosition(400, 20):setSize(80, 18)
-		)
-		:loadComponent( -- Baloon
-			Button.new():setTranslation("balloon")
-
-			:onClick(function(self, player, page, data)
-				if not checkCooldown(player, "shopbuttons", 1500) then return end
-				local args = self.parent.args[player]
-				shopPage[player] = 4
-				self.parent:update(player, 4, shop_items[4])
-			end)
-
-			:canUpdate(true):onUpdate(function(self, player, page, data)
-				if page == 4 then
-					self:disable(player)
-				else
-					self:enable(player)
-				end
-			end)
-
-			:setPosition(500, 20):setSize(80, 18)
-		)
-		:loadComponent( -- Choco
-			Button.new():setTranslation("choco")
-
-			:onClick(function(self, player, page, data)
-				local args = self.parent.args[player]
-				shopPage[player] = 5
-				self.parent:update(player, 5, shop_items[5])
-			end)
-
-			:canUpdate(true):onUpdate(function(self, player, page, data)
-				if page == 5 then
-					self:disable(player)
-				else
-					self:enable(player)
-				end
-			end)
-
-			:setPosition(600, 20):setSize(80, 18)
-		)
-		
-
 	local buttonx = 22
 	local buttony = 155
 
-	for buyButton = 1, #shop_items[1] do
+	for buyButton = 1, 18 do
 		local component = Button.new()
-        
 		:setText(
-			function(self, player, page, data)				
-				local itemID = shop_items[shopPage[player]][buyButton].id
-
-				if players_file[player].cskins[shopPage[player]] == itemID then
+			function(self, player, page, tab)				
+				local item = shop_items[tab][page + buyButton - 1]
+				if not item then return "-" end
+				if players_file[player].cskins[tab] == item.id then
 					return translatedMessage("equipped", player)
-				elseif default_skins[itemID] or table_find(players_file[player].skins, itemID) then
+				elseif default_skins[item.id] or table_find(players_file[player].skins, item.id) then
 					return translatedMessage("equip", player)
-				else
+				elseif item.price > 0 then
 					return translatedMessage("buy", player)
+				else
+					return "-"
 				end
 
 			end)
-
-		:onClick(function(self, player, page, data)
-			if not checkCooldown(player, "buybutton", 1000) then return end
-
-			local item_price = shop_items[shopPage[player]][buyButton].price
+		:onClick(function(self, player)
+			local page = self.parent.args[player][1]
+			local tab = self.parent.args[player][2]
+			local index = page + buyButton - 1
+			local item_price = shop_items[tab][index].price
 			local player_coin = players_file[player].coins
-			local itemID = shop_items[shopPage[player]][buyButton].id
-			isSave[player] = true
-
-			local args = self.parent.args[player]
+			local itemID = shop_items[tab][index].id
 
 			if default_skins[itemID] or table_find(players_file[player].skins, itemID) then
-				players_file[player].cskins[shopPage[player]] = itemID
-				self.parent:update(player, args[1], args[2], 3)
+				players_file[player].cskins[tab] = itemID
+				isSave[player] = true
+				self.parent:update(player, page, tab)
 				return
 			end
 
+			if item_price < 0 then return end
 			if player_coin >= item_price then
 				table.insert(players_file[player].skins, itemID)
 				players_file[player].coins = player_coin - item_price
-				self.parent:update(player, args[1], args[2], 1)
+				isSave[player] = true
+				self.parent:update(player, page, tab)
 			else
 				tfm.exec.chatMessage("<v>[#] <r>You don't have enough coins.", player)
 			end
 		end)
-	
-		:canUpdate(true):onUpdate(function(self, player, page, data)
-			if players_file[player].cskins[page] == shop_items[page][buyButton].id or shop_items[page][buyButton].price == -1 then
+		:canUpdate(true)
+		:onUpdate(function(self, player)
+			local page = self.parent.args[player][1]
+			local tab = self.parent.args[player][2]
+			local data = shop_items[tab]
+			local index = page + buyButton - 1
+			local itemID = data[index] and data[index].id
+			if not data[index] or players_file[player].cskins[tab] == itemID or data[index].price == -1 and not table_find(players_file[player].skins, itemID) then
 				self:disable(player)
 			else
 				self:enable(player)
 			end 
 		end)
-	
 		:setPosition(buttonx, buttony):setSize(55, 18)
-	
+
 		ShopInterface:loadComponent(component)
 		buttonx = buttonx + 75
 

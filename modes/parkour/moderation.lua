@@ -972,7 +972,54 @@ local function editCoins(player, cmd, quantity, args)
 		local index = tonumber(args[3])
 		local id = tonumber(args[4])
 
+		if not index or not id then
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid index or id", player)
+		end
+
+		if not pdata.cskins[index] then
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid index", player)
+		end
+
 		pdata.cskins[index] = id
+		savePlayerData(playerName)
+		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
+
+	elseif action == "add" then
+		if quantity < 3 then
+			translatedChatMessage("invalid_syntax", player)
+			return
+		end
+
+		local id = tonumber(args[3])
+		if not id then
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid id", player)
+		end
+
+		if table_find(pdata.skins, id) then
+			return tfm.exec.chatMessage("<v>[#] <r>Player already have that skin", player)
+		end
+
+		pdata.skins[1 + #pdata.skins] = id
+		savePlayerData(playerName)
+		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
+
+	elseif action == "remove" then
+		if quantity < 3 then
+			translatedChatMessage("invalid_syntax", player)
+			return
+		end
+
+		local id = tonumber(args[3])
+		if not id then
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid id", player)
+		end
+
+		local index = table_find(pdata.skins, id)
+		if not index then
+			return tfm.exec.chatMessage("<v>[#] <r>Player doesn't have that skin", player)
+		end
+
+		table.remove(pdata.skins, index)
 		savePlayerData(playerName)
 		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
 
