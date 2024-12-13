@@ -946,25 +946,38 @@ local function editCoins(player, cmd, quantity, args)
 
 	local playerName = args[1]
 	local action = args[2]
+	local pdata = players_file[playerName]
 
-	if not in_room[playerName] or not players_file[playerName] then
+	if not in_room[playerName] or not pdata then
 		return tfm.exec.chatMessage(playerName.." is not here.", player)
 	end
 
 	if action == "show" then
-		local result = table.concat(players_file[playerName].skins, ', ')
-		
-		tfm.exec.chatMessage("Current coins: " ..players_file[playerName].coins, player)
-		tfm.exec.chatMessage("Skins: " ..result, player)
+		tfm.exec.chatMessage("Current coins: " .. pdata.coins, player)
+		tfm.exec.chatMessage("Skins: " .. table.concat(pdata.skins, ' '), player)
+		tfm.exec.chatMessage("Wearing: " .. table.concat(pdata.cskins, ' '), player)
 		return
 
 	elseif action == "default" then
-		players_file[playerName].cskins = { 1, 2, 7, 28, 46 }
+		pdata.cskins = { 1, 2, 7, 28, 46 }
 		savePlayerData(playerName)
 		tfm.exec.chatMessage("<v>[#] <j>Current skins set default for " ..playerName, player)
 
+	elseif action == "set" then
+		if quantity < 4 then
+			translatedChatMessage("invalid_syntax", player)
+			return
+		end
+
+		local index = tonumber(args[3])
+		local id = tonumber(args[4])
+
+		pdata.cskins[index] = id
+		savePlayerData(playerName)
+		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
+
 	elseif action == "refund" then
-		if quantity < 3 then
+		if quantity < 4 then
 			translatedChatMessage("invalid_syntax", player)
 			return
 		end
@@ -977,17 +990,17 @@ local function editCoins(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("Invalid skin type or skin number.", player)
 		end
 
-		local skinsIndex = table_find(players_file[playerName].skins, selectedSkin.id)
+		local skinsIndex = table_find(pdata.skins, selectedSkin.id)
 		if not skinsIndex then
 			return tfm.exec.chatMessage("The player doesn't have this skin. ", player)
 		end
 
-		table.remove(players_file[playerName].skins, skinsIndex)
-		players_file[playerName].coins = players_file[playerName].coins + tonumber(selectedSkin.price)
+		table.remove(pdata.skins, skinsIndex)
+		pdata.coins = pdata.coins + tonumber(selectedSkin.price)
 
-		for i = #players_file[playerName].cskins, 1, -1 do
-			if players_file[playerName].cskins[i] == tonumber(selectedSkin.id) then
-				players_file[playerName].cskins[i] = shop_items[skinType][1].id
+		for i = #pdata.cskins, 1, -1 do
+			if pdata.cskins[i] == tonumber(selectedSkin.id) then
+				pdata.cskins[i] = shop_items[skinType][1].id
 			end
 		end
 
