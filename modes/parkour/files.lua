@@ -263,6 +263,8 @@ local data_migrations = {
 
 		data.coins = math.floor(data.c * 0.10)
 		data.skins = { ["1"] = 1, ["2"] = 1, ["7"] = 1, ["28"] = 1, ["46"] = 1 }
+
+		-- small box, big box, trampoline, balloon, choco, cloud, rip
 		data.cskins = { 1, 2, 7, 28, 46 }
 	end,
 	[6] = function(player, data)
@@ -290,6 +292,7 @@ local data_migrations = {
 		end
 
 		data.skins = skins
+		--data.gifts = nil
 	end,
 }
 

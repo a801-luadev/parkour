@@ -683,8 +683,16 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if checkpoint_info.version ~= 1 then return end
 	if christmas and christmas.bonusId == bonus then
 		local prize = christmas.collectGift(player)
-		if players_file[player] and prize then
-			players_file[player].coins = players_file[player].coins + prize
+		local pdata = players_file[player]
+		if pdata and prize then
+			pdata.coins = pdata.coins + prize
+			pdata.gifts = (pdata.gifts or 0) + 1
+			if pdata.gifts == 30 then
+				if not table_find(pdata.skins, 57.1) then
+					pdata.skins[1 + #pdata.skins] = 57.1
+					pdata.cskins[6] = 57.1
+				end
+			end
 			queueForSave(player)
 		end
 		return
