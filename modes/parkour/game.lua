@@ -812,7 +812,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		if not review_mode then
 			if not victory[player] then return end
-			if not checkCooldown(player, "cp_command", 10000) then
+			if not checkCooldown(player, "cp_command", 4000) then
 				return translatedChatMessage("cooldown", player)
 			end
 		end
