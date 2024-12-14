@@ -497,6 +497,7 @@ powers = {
 	{
 		name = "link", maps = 6000,
 		id = 13,
+		noChairCooldown = true,
 
 		small = "18a1f4da09f.png", big = "18a1f4d198c.png",
 		lockedSmall = "18a1f563110.png", lockedBig = "18a1f4e3528.png",
@@ -860,11 +861,11 @@ onEvent("Keyboard", function(player, key, down, x, y)
 
 	local power = keys.triggers[player][key]
 	if power then
-		local nonVisualCooldown = victory[player] > os.time() and
+		local chairCooldown = victory[player] > os.time() and
 			chair_pos and ((x - chair_pos[1]) ^ 2 + (y - chair_pos[2]) ^ 2) <= 10000
 		for index = 1, power._count do
 			if power[index] and
-			(power[index].isVisual or not nonVisualCooldown) and
+			(not chairCooldown or power[index].isVisual or power[index].noChairCooldown) and
 			(not power[index].cond or power[index].cond(player, key, down, x, y)) and
 			(not power[index].cooldown or checkCooldown(
 				player, power[index].name, power[index].cooldown,
