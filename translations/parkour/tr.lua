@@ -37,6 +37,7 @@ translations.tr = {
 	reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeyi tamamladınız. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> parkuru <vp>%s</vp> saniyede bitirdi, <fc>Tebrikler!",
 	unlocked_power = "<ce><d>%s</d>, <vp>%s</vp> becerisini açtı.",
+	unlocked_skin = "<ce><d>%s</d>, <vp>%s</vp> becerisi için bir eşya görünümü kazandı.",
 
 	-- Information messages
 	mod_apps = "<j>Parkour moderatör alımları şimdi açık! Bu bağlantıyı kullanın: <rose>%s",

@@ -36,6 +36,7 @@ translations.en = {
 	reached_level = "<d>Congratulations! You've completed level <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> finished the parkour in <vp>%s</vp> seconds, <fc>congratulations!",
 	unlocked_power = "<ce><d>%s</d> unlocked the <vp>%s</vp> power.",
+	unlocked_skin = "<ce><d>%s</d> unlocked a skin for the <vp>%s</vp> power.",
 
 	-- Information messages
 	mod_apps = "<j>Parkour moderator applications are now open! Use this link: <rose>%s",
@@ -223,6 +224,7 @@ translations.en = {
 	saving = "<p align='right'>Saving...",
 	new_image = "<J>Your appearance has been changed. You can turn it back to normal by typing !image",
 	smol_best = "<j>New smol mode room leader: <v>%s</v> with <vp>%s</vp> map completions!",
+	event = "EVENT",
 
 	-- Power names
 	balloon = "Balloon",

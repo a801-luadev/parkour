@@ -115,6 +115,15 @@ local function doStatsCount()
 		not review_mode or force_stats_count_debug
 end
 
+local function rewardSkin(player, power, id)
+	local pdata = players_file[player]
+	if table_find(pdata.skins, id) then return end
+	pdata.skins[1 + #pdata.skins] = id -- ice cube
+	for _player in next, in_room do
+		translatedChatMessage("unlocked_skin", _player, player, translatedMessage(power, _player))
+	end
+end
+
 function showStats()
 	-- Shows if stats count or not
 
@@ -273,7 +282,7 @@ onEvent("NewPlayer", function(player)
 			"common",
 			packets.rooms.lock_fixed,
 			room.shortName .. "\000" ..
-			player_count .. "\000" ..
+			actual_player_count .. "\000" ..
 			room.moduleMaxPlayers .. "\000" ..
 			(lastPlayerLeft or "-") .. "\000" ..
 			player
@@ -683,8 +692,17 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if checkpoint_info.version ~= 1 then return end
 	if christmas and christmas.bonusId == bonus then
 		local prize = christmas.collectGift(player)
-		if players_file[player] and prize then
-			players_file[player].coins = players_file[player].coins + prize
+		local pdata = players_file[player]
+		if pdata and prize then
+			pdata.coins = pdata.coins + prize
+			pdata.gifts = (pdata.gifts or 0) + 1
+			if pdata.gifts == 30 then
+				rewardSkin(player, "bigBox", 200.1) -- ice cube
+			elseif pdata.gifts == 60 then
+				rewardSkin(player, "cloud", 57.1) -- reindeer sleigh
+			elseif pdata.gifts == 90 then
+				rewardSkin(player, "rip", 1028) -- snowy anvil
+			end
 			queueForSave(player)
 		end
 		return
@@ -794,7 +812,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		if not review_mode then
 			if not victory[player] then return end
-			if not checkCooldown(player, "cp_command", 10000) then
+			if not checkCooldown(player, "cp_command", 4000) then
 				return translatedChatMessage("cooldown", player)
 			end
 		end

@@ -33,6 +33,8 @@ local function apply_file_operation(data, operation)
 	local action = operation[2]
 	if action == 'fetch' then
 		return
+	elseif action == 'fetch_field' then
+		return
 	elseif action == 'sanction' then
 		if not data.mods then
 			return "no mods field"
@@ -244,10 +246,11 @@ onEvent("FileLoaded", function(file, data)
 	end
 
 	local data = manager:load(data)
-	local reason
+	local reason, operation
 
 	for i=1, #file_updates do
-		if file_updates[i][1] ~= file then
+		operation = file_updates[i]
+		if operation[1] ~= file then
 			file_updates = nil
 			addTextArea(
 				textareas.file_update_status,
@@ -257,7 +260,27 @@ onEvent("FileLoaded", function(file, data)
 			return
 		end
 
-		reason = apply_file_operation(data, file_updates[i])
+		if operation[2] == 'fetch_field' then
+			local current = data
+			for j=3, #operation do
+				if not current[operation[j]] then
+					reason = "field not found"
+					break
+				end
+				current = current[operation[j]]
+			end
+
+			if not reason then
+				tfm.exec.playMusic(
+					'field:' .. tostring(file) .. ':' .. table.concat(operation, '.', 3),
+					json.encode(current),
+					0, false, false, parkour_bot
+				)
+			end
+		else
+			reason = apply_file_operation(data, operation)
+		end
+
 		if reason then
 			file_updates = nil
 			addTextArea(

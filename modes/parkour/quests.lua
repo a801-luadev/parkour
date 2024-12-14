@@ -23,6 +23,7 @@ function checkMapQuest(player)
 	if not pdata then
 		return
 	end
+	if #maps[1].list == 1 then return end -- list not loaded yet
 
 	for i=1, #pdata do
 		if pdata[i].id == 5 then
