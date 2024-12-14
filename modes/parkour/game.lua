@@ -282,7 +282,7 @@ onEvent("NewPlayer", function(player)
 			"common",
 			packets.rooms.lock_fixed,
 			room.shortName .. "\000" ..
-			player_count .. "\000" ..
+			actual_player_count .. "\000" ..
 			room.moduleMaxPlayers .. "\000" ..
 			(lastPlayerLeft or "-") .. "\000" ..
 			player
