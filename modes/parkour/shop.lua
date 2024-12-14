@@ -185,6 +185,7 @@ shop_items = {
 		},
 		{
 			price = -1,
+			gifts = 30,
 			image = "img@193c1beb7b2",
 			id = 200.1,
 		},
@@ -473,6 +474,7 @@ shop_items = {
 		},
 		{
 			price = -1,
+			gifts = 60,
 			image = "img@193b7a44117",
 			id = 57.1,
 			scale = 0.7,
@@ -487,6 +489,7 @@ shop_items = {
 		},
 		{
 			price = -1,
+			gifts = 90,
 			image = "img@193c1e22110",
 			id = 1028,
 			scale = 0.7,
