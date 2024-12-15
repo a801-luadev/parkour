@@ -15,7 +15,7 @@ do
     }
 
     christmas.reset = function()
-      christmas.rounds = math.random(4, 8)
+      christmas.rounds = math.random(2, 4)
       christmas.timestamp = os.time() + math.random(15, 30) * 60 * 1000
     end
 
@@ -38,11 +38,15 @@ do
       translatedChatMessage(christmas.msg, player)
     end
 
+    christmas.resetRound = function()
+      christmas.isGiftRound = false
+    end
+
     christmas.initRound = function()
       christmas.rounds = christmas.rounds - 1
 
       if christmas.rounds > 0 or christmas.timestamp > os.time() then
-        christmas.isGiftRound = false
+        christmas.resetRound()
         return
       end
 

@@ -590,8 +590,12 @@ onEvent("NewGame", function()
 	end
 	showStats()
 
-	if christmas and doStatsCount() then
-		christmas.initRound()
+	if christmas then
+		if doStatsCount() then
+			christmas.initRound()
+		else
+			christmas.resetRound()
+		end
 	end
 end)
 
