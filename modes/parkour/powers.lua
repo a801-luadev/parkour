@@ -389,7 +389,7 @@ powers = {
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player].cskins[5] or 46
 			local angle = skinID == 351 and -90 or 90
-			despawnableObject(4000, 46, x + 20 * (facing[player] and 1 or -1), y - 30, angle)
+			despawnableObject(4000, skinID, x + 20 * (facing[player] and 1 or -1), y - 30, angle)
 		end
 	},
 	{
