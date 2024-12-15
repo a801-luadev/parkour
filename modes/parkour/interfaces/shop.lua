@@ -186,14 +186,14 @@ do
 
 						if item.gifts then
 							itemPrice = (players_file[player] and players_file[player].gifts or 0) .. "/" .. itemPrice
-							images[index] = tfm.exec.addImage("18c73e40d6d.png", "&1000", x - 2, y - 2, player, 0.5, 0.5)
+							images[index] = tfm.exec.addImage("18c73e40d6d.png", "&1000", x - 4, y - 2, player, 0.5, 0.5)
 						else
-							images[index] = tfm.exec.addImage("18b2a0bc298.png", "&1000", x - 2, y + 2, player)
+							images[index] = tfm.exec.addImage("18b2a0bc298.png", "&1000", x - 4, y + 2, player)
 						end
 
 						ui.addTextArea(
 							-10000 - index, "<b><p align='right'>"..itemPrice, player,
-							x, y, 50, 15,
+							x-5, y, 60, 15,
 							0x14282b, 0x14282b, 1,
 							true
 						)
