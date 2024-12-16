@@ -10,8 +10,8 @@ do
       bonusId = 999,
       imageName = "18c73e40d6d.png",
       imageTarget = "!999",
-      prizes = { 10, 50, 100, 250, 500, 750, 1000 },
-      chances = { 8600, 1000, 200, 139, 50, 10, 1 },
+      prizes = { 10, 50, 100, 250, 500, 750, 1000, 0 },
+      chances = { 8600, 1000, 200, 139, 49, 10, 1, 1 },
     }
 
     christmas.reset = function()
@@ -85,7 +85,7 @@ do
       end
 
       local msg = math.random(1, 5)
-      if prize > 50 then
+      if prize > 50 or prize == 0 then
         translatedChatMessage("found_gift" .. msg, nil, player, prize)
       else
         translatedChatMessage("found_gift" .. msg, player, player, prize)
