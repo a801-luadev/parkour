@@ -92,12 +92,11 @@ shop_items = {
 			id = 164,
 		},
 		{
-			price = -1,
-			gifts = "??",
-			image = "img@193cd8077a3",
-			id = 100.1,
-			scale = 0.25,
-		}
+			price = 5000,
+			image = "img@193d0bdee01",
+			id = 181,
+			scale = 0.2,
+		},
 	},
 	{ -- bigbox
 		{
@@ -532,6 +531,7 @@ shop_skins = {
 	["164"] = {img = "18b400be9bc.png", x = 0.5, y = 0.52},
 	["165"] = {img = "18b400c3a16.png", x = 0.5, y = 0.52},
 	["166"] = {img = "18b400c8838.png", x = 0.5, y = 0.52},
+	["181"] = {img = "img@193d0ba33aa"},
 
 	["200.1"] = {img="img@193c1beb7b2", id=2},
 	["247"] = {img = "18b4011d953.png", x = 0.5, y = 0.52},
