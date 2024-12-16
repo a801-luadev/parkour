@@ -1438,6 +1438,25 @@ local function handleKick(playerName, cmd, quantity, args)
 	tfm.exec.kickPlayer(args[1])
 end
 
+local function handlePing(playerName, cmd, quantity, args)
+	if not perms[playerName] or not perms[playerName].ping then
+		return
+	end
+
+	if quantity == 0 then
+		return tfm.exec.chatMessage('<v>[#] <r>Need player name.', playerName)
+	end
+
+	local target = args[1]
+	local targetPlayer = target and room.playerList[target]
+
+	if not targetPlayer then
+		return tfm.exec.chatMessage('<v>[#] <r>Player isn\'t in the room.', playerName)
+	end
+
+	tfm.exec.chatMessage('<v>[#] ' .. target .. '<n>\'s average latency: <bl>~' .. targetPlayer.averageLatency, playerName)
+end
+
 local commandDispatch = {
 	["ban"] = handleBan,
 	["unban"] = handleBan,
@@ -1463,6 +1482,7 @@ local commandDispatch = {
 	["skip"] = skipMap,
 	["kick"] = handleKick,
 	["partyhost"] = handlePartyHost,
+	["ping"] = handlePing,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)

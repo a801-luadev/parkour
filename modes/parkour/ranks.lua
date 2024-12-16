@@ -42,6 +42,7 @@ local ranks_permissions = {
 		manage_maps = true,
 	},
 	mod = {
+		ping = true,
 		ban = true,
 		unban = true,
 		spectate = true,
@@ -71,6 +72,7 @@ local ranks_permissions = {
 		set_room_limit_review = true,
 	},
 	trainee = {
+		ping = true,
 		ban = true,
 		kill = true,
 		spectate = true,
