@@ -590,8 +590,12 @@ onEvent("NewGame", function()
 	end
 	showStats()
 
-	if christmas and doStatsCount() then
-		christmas.initRound()
+	if christmas then
+		if doStatsCount() then
+			christmas.initRound()
+		else
+			christmas.resetRound()
+		end
 	end
 end)
 
@@ -695,7 +699,7 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 		local pdata = players_file[player]
 		if pdata and prize then
 			pdata.coins = pdata.coins + prize
-			pdata.gifts = (pdata.gifts or 0) + 1
+			pdata.gifts = math.min(99, (pdata.gifts or 0) + 1)
 			if pdata.gifts == 30 then
 				rewardSkin(player, "bigBox", 200.1) -- ice cube
 			elseif pdata.gifts == 60 then

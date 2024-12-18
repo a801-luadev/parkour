@@ -96,7 +96,7 @@ local function despawnableObject(when, id, ...)
 		skin.img,
 		"#"..obj,
 		0, 0, nil,
-		1, 1, 0, 1,
+		skin.scale or 1, skin.scale or 1, 0, 1,
 		skin.x or 0.5, skin.y or 0.52
 	)
 end
