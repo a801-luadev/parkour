@@ -250,7 +250,10 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player].cskins[4] or 28
-			despawnableObject(2000, skinID, x, y + 10)
+			local antiGrav = map_gravity <= 0
+			despawnableObject(2000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
+				fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
+			} or nil)
 		end,
 
 		upgrades = {
@@ -266,7 +269,10 @@ powers = {
 
 				fnc = function(player, key, down, x, y)
 					local skinID = players_file[player].cskins[4] or 28
-					despawnableObject(3000, skinID, x, y + 10)
+					local antiGrav = map_gravity <= 0
+					despawnableObject(3000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
+						fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
+					} or nil)
 				end
 			},
 			{
@@ -281,9 +287,11 @@ powers = {
 
 				fnc = function(player, key, down, x, y)
 					local skinID = players_file[player].cskins[4] or 28
-
+					local antiGrav = map_gravity <= 0
 					if skinID == 28 then skinID = 59 end
-					despawnableObject(4000, skinID, x, y + 10)
+					despawnableObject(4000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
+						fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
+					} or nil)
 				end
 			},
 		}
@@ -325,7 +333,8 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player].cskins[1] or 1
-			despawnableObject(3000, skinID, x, y + 10)
+			local antiGrav = map_gravity <= 0
+			despawnableObject(3000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{
@@ -346,7 +355,8 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player].cskins[6] or 57
-			despawnableObject(2000, skinID, x, y + 10)
+			local antiGrav = map_gravity <= 0
+			despawnableObject(2000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{
@@ -367,7 +377,8 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player].cskins[7] or 90
-			despawnableObject(4000, skinID, x, y + 10)
+			local antiGrav = map_gravity <= 0
+			despawnableObject(4000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{
@@ -410,7 +421,8 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player].cskins[2] or 2
-			despawnableObject(4000, skinID, x, y + 10, 0)
+			local antiGrav = map_gravity <= 0
+			despawnableObject(4000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{
@@ -431,7 +443,8 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player].cskins[3] or 7
-			despawnableObject(4000, skinID, x, y + 10, 0)
+			local antiGrav = map_gravity <= 0
+			despawnableObject(4000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{
@@ -466,21 +479,24 @@ powers = {
 			local id1 = bit32.bxor(room.playerList[player].id, 32768) -- unfortunately physicobjects only use 16 bits as id
 			local id2 = bit32.bxor(room.playerList[player].id, 16384)
 			local sprite = powers.pig.piggies[math.random(#powers.pig.piggies)]
-			local img = tfm.exec.addImage(sprite, "_51", x - 24, y - 15)
+			local yScale = map_gravity <= 0 and -1 or 1
+			local img = tfm.exec.addImage(sprite, "_51", x + 5, y + 5, nil, 1, yScale, 0, 1, 0.5, 0.5 * yScale)
 
 			local circles = {
 				type = 14,
-				friction = 0.3
+				friction = 0.3,
 			}
 			tfm.exec.addPhysicObject(id1, x + 13, y, circles)
 			tfm.exec.addPhysicObject(id2, x - 5, y + 2, circles)
 
 			addNewTimer(5000, powers.pig.explode, id1, id2, img, x, y)
-			addNewTimer(
-				5000,
-				tfm.exec.removeImage,
-				tfm.exec.addImage("17797e8de0d.png", "_52", x - 30, y - 28)
-			)
+			if yScale == 1 then
+				addNewTimer(
+					5000,
+					tfm.exec.removeImage,
+					tfm.exec.addImage("17797e8de0d.png", "_52", x - 30, y - 28)
+				)
+			end
 		end,
 
 		explode = function(id1, id2, img, x, y)
@@ -669,8 +685,8 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local id = room.playerList[player].id + 2147483648 -- makes 32nd bit 1 so it doesn't play around with the interface textareas
-
-			local img = tfm.exec.addImage("17426539be5.png", "_51", x - 30, y - 26)
+			local antiGrav = map_gravity <= 0
+			local img = tfm.exec.addImage("17426539be5.png", "_51", x, y, nil, 1, antiGrav and -1 or 1, 0, 1, 0.5, antiGrav and -0.5 or 0.5)
 			ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 32, y - 26, 64, 56, 0, 0, 0)
 			addNewTimer(powers.campfire.cooldown, powers.campfire.despawn, img, id)
 		end,
@@ -698,8 +714,9 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local id = bit32.bxor(room.playerList[player].id, 49152)
-			local img = tfm.exec.addImage("17459a230e9.png", "_51", x - 30, y - 20)
-			tfm.exec.addPhysicObject(id, x - 5, y + 20, {
+			local yScale = map_gravity <= 0 and -1 or 1
+			local img = tfm.exec.addImage("17459a230e9.png", "_51", x - 1, y + 10, nil, 1, yScale, 0, 1, 0.5, 0.5 * yScale)
+			tfm.exec.addPhysicObject(id, x - 5, y + 10 + 10 * yScale, {
 				type = 14,
 				friction = 0.3,
 				width = 32
