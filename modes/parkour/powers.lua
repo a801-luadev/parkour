@@ -4,7 +4,7 @@ local keyboard
 
 no_powers = {}
 local used_powers = {_count = 0}
-disable_powers = false
+disable_powers = room.name:lower():find('nohelp') and true
 local first_player = nil
 
 local keys
@@ -1134,13 +1134,13 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 	end
 
 	if cmd == "disablepowers" then
-		if not review_mode then
+		if not ranks.admin[player] and not review_mode then
 			return tfm.exec.chatMessage("<v>[#] <r>Enable review mode first.", player) 
 		end
 		disable_powers = true
 		tfm.exec.chatMessage("<v>[#] <d>Powers disabled by " .. player .. ".")
 	elseif cmd == "enablepowers" then
-		if not review_mode then
+		if not ranks.admin[player] and not review_mode then
 			return tfm.exec.chatMessage("<r>[#] Enable review mode first.", player) 
 		end
 		disable_powers = false
