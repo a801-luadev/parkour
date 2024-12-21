@@ -36,6 +36,9 @@ local function apply_file_operation(data, operation, file, raw_data)
 	if action == 'fetch' then
 		tfm.exec.playMusic('file:' .. tostring(file), tostring(raw_data), 0, false, false, parkour_bot)
 		return
+	elseif action == 'backup' then
+		system.saveFile(raw_data, operation[3])
+		return
 	elseif action == 'fetch_field' then
 		local current = data
 		for j=3, #operation do
