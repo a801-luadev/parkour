@@ -43,6 +43,7 @@ local showStats
 
 local lastOpenedMap
 local lastPlayerLeft
+local lastUniquePlayerCount = room.uniquePlayers
 
 -- anniversary on march 6
 local is_anniversary, is_before_anniversary, is_after_anniversary
@@ -269,7 +270,15 @@ local function checkTitleAndNextFieldValue(player, title, sumValue, _playerData,
 	end
 end
 
-onEvent("NewPlayer", function(player)
+onEvent("NewPlayer", function(player, init)
+	-- Auto kick duplicate souris accounts
+	if player:sub(1, 1) == "*" then
+		if not init and lastUniquePlayerCount == room.uniquePlayers then
+			tfm.exec.kickPlayer(player)
+		end
+	end
+	lastUniquePlayerCount = room.uniquePlayers
+
 	ui.removeTextArea(987, nil)
 	spec_mode[player] = nil
 	in_room[player] = true

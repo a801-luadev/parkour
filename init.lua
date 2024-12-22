@@ -154,7 +154,7 @@ else
 end
 
 for player in next, room.playerList do
-	eventNewPlayer(player)
+	eventNewPlayer(player, true)
 end
 
 initializingModule = false
