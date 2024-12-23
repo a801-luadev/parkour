@@ -383,6 +383,8 @@ onEvent("Keyboard", function(player, key)
 end)
 
 onEvent("PlayerLeft", function(player)
+	lastUniquePlayerCount = room.uniquePlayers
+
 	if smol_completions and smol_completions._maxName == player then
 		smol_completions[smol_completions._maxName] = nil
 		smol_completions._max = 0
