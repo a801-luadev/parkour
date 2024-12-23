@@ -269,20 +269,21 @@ do
 			local index = page + buyButton - 1
 			if index > data._len then return end
 			local item_price = data[index].price
-			local player_coin = players_file[player].coins
+			local file = players_file[player]
 			local itemID = data[index].id
 
-			if default_skins[itemID] or table_find(players_file[player].skins, itemID) then
-				players_file[player].cskins[tab] = itemID
+			if default_skins[itemID] or table_find(file.skins, itemID) then
+				file.cskins[tab] = itemID
 				isSave[player] = true
 				self.parent:update(player, page, tab, data)
 				return
 			end
 
 			if item_price < 0 then return end
-			if player_coin >= item_price then
-				table.insert(players_file[player].skins, itemID)
-				players_file[player].coins = player_coin - item_price
+			if #file.skins > 99 then return end
+			if file.coins >= item_price then
+				table.insert(file.skins, itemID)
+				file.coins = file.coins - item_price
 				isSave[player] = true
 				self.parent:update(player, page, tab, data)
 			else
