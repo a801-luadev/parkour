@@ -4,12 +4,32 @@ do
 	local coin_images = {}
 	local isSave = {}
 
+	local function filterShopItems(player, tab, ret)
+		local tabItems = shop_items[tab]
+		if not tabItems or not players_file[player] then return ret end
+
+		local hasItem = {}
+		local skins = players_file[player].skins
+		for i=1, #skins do
+			hasItem[skins[i]] = true
+		end
+
+		local count = 0
+		for i=1, #tabItems do
+			if not tabItems[i].hidden or hasItem[tabItems[i].id] then
+				count = 1 + count
+				ret[count] = tabItems[i]
+			end
+		end
+		ret._len = count
+		return ret
+	end
+
 	ShopInterface = Interface.new(50, 35, 700, 350, true)
-		:setDefaultArgs("shop")
 		:loadTemplate(WindowBackground)
-		:setShowCheck(function(self, player, page, tab)
-			if not tab then
-				self:show(player, 1, 1)
+		:setShowCheck(function(self, player, page, tab, data)
+			if not data then
+				self:show(player, 1, 1, filterShopItems(player, 1, { _len=0 }))
 				return false
 			end
 			return true
@@ -30,7 +50,8 @@ do
 			Button.new():setText(">")
 			:onClick(function(self, player)
 				local tab = self.parent.args[player][2]
-				self.parent:update(player, 1, 1 + (tab % #shop_items))
+				tab = 1 + (tab % #shop_items)
+				self.parent:update(player, 1, tab, filterShopItems(player, tab, self.parent.args[player][3]))
 			end)
 			:setPosition(595, 20):setSize(80, 18)
 		)
@@ -40,7 +61,8 @@ do
 			Button.new():setText("&lt;")
 			:onClick(function(self, player)
 				local tab = self.parent.args[player][2]
-				self.parent:update(player, 1, tab == 1 and #shop_items or (tab - 1))
+				tab = tab == 1 and #shop_items or (tab - 1)
+				self.parent:update(player, 1, tab, filterShopItems(player, tab, self.parent.args[player][3]))
 			end)
 			:setPosition(145, 20):setSize(80, 18)
 		)
@@ -65,16 +87,16 @@ do
 			:onClick(function(self, player)
 				local page = self.parent.args[player][1]
 				local tab = self.parent.args[player][2]
-				local count = #shop_items[tab]
+				local data = self.parent.args[player][3]
+				local count = data._len
 				local newpage = page == 1 and (math.floor((count - 1) / 18) * 18 + 1) or (page - 18)
 				if page == newpage then return end
-				self.parent:update(player, newpage, tab)
+				self.parent:update(player, newpage, tab, data)
 			end)
 			:setPosition(20, 323):setSize(80, 18)
 			:canUpdate(true):onUpdate(function(self, player)
-				local tab = self.parent.args[player][2]
-				local count = #shop_items[tab]
-				if count <= 18 then
+				local data = self.parent.args[player][3]
+				if data._len <= 18 then
 					self:disable(player)
 				else
 					self:enable(player)
@@ -88,16 +110,16 @@ do
 			:onClick(function(self, player)
 				local page = self.parent.args[player][1]
 				local tab = self.parent.args[player][2]
-				local count = #shop_items[tab]
+				local data = self.parent.args[player][3]
+				local count = data._len
 				local newpage = (page + 18) > count and 1 or (page + 18)
 				if page == newpage then return end
-				self.parent:update(player, newpage, tab)
+				self.parent:update(player, newpage, tab, data)
 			end)
 			:setPosition(595, 323):setSize(80, 18)
 			:canUpdate(true):onUpdate(function(self, player)
-				local tab = self.parent.args[player][2]
-				local count = #shop_items[tab]
-				if count <= 18 then
+				local data = self.parent.args[player][3]
+				if data._len <= 18 then
 					self:disable(player)
 				else
 					self:enable(player)
@@ -127,7 +149,7 @@ do
 			x = 0, y = 50,
 			width = 700, height = 250,
 			alpha = 0,
-		}):onUpdate(function(self, player, page, tab)
+		}):onUpdate(function(self, player, page, tab, data)
 			local images = shop_images[player] or {}
 			shop_images[player] = images
 			for index = 1, #images do
@@ -136,7 +158,6 @@ do
 
 			local x = 70
 			local y = 120
-			local data = shop_items[tab]
 			local item
 			local firstImage
 
@@ -145,6 +166,9 @@ do
 			end
 
 			for index = 1, 18 do
+				if page + index - 1 > data._len then
+					break
+				end
 				item = data[page + index - 1]
 				if item then
 					images[index] = tfm.exec.addImage(index == 1 and firstImage or item.image, "&999", x, y, player, item.scale, item.scale)
@@ -163,7 +187,7 @@ do
 			x = 0, y = 50,
 			width = 700, height = 250,
 			canUpdate = true,
-			text = function(self, player, page, tab)
+			text = function(self, player, page, tab, data)
 				local images = coin_images[player] or {}
 				coin_images[player] = images
 				for index = 1, #images do
@@ -172,11 +196,10 @@ do
 
 				local x = self.x + 25
 				local y = self.y + 15
-				local data = shop_items[tab]
 				local item
 				for index = 1, 18 do
 					item = data[page + index - 1]
-					if item then
+					if item and page + index - 1 <= data._len then
 						local itemPrice = item.gifts or item.price or 0
 
 						if item.gifts then
@@ -224,9 +247,10 @@ do
 	for buyButton = 1, 18 do
 		local component = Button.new()
 		:setText(
-			function(self, player, page, tab)				
-				local item = shop_items[tab][page + buyButton - 1]
-				if not item then return "-" end
+			function(self, player, page, tab, data)
+				local index = page + buyButton - 1
+				local item = data[index]
+				if index > data._len or not item then return "-" end
 				if players_file[player].cskins[tab] == item.id then
 					return translatedMessage("equipped", player)
 				elseif default_skins[item.id] or table_find(players_file[player].skins, item.id) then
@@ -241,15 +265,17 @@ do
 		:onClick(function(self, player)
 			local page = self.parent.args[player][1]
 			local tab = self.parent.args[player][2]
+			local data = self.parent.args[player][3]
 			local index = page + buyButton - 1
-			local item_price = shop_items[tab][index].price
+			if index > data._len then return end
+			local item_price = data[index].price
 			local player_coin = players_file[player].coins
-			local itemID = shop_items[tab][index].id
+			local itemID = data[index].id
 
 			if default_skins[itemID] or table_find(players_file[player].skins, itemID) then
 				players_file[player].cskins[tab] = itemID
 				isSave[player] = true
-				self.parent:update(player, page, tab)
+				self.parent:update(player, page, tab, data)
 				return
 			end
 
@@ -258,7 +284,7 @@ do
 				table.insert(players_file[player].skins, itemID)
 				players_file[player].coins = player_coin - item_price
 				isSave[player] = true
-				self.parent:update(player, page, tab)
+				self.parent:update(player, page, tab, data)
 			else
 				tfm.exec.chatMessage("<v>[#] <r>You don't have enough coins.", player)
 			end
@@ -267,10 +293,10 @@ do
 		:onUpdate(function(self, player)
 			local page = self.parent.args[player][1]
 			local tab = self.parent.args[player][2]
-			local data = shop_items[tab]
+			local data = self.parent.args[player][3]
 			local index = page + buyButton - 1
 			local itemID = data[index] and data[index].id
-			if not data[index] or players_file[player].cskins[tab] == itemID or data[index].price == -1 and not table_find(players_file[player].skins, itemID) then
+			if index > data._len or not data[index] or players_file[player].cskins[tab] == itemID or data[index].price == -1 and not table_find(players_file[player].skins, itemID) then
 				self:disable(player)
 			else
 				self:enable(player)

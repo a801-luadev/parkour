@@ -97,6 +97,13 @@ shop_items = {
 			id = 181,
 			scale = 0.2,
 		},
+		{
+			price = -1,
+			image = "img@193cd8077a3",
+			id = 100.1,
+			scale = 0.25,
+			hidden = true,
+		},
 	},
 	{ -- bigbox
 		{
@@ -194,6 +201,7 @@ shop_items = {
 			gifts = 30,
 			image = "img@193c1beb7b2",
 			id = 200.1,
+			hidden = not christmas,
 		},
 	},
 	{ -- trampoline
@@ -484,6 +492,7 @@ shop_items = {
 			image = "img@193b7a44117",
 			id = 57.1,
 			scale = 0.7,
+			hidden = not christmas,
 		},
 	},
 	{
@@ -499,6 +508,7 @@ shop_items = {
 			image = "img@193c1e22110",
 			id = 1028,
 			scale = 0.7,
+			hidden = not christmas,
 		},
 	},
 }
