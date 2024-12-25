@@ -386,7 +386,50 @@ shop_items = {
 			price = 2500,
 			image = "18b53f100e9.png",
 			id = 2840,
-		}
+		},
+		{
+			price = 5000,
+			image = "img@19405ced563",
+			id = 2833,
+		},
+		{
+			price = 6000,
+			image = "img@19405cc23fa",
+			id = 2867,
+		},
+		{
+			price = 7000,
+			image = "img@19405eeddfe",
+			id = 2869,
+			scale = 0.9,
+		},
+		{
+			price = 8000,
+			image = "img@19405c83dc8",
+			id = 2868,
+			scale = 0.8,
+		},
+		{
+			price = 9000,
+			image = "img@19405c4d494",
+			id = 2863,
+		},
+		{
+			price = 10000,
+			image = "img@19405cab7bc",
+			id = 2864,
+			scale = 0.9,
+		},
+		{
+			price = 11000,
+			image = "img@19405c6163d",
+			id = 2866,
+		},
+		{
+			price = 12000,
+			image = "img@19405c72d7f",
+			id = 2870,
+		},
 	},
 	{ -- plank
 		{
@@ -487,6 +530,18 @@ shop_items = {
 			id = 57,
 		},
 		{
+			price = 5000,
+			image = "img@1940598ffcb",
+			id = 57.2,
+			scale = 0.7,
+		},
+		{
+			price = 10000,
+			image = "img@194056fa29e",
+			id = 57.3,
+			scale = 0.7,
+		},
+		{
 			price = -1,
 			gifts = 60,
 			image = "img@193b7a44117",
@@ -515,6 +570,8 @@ shop_items = {
 
 shop_skins = {
 	["57.1"] = {img="img@193b7a44117", id=57, y=0.7},
+	["57.2"] = {img="img@1940598ffcb", id=57, y=0.45},
+	["57.3"] = {img="img@194056fa29e", id=57, y=0.5},
 
 	["100.1"] = {img="img@193cd8077a3", id=1, scale=0.25, y=0.7},
 	["143"] = {img = "18b40057d3b.png", x = 0.5, y = 0.52},
@@ -598,6 +655,14 @@ shop_skins = {
 
 	["1028"] = {img="img@193c20b2a55", id=90},
 
+	["2833"] = {img = "img@19405ced563"},
+	["2863"] = {img = "img@19405c4d494"},
+	["2864"] = {img = "img@19405cab7bc"},
+	["2866"] = {img = "img@19405c6163d"},
+	["2867"] = {img = "img@19405cc23fa"},
+	["2868"] = {img = "img@19405c83dc8", scale=0.8},
+	["2869"] = {img = "img@19405eeddfe"},
+	["2870"] = {img = "img@19405c72d7f"},
 	["2845"] = {img = "18b40180a6f.png", x = 0.5, y = 0.52},
 	["2846"] = {img = "18b40185865.png", x = 0.5, y = 0.52},
 	["2847"] = {img = "18b4018a633.png", x = 0.5, y = 0.52},
