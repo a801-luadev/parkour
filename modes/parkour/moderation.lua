@@ -68,6 +68,12 @@ local function sendBanLog(playerName, time, target, minutes)
     end
 end
 
+local function printList(list, col, len, player)
+	for i=1, len, col do
+		tfm.exec.chatMessage(table.concat(list, ' ', i, math.min(i+col-1, len)), player)
+	end
+end
+
 onEvent("GameDataLoaded", function(data, fileid)
 	local action
 	local save
@@ -832,9 +838,7 @@ local function fileActions(player, cmd, quantity, args)
 			if category == "all" or category == tostring(j) then
 				len = maps[j].count
 				tfm.exec.chatMessage("<v>[#] <v>diff" .. tostring(j) .. " maps: " .. tostring(len), player)
-				for i=1, len, 20 do
-					tfm.exec.chatMessage(table.concat(maps[j].list, ' ', i, math.min(i+19, len)), player)
-				end
+				printList(maps[j].list, 20, len, player)
 			end
 		end
 	elseif fileName == "staff" then
@@ -859,9 +863,7 @@ local function fileActions(player, cmd, quantity, args)
 		end
 
 		tfm.exec.chatMessage("<v>[#] <j>" .. rankName .. ":", player)
-		for i=1, list._count, 10 do
-			tfm.exec.chatMessage(table.concat(list, ' ', i, math.min(i+9, list._count)), player)
-		end
+		printList(list, 10, list._count, player)
 
 	elseif fileName == "sanction" then
 		local fileAction = args[2]
@@ -934,22 +936,33 @@ function roomAnnouncement(player, cmd, quantity, args)
 	tfm.exec.chatMessage("<ROSE>Ξ [Parkour] <N>"..announcementtext)
 end
 
-local function editCoins(player, cmd, quantity, args)
+local skinsGeneralActions = { new=1, list=1, inspect=1 }
+local function handleSkins(player, cmd, quantity, args)
 	if not ranks.admin[player] then
 		return
 	end
 
-	if quantity < 2 then
+	if quantity < 1 then
 		translatedChatMessage("invalid_syntax", player)
 		return
 	end
 
-	local playerName = args[1]
-	local action = args[2]
-	local pdata = players_file[playerName]
+	local action = args[1]
+	local playerName, pdata
 
-	if not in_room[playerName] or not pdata then
-		return tfm.exec.chatMessage(playerName.." is not here.", player)
+	if not skinsGeneralActions[action] then
+		if quantity < 2 then
+			translatedChatMessage("invalid_syntax", player)
+			return
+		end
+
+		playerName = args[1]
+		action = args[2]
+		pdata = players_file[playerName]
+
+		if not in_room[playerName] or not pdata then
+			return tfm.exec.chatMessage(playerName.." is not here.", player)
+		end
 	end
 
 	if action == "show" then
@@ -962,6 +975,48 @@ local function editCoins(player, cmd, quantity, args)
 		pdata.cskins = { 1, 2, 7, 28, 46 }
 		savePlayerData(playerName)
 		tfm.exec.chatMessage("<v>[#] <j>Current skins set default for " ..playerName, player)
+
+	elseif action == "new" then
+		local id = tonumber(args[2])
+		local image = args[3]
+		local testId = tfm.exec.addImage(image, "!1", 0, 0, "Tigrounette")
+		if not id or not testId then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+
+		local objId = tonumber(args[4])
+		objId = objId or default_skins[math.floor(id)] and math.floor(id)
+		objId = objId or default_skins[math.floor(id/100)] and math.floor(id/100)
+		if not objId then
+			return tfm.exec.chatMessage("<v>[#] <r>Missing object id", player)
+		end
+
+		local scale = tonumber(args[5])
+		local x = tonumber(args[6])
+		local y = tonumber(args[7])
+
+		shop_skins[tostring(id)] = {img=image, id=objId, scale=scale, x=x, y=y}
+		tfm.exec.chatMessage("<v>[#] <j>Added test skin: " .. id, player)
+
+	elseif action == "inspect" then
+		local id = args[2]
+		local skin = shop_skins[id]
+		if not skin then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+		tfm.exec.chatMessage(("<v>[#] <j>Skin %s: img[%s] obj[%s] scale[%s] x[%s] y[%s]"):format(
+			id, skin.img, tostring(skin.id), tostring(skin.scale), tostring(skin.x), tostring(skin.y)
+		), player)
+		return
+
+	elseif action == "list" then
+		local list = {}
+		for id in next, shop_skins do
+			list[1+#list] = id
+		end
+		tfm.exec.chatMessage("<v>[#] <j>Skin list:", player)
+		printList(list, 20, #list, player)
+		return
 
 	elseif action == "set" then
 		if quantity < 4 then
@@ -1471,7 +1526,8 @@ local commandDispatch = {
 	["file"] = fileActions,
 	["kill"] = warnPlayer,
 	["announcement"] = roomAnnouncement,
-	["coins"] = editCoins,
+	["skins"] = handleSkins,
+	["coins"] = handleSkins,
 	["christmas"] = setChristmasMap,
 	["snow"] = disableSnow,
 	["link"] = linkMouse,

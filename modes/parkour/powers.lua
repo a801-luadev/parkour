@@ -88,8 +88,9 @@ function checkCooldown(player, name, long, img, x, y, show)
 end
 
 local function despawnableObject(when, id, ...)
+	if not id then return end
 	local skin = shop_skins[tostring(id)]
-	local obj = addShamanObject(skin and skin.id or id, ...)
+	local obj = addShamanObject(math.floor(skin and skin.id or id), ...)
 	addNewTimer(when, tfm.exec.removeObject, obj)
 	if not skin then return end
 	tfm.exec.addImage(
