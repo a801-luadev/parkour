@@ -297,7 +297,8 @@ do
 			local data = self.parent.args[player][3]
 			local index = page + buyButton - 1
 			local itemID = data[index] and data[index].id
-			if index > data._len or not data[index] or players_file[player].cskins[tab] == itemID or data[index].price == -1 and not table_find(players_file[player].skins, itemID) then
+			local file = players_file[player]
+			if index > data._len or not data[index] or file.cskins[tab] == itemID or (data[index].price < 0 or file.coins < data[index].price) and not table_find(file.skins, itemID) then
 				self:disable(player)
 			else
 				self:enable(player)
