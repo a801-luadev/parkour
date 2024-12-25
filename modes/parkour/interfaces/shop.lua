@@ -171,7 +171,7 @@ do
 				end
 				item = data[page + index - 1]
 				if item then
-					images[index] = tfm.exec.addImage(index == 1 and firstImage or item.image, "&999", x + 30, y + 30, player, item.scale, item.scale, 0, 1, 0.5, 0.5)
+					images[index] = tfm.exec.addImage(index == 1 and firstImage or item.image, "~99", x + 30, y + 30, player, item.scale, item.scale, 0, 1, 0.5, 0.5)
 					x = x + 75
 
 					if index == 9 then
