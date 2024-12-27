@@ -17,6 +17,7 @@ local facing = {}
 local cooldowns = {}
 local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
+local cooldownMultiplier = 1
 
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
@@ -886,7 +887,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 			(not chairCooldown or power[index].isVisual or power[index].noChairCooldown) and
 			(not power[index].cond or power[index].cond(player, key, down, x, y)) and
 			(not power[index].cooldown or checkCooldown(
-				player, power[index].name, power[index].cooldown,
+				player, power[index].name, power[index].cooldown * cooldownMultiplier,
 
 				power[index].cooldown_img,
 				power[index].cooldown_x, power[index].cooldown_y,
@@ -929,7 +930,7 @@ onEvent("Mouse", function(player, x, y)
 	local power = powers.teleport
 	if players_file[player].c >= power.maps or review_mode then
 		if (not power.cooldown or checkCooldown(
-			player, power.name, power.cooldown,
+			player, power.name, power.cooldown * cooldownMultiplier,
 
 			power.cooldown_img,
 			power.cooldown_x, power.cooldown_y,
@@ -1146,6 +1147,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 		disable_powers = false
 		tfm.exec.chatMessage("<v>[#] <d>Powers enabled by " .. player .. ".")
+	elseif cmd == "cooldown" then
+		if not ranks.admin[player] or not review_mode then return end
+		cooldownMultiplier = tonumber(args[1]) or 1
+		tfm.exec.chatMessage("<v>[#] <d>Cooldown multiplier = " .. cooldownMultiplier, player)
+		inGameLogCommand(player, cmd, args)
 	end
 end)
 
