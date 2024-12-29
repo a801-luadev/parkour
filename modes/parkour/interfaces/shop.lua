@@ -206,7 +206,7 @@ do
 							itemPrice = (players_file[player] and players_file[player].gifts or 0) .. "/" .. itemPrice
 							images[index] = tfm.exec.addImage("18c73e40d6d.png", "&1000", x - 4, y - 2, player, 0.5, 0.5)
 						else
-							if itemPrice >= 10000 then
+							if itemPrice >= 100000 then
 								local thousand = itemPrice / 1000
 								itemPrice = tostring(thousand) .. "K"
 							end
