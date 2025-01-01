@@ -313,7 +313,7 @@ powers = {
 		cooldown_img = "17127e73965.png",
 
 		cooldown = 10000,
-		click = true,
+		click = {},
 
 		fnc = tfm.exec.movePlayer
 	},
@@ -783,7 +783,9 @@ function bindNecessary(player)
 			(power.isVisual or (not records_admins and submode ~= "smol"))) then
 			if power.click then
 				system.bindMouse(player, true)
-			else
+			end
+
+			if powers[index].key or player_keys[index] then
 				if player_keys[index] then
 					key = player_keys[index]
 				elseif powers[index].key[1] then -- variation qwerty/azerty
@@ -795,9 +797,13 @@ function bindNecessary(player)
 				if triggers[key] then
 					triggers[key]._count = triggers[key]._count + 1
 					triggers[key][ triggers[key]._count ] = power
-				else
+				elseif key then
 					triggers[key] = {_count = 1, [1] = power}
 					bindKeyboard(player, key, true, true)
+
+					if power.click then
+						bindKeyboard(player, key, false, true)
+					end
 				end
 			end
 		end
@@ -883,7 +889,9 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		local chairCooldown = victory[player] > os.time() and
 			chair_pos and ((x - chair_pos[1]) ^ 2 + (y - chair_pos[2]) ^ 2) <= 10000
 		for index = 1, power._count do
-			if power[index] and
+			if power[index] and power[index].click then
+				power[index].click[player] = down
+			elseif down and power[index] and
 			(not chairCooldown or power[index].isVisual or power[index].noChairCooldown) and
 			(not power[index].cond or power[index].cond(player, key, down, x, y)) and
 			(not power[index].cooldown or checkCooldown(
@@ -929,7 +937,7 @@ onEvent("Mouse", function(player, x, y)
 
 	local power = powers.teleport
 	if players_file[player].c >= power.maps or review_mode then
-		if (not power.cooldown or checkCooldown(
+		if (power.click[player] or not keys[player][power.id]) and (not power.cooldown or checkCooldown(
 			player, power.name, power.cooldown * cooldownMultiplier,
 
 			power.cooldown_img,
@@ -968,6 +976,7 @@ end)
 onEvent("PlayerLeft", function(player)
 	keys.triggers[player] = nil
 	keybindings[player] = nil
+	powers.teleport.click[player] = nil
 end)
 
 onEvent("PlayerDataParsed", function(player, data)

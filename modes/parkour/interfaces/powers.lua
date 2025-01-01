@@ -248,7 +248,7 @@ do
 					local pkeys = players_file[player].keys
 
 					local key
-					if powers[power].key[1] then -- variation qwerty/azerty
+					if powers[power].key and powers[power].key[1] then -- variation qwerty/azerty
 						local setting = players_file[player].settings[5] + 1
 						key = powers[power].key[setting]
 					else
@@ -307,31 +307,20 @@ do
 				end
 			end
 
-			if powers[power].click then
-				if Keyboard.open[player] then
-					Keyboard:remove(player)
-				end
-				images[player][4] = tfm.exec.addImage(
-					"173de7d5a5c.png", ":7",
-					self.x + 250, self.y + 140, player
-				)
+			local numkey = powers[power].default
+			local keyname
+			if keys[player][power] then
+				numkey = nil
+				keyname = keyboard.bindings[ keys[player][power] ]
+			end
 
+			if not Keyboard.open[player] then
+				local qwerty = (self.open[player] and Keyboard.args[player][1] or
+								players_file[player].settings[5] == 1)
+
+				Keyboard:show(player, qwerty, numkey, keyname)
 			else
-				local numkey = powers[power].default
-				local keyname
-				if keys[player][power] then
-					numkey = nil
-					keyname = keyboard.bindings[ keys[player][power] ]
-				end
-
-				if not Keyboard.open[player] then
-					local qwerty = (self.open[player] and Keyboard.args[player][1] or
-									players_file[player].settings[5] == 1)
-
-					Keyboard:show(player, qwerty, numkey, keyname)
-				else
-					Keyboard:update(player, Keyboard.args[player][1], numkey, keyname)
-				end
+				Keyboard:update(player, Keyboard.args[player][1], numkey, keyname)
 			end
 
 			local completed = players_file[player].c
@@ -462,7 +451,7 @@ do
 				if old == binding then return end
 
 				if not old then
-					if powers[power].key[1] then -- variation qwerty/azerty
+					if powers[power].key and powers[power].key[1] then -- variation qwerty/azerty
 						old = keyboard.bindings[ powers[power].key[ players_file[player].settings[5] + 1 ] ]
 					else
 						old = keyboard.bindings[ powers[power].key ]
