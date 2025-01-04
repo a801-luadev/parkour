@@ -261,6 +261,23 @@ shop_powers[3] = { -- ghost
 		bindKeyboard(player, 3, true, true)
 	end
 }
+shop_powers[4] = { -- campfire
+	image = "173dee98c61.png",
+	cooldown = 15000,
+
+	fnc = function(self, player, key, down, x, y)
+		local id = allocateId("textarea", 1000, 10000)
+		local antiGrav = map_gravity <= 0
+		local img = tfm.exec.addImage("17426539be5.png", "_101", x, y, nil, 0.8, 0.8 * (antiGrav and -1 or 1), 0, 1, 0.5, antiGrav and -0.5 or 0.5)
+		ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 25, y - 22, 50, 44, 0, 0, 0)
+		addNewTimer(self.cooldown, self.despawn, img, id)
+	end,
+
+	despawn = function(img, id)
+		tfm.exec.removeImage(img)
+		ui.removeTextArea(id)
+	end
+}
 
 -- in small x: positive -> towards the sides, negative -> towards the center
 powers = {
