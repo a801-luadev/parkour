@@ -333,7 +333,7 @@ do
 			for i=1, #list do
 				val = (list[i] * 100) % 100
 				if val ~= 0 then
-					uses[math.floor(list[i])] = val
+					uses[math.floor(list[i])] = math.floor(val + 0.5)
 				end
 			end
 		end
@@ -367,7 +367,7 @@ do
 		if power then
 			local val = (id * 100) % 100
 			if val ~= 0 then
-				_cache._power_uses[file][math.floor(id)] = val
+				_cache._power_uses[file][math.floor(id)] = math.floor(val + 0.5)
 			end
 		end
 		return true
