@@ -21,6 +21,11 @@ do
 		{"translator", "173f3263916.png"}
 	}
 	local images = {}
+	local badgeTAs = {}
+
+	for i=1, #badges do
+		badgeTAs[i] = allocateId("textarea", 20000)
+	end
 
 	Profile = Interface.new(200, 50, 400, 360, true)
 		:setShowCheck(function(self, player, profile, data)
@@ -89,7 +94,7 @@ do
 						container._count = container._count + 1
 						container[ container._count ] = tfm.exec.addImage(badge[2], ":2", x, y, player)
 						ui.addTextArea(
-							-10000 - index,
+							badgeTAs[index],
 							"<a href='event:_help:badge_" .. badge[1] .. "'>\n\n\n\n\n\n",
 							player, x, y, 30, 30,
 							0, 0, 0, true
@@ -101,7 +106,7 @@ do
 							y = y + 40
 						end
 					else
-						ui.removeTextArea(-10000 - index, player)
+						ui.removeTextArea(badgeTAs[index], player)
 					end
 				end
 			end
@@ -111,7 +116,7 @@ do
 				tfm.exec.removeImage(images[player][index])
 			end
 			for index = 1, #badges do
-				ui.removeTextArea(-10000 - index, player)
+				ui.removeTextArea(badgeTAs[index], player)
 			end
 			images[player]._count = 0
 		end)

@@ -1,6 +1,5 @@
 local Interface
 do
-	local nextId = 0
 	local all_interfaces = {}
 
 	Interface = {}
@@ -75,8 +74,7 @@ do
 			self.elements[data.name] = data
 		end
 
-		data.id = nextId
-		nextId = nextId + 1
+		data.id = allocateId("textarea")
 
 		data.parent = self
 		data.x = (data.x or 0) + self.x

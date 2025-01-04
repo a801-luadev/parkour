@@ -22,5 +22,9 @@
 	{
 		"type": "require-file",
 		"file": "global/communication.lua"
+	},
+	{
+		"type": "require-file",
+		"file": "global/id.lua"
 	}
 ]
