@@ -1296,6 +1296,12 @@ onEvent("NewGame", function()
 	ghost = {}
 end)
 
+onEvent("NewPlayer", function(player)
+	for player2 in next, ghost do
+		tfm.exec.setPlayerGravityScale(player2, 0, 0)
+	end
+end)
+
 onEvent("PlayerDied", function(player)
 	if ghost[player] then
 		ghost[player] = nil
