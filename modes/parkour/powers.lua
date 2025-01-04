@@ -18,6 +18,7 @@ local cooldowns = {}
 local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local cooldownMultiplier = 1
+local ghost = {}
 
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
@@ -173,6 +174,94 @@ local function fixHourCount(player, data)
 	return save or offset > 0
 end
 
+local shop_powers = {}
+shop_powers[1] = { -- snowball
+	image = "173db111ba4.png",
+	cooldown = 12500,
+
+	fnc = function(self, player, key, down, x, y)
+		local right = facing[player]
+		despawnableObject(5000, 34, x + (right and 20 or -20), y, 0, right and 10 or -10)
+	end
+}
+shop_powers[2] = { -- snowmouse
+	image = "1507c1da0e8.png",
+	cooldown = 15000,
+
+	fnc = function(self, player, key, down, x, y)
+		local id = allocateId("textarea", 1000, 10000)
+		local antiGrav = map_gravity <= 0
+		local img = tfm.exec.addImage("1507c1da0e8.png", "_101", x, y - 10, nil, 0.8, 0.8 * (antiGrav and -1 or 1), 0, 1, 0.5, antiGrav and -0.5 or 0.5)
+		local img2 = tfm.exec.addImage("img@194284eba8d", "!101", x, y - 10, nil, 0.5, 0.5, math.random(400) / 100, 1, 0.5, 0.5)
+
+		local g1 = allocateId("ground", 1000, 10000)
+		local g2 = allocateId("ground", 1000, 10000)
+		local g3 = allocateId("ground", 1000, 10000)
+		local j1 = allocateId("joint", 1000, 10000)
+		local j2 = allocateId("joint", 1000, 10000)
+		local j3 = allocateId("joint", 1000, 10000)
+
+		tfm.exec.addPhysicObject(g1, x, y, {
+			type = 14,
+			miceCollision = false,
+			groundCollision = false,
+		})
+		tfm.exec.addPhysicObject(g2, x, y - 20, {
+			type = 14,
+			miceCollision = false,
+			groundCollision = false,
+			dynamic = true,
+			mass = 1,
+			foreground = true,
+		})
+		tfm.exec.addPhysicObject(g3, x, y - 40, {
+			type = 14,
+			miceCollision = false,
+			groundCollision = false,
+			dynamic = true,
+			mass = 1,
+		})
+
+		tfm.exec.addImage("img@194284eba8d", "+" .. g2, 0, 0, nil, 0.5, 0.5, math.random(400) / 100, 1, 0.5, 0.5)
+
+		tfm.exec.addJoint(j1, g2, g1, {type = 1, axis = "0,1"})
+		tfm.exec.addJoint(j2, g3, g1, {
+			type = 3, forceMotor = 50, speedMotor = 1,
+			point1 = x .. "," .. (y - 30),
+		})
+		tfm.exec.addJoint(j3, g3, g2, {type = 0})
+
+		ui.addTextArea(id, "<a href='event:freeze'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 32, y - 26, 64, 56, 0, 0, 0)
+		addNewTimer(self.cooldown, self.despawn, id, img, img2, g1, g2, g3)
+	end,
+
+	despawn = function(id, img, img2, g1, g2, g3)
+		ui.removeTextArea(id)
+		tfm.exec.removeImage(img)
+		tfm.exec.removeImage(img2)
+		tfm.exec.removePhysicObject(g1)
+		tfm.exec.removePhysicObject(g2)
+		tfm.exec.removePhysicObject(g3)
+	end
+}
+shop_powers[3] = { -- ghost
+	image = "149c068e42f.png",
+	cooldown = 2 * 60 * 1000,
+
+	cond = function(player, key, down, x, y)
+		return not ghost[player]
+	end,
+
+	fnc = function(self, player, key, down, x, y)
+		local scale = facing[player] and 1 or -1
+		ghost[player] = tfm.exec.addImage("16ddff86413.png", "%" .. player, 0, 0, nil, scale, 1, 0, 1, scale * 0.5, 0.5)
+		tfm.exec.setPlayerCollision(player, 0)
+		tfm.exec.setPlayerGravityScale(player, 0, 0)
+		bindKeyboard(player, 1, true, true)
+		bindKeyboard(player, 3, true, true)
+	end
+}
+
 -- in small x: positive -> towards the sides, negative -> towards the center
 powers = {
 	{
@@ -189,7 +278,11 @@ powers = {
 		default = {5, 4}, -- SPACE
 
 		fnc = function(player, key, down, x, y)
-			tfm.exec.movePlayer(player, 0, 0, true, nil, -50 * (map_gravity == 0 and 0 or (map_gravity > 0 and 1 or -1)), false)
+			if ghost[player] then
+				tfm.exec.movePlayer(player, 0, 0, true, 0, 0, false)
+			else
+				tfm.exec.movePlayer(player, 0, 0, true, nil, -50 * (map_gravity == 0 and 0 or (map_gravity > 0 and 1 or -1)), false)
+			end
 		end
 	},
 	{
@@ -214,7 +307,7 @@ powers = {
 		end
 	},
 	{
-		name = "snowball", maps = 15,
+		name = "shop_power", maps = 15,
 		id = 3,
 
 		small = "173db1165c1.png", big = "173db111ba4.png",
@@ -226,12 +319,37 @@ powers = {
 		cooldown_y = 374,
 		cooldown_img = "17127e6674c.png",
 
-		cooldown = 12500,
+		cond = function(player, key, down, x, y)
+			local power_id = players_file[player].cskins[8] or 1
+			local power = shop_powers[power_id]
+			return power and (not power.cond or power.cond(player, key, down, x, y))
+		end,
+
+		cooldown_fnc = function(player)
+			local power_id = players_file[player].cskins[8] or 1
+			local power = shop_powers[power_id]
+			if not power then return end
+			return checkCooldown(
+				player, "shop_power", power.cooldown * cooldownMultiplier,
+
+				powers.shop_power.cooldown_img,
+				powers.shop_power.cooldown_x, powers.shop_power.cooldown_y,
+
+				players_file[player].settings[3] == 1
+			)
+		end,
 		default = {2, 4}, -- E
 
 		fnc = function(player, key, down, x, y)
-			local right = facing[player]
-			despawnableObject(5000, 34, x + (right and 20 or -20), y, 0, right and 10 or -10)
+			local file = players_file[player]
+			local id = file.cskins[8] or 1
+			local power = shop_powers[id]
+			if not power then return end
+			local updated = file:updatePower(id, -1)
+			if updated then
+				savePlayerData(player, true)
+			end
+			return power:fnc(player, key, down, x, y)
 		end
 	},
 	{
@@ -478,11 +596,11 @@ powers = {
 		},
 
 		fnc = function(player, key, down, x, y)
-			local id1 = bit32.bxor(room.playerList[player].id, 32768) -- unfortunately physicobjects only use 16 bits as id
-			local id2 = bit32.bxor(room.playerList[player].id, 16384)
+			local id1 = allocateId("ground", 1000, 10000)
+			local id2 = allocateId("ground", 1000, 10000)
 			local sprite = powers.pig.piggies[math.random(#powers.pig.piggies)]
 			local yScale = map_gravity <= 0 and -1 or 1
-			local img = tfm.exec.addImage(sprite, "_51", x + 5, y + 5, nil, 1, yScale, 0, 1, 0.5, 0.5 * yScale)
+			local img = tfm.exec.addImage(sprite, "_101", x + 5, y + 5, nil, 1, yScale, 0, 1, 0.5, 0.5 * yScale)
 
 			local circles = {
 				type = 14,
@@ -496,7 +614,7 @@ powers = {
 				addNewTimer(
 					5000,
 					tfm.exec.removeImage,
-					tfm.exec.addImage("17797e8de0d.png", "_52", x - 30, y - 28)
+					tfm.exec.addImage("17797e8de0d.png", "_102", x - 30, y - 28)
 				)
 			end
 		end,
@@ -565,8 +683,8 @@ powers = {
 		default = {4, 5}, -- C
 
 		fnc = function(player, key, down, x, y)
-			local id = room.playerList[player].id
-			local img = tfm.exec.addImage("17426b19d76.png", "_51", x - 20, y - 10)
+			local id = allocateId("ground", 1000, 10000)
+			local img = tfm.exec.addImage("17426b19d76.png", "_101", x - 20, y - 10)
 			tfm.exec.addPhysicObject(id, x, y + 13, {
 				type = 14,
 				friction = 0.3,
@@ -593,8 +711,8 @@ powers = {
 				cooldown_img = "171cd9e02d3.png",
 
 				fnc = function(player, key, down, x, y)
-					local id = room.playerList[player].id
-					local img = tfm.exec.addImage("171cd3eddf1.png", "_51", x - 20, y - 20)
+					local id = allocateId("ground", 1000, 10000)
+					local img = tfm.exec.addImage("171cd3eddf1.png", "_101", x - 20, y - 20)
 					tfm.exec.addPhysicObject(id, x, y + 13, {
 						type = 14,
 						friction = 0.3,
@@ -636,7 +754,7 @@ powers = {
 				cooldown_img = "1741cfd8396.png",
 
 				fnc = function(player, key, down, x, y)
-					local id = room.playerList[player].id
+					local id = allocateId("ground", 1000, 10000)
 					local img = tfm.exec.addImage("17426f98ce6.png", "!1", x - 48, y - 65)
 					tfm.exec.addPhysicObject(id, x, y + 13, {
 						type = 14,
@@ -686,9 +804,9 @@ powers = {
 		default = {3, 8}, -- J
 
 		fnc = function(player, key, down, x, y)
-			local id = room.playerList[player].id + 2147483648 -- makes 32nd bit 1 so it doesn't play around with the interface textareas
+			local id = allocateId("textarea", 1000, 10000)
 			local antiGrav = map_gravity <= 0
-			local img = tfm.exec.addImage("17426539be5.png", "_51", x, y, nil, 1, antiGrav and -1 or 1, 0, 1, 0.5, antiGrav and -0.5 or 0.5)
+			local img = tfm.exec.addImage("17426539be5.png", "_101", x, y, nil, 1, antiGrav and -1 or 1, 0, 1, 0.5, antiGrav and -0.5 or 0.5)
 			ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 32, y - 26, 64, 56, 0, 0, 0)
 			addNewTimer(powers.campfire.cooldown, powers.campfire.despawn, img, id)
 		end,
@@ -715,9 +833,9 @@ powers = {
 		default = {3, 6}, -- G
 
 		fnc = function(player, key, down, x, y)
-			local id = bit32.bxor(room.playerList[player].id, 49152)
+			local id = allocateId("ground", 1000, 10000)
 			local yScale = map_gravity <= 0 and -1 or 1
-			local img = tfm.exec.addImage("17459a230e9.png", "_51", x - 1, y + 10, nil, 1, yScale, 0, 1, 0.5, 0.5 * yScale)
+			local img = tfm.exec.addImage("17459a230e9.png", "_101", x - 1, y + 10, nil, 1, yScale, 0, 1, 0.5, 0.5 * yScale)
 			tfm.exec.addPhysicObject(id, x - 5, y + 10 + 10 * yScale, {
 				type = 14,
 				friction = 0.3,
@@ -856,6 +974,20 @@ onEvent("Keyboard", function(player, key, down, x, y)
 
 	if key == 0 or key == 2 then
 		facing[player] = key == 2
+		if ghost[player] then
+			if ghost[player] ~= -1 then
+				tfm.exec.removeImage(ghost[player])
+			end
+			local scale = facing[player] and 1 or -1
+			ghost[player] = tfm.exec.addImage("16ddff86413.png", "%" .. player, 0, 0, nil, scale, 1, 0, 1, scale * 0.5, 0.5)
+		end
+		return
+	end
+
+	if key == 1 or key == 3 then
+		if ghost[player] then
+			tfm.exec.movePlayer(player, 0, 0, true, nil, (key - 2) * 50, false)
+		end
 		return
 	end
 
@@ -894,6 +1026,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 			elseif down and power[index] and
 			(not chairCooldown or power[index].isVisual or power[index].noChairCooldown) and
 			(not power[index].cond or power[index].cond(player, key, down, x, y)) and
+			(not power[index].cooldown_fnc or power[index].cooldown_fnc(player)) and
 			(not power[index].cooldown or checkCooldown(
 				player, power[index].name, power[index].cooldown * cooldownMultiplier,
 
@@ -977,6 +1110,7 @@ onEvent("PlayerLeft", function(player)
 	keys.triggers[player] = nil
 	keybindings[player] = nil
 	powers.teleport.click[player] = nil
+	ghost[player] = nil
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
@@ -1136,6 +1270,20 @@ onEvent("NewGame", function()
 			fixHourCount(player, file)
 		end
 		unbind(player)
+	end
+
+	for player in next, ghost do
+		bindKeyboard(player, 1, true, false)
+		bindKeyboard(player, 3, true, false)
+	end
+	ghost = {}
+end)
+
+onEvent("PlayerDied", function(player)
+	if ghost[player] then
+		ghost[player] = nil
+		bindKeyboard(player, 1, true, false)
+		bindKeyboard(player, 3, true, false)
 	end
 end)
 

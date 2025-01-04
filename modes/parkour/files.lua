@@ -299,7 +299,140 @@ local data_migrations = {
 		data.cskins[6] = 57
 		data.cskins[7] = 90
 	end,
+	[9] = function(player, data)
+		data.v = 10
+		data.cskins[8] = 1
+		data.powers = {}
+	end,
 }
+
+local pdataFunctions = {}
+pdataFunctions.__index = pdataFunctions
+
+do
+	-- weak keys so it gets deleted when pdata is not referenced anywhere else
+	local _cache = {
+		powers = setmetatable({}, { __mode = "k" }),
+		skins = setmetatable({}, { __mode = "k" }),
+		_power_uses = setmetatable({}, { __mode = "k" }),
+	}
+
+	function pdataFunctions.refreshCache(file, key)
+		local cache = {}
+		_cache[key][file] = cache
+
+		local list = file[key]
+		for i=1, #list do
+			cache[key == "powers" and math.floor(list[i]) or list[i]] = i
+		end
+
+		if key == "powers" then
+			local uses = {}
+			local val
+			_cache._power_uses[file] = uses
+			for i=1, #list do
+				val = (list[i] * 100) % 100
+				if val ~= 0 then
+					uses[math.floor(list[i])] = val
+				end
+			end
+		end
+
+		return cache
+	end
+
+	function pdataFunctions.findShopItem(file, id, power)
+		if power and id == 1 or not power and default_skins[id] then
+			return 0
+		end
+		local key = power and "powers" or "skins"
+		local cache = _cache[key][file]
+		if not cache then
+			cache = file:refreshCache(key)
+		end
+		if power then
+			id = math.floor(id)
+		end
+		return cache[id]
+	end
+
+	function pdataFunctions.addShopItem(file, id, power)
+		if file:findShopItem(id, power) then
+			return
+		end
+
+		local key = power and "powers" or "skins"
+		table.insert(file[key], id)
+		_cache[key][file][power and math.floor(id) or id] = #file[key]
+		if power then
+			local val = (id * 100) % 100
+			if val ~= 0 then
+				_cache._power_uses[file][math.floor(id)] = val
+			end
+		end
+		return true
+	end
+
+	function pdataFunctions.removeShopItem(file, id, power)
+		local index = file:findShopItem(id, power)
+		if not index or index == 0 then
+			return
+		end
+
+		local key = power and "powers" or "skins"
+		table.remove(file[key], index)
+
+		if index == #file[key] + 1 then
+			_cache[key][file][power and math.floor(id) or id] = nil
+			if power then
+				_cache._power_uses[file][math.floor(id)] = nil
+			end
+		else
+			file:refreshCache(key)
+		end
+
+		return true
+	end
+
+	function pdataFunctions.getPowerUse(file, id)
+		local cache = _cache._power_uses[file]
+		if not cache then
+			cache = file:refreshCache("powers")
+		end
+		return cache[id]
+	end
+
+	function pdataFunctions.updatePower(file, id, useChange)
+		local index = file:findShopItem(id, true)
+		if not index or index == 0 then
+			if useChange > 0 then
+				return file:addShopItem(id + useChange / 100, true)
+			end
+			return
+		end
+
+		local uses = file:getPowerUse(id)
+		if not uses then
+			return
+		end
+
+		uses = uses + useChange
+		if uses > 99 then
+			return
+		end
+
+		if uses > 0 then
+			file.powers[index] = math.floor(id) + uses / 100
+			_cache._power_uses[file][math.floor(id)] = uses
+		else
+			file.cskins[8] = 1
+			table.remove(file.powers, index)
+			file:refreshCache("powers")
+		end
+
+		return true
+	end
+end
 
 function getQuestsResetTime()
 	local currentTime = os.time() + 60 * 60 * 1000
@@ -454,6 +587,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 	players_file[player].room = room.name
 	players_file[player].settings.__len = settings_length
 	players_file[player].badges.__len = #badges
+	setmetatable(players_file[player], pdataFunctions)
 
 	if room.playerList[player] then
 		players_file[player].commu = room.playerList[player].community

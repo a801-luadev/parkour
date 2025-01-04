@@ -3,20 +3,22 @@ do
 	local shop_images = {}
 	local coin_images = {}
 	local isSave = {}
+	local priceTAs = {}
+	local consumableTAs = {}
+
+	for i=1, 18 do
+		priceTAs[i] = allocateId("textarea", 30000)
+		consumableTAs[i] = allocateId("textarea", 30000)
+	end
 
 	local function filterShopItems(player, tab, ret)
 		local tabItems = shop_items[tab]
-		if not tabItems or not players_file[player] then return ret end
-
-		local hasItem = {}
-		local skins = players_file[player].skins
-		for i=1, #skins do
-			hasItem[skins[i]] = true
-		end
+		local pdata = players_file[player]
+		if not tabItems or not pdata then return ret end
 
 		local count = 0
 		for i=1, #tabItems do
-			if not tabItems[i].hidden or hasItem[tabItems[i].id] then
+			if not tabItems[i].hidden or pdata:findShopItem(tabItems[i].id, tab == 8) then
 				count = 1 + count
 				ret[count] = tabItems[i]
 			end
@@ -197,13 +199,15 @@ do
 				local x = self.x + 25
 				local y = self.y + 15
 				local item
+				local file = players_file[player]
+
 				for index = 1, 18 do
 					item = data[page + index - 1]
-					if item and page + index - 1 <= data._len then
+					if file and item and page + index - 1 <= data._len then
 						local itemPrice = item.gifts or item.price or 0
 
 						if item.gifts then
-							itemPrice = (players_file[player] and players_file[player].gifts or 0) .. "/" .. itemPrice
+							itemPrice = (file.gifts or 0) .. "/" .. itemPrice
 							images[index] = tfm.exec.addImage("18c73e40d6d.png", "&1000", x - 4, y - 2, player, 0.5, 0.5)
 						else
 							if itemPrice >= 100000 then
@@ -215,11 +219,25 @@ do
 						end
 
 						ui.addTextArea(
-							-10000 - index, "<b><p align='right'>"..itemPrice, player,
+							priceTAs[index], "<b><p align='right'>"..itemPrice, player,
 							x-5, y, 60, 15,
 							0x14282b, 0x14282b, 1,
 							true
 						)
+
+						if tab == 8 then
+							local uses = file:getPowerUse(item.id)
+							if uses then
+								ui.addTextArea(
+									consumableTAs[index], "<b><p align='right'>"..uses, player,
+									x, y + 20, 60, 15,
+									0, 0, 0,
+									true
+								)
+							end
+						else
+							ui.removeTextArea(consumableTAs[index], player)
+						end
 
 						x = x + 75 
 						if index == 9 then
@@ -227,7 +245,8 @@ do
 							x = self.x + 25
 						end
 					else
-						ui.removeTextArea(-10000 - index, player)
+						ui.removeTextArea(priceTAs[index], player)
+						ui.removeTextArea(consumableTAs[index], player)
 					end
 				end
 				return ""
@@ -235,7 +254,8 @@ do
 			alpha = 0
 		}):onRemove(function(self, player)
 			for index = 1, 18 do
-				ui.removeTextArea(-10000 - index, player)
+				ui.removeTextArea(priceTAs[index], player)
+				ui.removeTextArea(consumableTAs[index], player)
 				tfm.exec.removeImage(shop_images[player][index])
 				tfm.exec.removeImage(coin_images[player][index])
 			end
@@ -253,9 +273,9 @@ do
 				if index > data._len or not item then return "-" end
 				if players_file[player].cskins[tab] == item.id then
 					return translatedMessage("equipped", player)
-				elseif default_skins[item.id] or table_find(players_file[player].skins, item.id) then
+				elseif players_file[player]:findShopItem(item.id, tab == 8) then
 					return translatedMessage("equip", player)
-				elseif item.price > 0 then
+				elseif item.price >= 0 then
 					return translatedMessage("buy", player)
 				else
 					return "-"
@@ -272,7 +292,7 @@ do
 			local file = players_file[player]
 			local itemID = data[index].id
 
-			if default_skins[itemID] or table_find(file.skins, itemID) then
+			if file:findShopItem(itemID, tab == 8) then
 				file.cskins[tab] = itemID
 				isSave[player] = true
 				self.parent:update(player, page, tab, data)
@@ -280,15 +300,28 @@ do
 			end
 
 			if item_price < 0 then return end
-			if #file.skins > 99 then return end
-			if file.coins >= item_price then
-				table.insert(file.skins, itemID)
-				file.coins = file.coins - item_price
-				isSave[player] = true
-				self.parent:update(player, page, tab, data)
-			else
+			if file.coins < item_price then
 				tfm.exec.chatMessage("<v>[#] <r>You don't have enough coins.", player)
+				return
 			end
+
+			if tab ~= 8 and #file.skins > 99 then
+				return
+			end
+
+			if tab == 8 and data[index].uses then
+				if not file:updatePower(itemID, data[index].uses) then
+					return
+				end
+			else
+				if not file:addShopItem(itemID, tab == 8) then
+					return
+				end
+			end
+
+			file.coins = file.coins - item_price
+			isSave[player] = true
+			self.parent:update(player, page, tab, data)
 		end)
 		:canUpdate(true)
 		:onUpdate(function(self, player)
@@ -298,7 +331,7 @@ do
 			local index = page + buyButton - 1
 			local itemID = data[index] and data[index].id
 			local file = players_file[player]
-			if index > data._len or not data[index] or file.cskins[tab] == itemID or (data[index].price < 0 or file.coins < data[index].price) and not table_find(file.skins, itemID) then
+			if index > data._len or not data[index] or file.cskins[tab] == itemID or (data[index].price < 0 or file.coins < data[index].price) and not file:findShopItem(itemID, tab == 8) then
 				self:disable(player)
 			else
 				self:enable(player)

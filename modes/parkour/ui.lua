@@ -431,6 +431,9 @@ onEvent("RawTextAreaCallback", function(id, player, callback)
 		toggleInterface(QuestsInterface, player)
 	elseif callback == "leaderboard_button" then
 		toggleInterface(LeaderboardInterface, player)
+	elseif callback == "freeze" then
+		if not victory[player] then return end
+		tfm.exec.freezePlayer(player, true, true)
 	end
 end)
 

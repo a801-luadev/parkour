@@ -247,4 +247,5 @@ translations.en = {
 	campfire = "Campfire",
 	chair = "Chair",
 	link = "Soul mate",
+	shop_power = "Shop Power",
 }

@@ -968,6 +968,7 @@ local function handleSkins(player, cmd, quantity, args)
 	if action == "show" then
 		tfm.exec.chatMessage("Current coins: " .. pdata.coins, player)
 		tfm.exec.chatMessage("Skins: " .. table.concat(pdata.skins, ' '), player)
+		tfm.exec.chatMessage("Powers: " .. table.concat(pdata.powers, ' '), player)
 		tfm.exec.chatMessage("Wearing: " .. table.concat(pdata.cskins, ' '), player)
 		return
 
@@ -1050,11 +1051,10 @@ local function handleSkins(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>Invalid id", player)
 		end
 
-		if table_find(pdata.skins, id) then
+		if not pdata:addShopItem(id, args[4] == 'power') then
 			return tfm.exec.chatMessage("<v>[#] <r>Player already have that skin", player)
 		end
 
-		pdata.skins[1 + #pdata.skins] = id
 		savePlayerData(playerName)
 		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
 
@@ -1069,12 +1069,10 @@ local function handleSkins(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>Invalid id", player)
 		end
 
-		local index = table_find(pdata.skins, id)
-		if not index then
+		if not pdata:removeShopItem(id, args[4] == 'power') then
 			return tfm.exec.chatMessage("<v>[#] <r>Player doesn't have that skin", player)
 		end
 
-		table.remove(pdata.skins, index)
 		savePlayerData(playerName)
 		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
 
@@ -1092,12 +1090,10 @@ local function handleSkins(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("Invalid skin type or skin number.", player)
 		end
 
-		local skinsIndex = table_find(pdata.skins, selectedSkin.id)
-		if not skinsIndex then
-			return tfm.exec.chatMessage("The player doesn't have this skin. ", player)
+		if not pdata:removeShopItem(selectedSkin.id) then
+			return tfm.exec.chatMessage("<v>[#] <r>Player doesn't have that skin", player)
 		end
 
-		table.remove(pdata.skins, skinsIndex)
 		pdata.coins = pdata.coins + tonumber(selectedSkin.price)
 
 		for i = #pdata.cskins, 1, -1 do

@@ -250,4 +250,5 @@ translations.tr = {
 	campfire = "Kamp Ateşi",
 	chair = "Sandalye",
 	link = "Ruh ikizi",
+	shop_power = "Market Becerisi",
 }

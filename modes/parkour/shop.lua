@@ -1,4 +1,4 @@
-shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip" }
+shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers" }
 shop_items = {
 	{ -- smallbox
 		{
@@ -633,7 +633,7 @@ shop_items = {
 			id = 309,
 		}
 	},
-	{
+	{ -- cloud
 		{
 			price = 0,
 			image = "173db14a1d6.png",
@@ -684,7 +684,7 @@ shop_items = {
 			hidden = not christmas,
 		},
 	},
-	{
+	{ -- tombstone
 		{
 			price = 0,
 			image = "173db33602c.png",
@@ -698,6 +698,28 @@ shop_items = {
 			id = 1028,
 			scale = 0.7,
 			hidden = not christmas,
+		},
+	},
+	{ -- shop power
+		{
+			price = 0,
+			image = "173db111ba4.png",
+			id = 1,
+			scale = 0.6,
+		},
+		{
+			price = 0,
+			image = "1507c1da0e8.png",
+			id = 2,
+			scale = 0.6,
+			hidden = not christmas,
+		},
+		{
+			price = 100,
+			image = "149c068e42f.png",
+			id = 3,
+			uses = 10,
+			scale = 0.8,
 		},
 	},
 }

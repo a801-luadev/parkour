@@ -118,8 +118,7 @@ end
 
 local function rewardSkin(player, power, id)
 	local pdata = players_file[player]
-	if table_find(pdata.skins, id) then return end
-	pdata.skins[1 + #pdata.skins] = id -- ice cube
+	pdata:addShopItem(id)
 	for _player in next, in_room do
 		translatedChatMessage("unlocked_skin", _player, player, translatedMessage(power, _player))
 	end
