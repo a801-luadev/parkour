@@ -313,6 +313,18 @@ shop_items = {
 			id = 200.1,
 			hidden = not christmas,
 		},
+		{
+			price = -1,
+			image = "18b40153316.png",
+			id = 2.4,
+			hidden = true,
+		},
+		{
+			price = -1,
+			image = "18d94566b19.png",
+			id = 2.5,
+			hidden = true,
+		},
 	},
 	{ -- trampoline
 		{
@@ -567,6 +579,12 @@ shop_items = {
 			price = 12000,
 			image = "img@19405c72d7f",
 			id = 2870,
+		},
+		{
+			price = -1,
+			image = "18a1f4d198c.png",
+			id = 28.5,
+			hidden = true,
 		},
 	},
 	{ -- plank
@@ -835,10 +853,13 @@ shop_items = {
 shop_skins = {
 	["2.2"] = {img="img@1943a219514", id=2, y=0.5},
 	["2.3"] = {img="img@1942f8d266f", y=0.5},
+	["2.4"] = {img="18b40153316.png"},
+	["2.5"] = {img="18d94566b19.png"},
 
 	["28.2"] = {img="img@1943a239205"},
 	["28.3"] = {img="img@1943a307b36"},
 	["28.4"] = {img="img@1943a4d7328"},
+	["28.5"] = {img="18a1f4d198c.png", scale=0.6},
 
 	["34.1"] = {img="169169d8479.png", id=34, scale=0.5},
 	["34.2"] = {img="img@193c5d9f045", id=34},
