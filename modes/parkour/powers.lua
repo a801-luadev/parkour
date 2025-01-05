@@ -19,6 +19,7 @@ local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local cooldownMultiplier = 1
 local ghost = {}
+local cooldownSlots = {}
 
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
@@ -66,7 +67,12 @@ local function addShamanObject(id, x, y, ...)
 	return tfm.exec.addShamanObject(id, x, y, ...)
 end
 
-function checkCooldown(player, name, long, img, x, y, show)
+local function clearCooldownSlot(index)
+	tfm.exec.removeImage(cooldownSlots[index], true)
+	cooldownSlots[index] = nil
+end
+
+function checkCooldown(player, name, long, img, scale, show)
 	if cooldowns[player] then
 		if cooldowns[player][name] and os.time() < cooldowns[player][name] then
 			return false
@@ -79,11 +85,9 @@ function checkCooldown(player, name, long, img, x, y, show)
 	end
 
 	if show then
-		addNewTimer(
-			long, tfm.exec.removeImage,
-			tfm.exec.addImage(img, ":1", x, y, player),
-			true
-		)
+		local slotIndex = #cooldownSlots + 1
+		cooldownSlots[slotIndex] = tfm.exec.addImage(img, ":1", slotIndex * 30, 384, player, scale, scale, 0, 1, 0.5, 0.5)
+		addNewTimer(long, clearCooldownSlot, slotIndex)
 	end
 
 	return true
@@ -175,8 +179,10 @@ local function fixHourCount(player, data)
 end
 
 local shop_powers = {}
-shop_powers[1] = { -- snowball
-	image = "173db111ba4.png",
+shop_powers[1] = {
+	name = "snowball",
+	cooldown_img = "173db111ba4.png",
+	cooldown_scale = 0.34,
 	cooldown = 12500,
 
 	fnc = function(self, player, key, down, x, y)
@@ -184,8 +190,10 @@ shop_powers[1] = { -- snowball
 		despawnableObject(5000, 34, x + (right and 20 or -20), y, 0, right and 10 or -10)
 	end
 }
-shop_powers[2] = { -- snowmouse
-	image = "1507c1da0e8.png",
+shop_powers[2] = {
+	name = "snowmouse",
+	cooldown_img = "1507c1da0e8.png",
+	cooldown_scale = 0.36,
 	cooldown = 15000,
 
 	fnc = function(self, player, key, down, x, y)
@@ -244,8 +252,10 @@ shop_powers[2] = { -- snowmouse
 		tfm.exec.removePhysicObject(g3)
 	end
 }
-shop_powers[3] = { -- ghost
-	image = "149c068e42f.png",
+shop_powers[3] = {
+	name = "ghost",
+	cooldown_img = "149c068e42f.png",
+	cooldown_scale = 0.5,
 	cooldown = 2 * 60 * 1000,
 
 	cond = function(player, key, down, x, y)
@@ -261,8 +271,10 @@ shop_powers[3] = { -- ghost
 		bindKeyboard(player, 3, true, true)
 	end
 }
-shop_powers[4] = { -- campfire
-	image = "173dee98c61.png",
+shop_powers[4] = {
+	name = "campfire",
+	cooldown_img = "173dee98c61.png",
+	cooldown_scale = 0.4,
 	cooldown = 15000,
 
 	fnc = function(self, player, key, down, x, y)
@@ -278,8 +290,10 @@ shop_powers[4] = { -- campfire
 		ui.removeTextArea(id)
 	end
 }
-shop_powers[5] = { -- booster
-	image = "img@1943409e46e",
+shop_powers[5] = {
+	name = "booster",
+	cooldown_img = "img@1943409e46e",
+	cooldown_scale = 0.5,
 	cooldown = 5000,
 
 	fnc = function(self, player, key, down, x, y)
@@ -327,8 +341,6 @@ powers = {
 		smallX = 0, smallY = 0,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 8,
-		cooldown_y = 373,
 		cooldown_img = "17127e682ff.png",
 
 		cooldown = 1000,
@@ -347,8 +359,6 @@ powers = {
 		smallX = 0, smallY = 0,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 30,
-		cooldown_y = 374,
 		cooldown_img = "17127e6674c.png",
 
 		cond = function(player, key, down, x, y)
@@ -362,11 +372,8 @@ powers = {
 			local power = shop_powers[power_id]
 			if not power then return end
 			return checkCooldown(
-				player, "shop_power", power.cooldown * cooldownMultiplier,
-
-				powers.shop_power.cooldown_img,
-				powers.shop_power.cooldown_x, powers.shop_power.cooldown_y,
-
+				player, power.name, power.cooldown * cooldownMultiplier,
+				power.cooldown_img, power.cooldown_scale,
 				players_file[player].settings[3] == 1
 			)
 		end,
@@ -393,8 +400,6 @@ powers = {
 		smallX = 0, smallY = -10,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 52,
-		cooldown_y = 372,
 		cooldown_img = "17127e5b2d5.png",
 
 		cooldown = 10000,
@@ -458,8 +463,6 @@ powers = {
 		smallX = 10, smallY = 0,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 74,
-		cooldown_y = 373,
 		cooldown_img = "17127e73965.png",
 
 		cooldown = 10000,
@@ -476,8 +479,6 @@ powers = {
 		smallX = 10, smallY = 0,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 96,
-		cooldown_y = 373,
 		cooldown_img = "17127e77dbe.jpg",
 
 		cooldown = 10000,
@@ -498,8 +499,6 @@ powers = {
 		smallX = 0, smallY = 10,
 		bigX = 0, bigY = 20,
 
-		cooldown_x = 121,
-		cooldown_y = 377,
 		cooldown_img = "17127e5f927.png",
 
 		cooldown = 10000,
@@ -520,8 +519,6 @@ powers = {
 		smallX = 0, smallY = 0,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 142,
-		cooldown_y = 373,
 		cooldown_img = "17127e69ea4.png",
 
 		cooldown = 10000,
@@ -542,8 +539,6 @@ powers = {
 		smallX = 0, smallY = 0,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 164,
-		cooldown_y = 374,
 		cooldown_img = "17127fc6b27.png",
 
 		cooldown = 25000,
@@ -564,8 +559,6 @@ powers = {
 		smallX = 0, smallY = 0,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 186,
-		cooldown_y = 374,
 		cooldown_img = "17127e77dbe.jpg",
 
 		cooldown = 25000,
@@ -586,8 +579,6 @@ powers = {
 		smallX = 0, smallY = 0,
 		bigX = 0, bigY = 0,
 
-		cooldown_x = 208,
-		cooldown_y = 374,
 		cooldown_img = "171cd9f5188.png",
 
 		cooldown = 25000,
@@ -608,8 +599,6 @@ powers = {
 		smallX = 0, smallY = 20,
 		bigX = 0, bigY = 15,
 
-		cooldown_x = 229,
-		cooldown_y = 380,
 		cooldown_img = "1741cfb9868.png",
 
 		cooldown = 30000,
@@ -672,8 +661,6 @@ powers = {
 		smallX = 0, smallY = 10,
 		bigX = 0, bigY = 20,
 
-		cooldown_x = 308,
-		cooldown_y = 377,
 		cooldown_img = "18a1f569408.png",
 
 		cooldown = 60000,
@@ -707,8 +694,6 @@ powers = {
 		smallX = 0, smallY = 10,
 		bigX = 5, bigY = 10,
 
-		cooldown_x = 252,
-		cooldown_y = 374,
 		cooldown_img = "1741cfd281e.png",
 
 		cooldown = 30000,
@@ -828,8 +813,6 @@ powers = {
 		smallX = 0, smallY = 10,
 		bigX = 0, bigY = 10,
 
-		cooldown_x = 274,
-		cooldown_y = 376,
 		cooldown_img = "1741cfdadc9.png",
 
 		cooldown = 15000,
@@ -857,8 +840,6 @@ powers = {
 		smallX = 0, smallY = 10,
 		bigX = 10, bigY = 10,
 
-		cooldown_x = 296,
-		cooldown_y = 376,
 		cooldown_img = "17459a21979.png",
 
 		cooldown = 15000,
@@ -1061,10 +1042,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 			(not power[index].cooldown_fnc or power[index].cooldown_fnc(player)) and
 			(not power[index].cooldown or checkCooldown(
 				player, power[index].name, power[index].cooldown * cooldownMultiplier,
-
-				power[index].cooldown_img,
-				power[index].cooldown_x, power[index].cooldown_y,
-
+				power[index].cooldown_img, power[index].cooldown_scale,
 				players_file[player].settings[3] == 1
 			)) and (power[index].isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
 				power[index].fnc(player, key, down, x, y)
@@ -1104,10 +1082,7 @@ onEvent("Mouse", function(player, x, y)
 	if players_file[player].c >= power.maps or review_mode then
 		if (power.click[player] or not keys[player][power.id]) and (not power.cooldown or checkCooldown(
 			player, power.name, power.cooldown * cooldownMultiplier,
-
-			power.cooldown_img,
-			power.cooldown_x, power.cooldown_y,
-
+			power.cooldown_img, power.cooldown_scale,
 			players_file[player].settings[3] == 1
 		)) and (power.isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
 			power.fnc(player, x, y)
