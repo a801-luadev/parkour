@@ -1,4 +1,4 @@
-shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers" }
+shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
 shop_items = {
 	{ -- smallbox
 		{
@@ -246,9 +246,21 @@ shop_items = {
 			id = 212,
 		},
 		{
+			price = 4000,
+			image = "img@1942f8d266f",
+			id = 2.3,
+			scale = 0.9,
+		},
+		{
 			price = 5000,
 			image = "img@1941032103f",
 			id = 249,
+			scale = 0.9,
+		},
+		{
+			price = 5250,
+			image = "img@1943a219514",
+			id = 2.2,
 			scale = 0.9,
 		},
 		{
@@ -486,6 +498,11 @@ shop_items = {
 			id = 2840,
 		},
 		{
+			price = 4000,
+			image = "img@1943a4d7328",
+			id = 28.4,
+		},
+		{
 			price = 5000,
 			image = "img@19405ced563",
 			id = 2833,
@@ -500,6 +517,11 @@ shop_items = {
 			price = 6000,
 			image = "img@19405cc23fa",
 			id = 2867,
+		},
+		{
+			price = 6500,
+			image = "img@1943a307b36",
+			id = 28.3,
 		},
 		{
 			price = 7000,
@@ -517,6 +539,12 @@ shop_items = {
 			price = 8000,
 			image = "img@19405c83dc8",
 			id = 2868,
+			scale = 0.8,
+		},
+		{
+			price = 8500,
+			image = "img@1943a239205",
+			id = 28.2,
 			scale = 0.8,
 		},
 		{
@@ -734,10 +762,95 @@ shop_items = {
 			uses = 10,
 			scale = 0.8,
 		},
+		{
+			price = 10,
+			image = "16d67f42439.png",
+			uses = 10,
+			id = 6,
+		},
+	},
+	{ -- snowball
+		{
+			price = 0,
+			image = "173db111ba4.png",
+			id = 34,
+			scale = 0.4,
+		},
+		{
+			price = 200,
+			image = "188b5c0fec6.png",
+			id = 34.7,
+		},
+		{
+			price = 250,
+			image = "16748031acc.png",
+			id = 34.9,
+		},
+		{
+			price = 300,
+			image = "188b5c017d4.png",
+			id = 34.5,
+		},
+		{
+			price = 500,
+			image = "169169d8479.png",
+			id = 34.1,
+			scale = 0.5,
+		},
+		{
+			price = 700,
+			image = "1507c172145.png",
+			id = 34.6,
+		},
+		{
+			price = 800,
+			image = "165df84aad8.png",
+			id = 34.3,
+			scale = 0.8,
+		},
+		{
+			price = 850,
+			image = "img@193c5d9f045",
+			id = 34.2,
+		},
+		{
+			price = 900,
+			image = "177fc32bd99.png",
+			id = 34.11,
+			scale = 0.2,
+		},
+		{
+			price = 1000,
+			image = "1674802a592.png",
+			id = 34.8,
+		},
+		{
+			price = 1500,
+			image = "17d483107d9.png",
+			id = 34.4,
+		},
 	},
 }
 
 shop_skins = {
+	["2.2"] = {img="img@1943a219514", id=2, y=0.5},
+	["2.3"] = {img="img@1942f8d266f", y=0.5},
+
+	["28.2"] = {img="img@1943a239205"},
+	["28.3"] = {img="img@1943a307b36"},
+	["28.4"] = {img="img@1943a4d7328"},
+
+	["34.1"] = {img="169169d8479.png", id=34, scale=0.5},
+	["34.2"] = {img="img@193c5d9f045", id=34},
+	["34.3"] = {img="165df84aad8.png", id=34, scale=0.6},
+	["34.4"] = {img="17d483107d9.png", id=34, scale=0.8},
+	["34.5"] = {img="188b5c017d4.png", id=34, scale=0.7},
+	["34.6"] = {img="1507c172145.png", id=34, scale=0.8},
+	["34.7"] = {img="188b5c0fec6.png", id=34, scale=0.8},
+	["34.8"] = {img="1674802a592.png", id=34},
+	["34.9"] = {img="16748031acc.png", id=34},
+	["34.11"] = {img="177fc32bd99.png", id=34, scale=0.15},
+
 	["57.1"] = {img="img@193b7a44117", id=57, y=0.7},
 	["57.2"] = {img="img@1940598ffcb", id=57, y=0.45},
 	["57.3"] = {img="img@1941041eb1e", id=57, y=0.5},

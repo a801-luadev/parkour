@@ -10,7 +10,7 @@ local QuestsInterface
 local getQuestsResetTime
 
 local badges, titles
-local default_skins = { [1] = 1, [2] = 1, [7] = 1, [28] = 1, [46] = 1, [57] = 1, [90] = 1 }
+local default_skins = { [1] = 1, [2] = 1, [7] = 1, [28] = 1, [46] = 1, [57] = 1, [90] = 1, [34] = 1 }
 
 local quests
 local fillQuests
@@ -303,6 +303,10 @@ local data_migrations = {
 		data.v = 10
 		data.cskins[8] = 1
 		data.powers = {}
+	end,
+	[10] = function(player, data)
+		data.v = 11
+		data.cskins[9] = 34
 	end,
 }
 

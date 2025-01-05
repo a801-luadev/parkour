@@ -293,6 +293,9 @@ do
 			local itemID = data[index].id
 
 			if file:findShopItem(itemID, tab == 8) then
+				if tab == 9 then
+					file.cskins[8] = 1
+				end
 				file.cskins[tab] = itemID
 				isSave[player] = true
 				self.parent:update(player, page, tab, data)

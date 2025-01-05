@@ -186,8 +186,9 @@ shop_powers[1] = {
 	cooldown = 12500,
 
 	fnc = function(self, player, key, down, x, y)
+		local skinID = players_file[player].cskins[9] or 34
 		local right = facing[player]
-		despawnableObject(5000, 34, x + (right and 20 or -20), y, 0, right and 10 or -10)
+		despawnableObject(5000, skinID, x + (right and 20 or -20), y, right and 0 or 180, right and 10 or -10)
 	end
 }
 shop_powers[2] = {
@@ -305,6 +306,16 @@ shop_powers[5] = {
 
 	despawn = function(id)
 		tfm.exec.removeBonus(id)
+	end
+}
+shop_powers[6] = {
+	name = "arrow",
+	cooldown_img = "16d67f42439.png",
+	cooldown_scale = 0.7,
+	cooldown = 5000,
+
+	fnc = function(self, player, key, down, x, y)
+		despawnableObject(5000, 0, x, y + 5)
 	end
 }
 
