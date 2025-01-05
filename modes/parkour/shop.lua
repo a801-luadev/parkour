@@ -715,6 +715,12 @@ shop_items = {
 			hidden = not christmas,
 		},
 		{
+			price = 10,
+			image = "img@1943409e46e",
+			id = 5,
+			uses = 10,
+		},
+		{
 			price = 20,
 			image = "173dee98c61.png",
 			id = 4,

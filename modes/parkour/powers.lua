@@ -278,6 +278,21 @@ shop_powers[4] = { -- campfire
 		ui.removeTextArea(id)
 	end
 }
+shop_powers[5] = { -- booster
+	image = "img@1943409e46e",
+	cooldown = 5000,
+
+	fnc = function(self, player, key, down, x, y)
+		local right = facing[player]
+		local id = allocateId("bonus", 1000, 10000)
+		tfm.exec.addBonus(5, x + (right and 20 or -20), y, id, right and 0 or 180, true, nil)
+		addNewTimer(self.cooldown, self.despawn, id)
+	end,
+
+	despawn = function(id)
+		tfm.exec.removeBonus(id)
+	end
+}
 
 -- in small x: positive -> towards the sides, negative -> towards the center
 powers = {
