@@ -725,7 +725,7 @@ shop_items = {
 			image = "173dee98c61.png",
 			id = 4,
 			uses = 10,
-			scale = 0.8,
+			scale = 0.7,
 		},
 		{
 			price = 100,

@@ -159,7 +159,7 @@ do
 			end
 
 			local x = 70
-			local y = 120
+			local y = 150
 			local item
 			local firstImage
 
@@ -173,11 +173,11 @@ do
 				end
 				item = data[page + index - 1]
 				if item then
-					images[index] = tfm.exec.addImage(index == 1 and firstImage or item.image, "~99", x + 30, y + 30, player, item.scale, item.scale, 0, 1, 0.5, 0.5)
+					images[index] = tfm.exec.addImage(index == 1 and firstImage or item.image, "~99", x + 30, y + (item.uses and 10 or 0), player, item.scale, item.scale, 0, 1, 0.5, 0.5)
 					x = x + 75
 
 					if index == 9 then
-						y = 250
+						y = y + 130
 						x = 70
 					end
 				end
@@ -227,10 +227,10 @@ do
 
 						if tab == 8 then
 							local uses = file:getPowerUse(item.id)
-							if uses then
+							if item.uses then
 								ui.addTextArea(
-									consumableTAs[index], "<b><p align='right'>"..uses, player,
-									x, y + 20, 60, 15,
+									consumableTAs[index], "<b><p align='right'>" .. (uses or 0) .. "/" .. item.uses, player,
+									x, y + 20, 55, 15,
 									0, 0, 0,
 									true
 								)
@@ -270,7 +270,7 @@ do
 			function(self, player, page, tab, data)
 				local index = page + buyButton - 1
 				local item = data[index]
-				if index > data._len or not item then return "-" end
+				if index > data._len or not item then return "" end
 				if players_file[player].cskins[tab] == item.id then
 					return translatedMessage("equipped", player)
 				elseif players_file[player]:findShopItem(item.id, tab == 8) then
@@ -278,7 +278,7 @@ do
 				elseif item.price >= 0 then
 					return translatedMessage("buy", player)
 				else
-					return "-"
+					return ""
 				end
 
 			end)
