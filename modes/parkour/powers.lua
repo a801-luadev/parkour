@@ -67,9 +67,10 @@ local function addShamanObject(id, x, y, ...)
 	return tfm.exec.addShamanObject(id, x, y, ...)
 end
 
-local function clearCooldownSlot(index)
-	tfm.exec.removeImage(cooldownSlots[index], true)
-	cooldownSlots[index] = nil
+local function clearCooldownSlot(player, index)
+	if not cooldownSlots[player] then return end
+	tfm.exec.removeImage(cooldownSlots[player][index], true)
+	cooldownSlots[player][index] = nil
 end
 
 function checkCooldown(player, name, long, img, scale, show)
@@ -85,9 +86,13 @@ function checkCooldown(player, name, long, img, scale, show)
 	end
 
 	if show then
-		local slotIndex = #cooldownSlots + 1
-		cooldownSlots[slotIndex] = tfm.exec.addImage(img, ":1", slotIndex * 30, 384, player, scale, scale, 0, 1, 0.5, 0.5)
-		addNewTimer(long, clearCooldownSlot, slotIndex)
+		if not cooldownSlots[player] then
+			cooldownSlots[player] = {}
+		end
+
+		local slotIndex = #cooldownSlots[player] + 1
+		cooldownSlots[player][slotIndex] = tfm.exec.addImage(img, ":1", slotIndex * 30, 384, player, scale, scale, 0, 1, 0.5, 0.5)
+		addNewTimer(long, clearCooldownSlot, player, slotIndex)
 	end
 
 	return true
@@ -1129,6 +1134,7 @@ onEvent("PlayerLeft", function(player)
 	keybindings[player] = nil
 	powers.teleport.click[player] = nil
 	ghost[player] = nil
+	cooldownSlots[player] = nil
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
