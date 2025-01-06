@@ -71,6 +71,8 @@ do
 			end
 		end
 
+		if not new then return end
+
 		if not triggers[new] then
 			triggers[new] = {_count = 1, [1] = power}
 			bindKeyboard(player, new, true, true)
