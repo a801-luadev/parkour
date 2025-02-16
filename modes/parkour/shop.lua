@@ -425,6 +425,16 @@ shop_items = {
 			id = 28,
 		},
 		{
+			price = 100,
+			image = "img@194f8638d35",
+			id = 28.6,
+		},
+		{
+			price = 100,
+			image = "img@194f875f282",
+			id = 28.7,
+		},			
+		{
 			price = 140,
 			image = "18b53f0b3d7.png",
 			id = 2838,
@@ -686,6 +696,12 @@ shop_items = {
 			id = 57,
 		},
 		{
+			price = 100,
+			image = "img@194f83fb43d",
+			id = 57.8,
+			scale = 0.7,
+		},
+		{
 			price = 1000,
 			image = "img@1941613fa3d",
 			id = 57.7,
@@ -860,6 +876,8 @@ shop_skins = {
 	["28.3"] = {img="img@1943a307b36"},
 	["28.4"] = {img="img@1943a4d7328"},
 	["28.5"] = {img="18a1f4d198c.png", scale=0.6},
+	["28.6"] = {img="img@194f8638d35"},
+	["28.7"] = {img="img@194f875f282"},
 
 	["34.1"] = {img="169169d8479.png", id=34, scale=0.5},
 	["34.2"] = {img="img@193c5d9f045", id=34},
@@ -879,6 +897,7 @@ shop_skins = {
 	["57.5"] = {img="img@19414c686fc", id=57},
 	["57.6"] = {img="img@19416277202", id=57},
 	["57.7"] = {img="img@1941613fa3d", id=57},
+	["57.8"] = {img="img@194f83fb43d", id=57},
 
 	["100.1"] = {img="img@193cd8077a3", id=1, scale=0.25, y=0.7},
 	["100.2"] = {img="18c73e40d6d.png", id=1},
