@@ -680,22 +680,16 @@ local function warnPlayer(player, cmd, quantity, args)
 		return
 	end
 
-	logCommand(player, "kill", math.min(quantity, 2), args)
-	sendPacket(
-		"common",
-		packets.rooms.kill_logs,
-		requestplayer .. "\000" ..
-		killedTime .. "\000" ..
-		player .. "\000" ..
-		roomPlayer.id
-	)
-
+	logCommand(player, "kill", quantity, args)
 	schedule_player(requestplayer, true, function(pdata)
 		sendPacket(
 			"common",
-			packets.rooms.prev_kill,
+			packets.rooms.kill_logs,
 			requestplayer .. "\000" ..
+			killedTime .. "\000" ..
+			player .. "\000" ..
 			roomPlayer.id .. "\000" ..
+			(args[3] or '') .. "\000" ..
 			pdata.killed .. "\000" ..
 			pdata.kill .. "\000" ..
 			(pdata.killedby or '-')
