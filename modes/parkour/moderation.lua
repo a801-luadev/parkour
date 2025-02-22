@@ -930,7 +930,7 @@ function roomAnnouncement(player, cmd, quantity, args)
 	tfm.exec.chatMessage("<ROSE>Ξ [Parkour] <N>"..announcementtext)
 end
 
-local skinsGeneralActions = { new=1, list=1, inspect=1 }
+local skinsGeneralActions = { new=1, list=1, inspect=1, ownshop=1 }
 local function handleSkins(player, cmd, quantity, args)
 	if not ranks.admin[player] then
 		return
@@ -970,6 +970,14 @@ local function handleSkins(player, cmd, quantity, args)
 		pdata.cskins = { 1, 2, 7, 28, 46 }
 		savePlayerData(playerName)
 		tfm.exec.chatMessage("<v>[#] <j>Current skins set default for " ..playerName, player)
+
+	elseif action == "ownshop" then
+		pdata = players_file[player]
+		if pdata then
+			pdata.ownshop = not pdata.ownshop or nil
+			savePlayerData(player)
+			tfm.exec.chatMessage("ownshop: " .. tostring(pdata.ownshop), player)
+		end
 
 	elseif action == "new" then
 		local id = tonumber(args[2])

@@ -307,6 +307,7 @@ local data_migrations = {
 	[10] = function(player, data)
 		data.v = 11
 		data.cskins[9] = 34
+		--data.ownshop = nil
 	end,
 }
 
@@ -346,7 +347,7 @@ do
 	end
 
 	function pdataFunctions.findShopItem(file, id, power)
-		if power and id == 1 or not power and default_skins[id] then
+		if power and id == 1 or not power and default_skins[id] or file.ownshop then
 			return 0
 		end
 		local key = power and "powers" or "skins"
