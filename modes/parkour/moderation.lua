@@ -1486,6 +1486,14 @@ local function handleKick(playerName, cmd, quantity, args)
 		return
 	end
 
+	if args[2] then
+		local file = players_file[args[1]]
+		if file then
+			file.kick = tonumber(args[2])
+			savePlayerData(args[1])
+		end
+	end
+
 	tfm.exec.kickPlayer(args[1])
 end
 
