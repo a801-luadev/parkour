@@ -400,12 +400,12 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				return
 			end
 
-			count_stats = false
 			local map = tonumber(args[1]) or tonumber(string.sub(args[1], 2))
 			if not map or map < 1000 then
 				translatedChatMessage("invalid_syntax", player)
 				return
 			end
+			count_stats = false
 			current_map = map
 			tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped" and not records_admins)
 		elseif os.time() < map_change_cd and not review_mode then
