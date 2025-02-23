@@ -248,4 +248,5 @@ translations.en = {
 	chair = "Chair",
 	link = "Soul mate",
 	shop_power = "Shop Power",
+	ladder = "Ladder",
 }

@@ -281,13 +281,13 @@ shop_powers[4] = {
 	name = "campfire",
 	cooldown_img = "173dee98c61.png",
 	cooldown_scale = 0.4,
-	cooldown = 15000,
+	cooldown = 30000,
 
 	fnc = function(self, player, key, down, x, y)
 		local id = allocateId("textarea", 1000, 10000)
 		local antiGrav = map_gravity <= 0
-		local img = tfm.exec.addImage("17426539be5.png", "_101", x, y, nil, 0.8, 0.8 * (antiGrav and -1 or 1), 0, 1, 0.5, antiGrav and -0.5 or 0.5)
-		ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 25, y - 22, 50, 44, 0, 0, 0)
+		local img = tfm.exec.addImage("17426539be5.png", "_101", x, y, nil, 1, antiGrav and -1 or 1, 0, 1, 0.5, antiGrav and -0.5 or 0.5)
+		ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 32, y - 26, 64, 56, 0, 0, 0)
 		addNewTimer(self.cooldown, self.despawn, img, id)
 	end,
 
@@ -376,6 +376,12 @@ powers = {
 		bigX = 0, bigY = 0,
 
 		cooldown_img = "17127e6674c.png",
+
+		actualName = function(shop_power)
+			local power_id = players_file[player].cskins[8] or 1
+			local power = shop_powers[power_id]
+			return power and power.name or "shop_power"
+		end,
 
 		cond = function(player, key, down, x, y)
 			local power_id = players_file[player].cskins[8] or 1
@@ -820,31 +826,37 @@ powers = {
 		}
 	},
 	{
-		name = "campfire", ranking = 28,
+		name = "ladder", ranking = 28,
 		id = 15,
 		isVisual = true,
 
-		small = "173dee9c5d9.png", big = "173dee98c61.png",
-		lockedSmall = "173dee9e873.png", lockedBig = "173dee9aaea.png",
-		smallX = 0, smallY = 10,
-		bigX = 0, bigY = 10,
+		small = "img@19461bc077d", big = "img@19461bc077d",
+		lockedSmall = "img@19530ca5bbe", lockedBig = "img@19530ca5bbe",
+		smallScale = 0.75,
+		smallX = 15, smallY = 10,
+		bigX = 20, bigY = 0,
 
-		cooldown_img = "1741cfdadc9.png",
+		cooldown_img = "img@19461bc077d",
+		cooldown_scale = 0.4,
 
-		cooldown = 15000,
+		cooldown = 30000,
 		default = {3, 8}, -- J
 
 		fnc = function(player, key, down, x, y)
 			local id = allocateId("textarea", 1000, 10000)
-			local antiGrav = map_gravity <= 0
-			local img = tfm.exec.addImage("17426539be5.png", "_101", x, y, nil, 1, antiGrav and -1 or 1, 0, 1, 0.5, antiGrav and -0.5 or 0.5)
-			ui.addTextArea(id, "<a href='event:emote:11'>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", nil, x - 32, y - 26, 64, 56, 0, 0, 0)
-			addNewTimer(powers.campfire.cooldown, powers.campfire.despawn, img, id)
+			tfm.exec.addPhysicObject(id, x, y, {
+				height = 100,
+				width = 30,
+				type = 9,
+				miceCollision = false,
+			})
+			local img = tfm.exec.addImage("img@19461bc077d", "+" .. id, 0, 0, nil, 1, 1, 0, 1, 0.5, 0.5)
+			addNewTimer(5000, powers.ladder.despawn, img, id)
 		end,
 
 		despawn = function(img, id)
 			tfm.exec.removeImage(img)
-			ui.removeTextArea(id)
+			tfm.exec.removePhysicObject(id)
 		end
 	},
 	{
@@ -997,6 +1009,13 @@ function checkKill(player)
 	end
 end
 
+local function addTracklist(power, player, x, y)
+	if not power.isVisual then
+		used_powers._count = used_powers._count + 1
+		used_powers[ used_powers._count ] = {player, power.actualName and power.actualName(player) or power.name, x, y}
+	end
+end
+
 onEvent("Keyboard", function(player, key, down, x, y)
 	if not victory[player] or not players_file[player] or not keys.triggers[player] then return end
 	if spec_mode[player] then return end
@@ -1062,6 +1081,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 				players_file[player].settings[3] == 1
 			)) and (power[index].isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
 				power[index].fnc(player, key, down, x, y)
+				addTracklist(power[index], player, x, y)
 
 				if doStatsCount() then
 					if power_quest[player] and (power_quest[player].w or power_quest[player].d) then
@@ -1081,11 +1101,6 @@ onEvent("Keyboard", function(player, key, down, x, y)
 						end
 					end
 				end
-
-				if not power[index].isVisual then
-					used_powers._count = used_powers._count + 1
-					used_powers[ used_powers._count ] = {player, power[index].name}
-				end
 			end
 		end
 	end
@@ -1102,11 +1117,7 @@ onEvent("Mouse", function(player, x, y)
 			players_file[player].settings[3] == 1
 		)) and (power.isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
 			power.fnc(player, x, y)
-
-			if not power.isVisual then
-				used_powers._count = used_powers._count + 1
-				used_powers[ used_powers._count ] = {player, power.name}
-			end
+			addTracklist(power, player, x, y)
 		end
 	end
 end)

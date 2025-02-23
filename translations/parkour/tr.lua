@@ -251,4 +251,5 @@ translations.tr = {
 	chair = "Sandalye",
 	link = "Ruh ikizi",
 	shop_power = "Market Becerisi",
+	ladder = "Merdiven",
 }

@@ -342,7 +342,8 @@ do
 				end
 				images[player][1] = tfm.exec.addImage(
 					img[(not cond) and "lockedSmall" or "small"],
-					":2", self.x + 240 - img.smallX, self.y + 50 + img.smallY, player
+					":2", self.x + 240 - img.smallX, self.y + 50 + img.smallY, player,
+					img.smallScale, img.smallScale
 				)
 			end
 
@@ -376,7 +377,8 @@ do
 				end
 				images[player][3] = tfm.exec.addImage(
 					img[(not cond) and "lockedSmall" or "small"],
-					":4", self.x + 380 + img.smallX, self.y + 50 + img.smallY, player
+					":4", self.x + 380 + img.smallX, self.y + 50 + img.smallY, player,
+					img.smallScale, img.smallScale
 				)
 			end
 		end)
