@@ -852,6 +852,13 @@ shop_items = {
 			image = "177fc32bd99.png",
 			id = 34.11,
 			scale = 0.2,
+			hidden = true,
+		},
+		{
+			price = 900,
+			image = "185c2dc5d45.png",
+			id = 34.12,
+			scale = 0.8,
 		},
 		{
 			price = 1000,
@@ -889,6 +896,7 @@ shop_skins = {
 	["34.8"] = {img="1674802a592.png", id=34},
 	["34.9"] = {img="16748031acc.png", id=34},
 	["34.11"] = {img="177fc32bd99.png", id=34, scale=0.15},
+	["34.12"] = {img="185c2dc5d45.png", id=34, scale=0.6},
 
 	["57.1"] = {img="img@193b7a44117", id=57, y=0.7},
 	["57.2"] = {img="img@1940598ffcb", id=57, y=0.45},
