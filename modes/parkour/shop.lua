@@ -778,9 +778,9 @@ shop_items = {
 		},
 		{
 			price = 10,
-			image = "img@1943409e46e",
-			id = 5,
+			image = "16d67f42439.png",
 			uses = 10,
+			id = 6,
 		},
 		{
 			price = 20,
@@ -790,17 +790,17 @@ shop_items = {
 			scale = 0.7,
 		},
 		{
+			price = 50,
+			image = "img@1943409e46e",
+			id = 5,
+			uses = 10,
+		},
+		{
 			price = 100,
 			image = "149c068e42f.png",
 			id = 3,
 			uses = 10,
 			scale = 0.8,
-		},
-		{
-			price = 10,
-			image = "16d67f42439.png",
-			uses = 10,
-			id = 6,
 		},
 	},
 	{ -- snowball
