@@ -377,7 +377,7 @@ powers = {
 
 		cooldown_img = "17127e6674c.png",
 
-		actualName = function(shop_power)
+		actualName = function(player)
 			local power_id = players_file[player].cskins[8] or 1
 			local power = shop_powers[power_id]
 			return power and power.name or "shop_power"
@@ -828,7 +828,6 @@ powers = {
 	{
 		name = "ladder", ranking = 28,
 		id = 15,
-		isVisual = true,
 
 		small = "img@19461bc077d", big = "img@19461bc077d",
 		lockedSmall = "img@19530ca5bbe", lockedBig = "img@19530ca5bbe",
