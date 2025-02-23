@@ -1499,6 +1499,25 @@ local function handleKick(playerName, cmd, quantity, args)
 	tfm.exec.kickPlayer(args[1])
 end
 
+local function handleClaim(playerName, cmd, quantity, args)
+	if playerName ~= "Parkour#0568" then return end
+	if quantity < 3 then return end
+
+	local target, nonce, nextCmd = args[1], args[2], args[3]
+	local file = players_file[target]
+	if not file then return end
+
+	nonce = tonumber(nonce)
+	if not nonce or file.claim and file.claim >= nonce then return end
+
+	file.claim = nonce
+	savePlayerData(target, true)
+	table.remove(args, 1)
+	table.remove(args, 1)
+	table.remove(args, 1)
+	eventParsedChatCommand(playerName, nextCmd, quantity - 3, args)
+end
+
 local function handlePing(playerName, cmd, quantity, args)
 	if not perms[playerName] or not perms[playerName].ping then
 		return
@@ -1545,6 +1564,7 @@ local commandDispatch = {
 	["kick"] = handleKick,
 	["partyhost"] = handlePartyHost,
 	["ping"] = handlePing,
+	["claim"] = handleClaim,
 }
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)

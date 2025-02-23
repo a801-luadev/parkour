@@ -308,6 +308,7 @@ local data_migrations = {
 		data.v = 11
 		data.cskins[9] = 34
 		--data.ownshop = nil
+		--data.claim = nil
 	end,
 }
 
