@@ -62,6 +62,7 @@ translations.tr = {
 	report_done = "<j>Raporunuz için teşekkürler.",
 	nohelp = "<r>Kırmızı çizgiyi etkinleştirerek diğerlerine yardım istemediğinizi bildiriyorsunuz. Açmak/kapatmak için <v>F</v> tuşuna basın.",
 	quest_map = "<ch>Görev haritanız @%s burada!",
+	powers_disabled = "<r>Yetenekler bu odada çalışmamaktadır.",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Ve geri sayım başlıyor...",

@@ -550,6 +550,10 @@ onEvent("PlayerDataParsed", function(player, data)
 				translatedChatMessage("records_admin", player)
 			end
 		end
+
+		if disable_powers then
+			translatedChatMessage("powers_disabled", player)
+		end
 	end
 end)
 
