@@ -94,7 +94,7 @@ local function apply_file_operation(data, operation, file, raw_data)
 			mod_index = #data.mods
 		end
 
-		local sanctionLevel = data.sanction[playerid] or 0
+		local sanctionLevel = data.sanction[playerid] and data.sanction[playerid].level or 0
 		if level then
 			if operation[6]:sub(1,1) == '+' or operation[6]:sub(1,1) == '-' then
 				sanctionLevel = math.min(4, math.max(0, sanctionLevel + level))
