@@ -52,7 +52,7 @@ do
 	local date_current = os.date("*t", now / 1000)
 
 	local function anniversaryTime(day)
-		return os.time({ year=date_current.year, month=3, day=6+day })
+		return os.time({ year=date_current.year, month=3, day=6+day, hour=0 })
 	end
 
 	local date_anniversary = os.date("*t", anniversaryTime(0) / 1000)
