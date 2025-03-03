@@ -1189,6 +1189,7 @@ onEvent("PlayerDataUpdated", function(player, data)
 end)
 
 onEvent("PlayerWon", function(player)
+	if not room.playerList[player] then return end
 	local id = room.playerList[player].id
 	if bans[ id ] then return end
 	if victory[player] then return end
