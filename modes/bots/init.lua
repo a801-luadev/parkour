@@ -85,6 +85,7 @@ local function apply_file_operation(data, operation, file, raw_data)
 			return
 		end
 
+		local prev_sanction = data.sanction[playerid]
 		local time, level = tonumber(operation[5]), tonumber(operation[6])
 		local mod_index = table_find(data.mods, moderator)
 		local now = os.time()
@@ -123,6 +124,15 @@ local function apply_file_operation(data, operation, file, raw_data)
 			info = mod_index,
 			level = sanctionLevel,
 		}
+
+		tfm.exec.playMusic(
+			'sanction:' .. tostring(playerid),
+			json.encode({
+				prev = prev_sanction,
+				current = data.sanction[playerid]
+			}),
+			0, false, false, parkour_bot
+		)
 		return
 	elseif action == 'addmap' then
 		local list = data[operation[3]]
