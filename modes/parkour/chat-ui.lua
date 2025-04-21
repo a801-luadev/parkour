@@ -50,6 +50,16 @@ onEvent("NewPlayer", function(player)
 	if roomcreators and #roomcreators < 10 then
 		roomcreators[1 + #roomcreators] = player
 	end
+
+	if roompw and roompw.password then
+		tfm.exec.setRoomPassword(roompw.password)
+	end
+end)
+
+onEvent("PlayerLeft", function(player)
+	if roompw and roompw.password then
+		tfm.exec.setRoomPassword(roompw.password)
+	end
 end)
 
 onEvent("PlayerWon", function(player)
