@@ -61,6 +61,7 @@ local perms
 local review_mode
 local records_admins = string.find(room.lowerName, "records", 1, true) and {}
 local smol_completions = submode == "smol" and { _max = 0, _maxName = nil }
+local isAieMap
 
 if records_admins and submode == "smol" then
 	records_admins = nil
@@ -278,6 +279,8 @@ onEvent("NewGame", function()
 	if not mouse_start then
 		return invalidMap("mouse_start")
 	end
+
+	isAieMap = xml:find('aie="')
 
 	local properties = getTagProperties(mouse_start)
 	levels[count] = {

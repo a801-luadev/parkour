@@ -190,6 +190,10 @@ shop_powers[1] = {
 	cooldown_scale = 0.34,
 	cooldown = 12500,
 
+	cond = function(player, key, down, x, y)
+		return not isAieMap
+	end,
+
 	fnc = function(self, player, key, down, x, y)
 		local skinID = players_file[player].cskins[9] or 34
 		local right = facing[player]
