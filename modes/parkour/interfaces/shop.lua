@@ -6,7 +6,7 @@ do
 	local priceTAs = {}
 	local consumableTAs = {}
 
-	for i=1, 18 do
+	for i=1, 14 do
 		priceTAs[i] = allocateId("textarea", 30000)
 		consumableTAs[i] = allocateId("textarea", 30000)
 	end
@@ -47,28 +47,6 @@ do
 			alpha = 0
 		})
 
-		-- Next Tab Button
-		:loadComponent(
-			Button.new():setText(">")
-			:onClick(function(self, player)
-				local tab = self.parent.args[player][2]
-				tab = 1 + (tab % #shop_items)
-				self.parent:update(player, 1, tab, filterShopItems(player, tab, self.parent.args[player][3]))
-			end)
-			:setPosition(595, 20):setSize(80, 18)
-		)
-
-		-- Prev Tab Button
-		:loadComponent(
-			Button.new():setText("&lt;")
-			:onClick(function(self, player)
-				local tab = self.parent.args[player][2]
-				tab = tab == 1 and #shop_items or (tab - 1)
-				self.parent:update(player, 1, tab, filterShopItems(player, tab, self.parent.args[player][3]))
-			end)
-			:setPosition(145, 20):setSize(80, 18)
-		)
-
 		-- Close button
 		:loadComponent(
 			Button.new():setTranslation("close")
@@ -80,7 +58,7 @@ do
 
 				self.parent:remove(player)
 			end)
-			:setPosition(115, 323):setSize(465, 18)
+			:setPosition(115 + 150, 323):setSize(465 - 150, 18)
 		)
 
 		-- Prev Page Button
@@ -91,14 +69,14 @@ do
 				local tab = self.parent.args[player][2]
 				local data = self.parent.args[player][3]
 				local count = data._len
-				local newpage = page == 1 and (math.floor((count - 1) / 18) * 18 + 1) or (page - 18)
+				local newpage = page == 1 and (math.floor((count - 1) / 14) * 14 + 1) or (page - 14)
 				if page == newpage then return end
 				self.parent:update(player, newpage, tab, data)
 			end)
-			:setPosition(20, 323):setSize(80, 18)
+			:setPosition(20 + 150, 323):setSize(80, 18)
 			:canUpdate(true):onUpdate(function(self, player)
 				local data = self.parent.args[player][3]
-				if data._len <= 18 then
+				if data._len <= 14 then
 					self:disable(player)
 				else
 					self:enable(player)
@@ -114,14 +92,14 @@ do
 				local tab = self.parent.args[player][2]
 				local data = self.parent.args[player][3]
 				local count = data._len
-				local newpage = (page + 18) > count and 1 or (page + 18)
+				local newpage = (page + 14) > count and 1 or (page + 14)
 				if page == newpage then return end
 				self.parent:update(player, newpage, tab, data)
 			end)
 			:setPosition(595, 323):setSize(80, 18)
 			:canUpdate(true):onUpdate(function(self, player)
 				local data = self.parent.args[player][3]
-				if data._len <= 18 then
+				if data._len <= 14 then
 					self:disable(player)
 				else
 					self:enable(player)
@@ -158,7 +136,7 @@ do
 				tfm.exec.removeImage(images[index])
 			end
 
-			local x = 70
+			local x = 70 + 150
 			local y = 150
 			local item
 			local firstImage
@@ -167,7 +145,7 @@ do
 				firstImage = "173db16a824.png"
 			end
 
-			for index = 1, 18 do
+			for index = 1, 14 do
 				if page + index - 1 > data._len then
 					break
 				end
@@ -176,9 +154,9 @@ do
 					images[index] = tfm.exec.addImage(index == 1 and firstImage or item.image, "~99", x + 30, y + (item.uses and 10 or 0), player, item.scale, item.scale, 0, 1, 0.5, 0.5)
 					x = x + 75
 
-					if index == 9 then
+					if index == 7 then
 						y = y + 130
-						x = 70
+						x = 70 + 150
 					end
 				end
 			end
@@ -186,8 +164,8 @@ do
 
 		-- Item Prices
 		:addTextArea({
-			x = 0, y = 50,
-			width = 700, height = 250,
+			x = 150, y = 50,
+			width = 700 - 150, height = 250,
 			canUpdate = true,
 			text = function(self, player, page, tab, data)
 				local images = coin_images[player] or {}
@@ -201,7 +179,7 @@ do
 				local item
 				local file = players_file[player]
 
-				for index = 1, 18 do
+				for index = 1, 14 do
 					item = data[page + index - 1]
 					if file and item and page + index - 1 <= data._len then
 						local itemPrice = item.gifts or item.price or 0
@@ -240,7 +218,7 @@ do
 						end
 
 						x = x + 75 
-						if index == 9 then
+						if index == 7 then
 							y = self.y + 145
 							x = self.x + 25
 						end
@@ -253,7 +231,7 @@ do
 			end,
 			alpha = 0
 		}):onRemove(function(self, player)
-			for index = 1, 18 do
+			for index = 1, 14 do
 				ui.removeTextArea(priceTAs[index], player)
 				ui.removeTextArea(consumableTAs[index], player)
 				tfm.exec.removeImage(shop_images[player][index])
@@ -262,9 +240,24 @@ do
 		end)
 
 	local buttonx = 22
+	local buttony = 65
+
+	for tabButton = 1, #shop_tabs do
+		ShopInterface:loadComponent(
+			Button.new():setText(function(self, player, page, tab, data)
+				return translatedMessage(shop_tabs[tabButton], player)
+			end)
+			:onClick(function(self, player)
+				self.parent:update(player, 1, tabButton, filterShopItems(player, tabButton, self.parent.args[player][3]))
+			end)
+			:setPosition(buttonx, buttony + (tabButton - 1) * 32):setSize(130, 18)
+		)
+	end
+
+	local buttonx = 22 + 150
 	local buttony = 155
 
-	for buyButton = 1, 18 do
+	for buyButton = 1, 14 do
 		local component = Button.new()
 		:setText(
 			function(self, player, page, tab, data)
@@ -345,9 +338,9 @@ do
 		ShopInterface:loadComponent(component)
 		buttonx = buttonx + 75
 
-		if buyButton == 9 then
+		if buyButton == 7 then
 			buttony = 285
-			buttonx = 22
+			buttonx = 22 + 150
 		end
 	end
 end
