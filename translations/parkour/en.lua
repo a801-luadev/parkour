@@ -220,6 +220,8 @@ translations.en = {
 	room = "Room",
 	time = "Time",
 	buy = "Buy",
+	refund = "Refund",
+	refund_info = "<p align='right'><font size='10'><b><g>Refunds 70% of the coins spent on items.",
 	equip = "Equip",
 	equipped = "<font size = '10'>Equipped</font>",
 	saving = "<p align='right'>Saving...",

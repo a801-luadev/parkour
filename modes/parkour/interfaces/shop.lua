@@ -5,6 +5,8 @@ do
 	local isSave = {}
 	local priceTAs = {}
 	local consumableTAs = {}
+	local refundMode = newSessionTable()
+	local confirmIndex = newSessionTable()
 
 	for i=1, 14 do
 		priceTAs[i] = allocateId("textarea", 30000)
@@ -31,6 +33,7 @@ do
 		:loadTemplate(WindowBackground)
 		:setShowCheck(function(self, player, page, tab, data)
 			if not data then
+				confirmIndex[player] = nil
 				self:show(player, 1, 1, filterShopItems(player, 1, { _len=0 }))
 				return false
 			end
@@ -46,6 +49,42 @@ do
 			end,
 			alpha = 0
 		})
+
+		-- Refund button
+		:addTextArea({
+			x = 555, y = 10,
+			width = 100, height = nil,
+			canUpdate = true,
+			text = function(self, player, page, tab)
+				return '<p align="right"><b>' .. translatedMessage('refund', player)
+			end,
+			alpha = 0
+		})
+		:addTextArea({
+			x = 525, y = 25,
+			width = 160, height = nil,
+			canUpdate = true,
+			text = function(self, player, page, tab)
+				return translatedMessage('refund_info', player)
+			end,
+			alpha = 0
+		})
+		:loadComponent(
+			Toggle.new(660, 15, false)
+			:onToggle(function(self, player, state)
+				local page = self.parent.args[player][1]
+				local tab = self.parent.args[player][2]
+				local data = self.parent.args[player][3]
+				refundMode[player] = state
+				self.parent:update(player, page, tab, data)
+			end)
+			:onUpdate(function(self, player)
+				local refund = refundMode[player]
+				if (self.state[player] and not refund) or (not self.state[player] and refund) then
+					self:toggle(player)
+				end
+			end)
+		)
 
 		-- Close button
 		:loadComponent(
@@ -178,11 +217,16 @@ do
 				local y = self.y + 15
 				local item
 				local file = players_file[player]
+				local color
 
 				for index = 1, 14 do
 					item = data[page + index - 1]
 					if file and item and page + index - 1 <= data._len then
 						local itemPrice = item.gifts or item.price or 0
+
+						if refundMode[player] and item.price and item.price > 0 then
+							itemPrice = math.floor(itemPrice * 0.7)
+						end
 
 						if item.gifts then
 							itemPrice = (file.gifts or 0) .. "/" .. itemPrice
@@ -196,8 +240,14 @@ do
 							images[index] = tfm.exec.addImage("18b2a0bc298.png", "&1000", x - 4, y + 2, player)
 						end
 
+						if refundMode[player] and file:findShopItem(item.id, tab == 8) and itemPrice > 0 then
+							color = "<vp>"
+						else
+							color = ''
+						end
+
 						ui.addTextArea(
-							priceTAs[index], "<b><p align='right'>"..itemPrice, player,
+							priceTAs[index], "<b><p align='right'>"..color..itemPrice, player,
 							x-5, y, 60, 15,
 							0x14282b, 0x14282b, 1,
 							true
@@ -264,8 +314,16 @@ do
 				local index = page + buyButton - 1
 				local item = data[index]
 				if index > data._len or not item then return "" end
+				if confirmIndex[player] == buyButton then
+					return translatedMessage("yes", player)
+				end
 				if players_file[player].cskins[tab] == item.id then
 					return translatedMessage("equipped", player)
+				elseif refundMode[player] then
+					if not players_file[player]:findShopItem(item.id, tab == 8) or item.price <= 0 then
+						return ""
+					end
+					return translatedMessage("refund", player)
 				elseif players_file[player]:findShopItem(item.id, tab == 8) then
 					return translatedMessage("equip", player)
 				elseif item.price >= 0 then
@@ -286,6 +344,33 @@ do
 			local itemID = data[index].id
 
 			if file:findShopItem(itemID, tab == 8) then
+				if refundMode[player] then
+					if not item_price or item_price <= 0 or tab == 8 then return end
+
+					if confirmIndex[player] ~= buyButton then
+						confirmIndex[player] = buyButton
+						self.parent:update(player, page, tab, data)
+						return
+					end
+
+					confirmIndex[player] = nil
+	
+					if not file:removeShopItem(itemID, tab == 8) then
+						return
+					end
+
+					file.coins = file.coins + math.floor(item_price * 0.7)
+
+					for i = #file.cskins, 1, -1 do
+						if file.cskins[i] == itemID then
+							file.cskins[i] = shop_items[tab][1].id
+						end
+					end
+
+					self.parent:update(player, page, tab, data)
+					return
+				end
+
 				if tab == 9 then
 					file.cskins[8] = 1
 				end
@@ -295,6 +380,7 @@ do
 				return
 			end
 
+			if refundMode[player] then return end
 			if item_price < 0 then return end
 			if file.coins < item_price then
 				tfm.exec.chatMessage("<v>[#] <r>You don't have enough coins.", player)
@@ -304,6 +390,14 @@ do
 			if tab ~= 8 and #file.skins > 99 then
 				return
 			end
+
+			if confirmIndex[player] ~= buyButton then
+				confirmIndex[player] = buyButton
+				self.parent:update(player, page, tab, data)
+				return
+			end
+
+			confirmIndex[player] = nil
 
 			if tab == 8 and data[index].uses then
 				if not file:updatePower(itemID, data[index].uses) then
@@ -327,7 +421,9 @@ do
 			local index = page + buyButton - 1
 			local itemID = data[index] and data[index].id
 			local file = players_file[player]
-			if index > data._len or not data[index] or file.cskins[tab] == itemID or (data[index].price < 0 or file.coins < data[index].price) and not file:findShopItem(itemID, tab == 8) then
+			if index > data._len or not data[index] or file.cskins[tab] == itemID
+			or (refundMode[player] and (data[index].price <= 0 or tab == 8))
+			or (refundMode[player] or data[index].price < 0 or file.coins < data[index].price) and not file:findShopItem(itemID, tab == 8) then
 				self:disable(player)
 			else
 				self:enable(player)

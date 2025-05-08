@@ -224,6 +224,8 @@ translations.tr = {
 	room = "Oda",
 	time = "Süre",
 	buy = "Satın Al",
+	refund = "İade Et",
+	refund_info = "<p align='right'><font size='10'><b><g>Eşyalar için harcanan coinlerin %70'ini iade eder.",
 	equip = "Kullan",
 	equipped = "<font size = '10'>Kullanıldı</font>",
 	saving = "<p align='right'>Kaydediliyor...",
