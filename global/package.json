@@ -26,5 +26,9 @@
 	{
 		"type": "require-file",
 		"file": "global/id.lua"
+	},
+	{
+		"type": "require-file",
+		"file": "global/session.lua"
 	}
 ]
