@@ -236,7 +236,7 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 			-- prev sanction
 			(baninfo and baninfo.timestamp or "-") .. "\000" ..
 			(baninfo and baninfo.time or "-") .. "\000" ..
-			(baninfo and baninfo.info and (data.mods[baninfo.info] or banInfo.info) or "-") .. "\000" ..
+			(baninfo and baninfo.info and (data.mods[baninfo.info] or baninfo.info) or "-") .. "\000" ..
 			(baninfo and baninfo.level or "-")
 		)
 		sendBanLog(playerName, time, moderator, minutes)
