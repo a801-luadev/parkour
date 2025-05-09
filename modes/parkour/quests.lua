@@ -83,8 +83,8 @@ quests = {
 			local questData = getPlayerQuest(player, 1, isWeekly)
 			if not questData then return end
 
-			local prize = questData.tg * 0.75
-			return math.floor(prize / 5) * 5 -- per map
+			local prize = questData.tg * (isWeekly and 1.5 or 2)
+			return math.ceil(prize / 5) * 5 -- per map
 		end,
 
 		updateProgress = function(player, questData, isWeekly)
@@ -116,8 +116,8 @@ quests = {
 			local questData = getPlayerQuest(player, 2, isWeekly)
 			if not questData then return end
 
-			local prize = questData.tg * 0.1
-			return math.floor(prize / 5 ) * 5 -- per cp
+			local prize = questData.tg * (isWeekly and 0.2 or 0.3)
+			return math.ceil(prize / 5 ) * 5 -- per cp
 		end,
 
 		updateProgress = function(player, questData, isWeekly)
@@ -148,8 +148,8 @@ quests = {
 			local questData = getPlayerQuest(player, 3, isWeekly)
 			if not questData then return end
 
-			local prize = questData.tg * 3
-			return math.floor(prize / 5 ) * 5 -- per map
+			local prize = questData.tg * (isWeekly and 6 or 9)
+			return math.ceil(prize / 5 ) * 5 -- per map
 		end,
 
 		updateProgress = function(player, questData, isWeekly)
@@ -183,9 +183,9 @@ quests = {
 			if not questData then return end
 
 			if isWeekly then
-				return 50
+				return 100
 			else
-				return 25
+				return 75
 			end
 		end,
 
@@ -206,7 +206,8 @@ quests = {
 			local questData = getPlayerQuest(player, 5, isWeekly)
 			if not questData then return end
 
-			local mapCode = maps[1].list[((questData.tg-1)%maps[1].count) + 1 ] or "N/A"
+			local diff = isWeekly and 3 or 1
+			local mapCode = maps[diff].list[((questData.tg-1)%maps[diff].count) + 1 ] or "N/A"
 
 			return translatedMessage("quest_5", player, mapCode)
 	  	end,
@@ -222,12 +223,13 @@ quests = {
 			local questData = getPlayerQuest(player, 5, isWeekly)
 			if not questData then return end
 
-			return 50
+			return isWeekly and 200 or 100
 		end,
 		
 		updateProgress = function(player, questData, isWeekly)
 			if questData and questData.ts then return end
-			if maps[1].list[((questData.tg - 1)%maps[1].count) + 1 ] == tonumber(current_map) then
+			local diff = isWeekly and 3 or 1
+			if maps[diff].list[((questData.tg - 1)%maps[diff].count) + 1 ] == tonumber(current_map) then
 				questData.pg = questData.tg
 
 				if questData.pg >= questData.tg then
@@ -256,8 +258,8 @@ quests = {
 			local questData = getPlayerQuest(player, 6, isWeekly)
 			if not questData then return end
 
-			local prize = questData.tg * 0.5
-			return math.floor(prize / 5) * 5 -- per use
+			local prize = questData.tg * (isWeekly and 1 or 1.5)
+			return math.ceil(prize / 5) * 5 -- per use
 		end,
 
 		updateProgress = function(player, questData, isWeekly)
