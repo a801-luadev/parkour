@@ -170,7 +170,7 @@ do
 				-- if this was paused, we need to resume!
 				if paused then
 					paused = false
-					checkingRuntime = false
+					--checkingRuntime = false
 
 					local done, result = pcall(resumeModule)
 					if not done then
