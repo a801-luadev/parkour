@@ -62,7 +62,7 @@ do
 		})
 		:addTextArea({
 			x = 595, y = 30,
-			width = 200, height = 25,
+			width = 200, height = 30,
 			canUpdate = true,
 			translation = 'refund_info',
 			alpha = 0
