@@ -183,6 +183,12 @@ do
 							itemPrice = math.floor(itemPrice * 0.7)
 						end
 
+						if refundMode[player] and file:findShopItem(item.id, tab == 8) and itemPrice > 0 then
+							color = "<vp>"
+						else
+							color = ''
+						end
+
 						if item.gifts then
 							itemPrice = (file.gifts or 0) .. "/" .. itemPrice
 							images[index] = tfm.exec.addImage("18c73e40d6d.png", "&1000", x - 4, y - 2, player, 0.5, 0.5)
@@ -193,12 +199,6 @@ do
 							end
 
 							images[index] = tfm.exec.addImage("18b2a0bc298.png", "&1000", x - 4, y + 2, player)
-						end
-
-						if refundMode[player] and file:findShopItem(item.id, tab == 8) and itemPrice > 0 then
-							color = "<vp>"
-						else
-							color = ''
 						end
 
 						ui.addTextArea(
