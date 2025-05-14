@@ -74,6 +74,7 @@ do
 				local tab = self.parent.args[player][2]
 				local data = self.parent.args[player][3]
 				refundMode[player] = state
+				confirmIndex[player] = nil
 				self.parent:update(player, page, tab, data)
 			end)
 			:onUpdate(function(self, player)
@@ -301,7 +302,7 @@ do
 				local index = page + buyButton - 1
 				local item = data[index]
 				if index > data._len or not item then return "" end
-				if confirmIndex[player] == buyButton then
+				if confirmIndex[player] == item.id then
 					return translatedMessage("yes", player)
 				end
 				if players_file[player].cskins[tab] == item.id then
@@ -334,8 +335,8 @@ do
 				if refundMode[player] then
 					if not item_price or item_price <= 0 or tab == 8 then return end
 
-					if confirmIndex[player] ~= buyButton then
-						confirmIndex[player] = buyButton
+					if confirmIndex[player] ~= itemID then
+						confirmIndex[player] = itemID
 						self.parent:update(player, page, tab, data)
 						return
 					end
@@ -354,6 +355,7 @@ do
 						end
 					end
 
+					isSave[player] = true
 					self.parent:update(player, page, tab, data)
 					return
 				end
@@ -378,8 +380,8 @@ do
 				return
 			end
 
-			if confirmIndex[player] ~= buyButton then
-				confirmIndex[player] = buyButton
+			if confirmIndex[player] ~= itemID then
+				confirmIndex[player] = itemID
 				self.parent:update(player, page, tab, data)
 				return
 			end
