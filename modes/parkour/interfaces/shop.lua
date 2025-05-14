@@ -85,6 +85,27 @@ do
 			end)
 		)
 
+		-- Config Button
+		:loadComponent(
+			Button.new():setTranslation("settings")
+			:onClick(function(self, player)
+				local tab = self.parent.args[player][2]
+				local power_id = shop_tab_to_power[tab]
+				if not power_id then return end
+				eventChatCommand(player, "powers " .. power_id)
+			end)
+			:setPosition(92 + 40 * 13, 323):setSize(25*4, 18)
+			:canUpdate(true):onUpdate(function(self, player)
+				local tab = self.parent.args[player][2]
+				local power_id = shop_tab_to_power[tab]
+				if power_id then
+					self:enable(player)
+				else
+					self:disable(player)
+				end
+			end)
+		)
+
 		-- Close button
 		:loadComponent(
 			Button.new():setTranslation("close")
@@ -263,7 +284,7 @@ do
 	local buttonx = 22 + 110
 	local buttony = 155
 
-	for pageNumber = 1, 15 do
+	for pageNumber = 1, 12 do
 		local startIndex = 18 * pageNumber - 17
 		ShopInterface:loadComponent(
 			Button.new():setText(function(self, player)

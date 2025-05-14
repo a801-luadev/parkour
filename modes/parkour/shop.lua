@@ -1,5 +1,6 @@
-shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
-shop_items = {
+local shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
+local shop_tab_to_power = { 6, 10, 11, 4, 9, 7, 8, 3, 3 }
+local shop_items = {
 	{ -- smallbox
 		{
 			price = 0,
