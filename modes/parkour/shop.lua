@@ -785,6 +785,12 @@ local shop_items = {
 			scale = 0.7,
 		},
 		{
+			price = 8000,
+			image = "img@196ca609bb0",
+			id = 57.14,
+			scale = 0.8,
+		},
+		{
 			price = 9000,
 			image = "img@1950ff9de7d",
 			id = 57.9,
@@ -1021,6 +1027,7 @@ shop_skins = {
 	["57.11"] = {img="img@1950c2b3fe4", id=57, x=0.6, y=0.5, scale=0.9},
 	["57.12"] = {img="img@1968a225b50", id=57},
 	["57.13"] = {img="img@1968a228731", id=57},
+	["57.14"] = {img="img@196ca609bb0", id=57},
 
 	["90.1"] = {img="img@196b352834b", id=90, y=0.55},
 	["90.2"] = {img="img@196b35d55d8", id=90, y=0.4, size=1.2},
