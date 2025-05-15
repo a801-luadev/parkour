@@ -110,11 +110,6 @@ do
 		:loadComponent(
 			Button.new():setTranslation("close")
 			:onClick(function(self, player)
-				if isSave[player] then
-					savePlayerData(player)
-					isSave[player] = nil
-				end
-
 				self.parent:remove(player)
 			end)
 			:setPosition(732, 323):setSize(55, 18)
@@ -258,6 +253,11 @@ do
 			end,
 			alpha = 0
 		}):onRemove(function(self, player)
+			if isSave[player] then
+				savePlayerData(player)
+				isSave[player] = nil
+			end
+
 			for index = 1, 18 do
 				ui.removeTextArea(priceTAs[index], player)
 				ui.removeTextArea(consumableTAs[index], player)
