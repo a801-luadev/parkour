@@ -25,9 +25,11 @@ function checkMapQuest(player)
 	end
 	if #maps[1].list == 1 then return end -- list not loaded yet
 
+	local diff
 	for i=1, #pdata do
 		if pdata[i].id == 5 then
-			if maps[1].list[((pdata[i].tg-1)%maps[1].count) + 1] == tonumber(current_map) then
+			diff = i > 4 and 3 or 1
+			if maps[diff].list[((pdata[i].tg-1)%maps[diff].count) + 1] == tonumber(current_map) then
 				return translatedChatMessage("quest_map", player, current_map)
 			end
 		end
