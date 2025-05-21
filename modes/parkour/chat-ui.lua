@@ -379,6 +379,15 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		return
 
+	elseif cmd == "pw?" then
+		if not ranks.admin[player] then
+			return
+		end
+	
+		tfm.exec.chatMessage("<v>[#] <d>owner: <bl>" .. tostring(roompw.owner), player)
+		tfm.exec.chatMessage("<v>[#] <d>password: <bl>" .. tostring(roompw.password), player)
+		return
+
 	elseif cmd == "pw" then
 		if not records_admins or not records_admins[player] then
 			if not perms[player] or not perms[player].enable_review then return end
