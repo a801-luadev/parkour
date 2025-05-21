@@ -42,6 +42,7 @@ local ranks_permissions = {
 		manage_maps = true,
 	},
 	mod = {
+		view_creators = true,
 		ping = true,
 		ban = true,
 		unban = true,

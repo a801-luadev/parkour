@@ -8,7 +8,8 @@ local setNameColor
 do
 local fetching_player_room = {}
 local roompw = {}
-local roomcreators = {}
+local init_time = os.time()
+local visitors = { _len=0 }
 local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 
 local function checkRoomRequest(player, data)
@@ -47,8 +48,10 @@ onEvent("NewPlayer", function(player)
 		end
 	end
 	
-	if roomcreators and #roomcreators < 10 then
-		roomcreators[1 + #roomcreators] = player
+	if not visitors[player] and visitors._len < 50 then
+		visitors[player] = os.time()
+		visitors._len = visitors._len + 1
+		visitors[visitors._len] = player
 	end
 
 	if roompw and roompw.password then
@@ -352,13 +355,29 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			return
 		end
 
-	elseif cmd == "creators" then
+	elseif cmd == "creators" or cmd == "visitors" then
 		if not perms[player] or not perms[player].view_creators then return end
 
-		tfm.exec.chatMessage("<v>[#] <bl>People in the room when the module was loaded:", player)
-		for i=1, #roomcreators, 10 do
-			tfm.exec.chatMessage("<v>[#] <bl>" .. table.concat(roomcreators, ' ', i, math.min(i+9, #roomcreators)), player)
+		local startIndex = math.max(1, tonumber(args[1]) or 1)
+		local endIndex = math.min(startIndex + 9, visitors._len)
+	
+		local creatorsEndIndex = startIndex - 1
+
+		for i=startIndex, endIndex do
+			if visitors[visitors[i]] < init_time + 1000 then
+				creatorsEndIndex = i
+			end
 		end
+
+		tfm.exec.chatMessage(
+			("<v>[#] <j>Visitors %s-%s/%s: <ch>%s <bl>%s"):format(
+				startIndex, endIndex, visitors._len,
+				table.concat(visitors, " ", startIndex, creatorsEndIndex),
+				table.concat(visitors, " ", creatorsEndIndex + 1, endIndex)
+			), player
+		)
+
+		return
 
 	elseif cmd == "pw" then
 		if not records_admins or not records_admins[player] then
