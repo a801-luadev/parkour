@@ -176,6 +176,7 @@ local function enableSpecMode(player, enable)
 
 		local level = levels[ players_level[player] ]
 
+		cp_available[player] = os.time() + 750
 		tfm.exec.respawnPlayer(player)
 		tfm.exec.movePlayer(player, level.x, level.y)
 
@@ -451,6 +452,7 @@ onEvent("PlayerDied", function(player)
 	tfm.exec.linkMice(player, player, false)
 
 	if not spec_mode[player] then
+		cp_available[player] = os.time() + 750
 		tfm.exec.respawnPlayer(player)
 		if level then
 			tfm.exec.movePlayer(player, level.x, level.y)
@@ -580,6 +582,7 @@ onEvent("NewGame", function()
 			changePlayerSize(player, size)
 			tfm.exec.setPlayerScore(player, 1, false)
 			tfm.exec.linkMice(player, player, false)
+			tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
 
 			if levels[1].cheese then
 				tfm.exec.giveCheese(player)
@@ -832,6 +835,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if checkpoint_info.version == 1 then
 			tfm.exec.removeBonus(players_level[player] + 1, player)
 		end
+		cp_available[player] = os.time() + 750
 		players_level[player] = checkpoint
 		changePlayerSize(player, levels[checkpoint].size)
 		times.checkpoint[player] = os.time()
@@ -908,6 +912,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.removeBonus(players_level[player] + 1, player)
 		end
 
+		cp_available[player] = os.time() + 750
 		players_level[player] = 1
 		changePlayerSize(player, levels[1].size)
 		times.generated[player] = nil
