@@ -979,7 +979,8 @@ local function handleSkins(player, cmd, quantity, args)
 		end
 
 	elseif action == "tester" then
-		pdata:setTester(args[3] ~= 'no')
+		pdata:setTester(not pdata:tester())
+		tfm.exec.chatMessage(playerName .. ".tester = " .. tostring(pdata:tester()), player)
 
 	elseif action == "new" then
 		local category = tonumber(args[2])
