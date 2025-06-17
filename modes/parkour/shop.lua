@@ -120,6 +120,11 @@ local shop_items = {
 			scale = 0.5,
 		},
 		{
+			price = 3000,
+			image = "img@19784fc011b",
+			id = 100.3,
+		},
+		{
 			price = 5000,
 			image = "img@193d0bdee01",
 			id = 181,
@@ -565,6 +570,16 @@ local shop_items = {
 			id = 2840,
 		},
 		{
+			price = 3000,
+			image = "img@1975793006f",
+			id = 28.9,
+		},
+		{
+			price = 3500,
+			image = "img@19758475406",
+			id = 28.11,
+		},
+		{
 			price = 4000,
 			image = "img@1943a4d7328",
 			id = 28.4,
@@ -764,9 +779,21 @@ local shop_items = {
 			scale = 0.7,
 		},
 		{
+			price = 2500,
+			image = "img@19784b8916b",
+			id = 57.14,
+			scale = 0.7,
+		},
+		{
 			price = 3000,
 			image = "img@19416277202",
 			id = 57.6,
+			scale = 0.7,
+		},
+		{
+			price = 3500,
+			image = "img@1974d859e00",
+			id = 57.15,
 			scale = 0.7,
 		},
 		{
@@ -792,12 +819,6 @@ local shop_items = {
 			image = "img@1968a228731",
 			id = 57.13,
 			scale = 0.7,
-		},
-		{
-			price = 8000,
-			image = "img@196ca609bb0",
-			id = 57.14,
-			scale = 0.8,
 		},
 		{
 			price = 9000,
@@ -1010,6 +1031,8 @@ shop_skins = {
 	["28.6"] = {img="img@194f8638d35"},
 	["28.7"] = {img="img@194f875f282"},
 	["28.8"] = {img="img@195a2571468"},
+	["28.9"] = {img="img@1975793006f"},
+	["28.11"] = {img="img@19758475406"},
 
 	["34.1"] = {img="169169d8479.png", id=34, scale=0.5},
 	["34.2"] = {img="img@193c5d9f045", id=34},
@@ -1036,7 +1059,8 @@ shop_skins = {
 	["57.11"] = {img="img@1950c2b3fe4", id=57, x=0.6, y=0.5, scale=0.9},
 	["57.12"] = {img="img@1968a225b50", id=57},
 	["57.13"] = {img="img@1968a228731", id=57},
-	["57.14"] = {img="img@196ca609bb0", id=57},
+	["57.14"] = {img="img@19784b8916b", id=57, x=0.5, y=0.6, scale=0.92},
+	["57.15"] = {img="img@1974d859e00", id=57},
 
 	["90.1"] = {img="img@196b352834b", id=90, y=0.55},
 	["90.2"] = {img="img@196b35d55d8", id=90, y=0.4, size=1.2},
@@ -1048,6 +1072,7 @@ shop_skins = {
 
 	["100.1"] = {img="img@193cd8077a3", id=1, scale=0.25, y=0.7},
 	["100.2"] = {img="18c73e40d6d.png", id=1},
+	["100.3"] = {img="img@19784fc011b", id=1},
 	["143"] = {img = "18b40057d3b.png", x = 0.5, y = 0.52},
 	["144"] = {img = "18b4005cd84.png", x = 0.5, y = 0.52},
 	["145"] = {img = "18b40061bab.png", x = 0.5, y = 0.52},
