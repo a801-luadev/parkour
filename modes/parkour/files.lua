@@ -10,7 +10,6 @@ local QuestsInterface
 local getQuestsResetTime
 
 local badges, titles
-local default_skins = { [1] = 1, [2] = 1, [7] = 1, [28] = 1, [46] = 1, [57] = 1, [90] = 1, [34] = 1 }
 
 local quests
 local fillQuests
@@ -310,6 +309,24 @@ local data_migrations = {
 		--data.ownshop = nil
 		--data.claim = nil
 	end,
+	[11] = function(player, data)
+		data.v = 12
+		data.cpower = data.cskins[8] -- currently equipped shop power
+
+		-- reset equipped skins
+		data.cskins = {}
+		data.cslen = {0,0,0,0,0,0,0,0,0}
+
+		local powers = data.powers
+		local powuse = {}
+
+		for i=1, #powers do
+			powuse[i] = math.floor(((powers[i] * 100) % 100) + 0.5)
+			powers[i] = math.floor(powers[i])
+		end
+
+		data.powuse = powuse
+	end,
 }
 
 local pdataFunctions = {}
@@ -320,99 +337,140 @@ do
 	local _cache = {
 		powers = setmetatable({}, { __mode = "k" }),
 		skins = setmetatable({}, { __mode = "k" }),
-		_power_uses = setmetatable({}, { __mode = "k" }),
+		cskins = setmetatable({}, { __mode = "k" }),
 	}
+	local testskins = setmetatable({}, { __mode = "k" })
 
-	function pdataFunctions.refreshCache(file, key)
-		local cache = {}
-		_cache[key][file] = cache
+	local function refreshCache(file, key, start)
+		local cache = start and _cache[key][file]
 
-		local list = file[key]
-		for i=1, #list do
-			cache[key == "powers" and math.floor(list[i]) or list[i]] = i
+		if not cache then
+			-- requests partial refresh & cache doesn't exist, no need for refresh
+			if start then
+				return
+			end
+
+			cache = {}
+			start = 1
+			_cache[key][file] = cache
 		end
 
-		if key == "powers" then
-			local uses = {}
-			local val
-			_cache._power_uses[file] = uses
-			for i=1, #list do
-				val = (list[i] * 100) % 100
-				if val ~= 0 then
-					uses[math.floor(list[i])] = math.floor(val + 0.5)
-				end
-			end
+		local list = file[key]
+		for i=start, #list do
+			cache[list[i]] = i
 		end
 
 		return cache
 	end
 
-	function pdataFunctions.findShopItem(file, id, power)
-		if power and id == 1 or not power and default_skins[id] or file.ownshop then
-			return 0
-		end
-		local key = power and "powers" or "skins"
+	local function removeCachedIndex(file, key, index)
 		local cache = _cache[key][file]
-		if not cache then
-			cache = file:refreshCache(key)
+		local list = file[key]
+
+		if cache then
+			cache[list[index]] = nil
 		end
-		if power then
-			id = math.floor(id)
-		end
-		return cache[id]
+
+		table.remove(list, index)
+		refreshCache(file, key, index)
 	end
 
-	function pdataFunctions.addShopItem(file, id, power)
-		if file:findShopItem(id, power) then
+	function pdataFunctions.tester(file)
+		return testskins[file] and true or false
+	end
+
+	function pdataFunctions.setTester(file, state)
+		if state then
+			if not testskins[file] then
+				testskins[file] = {}
+			end
+		else
+			testskins[file] = nil
+		end
+	end
+
+	function pdataFunctions.findShopItem(file, id, power)
+		local key = power and "powers" or "skins"
+		if power and id == 1 or not power and default_skins[id] or file.ownshop or testskins[file] then
+			return 0, key
+		end
+
+		local cache = _cache[key][file] or refreshCache(file, key)
+		if cache[id] or power then
+			return cache[id], key
+		end
+
+		key = "cskins"
+		cache = _cache[key][file] or refreshCache(file, key)
+		return cache[id], key
+	end
+
+	function pdataFunctions.addShopItem(file, id, powerUse)
+		if file:findShopItem(id, powerUse) then
 			return
 		end
 
-		local key = power and "powers" or "skins"
+		local key = powerUse and "powers" or "skins"
+
 		table.insert(file[key], id)
-		_cache[key][file][power and math.floor(id) or id] = #file[key]
-		if power then
-			local val = (id * 100) % 100
-			if val ~= 0 then
-				_cache._power_uses[file][math.floor(id)] = math.floor(val + 0.5)
-			end
+		refreshCache(file, key, #file[key])
+
+		if powerUse then
+			if powerUse == true then powerUse = 0 end
+			table.insert(file.powuse, powerUse)
 		end
 		return true
 	end
 
 	function pdataFunctions.removeShopItem(file, id, power)
-		local index = file:findShopItem(id, power)
+		local index, key = file:findShopItem(id, power)
 		if not index or index == 0 then
 			return
 		end
 
-		local key = power and "powers" or "skins"
-		table.remove(file[key], index)
+		if key == "cskins" then
+			local category
+			local sum = 0
 
-		if index == #file[key] + 1 then
-			_cache[key][file][power and math.floor(id) or id] = nil
-			if power then
-				_cache._power_uses[file][math.floor(id)] = nil
+			for i=1, 9 do
+				sum = sum + file.cslen[i]
+				if index <= sum then
+					category = i
+					break
+				end
 			end
-		else
-			file:refreshCache(key)
+
+			if not category then
+				return
+			end
+
+			-- update cslen
+			file.cslen[category] = file.cslen[category] - 1
+		end
+
+		removeCachedIndex(file, key, index)
+
+		if power then
+			table.remove(file.powuse, index)
 		end
 
 		return true
 	end
 
 	function pdataFunctions.getPowerUse(file, id)
-		local cache = _cache._power_uses[file]
-		if not cache then
-			cache = file:refreshCache("powers")
+		local cache = _cache.powers[file] or refreshCache(file, "powers")
+		local uses = cache[id] and file.powuse[cache[id]]
+		if uses and uses ~= 0 then
+			return uses
 		end
-		return cache[id]
 	end
 
 	function pdataFunctions.updatePower(file, id, useChange)
 		local index = file:findShopItem(id, true)
-		if not index or index == 0 then
+		if index == 0 then return end
+		if not index then
 			if useChange > 0 then
-				return file:addShopItem(id + useChange / 100, true)
+				return file:addShopItem(id, useChange)
 			end
 			return
 		end
@@ -428,14 +486,161 @@ do
 		end
 
 		if uses > 0 then
-			file.powers[index] = math.floor(id) + uses / 100
-			_cache._power_uses[file][math.floor(id)] = uses
+			file.powuse[index] = uses
 		else
-			file.cskins[8] = 1
-			table.remove(file.powers, index)
-			file:refreshCache("powers")
+			removeCachedIndex(file, "powers", index)
+			table.remove(file.powuse, index)
+			file:equip(8, 1)
 		end
 
+		return true
+	end
+
+	function pdataFunctions.resetEquipped(file)
+		-- add back to skins
+		if not file.ownshop then
+			local len = #file.cskins
+			local skinsOffset = #file.skins + 1
+			local skinsIndex = skinsOffset
+			local id
+
+			for i=1, len do
+				id = file.cskins[i]
+				if not default_skins[id] then
+					file.skins[skinsIndex] = id
+					skinsIndex = skinsIndex + 1
+				end
+			end
+
+			refreshCache(file, "skins", skinsOffset)
+		end
+
+		-- reset current skins
+		file.cskins = {}
+		_cache.cskins[file] = nil
+
+		for i=1, 9 do
+			file.cslen[i] = 0
+		end
+	end
+
+	function pdataFunctions.reachedSkinLimit(file)
+		return #file.skins + #file.cskins >= 100
+	end
+
+	function pdataFunctions.isEquipped(file, category, id)
+		if category == 8 then
+			return file.cpower == id
+		end
+
+		if testskins[file] and testskins[file][category] then
+			return testskins[file][category] == id
+		end
+
+		-- if the category is not in cskins, it means it is equipped with the default skin
+		if file.cslen[category] == 0 then
+			return default_skins_by_cat[category] == id
+		end
+
+		local cache = _cache.cskins[file] or refreshCache(file, "cskins")
+		return cache[id]
+	end
+
+	function pdataFunctions.getEquipped(file, category)
+		if category == 8 then
+			return file.cpower
+		end
+
+		if testskins[file] and testskins[file][category] then
+			return testskins[file][category]
+		end
+
+		if file.cslen[category] == 0 then
+			return default_skins_by_cat[category]
+		end
+
+		local first = 1
+		for i=1, category - 1 do
+			first = first + file.cslen[i]
+		end
+
+		local last = first + file.cslen[category] - 1
+		local index = math.random(first, last)
+
+		return file.cskins[index]
+	end
+
+	function pdataFunctions.unequip(file, category, id)
+		if category == 8 then
+			file.cpower = default_skins_by_cat[category]
+			return true
+		end
+
+		if testskins[file] and testskins[file][category] == id then
+			testskins[file][category] = nil
+			return true
+		end
+
+		if not file:isEquipped(category, id) or file.cslen[category] == 0 then
+			return
+		end
+
+		-- isEquipped makes sure we have a fresh cache
+		local cache = _cache.cskins[file]
+
+		-- remove from cskins
+		local index = cache[id]
+		removeCachedIndex(file, "cskins", index)
+
+		-- update cslen
+		file.cslen[category] = file.cslen[category] - 1
+
+		-- add to skins
+		if not default_skins[id] and not file.ownshop then
+			file.skins[#file.skins + 1] = id
+			refreshCache(file, "skins", #file.skins)
+		end
+
+		return true
+	end
+
+	function pdataFunctions.equip(file, category, id)
+		if file:isEquipped(category, id) then
+			return
+		end
+
+		if category == 8 then
+			file.cpower = id
+			return true
+		end
+
+		if testskins[file] then
+			testskins[file][category] = id
+			return true
+		end
+
+		if default_skins_by_cat[category] ~= id then
+			local cache = _cache.skins[file] or refreshCache(file, "skins")
+			local index = cache[id]
+			if index then
+				-- remove from skins
+				removeCachedIndex(file, "skins", index)
+			elseif not file.ownshop then
+				return -- can't equip a skin that is not owned
+			end
+		end
+
+		-- add to cskins
+		local first = 1
+		for i=1, category - 1 do
+			first = first + file.cslen[i]
+		end
+
+		table.insert(file.cskins, first, id)
+		refreshCache(file, "cskins", first)
+
+		-- update cslen
+		file.cslen[category] = file.cslen[category] + 1
 		return true
 	end
 end

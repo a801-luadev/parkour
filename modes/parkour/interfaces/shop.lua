@@ -126,7 +126,10 @@ do
 			width = 100, height = 30,
 			canUpdate = true,
 			text = function(self, player)
-				return ("<font size='18'><p align='right'>"..players_file[player].coins)
+				return "<font size='18'><p align='right'>" .. (
+					players_file[player].ownshop and "<rose>owner" or
+					players_file[player]:tester() and "<rose>tester" or players_file[player].coins
+				)
 			end,
 			alpha = 1,
 			color = {0x204347, 0x204347}
@@ -325,14 +328,13 @@ do
 				if index > data._len or not item then return "" end
 				if confirmIndex[player] == item.id then
 					return translatedMessage("yes", player)
-				end
-				if players_file[player].cskins[tab] == item.id then
-					return translatedMessage("equipped", player)
 				elseif refundMode[player] then
 					if not players_file[player]:findShopItem(item.id, tab == 8) or item.price <= 0 then
 						return ""
 					end
 					return translatedMessage("refund", player)
+				elseif players_file[player]:isEquipped(tab, item.id) then
+					return translatedMessage("equipped", player)
 				elseif players_file[player]:findShopItem(item.id, tab == 8) then
 					return translatedMessage("equip", player)
 				elseif item.price >= 0 then
@@ -369,22 +371,21 @@ do
 					end
 
 					file.coins = file.coins + math.floor(item_price * 0.7)
-
-					for i = #file.cskins, 1, -1 do
-						if file.cskins[i] == itemID then
-							file.cskins[i] = shop_items[tab][1].id
-						end
-					end
-
 					isSave[player] = true
 					self.parent:update(player, page, tab, data)
 					return
 				end
 
-				if tab == 9 then
-					file.cskins[8] = 1
+				if file:isEquipped(tab, itemID) then
+					if tab == 8 then return end
+					file:unequip(tab, itemID)
+				else
+					if tab == 9 then
+						file:equip(8, 1)
+					end
+					file:equip(tab, itemID)
 				end
-				file.cskins[tab] = itemID
+
 				isSave[player] = true
 				self.parent:update(player, page, tab, data)
 				return
@@ -397,7 +398,7 @@ do
 				return
 			end
 
-			if tab ~= 8 and #file.skins > 99 then
+			if tab ~= 8 and file:reachedSkinLimit() then
 				return
 			end
 
@@ -431,7 +432,7 @@ do
 			local index = page + buyButton - 1
 			local itemID = data[index] and data[index].id
 			local file = players_file[player]
-			if index > data._len or not data[index] or file.cskins[tab] == itemID
+			if index > data._len or not data[index] or tab == 8 and file:isEquipped(tab, itemID)
 			or (refundMode[player] and (data[index].price <= 0 or tab == 8))
 			or (refundMode[player] or data[index].price < 0 or file.coins < data[index].price) and not file:findShopItem(itemID, tab == 8) then
 				self:disable(player)

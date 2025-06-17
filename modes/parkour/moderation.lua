@@ -931,6 +931,7 @@ function roomAnnouncement(player, cmd, quantity, args)
 end
 
 local skinsGeneralActions = { new=1, list=1, inspect=1, ownshop=1 }
+local newSkins = {}
 local function handleSkins(player, cmd, quantity, args)
 	if not ranks.admin[player] then
 		return
@@ -945,13 +946,8 @@ local function handleSkins(player, cmd, quantity, args)
 	local playerName, pdata
 
 	if not skinsGeneralActions[action] then
-		if quantity < 2 then
-			translatedChatMessage("invalid_syntax", player)
-			return
-		end
-
 		playerName = args[1]
-		action = args[2]
+		action = args[2] or "show"
 		pdata = players_file[playerName]
 
 		if not in_room[playerName] or not pdata then
@@ -962,12 +958,15 @@ local function handleSkins(player, cmd, quantity, args)
 	if action == "show" then
 		tfm.exec.chatMessage("Current coins: " .. pdata.coins, player)
 		tfm.exec.chatMessage("Skins: " .. table.concat(pdata.skins, ' '), player)
-		tfm.exec.chatMessage("Powers: " .. table.concat(pdata.powers, ' '), player)
 		tfm.exec.chatMessage("Wearing: " .. table.concat(pdata.cskins, ' '), player)
+		tfm.exec.chatMessage("Powers: " .. table.concat(pdata.powers, ' '), player)
+		tfm.exec.chatMessage("Powuse: " .. table.concat(pdata.powuse, ' '), player)
+		tfm.exec.chatMessage("Current Power: " .. tostring(pdata.cpower), player)
+		tfm.exec.chatMessage("Ownshop/tester: " .. tostring(pdata.ownshop) .. "/" .. tostring(pdata:tester()), player)
 		return
 
 	elseif action == "default" then
-		pdata.cskins = { 1, 2, 7, 28, 46 }
+		pdata:resetEquipped()
 		savePlayerData(playerName)
 		tfm.exec.chatMessage("<v>[#] <j>Current skins set default for " ..playerName, player)
 
@@ -979,27 +978,55 @@ local function handleSkins(player, cmd, quantity, args)
 			tfm.exec.chatMessage("ownshop: " .. tostring(pdata.ownshop), player)
 		end
 
+	elseif action == "tester" then
+		pdata:setTester(args[3] ~= 'no')
+
 	elseif action == "new" then
-		local id = tonumber(args[2])
+		local category = tonumber(args[2])
+		if not category or category < 1 or category > 9 or category == 8 then
+			return tfm.exec.chatMessage("<v>[#] <r>Category must be 1-9 except 8", player)
+		end
+
 		local image = args[3]
 		local testId = tfm.exec.addImage(image, "!1", 0, 0, "Tigrounette")
-		if not id or not testId then
-			return translatedChatMessage("invalid_syntax", player)
+		if not testId then
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid image", player)
 		end
 
-		local objId = tonumber(args[4])
-		objId = objId or default_skins[math.floor(id)] and math.floor(id)
-		objId = objId or default_skins[math.floor(id/100)] and math.floor(id/100)
-		if not objId then
-			return tfm.exec.chatMessage("<v>[#] <r>Missing object id", player)
+		local id
+
+		if newSkins[image] and category == newSkins[image][1] then
+			id = newSkins[image][2]
 		end
 
-		local scale = tonumber(args[5])
-		local x = tonumber(args[6])
-		local y = tonumber(args[7])
+		if not id then
+			id = default_skins_by_cat[category] * 1000
+			while shop_skins[tostring(id)] do
+				id = id + 1
+			end
+		end
 
+		local objId = default_skins_by_cat[category]
+		local scale = tonumber(args[4])
+		local x = tonumber(args[5])
+		local y = tonumber(args[6])
+		local shopScale = tonumber(args[7]) or scale
+		local shopIndex = 1 + #shop_items[category]
+
+		newSkins[image] = { category, id }
 		shop_skins[tostring(id)] = {img=image, id=objId, scale=scale, x=x, y=y}
-		tfm.exec.chatMessage("<v>[#] <j>Added test skin: " .. id, player)
+		shop_items[category][shopIndex] = {
+			id = id,
+			image = image,
+			scale = shopScale,
+			price = -1,
+			hidden = true,
+		}
+		tfm.exec.chatMessage(("<v>[#] <j>Added test skin %s on shop %s, %s"):format(id, category, shopIndex), player)
+
+		pdata = players_file[player]
+		pdata:setTester(true)
+		pdata:equip(category, id)
 
 	elseif action == "inspect" then
 		local id = args[2]
@@ -1021,7 +1048,7 @@ local function handleSkins(player, cmd, quantity, args)
 		printList(list, 20, #list, player)
 		return
 
-	elseif action == "set" then
+	elseif action == "equip" or action == "unequip" or action == "set" then
 		if quantity < 4 then
 			translatedChatMessage("invalid_syntax", player)
 			return
@@ -1034,12 +1061,24 @@ local function handleSkins(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>Invalid index or id", player)
 		end
 
-		if not pdata.cskins[index] then
-			return tfm.exec.chatMessage("<v>[#] <r>Invalid index", player)
+		if action == "unequip" then
+			if not pdata:unequip(index, id) then
+				return tfm.exec.chatMessage("<v>[#] <r>Invalid index", player)
+			end
+		else
+			if action == "set" then
+				pdata:setTester(true)
+			end
+
+			if not pdata:equip(index, id) then
+				return tfm.exec.chatMessage("<v>[#] <r>Invalid index", player)
+			end
 		end
 
-		pdata.cskins[index] = id
-		savePlayerData(playerName)
+		if action ~= "set" then
+			savePlayerData(playerName)
+		end
+
 		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
 
 	elseif action == "add" then
@@ -1053,7 +1092,12 @@ local function handleSkins(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>Invalid id", player)
 		end
 
-		if not pdata:addShopItem(id, args[4] == 'power') then
+		local powerUse = tonumber(args[4])
+		if args[4] and not powerUse or powerUse < 0 then
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid power use", player)
+		end
+
+		if not pdata:addShopItem(id, powerUse) then
 			return tfm.exec.chatMessage("<v>[#] <r>Player already have that skin", player)
 		end
 
@@ -1097,12 +1141,6 @@ local function handleSkins(player, cmd, quantity, args)
 		end
 
 		pdata.coins = pdata.coins + tonumber(selectedSkin.price)
-
-		for i = #pdata.cskins, 1, -1 do
-			if pdata.cskins[i] == tonumber(selectedSkin.id) then
-				pdata.cskins[i] = shop_items[skinType][1].id
-			end
-		end
 
 		savePlayerData(playerName)
 		tfm.exec.chatMessage("<v>[#] <j>Refunded " ..selectedSkin.price.. " coins (" ..skinType.. "/" ..skinNumber..") to the "..playerName, player)

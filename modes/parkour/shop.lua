@@ -1,3 +1,12 @@
+local default_skins_by_cat = {1, 2, 7, 28, 46, 57, 90, 1, 34}
+local default_skins = {}
+
+do
+	for i=1, #default_skins_by_cat do
+		default_skins[default_skins_by_cat[i]] = true
+	end
+end
+
 local shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
 local shop_tab_to_power = { 6, 10, 11, 4, 9, 7, 8, 3, 3 }
 local shop_items = {
