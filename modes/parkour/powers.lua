@@ -410,9 +410,11 @@ powers = {
 			local id = file:getEquipped(8)
 			local power = shop_powers[id]
 			if not power then return end
-			local updated = file:updatePower(id, -1)
-			if updated then
-				savePlayerData(player, true)
+			if not review_mode then
+				local updated = file:updatePower(id, -1)
+				if updated then
+					savePlayerData(player, true)
+				end
 			end
 			return power:fnc(player, key, down, x, y)
 		end
