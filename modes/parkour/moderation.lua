@@ -994,13 +994,16 @@ local function handleSkins(player, cmd, quantity, args)
 		end
 
 		local id
+		local shopIndex
 
 		if newSkins[image] and category == newSkins[image][1] then
 			id = newSkins[image][2]
+			shopIndex = newSkins[image][3]
 		end
 
 		if not id then
 			id = default_skins_by_cat[category] * 1000
+			shopIndex = 1 + #shop_items[category]
 			while shop_skins[tostring(id)] do
 				id = id + 1
 			end
@@ -1011,9 +1014,8 @@ local function handleSkins(player, cmd, quantity, args)
 		local x = tonumber(args[5])
 		local y = tonumber(args[6])
 		local shopScale = tonumber(args[7]) or scale
-		local shopIndex = 1 + #shop_items[category]
 
-		newSkins[image] = { category, id }
+		newSkins[image] = { category, id, shopIndex }
 		shop_skins[tostring(id)] = {img=image, id=objId, scale=scale, x=x, y=y}
 		shop_items[category][shopIndex] = {
 			id = id,
