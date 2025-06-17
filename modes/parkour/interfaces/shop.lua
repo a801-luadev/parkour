@@ -7,6 +7,7 @@ do
 	local consumableTAs = {}
 	local refundMode = newSessionTable()
 	local confirmIndex = newSessionTable()
+	local lastPageTab = newSessionTable()
 
 	for i=1, 18 do
 		priceTAs[i] = allocateId("textarea", 30000)
@@ -33,8 +34,13 @@ do
 		:loadTemplate(WindowBackground)
 		:setShowCheck(function(self, player, page, tab, data)
 			if not data then
+				local pagetab = lastPageTab[player]
+				if pagetab then
+					tab = pagetab % 100
+					page = math.floor(pagetab / 100)
+				end
 				confirmIndex[player] = nil
-				self:show(player, 1, 1, filterShopItems(player, 1, { _len=0 }))
+				self:show(player, page or 1, tab or 1, filterShopItems(player, tab or 1, { _len=0 }))
 				return false
 			end
 			return true
@@ -259,6 +265,12 @@ do
 			if isSave[player] then
 				savePlayerData(player)
 				isSave[player] = nil
+			end
+
+			local page = self.args[player][1]
+			local tab = self.args[player][2]
+			if page and tab then
+				lastPageTab[player] = page * 100 + tab
 			end
 
 			for index = 1, 18 do
