@@ -333,13 +333,12 @@ local pdataFunctions = {}
 pdataFunctions.__index = pdataFunctions
 
 do
-	-- weak keys so it gets deleted when pdata is not referenced anywhere else
 	local _cache = {
-		powers = setmetatable({}, { __mode = "k" }),
-		skins = setmetatable({}, { __mode = "k" }),
-		cskins = setmetatable({}, { __mode = "k" }),
+		powers = newSessionTable(players_file),
+		skins = newSessionTable(players_file),
+		cskins = newSessionTable(players_file),
 	}
-	local testskins = setmetatable({}, { __mode = "k" })
+	local testskins = newSessionTable(players_file)
 
 	local function refreshCache(file, key, start)
 		local cache = start and _cache[key][file]
