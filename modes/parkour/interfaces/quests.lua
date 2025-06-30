@@ -99,7 +99,7 @@ do
 			width = 120, height = 40,
 			canUpdate = true,
 			text = function(self, player, page)
-				local currentTime = os.time() + 60 * 60 * 1000
+				local currentTime = os.time()
 				local reset_time = getQuestsResetTime() -- reset_time = {last_daily_reset, last_weekly_reset, next_daily_reset, next_weekly_reset}
 
 				local day = 24 * 60 * 60 * 1000

@@ -645,23 +645,17 @@ do
 end
 
 function getQuestsResetTime()
-	local currentTime = os.time() + 60 * 60 * 1000
-	local currentDate = os.date("*t", os.time() / 1000)
-	local day = 24 * 60 * 60 * 1000
+	local ts = os.time()
+	local a_day = 24 * 60 * 60 * 1000
+	local a_week = 7 * a_day
 
-	currentDate.wday = currentDate.wday - 2
+	local last_daily_reset = WEEKLY_RESET_INIT + a_day * math.floor((ts - WEEKLY_RESET_INIT) / a_day)
+	local next_daily_reset = last_daily_reset + a_day
 
-	if currentDate.wday == -1 then
-		currentDate.wday = 6
-	end
+	local last_weekly_reset = WEEKLY_RESET_INIT + a_week * math.floor((ts - WEEKLY_RESET_INIT) / a_week)
+	local next_weekly_reset = last_weekly_reset + a_week
 
-	local last_daily_reset = math.floor(currentTime / day) * day
-	local next_daily_reset = math.ceil(currentTime / day) * day
-
-	local last_weekly_reset = last_daily_reset - currentDate.wday * day
-	local next_weekly_reset = last_weekly_reset + 7 * day
-
-	local reset_times = {last_daily_reset - 60 * 60 * 1000, last_weekly_reset - 60 * 60 * 1000, next_daily_reset, next_weekly_reset}
+	local reset_times = {last_daily_reset, last_weekly_reset, next_daily_reset, next_weekly_reset}
 
 	return reset_times
 end

@@ -124,6 +124,9 @@ onEvent("GameDataLoaded", function(data)
 	end
 
 	if data.weekly then
+		weeklyfile = data.weekly
+		weekleaderboard = data.weekly.ranks
+
 		local ts = os.time() --+ 60 * 60 * 1000
 		local file_reset = tonumber(data.weekly.ts) or WEEKLY_RESET_INIT
 		local a_day = 24 * 60 * 60 * 1000
@@ -163,9 +166,6 @@ onEvent("GameDataLoaded", function(data)
 
 			tfm.exec.chatMessage("<j>The weekly leaderboard has been reset.")
 		end
-
-		weeklyfile = data.weekly
-		weekleaderboard = data.weekly.ranks
 
 		checkPlayersPosition(1)
 	end
