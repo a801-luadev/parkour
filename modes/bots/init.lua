@@ -309,7 +309,7 @@ onEvent("FileLoaded", function(file, raw_data)
 		return
 	end
 
-	local data = manager:load(raw_data)
+	local data = manager:load(raw_data, true)
 	local reason, operation
 
 	for i=1, #file_updates do

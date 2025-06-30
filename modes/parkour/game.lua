@@ -6,7 +6,6 @@ local actual_player_count = 0
 local victory_count = 0
 local less_time = false
 local victory = {_last_level = {}}
-local bans = {}
 local in_room = {}
 local online = {}
 local hidden = {}
@@ -973,16 +972,8 @@ end)
 
 onEvent("GameDataLoaded", function(data)
 	if data.sanction then
-		local oldBans = bans
-		bans = {}
-		for pid, value in pairs(data.sanction) do
-			if value and value.time then
-				if value.time == 1 or value.time == 2 or os.time() < value.time then
-					bans[tonumber(pid)] = value.timestamp
-				end
-			end
-		end
-
+		if bans == data then return end
+		bans = data
 		for player, data in next, room.playerList do
 			if in_room[player] then
 				if bans[data.id] then
@@ -990,8 +981,6 @@ onEvent("GameDataLoaded", function(data)
 						AfkInterface:remove(player)
 					end
 					enableSpecMode(player, true)
-				elseif oldBans[data.id] then
-					enableSpecMode(player, false)
 				end
 			end
 		end

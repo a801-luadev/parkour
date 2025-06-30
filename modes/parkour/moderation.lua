@@ -116,7 +116,7 @@ onEvent("GameDataLoaded", function(data, fileid)
 
 					savePlayerData(player)
 
-					local minutes = pdata.banned and math.floor((pdata.banned - os.time()) / 1000 / 60)
+					local minutes = pdata.banned and math.ceil((pdata.banned - os.time()) / 1000 / 60)
                     if ranks.hidden[pdata.bannedby] then
                         for moderator in pairs(room.playerList) do
                             if ranks.admin[moderator] or ranks.mod[moderator] then
@@ -130,16 +130,14 @@ onEvent("GameDataLoaded", function(data, fileid)
 
 				if pdata.banned and (pdata.banned == 2 or os.time() < pdata.banned) then
 					if not banInfo then
-						local sanctionLevel = pdata.banned == 2 and 4 or 1
-                        data.sanction[tostring(id)] = {
-                            timestamp = 0,
-                            time = pdata.banned,
-                            info = 0,
-							level = sanctionLevel,
-                        }
-                        save = true
-                    end
-					
+						data:setSanction(id, {
+							timestamp = 0,
+							time = pdata.banned,
+							level = pdata.banned == 2 and 4 or 1,
+						})
+						save = true
+					end
+
 					if pdata.banned == 2 then
 						translatedChatMessage("permbanned", player)
 					else
@@ -212,18 +210,16 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 			minutes = 0
 		end
 
-		local mod_index = table_find(data.mods, moderator)
-		if not mod_index then
-			mod_index = 1 + #data.mods
-			data.mods[mod_index] = moderador
+		if time == 0 and in_room[playerName] then
+			enableSpecMode(playerName, false)
 		end
 
-		data.sanction[playerID] = {
+		data:setSanction(playerID, {
 			timestamp = now,
 			time = time,
-			info = mod_index,
+			info = moderator,
 			level = sanctionLevel
-		}
+		})
 
 		sendPacket(
 			"common",
@@ -876,12 +872,8 @@ printSanctionList = function(player, targetID, page)
 		if not targetID then
 			local page_size = 180
 
-			local playerIDs, len = {}, 0
-			for playerID in next, sanctions_file do
-				len = len + 1
-				playerIDs[len] = playerID
-			end
-			table.sort(playerIDs)
+			local playerIDs = data:sanctionKeys()
+			local len = #playerIDs
 
 			local totalPages = math.ceil(len / page_size)
 
