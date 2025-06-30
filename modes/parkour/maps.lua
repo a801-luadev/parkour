@@ -259,8 +259,8 @@ onEvent("NewGame", function()
 	-- When a map is loaded, this function reads the XML to know where the
 	-- checkpoints are
 
-	levels = {}
-	if not room.xmlMapInfo or tonumber(room.currentMap) or tonumber(room.xmlMapInfo.mapCode) ~= map_code_num then
+	levels = nil
+	if not room.xmlMapInfo or not room.xmlMapInfo.xml or tonumber(room.currentMap) or tonumber(room.xmlMapInfo.mapCode) ~= map_code_num then
 		if not room.xmlMapInfo then
 			return
 		end
@@ -281,6 +281,7 @@ onEvent("NewGame", function()
 	end
 
 	isAieMap = xml:find('aie="')
+	levels = {}
 
 	local properties = getTagProperties(mouse_start)
 	levels[count] = {
