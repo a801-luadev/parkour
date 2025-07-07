@@ -1145,17 +1145,23 @@ local function handleSkins(player, cmd, quantity, args)
 	inGameLogCommand(player, cmd, args)
 end
 
-local function setChristmasMap(player, cmd, quantity, args)
+local function eventDebugCmd(player, cmd, quantity, args)
 	if not ranks.admin[player] then
 		return
 	end
 
-	if not christmas then
-		return tfm.exec.chatMessage('<r>Not in christmas season', player)
+	if quantity < 1 then
+		return tfm.exec.chatMessage('<r>Need event name', player)
 	end
 
-	christmas.nextRound()
-	tfm.exec.chatMessage('Christmas gifts will appear next round', player)
+	local eventName = args[1]
+	local evt = activeEvents[eventName]
+
+	if not evt or not evt.debug then
+		return tfm.exec.chatMessage('<r>Invalid event name', player)
+	end
+
+	evt.debug(player, cmd, quantity, args)
 end
 
 local function disableSnow(player, cmd, quantity, args)
@@ -1586,7 +1592,7 @@ local commandDispatch = {
 	["announcement"] = roomAnnouncement,
 	["skins"] = handleSkins,
 	["coins"] = handleSkins,
-	["christmas"] = setChristmasMap,
+	["event"] = eventDebugCmd,
 	["snow"] = disableSnow,
 	["link"] = linkMouse,
 	["size"] = changeMouseSize,

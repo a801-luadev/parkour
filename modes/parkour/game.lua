@@ -16,6 +16,7 @@ local times = {
 	checkpoint = {},
 	movement = {}
 }
+local activeEvents = {}
 local spec_mode = {}
 local checkpoints = {}
 local players_file
@@ -352,10 +353,6 @@ onEvent("NewPlayer", function(player, init)
 	end
 
 	showStats()
-
-	if christmas then
-		christmas.createGift(player)
-	end
 end)
 
 onEvent("Keyboard", function(player, key)
@@ -602,14 +599,6 @@ onEvent("NewGame", function()
 		tfm.exec.killPlayer(player)
 	end
 	showStats()
-
-	if christmas then
-		if doStatsCount() then
-			christmas.initRound()
-		else
-			christmas.resetRound()
-		end
-	end
 end)
 
 onEvent("Loop", function()
@@ -707,23 +696,6 @@ end)
 
 onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if checkpoint_info.version ~= 1 then return end
-	if christmas and christmas.bonusId == bonus then
-		local prize = christmas.collectGift(player)
-		local pdata = players_file[player]
-		if pdata and prize then
-			pdata.coins = pdata.coins + prize
-			pdata.gifts = math.min(99, (pdata.gifts or 0) + 1)
-			if pdata.gifts == 30 then
-				rewardSkin(player, "bigBox", 200.1) -- ice cube
-			elseif pdata.gifts == 60 then
-				rewardSkin(player, "cloud", 57.1) -- reindeer sleigh
-			elseif pdata.gifts == 90 then
-				rewardSkin(player, "rip", 1028) -- snowy anvil
-			end
-			queueForSave(player)
-		end
-		return
-	end
 	if not levels then return end
 	local level = levels[bonus]
 	if not level then return end

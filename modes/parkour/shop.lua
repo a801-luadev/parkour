@@ -13,7 +13,7 @@ local shop_items = {
 	{ -- smallbox
 		{
 			price = 0,
-			image = christmas and "18c72bd8ad1.png" or "18b59d0c458.png",
+			image = "18b59d0c458.png",
 			id = 1,
 			scale = 0.5,
 		},
@@ -172,7 +172,7 @@ local shop_items = {
 	{ -- bigbox
 		{
 			price = 0,
-			image = christmas and "18c72bd3975.png" or "18b59d0c458.png",
+			image = "18b59d0c458.png",
 			id = 2,
 		},
 		{
@@ -326,7 +326,7 @@ local shop_items = {
 			gifts = 30,
 			image = "img@193c1beb7b2",
 			id = 200.1,
-			hidden = not christmas,
+			hidden = true,
 		},
 		{
 			price = -1,
@@ -344,7 +344,7 @@ local shop_items = {
 	{ -- trampoline
 		{
 			price = 0,
-			image = christmas and "18c72bddd28.png" or "18b2b460ab3.png",
+			image = "18b2b460ab3.png",
 			id = 7,
 		},
 		{
@@ -471,7 +471,7 @@ local shop_items = {
 	{ -- balloon
 		{
 			price = 0,
-			image = christmas and  "18c72bb89a4.png" or "18b31269b0a.png",
+			image = "18b31269b0a.png",
 			id = 28,
 		},
 		{
@@ -665,7 +665,7 @@ local shop_items = {
 	{ -- plank
 		{
 			price = 0,
-			image = christmas and "18c72bfa272.png" or "173db2812bc.png",
+			image = "173db2812bc.png",
 			id = 46,
 		},
 		{
@@ -844,7 +844,7 @@ local shop_items = {
 			image = "img@193b7a44117",
 			id = 57.1,
 			scale = 0.7,
-			hidden = not christmas,
+			hidden = true,
 		},
 	},
 	{ -- tombstone
@@ -885,7 +885,7 @@ local shop_items = {
 			image = "img@193c1e22110",
 			id = 1028,
 			scale = 0.7,
-			hidden = not christmas,
+			hidden = true,
 		},
 		{
 			price = -1,
@@ -913,7 +913,7 @@ local shop_items = {
 			image = "1507c1da0e8.png",
 			id = 2,
 			scale = 0.6,
-			hidden = not christmas,
+			hidden = true,
 		},
 		{
 			price = 10,
@@ -1193,11 +1193,3 @@ shop_skins = {
 	["2859"] = {img = "18b401c4f6e.png", x = 0.5, y = 0.52},
 	["2871"] = {img = "img@19405c9b390", y=0.6},
 }
-
-if christmas then
-	shop_skins["1"] = {img = "18c72bad79e.png", x = 0.5, y = 0.50}
-	shop_skins["2"] = {img = "18c72ba3321.png", x = 0.5, y = 0.50}
-	shop_skins["7"] = {img = "18c72bb2589.png", x = 0.5, y = 0.52}
-	shop_skins["28"] = {img = "18c72bccb7c.png", x = 0.5, y = 0.30}
-	shop_skins["46"] = {img = "18c72ba881a.png", x = 0.5, y = 0.52}
-end

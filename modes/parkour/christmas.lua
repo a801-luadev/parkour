@@ -1,27 +1,52 @@
-local christmas
-
 do
   local day = tonumber(os.date("%d"))
   local month = tonumber(os.date("%m"))
   local is_christmas_time = (month == 12 and day >= 15) or (month == 1 and day <= 15) or force_christmas_debug
 
+  local function findValueTbl(arr, key, val)
+    for i=1, #arr do
+      if arr[i][key] == val then
+        return arr[i]
+      end
+    end
+  end
+
   if is_christmas_time then
-    christmas = {
-      bonusId = 999,
+    shop_skins["1"] = {img = "18c72bad79e.png", x = 0.5, y = 0.50}
+    shop_skins["2"] = {img = "18c72ba3321.png", x = 0.5, y = 0.50}
+    shop_skins["7"] = {img = "18c72bb2589.png", x = 0.5, y = 0.52}
+    shop_skins["28"] = {img = "18c72bccb7c.png", x = 0.5, y = 0.30}
+    shop_skins["46"] = {img = "18c72ba881a.png", x = 0.5, y = 0.52}
+
+    findValueTbl(shop_items[1], "id", 1).image = "18c72bd8ad1.png"
+    findValueTbl(shop_items[2], "id", 2).image = "18c72bd3975.png"
+    findValueTbl(shop_items[3], "id", 7).image = "18c72bddd28.png"
+    findValueTbl(shop_items[4], "id", 28).image = "18c72bb89a4.png"
+    findValueTbl(shop_items[5], "id", 46).image = "18c72bfa272.png"
+
+    findValueTbl(shop_items[2], "id", 200.1).hidden = false
+    findValueTbl(shop_items[6], "id", 57.1).hidden = false
+    findValueTbl(shop_items[7], "id", 1028).hidden = false
+    findValueTbl(shop_items[8], "id", 2).hidden = false
+
+    local christmas = {
+      bonusId = allocateId("bonus", 20000),
       imageName = "18c73e40d6d.png",
       imageTarget = "!999",
       prizes = { 10, 50, 100, 250, 500, 750, 1000, 0 },
       chances = { 8600, 1000, 200, 139, 49, 10, 1, 1 },
     }
+    activeEvents.christmas = christmas
 
     christmas.reset = function()
       christmas.rounds = math.random(2, 4)
       christmas.timestamp = os.time() + math.random(15, 30) * 60 * 1000
     end
 
-    christmas.nextRound = function()
+    christmas.debug = function(player, cmd, quantity, args)
       christmas.rounds = 0
       christmas.timestamp = 0
+      tfm.exec.chatMessage("<J>Christmas gifts will appear next round", player)
     end
 
     christmas.createGift = function(player)
@@ -98,5 +123,37 @@ do
     end
 
     christmas.reset()
+
+    onEvent("NewGame", function()
+      if doStatsCount() then
+        christmas.initRound()
+      else
+        christmas.resetRound()
+      end
+    end)
+
+    onEvent("NewPlayer", function(player, init)
+      christmas.createGift(player)
+    end)
+
+    onEvent("PlayerBonusGrabbed", function(player, bonus)
+      if christmas.bonusId == bonus then
+        local prize = christmas.collectGift(player)
+        local pdata = players_file[player]
+        if pdata and prize then
+          pdata.coins = pdata.coins + prize
+          pdata.gifts = math.min(99, (pdata.gifts or 0) + 1)
+          if pdata.gifts == 30 then
+            rewardSkin(player, "bigBox", 200.1) -- ice cube
+          elseif pdata.gifts == 60 then
+            rewardSkin(player, "cloud", 57.1) -- reindeer sleigh
+          elseif pdata.gifts == 90 then
+            rewardSkin(player, "rip", 1028) -- snowy anvil
+          end
+          queueForSave(player)
+        end
+        return
+      end
+    end)
   end
 end

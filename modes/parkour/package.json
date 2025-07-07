@@ -12,7 +12,6 @@
 
 	{"type": "require-file", "file": "modes/parkour/join-system.lua"},
 
-	{"type": "require-file", "file": "modes/parkour/christmas.lua"},
 	{"type": "require-file", "file": "modes/parkour/shop.lua"},
 
 	{"type": "require-file", "file": "modes/parkour/game.lua"},
@@ -31,6 +30,8 @@
 	{"type": "require-dir", "dir": "modes/parkour/interfaces/requirements", "recursive": false},
 	{"type": "require-dir", "dir": "modes/parkour/interfaces", "recursive": false},
 	{"type": "require-file", "file": "modes/parkour/ui.lua"},
+
+	{"type": "require-file", "file": "modes/parkour/christmas.lua"},
 
 	{"type": "require-file", "file": "modes/parkour/moderation.lua"},
 	{"type": "require-file", "file": "modes/parkour/init.lua"}
