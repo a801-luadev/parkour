@@ -35,6 +35,7 @@ local maps = {
 }
 local current_difficulty = 0
 local maplist_index = 0
+local next_map
 
 for i=1,3 do
 	maps[i] = {
@@ -150,6 +151,13 @@ end
 local function newMap(difficulty)
 	count_stats = not review_mode
 	map_change_cd = os.time() + 20000
+
+	if next_map then
+		current_map = next_map
+		tfm.exec.newGame(next_map)
+		next_map = nil
+		return
+	end
 
 	-- This might break if we move them to different files
 	local map
@@ -274,7 +282,7 @@ onEvent("NewGame", function()
 	end
 
 	local count = 1
-	local mouse_start = string.match(xml, '<DS%s+(.-)%s+/>')
+	local mouse_start = string.match(xml, '<DS%s+(.-)%s*/>')
 
 	if not mouse_start then
 		return invalidMap("mouse_start")
@@ -291,7 +299,7 @@ onEvent("NewGame", function()
 		uncheese = properties.cheese == 0,
 	}
 
-	for tag in string.gmatch(xml, '<O%s+(.-)%s+/>') do
+	for tag in string.gmatch(xml, '<O%s+(.-)%s*/>') do
 		properties = getTagProperties(tag)
 
 		if properties.C == 22 then
@@ -306,7 +314,7 @@ onEvent("NewGame", function()
 	end
 
 	chair_pos = nil
-	for tag in string.gmatch(xml, '<P%s+(.-)%s+/>') do
+	for tag in string.gmatch(xml, '<P%s+(.-)%s*/>') do
 		properties = getTagProperties(tag)
 
 		if properties.T == 19 and properties.C == "329cd2" then
