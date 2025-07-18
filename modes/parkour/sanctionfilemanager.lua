@@ -170,7 +170,8 @@ SanctionFileManager = {
     end,
 
     dump = function(self, data)
-        if data._updated then
+        if data._sanction then
+            if not data._updated then return end
             return table.concat({ os.time(), table.concat(data.mods, "\2"), data._sanction:sub(2, -2) }, "\1")
         end
 

@@ -338,7 +338,9 @@ onEvent("FileLoaded", function(file, raw_data)
 
 	file_updates = nil
 	data = manager:dump(data)
-	system.saveFile(data, file)
+	if data then
+		system.saveFile(data, file)
+	end
 
 	addTextArea(
 		textareas.file_action_status,

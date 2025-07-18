@@ -861,7 +861,9 @@ onEvent("PlayerDataLoaded", function(player, data)
 end)
 
 onEvent("SavingFile", function(id, data)
-	system.saveFile(filemanagers[id]:dump(data), id)
+	local new_data = filemanagers[id]:dump(data)
+	if not new_data then return end
+	system.saveFile(new_data, id)
 end)
 
 onEvent("FileLoaded", function(id, data)
