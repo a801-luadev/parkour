@@ -411,7 +411,7 @@ powers = {
 			local power = shop_powers[id]
 			if not power then return end
 			if not review_mode then
-				local updated = file:updatePower(id, -1)
+				local updated = file:updateItem(id, 8, -1)
 				if updated then
 					savePlayerData(player, true)
 				end

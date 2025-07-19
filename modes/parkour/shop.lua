@@ -7,9 +7,31 @@ do
 	end
 end
 
+local function findValueTbl(arr, key, val)
+	for i=1, #arr do
+		if arr[i][key] == val then
+			return arr[i]
+		end
+	end
+end
+
+local shop_currencies = {
+	-- ec index, image, x, y, scale
+	coins = { 0, "18b2a0bc298.png" },
+	gifts = { 1, "18c73e40d6d.png", 0.5 },
 local shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
+}
+local shop_tabs = { [0]="event", "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
 local shop_tab_to_power = { 6, 10, 11, 4, 9, 7, 8, 3, 3 }
 local shop_items = {
+	[0] = { -- Event
+		{
+			price = 1,
+			image = "18c73e40d6d.png",
+			id = 1,
+			uses = 100,
+		},
+	},
 	{ -- smallbox
 		{
 			price = 0,
@@ -322,11 +344,10 @@ local shop_items = {
 			id = 281,
 		},
 		{
-			price = -1,
-			gifts = 30,
+			price = 30,
+			currency = "gifts",
 			image = "img@193c1beb7b2",
 			id = 200.1,
-			hidden = true,
 		},
 		{
 			price = -1,
@@ -841,10 +862,12 @@ local shop_items = {
 		{
 			price = -1,
 			gifts = 60,
+		{
+			price = 30,
+			currency = "gifts",
 			image = "img@193b7a44117",
 			id = 57.1,
 			scale = 0.7,
-			hidden = true,
 		},
 	},
 	{ -- tombstone
@@ -882,10 +905,12 @@ local shop_items = {
 		{
 			price = -1,
 			gifts = 90,
+		{
+			price = 30,
+			currency = "gifts",
 			image = "img@193c1e22110",
 			id = 1028,
 			scale = 0.7,
-			hidden = true,
 		},
 		{
 			price = -1,

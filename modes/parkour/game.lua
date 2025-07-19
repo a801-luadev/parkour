@@ -118,10 +118,11 @@ end
 
 local function rewardSkin(player, power, id)
 	local pdata = players_file[player]
-	pdata:addShopItem(id)
+	if not pdata or not pdata:addItem(id) then return end
 	for _player in next, in_room do
 		translatedChatMessage("unlocked_skin", _player, player, translatedMessage(power, _player))
 	end
+	return true
 end
 
 function showStats()

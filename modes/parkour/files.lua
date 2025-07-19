@@ -326,6 +326,10 @@ local data_migrations = {
 		end
 
 		data.powuse = powuse
+		data.ec = {data.gifts or 0} -- event coins
+		data.ec[1] = data.ec[1] % 30 -- subtract gifts "spent"
+		if data.ec[1] == 0 then data.ec[1] = nil end
+		data.gifts = nil
 	end,
 }
 
@@ -388,7 +392,16 @@ do
 		end
 	end
 
-	function pdataFunctions.findShopItem(file, id, power)
+	-- category can be nil, 8 or 0
+	function pdataFunctions.findItem(file, id, category)
+		if category == 0 then
+			if not file.ec[id] or file.ec[id] <= 0 then
+				return nil, "ec"
+			end
+			return id, "ec"
+		end
+
+		local power = category == 8
 		local key = power and "powers" or "skins"
 		if power and id == 1 or not power and default_skins[id] or file.ownshop or testskins[file] then
 			return 0, key
@@ -404,43 +417,54 @@ do
 		return cache[id], key
 	end
 
-	function pdataFunctions.addShopItem(file, id, powerUse)
-		if file:findShopItem(id, powerUse) then
+	function pdataFunctions.addItem(file, id, category, amount)
+		if file:findItem(id, category) then
 			return
 		end
 
-		local key = powerUse and "powers" or "skins"
+		if category == 0 then
+			if amount <= 0 then return end
+			file.ec[id] = amount
+			-- fill the gaps
+			for i=1, id do
+				if not file.ec[i] then
+					file.ec[i] = 0
+				end
+			end
+			return true
+		end
+
+		local key = category == 8 and "powers" or "skins"
 
 		table.insert(file[key], id)
 		refreshCache(file, key, #file[key])
 
-		if powerUse then
-			if powerUse == true then powerUse = 0 end
-			table.insert(file.powuse, powerUse)
+		if category == 8 then
+			table.insert(file.powuse, amount or 0)
 		end
 		return true
 	end
 
-	function pdataFunctions.removeShopItem(file, id, power)
-		local index, key = file:findShopItem(id, power)
+	function pdataFunctions.removeItem(file, id, category)
+		if category == 0 then
+			return file:updateItem(id, 0, -file:getItemAmount(id, 0))
+		end
+
+		local index, key = file:findItem(id, category)
 		if not index or index == 0 then
 			return
 		end
 
 		if key == "cskins" then
-			local category
 			local sum = 0
 
 			for i=1, 9 do
 				sum = sum + file.cslen[i]
 				if index <= sum then
-					category = i
+					-- category doesn't match
+					if category ~= i then return end
 					break
 				end
-			end
-
-			if not category then
-				return
 			end
 
 			-- update cslen
@@ -449,35 +473,48 @@ do
 
 		removeCachedIndex(file, key, index)
 
-		if power then
+		if category == 8 then
 			table.remove(file.powuse, index)
 		end
 
 		return true
 	end
 
-	function pdataFunctions.getPowerUse(file, id)
+	function pdataFunctions.getItemAmount(file, id, category)
+		if category == 0 then return file.ec[id] or 0 end
+		if category ~= 8 then return 0 end
+
 		local cache = _cache.powers[file] or refreshCache(file, "powers")
 		local uses = cache[id] and file.powuse[cache[id]]
-		if uses and uses ~= 0 then
-			return uses
-		end
+		return uses or 0
 	end
 
-	function pdataFunctions.updatePower(file, id, useChange)
-		local index = file:findShopItem(id, true)
+	function pdataFunctions.updateItem(file, id, category, useChange)
+		local index = file:findItem(id, category)
 		if index == 0 then return end
 		if not index then
-			if useChange > 0 then
-				return file:addShopItem(id, useChange)
-			end
-			return
+			return file:addItem(id, category, useChange)
 		end
 
-		local uses = file:getPowerUse(id)
-		if not uses then
-			return
+		if not useChange then return end
+
+		local uses = file:getItemAmount(id, category)
+
+		if category == 0 then
+			file.ec[id] = math.max(0, uses + useChange)
+			if file.ec[id] == 0 and id == #file.ec then
+				-- remove fillers
+				for i=id, 1, -1 do
+					if file.ec[i] ~= 0 then break end
+					file.ec[i] = nil
+				end
+			end
+			return true
 		end
+
+		-- shop items other than powers has no amount field
+		-- powers with 0 amount cant be updated
+		if category ~= 8 or uses == 0 then return end
 
 		uses = uses + useChange
 		if uses > 99 then

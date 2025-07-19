@@ -1092,7 +1092,7 @@ local function handleSkins(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>Invalid power use", player)
 		end
 
-		if not pdata:addShopItem(id, powerUse) then
+		if not pdata:addItem(id, powerUse and 8, powerUse) then
 			return tfm.exec.chatMessage("<v>[#] <r>Player already have that skin", player)
 		end
 
@@ -1100,45 +1100,23 @@ local function handleSkins(player, cmd, quantity, args)
 		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
 
 	elseif action == "remove" then
-		if quantity < 3 then
-			translatedChatMessage("invalid_syntax", player)
-			return
-		end
-
-		local id = tonumber(args[3])
-		if not id then
-			return tfm.exec.chatMessage("<v>[#] <r>Invalid id", player)
-		end
-
-		if not pdata:removeShopItem(id, args[4] == 'power') then
-			return tfm.exec.chatMessage("<v>[#] <r>Player doesn't have that skin", player)
-		end
-
-		savePlayerData(playerName)
-		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
-
-	elseif action == "refund" then
 		if quantity < 4 then
 			translatedChatMessage("invalid_syntax", player)
 			return
 		end
 
-		local skinType = tonumber(args[3])
-		local skinNumber = tonumber(args[4])
-
-		local selectedSkin = skinType and skinNumber and shop_items[skinType] and shop_items[skinType][skinNumber]
-		if not selectedSkin then
-			return tfm.exec.chatMessage("Invalid skin type or skin number.", player)
+		local category = tonumber(args[3])
+		local id = tonumber(args[4])
+		if not id or not category then
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid category or id", player)
 		end
 
-		if not pdata:removeShopItem(selectedSkin.id) then
+		if not pdata:removeItem(id, category) then
 			return tfm.exec.chatMessage("<v>[#] <r>Player doesn't have that skin", player)
 		end
 
-		pdata.coins = pdata.coins + tonumber(selectedSkin.price)
-
 		savePlayerData(playerName)
-		tfm.exec.chatMessage("<v>[#] <j>Refunded " ..selectedSkin.price.. " coins (" ..skinType.. "/" ..skinNumber..") to the "..playerName, player)
+		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
 
 	end
 
@@ -1151,13 +1129,35 @@ local function eventDebugCmd(player, cmd, quantity, args)
 	end
 
 	if quantity < 1 then
-		return tfm.exec.chatMessage('<r>Need event name', player)
+		return tfm.exec.chatMessage('<r>Need event or player name', player)
 	end
 
-	local eventName = args[1]
-	local evt = activeEvents[eventName]
+	local name = args[1]
+	local evt = activeEvents[name]
 
-	if not evt or not evt.debug then
+	if quantity == 1 then
+		if evt then
+			local rel = '-'
+			if evt.timestamp then
+				rel = math.ceil((evt.timestamp - os.time()) / 1000) / 60
+				rel = ' (in ' .. rel .. ' minutes)'
+			end
+			tfm.exec.chatMessage(
+				'<j>rounds: ' .. tostring(evt.rounds) .. '\n' ..
+				'<j>timestamp: ' .. tostring(evt.timestamp) .. rel,
+				player
+			)
+			return
+		end
+
+		local file = players_file[name]
+		if not file or not file.ec then
+			return tfm.exec.chatMessage('<r>Player not found', player)
+		end
+		return tfm.exec.chatMessage('<j>' .. name .. ' event coins: ' .. table.concat(file.ec, ' '), player)
+	end
+
+	if not evt then
 		return tfm.exec.chatMessage('<r>Invalid event name', player)
 	end
 
