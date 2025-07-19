@@ -32,6 +32,7 @@
 	{"type": "require-file", "file": "modes/parkour/ui.lua"},
 
 	{"type": "require-file", "file": "modes/parkour/christmas.lua"},
+	{"type": "require-file", "file": "modes/parkour/lemonade.lua"},
 
 	{"type": "require-file", "file": "modes/parkour/moderation.lua"},
 	{"type": "require-file", "file": "modes/parkour/init.lua"}

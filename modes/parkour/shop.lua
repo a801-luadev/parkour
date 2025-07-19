@@ -19,7 +19,11 @@ local shop_currencies = {
 	-- ec index, image, x, y, scale
 	coins = { 0, "18b2a0bc298.png" },
 	gifts = { 1, "18c73e40d6d.png", 0.5 },
-local shop_tabs = { "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
+	lemonade = { 2, "img@198008a0320" },
+	ice = { 3, "img@197ed411401" },
+	sugar = { 4, "img@197ed41077c" },
+	water = { 5, "img@197ed410214" },
+	lemon = { 6, "img@197ed3a7e0a" },
 }
 local shop_tabs = { [0]="event", "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
 local shop_tab_to_power = { 6, 10, 11, 4, 9, 7, 8, 3, 3 }
@@ -29,6 +33,36 @@ local shop_items = {
 			price = 1,
 			image = "18c73e40d6d.png",
 			id = 1,
+			uses = 100,
+		},
+		{
+			price = 1,
+			image = "img@197ed411401",
+			id = 3,
+			uses = 10,
+		},
+		{
+			price = 1,
+			image = "img@197ed41077c",
+			id = 4,
+			uses = 10,
+		},
+		{
+			price = 1,
+			image = "img@197ed410214",
+			id = 5,
+			uses = 10,
+		},
+		{
+			price = 1,
+			image = "img@197ed3a7e0a",
+			id = 6,
+			uses = 10,
+		},
+		{
+			price = 5,
+			image = "img@198008a0cb4",
+			id = 2,
 			uses = 100,
 		},
 	},
@@ -682,6 +716,12 @@ local shop_items = {
 			id = 28.5,
 			hidden = true,
 		},
+		{
+			price = 10,
+			currency = "lemonade",
+			image = "img@197ed06bf10",
+			id = 28.12,
+		},
 	},
 	{ -- plank
 		{
@@ -860,8 +900,12 @@ local shop_items = {
 			scale = 0.7,
 		},
 		{
-			price = -1,
-			gifts = 60,
+			price = 20,
+			currency = "lemonade",
+			image = "img@197ed06d073",
+			id = 57.16,
+			scale = 0.7,
+		},
 		{
 			price = 30,
 			currency = "gifts",
@@ -903,8 +947,12 @@ local shop_items = {
 			id = 90.3,
 		},
 		{
-			price = -1,
-			gifts = 90,
+			price = 30,
+			currency = "lemonade",
+			image = "img@197ecff508b",
+			id = 90.8,
+			scale = 0.7,
+		},
 		{
 			price = 30,
 			currency = "gifts",
@@ -1058,6 +1106,7 @@ shop_skins = {
 	["28.8"] = {img="img@195a2571468"},
 	["28.9"] = {img="img@1975793006f"},
 	["28.11"] = {img="img@19758475406"},
+	["28.12"] = {img="img@197ed06bf10"},
 
 	["34.1"] = {img="169169d8479.png", id=34, scale=0.5},
 	["34.2"] = {img="img@193c5d9f045", id=34},
@@ -1086,6 +1135,7 @@ shop_skins = {
 	["57.13"] = {img="img@1968a228731", id=57},
 	["57.14"] = {img="img@19784b8916b", id=57, x=0.5, y=0.6, scale=0.92},
 	["57.15"] = {img="img@1974d859e00", id=57},
+	["57.16"] = {img="img@197ed06d073"},
 
 	["90.1"] = {img="img@196b352834b", id=90, y=0.55},
 	["90.2"] = {img="img@196b35d55d8", id=90, y=0.4, size=1.2},
@@ -1094,6 +1144,7 @@ shop_skins = {
 	["90.5"] = {img="17123822449.png", id=90},
 	["90.6"] = {img="img@196b3750757", id=90},
 	["90.7"] = {img="img@196b59ef6a3", id=90, scale=0.75},
+	["90.8"] = {img="img@197ecff508b", y=0.55},
 
 	["100.1"] = {img="img@193cd8077a3", id=1, scale=0.25, y=0.7},
 	["100.2"] = {img="18c73e40d6d.png", id=1},

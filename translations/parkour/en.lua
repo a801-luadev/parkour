@@ -119,6 +119,20 @@ translations.en = {
 	found_gift4 = "<ch>Congratulations to <J>%s</J> on winning <J>%s</J> coins! The Christmas spirit is shining bright!",
 	found_gift5 = "<ch>Santa's gift has bestowed <J>%s</J> with <J>%s</J> dazzling coins!",
 
+	-- Lemonade
+	lemonade_welcome = "<j>Welcome to the Lemonade Festival! Ready to cool off? Gather the ingredients, figure out how to make lemonade, and grab some awesome rewards!",
+	lemonade_ice = "<ch>Can you feel the chill? Looks like some ice cubes are hiding! Time to bring the cool and give your lemonade a refreshing boost!",
+	lemonade_sugar = "<ch>How about sweetening things up a bit? Come on, let's find some sugar!",
+	lemonade_lemon = "<ch>Yellow alert! A lemon has made a great escape from the basket! Hurry — without it, the lemonade's just not the same!",
+	lemonade_water = "<ch>Water — the unsung hero of lemonade — has gone missing. Let's find it and bring that lemonade to life!",
+	lemonade_badge = "<v>[#] <N>Whew, it's really hot out here. If you bring me 40 lemonades, this Badge is all yours!",
+	lemonade_rip = "<v>[#] <N>Bring me 30 lemonades and I'll hand over this Tombstone skin!",
+	lemonade_balloon = "<v>[#] <N>Hey there! Want a balloon? Then bring me 10 lemonades!",
+	lemonade_cloud = "<v>[#] <N>This Cloud doesn't look like it's raining anytime soon. Want it? Then bring me 20 lemonades!",
+	lemonade_insufficient = "<v>[#] <r>Hmm, something's off. Mind checking your bag again?",
+	lemonade_found = "<v>[#] <j>Sweet! Another step closer to making awesome lemonade!",
+	lemonade_toomuch = "<v>[#] <r>You've collected plenty of this for lemonade. Maybe use some first?",
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
 	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\n" ..
@@ -189,6 +203,7 @@ translations.en = {
 	help_badge_21 = "This player has got the fastest time in 30 maps.",
 	help_badge_22 = "This player has got the fastest time in 35 maps.",
 	help_badge_23 = "This player has got the fastest time in 40 maps.",
+	help_badge_24 = "This player has bought this badge in Lemonade Festival.",
 	make_public = "make public",
 	make_private = "make private",
 	moderators = "Moderators",
@@ -227,7 +242,7 @@ translations.en = {
 	saving = "<p align='right'>Saving...",
 	new_image = "<J>Your appearance has been changed. You can turn it back to normal by typing !image",
 	smol_best = "<j>New smol mode room leader: <v>%s</v> with <vp>%s</vp> map completions!",
-	event = "EVENT",
+	event = "Event",
 	settings = "Settings",
 
 	-- Power names

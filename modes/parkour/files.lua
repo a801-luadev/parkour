@@ -83,6 +83,9 @@ badges = { -- badge id, small image, big image
 		{22, "1755bac4ab9.png", "1755bac1ed3.png"}, -- 35
 		{23, "1755bacbdd6.png", "1755bac996d.png"}, -- 40
 	},
+	[7] = { -- Lemonade Event
+		{24, "img@197eae1e011", "img@197eae1cec8"},
+	},
 }
 titles = {
 	piglet = {

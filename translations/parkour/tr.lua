@@ -63,7 +63,7 @@ translations.tr = {
 	nohelp = "<r>Kırmızı çizgiyi etkinleştirerek diğerlerine yardım istemediğinizi bildiriyorsunuz. Açmak/kapatmak için <v>F</v> tuşuna basın.",
 	quest_map = "<ch>Görev haritanız @%s burada!",
 	powers_disabled = "<r>Yetenekler bu odada çalışmamaktadır.",
-	event = "ETKINLIK",
+	event = "Etkinlik",
 	settings = "Ayarlar",
 
 	-- Easter Eggs
@@ -124,6 +124,20 @@ translations.tr = {
 	found_gift3 = "<J>%s</J> <ch>şanslı gününde! Yılbaşı hediyesi sayesinde <J>%s</J> coin daha zengin!",
 	found_gift4 = "<ch>Tebrikler, <J>%s</J>! <J>%s</J> coin kazandın!",
 	found_gift5 = "<ch>Muazzam! <J>%s</J>, Noel Baba'nın sürpriz hediyesini açtın ve <J>%s</J> coin kaptın!",
+
+	-- Lemonade
+	lemonade_welcome = "<j>Limonata Festivali'ne hoş geldin! Biraz serinlemeye ne dersin? Malzemeleri topla, limonatayı nasıl yapacağını keşfet ve ödülleri kap!",
+	lemonade_ice = "<ch>Serinliği hissediyor musun? Sanırım bazı buzlar saklanmış! Serinliği çağır, limonatayı canlandır!",
+	lemonade_sugar = "<ch>Ortamı tatlandırmaya ne dersin? Hadi, biraz şeker bul!",
+	lemonade_lemon = "<ch>Sarı alarm! Bir limon, sepetinden kaçtı! Acele et, o olmadan limonata tatsız ve renksiz olur!",
+	lemonade_water = "<ch>Limonatanın gizli kahramanı su, ortadan kayboldu. Hadi, suyu bul ve limonataya hayat ver!",
+	lemonade_badge = "<v>[#] <N>Hey, hava gerçekten çok sıcak. Bana 40 adet limonata getirirsen, bu Rozet senin olabilir!",
+	lemonade_rip = "<v>[#] <N>Eğer 30 adet limonata getirirsen, sana bu Mezar Taşı görünümünü verebilirim.",
+	lemonade_balloon = "<v>[#] <N>Selam! Balon ister misin? o zaman bana 10 adet limonata getir!",
+	lemonade_cloud = "<v>[#] <N>Bu Bulut kesinlikle yağmur yağdırmıyor. Onu ister misin? O zaman bana 20 adet limonata getirmelisin!",
+	lemonade_insufficient = "<v>[#] <r>Sanırım bir şeyler yanlış, çantanı tekrar kontrol eder misin?",
+	lemonade_found = "<v>[#] <j>Harika! Mükemmel bir limonataya bir adım daha yaklaştın!",
+	lemonade_toomuch = "<v>[#] <r>Limonata yapmak için bundan fazlasıyla var. Önce birazını kullan istersen?",
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MODDASIN</b></bv>\nYENİDEN DOĞMAK İÇİN HAREKET ET. </font>\n\n<font size='30'><u><t>Hatırlatıcılar:</t></u></font>\n\n<font size='15'><r>Üzerinde kırmızı çizgi olan oyuncular yardım istemiyordur!\nParkurdaki diğer oyuncuları trollemek/engellemek YASAKTIR!<d>\n<cep><a href='event:discord'>Discord</a></cep>'umuza katıl!\nKodumuza katkıda bulunmak mı istiyorsun? <cep><a href='event:github'>Github depomuza</a></cep> bir bak\nSunacak iyi bir haritanız mı var? <cep><a href='event:map_submission'>Harita öneri başlığımıza</a></cep> gönderin!\nDaha fazla bilgi için<cep><a href='event:forum'>resmi başlığımıza</a></cep> bakın!\nBizi desteklemek için <cep><a href='event:donate'>bağış yap!</a></cep>",
@@ -195,6 +209,7 @@ translations.tr = {
 	help_badge_21 = "Bu oyuncu 30 haritayı en kısa sürede tamamladı.",
 	help_badge_22 = "Bu oyuncu 35 haritayı en kısa sürede tamamladı.",
 	help_badge_23 = "Bu oyuncu 40 haritayı en kısa sürede tamamladı.",
+	help_badge_24 = "Bu oyuncu Limonata Festivalinde bu rozeti satın aldı.",
 	make_public = "herkese açık",
 	make_private = "kişiye özel",
 	moderators = "Moderatörler",
