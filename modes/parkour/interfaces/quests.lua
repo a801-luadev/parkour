@@ -150,7 +150,7 @@ do
 		})
 		:addImage({ -- Coin Image
 			image = "18b29f6977c.png",
-			target = "~8",
+			target = "&1",
 			x = 25, y = 82
 		})
 		:addTextArea({ -- Prize
@@ -201,7 +201,7 @@ do
 				end
 			end,
 			
-			target = "~10",
+			target = "&1",
 			x = 360, y = 95,
 		})
 		:addTextArea({ -- Change TA
@@ -237,7 +237,7 @@ do
 		})
 		:addImage({ -- Coin Image
 			image = "18b29f6977c.png",
-			target = "~8",
+			target = "&1",
 			x = 25, y = 142
 		})
 		:addTextArea({ -- Prize
@@ -288,7 +288,7 @@ do
 				end
 			end,
 			
-			target = "~20",
+			target = "&1",
 			x = 360, y = 155,
 		})
 		:addTextArea({ -- Change TA
@@ -324,7 +324,7 @@ do
 		})
 		:addImage({ -- Coin Image
 			image = "18b29f6977c.png",
-			target = "~8",
+			target = "&1",
 			x = 25, y = 202
 		})
 		:addTextArea({ -- Prize
@@ -375,7 +375,7 @@ do
 				end
 			end,
 			
-			target = "~30",
+			target = "&1",
 			x = 360, y = 215,
 		})
 		:addTextArea({ -- Change TA
@@ -411,7 +411,7 @@ do
 		})
 		:addImage({ -- Coin Image
 			image = "18b29f6977c.png",
-			target = "~8",
+			target = "&1",
 			x = 25, y = 262
 		})
 		:addTextArea({ -- Prize
@@ -462,7 +462,7 @@ do
 				end
 			end,
 			
-			target = "~40",
+			target = "&1",
 			x = 360, y = 275,
 		})
 		:addTextArea({ -- Change TA
