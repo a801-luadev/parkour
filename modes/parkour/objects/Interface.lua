@@ -200,7 +200,10 @@ do
 				data:target_fnc(player, arg1, arg2, arg3, arg4),
 
 				data.x, data.y,
-				player
+				player,
+
+				data.scaleX, data.scaleY, data.rotation, data.alpha,
+				data.anchorX, data.anchorY, data.fadeIn
 			)
 
 			if data.onUpdate then
@@ -266,7 +269,10 @@ do
 					data:target_fnc(player, arg1, arg2, arg3, arg4),
 
 					data.x, data.y,
-					player
+					player,
+
+					data.scaleX, data.scaleY, data.rotation, data.alpha,
+					data.anchorX, data.anchorY, data.fadeIn
 				)
 
 				if data.onUpdate then
