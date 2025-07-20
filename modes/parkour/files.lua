@@ -17,31 +17,31 @@ local power_quest = {}
 local dont_parse_data = {}
 
 local files = {
-	--[[
-		File values:
-
-		- ranks       (1)
-		- maps        (1)
-		- maps2        (1)
-		- maps3        (1)
-
-		- ranking     (2)
-		- weekly      (2)
-
-		- sanction    (3)
-	]]
-
-	[1] = 40, -- ranks, maps, maps2, maps3
-	[2] = 21, -- ranking, weekly
-	[3] = 43, -- sanction
+	init = 40, -- ranks, maps, maps2, maps3
+	leaderboard = 21, -- ranking, weekly
+	sanction = 43, -- sanction
+	npc = 51, -- npc, xml
 }
+local scheduleFile
 
 do
-local total_files = 3
-local file_index = 1
 local settings_length = 9
-local file_id = files[file_index]
-local next_file_load = os.time() + math.random(60500, 90500)
+
+local file_queue = { files.init, files.leaderboard, files.sanction }
+local file_schedule
+local total_files = #file_queue
+local file_index = 1
+local next_file_load
+
+local function scheduleFile(name)
+	if not files[name] then return end
+	if file_schedule then
+		file_schedule[name] = true
+	else
+		file_schedule = {[name] = true}
+	end
+	return true
+end
 
 badges = { -- badge id, small image, big image
 	[1] = { -- former staff
@@ -914,20 +914,32 @@ end)
 onEvent("Loop", function()
 	local now = os.time()
 	if now >= next_file_load then
+		local file_id
+		if file_schedule then
+			for name in next, file_schedule do
+				file_id = files[name]
+				file_schedule[name] = nil
+				break
+			end
+			if not next(file_schedule) then
+				file_schedule = nil
+			end
+		end
+		if not file_id then
+			file_id = file_queue[file_index]
+			file_index = file_index % total_files + 1
+		end
 		system.loadFile(file_id)
 		next_file_load = now + math.random(10500, 13000)
-		file_index = file_index % total_files + 1
-		file_id = files[file_index]
 	end
 end)
 
 onEvent("GameStart", function()
-	system.loadFile(file_id)
+	system.loadFile(file_queue[file_index])
 	local ts = os.time()
 
 	next_file_load = ts + math.random(10500, 15500)
 	file_index = file_index % total_files + 1
-	file_id = files[file_index]
 
 	-- os.date is weird in tfm, *t accepts seconds, %d/%m/%Y accepts ms
 	-- so we just don't use it here

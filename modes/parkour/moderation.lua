@@ -51,7 +51,7 @@ local function checkWeeklyWinners(player, data)
 		savePlayerData(player, true)
 	end
 
-	schedule(2, true, function(filedata)
+	schedule("leaderboard", true, function(filedata)
 		filedata.weekly.wl[id] = nil
 	end)
 end
@@ -168,7 +168,7 @@ local function playerDataRequests(player, data)
 end
 
 local function updateSanctions(playerID, playerName, time, moderator, minutes)
-	schedule(3, true, function(data)
+	schedule("sanction", true, function(data)
 		local now = os.time()
 
 		playerID = tostring(playerID)
@@ -407,7 +407,7 @@ local function handleMap(player, cmd, quantity, args)
 
 	table.sort(indexList)
 	tfm.exec.chatMessage("<v>[#] <j>Scheduled and map update job.", player)
-	schedule(1, true, function(data)
+	schedule("init", true, function(data)
 		local rotation_table = data[rotation]
 
 		if addmap then
@@ -526,7 +526,7 @@ local function handleSanctions(player, cmd, quantity, args)
 			inGameLogCommand(player, cmd, args)
 
 			tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
-			schedule(3, true, function(data)
+			schedule("sanction", true, function(data)
 				local file = data.sanction and data.sanction[targetID]
 				if not file or not file.level or file.level == 0 then
 					tfm.exec.chatMessage(
@@ -580,7 +580,7 @@ local function handleSanctions(player, cmd, quantity, args)
 
 			if not targetID and pdata.playerid then
 				targetID = pdata.playerid
-				local is_cached = schedule(3, false, function(data)
+				local is_cached = schedule("sanction", false, function(data)
 					local file = data and data.sanction and data.sanction[targetID]
 					if not file then
 						tfm.exec.chatMessage(
@@ -617,7 +617,7 @@ local function handleSanctions(player, cmd, quantity, args)
 	end
 
 	if targetID then
-		local is_cached = schedule(3, false, function(data)
+		local is_cached = schedule("sanction", false, function(data)
 			local file = data and data.sanction and data.sanction[targetID]
 			if not file then
 				tfm.exec.chatMessage(
@@ -746,7 +746,7 @@ local function handleSetrank(player, cmd, quantity, args)
 		tfm.exec.chatMessage("<v>[#] <r>Ranks has been set.", player)
 	end
 
-	schedule(1, true, function(data)
+	schedule("init", true, function(data)
 		data.ranks[targetPlayer] = ID
 	end)
 	logCommand(player, cmd, quantity, args)
@@ -867,7 +867,7 @@ local function fileActions(player, cmd, quantity, args)
 end
 
 printSanctionList = function(player, targetID, page)
-	local is_cached = schedule(3, false, function(data)
+	local is_cached = schedule("sanction", false, function(data)
 		local sanctions_file = data.sanction
 		if not targetID then
 			local page_size = 180
@@ -886,6 +886,7 @@ printSanctionList = function(player, targetID, page)
 			local endIndex = math.min(startIndex + page_size - 1, len)
 			local message = table.concat(playerIDs, ', ', startIndex, endIndex)
 
+			tfm.exec.chatMessage("<v>[#] <j>Count: " .. len, player)
 			tfm.exec.chatMessage("<v>[#] <j>" ..message, player)
 		else
 			if not tonumber(targetID) then
