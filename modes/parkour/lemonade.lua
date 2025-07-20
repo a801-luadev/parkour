@@ -1,7 +1,7 @@
 do
   local day = tonumber(os.date("%d"))
   local month = tonumber(os.date("%m"))
-  local is_lemonade_time = (month == 7 and day >= 15) or (month == 8 and day <= 15) or force_lemonade_debug
+  local is_lemonade_time = (month == 7 and day >= 23) or month == 8 or force_lemonade_debug
 
   if is_lemonade_time then
     local WAIT, COLLECT, TRADE = 0, 1, 2
@@ -27,7 +27,8 @@ do
         "img@198241a4666", -- ice
       },
       countTA = {
-        [2] = { 655, 395 },
+        -- x, y, id, width
+        [2] = { 650, 395, nil, 40 },
         [3] = { 817, 390 },
         [4] = { 471, 395 },
         [5] = { 791, 380 },
@@ -42,7 +43,6 @@ do
         ice = { 5, 3, 824, 410, 24, 34 },
         glass = { 6, nil, 704, 417, 23, 28 },
       },
-      buyButton = allocateId("textarea", 40000),
       npcs = {
         Askosu = {
           x = 1085,
@@ -50,12 +50,9 @@ do
           title = 537,
           look = "290;0,46,151,0,0,116_edc5c4+edc5c4+edc5c4,75_17110b+17110b+ffffff+f7ccdd+f1c6c9+e6b3b7,12,109_ffc862+ffd588+ffc862+f1d49f+6b3c2f+fefefe+e8796c,0,0,0",
           reward = "balloon",
+          right_image = "img@197ed06bf10",
           itemID = 28.12,
           price = 10,
-          buyX = 1090,
-          buyY = 410,
-          interactive = true,
-          lookAtPlayer = true,
         },
         Tascion = {
           x = 1287,
@@ -63,12 +60,9 @@ do
           title = 104,
           look = "172;0,0,113_a3d7fc+b3e2ff+c7e5f7+c7e5f7+dcf1ff+dcf1ff+dcf1ff,0,0,130_afe0ff+bfe5ff+fafafa+bfe6ff+ebf6ff+bfe6ff+bfe6ff,69_c7e5f7+8fd0ff+e9f6ff+a2d7fc+c7e5f7+a2d7fc,2,78,0,0,0",
           reward = "cloud",
+          right_image = "img@197ed06d073",
           itemID = 57.16,
           price = 20,
-          buyX = 1190,
-          buyY = 115,
-          interactive = true,
-          lookAtPlayer = true,
         },
         Lays = {
           x = 430,
@@ -76,12 +70,9 @@ do
           title = 212,
           look = "8;12_f8a500+f8a500+f8a500+f8a500+f8a500+f8a500,0,18,24,0,0,0,5,9_e07323+3d1f07,0,0,0",
           reward = "rip",
+          right_image = "img@197ecff508b",
           itemID = 90.8,
           price = 30,
-          buyX = 360,
-          buyY = 545,
-          interactive = true,
-          lookAtPlayer = true,
         },
         Jaw = {
           x = 120,
@@ -89,13 +80,10 @@ do
           title = 509,
           look = "159;127_f9683f+fff0e2,52_f9683f+ffff00+e0cae0+7343cb+dddddd+eaddea+7343cb+ffff00+895bac,0,0,0,0,0,0,45_f9683f+ffffff+f9683f+efefef+f9683f+eeeeee+f9683f,0,0,0",
           reward = "badge",
+          right_image = "img@197eae1cec8",
           badgeGroup = 7,
           badge = 1,
           price = 40,
-          buyX = 130,
-          buyY = 485,
-          interactive = true,
-          lookAtPlayer = true,
         },
       },
     }
@@ -115,6 +103,20 @@ do
     for i=1, 3 do
       lemonade.bonus_rev[i] = allocateId("bonus", 20000)
       lemonade.bonus[lemonade.bonus_rev[i]] = i
+    end
+
+    -- prepare npc definitions
+    for name, def in next, lemonade.npcs do
+      def.name = name
+      def.message = "lemonade_" .. def.reward
+      def.button = "buy"
+      def.interactive = true
+      def.lookAtPlayer = true
+      def.left_disabled = true
+      def.left_image = "img@198008a0cb4"
+      def.left_amount = def.price
+      def.right_amount = "1"
+      def.right_button = "buy"
     end
 
     local xml = [[<C><P L="1500" H="600" PKAUTHOR="Lemonade Festival"/><Z><S><S T="0" X="750" Y="545" L="1502" H="10" P="0,0,0.3,0.2,0,0,0,0" N="" m=""/><S T="12" X="748" Y="274" L="1495" H="546" P="0,0,0.3,0.2,0,0,0,0" o="324650" c="4" i="0,0,197c77274f0.png"/><S T="0" X="-5" Y="263" L="11" H="568" P="0,0,0.3,0.2,0,0,0,0" m=""/><S T="4" X="517" Y="479" L="33" H="10" P="0,0,20,0.2,0,0,0,0" m=""/><S T="4" X="560" Y="479" L="34" H="10" P="0,0,20,0.2,0,0,0,0" m=""/><S T="4" X="626" Y="479" L="33" H="10" P="0,0,20,0.2,0,0,0,0" m=""/><S T="4" X="692" Y="479" L="32" H="10" P="0,0,20,0.2,0,0,0,0" m=""/><S T="4" X="769" Y="479" L="68" H="10" P="0,0,20,0.2,0,0,0,0" m=""/><S T="0" X="666" Y="310" L="269" H="48" P="0,0,0.3,0.2,0,0,0,0" m=""/><S T="13" X="347" Y="517" L="10" P="0,0,0.3,0.2,0,0,0,0" o="324650" m=""/><S T="16" X="348" Y="529" L="38" H="17" P="0,0,0.3,0.2,0,0,0,0" m=""/><S T="16" X="256" Y="374" L="10" H="116" P="0,0,0.3,0.2,55,0,0,0" m=""/><S T="16" X="311" Y="404" L="10" H="206" P="0,0,0.3,0.2,90,0,0,0" m=""/><S T="16" X="355" Y="369" L="10" H="128" P="0,0,0.3,0.2,120,0,0,0" m=""/><S T="16" X="305" Y="331" L="10" H="20" P="0,0,0.3,0.2,0,0,0,0" m=""/><S T="4" X="1040" Y="264" L="10" H="401" P="0,0,20,0.2,0,0,0,0" m=""/><S T="0" X="1140" Y="520" L="156" H="10" P="0,0,0.3,0.2,0,0,0,0" m=""/><S T="0" X="1338" Y="520" L="153" H="10" P="0,0,0.3,0.2,0,0,0,0" m=""/><S T="0" X="1507" Y="265" L="10" H="573" P="0,0,0.3,0.2,0,0,0,0" m=""/><S T="12" X="750" Y="-40" L="1500" H="70" P="0,0,0.3,0.2,0,0,0,0" o="6A7495" N=""/><S T="4" X="331" Y="223" L="10" H="238" P="0,0,20,0.2,0,0,0,0" m=""/><S T="13" X="1129" Y="379" L="21" P="0,0,0.3,0.5,0,0,0,0" o="324650" m=""/><S T="13" X="1254" Y="116" L="26" P="0,0,0.3,0.2,0,0,0,0" o="324650" m=""/><S T="13" X="1232" Y="106" L="26" P="0,0,0.3,0.2,0,0,0,0" o="324650" m=""/><S T="13" X="1217" Y="121" L="26" P="0,0,0.3,0.2,0,0,0,0" o="324650" m=""/><S T="13" X="1205" Y="113" L="26" P="0,0,0.3,0.2,0,0,0,0" o="324650" m=""/></S><D><P X="142" Y="519" T="68" P="0,0"/><P X="157" Y="519" T="68" P="0,0"/><P X="800" Y="-15" T="19" C="329cd2" P="0,0"/><DS X="1454" Y="524"/></D><O><O X="600" Y="-40" C="22" P="0"/></O><L/></Z></C>]]
@@ -184,6 +186,7 @@ do
             tfm.exec.addBonus(0, item.x, item.y, lemonade.bonus_rev[i], 0, false, target)
 
             if not seen[item.i] then
+              seen[item.i] = true
               translatedChatMessage("lemonade_" .. collectible[2], target)
             end
           end
@@ -199,8 +202,8 @@ do
 
         for ecIndex, ta in next, lemonade.countTA do
           ui.addTextArea(
-            ta[3], "<vp><p align='center'><font size='20'>" .. file:getItemAmount(ecIndex, 0),
-            target, ta[1], ta[2], 30, nil, 0, 0, 0, false
+            ta[3], "<vp><p align='center'><font color='#000000' size='18'>" .. file:getItemAmount(ecIndex, 0),
+            target, ta[1], ta[2], ta[4] or 30, nil, 0, 0, 0, false
           )
         end
 
@@ -221,7 +224,7 @@ do
       local ta = lemonade.countTA[ecIndex]
       local file = players_file[target]
       if not ta or not file then return end
-      ui.updateTextArea(ta[3], "<vp><p align='center'><font size='20'>" .. file:getItemAmount(ecIndex, 0), target)
+      ui.updateTextArea(ta[3], "<vp><p align='center'><font color='#000000' size='18'>" .. file:getItemAmount(ecIndex, 0), target)
     end
 
     function lemonade.hideTrade(target)
@@ -231,7 +234,6 @@ do
       for _, ta in next, lemonade.buttonTA do
         ui.removeTextArea(ta[7], target)
       end
-      ui.removeTextArea(lemonade.buyButton, target)
     end
 
     function lemonade.initTrade()
@@ -342,18 +344,19 @@ do
 
     onEvent("TalkToNPC", function(player, npc)
       if lemonade.state ~= TRADE or review_mode then return end
-      if not checkCooldown(player, "npc_" .. npc, 10000) then return end
+      if not checkCooldown(player, "npc_" .. npc, 1000) then return end
 
       local shop = lemonade.npcs[npc]
       local file = players_file[player]
       if not shop or not file then return end
 
-      translatedChatMessage("lemonade_" .. shop.reward, player)
-      ui.addTextArea(
-        lemonade.buyButton,
-        "<vp><font size='20'><a href='event:lemonade_" .. npc .. "'>" .. translatedMessage("buy", player),
-        player, shop.buyX, shop.buyY, nil, nil, 1, 1, 0.7, false
-      )
+      if shop.itemID then
+        if file:findItem(shop.itemID) then return end
+      elseif shop.badgeGroup and shop.badge then
+        if file.badges[shop.badgeGroup] == shop.badge then return end
+      end
+
+      NPCInterface:show(player, shop)
     end)
 
     onEvent("TextAreaCallback", function(id, player, event)
@@ -365,52 +368,52 @@ do
       local file = players_file[player]
       if not file then return end
 
-      if id ~= lemonade.buyButton then
-        local btn = lemonade.buttonTA[param]
-        local p = tfm.get.room.playerList[player]
-        if not btn or not p or btn[7] ~= id then return end
+      local btn = lemonade.buttonTA[param]
+      local p = tfm.get.room.playerList[player]
+      if not btn or not p or btn[7] ~= id then return end
 
-        -- make sure it has the item
-        if btn[2] and file:getItemAmount(btn[2], 0) < 1 then
-          return
-        end
-
-        if lemonade.jug.progress[player] ~= btn[1] then
-          return
-        end
-
-        if lemonade.jug.progress[player] == 6 then
-          lemonade.jug.progress[player] = 1
-          lemonade.renderJug(player)
-
-          if file:getItemAmount(2, 0) > 99 then return end -- limited to 100 lemonades
-
-          -- check ingredients first
-          for i=3, 6 do
-            if file:getItemAmount(i, 0) < 1 then
-              translatedChatMessage("lemonade_insufficient", player)
-              return
-            end
-          end
-
-          -- make sure player receives the lemonade first
-          if not file:updateItem(2, 0, 1) then return end
-
-          -- remove 1 of each ingredient
-          for i=3, 6 do file:updateItem(i, 0, -1) end
-          for i=2, 6 do lemonade.updateCounter(player, i) end
-          return
-        end
-
-        lemonade.jug.progress[player] = lemonade.jug.progress[player] + 1
-        lemonade.renderJug(player)
+      -- make sure it has the item
+      if btn[2] and file:getItemAmount(btn[2], 0) < 1 then
         return
       end
 
-      local shop = lemonade.npcs[param]
+      if lemonade.jug.progress[player] ~= btn[1] then
+        return
+      end
 
-      ui.removeTextArea(lemonade.buyButton, player)
-      if not shop then return end
+      if lemonade.jug.progress[player] == 6 then
+        lemonade.jug.progress[player] = 1
+        lemonade.renderJug(player)
+
+        if file:getItemAmount(2, 0) > 99 then return end -- limited to 100 lemonades
+
+        -- check ingredients first
+        for i=3, 6 do
+          if file:getItemAmount(i, 0) < 1 then
+            translatedChatMessage("lemonade_insufficient", player)
+            return
+          end
+        end
+
+        -- make sure player receives the lemonade first
+        if not file:updateItem(2, 0, 1) then return end
+
+        -- remove 1 of each ingredient
+        for i=3, 6 do file:updateItem(i, 0, -1) end
+        for i=2, 6 do lemonade.updateCounter(player, i) end
+        return
+      end
+
+      lemonade.jug.progress[player] = lemonade.jug.progress[player] + 1
+      lemonade.renderJug(player)
+    end)
+
+    onEvent("TradeNPC", function(player, npc)
+      if lemonade.state ~= TRADE or review_mode then return end
+
+      local shop = lemonade.npcs[npc]
+      local file = players_file[player]
+      if not shop or not file then return end
 
       if file:getItemAmount(2, 0) >= shop.price then
         if shop.itemID then
@@ -428,9 +431,12 @@ do
         file:updateItem(2, 0, -shop.price)
         lemonade.updateCounter(player, 2)
         queueForSave(player)
-      else
-        translatedChatMessage("lemonade_insufficient", player)
 
+        if NPCInterface.open[player] then
+          NPCInterface:remove(player)
+        end
+      else
+        NPCInterface:update(player, shop, "lemonade_insufficient")
       end
     end)
   end

@@ -46,6 +46,9 @@ local function closeAllInterfaces(player)
 	if QuestsInterface.open[player] then
 		QuestsInterface:remove(player)
 	end
+	if NPCInterface.open[player] then
+		NPCInterface:remove(player)
+	end
 end
 
 local function checkProfileRequest(player, data)
