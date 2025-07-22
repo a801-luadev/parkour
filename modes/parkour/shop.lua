@@ -480,8 +480,8 @@ local shop_skins = {
 	id = 28,
 	price = 0,
 	shop_img = '18b31269b0a.png',
-	shop_img_fnc = function(player)
-		if players_file[player] and players_file[player].c >= 400 then
+	shop_img_fnc = function(player, file)
+		if file.c >= 400 then
 			return "173db16a824.png"
 		end
 	end,

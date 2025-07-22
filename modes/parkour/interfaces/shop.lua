@@ -159,6 +159,7 @@ do
 			local y = self.y
 			local item
 			local firstImage
+			local file = players_file[player]
 
 			for index = 1, 18 do
 				if page + index - 1 > data._len then
@@ -166,7 +167,7 @@ do
 				end
 				item = data[page + index - 1]
 				if item then
-					images[index] = tfm.exec.addImage(item.shop_img_fnc and item.shop_img_fnc(player) or item.shop_img or item.img, "&1", x + 30, y + (item.uses and 10 or 0), player, item.shop_scale, item.shop_scale, 0, 1, 0.5, 0.5)
+					images[index] = tfm.exec.addImage(item.shop_img_fnc and file and item.shop_img_fnc(player, file) or item.shop_img or item.img, "&1", x + 30, y + (item.uses and 10 or 0), player, item.shop_scale, item.shop_scale, 0, 1, 0.5, 0.5)
 					x = x + 75
 
 					if index == 9 then
