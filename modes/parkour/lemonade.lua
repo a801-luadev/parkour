@@ -191,6 +191,7 @@ do
           end
         end
       elseif lemonade.state == TRADE then
+        map_name = nil
         ui.setMapName("Lemonade Festival")
 
         local file = players_file[target]
@@ -400,6 +401,7 @@ do
         -- remove 1 of each ingredient
         for i=3, 6 do file:updateItem(i, 0, -1) end
         for i=2, 6 do lemonade.updateCounter(player, i) end
+        queueForSave(player)
         return
       end
 
