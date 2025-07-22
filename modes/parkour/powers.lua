@@ -1199,7 +1199,7 @@ onEvent("PlayerWon", function(player)
 	if bans[ id ] then return end
 	if victory[player] then return end
 	local file = players_file[player]
-	if not file then return end
+	if not file or not levels then return end
 
 	if doStatsCount() then
 		local earned_coins = (is_anniversary and 2 or 1) * current_difficulty
