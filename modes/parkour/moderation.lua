@@ -2,7 +2,7 @@ do
 local to_do = {}
 local pdataRequest = {}
 local cached_files = {
-	[tostring(files[3])] = false,
+	[tostring(files["sanction"])] = false,
 }
 local reported = {}
 
@@ -870,7 +870,7 @@ printSanctionList = function(player, targetID, page)
 	local is_cached = schedule("sanction", false, function(data)
 		local sanctions_file = data.sanction
 		if not targetID then
-			local page_size = 180
+			local page_size = 90
 
 			local playerIDs = data:sanctionKeys()
 			local len = #playerIDs
