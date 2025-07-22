@@ -1092,7 +1092,7 @@ local function handleSkins(player, cmd, quantity, args)
 		end
 
 		local powerUse = tonumber(args[4])
-		if args[4] and not powerUse or powerUse < 0 then
+		if args[4] and (not powerUse or powerUse < 0) then
 			return tfm.exec.chatMessage("<v>[#] <r>Invalid power use", player)
 		end
 
