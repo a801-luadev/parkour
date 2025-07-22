@@ -333,6 +333,15 @@ local data_migrations = {
 		data.ec[1] = data.ec[1] % 30 -- subtract gifts "spent"
 		if data.ec[1] == 0 then data.ec[1] = nil end
 		data.gifts = nil
+
+		-- migrate skin ids
+		local migrate_id
+		for i=1, #data.skins do
+			migrate_id = shop_migrate_ids[tostring(data.skins[i])]
+			if migrate_id then
+				data.skins[i] = migrate_id
+			end
+		end
 	end,
 }
 
@@ -568,12 +577,12 @@ do
 	end
 
 	function pdataFunctions.isEquipped(file, category, id)
-		if category == 8 then
-			return file.cpower == id
-		end
-
 		if testskins[file] and testskins[file][category] then
 			return testskins[file][category] == id
+		end
+
+		if category == 8 then
+			return file.cpower == id
 		end
 
 		-- if the category is not in cskins, it means it is equipped with the default skin
@@ -586,12 +595,12 @@ do
 	end
 
 	function pdataFunctions.getEquipped(file, category)
-		if category == 8 then
-			return file.cpower
-		end
-
 		if testskins[file] and testskins[file][category] then
 			return testskins[file][category]
+		end
+
+		if category == 8 then
+			return file.cpower
 		end
 
 		if file.cslen[category] == 0 then
@@ -610,13 +619,13 @@ do
 	end
 
 	function pdataFunctions.unequip(file, category, id)
-		if category == 8 then
-			file.cpower = default_skins_by_cat[category]
+		if testskins[file] and testskins[file][category] == id then
+			testskins[file][category] = nil
 			return true
 		end
 
-		if testskins[file] and testskins[file][category] == id then
-			testskins[file][category] = nil
+		if category == 8 then
+			file.cpower = default_skins_by_cat[category]
 			return true
 		end
 
@@ -648,13 +657,13 @@ do
 			return
 		end
 
-		if category == 8 then
-			file.cpower = id
+		if testskins[file] then
+			testskins[file][category] = id
 			return true
 		end
 
-		if testskins[file] then
-			testskins[file][category] = id
+		if category == 8 then
+			file.cpower = id
 			return true
 		end
 

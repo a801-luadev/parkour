@@ -49,9 +49,9 @@ do
           y = 500,
           title = 537,
           look = "290;0,46,151,0,0,116_edc5c4+edc5c4+edc5c4,75_17110b+17110b+ffffff+f7ccdd+f1c6c9+e6b3b7,12,109_ffc862+ffd588+ffc862+f1d49f+6b3c2f+fefefe+e8796c,0,0,0",
-          reward = "balloon",
+          message = "lemonade_balloon",
           right_image = "img@197ed06bf10",
-          itemID = 28.12,
+          itemID = 213,
           price = 10,
         },
         Tascion = {
@@ -59,9 +59,9 @@ do
           y = 94,
           title = 104,
           look = "172;0,0,113_a3d7fc+b3e2ff+c7e5f7+c7e5f7+dcf1ff+dcf1ff+dcf1ff,0,0,130_afe0ff+bfe5ff+fafafa+bfe6ff+ebf6ff+bfe6ff+bfe6ff,69_c7e5f7+8fd0ff+e9f6ff+a2d7fc+c7e5f7+a2d7fc,2,78,0,0,0",
-          reward = "cloud",
+          message = "lemonade_cloud",
           right_image = "img@197ed06d073",
-          itemID = 57.16,
+          itemID = 214,
           price = 20,
         },
         Lays = {
@@ -69,9 +69,9 @@ do
           y = 525,
           title = 212,
           look = "8;12_f8a500+f8a500+f8a500+f8a500+f8a500+f8a500,0,18,24,0,0,0,5,9_e07323+3d1f07,0,0,0",
-          reward = "rip",
+          message = "lemonade_rip",
           right_image = "img@197ecff508b",
-          itemID = 90.8,
+          itemID = 215,
           price = 30,
         },
         Jaw = {
@@ -79,7 +79,7 @@ do
           y = 530,
           title = 509,
           look = "159;127_f9683f+fff0e2,52_f9683f+ffff00+e0cae0+7343cb+dddddd+eaddea+7343cb+ffff00+895bac,0,0,0,0,0,0,45_f9683f+ffffff+f9683f+efefef+f9683f+eeeeee+f9683f,0,0,0",
-          reward = "badge",
+          message = "lemonade_badge",
           right_image = "img@197eae1cec8",
           badgeGroup = 7,
           badge = 1,
@@ -108,7 +108,6 @@ do
     -- prepare npc definitions
     for name, def in next, lemonade.npcs do
       def.name = name
-      def.message = "lemonade_" .. def.reward
       def.button = "buy"
       def.interactive = true
       def.lookAtPlayer = true
@@ -417,7 +416,7 @@ do
 
       if file:getItemAmount(2, 0) >= shop.price then
         if shop.itemID then
-          if not rewardSkin(player, shop.reward, shop.itemID) then return end
+          if not rewardSkin(player, shop.itemID) then return end
         elseif shop.badgeGroup and shop.badge then
           if file.badges[shop.badgeGroup] == shop.badge then return end
 

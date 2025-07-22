@@ -98,12 +98,12 @@ function checkCooldown(player, name, long, img, scale, show)
 	return true
 end
 
-local function despawnableObject(when, id, ...)
-	if not id then return end
-	local skin = shop_skins[tostring(id)]
-	local obj = addShamanObject(math.floor(skin and skin.id or id), ...)
+local function despawnableObject(when, id, skinID, ...)
+	if not id and not skinID then return end
+	local skin = skinID and shop_skins[skinID]
+	local obj = addShamanObject(id or skin and skin.so, ...)
 	addNewTimer(when, tfm.exec.removeObject, obj)
-	if not skin then return end
+	if not skin or not skin.img then return end
 	tfm.exec.addImage(
 		skin.img,
 		"#"..obj,
@@ -197,7 +197,7 @@ shop_powers[1] = {
 	fnc = function(self, player, key, down, x, y)
 		local skinID = players_file[player]:getEquipped(9)
 		local right = facing[player]
-		despawnableObject(5000, skinID, x + (right and 20 or -20), y, right and 0 or 180, right and 10 or -10)
+		despawnableObject(5000, nil, skinID, x + (right and 20 or -20), y, right and 0 or 180, right and 10 or -10)
 	end
 }
 shop_powers[2] = {
@@ -324,7 +324,7 @@ shop_powers[6] = {
 	cooldown = 5000,
 
 	fnc = function(self, player, key, down, x, y)
-		despawnableObject(5000, 0, x, y + 5)
+		despawnableObject(5000, 0, nil, x, y + 5)
 	end
 }
 
@@ -436,7 +436,7 @@ powers = {
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player]:getEquipped(4)
 			local antiGrav = map_gravity <= 0
-			despawnableObject(2000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
+			despawnableObject(2000, nil, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
 				fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
 			} or nil)
 		end,
@@ -455,7 +455,7 @@ powers = {
 				fnc = function(player, key, down, x, y)
 					local skinID = players_file[player]:getEquipped(4)
 					local antiGrav = map_gravity <= 0
-					despawnableObject(3000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
+					despawnableObject(3000, nil, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
 						fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
 					} or nil)
 				end
@@ -473,8 +473,7 @@ powers = {
 				fnc = function(player, key, down, x, y)
 					local skinID = players_file[player]:getEquipped(4)
 					local antiGrav = map_gravity <= 0
-					if skinID == 28 then skinID = 59 end
-					despawnableObject(4000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
+					despawnableObject(4000, skinID == 28 and 59 or nil, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
 						fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
 					} or nil)
 				end
@@ -515,7 +514,7 @@ powers = {
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player]:getEquipped(1)
 			local antiGrav = map_gravity <= 0
-			despawnableObject(3000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			despawnableObject(3000, nil, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{
@@ -535,7 +534,7 @@ powers = {
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player]:getEquipped(6)
 			local antiGrav = map_gravity <= 0
-			despawnableObject(2000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			despawnableObject(2000, nil, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{
@@ -555,7 +554,7 @@ powers = {
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player]:getEquipped(7)
 			local antiGrav = map_gravity <= 0
-			despawnableObject(4000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			despawnableObject(4000, nil, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{
@@ -575,7 +574,7 @@ powers = {
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player]:getEquipped(5)
 			local angle = skinID == 351 and -90 or 90
-			despawnableObject(4000, skinID, x + 20 * (facing[player] and 1 or -1), y - 30, angle)
+			despawnableObject(4000, nil, skinID, x + 20 * (facing[player] and 1 or -1), y - 30, angle)
 		end
 	},
 	{
@@ -595,7 +594,7 @@ powers = {
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player]:getEquipped(2)
 			local antiGrav = map_gravity <= 0
-			despawnableObject(4000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			despawnableObject(4000, nil, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{
@@ -615,7 +614,7 @@ powers = {
 		fnc = function(player, key, down, x, y)
 			local skinID = players_file[player]:getEquipped(3)
 			local antiGrav = map_gravity <= 0
-			despawnableObject(4000, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			despawnableObject(4000, nil, skinID, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
 		end
 	},
 	{

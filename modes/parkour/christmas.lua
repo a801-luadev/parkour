@@ -4,17 +4,18 @@ do
   local is_christmas_time = (month == 12 and day >= 15) or (month == 1 and day <= 15) or force_christmas_debug
 
   if is_christmas_time then
-    shop_skins["1"] = {img = "18c72bad79e.png", x = 0.5, y = 0.50}
-    shop_skins["2"] = {img = "18c72ba3321.png", x = 0.5, y = 0.50}
-    shop_skins["7"] = {img = "18c72bb2589.png", x = 0.5, y = 0.52}
-    shop_skins["28"] = {img = "18c72bccb7c.png", x = 0.5, y = 0.30}
-    shop_skins["46"] = {img = "18c72ba881a.png", x = 0.5, y = 0.52}
+    shop_skins[1].img = "18c72bad79e.png"
+    shop_skins[1].shop_img = "18c72bd8ad1.png"
+    shop_skins[2].img = "18c72ba3321.png"
+    shop_skins[2].shop_img = "18c72bd3975.png"
+    shop_skins[7].img = "18c72bb2589.png"
+    shop_skins[7].shop_img = "18c72bddd28.png"
+    shop_skins[28].img = "18c72bccb7c.png"
+    shop_skins[28].shop_img = "18b401ac8c7.png"
+    shop_skins[28].shop_img_fnc = nil
+    shop_skins[46].img = "18c72ba881a.png"
+    shop_skins[46].shop_img = "18c72bfa272.png"
 
-    findValueTbl(shop_items[1], "id", 1).image = "18c72bd8ad1.png"
-    findValueTbl(shop_items[2], "id", 2).image = "18c72bd3975.png"
-    findValueTbl(shop_items[3], "id", 7).image = "18c72bddd28.png"
-    findValueTbl(shop_items[4], "id", 28).image = "18c72bb89a4.png"
-    findValueTbl(shop_items[5], "id", 46).image = "18c72bfa272.png"
     findValueTbl(shop_items[8], "id", 2).hidden = false
 
     local christmas = {
@@ -134,9 +135,9 @@ do
             pdata:updateItem(1, 0, 1)
           end
           if pdata:getItemAmount(1, 0) >= 30 then
-            if not rewardSkin(player, "bigBox", 200.1) -- ice cube
-            and not rewardSkin(player, "cloud", 57.1) -- reindeer sleigh
-            and not rewardSkin(player, "rip", 1028) then -- snowy anvil
+            if not rewardSkin(player, 5) -- ice cube
+            and not rewardSkin(player, 4) -- reindeer sleigh
+            and not rewardSkin(player, 3) then -- snowy anvil
               return -- has all of them
             end
             pdata:updateItem(1, 0, -30)

@@ -977,6 +977,14 @@ local function handleSkins(player, cmd, quantity, args)
 
 	elseif action == "new" then
 		local category = tonumber(args[2])
+		if not category and args[2] then
+			category = category:lower()
+			if category == "bigbox" then
+				category = "bigBox"
+			end
+			category = table_find(shop_tabs, category)
+		end
+		category = category and math.floor(category)
 		if not category or category < 1 or category > 9 or category == 8 then
 			return tfm.exec.chatMessage("<v>[#] <r>Category must be 1-9 except 8", player)
 		end
@@ -987,21 +995,12 @@ local function handleSkins(player, cmd, quantity, args)
 			return tfm.exec.chatMessage("<v>[#] <r>Invalid image", player)
 		end
 
-		local id
-		local shopIndex
-
-		if newSkins[image] and category == newSkins[image][1] then
-			id = newSkins[image][2]
-			shopIndex = newSkins[image][3]
-		end
-
-		if not id then
-			id = default_skins_by_cat[category] * 1000
-			shopIndex = 1 + #shop_items[category]
-			while shop_skins[tostring(id)] do
-				id = id + 1
-			end
-		end
+		local skin = newSkins[category .. "-" .. image] or {
+			price = -1,
+			hidden = true,
+			id = #shop_skins + 1,
+		}
+		newSkins[category .. "-" .. image] = skin
 
 		local objId = default_skins_by_cat[category]
 		local scale = tonumber(args[4])
@@ -1009,29 +1008,33 @@ local function handleSkins(player, cmd, quantity, args)
 		local y = tonumber(args[6])
 		local shopScale = tonumber(args[7]) or scale
 
-		newSkins[image] = { category, id, shopIndex }
-		shop_skins[tostring(id)] = {img=image, id=objId, scale=scale, x=x, y=y}
-		shop_items[category][shopIndex] = {
-			id = id,
-			image = image,
-			scale = shopScale,
-			price = -1,
-			hidden = true,
-		}
-		tfm.exec.chatMessage(("<v>[#] <j>Added test skin %s on shop %s, %s"):format(id, category, shopIndex), player)
+		skin.so = objId
+		skin.img = image
+		skin.scale = scale
+		skin.x = x
+		skin.y = y
+		skin.shop_scale = shopScale
+		shop_skins[skin.id] = skin
+
+		if not skin.tab then
+			table.insert(shop_items[category], 2, skin)
+		end
+
+		skin.tab = category
+		tfm.exec.chatMessage(("<v>[#] <j>Added test skin %s for shop tab %s"):format(skin.id, category), player)
 
 		pdata = players_file[player]
 		pdata:setTester(true)
-		pdata:equip(category, id)
+		pdata:equip(category, skin.id)
 
 	elseif action == "inspect" then
-		local id = args[2]
+		local id = tonumber(args[2])
 		local skin = shop_skins[id]
 		if not skin then
 			return translatedChatMessage("invalid_syntax", player)
 		end
-		tfm.exec.chatMessage(("<v>[#] <j>Skin %s: img[%s] obj[%s] scale[%s] x[%s] y[%s]"):format(
-			id, skin.img, tostring(skin.id), tostring(skin.scale), tostring(skin.x), tostring(skin.y)
+		tfm.exec.chatMessage(("<v>[#] <j>Skin %s: img[%s] tab[%s] so[%s] scale[%s] x[%s] y[%s] shop_scale[%s]"):format(
+			id, skin.img, tostring(skin.tab), tostring(skin.so), tostring(skin.scale), tostring(skin.x), tostring(skin.y), tostring(skin.shop_scale)
 		), player)
 		return
 

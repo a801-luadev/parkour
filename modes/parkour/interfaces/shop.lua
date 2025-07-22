@@ -160,17 +160,13 @@ do
 			local item
 			local firstImage
 
-			if tab == 4 and page == 1 and players_file[player].c >= 400 then
-				firstImage = "173db16a824.png"
-			end
-
 			for index = 1, 18 do
 				if page + index - 1 > data._len then
 					break
 				end
 				item = data[page + index - 1]
 				if item then
-					images[index] = tfm.exec.addImage(index == 1 and firstImage or item.image, "&1", x + 30, y + (item.uses and 10 or 0), player, item.scale, item.scale, 0, 1, 0.5, 0.5)
+					images[index] = tfm.exec.addImage(item.shop_img_fnc and item.shop_img_fnc(player) or item.shop_img or item.img, "&1", x + 30, y + (item.uses and 10 or 0), player, item.shop_scale, item.shop_scale, 0, 1, 0.5, 0.5)
 					x = x + 75
 
 					if index == 9 then
@@ -234,16 +230,26 @@ do
 							true
 						)
 
-						if item.uses then
-							local uses = file:getItemAmount(item.id, tab)
+						if file:tester() or file.ownshop then
+							-- show item id for testers
 							ui.addTextArea(
-								consumableTAs[index], "<b><p align='right'>" .. uses .. "/" .. item.uses, player,
-								x, y + 20, 55, 15,
+								consumableTAs[index], "<b><p align='right'><rose>" .. tostring(item.id), player,
+								x, y - 20, 55, 15,
 								0, 0, 0,
 								true
 							)
 						else
-							ui.removeTextArea(consumableTAs[index], player)
+							if item.uses then
+								local uses = file:getItemAmount(item.id, tab)
+								ui.addTextArea(
+									consumableTAs[index], "<b><p align='right'>" .. uses .. "/" .. item.uses, player,
+									x, y + 20, 55, 15,
+									0, 0, 0,
+									true
+								)
+							else
+								ui.removeTextArea(consumableTAs[index], player)
+							end
 						end
 
 						x = x + 75 
