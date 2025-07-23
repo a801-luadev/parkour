@@ -212,7 +212,7 @@ do
 					if not img then
 						img = {
 							[1] = tfm.exec.addImage(
-								"1719e0e550a.png", "&1",
+								"1719e0e550a.png", "~10",
 								HelpInterface.x + 585,
 								HelpInterface.y + 40,
 								player
@@ -227,7 +227,7 @@ do
 						tfm.exec.removeImage(img[2])
 					end
 					img[2] = tfm.exec.addImage(
-						"1719e173ac6.png", "&1",
+						"1719e173ac6.png", "~10",
 						HelpInterface.x + 585,
 						HelpInterface.y + 40 + (125 / (#info - 1)) * (scroll - 1),
 						player
@@ -308,30 +308,34 @@ do
 			alpha = 0
 		})
 
-	onEvent("RawTextAreaCallback", function(id, player, cb)
-		if not checkCooldown(player, "helpscroll", 4000) then return end
-		if cb == "help_scroll_up" then
-			eventKeyboard(player, 1, true, 0, 0)
-		elseif cb == "help_scroll_down" then
-			eventKeyboard(player, 3, true, 0, 0)
-		end
-	end)
-
-	onEvent("Keyboard", function(player, key, down)
-		if not checkCooldown(player, "helpscroll", 4000) then return end
-		if key ~= 1 and key ~= 3 then return end
-		if not down then return end
+	local function scrollHelp(player, up)
 		if not HelpInterface.open[player] then return end
 
 		local page = HelpInterface.args[player][1]
 		local info = page_info[ player_langs[player].name ][ page ]
 		if not info.scrollable then return end
 
-		if key == 1 then -- up
+		if up then -- up
 			scroll_info[player] = math.max(scroll_info[player] - 1, 1)
 		else -- down
 			scroll_info[player] = math.min(scroll_info[player] + 1, #info)
 		end
 		HelpInterface:update(player, page)
+	end
+
+	onEvent("RawTextAreaCallback", function(id, player, cb)
+		if not checkCooldown(player, "helpscroll", 2000) then return end
+		if cb == "help_scroll_up" then
+			scrollHelp(player, true)
+		elseif cb == "help_scroll_down" then
+			scrollHelp(player, false)
+		end
+	end)
+
+	onEvent("Keyboard", function(player, key, down)
+		if not checkCooldown(player, "helpscroll", 2000) then return end
+		if key ~= 1 and key ~= 3 then return end
+		if not down then return end
+		scrollHelp(player, key == 1)
 	end)
 end

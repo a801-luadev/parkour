@@ -124,8 +124,9 @@ do
 		-- Parkour Coin
 		:addImage({
 			image = "18b29f6977c.png",
-			target = "&1",
-			x = 130, y = 15
+			target = "~20",
+			x = 130, y = 15,
+			canUpdate = true,
 		})
 
 		:addTextArea({
@@ -167,7 +168,7 @@ do
 				end
 				item = data[page + index - 1]
 				if item then
-					images[index] = tfm.exec.addImage(item.shop_img_fnc and file and item.shop_img_fnc(player, file) or item.shop_img or item.img, "&1", x + 30, y + (item.uses and 10 or 0), player, item.shop_scale, item.shop_scale, 0, 1, 0.5, 0.5)
+					images[index] = tfm.exec.addImage(item.shop_img_fnc and file and item.shop_img_fnc(player, file) or item.shop_img or item.img, "~20", x + 30, y + (item.uses and 10 or 0), player, item.shop_scale, item.shop_scale, 0, 1, 0.5, 0.5)
 					x = x + 75
 
 					if index == 9 then
@@ -216,7 +217,6 @@ do
 						end
 
 						currency = shop_currencies[item.currency] or shop_currencies.coins
-						images[index] = tfm.exec.addImage(currency[2], "&1", x+2, y+7, player, currency[3], currency[3], 0, 1, 0.5, 0.5)
 
 						if itemPrice >= 100000 then
 							itemPrice = tostring(itemPrice / 1000) .. "K"
@@ -252,6 +252,8 @@ do
 								ui.removeTextArea(consumableTAs[index], player)
 							end
 						end
+
+						images[index] = tfm.exec.addImage(currency[2], "~20", x+2, y+7, player, currency[3], currency[3], 0, 1, 0.5, 0.5)
 
 						x = x + 75 
 						if index == 9 then

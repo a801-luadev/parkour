@@ -33,7 +33,7 @@ NPCInterface = Interface.new(200, 35, 400, 350, true)
 		image = function(self, player, data)
 			return data.left_image
 		end,
-		target = "&1",
+		target = "~10",
 		x = 100, y = 195,
 		anchorX = 0.5, anchorY = 0.5,
 	})
@@ -80,7 +80,7 @@ NPCInterface = Interface.new(200, 35, 400, 350, true)
 		image = function(self, player, data)
 			return data.right_image
 		end,
-		target = "&1",
+		target = "~10",
 		x = 300, y = 195,
 		anchorX = 0.5, anchorY = 0.5,
 	})

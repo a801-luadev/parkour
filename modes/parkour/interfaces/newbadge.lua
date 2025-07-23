@@ -14,7 +14,7 @@ do
 			image = function(self, player, group, badge)
 				return badges[group][badge][3]
 			end,
-			target = "&1",
+			target = "~10",
 			x = 10, y = 5
 		})
 

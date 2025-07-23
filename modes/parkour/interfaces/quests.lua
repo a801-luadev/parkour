@@ -1,5 +1,4 @@
-do	
-
+do
 	local isQuestSkipped = {}
 	local function checkQuestSkipped(player)
 		if not players_file[player] then return end
@@ -19,7 +18,6 @@ do
 				end
 			end
 		end
-
 	end
 
 	local closeButton = Button.new()
@@ -142,48 +140,48 @@ do
 			alpha = 0
 		})
 
-		:addTextArea({ -- Quest 1
-			x = 10, y = 85,
+	for i=1, 4 do
+		QuestsInterface
+		:addTextArea({ -- Background
+			x = 10, y = 25 + 60 * i,
 			width = 380, height = 40,
-			alpha = 1,
+			alpha = 0,
 			color = {0x314e57, 0x314e57}
 		})
 		:addImage({ -- Coin Image
 			image = "18b29f6977c.png",
-			target = "&1",
-			x = 25, y = 82
+			target = "~8",
+			x = 25, y = 22 + 60 * i,
 		})
 		:addTextArea({ -- Prize
-			x = 15, y = 110,
+			x = 15, y = 50 + 60 * i,
 			width = 50, height = 20,
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[1].id or players_file[player].quests[5].id
+				local questID = page == 1 and players_file[player].quests[i].id or players_file[player].quests[i + 4].id
 				local isWeekly = (page ~= 1)
-
 				return string.format(
 					"<p align='center'><font color='#ffffff' size='14' face='Verdana'><b>%s", quests[questID].prize(player, isWeekly)
 				)
 			end
 		})
-		:addTextArea({ -- Quest 1 Description
-			x = 80, y = 85,
+		:addTextArea({ -- Description
+			x = 80, y = 25 + 60 * i,
 			width = 270, height = 40,
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[1].id or players_file[player].quests[5].id
+				local questID = page == 1 and players_file[player].quests[i].id or players_file[player].quests[i + 4].id
 				local isWeekly = (page ~= 1)
-
 				return quests[questID].description(player, isWeekly)
 			end
 		})
-		:addImage({
+		:addImage({ -- Button Image
 			canUpdate = true,
 			image = function(self, player, page, data)
 				local questCompleted = false
-				if (page == 1 and players_file[player].quests[1].ts) or (page == 2 and players_file[player].quests[5].ts) then
+				if (page == 1 and players_file[player].quests[i].ts) or (page == 2 and players_file[player].quests[i + 4].ts) then
 					questCompleted = true
 				end
 
@@ -201,16 +199,16 @@ do
 				end
 			end,
 			
-			target = "&1",
-			x = 360, y = 95,
+			target = "~10",
+			x = 360, y = 35 + 60 * i,
 		})
 		:addTextArea({ -- Change TA
-			x = 360, y = 95,
+			x = 360, y = 35 + 60 * i,
 			width = 20, height = 20,
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, data)
-				local questID = page == 1 and 1 or 5
+				local questID = page == 1 and i or (i + 4)
 
 				local questCompleted = false
 				if players_file[player].quests[questID].ts then
@@ -227,266 +225,5 @@ do
 				return string.format("<a href='event:change_quest:%s:%s'><font size='50'>  </font></a>", questID, page)
 			end
 		})
-
-
-		:addTextArea({ -- Quest 2
-			x = 10, y = 145,
-			width = 380, height = 40,
-			alpha = 1,
-			color = {0x314e57, 0x314e57}
-		})
-		:addImage({ -- Coin Image
-			image = "18b29f6977c.png",
-			target = "&1",
-			x = 25, y = 142
-		})
-		:addTextArea({ -- Prize
-			x = 15, y = 170,
-			width = 50, height = 20,
-			alpha = 0,
-			canUpdate = true,
-			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[2].id or players_file[player].quests[6].id
-				local isWeekly = (page ~= 1)
-
-				return string.format(
-					"<p align='center'><font color='#ffffff' size='14' face='Verdana'><b>%s", quests[questID].prize(player, isWeekly)
-				)
-			end
-		})
-		:addTextArea({ -- Quest 2 Description
-			x = 80, y = 145,
-			width = 270, height = 40,
-			alpha = 0,
-			canUpdate = true,
-			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[2].id or players_file[player].quests[6].id
-				local isWeekly = (page ~= 1)
-
-				return quests[questID].description(player, isWeekly)
-			end
-		})
-		:addImage({
-			canUpdate = true,
-			image = function(self, player, page, data)
-				local questCompleted = false
-				if (page == 1 and players_file[player].quests[2].ts) or (page == 2 and players_file[player].quests[6].ts) then
-					questCompleted = true
-				end
-
-				local questSkipped = false
-				if (page == 1 and isQuestSkipped[player].daily) or (page == 2 and isQuestSkipped[player].weekly) then
-					questSkipped = true
-				end
-
-				if questCompleted then
-					return "18bdfe01bb3.png"
-				elseif questSkipped then
-					return "a.png"
-				else
-					return "18bab04d3a9.png"
-				end
-			end,
-			
-			target = "&1",
-			x = 360, y = 155,
-		})
-		:addTextArea({ -- Change TA
-			x = 360, y = 155,
-			width = 20, height = 20,
-			alpha = 0,
-			canUpdate = true,
-			text = function(self, player, page, data)
-				local questID = page == 1 and 2 or 6
-
-				local questCompleted = false
-				if players_file[player].quests[questID].ts then
-					questCompleted = true
-				end
-
-				local questSkipped = false
-				if (page == 1 and isQuestSkipped[player].daily) or (page == 2 and isQuestSkipped[player].weekly) then
-					questSkipped = true
-				end
-
-				if questSkipped or questCompleted then return "" end
-
-				return string.format("<a href='event:change_quest:%s:%s'><font size='50'>  </font></a>", questID, page)
-			end
-		})
-
-
-		:addTextArea({ -- Quest 3
-			x = 10, y = 205,
-			width = 380, height = 40,
-			alpha = 1,
-			color = {0x314e57, 0x314e57}
-		})
-		:addImage({ -- Coin Image
-			image = "18b29f6977c.png",
-			target = "&1",
-			x = 25, y = 202
-		})
-		:addTextArea({ -- Prize
-			x = 15, y = 230,
-			width = 50, height = 20,
-			alpha = 0,
-			canUpdate = true,
-			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[3].id or players_file[player].quests[7].id
-				local isWeekly = (page ~= 1)
-
-				return string.format(
-					"<p align='center'><font color='#ffffff' size='14' face='Verdana'><b>%s", quests[questID].prize(player, isWeekly)
-				)
-			end
-		})
-		:addTextArea({ -- Quest 3 Description
-			x = 80, y = 205,
-			width = 270, height = 40,
-			alpha = 0,
-			canUpdate = true,
-			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[3].id or players_file[player].quests[7].id
-				local isWeekly = (page ~= 1)
-
-				return quests[questID].description(player, isWeekly)
-			end
-		})
-		:addImage({
-			canUpdate = true,
-			image = function(self, player, page, data)
-				local questCompleted = false
-				if (page == 1 and players_file[player].quests[3].ts) or (page == 2 and players_file[player].quests[7].ts) then
-					questCompleted = true
-				end
-
-				local questSkipped = false
-				if (page == 1 and isQuestSkipped[player].daily) or (page == 2 and isQuestSkipped[player].weekly) then
-					questSkipped = true
-				end
-
-				if questCompleted then
-					return "18bdfe01bb3.png"
-				elseif questSkipped then
-					return "a.png"
-				else
-					return "18bab04d3a9.png"
-				end
-			end,
-			
-			target = "&1",
-			x = 360, y = 215,
-		})
-		:addTextArea({ -- Change TA
-			x = 360, y = 215,
-			width = 20, height = 20,
-			alpha = 0,
-			canUpdate = true,
-			text = function(self, player, page, data)
-				local questID = page == 1 and 3 or 7
-
-				local questCompleted = false
-				if players_file[player].quests[questID].ts then
-					questCompleted = true
-				end
-
-				local questSkipped = false
-				if (page == 1 and isQuestSkipped[player].daily) or (page == 2 and isQuestSkipped[player].weekly) then
-					questSkipped = true
-				end
-
-				if questSkipped or questCompleted then return "" end
-
-				return string.format("<a href='event:change_quest:%s:%s'><font size='50'>  </font></a>", questID, page)
-			end
-		})
-
-
-		:addTextArea({ -- Quest 4
-			x = 10, y = 265,
-			width = 380, height = 40,
-			alpha = 1,
-			color = {0x314e57, 0x314e57}
-		})
-		:addImage({ -- Coin Image
-			image = "18b29f6977c.png",
-			target = "&1",
-			x = 25, y = 262
-		})
-		:addTextArea({ -- Prize
-			x = 15, y = 290,
-			width = 50, height = 20,
-			alpha = 0,
-			canUpdate = true,
-			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[4].id or players_file[player].quests[8].id
-				local isWeekly = (page ~= 1)
-
-				return string.format(
-					"<p align='center'><font color='#ffffff' size='14' face='Verdana'><b>%s", quests[questID].prize(player, isWeekly)
-				)
-			end
-		})
-		:addTextArea({ -- Quest 4 Description
-			x = 80, y = 265,
-			width = 270, height = 40,
-			alpha = 0,
-			canUpdate = true,
-			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[4].id or players_file[player].quests[8].id
-				local isWeekly = (page ~= 1)
-
-				return quests[questID].description(player, isWeekly)
-			end
-		})
-		:addImage({
-			canUpdate = true,
-			image = function(self, player, page, data)
-				local questCompleted = false
-				if (page == 1 and players_file[player].quests[4].ts) or (page == 2 and players_file[player].quests[8].ts) then
-					questCompleted = true
-				end
-
-				local questSkipped = false
-				if (page == 1 and isQuestSkipped[player].daily) or (page == 2 and isQuestSkipped[player].weekly) then
-					questSkipped = true
-				end
-
-				if questCompleted then
-					return "18bdfe01bb3.png"
-				elseif questSkipped then
-					return "a.png"
-				else
-					return "18bab04d3a9.png"
-				end
-			end,
-			
-			target = "&1",
-			x = 360, y = 275,
-		})
-		:addTextArea({ -- Change TA
-			x = 360, y = 275,
-			width = 20, height = 20,
-			alpha = 0,
-			canUpdate = true,
-			text = function(self, player, page, data)
-				local questID = page == 1 and 4 or 8
-
-				local questCompleted = false
-				if players_file[player].quests[questID].ts then
-					questCompleted = true
-				end
-
-				local questSkipped = false
-				if (page == 1 and isQuestSkipped[player].daily) or (page == 2 and isQuestSkipped[player].weekly) then
-					questSkipped = true
-				end
-
-				if questSkipped or questCompleted then return "" end
-
-				return string.format("<a href='event:change_quest:%s:%s'><font size='50'>  </font></a>", questID, page)
-			end
-		})
-	
+	end
 end

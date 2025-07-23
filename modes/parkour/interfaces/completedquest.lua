@@ -10,7 +10,7 @@ do
 
 		:addImage({
             image = "18b29f6977c.png",
-			target = "&1",
+			target = "~9",
 			x = 10, y = 0
 		})
 

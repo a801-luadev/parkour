@@ -75,7 +75,7 @@ do
 				for index = 1, #staff do
 					if ranks[ staff[index][1] ][profile] then
 						container._count = container._count + 1
-						container[ container._count ] = tfm.exec.addImage(staff[index][2], "&1", x, self.y + 10, player)
+						container[ container._count ] = tfm.exec.addImage(staff[index][2], "~1", x, self.y + 10, player)
 						x = x - 25
 					end
 				end

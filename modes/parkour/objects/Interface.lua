@@ -143,6 +143,38 @@ do
 		)
 	end
 
+	-- only to be called by show and update functions
+	function Interface:_renderImages(player, isUpdate, arg1, arg2, arg3, arg4)
+		local data
+		for index = 1, self.image_count do
+			data = self.images[index]
+
+			if not isUpdate or data.canUpdate then
+				if data.players[player] then
+					tfm.exec.removeImage(data.players[player])
+				end
+
+				data.players[player] = tfm.exec.addImage(
+					data.image_str and data.image_str or
+					data:image_fnc(player, arg1, arg2, arg3, arg4),
+
+					data.target_str and data.target_str or
+					data:target_fnc(player, arg1, arg2, arg3, arg4),
+
+					data.x, data.y,
+					player,
+
+					data.scaleX, data.scaleY, data.rotation, data.alpha,
+					data.anchorX, data.anchorY, data.fadeIn
+				)
+
+				if data.onUpdate then
+					data:onUpdate(player, arg1, arg2, arg3, arg4)
+				end
+			end
+		end
+	end
+
 	function Interface:show(player, arg1, arg2, arg3, arg4)
 		if self.showCheck and not self:showCheck(player, arg1, arg2, arg3, arg4) then return end
 		if self.open[player] then return end
@@ -185,31 +217,7 @@ do
 			end
 		end
 
-		for index = 1, self.image_count do
-			data = self.images[index]
-
-			if data.players[player] then
-				tfm.exec.removeImage(data.players[player])
-			end
-
-			data.players[player] = tfm.exec.addImage(
-				data.image_str and data.image_str or
-				data:image_fnc(player, arg1, arg2, arg3, arg4),
-
-				data.target_str and data.target_str or
-				data:target_fnc(player, arg1, arg2, arg3, arg4),
-
-				data.x, data.y,
-				player,
-
-				data.scaleX, data.scaleY, data.rotation, data.alpha,
-				data.anchorX, data.anchorY, data.fadeIn
-			)
-
-			if data.onUpdate then
-				data:onUpdate(player, arg1, arg2, arg3, arg4)
-			end
-		end
+		self:_renderImages(player, false, arg1, arg2, arg3, arg4)
 
 		if self.updateCallback then
 			self:updateCallback(player, arg1, arg2, arg3, arg4)
@@ -253,33 +261,7 @@ do
 			end
 		end
 
-		for index = 1, self.image_count do
-			data = self.images[index]
-
-			if data.canUpdate then
-				if data.players[player] then
-					tfm.exec.removeImage(data.players[player])
-				end
-
-				data.players[player] = tfm.exec.addImage(
-					data.image_str and data.image_str or
-					data:image_fnc(player, arg1, arg2, arg3, arg4),
-
-					data.target_str and data.target_str or
-					data:target_fnc(player, arg1, arg2, arg3, arg4),
-
-					data.x, data.y,
-					player,
-
-					data.scaleX, data.scaleY, data.rotation, data.alpha,
-					data.anchorX, data.anchorY, data.fadeIn
-				)
-
-				if data.onUpdate then
-					data:onUpdate(player, arg1, arg2, arg3, arg4)
-				end
-			end
-		end
+		self:_renderImages(player, true, arg1, arg2, arg3, arg4)
 
 		if self.updateCallback then
 			self:updateCallback(player, arg1, arg2, arg3, arg4)

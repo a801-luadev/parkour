@@ -165,7 +165,7 @@ do
 					image = communities[row[4]] or communities.xx
 				end
 
-				community_images[player][index] = tfm.exec.addImage(image, "&1", x, nextY, player)
+				community_images[player][index] = tfm.exec.addImage(image, "~10", x, nextY, player)
 				nextY = nextY + 14
 			end
 		end):onRemove(function(self, player)
