@@ -35,7 +35,12 @@ local links = {
 	records = "https://tfmrecords.com/",
 	forum = "https://atelier801.com/topic?f=6&t=892086",
 	mod_apps = "https://bit.ly/parkourmods",
+	mapper_apps = "https://discord.gg/QRCjyVyg7B",
 	mapper_event = "https://atelier801.com/topic?f=6&t=898915&p=1#m2",
+}
+local app_times = {
+	mapper_apps = 1756267200,
+	mod_apps = 0,
 }
 
 local starting = string.sub(room.name, 1, 2)

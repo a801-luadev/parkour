@@ -40,6 +40,7 @@ translations.en = {
 
 	-- Information messages
 	mod_apps = "<j>Parkour moderator applications are now open! Use this link: <rose>%s",
+	mapper_apps = "<j>Parkour mapper applications are now open! Join our discord server for more info: <rose>%s",
 	staff_power = "<p align='center'><font size='12'><r>Parkour staff <b>do not</b> have any power outside of #parkour rooms.",
 	donate = "<vp>Type <b>!donate</b> if you would like to donate for this module!",
 	paused_events = "<cep><b>[Warning!]</b> <n>The module has reached it's critical limit and is being paused.",

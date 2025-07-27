@@ -572,6 +572,13 @@ onEvent("PlayerDataParsed", function(player, data)
 		--translatedChatMessage("forum_topic", player, links.forum)
 		translatedChatMessage("report", player)
 		--translatedChatMessage("donate", player)
+
+		local now = os.time()
+		for key, t in next, app_times do
+			if now < t then
+				translatedChatMessage(key, player, links[key])
+			end
+		end
 	
 		if is_before_anniversary then
 			translatedChatMessage("anniversary", player)
