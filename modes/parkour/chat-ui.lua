@@ -199,6 +199,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.chatMessage("<v>[#] <d>used " .. (total - usedRuntime) .. "ms of runtime", player)
 		max_args = 1
 
+	elseif cmd == "runtime" then
+		if not ranks.admin[player] then return end
+		tfm.exec.chatMessage("<v>[#] <d>used " .. usedRuntime .. "ms for cycle " .. (cycleId - startCycle) .. " and spent total of " .. totalRuntime .. "ms", player)
+		return
+
 	elseif cmd == "give" then -- logged
 		if not perms[player] or not perms[player].give_command then return end
 

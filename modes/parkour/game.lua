@@ -25,8 +25,7 @@ local cp_available = {}
 local map_name
 local map_gravity = 10
 
-local save_queue = { __first = "", __last = ""}
-local saveQueueCounter = 0
+local save_queue
 
 local difficulty_color = { 'vp', 'j', 'ch2' }
 local checkpoint_info = {
@@ -193,37 +192,6 @@ local function enableSpecMode(player, enable)
 	end
 
 	showStats()
-end
-
-local function queueForSave(player)
-	if save_queue[player] then return end
-
-	if save_queue.__first == "" then
-		save_queue[player] = ""
-		save_queue.__first = player
-		save_queue.__last = player
-	else
-		save_queue[player] = ""
-		save_queue[save_queue.__last] = player
-		save_queue.__last = player
-	end
-
-	local savingMessage = translatedMessage("saving", player)
-	ui.addTextArea(987, savingMessage, player, 670, 380, 120, 20, nil, 0, 0, true)
-end
-
-local function saveFromQueue()
-	if not save_queue then return end
-	if save_queue.__first == "" then return end
-
-	savePlayerData(save_queue.__first)
-	ui.removeTextArea(987, save_queue.__first)
-
-	local oldfirst = save_queue.__first
-
-	save_queue.__first = save_queue[save_queue.__first]
-
-	save_queue[oldfirst] = nil
 end
 
 local function checkBan(player, data, id)
@@ -607,14 +575,6 @@ onEvent("NewGame", function()
 end)
 
 onEvent("Loop", function()
-	if save_queue.__first ~= "" then 
-		saveQueueCounter = saveQueueCounter + 1
-		if saveQueueCounter == 8 then
-			saveFromQueue()
-			saveQueueCounter = 0
-		end
-	end
-
 	if not levels then return end
 
 	if check_position > 0 then

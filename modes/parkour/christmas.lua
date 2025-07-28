@@ -141,7 +141,7 @@ do
               return -- has all of them
             end
             pdata:updateItem(1, 0, -30)
-            queueForSave(player)
+            savePlayerData(player)
           end
         end
         return

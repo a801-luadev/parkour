@@ -709,19 +709,19 @@ function getQuestsResetTime()
 	return reset_times
 end
 
-function savePlayerData(player, delay)
+function savePlayerData(player, immediate)
 	if not players_file[player] then return end
-
-	if delay then
-		queueForSave(player)
+	if not immediate then
+		save_queue = save_queue or {}
+		save_queue[player] = true
 		return
 	end
 
+	eventPlayerDataUpdated(player, players_file[player])
 	system.savePlayerData(
 		player,
 		json.encode(players_file[player])
 	)
-	eventPlayerDataUpdated(player, players_file[player])
 end
 
 local function updateData(player, data)
@@ -905,7 +905,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 		players_file[player].quests = questTable
 	end
 
-	savePlayerData(player, true)
+	savePlayerData(player)
 	eventPlayerDataParsed(player, data)
 end)
 
@@ -943,6 +943,17 @@ onEvent("Loop", function()
 	end
 end)
 
+-- this event is called after every event
+-- we save here using 2nd parameter (immediate save)
+-- this is to avoid saving same player too many times in a single event
+onEvent("After", function()
+	if not save_queue then return end
+	for player in next, save_queue do
+		savePlayerData(player, true)
+	end
+	save_queue = nil
+end)
+
 onEvent("GameStart", function()
 	system.loadFile(file_queue[file_index])
 	local ts = os.time()
@@ -970,7 +981,7 @@ onEvent("PlayerDataParsed", function(player, data)
 
 		data.week[1] = 0
 		data.week[2] = last_weekly_reset_ts
-		savePlayerData(player, true)
+		savePlayerData(player)
 	end
 end)
 

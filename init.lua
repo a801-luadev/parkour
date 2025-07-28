@@ -39,7 +39,7 @@ local links = {
 	mapper_event = "https://atelier801.com/topic?f=6&t=898915&p=1#m2",
 }
 local app_times = {
-	mapper_apps = 1756267200,
+	mapper_apps = 1756267200000,
 	mod_apps = 0,
 }
 

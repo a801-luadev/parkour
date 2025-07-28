@@ -113,7 +113,7 @@ local function despawnableObject(when, id, skinID, ...)
 	)
 end
 
-local function fixHourCount(player, data)
+local function fixHourCount(data)
 	local reset = data.hour_r
 	local hour = data.hour
 	local count = #hour
@@ -174,10 +174,6 @@ local function fixHourCount(player, data)
 
 	for i = count - offset + 1, count do
 		hour[i] = nil
-	end
-
-	if player and (save or offset > 0) then
-		queueForSave(player)
 	end
 
 	return save or offset > 0
@@ -413,7 +409,7 @@ powers = {
 			if not review_mode then
 				local updated = file:updateItem(id, 8, -1)
 				if updated then
-					savePlayerData(player, true)
+					savePlayerData(player)
 				end
 			end
 			return power:fnc(player, key, down, x, y)
@@ -1101,7 +1097,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 						end
 
 						if save then
-							queueForSave(player)
+							savePlayerData(player)
 						end
 					end
 				end
@@ -1162,8 +1158,8 @@ onEvent("PlayerDataParsed", function(player, data)
 
 	checkKill(player)
 
-	if fixHourCount(nil, data) then
-		savePlayerData(player, true)
+	if fixHourCount(data) then
+		savePlayerData(player)
 	end
 end)
 
@@ -1188,8 +1184,8 @@ onEvent("PlayerDataUpdated", function(player, data)
 		end
 	end
 
-	if fixHourCount(nil, data) then
-		savePlayerData(player, true)
+	if fixHourCount(data) then
+		savePlayerData(player)
 	end
 end)
 
@@ -1306,8 +1302,8 @@ onEvent("NewGame", function()
 	local file
 	for player in next, in_room do
 		file = players_file[player]
-		if file then
-			fixHourCount(player, file)
+		if file and fixHourCount(file) then
+			savePlayerData(player)
 		end
 		unbind(player)
 	end

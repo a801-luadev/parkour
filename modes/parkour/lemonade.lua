@@ -340,7 +340,7 @@ do
       end
 
       pdata:updateItem(ecIndex, 0, 1)
-      queueForSave(player)
+      savePlayerData(player)
       translatedChatMessage("lemonade_found", player)
     end)
 
@@ -403,7 +403,7 @@ do
         -- remove 1 of each ingredient
         for i=3, 6 do file:updateItem(i, 0, -1) end
         for i=2, 6 do lemonade.updateCounter(player, i) end
-        queueForSave(player)
+        savePlayerData(player)
         return
       end
 
@@ -433,7 +433,7 @@ do
 
         file:updateItem(2, 0, -shop.price)
         lemonade.updateCounter(player, 2)
-        queueForSave(player)
+        savePlayerData(player)
 
         if NPCInterface.open[player] then
           NPCInterface:remove(player)

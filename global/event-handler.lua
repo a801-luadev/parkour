@@ -9,7 +9,8 @@ do
 	local RUNTIME_LIMIT = 30
 	local DONT_SCHEDULE = {
 		["Loop"] = true,
-		["Keyboard"] = true
+		["Keyboard"] = true,
+		["After"] = true
 	}
 
 	-- Optimization
@@ -178,11 +179,10 @@ do
 						return
 					end
 
-					usedRuntime = usedRuntime + os_time() - start
-
 					-- if resuming took a lot of runtime, we have to
 					-- pause again
 					if paused then
+						usedRuntime = usedRuntime + os_time() - start
 						if schedule then
 							scheduled._count = scheduled._count + 1
 							scheduled[ scheduled._count ] = {evt, a, b, c, d, e, 1}
@@ -207,6 +207,10 @@ do
 			if not done then
 				errorHandler(name, result)
 				return
+			end
+
+			if eventAfter then
+				eventAfter()
 			end
 
 			checkingRuntime = false

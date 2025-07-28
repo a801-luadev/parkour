@@ -48,7 +48,7 @@ local function checkWeeklyWinners(player, data)
 	if data.badges[3] ~= 1 then
 		data.badges[3] = 1
 		NewBadgeInterface:show(player, 3, 1)
-		savePlayerData(player, true)
+		savePlayerData(player)
 	end
 
 	schedule("leaderboard", true, function(filedata)
@@ -970,6 +970,7 @@ local function handleSkins(player, cmd, quantity, args)
 			savePlayerData(player)
 			tfm.exec.chatMessage("ownshop: " .. tostring(pdata.ownshop), player)
 		end
+		return
 
 	elseif action == "tester" then
 		pdata:setTester(not pdata:tester())
@@ -1554,7 +1555,7 @@ local function handleClaim(playerName, cmd, quantity, args)
 	if not nonce or file.claim and file.claim >= nonce then return end
 
 	file.claim = nonce
-	savePlayerData(target, true)
+	savePlayerData(target)
 	table.remove(args, 1)
 	table.remove(args, 1)
 	table.remove(args, 1)
