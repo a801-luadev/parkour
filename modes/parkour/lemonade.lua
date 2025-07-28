@@ -172,7 +172,12 @@ do
         return
       end
 
-      translatedChatMessage("lemonade_welcome", target)
+      local file = players_file[target]
+      if not file then return end
+
+      if file.settings[6] == 1 then
+        translatedChatMessage("lemonade_welcome", target)
+      end
 
       if lemonade.state == COLLECT then
         local items, item, collectible = lemonade.items
@@ -193,9 +198,6 @@ do
       elseif lemonade.state == TRADE then
         map_name = nil
         ui.setMapName("Lemonade Festival")
-
-        local file = players_file[target]
-        if not file then return end
 
         lemonade.jug.progress[target] = 1
         lemonade.renderJug(target)
