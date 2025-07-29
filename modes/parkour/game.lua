@@ -9,6 +9,7 @@ local victory = {_last_level = {}}
 local in_room = {}
 local online = {}
 local hidden = {}
+local bonusOffset = 0
 local players_level = {}
 local times = {
 	map_start = 0,
@@ -316,7 +317,7 @@ onEvent("NewPlayer", function(player, init)
 		if next_level then
 			addCheckpointImage(player, next_level.x, next_level.y)
 			if checkpoint_info.version == 1 then
-				tfm.exec.addBonus(0, next_level.x, next_level.y, players_level[player] + 1, 0, false, player)
+				tfm.exec.addBonus(0, next_level.x, next_level.y, bonusOffset + players_level[player] + 1, 0, false, player)
 			end
 		end
 	end
@@ -486,7 +487,6 @@ onEvent("PlayerRespawn", function(player)
 end)
 
 onEvent("NewGame", function()
-
 	tfm.exec.disablePhysicalConsumables(true)
 	tfm.exec.disableMinimalistMode(true)
 
@@ -498,6 +498,7 @@ onEvent("NewGame", function()
 	times.generated = {}
 	times.map_start = os.time()
 	checkpoint_info.version = checkpoint_info.next_version
+	bonusOffset = bonusOffset == 0 and 500 or 0
 
   local info = room.xmlMapInfo
   local xml = info and info.xml
@@ -536,7 +537,7 @@ onEvent("NewGame", function()
 	if levels then
 		start_x, start_y = levels[2].x, levels[2].y
 		if checkpoint_info.version == 1 then
-			tfm.exec.addBonus(0, start_x, start_y, 2, 0, false)
+			tfm.exec.addBonus(0, start_x, start_y, bonusOffset + 2, 0, false)
 		end
 
 		for player in next, in_room do
@@ -662,17 +663,18 @@ end)
 onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if checkpoint_info.version ~= 1 then return end
 	if not levels then return end
-	local level = levels[bonus]
+	local checkpointIndex = bonus - bonusOffset
+	local level = levels[checkpointIndex]
 	if not level then return end
 	if not players_level[player] then return end
-	if bonus ~= players_level[player] + 1 then return end
+	if checkpointIndex ~= players_level[player] + 1 then return end
 	if os.time() < cp_available[player] then return tfm.exec.addBonus(0, level.x, level.y, bonus, 0, false, player) end
 
 	local taken = (os.time() - (times.checkpoint[player] or times.map_start)) / 1000
 	times.checkpoint[player] = os.time()
-	players_level[player] = bonus
+	players_level[player] = checkpointIndex
 
-	if level.size ~= levels[ bonus - 1 ].size then
+	if level.size ~= levels[ checkpointIndex - 1 ].size then
 		-- need to change the size
 		changePlayerSize(player, level.size)
 	end
@@ -684,13 +686,13 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	end
 
 	if not victory[player] then
-		tfm.exec.setPlayerScore(player, bonus, false)
+		tfm.exec.setPlayerScore(player, checkpointIndex, false)
 	end
 	tfm.exec.removeImage(checkpoints[player])
 	tfm.exec.linkMice(player, player, false)
 
-	if bonus == #levels then
-		translatedChatMessage("reached_level", player, bonus-1, taken)
+	if checkpointIndex == #levels then
+		translatedChatMessage("reached_level", player, checkpointIndex-1, taken)
 		if not victory[player] then -- !cp
 			victory._last_level[player] = true
 			tfm.exec.giveCheese(player)
@@ -700,9 +702,9 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 			return
 		end
 	else
-		translatedChatMessage("reached_level", player, bonus-1, taken)
+		translatedChatMessage("reached_level", player, checkpointIndex-1, taken)
 
-		local next_level = levels[bonus + 1]
+		local next_level = levels[checkpointIndex + 1]
 		addCheckpointImage(player, next_level.x, next_level.y)
 
 		tfm.exec.addBonus(0, next_level.x, next_level.y, bonus + 1, 0, false, player)
@@ -794,7 +796,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if next_level then
 			addCheckpointImage(player, next_level.x, next_level.y)
 			if checkpoint_info.version == 1 then
-				tfm.exec.addBonus(0, next_level.x, next_level.y, checkpoint + 1, 0, false, player)
+				tfm.exec.addBonus(0, next_level.x, next_level.y, bonusOffset + checkpoint + 1, 0, false, player)
 			end
 		else
 			if not records_admins then
@@ -873,7 +875,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 		addCheckpointImage(player, x, y)
 		if checkpoint_info.version == 1 then
-			tfm.exec.addBonus(0, x, y, 2, 0, false, player)
+			tfm.exec.addBonus(0, x, y, bonusOffset + 2, 0, false, player)
 		end
 
 	elseif cmd == "setcp" then
