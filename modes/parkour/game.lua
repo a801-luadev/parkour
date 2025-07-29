@@ -147,10 +147,9 @@ function showStats()
 		"%s%s<g>   |   %s",
 		map_name,
 		colortag and string.format(
-			' - <%s>%s%s',
+			' - <%s>%s',
 			colortag,
-			('★'):rep(current_difficulty),
-			('☆'):rep(3 - current_difficulty)
+			('★'):rep(current_difficulty)
 		)
 		or current_difficulty == 4 and ' - <bv>In-Review'
 		or '',
