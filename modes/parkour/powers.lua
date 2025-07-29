@@ -182,8 +182,7 @@ end
 local shop_powers = {}
 shop_powers[1] = {
 	name = "snowball",
-	cooldown_img = "173db111ba4.png",
-	cooldown_scale = 0.34,
+	cooldown_img = "17127e6674c.png",
 	cooldown = 12500,
 
 	cond = function(player, key, down, x, y)
@@ -263,6 +262,7 @@ shop_powers[3] = {
 	cooldown_img = "149c068e42f.png",
 	cooldown_scale = 0.5,
 	cooldown = 2 * 60 * 1000,
+	noChairCooldown = true,
 
 	cond = function(player, key, down, x, y)
 		return not ghost[player]
@@ -377,27 +377,10 @@ powers = {
 
 		cooldown_img = "17127e6674c.png",
 
-		actualName = function(player)
+		proxyFor = function(player)
 			local power_id = players_file[player]:getEquipped(8)
 			local power = shop_powers[power_id]
-			return power and power.name or "shop_power"
-		end,
-
-		cond = function(player, key, down, x, y)
-			local power_id = players_file[player]:getEquipped(8)
-			local power = shop_powers[power_id]
-			return power and (not power.cond or power.cond(player, key, down, x, y))
-		end,
-
-		cooldown_fnc = function(player)
-			local power_id = players_file[player]:getEquipped(8)
-			local power = shop_powers[power_id]
-			if not power then return end
-			return checkCooldown(
-				player, power.name, power.cooldown * cooldownMultiplier,
-				power.cooldown_img, power.cooldown_scale,
-				players_file[player].settings[3] == 1
-			)
+			return power
 		end,
 		default = {2, 4}, -- E
 
@@ -1012,7 +995,61 @@ end
 local function addTracklist(power, player, x, y)
 	if not power.isVisual then
 		used_powers._count = used_powers._count + 1
-		used_powers[ used_powers._count ] = {player, power.actualName and power.actualName(player) or power.name, x, y}
+		used_powers[ used_powers._count ] = {player, power.name, x, y}
+	end
+end
+
+do
+local function usePower(player, _power, key, down, x, y, chairCd, onlyVisual)
+	local power = _power.proxyFor and _power.proxyFor(player) or _power
+
+	if key == -1 then -- mouse click
+		if power.click and not power.click[player] and keys[player][power.id] then
+			return
+		end
+	else
+		if power.click then
+			power.click[player] = down
+			return
+		end
+	end
+
+	if not down then return end
+	if onlyVisual and not power.isVisual then return end
+	if chairCd and not power.isVisual and not power.noChairCooldown then return end
+	if power.cond and not power.cond(player, key, down, x, y) then return end
+
+	if power.cooldown and not checkCooldown(
+		player, power.name, power.cooldown * cooldownMultiplier,
+		power.cooldown_img, power.cooldown_scale,
+		players_file[player].settings[3] == 1
+	) then return end
+
+	if key == -1 then -- mouse click
+		_power.fnc(player, x, y)
+	else
+		_power.fnc(player, key, down, x, y)
+	end
+
+	addTracklist(power, player, x, y)
+
+	if doStatsCount() then
+		if power_quest[player] and (power_quest[player].w or power_quest[player].d) then
+			local save = false
+			local file = players_file[player].quests
+			if power_quest[player].w and power_quest[player].w == power.id then
+				quests[6].updateProgress(player, file[power_quest[player].wi], true)
+				save = true
+			end
+			if power_quest[player].d and power_quest[player].d == power.id then
+				quests[6].updateProgress(player, file[power_quest[player].di], false)
+				save = true
+			end
+
+			if save then
+				savePlayerData(player)
+			end
+		end
 	end
 end
 
@@ -1068,41 +1105,12 @@ onEvent("Keyboard", function(player, key, down, x, y)
 
 	local power = keys.triggers[player][key]
 	if power then
-		local chairCooldown = victory[player] > os.time() and
+		local chairCd = victory[player] > os.time() and
 			chair_pos and ((x - chair_pos[1]) ^ 2 + (y - chair_pos[2]) ^ 2) <= 10000
+		local onlyVisual = records_admins or disable_powers or submode == "smol"
 		for index = 1, power._count do
-			if power[index] and power[index].click then
-				power[index].click[player] = down
-			elseif down and power[index] and
-			(not chairCooldown or power[index].isVisual or power[index].noChairCooldown) and
-			(not power[index].cond or power[index].cond(player, key, down, x, y)) and
-			(not power[index].cooldown_fnc or power[index].cooldown_fnc(player)) and
-			(not power[index].cooldown or checkCooldown(
-				player, power[index].name, power[index].cooldown * cooldownMultiplier,
-				power[index].cooldown_img, power[index].cooldown_scale,
-				players_file[player].settings[3] == 1
-			)) and (power[index].isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
-				power[index].fnc(player, key, down, x, y)
-				addTracklist(power[index], player, x, y)
-
-				if doStatsCount() then
-					if power_quest[player] and (power_quest[player].w or power_quest[player].d) then
-						local save = false
-						local file = players_file[player].quests
-						if power_quest[player].w and power_quest[player].w == power[index].id then
-							quests[6].updateProgress(player, file[power_quest[player].wi], true)
-							save = true
-						end
-						if power_quest[player].d and power_quest[player].d == power[index].id then
-							quests[6].updateProgress(player, file[power_quest[player].di], false)
-							save = true
-						end
-
-						if save then
-							savePlayerData(player)
-						end
-					end
-				end
+			if power[index] then
+				usePower(player, power[index], key, down, x, y, chairCd, onlyVisual)
 			end
 		end
 	end
@@ -1110,19 +1118,17 @@ end)
 
 onEvent("Mouse", function(player, x, y)
 	if not victory[player] or not players_file[player] then return end
+	if mapIsAboutToChange then return end
 
 	local power = powers.teleport
+	local chairCd = victory[player] > os.time() and
+		chair_pos and ((x - chair_pos[1]) ^ 2 + (y - chair_pos[2]) ^ 2) <= 10000
+	local onlyVisual = records_admins or disable_powers or submode == "smol"
 	if players_file[player].c >= power.maps or review_mode then
-		if (power.click[player] or not keys[player][power.id]) and (not power.cooldown or checkCooldown(
-			player, power.name, power.cooldown * cooldownMultiplier,
-			power.cooldown_img, power.cooldown_scale,
-			players_file[player].settings[3] == 1
-		)) and (power.isVisual or (not records_admins and submode ~= "smol" and not disable_powers)) then
-			power.fnc(player, x, y)
-			addTracklist(power, player, x, y)
-		end
+		usePower(player, power, -1, true, x, y, chairCd, onlyVisual)
 	end
 end)
+end
 
 onEvent("GameStart", function()
 	local upgrade
