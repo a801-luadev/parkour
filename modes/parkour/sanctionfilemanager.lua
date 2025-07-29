@@ -126,12 +126,17 @@ SanctionFileManager = {
     lastdata = nil,
 
     load = function(self, str, fullparse)
-        local data = string_split(str, "\1")
+        local updateIndex = str:find("\1", 1, true)
+        if not updateIndex then
+          error("SplitFileManager: load: invalid data format, no update marker found")
+        end
 
-        if self.lastupdate == data[1] then
+        local update = str:sub(1, updateIndex - 1)
+        if self.lastupdate == update then
             return self.lastdata
         end
 
+        local data = string_split(str, "\1")
         local modList = string_split(data[2], "\2")
 
         if not fullparse then
