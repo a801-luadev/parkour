@@ -36,6 +36,7 @@ local maps = {
 local current_difficulty = 0
 local maplist_index = 0
 local next_map
+local mapIsAboutToChange
 
 for i=1,3 do
 	maps[i] = {
@@ -386,6 +387,8 @@ end)
 
 onEvent("Loop", function(elapsed, remaining)
 	if review_mode or records_admins then return end
+
+	mapIsAboutToChange = remaining < 1500
 
 	-- Changes the map when needed
 	if (is_invalid and os.time() >= is_invalid) or remaining < 500 then

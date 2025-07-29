@@ -1064,6 +1064,8 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		return
 	end
 
+	if mapIsAboutToChange then return end
+
 	local power = keys.triggers[player][key]
 	if power then
 		local chairCooldown = victory[player] > os.time() and
