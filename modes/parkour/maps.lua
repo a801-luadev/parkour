@@ -37,6 +37,7 @@ local current_difficulty = 0
 local maplist_index = 0
 local next_map
 local mapIsAboutToChange
+local map_images
 
 for i=1,3 do
 	maps[i] = {
@@ -197,6 +198,14 @@ local function getTagProperties(tag)
 	return properties
 end
 
+local function renderMapImages(player)
+	if not map_images then return end
+	for index = 1, map_images._len do
+		local image = map_images[index]
+		tfm.exec.addImage(image[4], "+" .. image[1], image[2], image[3], player, 1, 1, image[5], 1, 0, 0, false)
+	end
+end
+
 onEvent("GameDataLoaded", function(data)
 	if data.maps or data.maps2 or data.maps3 then
 		local in_file = { data.maps, data.maps2, data.maps3 }
@@ -253,6 +262,7 @@ end)
 onEvent("NewGame", function()
 	local map_code_num = tonumber(tostring(room.currentMap):sub(2))
 
+	map_images = nil
 	current_difficulty = 0
 	for i=1, 3 do
 		if table_find(maps[i].list, map_code_num) then
@@ -275,7 +285,8 @@ onEvent("NewGame", function()
 		end
 		return invalidMap("vanilla")
 	end
-	local xml = room.xmlMapInfo.xml
+	local info = room.xmlMapInfo
+	local xml = info.xml
 
 	local hole = string.match(xml, '<T%s+.-/>')
 	if hole then
@@ -349,7 +360,7 @@ onEvent("NewGame", function()
 		end
 	end
 
-	if room.xmlMapInfo.author ~= "#Module" then
+	if info.author ~= "#Module" then
 		if not chair_pos or count < 3 then -- start, at least one nail and end chair
 			return invalidMap(not chair_pos and "needing_chair" or "missing_checkpoints")
 		end
@@ -367,8 +378,8 @@ onEvent("NewGame", function()
 		and not is_tribe
 		and not records_admins
 		and not review_mode
-		and room.xmlMapInfo.permCode ~= 41
-		and room.xmlMapInfo.author ~= "#Module") then
+		and info.permCode ~= 41
+		and info.author ~= "#Module") then
 		invalidMap("no_perm")
 		return
 	end
@@ -381,6 +392,52 @@ onEvent("NewGame", function()
 			global_poll = true
 			-- poll starts in modes/parkour/ui.lua
 			break
+		end
+	end
+
+	if review_mode or info.permCode == 41 or info.permCode == 42 then
+		if not xml:find(' i="', 1, true) or not xml:find(' lua="', 1, true) then
+			return
+		end
+
+		local images, count, gcount = {}, 0, 0
+		local props, testId, x, y, w, h, rot, image
+
+		for ground in string.gmatch(xml, '<S( .-)/>') do
+			props = getTagProperties(ground)
+			if props.lua and props.i then
+				x, y, image = string.match(props.i, "^(.-),(.-),(.-)$")
+				rot = props.P and string.match(props.P, "^.-,.-,.-,.-,(.-),")
+				rot = math.rad(tonumber(rot) or 0)
+				if x and y and image then
+					if image:sub(-4) ~= ".png" then
+						image = "img@" .. image
+					end
+					testId = tfm.exec.addImage(image, "+" .. props.lua, x, y, "Tigrounette")
+					if testId then
+						w = math.max(10, tonumber(props.L) or 10)
+						h = math.max(10, tonumber(props.H) or 10)
+						x = tonumber(x) or 0
+						y = tonumber(y) or 0
+						x = x - w / 2
+						y = y - h / 2
+
+						count = count + 1
+						images[count] = { props.lua, x, y, image, rot }
+
+						if count == 60 then break	end
+					end
+				end
+			end
+
+			gcount = gcount + 1
+			if gcount == 60 then break end
+		end
+
+		if count > 0 then
+			images._len = count
+			map_images = images
+			renderMapImages()
 		end
 	end
 end)
@@ -441,6 +498,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 	end
 end)
+
+onEvent("NewPlayer", renderMapImages)
 
 onEvent("GameStart", function()
 	tfm.exec.disableAutoNewGame(true)
