@@ -979,7 +979,7 @@ local function handleSkins(player, cmd, quantity, args)
 	elseif action == "new" then
 		local category = tonumber(args[2])
 		if not category and args[2] then
-			category = category:lower()
+			category = args[2]:lower()
 			if category == "bigbox" then
 				category = "bigBox"
 			end
