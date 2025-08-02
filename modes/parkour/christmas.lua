@@ -39,7 +39,16 @@ do
     end
 
     christmas.createGift = function(player)
-      if not christmas.isGiftRound or christmas.collected[player] then
+      if not christmas.isGiftRound then
+        return
+      end
+
+      if christmas.collected[player] then
+        tfm.exec.addImage(
+          christmas.imageName, christmas.imageTarget,
+          christmas.gift_x, christmas.gift_y, player,
+          1, 1, 0, 0.5, 0.5, 0.5, true
+        )
         return
       end
 
@@ -107,6 +116,11 @@ do
 
       tfm.exec.removeBonus(christmas.bonusId, player)
       tfm.exec.removeImage(christmas.images[player], true)
+      tfm.exec.addImage(
+        christmas.imageName, christmas.imageTarget,
+        christmas.gift_x, christmas.gift_y, player,
+        1, 1, 0, 0.5, 0.5, 0.5, true
+      )
 
       return prize
     end

@@ -183,9 +183,10 @@ do
         local items, item, collectible = lemonade.items
         local seen = {}
         for i=1, #items do
+          item = items[i]
+          collectible = lemonade.collectibles[item.i]
+
           if lemonade.can_collect[i][target] ~= false then
-            item = items[i]
-            collectible = lemonade.collectibles[item.i]
             lemonade.can_collect[i][target] = tfm.exec.addImage(collectible[3], "!999", item.x, item.y, target, 1, 1, 0, 1, 0.5, 0.5)
             tfm.exec.addBonus(0, item.x, item.y, lemonade.bonus_rev[i], 0, false, target)
 
@@ -193,6 +194,8 @@ do
               seen[item.i] = true
               translatedChatMessage("lemonade_" .. collectible[2], target)
             end
+          else
+            tfm.exec.addImage(collectible[3], "!999", item.x, item.y, target, 1, 1, 0, 0.5, 0.5, 0.5)
           end
         end
       elseif lemonade.state == TRADE then
@@ -295,9 +298,11 @@ do
       if not item then return end
       local img = lemonade.can_collect[index][player]
       if not img then return end
-      tfm.exec.removeImage(img)
+      local collectible = lemonade.collectibles[item.i]
+      tfm.exec.removeImage(img, true)
+      tfm.exec.addImage(collectible[3], "!999", item.x, item.y, player, 1, 1, 0, 0.5, 0.5, 0.5, true)
       lemonade.can_collect[index][player] = false
-      return lemonade.collectibles[item.i][1]
+      return collectible[1]
     end
 
     lemonade.reset()
