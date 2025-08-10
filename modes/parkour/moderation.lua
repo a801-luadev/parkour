@@ -1541,6 +1541,7 @@ local function handleKick(playerName, cmd, quantity, args)
 	end
 
 	tfm.exec.kickPlayer(args[1])
+	logCommand(playerName, cmd, quantity, args)
 end
 
 local function handleClaim(playerName, cmd, quantity, args)
