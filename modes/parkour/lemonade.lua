@@ -146,6 +146,8 @@ do
         next_map = lemonade.map
         lemonade.tradeNext = true
         tfm.exec.chatMessage("<J>Lemonade trade map will appear next round", player)
+      elseif args[2] == "chance" then
+        tfm.exec.chatMessage("<J>Chance of craft map appearing: " .. tostring(lemonade.chance), player)
       else
         lemonade.rounds = 0
         lemonade.timestamp = 0
@@ -195,7 +197,7 @@ do
               translatedChatMessage("lemonade_" .. collectible[2], target)
             end
           else
-            tfm.exec.addImage(collectible[3], "!999", item.x, item.y, target, 1, 1, 0, 0.5, 0.5, 0.5)
+            tfm.exec.addImage(collectible[3], "!999", item.x, item.y, target, 1, 1, 0, 0.3, 0.5, 0.5)
           end
         end
       elseif lemonade.state == TRADE then
@@ -293,16 +295,20 @@ do
       end
     end
 
-    function lemonade.collect(player, index)
+    function lemonade.getCollectible(player, index)
       local item = lemonade.items[index]
       if not item then return end
       local img = lemonade.can_collect[index][player]
       if not img then return end
       local collectible = lemonade.collectibles[item.i]
+      return collectible, item, img
+    end
+
+    function lemonade.collect(player, index)
+      local collectible, item, img = lemonade.getCollectible(player, index)
       tfm.exec.removeImage(img, true)
-      tfm.exec.addImage(collectible[3], "!999", item.x, item.y, player, 1, 1, 0, 0.5, 0.5, 0.5, true)
+      tfm.exec.addImage(collectible[3], "!999", item.x, item.y, player, 1, 1, 0, 0.3, 0.5, 0.5, true)
       lemonade.can_collect[index][player] = false
-      return collectible[1]
     end
 
     lemonade.reset()
@@ -335,7 +341,8 @@ do
       local pdata = players_file[player]
       if not pdata then return end
 
-      local ecIndex = lemonade.collect(player, index)
+      local collectible = lemonade.getCollectible(player, index)
+      local ecIndex = collectible and collectible[1]
       if not ecIndex then return end
 
       -- limit to 10 per item
@@ -344,6 +351,7 @@ do
         return
       end
 
+      lemonade.collect(player, index)
       pdata:updateItem(ecIndex, 0, 1)
       savePlayerData(player)
       translatedChatMessage("lemonade_found", player)
