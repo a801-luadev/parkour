@@ -400,6 +400,10 @@ onEvent("NewGame", function()
 			return
 		end
 
+		if info.author == "#Module" then
+			return
+		end
+
 		local images, count, gcount = {}, 0, 0
 		local props, testId, x, y, w, h, rot, image
 
