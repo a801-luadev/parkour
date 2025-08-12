@@ -15,6 +15,7 @@ packets.rooms = {
   lock_fixed = 14,
   prev_kill = 15,
   skip_map = 16,
+  paused_events = 17,
 }
 
 packets.bots = {

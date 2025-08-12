@@ -26,6 +26,7 @@ do
 	local checkingRuntime = false
 	local paused = false
 	local scheduled = {_count = 0, _pointer = 1}
+	local pausedEventInfo
 
 	-- Listeners
 	local events = {}
@@ -83,6 +84,15 @@ do
 					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, index}
 				end
 
+				pausedEventInfo = (
+					evt._name .. '(' ..
+					tostring(a) .. ' ' ..
+					tostring(b) .. ' ' ..
+					tostring(c) .. ' ' ..
+					tostring(d) .. ' ' ..
+					tostring(e) .. ' ' ..
+					') ' .. tostring(index) .. '\n' .. debug.traceback()
+				)
 				paused = true
 				cycleId = cycleId + 2
 				translatedChatMessage("paused_events")
@@ -95,6 +105,18 @@ do
 
 	local function resumeModule()
 		local count = scheduled._count
+
+		if pausedEventInfo then
+			sendPacket(
+				"common", packets.rooms.paused_events,
+				room.shortName .. "\000" ..
+				(cycleId - startCycle) .. "\000" ..
+				totalRuntime .. "\000" ..
+				room.uniquePlayers .. "\000" ..
+				pausedEventInfo
+			)
+			pausedEventInfo = nil
+		end
 
 		local event
 		for index = scheduled._pointer, count do
@@ -209,7 +231,7 @@ do
 				return
 			end
 
-			if eventAfter then
+			if not paused and eventAfter then
 				eventAfter()
 			end
 
@@ -225,7 +247,7 @@ do
 
 		if not evt then
 			-- Unregistered event
-			evt = {_count = 0}
+			evt = {_count = 0, _name=name}
 			events[name] = evt
 
 			_G["event" .. name] = registerEvent(name)
