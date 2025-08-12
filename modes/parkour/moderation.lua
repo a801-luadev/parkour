@@ -1273,7 +1273,7 @@ end
 local mouseImages = {}
 local function applyImage(player, img, factorY)
 	if mouseImages[player] and mouseImages[player][0] then return img[2] or 0 end
-	return tfm.exec.addImage(img[1], '%'..player, img[5], img[6], nil, img[3] * img[4] * img[9], img[4] * factorY, 0, img[7], 0.5 * img[3] * img[9], 0.5, false)
+	return tfm.exec.addImage(img[1], img[10] .. player, img[5], img[6], nil, img[3] * img[4] * img[9], img[4] * factorY, 0, img[7], 0.5 * img[3] * img[9], 0.5, false)
 end
 local function addMouseImage(player, cmd, quantity, args)
 	if quantity == 0 then
@@ -1299,12 +1299,15 @@ local function addMouseImage(player, cmd, quantity, args)
 	local opacity = tonumber(args[6]) or 1
 	local invert = scale < 0 and -1 or 1
 	local alwaysActive = false
+	local imgTarget = '%'
 
 	scale = math.abs(scale)
 
 	if imageURL then
 		alwaysActive = ranks.admin[player] and imageURL:sub(1, 1) == '*'
 		imageURL = alwaysActive and imageURL:sub(2) or imageURL
+		imgTarget = imageURL:sub(1, 1) == '$' and '$' or '%'
+		imageURL = imgTarget == '$' and imageURL:sub(2) or imageURL
 	end
 
 	if not ranks.admin[player] then
@@ -1326,7 +1329,7 @@ local function addMouseImage(player, cmd, quantity, args)
 					tfm.exec.removeImage(mouseImages[name][2], false)
 				end
 
-				local img = {imageURL, nil, 1, scale, offsetX, offsetY, opacity, alwaysActive, invert}
+				local img = {imageURL, nil, 1, scale, offsetX, offsetY, opacity, alwaysActive, invert, imgTarget}
 				img[0] = mouseImages[name] and mouseImages[name][0]
 				if alwaysActive or victory[name] then
 					img[2] = applyImage(name, img, 1)
@@ -1357,7 +1360,7 @@ local function addMouseImage(player, cmd, quantity, args)
 		translatedChatMessage("new_image", playerName)
 	end
 
-	local img = {imageURL, nil, 1, scale, offsetX, offsetY, opacity, alwaysActive, invert}
+	local img = {imageURL, nil, 1, scale, offsetX, offsetY, opacity, alwaysActive, invert, imgTarget}
 	img[0] = mouseImages[playerName] and mouseImages[playerName][0]
 	if alwaysActive or victory[playerName] then
 		img[2] = applyImage(playerName, img, 1)
