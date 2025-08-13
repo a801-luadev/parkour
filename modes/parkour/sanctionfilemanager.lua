@@ -10,9 +10,9 @@ local function string_split(str, deli)
 end
 
 local function findSanction(data, id)
-    local first = data:find("\2"..id.."\3")
+    local first = data:find("\2"..id.."\3", 1, true)
     if not first then return end
-    local last = data:find("\2", first + 1)
+    local last = data:find("\2", first + 1, true)
     return first + 1, last - 1
 end
 
