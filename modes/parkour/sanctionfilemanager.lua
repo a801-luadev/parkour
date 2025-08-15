@@ -32,10 +32,11 @@ local function getSanction(file, id)
 
     local retSanction
 
-    if file._root then
+    if rawget(file, "_root") then
         retSanction = true
         file = file._root
     end
+    if not file._keys[id] then return end
 
     local first, last = findSanction(file._sanction, id)
 
@@ -73,6 +74,7 @@ local function setSanction(file, id, sanction)
 
     file._updated = true
     file.sanction[strId] = sanction
+    file._keys[id] = true
 
     -- Add moderator to the mod list if not already present
     if moderator then
@@ -113,10 +115,10 @@ local function setSanction(file, id, sanction)
     file._sanction = file._sanction:sub(1, first - 1) .. newSanction .. file._sanction:sub(last + 1)
 end
 
-local function sanctionKeys(file)
+local function parseSanctionKeys(data)
     local keys = {}
-    for key in file._sanction:gmatch('\2(%d+)\3') do
-        keys[#keys + 1] = key
+    for key in data:gmatch('\2(%d+)\3') do
+        keys[tonumber(key)] = true
     end
     return keys
 end
@@ -136,27 +138,32 @@ SanctionFileManager = {
             return self.lastdata
         end
 
-        local data = string_split(str, "\1")
-        local modList = string_split(data[2], "\2")
+        local modListEnd = str:find("\1", updateIndex + 1, true)
+        if not modListEnd then
+          error("SplitFileManager: load: invalid data format, no modlist marker found")
+        end
+
+        local modList = string_split(str:sub(updateIndex + 1, modListEnd - 1), "\2")
+        local sanctionData = str:sub(modListEnd + 1)
 
         if not fullparse then
             local root = {
                 setSanction = setSanction,
-                sanctionKeys = sanctionKeys,
 
-                _sanction = "\2" .. data[3] .. "\2",
+                _sanction = "\2" .. sanctionData .. "\2",
 
                 mods = modList,
             }
             root.sanction = setmetatable({ _root = root }, self)
+            root._keys = parseSanctionKeys(root._sanction)
 
-            self.lastupdate = data[1]
+            self.lastupdate = update
             self.lastdata = setmetatable(root, self)
     
             return self.lastdata
         end
 
-        local sanctionList = string_split(data[3], "\2")
+        local sanctionList = string_split(sanctionData, "\2")
         local sanctionDict = {}
         local key, sanction
 
@@ -165,7 +172,7 @@ SanctionFileManager = {
             sanctionDict[key] = sanction
         end
 
-        self.lastupdate = data[1]
+        self.lastupdate = update
         self.lastdata = {
             mods = modList,
             sanction = sanctionDict,
@@ -202,6 +209,7 @@ SanctionFileManager = {
 bans = setmetatable({
     mods = {},
     _sanction = '',
+    _keys = {},
 }, SanctionFileManager)
 bans.sanction = setmetatable({ _root = bans }, SanctionFileManager)
 end

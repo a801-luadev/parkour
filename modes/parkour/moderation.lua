@@ -872,8 +872,16 @@ printSanctionList = function(player, targetID, page)
 		if not targetID then
 			local page_size = 90
 
-			local playerIDs = data:sanctionKeys()
-			local len = #playerIDs
+			if not data._keys then
+				tfm.exec.chatMessage("<v>[#] <r>Not loaded yet", player)
+				return
+			end
+
+			local playerIDs, len = {}, 0
+			for id in next, data._keys do
+				len = len + 1
+				playerIDs[len] = id
+			end
 
 			local totalPages = math.ceil(len / page_size)
 
