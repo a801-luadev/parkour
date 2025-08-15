@@ -182,12 +182,20 @@ local function newMap(difficulty)
 	tfm.exec.newGame(map, not records_admins and math.random(3000000) <= 1000000)
 end
 
-local function invalidMap(arg)
+local invalidMap
+do
+local firstCall = true
+invalidMap = function(arg)
 	levels = nil
 	is_invalid = os.time() + 3000
+	if firstCall then
+		firstCall = nil
+		return
+	end
 	tfm.exec.chatMessage("<r>" .. room.currentMap)
 	translatedChatMessage("corrupt_map")
 	translatedChatMessage("corrupt_map_" .. arg)
+end
 end
 
 local function getTagProperties(tag)
