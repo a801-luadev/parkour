@@ -95,7 +95,7 @@ do
 						container[ container._count ] = tfm.exec.addImage(badge[2], ":2", x, y, player)
 						ui.addTextArea(
 							badgeTAs[index],
-							"<a href='event:_help:badge_" .. badge[1] .. "'>\n\n\n\n\n\n",
+							"<a href='event:big_badge:" .. index .. ":" .. pbg[index] .. "'>\n\n\n\n\n\n",
 							player, x, y, 30, 30,
 							0, 0, 0, true
 						)
@@ -178,7 +178,16 @@ do
 		)
 
 	onEvent("ParsedTextAreaCallback", function(id, player, action, args)
-		if action == "prof_maps" then
+		if action == "big_badge" then
+			if not checkCooldown(player, "big_badge", 2000) then return end
+			local group, badge = args:match("(%d+):(%d+)")
+			group = tonumber(group)
+			badge = tonumber(badge)
+			if not group or not badge or not badges[group] or not badges[group][badge] then
+				return
+			end
+			NewBadgeInterface:show(player, group, badge)
+		elseif action == "prof_maps" then
 			if not checkCooldown(player, "mapsToggle", 500) then return end
 			if not players_file[player] then return end
 
