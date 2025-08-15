@@ -124,7 +124,7 @@ do
 						end
 						names[index] = unknown
 					else
-						names[index] = row[2]
+						names[index] = '<a href="event:profile:' .. row[2] .. '">' .. row[2] .. '</a>'
 					end
 				end
 

@@ -446,6 +446,9 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 		if not emote then return end
 
 		tfm.exec.playEmote(player, emote)
+	elseif action == "profile" then
+		if not checkCooldown(player, "clickprofile", 2000) then return end
+		eventChatCommand(player, "profile " .. args)
 	elseif action == "change_quest" then
 		if not checkCooldown(player, "changequest", 5000) then return end
 
