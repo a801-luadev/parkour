@@ -74,7 +74,9 @@ do
 		end
 	end
 
-	local function callListeners(evt, a, b, c, d, e, offset)
+	-- isDirect = not a scheduled or an indirect call
+	local function callListeners(evt, a, b, c, d, e, offset, isDirect)
+		local pause_index
 		for index = offset, evt._count do
 			if not initializingModule and os_time() >= stoppingAt then
 				if index < evt._count then
@@ -84,22 +86,47 @@ do
 					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, index}
 				end
 
-				pausedEventInfo = (
-					evt._name .. '(' ..
-					tostring(a) .. ' ' ..
-					tostring(b) .. ' ' ..
-					tostring(c) .. ' ' ..
-					tostring(d) .. ' ' ..
-					tostring(e) .. ' ' ..
-					') ' .. tostring(index) .. '\n' .. debug.traceback()
-				)
+				if not paused then
+					pausedEventInfo = { _len=9 }
+					if not isDirect then
+						pausedEventInfo[10] = evt._name
+						pausedEventInfo[11] = a
+						pausedEventInfo[12] = b
+						pausedEventInfo[13] = c
+						pausedEventInfo[14] = d
+						pausedEventInfo[15] = e
+						pausedEventInfo[16] = index
+						pausedEventInfo[17] = evt._lines[index]
+					end
+					translatedChatMessage("paused_events")
+				end
+
 				paused = true
 				cycleId = cycleId + 2
-				translatedChatMessage("paused_events")
+
 				break
 			end
 
+			pause_index = index
 			evt[index](a, b, c, d, e)
+		end
+
+		if isDirect then
+			if eventAfter and not paused then
+				eventAfter()
+			end
+
+			if paused then
+				pausedEventInfo[1] = evt._name
+				pausedEventInfo[2] = a
+				pausedEventInfo[3] = b
+				pausedEventInfo[4] = c
+				pausedEventInfo[5] = d
+				pausedEventInfo[6] = e
+				pausedEventInfo[7] = offset
+				pausedEventInfo[8] = pause_index
+				pausedEventInfo[9] = evt._lines[pause_index]
+			end
 		end
 	end
 
@@ -107,13 +134,18 @@ do
 		local count = scheduled._count
 
 		if pausedEventInfo then
+			for i=1, 17 do
+				pausedEventInfo._len = pausedEventInfo[i] and i or pausedEventInfo._len
+				pausedEventInfo[i] = tostring(pausedEventInfo[i] or ""):sub(1, 20)
+			end
+
 			sendPacket(
 				"common", packets.rooms.paused_events,
 				room.shortName .. "\000" ..
 				(cycleId - startCycle) .. "\000" ..
 				totalRuntime .. "\000" ..
 				room.uniquePlayers .. "\000" ..
-				pausedEventInfo
+				table.concat(pausedEventInfo, '\000', 1, pausedEventInfo._len)
 			)
 			pausedEventInfo = nil
 		end
@@ -121,7 +153,7 @@ do
 		local event
 		for index = scheduled._pointer, count do
 			event = scheduled[index]
-			callListeners(event[1], event[2], event[3], event[4], event[5], event[6], event[7])
+			callListeners(event[1], event[2], event[3], event[4], event[5], event[6], event[7], false)
 
 			if paused then
 				if scheduled._count > count then
@@ -155,7 +187,7 @@ do
 		local event
 		event = function(a, b, c, d, e)
 			if initializingModule then
-				local done, result = pcall(callListeners, evt, a, b, c, d, e, 1)
+				local done, result = pcall(callListeners, evt, a, b, c, d, e, 1, false)
 				if not done then
 					errorHandler(name, result)
 				end
@@ -172,7 +204,7 @@ do
 				end
 				-- Directly call callListeners since there's no need of
 				-- two error handlers
-				callListeners(evt, a, b, c, d, e, 1)
+				callListeners(evt, a, b, c, d, e, 1, false)
 				return
 			end
 
@@ -225,14 +257,10 @@ do
 				return
 			end
 
-			local done, result = pcall(callListeners, evt, a, b, c, d, e, 1)
+			local done, result = pcall(callListeners, evt, a, b, c, d, e, 1, true)
 			if not done then
 				errorHandler(name, result)
 				return
-			end
-
-			if not paused and eventAfter then
-				eventAfter()
 			end
 
 			checkingRuntime = false
@@ -247,7 +275,7 @@ do
 
 		if not evt then
 			-- Unregistered event
-			evt = {_count = 0, _name=name}
+			evt = {_count = 0, _name=name, _lines={}}
 			events[name] = evt
 
 			_G["event" .. name] = registerEvent(name)
@@ -256,5 +284,6 @@ do
 		-- Register callback
 		evt._count = evt._count + 1
 		evt[ evt._count ] = callback
+		evt._lines[ evt._count ] = debug.traceback(nil, 2):match(':(%d+)')
 	end
 end
