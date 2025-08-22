@@ -75,7 +75,7 @@ do
 	end
 
 	-- isDirect = not a scheduled or an indirect call
-	local function callListeners(evt, a, b, c, d, e, offset, isDirect)
+	local function callListeners(evt, a, b, c, d, e, f, g, offset, isDirect)
 		local pause_index
 		for index = offset, evt._count do
 			if not initializingModule and os_time() >= stoppingAt then
@@ -83,7 +83,7 @@ do
 					-- If this event didn't end, we need to resume from
 					-- where it has been left!
 					scheduled._count = scheduled._count + 1
-					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, index}
+					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, f, g, index}
 				end
 
 				if not paused then
@@ -108,7 +108,7 @@ do
 			end
 
 			pause_index = index
-			evt[index](a, b, c, d, e)
+			evt[index](a, b, c, d, e, f, g)
 		end
 
 		if isDirect then
@@ -153,13 +153,13 @@ do
 		local event
 		for index = scheduled._pointer, count do
 			event = scheduled[index]
-			callListeners(event[1], event[2], event[3], event[4], event[5], event[6], event[7], false)
+			callListeners(event[1], event[2], event[3], event[4], event[5], event[6], event[7], event[8], event[9], false)
 
 			if paused then
 				if scheduled._count > count then
 					-- If a new event has been scheduled, it is this one.
 					-- It should be the first one to run on the next attempt to resume.
-					event[7] = scheduled[ scheduled._count ][7]
+					event[9] = scheduled[ scheduled._count ][9]
 
 					-- So we set it to start from here
 					scheduled._pointer = index
@@ -185,9 +185,9 @@ do
 		local schedule = not DONT_SCHEDULE[name]
 
 		local event
-		event = function(a, b, c, d, e)
+		event = function(a, b, c, d, e, f, g)
 			if initializingModule then
-				local done, result = pcall(callListeners, evt, a, b, c, d, e, 1, false)
+				local done, result = pcall(callListeners, evt, a, b, c, d, e, f, g, 1, false)
 				if not done then
 					errorHandler(name, result)
 				end
@@ -198,13 +198,13 @@ do
 				if paused then
 					if schedule then
 						scheduled._count = scheduled._count + 1
-						scheduled[ scheduled._count ] = {evt, a, b, c, d, e, 1}
+						scheduled[ scheduled._count ] = {evt, a, b, c, d, e, f, g, 1}
 					end
 					return
 				end
 				-- Directly call callListeners since there's no need of
 				-- two error handlers
-				callListeners(evt, a, b, c, d, e, 1, false)
+				callListeners(evt, a, b, c, d, e, f, g, 1, false)
 				return
 			end
 
@@ -239,7 +239,7 @@ do
 						usedRuntime = usedRuntime + os_time() - start
 						if schedule then
 							scheduled._count = scheduled._count + 1
-							scheduled[ scheduled._count ] = {evt, a, b, c, d, e, 1}
+							scheduled[ scheduled._count ] = {evt, a, b, c, d, e, f, g, 1}
 						end
 						return
 					end
@@ -251,13 +251,13 @@ do
 			if paused then
 				if schedule then
 					scheduled._count = scheduled._count + 1
-					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, 1}
+					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, f, g, 1}
 				end
 				checkingRuntime = false
 				return
 			end
 
-			local done, result = pcall(callListeners, evt, a, b, c, d, e, 1, true)
+			local done, result = pcall(callListeners, evt, a, b, c, d, e, f, g, 1, true)
 			if not done then
 				errorHandler(name, result)
 				return
