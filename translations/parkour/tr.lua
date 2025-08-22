@@ -19,7 +19,7 @@ translations.tr = {
 	leaderboard_not_loaded = "<r>Lider tablosu henüz yüklenemedi. Lütfen bekleyin.",
 	max_power_keys = "<v>[#] <r>Aynı tuşta sadece %s güç bulundurabilirsin",
 	room_name_length = "<ROSE><b>[HATA]</b> Oda adı, izin verilen <b>45</b karakter uzunluğunu aşıyor. Lütfen daha kısa bir oda adı seçin.",
-
+	bad_outfit = "<r>Farenizin üzerinde parkour odalarında kullanılamayan bir eşya/kürk var.",
 
 	-- Help window
 	help = "Yardım",
@@ -241,6 +241,7 @@ translations.tr = {
 	room = "Oda",
 	time = "Süre",
 	buy = "Satın Al",
+	sell = "Sat",
 	refund = "İade Et",
 	refund_info = "<p align='right'><font size='10'><b><g>Eşyalar için harcanan coinlerin %70'ini iade eder.",
 	equip = "Kullan",

@@ -19,6 +19,7 @@ translations.en = {
 	leaderboard_not_loaded = "<r>The leaderboard has not been loaded yet. Wait a minute.",
 	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 	room_name_length = "<ROSE><b>[ERROR]</b> The room name exceeds the allowed length of <b>45</b> characters. Please choose a shorter name.",
+	bad_outfit = "<r>Your outfit contains an item/fur that cannot be used in parkour.",
 
 	-- Help window
 	help = "Help",
@@ -236,6 +237,7 @@ translations.en = {
 	room = "Room",
 	time = "Time",
 	buy = "Buy",
+	sell = "Sell",
 	refund = "Refund",
 	refund_info = "<p align='right'><font size='10'><b><g>Refunds 70% of the coins spent on items.",
 	equip = "Equip",

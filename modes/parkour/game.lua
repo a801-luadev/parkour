@@ -79,6 +79,16 @@ do
 		lastOpenedMap = code:sub(1, 1) == '@' and code:sub(2) or code
 		newGame(code, reversed)
 	end
+
+	local respawnPlayer = tfm.exec.respawnPlayer
+	tfm.exec.respawnPlayer = function(player)
+		local info = room.playerList[player]
+		if info and info.look:find('327;', 1, true) == 1 then
+			tfm.exec.setPlayerLook(player, "1;0,0,0,0,0,0,0,0,0,0,0,0")
+			translatedChatMessage("bad_outfit", player)
+		end
+		return respawnPlayer(player)
+	end
 end
 
 local changePlayerSize = function(name, size)
