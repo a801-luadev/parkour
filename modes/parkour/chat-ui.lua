@@ -75,7 +75,6 @@ onEvent("PlayerWon", function(player)
 	if not levels then return end
 
 	victory[player] = os.time() + 10000 * (1 + math.max(0, file.bancount or 0))
-	setNameColor(player) -- just in case PlayerRespawn triggers first
 
 	if records_admins then
 		translatedChatMessage("records_completed", player)
@@ -100,6 +99,8 @@ onEvent("PlayerWon", function(player)
 			translatedChatMessage("records_submit", player)
 		end
 	end
+
+	setNameColor(player) -- just in case PlayerRespawn triggers first
 
 	if file.settings[7] == 0 then
 		translatedChatMessage("finished", player, player, taken)
