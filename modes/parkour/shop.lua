@@ -1911,6 +1911,20 @@ local shop_skins = {
 	shop_scale = 0.7,
 	tab = 6,
 },
+{
+	id = 230,
+	img = 'img@198c9786028',
+	price = 1500,
+	tab = 7,
+	x = 0.55,
+	y = 0.6,
+},
+{
+	id = 231,
+	img = 'img@198cd50b191',
+	price = 1000,
+	tab = 7,
+},
 }
 
 do
