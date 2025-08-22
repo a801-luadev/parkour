@@ -19,7 +19,6 @@ local online_staff = {
 	requesters = {_count = 0}
 }
 local shown_ranks = {"trainee", "mod", "mapper", "manager", "admin"}
-no_help = {}
 local map_polls = {}
 local current_poll
 
@@ -160,6 +159,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 			translatedChatMessage("nohelp", player)
 		end
 
+		updatePlayerCollision(player)
 		savePlayerData(player)
 	end
 end)

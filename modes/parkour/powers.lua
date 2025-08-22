@@ -18,8 +18,8 @@ local cooldowns = {}
 local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local cooldownMultiplier = 1
-local ghost = {}
 local cooldownSlots = {}
+local booster = {}
 
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
@@ -265,14 +265,14 @@ shop_powers[3] = {
 	noChairCooldown = true,
 
 	cond = function(player, key, down, x, y)
-		return not ghost[player]
+		return not ghost[player] and not golem[player]
 	end,
 
 	fnc = function(self, player, key, down, x, y)
 		local scale = facing[player] and 1 or -1
 		ghost[player] = tfm.exec.addImage("16ddff86413.png", "%" .. player, 0, 0, nil, scale, 1, 0, 1, scale * 0.5, 0.5)
-		tfm.exec.setPlayerCollision(player, 0)
 		tfm.exec.setPlayerGravityScale(player, 0, 0)
+		updatePlayerCollision(player)
 		bindKeyboard(player, 1, true, true)
 		bindKeyboard(player, 3, true, true)
 	end
@@ -302,15 +302,21 @@ shop_powers[5] = {
 	cooldown_scale = 0.5,
 	cooldown = 5000,
 
-	fnc = function(self, player, key, down, x, y)
+	fnc = function(self, player, key, down, x, y, vx, vy)
 		local right = facing[player]
 		local id = allocateId("bonus", 1000, 10000)
-		tfm.exec.addBonus(5, x + (right and 20 or -20), y, id, right and 0 or 180, true, nil)
-		addNewTimer(self.cooldown, self.despawn, id)
+		local angle = vx and vy and (vx ~= 0 or vy ~= 0) and math.atan2(vy, vx) or (right and 0 or math.pi)
+		x = x + (right and 20 or -20)
+		local img = tfm.exec.addImage("img@1943409e46e", "!99", x, y, nil, 1, 1, angle, 1, 0.5, 0.5)
+		tfm.exec.addBonus(0, x, y, id, 0, false, nil)
+		booster[id] = angle
+		addNewTimer(self.cooldown, self.despawn, id, img)
 	end,
 
-	despawn = function(id)
+	despawn = function(id, img)
 		tfm.exec.removeBonus(id)
+		tfm.exec.removeImage(img)
+		booster[id] = nil
 	end
 }
 shop_powers[6] = {
@@ -321,6 +327,46 @@ shop_powers[6] = {
 
 	fnc = function(self, player, key, down, x, y)
 		despawnableObject(5000, 0, nil, x, y + 5)
+	end
+}
+shop_powers[7] = {
+	name = "golem",
+	cooldown_img = "img@198c8bc6054",
+	cooldown_scale = 0.5,
+	cooldown = 2* 60 * 1000,
+	despawn_time = 20 * 1000,
+
+	cond = function(player, key, down, x, y)
+		local skinID = players_file[player]:getEquipped(7)
+		local skin = skinID and shop_skins[skinID]
+		return skin and not ghost[player] and not golem[player]
+	end,
+
+	fnc = function(self, player, key, down, x, y)
+		local skinID = players_file[player]:getEquipped(7)
+		local skin = skinID and shop_skins[skinID]
+		if not skin then return end
+		local imgID = tfm.exec.addImage(
+			skin.img or "img@196c5a94386",
+			"$" .. player,
+			0, 0, nil,
+			skin.scale or 1, skin.scale or 1, 0, 1,
+			skin.x or 0.5, skin.y or 0.52,
+			true
+		)
+		golem[player] = true
+		updatePlayerCollision(player)
+		addNewTimer(self.despawn_time - 1000, self.fadeOutImage, imgID)
+		addNewTimer(self.despawn_time, self.despawn, player)
+	end,
+
+	fadeOutImage = function(imgID)
+		tfm.exec.removeImage(imgID, true)
+	end,
+
+	despawn = function(player)
+		golem[player] = nil
+		updatePlayerCollision(player)
 	end
 }
 
@@ -384,7 +430,7 @@ powers = {
 		end,
 		default = {2, 4}, -- E
 
-		fnc = function(player, key, down, x, y)
+		fnc = function(player, key, down, x, y, vx, vy)
 			local file = players_file[player]
 			local id = file:getEquipped(8)
 			local power = shop_powers[id]
@@ -395,7 +441,7 @@ powers = {
 					savePlayerData(player)
 				end
 			end
-			return power:fnc(player, key, down, x, y)
+			return power:fnc(player, key, down, x, y, vx, vy)
 		end
 	},
 	{
@@ -1000,7 +1046,7 @@ local function addTracklist(power, player, x, y)
 end
 
 do
-local function usePower(player, _power, key, down, x, y, chairCd, onlyVisual)
+local function usePower(player, _power, key, down, x, y, chairCd, onlyVisual, vx, vy)
 	local power = _power.proxyFor and _power.proxyFor(player) or _power
 
 	if key == -1 then -- mouse click
@@ -1028,7 +1074,7 @@ local function usePower(player, _power, key, down, x, y, chairCd, onlyVisual)
 	if key == -1 then -- mouse click
 		_power.fnc(player, x, y)
 	else
-		_power.fnc(player, key, down, x, y)
+		_power.fnc(player, key, down, x, y, vx, vy)
 	end
 
 	addTracklist(power, player, x, y)
@@ -1053,7 +1099,7 @@ local function usePower(player, _power, key, down, x, y, chairCd, onlyVisual)
 	end
 end
 
-onEvent("Keyboard", function(player, key, down, x, y)
+onEvent("Keyboard", function(player, key, down, x, y, vx, vy)
 	if not victory[player] or not players_file[player] or not keys.triggers[player] then return end
 	if spec_mode[player] then return end
 
@@ -1110,7 +1156,7 @@ onEvent("Keyboard", function(player, key, down, x, y)
 		local onlyVisual = records_admins or disable_powers or submode == "smol"
 		for index = 1, power._count do
 			if power[index] then
-				usePower(player, power[index], key, down, x, y, chairCd, onlyVisual)
+				usePower(player, power[index], key, down, x, y, chairCd, onlyVisual, vx, vy)
 			end
 		end
 	end
@@ -1153,6 +1199,7 @@ onEvent("PlayerLeft", function(player)
 	keybindings[player] = nil
 	powers.teleport.click[player] = nil
 	ghost[player] = nil
+	golem[player] = nil
 	cooldownSlots[player] = nil
 end)
 
@@ -1320,12 +1367,16 @@ onEvent("NewGame", function()
 		bindKeyboard(player, 1, true, false)
 		bindKeyboard(player, 3, true, false)
 	end
-	ghost = {}
+	ghost, golem = {}, {}
 end)
 
 onEvent("NewPlayer", function(player)
-	for player2 in next, ghost do
-		tfm.exec.setPlayerGravityScale(player2, 0, 0)
+	for player2 in next, in_room do
+		updatePlayerCollision(player2)
+
+		if ghost[player2] then
+			tfm.exec.setPlayerGravityScale(player2, 0, 0)
+		end
 	end
 end)
 
@@ -1335,6 +1386,8 @@ onEvent("PlayerDied", function(player)
 		bindKeyboard(player, 1, true, false)
 		bindKeyboard(player, 3, true, false)
 	end
+	golem[player] = nil
+	updatePlayerCollision(player)
 end)
 
 onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
@@ -1360,6 +1413,15 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.chatMessage("<v>[#] <d>Cooldown multiplier = " .. cooldownMultiplier, player)
 		inGameLogCommand(player, cmd, args)
 	end
+end)
+
+onEvent("PlayerBonusGrabbed", function(player, bonus)
+	local angle = booster[bonus]
+	if not angle then return end
+	tfm.exec.removeBonus(bonus, player)
+	if no_help[player] then return end
+	local vx, vy = math.cos(angle), math.sin(angle)
+	tfm.exec.movePlayer(player, 0, 0, true, vx * 120, vy * 120, true)
 end)
 
 end

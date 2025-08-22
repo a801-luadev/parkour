@@ -1,4 +1,3 @@
-local no_help
 local OptionsInterface = Interface.new(168, 46, 465, 330, true)
 OptionsInterface
 	:loadTemplate(WindowBackground)

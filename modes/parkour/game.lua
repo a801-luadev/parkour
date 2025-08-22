@@ -17,6 +17,7 @@ local times = {
 	checkpoint = {},
 	movement = {}
 }
+local no_help, ghost, golem = {}, {}, {}
 local activeEvents = {}
 local spec_mode = {}
 local checkpoints = {}
@@ -91,12 +92,28 @@ do
 	end
 end
 
-local changePlayerSize = function(name, size)
+local function changePlayerSize(name, size)
 	size = tonumber(size)
 	if name and size and victory[name] and size > 1 then
 		size = 1
 	end
 	return tfm.exec.changePlayerSize(name, size)
+end
+
+local function updatePlayerCollision(player)
+	if ghost[player] then
+		tfm.exec.setPlayerCollision(player, 0)
+	elseif golem[player] then
+		tfm.exec.setPlayerCollision(player, 2)
+	else
+		local file = players_file[player]
+		if file and file.settings[8] == 1 then
+			-- 4 + 16 = normal objects + mice only objects
+			tfm.exec.setPlayerCollision(player, -1, 1, 20)
+		else
+			tfm.exec.setPlayerCollision(player, 1)
+		end
+	end
 end
 
 local function addCheckpointImage(player, x, y)
@@ -481,8 +498,9 @@ onEvent("PlayerRespawn", function(player)
 		and records_admins) then
 		tfm.exec.freezePlayer(player, true)
 	end
-	
+
 	tfm.exec.linkMice(player, player, false)
+	updatePlayerCollision(player)
 
 	local level = levels[ players_level[player] ]
 	if not level then return end
@@ -560,6 +578,7 @@ onEvent("NewGame", function()
 		for player in next, in_room do
 			players_level[player] = 1
 			changePlayerSize(player, size)
+			updatePlayerCollision(player)
 			tfm.exec.setPlayerScore(player, 1, false)
 			tfm.exec.linkMice(player, player, false)
 			tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
@@ -911,6 +930,7 @@ onEvent("PlayerDataParsed", function(player, data)
 		tfm.exec.chatMessage("<v>[#] <d>Your spec mode has been carried to this room since it's enabled.", player)
 	end
 
+	updatePlayerCollision(player)
 	checkBan(player, data)
 end)
 

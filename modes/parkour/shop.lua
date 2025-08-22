@@ -120,6 +120,13 @@ local shop_items = {
 			uses = 10,
 			shop_scale = 0.8,
 		},
+		{
+			price = 200,
+			img = "img@198c8bc6054",
+			id = 7,
+			uses = 10,
+			hidden = true,
+		},
 	},
 	{ -- snowball
 	},
