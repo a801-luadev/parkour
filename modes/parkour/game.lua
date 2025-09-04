@@ -382,8 +382,11 @@ end)
 onEvent("PlayerLeft", function(player)
 	lastUniquePlayerCount = room.uniquePlayers
 
+	if smol_completions then
+		smol_completions[player] = nil
+	end
+
 	if smol_completions and smol_completions._maxName == player then
-		smol_completions[smol_completions._maxName] = nil
 		smol_completions._max = 0
 		smol_completions._maxName = nil
 
