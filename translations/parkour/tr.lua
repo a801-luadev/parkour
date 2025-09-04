@@ -48,6 +48,7 @@ translations.tr = {
 	welcome = "<n><t>#parkour</t>! Odasına hoş geldiniz.",
 	module_update = "<r><b>[Dikkat!]</b> <n> Modül <d>%02d:%02d</d> içinde güncellenecektir.",
 	leaderboard_loaded = "<j>Lider tablosu güncellendi. Görüntülemek için klavyeden L tuşuna basın.",
+	shop_loaded = "<j>Market eşyaları yüklendi.",
 	kill_minutes = "<R>Becerilerin %s dakika boyunca devre dışı bırakılmıştır.",
 	permbanned = "<r>#Parkour'dan kalıcı olarak yasaklandınız.",
 	tempbanned = "<r>#Parkour'dan %s dakika boyunca yasaklandınız.",

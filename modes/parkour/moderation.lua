@@ -985,6 +985,10 @@ local function handleSkins(player, cmd, quantity, args)
 		tfm.exec.chatMessage(playerName .. ".tester = " .. tostring(pdata:tester()), player)
 
 	elseif action == "new" then
+		if not shop_state.parsed then
+			return tfm.exec.chatMessage("<r>Shop is not loaded yet", player)
+		end
+
 		local category = tonumber(args[2])
 		if not category and args[2] then
 			category = args[2]:lower()
@@ -1007,9 +1011,13 @@ local function handleSkins(player, cmd, quantity, args)
 		local skin = newSkins[category .. "-" .. image] or {
 			price = -1,
 			hidden = true,
-			id = #shop_skins + 1,
 		}
 		newSkins[category .. "-" .. image] = skin
+
+		if not skin.id then
+			shop_state.last_id = shop_state.last_id + 1
+			skin.id = shop_state.last_id
+		end
 
 		local objId = default_skins_by_cat[category]
 		local scale = tonumber(args[4])
@@ -1023,13 +1031,14 @@ local function handleSkins(player, cmd, quantity, args)
 		skin.x = x
 		skin.y = y
 		skin.shop_scale = shopScale
-		shop_skins[skin.id] = skin
 
 		if not skin.tab then
+			shop_items[category]._len = shop_items[category]._len + 1
 			table.insert(shop_items[category], 2, skin)
 		end
 
 		skin.tab = category
+		SplitRW.update(shop_state, skin, "shop")
 		tfm.exec.chatMessage(("<v>[#] <j>Added test skin %s for shop tab %s"):format(skin.id, category), player)
 
 		pdata = players_file[player]
@@ -1038,7 +1047,7 @@ local function handleSkins(player, cmd, quantity, args)
 
 	elseif action == "inspect" then
 		local id = tonumber(args[2])
-		local skin = shop_skins[id]
+		local skin = shop_skins[id] or file_skins[id]
 		if not skin then
 			return translatedChatMessage("invalid_syntax", player)
 		end
@@ -1048,12 +1057,17 @@ local function handleSkins(player, cmd, quantity, args)
 		return
 
 	elseif action == "list" then
-		local list = {}
+		local list, count = {}, 0
 		for id in next, shop_skins do
-			list[1+#list] = id
+			count = 1 + count
+			list[count] = id
+		end
+		for id in next, file_skins do
+			count = 1 + count
+			list[count] = id
 		end
 		tfm.exec.chatMessage("<v>[#] <j>Skin list:", player)
-		printList(list, 20, #list, player)
+		printList(list, 20, count, player)
 		return
 
 	elseif action == "equip" or action == "unequip" or action == "set" then

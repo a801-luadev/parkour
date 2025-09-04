@@ -101,4 +101,28 @@ local filemanagers = {
 	}):disableValidityChecks():prepare(),
 
 	["43"] = SanctionFileManager,
+
+	["54"] = FileManager.new({
+		type = "dictionary",
+		map = {
+			{
+				name = "shop",
+				type = "dictionary",
+				map = {
+					{
+						name = "ts",
+						type = "number",
+					},
+					{
+						name = "last_id",
+						type = "number",
+					},
+					{
+						name = "skins",
+						type = "string"
+					},
+				}
+			}
+		}
+	}):disableValidityChecks():prepare(),
 }

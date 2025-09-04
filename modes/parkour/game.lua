@@ -146,7 +146,7 @@ end
 local function rewardSkin(player, id)
 	local pdata = players_file[player]
 	if not pdata or not pdata:addItem(id) then return end
-	local skin = shop_skins[id]
+	local skin = shop_skins[id] or file_skins[id]
 	if not skin then return end
 	local power = shop_tabs[skin.tab]
 	if not power then return end

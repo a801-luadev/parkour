@@ -20,6 +20,7 @@ local files = {
 	init = 40, -- ranks, maps, maps2, maps3
 	leaderboard = 21, -- ranking, weekly
 	sanction = 43, -- sanction
+	shop = 54, -- shop
 	npc = 51, -- npc, xml
 }
 local scheduleFile
@@ -27,7 +28,7 @@ local scheduleFile
 do
 local settings_length = 9
 
-local file_queue = { files.init, files.leaderboard, files.sanction }
+local file_queue = { files.init, files.shop, files.leaderboard, files.sanction }
 local file_schedule
 local total_files = #file_queue
 local file_index = 1
