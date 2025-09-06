@@ -65,6 +65,9 @@ translations.en = {
 	nohelp = "<r>You are now telling others you don't want help by enabling red-line. Press <v>F</v> to toggle it.",
 	quest_map = "<ch>Your quest map @%s is here!",
 	powers_disabled = "<r>Powers are disabled in this room.",
+	powers_enabled = "<vp>Powers are enabled again.",
+	review_enabled = "<v>[#] <d>Review mode is enabled.",
+	review_disabled = "<v>[#] <d>Review mode is disabled.",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Finally the countdown begins...",

@@ -182,23 +182,37 @@ onEvent("TextAreaCallback", function(id, player, callback)
 	end
 end)
 
-onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
-	if cmd == "lb" or cmd == "leaderboard" then
-		toggleInterface(LeaderboardInterface, player)
+do
+	local cmds = {
+		lb = LeaderboardInterface,
+		help = HelpInterface,
+		op = OptionsInterface,
+		shop = ShopInterface,
+		quests = QuestsInterface,
+		powers = PowersInterface,
+	}
+	cmds.leaderboard = cmds.lb
+	cmds.options = cmds.op
+	cmds.settings = cmds.op
 
-	elseif cmd == "help" then
-		toggleInterface(HelpInterface, player)
-
-	elseif cmd == "op" or cmd == "options" or cmd == "settings" then
-		toggleInterface(OptionsInterface, player)
-
-	elseif cmd == "poll" then
-		if not perms[player] or not perms[player].start_round_poll then return end
-
-		if quantity == 0 then
-			return translatedChatMessage("invalid_syntax", player)
+	local function fn(player, args)
+		local page
+		if args[0] == "powers" then
+			page = math.min(#powers, math.max(1, math.floor(tonumber(args[1]) or 1)))
 		end
 
+		toggleInterface(cmds[args[0]], player, page)
+	end
+
+	for name in next, cmds do
+		newCmd({ name = name, fn = fn })
+	end
+end
+
+newCmd({ name = "poll",
+	perm = "start_round_poll",
+	min_args = 1,
+	fn = function(player, args)
 		local action = string.lower(args[1])
 		if action == "start" then
 			if current_poll then
@@ -260,8 +274,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		else
 			return tfm.exec.chatMessage("<v>[#] <r>Unknown action: <b>" .. action .. "</b>.", player)
 		end
+	end })
 
-	elseif cmd == "staff" then
+newCmd({ name = "staff",
+	fn = function(player)
 		if Staff.open[player] then return end
 
 		local now = os.time()
@@ -296,9 +312,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			closeAllInterfaces(player)
 			Staff:show(player)
 		end
+	end })
 
-	elseif cmd == "hide" then
-		if not perms[player] or not perms[player].hide then return end
+newCmd({ name = "hide",
+	perm = "hide",
+	fn = function(player)
 		if ranks.hidden[player] then
 			return tfm.exec.chatMessage("<v>[#] <r>You're a hidden staff. You can't use this command.", player)
 		end
@@ -315,19 +333,22 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		setNameColor(player)
 
 		savePlayerData(player)
+	end })
 
-	elseif cmd == "track" then
-		if not perms[player] or not perms[player].use_tracker then return end
-
+newCmd({ name = "track",
+	perm = "use_tracker",
+	fn = function(player)
 		if PowerTracker.open[player] then return end
 
 		closeAllInterfaces(player)
 		PowerTracker:show(player, used_powers)
+	end })
 
-	elseif cmd == "profile" or cmd == "p" then
+newCmd({ name = {"profile", "p"},
+	fn = function(player, args)
 		if not checkCooldown(player, "interfaceTrigger", 500) then return end
 
-		if quantity == 0 then
+		if args._len == 0 then
 			if Profile.open[player] then
 				Profile:update(player, player)
 			else
@@ -357,28 +378,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				system.loadPlayerData(request)
 			end
 		end
-	elseif cmd == "shop" then
-		toggleInterface(ShopInterface, player)
-	elseif cmd == "quests" then
-		toggleInterface(QuestsInterface, player)
-	elseif cmd == "powers" then
-		local page = math.min(#powers, math.max(1, tonumber(args[1]) or 1))
-		toggleInterface(PowersInterface, player, page)
-	end
-end)
+	end })
 
 onEvent("GameStart", function()
 	tfm.exec.disableMinimalistMode(true)
-
-	system.disableChatCommandDisplay("lb")
-	system.disableChatCommandDisplay("help")
-	system.disableChatCommandDisplay("op")
-	system.disableChatCommandDisplay("staff")
-	system.disableChatCommandDisplay("track")
-	system.disableChatCommandDisplay("profile")
-	system.disableChatCommandDisplay("p")
-	system.disableChatCommandDisplay("hide")
-	system.disableChatCommandDisplay("poll")
 end)
 
 onEvent("PollVote", function(poll, player, button)
@@ -552,7 +555,7 @@ onEvent("NewGame", function(player)
 
 	if global_poll then
 		-- execute as bot as it has all the permissions
-		eventParsedChatCommand("Parkour#0568", "poll", 1, {"start"})
+		eventChatCommand("Parkour#0568", "poll start")
 	end
 
 	for player in next, in_room do

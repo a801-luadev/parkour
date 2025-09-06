@@ -17,7 +17,6 @@ local facing = {}
 local cooldowns = {}
 local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
-local cooldownMultiplier = 1
 local cooldownSlots = {}
 local booster = {}
 
@@ -1396,30 +1395,44 @@ onEvent("PlayerDied", function(player)
 	updatePlayerCollision(player)
 end)
 
-onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
-	if not ranks.admin[player] and not ranks.mapper[player] and not ranks.manager[player] then
-		return
-	end
-
-	if cmd == "disablepowers" then
+newCmd({ name = "disablepowers",
+	rank = "mapper",
+	fn = function(player, args, cmd)
 		if not ranks.admin[player] and not review_mode then
 			return tfm.exec.chatMessage("<v>[#] <r>Enable review mode first.", player) 
 		end
+		if disable_powers then
+			return tfm.exec.chatMessage("<v>[#] <r>Powers are already disabled.", player) 
+		end
 		disable_powers = true
-		tfm.exec.chatMessage("<v>[#] <d>Powers disabled by " .. player .. ".")
-	elseif cmd == "enablepowers" then
+		translatedChatMessage("powers_disabled")
+		chatlogCmd(cmd, player, args, ranks.mapper)
+	end })
+
+newCmd({ name = "enablepowers",
+	rank = "mapper",
+	fn = function(player, args, cmd)
 		if not ranks.admin[player] and not review_mode then
 			return tfm.exec.chatMessage("<r>[#] Enable review mode first.", player) 
 		end
+		if not disable_powers then
+			return tfm.exec.chatMessage("<v>[#] <r>Powers are already enabled.", player) 
+		end
 		disable_powers = false
-		tfm.exec.chatMessage("<v>[#] <d>Powers enabled by " .. player .. ".")
-	elseif cmd == "cooldown" then
-		if not ranks.admin[player] or not review_mode then return end
+		translatedChatMessage("powers_enabled")
+		chatlogCmd(cmd, player, args, ranks.mapper)
+	end })
+
+newCmd({ name = "cooldown",
+	rank = "mapper",
+	fn = function(player, args, cmd)
+		if not ranks.admin[player] and not review_mode then
+			return tfm.exec.chatMessage("<v>[#] <r>Enable review mode first.", player) 
+		end
 		cooldownMultiplier = tonumber(args[1]) or 1
 		tfm.exec.chatMessage("<v>[#] <d>Cooldown multiplier = " .. cooldownMultiplier, player)
-		inGameLogCommand(player, cmd, args)
-	end
-end)
+		chatlogCmd(cmd, player, args, ranks.mapper)
+	end })
 
 onEvent("PlayerBonusGrabbed", function(player, bonus)
 	local angle = booster[bonus]

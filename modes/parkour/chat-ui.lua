@@ -148,70 +148,62 @@ onEvent("PlayerWon", function(player)
 	end
 end)
 
-onEvent("ChatCommand", function(player, msg)
-	local cmd, args, pointer = "", {}, -1
-	for slice in string.gmatch(msg, "%S+") do
-		pointer = pointer + 1
-		if pointer == 0 then
-			cmd = string.lower(slice)
-		else
-			args[pointer] = slice
-		end
+do
+	local function fn(player, args)
+		local link = links[args[0]]
+		if not link then return end
+		tfm.exec.chatMessage("<rose>" .. link, player)
 	end
 
-	eventParsedChatCommand(player, cmd, pointer, args)
-end)
+	for name in next, links do
+		newCmd({ name = name, fn = fn })
+	end
 
-onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
-	local max_args = quantity
+	onEvent("RawTextAreaCallback", function(id, player, callback)
+		if links[callback] then
+			tfm.exec.chatMessage("<rose>" .. links[callback], player)
+		end
+	end)
+end
 
-	if cmd == "donate" then
-		tfm.exec.chatMessage("<rose>" .. links.donation, player)
-		return
-
-	elseif cmd == "discord" then
-		tfm.exec.chatMessage("<rose>" .. links.discord, player)
-		return
-
-	elseif cmd == "submit" then
+newCmd({ name = "submit",
+	fn = function(player, args)
 		if not records_admins then return end
-		local map = tonumber(string.sub(room.currentMap, 2))
+		-- local map = tonumber(string.sub(room.currentMap, 2))
 
-		if fastest.player ~= player then
-			return translatedChatMessage("records_not_fastest", player)
-		end
-		if fastest.submitted then
-			return translatedChatMessage("records_already_submitted", player)
-		end
+		-- if fastest.player ~= player then
+		-- 	return translatedChatMessage("records_not_fastest", player)
+		-- end
+		-- if fastest.submitted then
+		-- 	return translatedChatMessage("records_already_submitted", player)
+		-- end
 
-		fastest.submitted = true
-		fastest.wait_send = true
+		-- fastest.submitted = true
+		-- fastest.wait_send = true
 		
-		tfm.exec.chatMessage("<v>[#] <d>You can't send record with this way, check Records Discord server: https://discord.gg/zbjVYAxYzp", player)
+		tfm.exec.chatMessage("<v>[#] <d>You can't send records with this way, check Records Discord server: https://discord.gg/zbjVYAxYzp", player)
+	end })
 
-	elseif cmd == "pause" then -- logged
-		if not ranks.admin[player] then return end
-
+newCmd({ name = "pause",
+	rank = "admin",
+	log = true,
+	fn = function(player, args)
 		local total = tonumber(args[1]) or 31
-
 		local finish = os.time() + (total - usedRuntime)
 		while os.time() < finish do end
-
 		tfm.exec.chatMessage("<v>[#] <d>used " .. (total - usedRuntime) .. "ms of runtime", player)
-		max_args = 1
+	end })
 
-	elseif cmd == "runtime" then
-		if not ranks.admin[player] then return end
+newCmd({ name = "runtime",
+	rank = "admin",
+	fn = function(player, args)
 		tfm.exec.chatMessage("<v>[#] <d>used " .. usedRuntime .. "ms for cycle " .. (cycleId - startCycle) .. " and spent total of " .. totalRuntime .. "ms", player)
-		return
+	end })
 
-	elseif cmd == "give" then -- logged
-		if not perms[player] or not perms[player].give_command then return end
-
-		if quantity < 2 then
-			return translatedChatMessage("invalid_syntax", player)
-		end
-
+newCmd({ name = "give",
+	perm = "give_command",
+	min_args = 2,
+	fn = function(player, args, cmd)
 		local target = capitalize(args[1])
 		if not string.find(target, "#", 1, true) then
 			target = target .. "#0000"
@@ -224,7 +216,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		local thing = string.lower(args[2])
 		if thing == "maps" then
-			if quantity < 4 then
+			if args._len < 4 then
 				return tfm.exec.chatMessage("<v>[#] <r>u gotta specify an action and a quantity noob", player)
 			end
 
@@ -249,7 +241,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.chatMessage("<v>[#] <d>" .. target .. "'s new map count: " .. file.c, player)
 
 		elseif thing == "badge" then
-			if quantity < 4 then
+			if args._len < 4 then
 				return tfm.exec.chatMessage("<v>[#] <r>u gotta specify a badge group and badge id", player)
 			end
 
@@ -282,8 +274,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			tfm.exec.chatMessage("<v>[#] <d>given migration flag to " .. target, player)
 
 		elseif thing == "coins" then
-			
-			if quantity < 2 then
+			if args._len < 3 then
 				return translatedChatMessage("invalid_syntax", player)
 			end
 
@@ -301,9 +292,24 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				return tfm.exec.chatMessage("<v>[#] <r>u cant set a player's namecolor", player)
 			end
 
-			if quantity > 2 and string.lower(args[3]) == "nil" then
-				tfm.exec.chatMessage("<v>[#] <d>removed custom namecolor from " .. target, player)
-				file.namecolor = nil
+			if args._len > 2 then
+				if string.lower(args[3]) == "nil" then
+					tfm.exec.chatMessage("<v>[#] <d>removed custom namecolor from " .. target, player)
+					file.namecolor = nil
+				else
+					local color = string.match(args[3], "^#?(%x%x%x%x%x%x)$")
+					color = color and tonumber(color, 16)
+					if not color then
+						return tfm.exec.chatMessage("<v>[#] <r>" .. args[3] .. " doesnt look like a color", player)
+					end
+
+					file.namecolor = color
+					tfm.exec.chatMessage(
+						string.format("<v>[#] <d>set name color of %s to <font color='#%06x'>#%06x</font>", target, color, color),
+						player
+					)
+				end
+
 				setNameColor(target)
 
 			else
@@ -316,54 +322,71 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		savePlayerData(target)
+		chatlogCmd(cmd, player, args)
+		logCmd(cmd, player, args)
+	end })
 
-	elseif cmd == "roommod" then
+newCmd({ name = "roommod",
+	min_args = 1,
+	fn = function(player, args, cmd)
 		if not records_admins then return end
 
 		local has_perm = perms[player] and perms[player].change_roommod
-		local is_owner = records_admins and records_admins[player]
+		local is_owner = records_admins[player]
 		if not has_perm and not is_owner then
 			return
 		end
 
 		local target = args[1]
-		if quantity < 1 or records_admins[target] or not room.playerList[target] then
+		if records_admins[target] or not room.playerList[target] then
 			return translatedChatMessage("invalid_syntax", player)
 		end
 
 		records_admins[target] = 1
 		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is a room mod now.")
 
+		chatlogCmd(cmd, player, args, records_admins)
+
 		-- don't log room owner actions
 		if is_owner then
 			return
 		end
 
-	elseif cmd == "deroommod" then
+		logCmd(cmd, player, args)
+	end })
+
+newCmd({ name = "deroommod",
+	min_args = 1,
+	fn = function(player, args, cmd)
 		if not records_admins then return end
 
 		local has_perm = perms[player] and perms[player].change_roommod
-		local is_owner = records_admins and records_admins[player]
+		local is_owner = records_admins[player]
 		if not has_perm and not is_owner then
 			return
 		end
 
 		local target = args[1]
-		if quantity < 1 or records_admins[target] ~= 1 then
+		if records_admins[target] ~= 1 then
 			return translatedChatMessage("invalid_syntax", player)
 		end
 
 		records_admins[target] = nil
 		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is not a room mod anymore.")
 
+		chatlogCmd(cmd, player, args, records_admins)
+
 		-- don't log room owner actions
 		if is_owner then
 			return
 		end
 
-	elseif cmd == "creators" or cmd == "visitors" then
-		if not perms[player] or not perms[player].view_creators then return end
+		logCmd(cmd, player, args)
+	end })
 
+newCmd({ name = {"creators", "visitors"},
+	perm = "view_creators",
+	fn = function(player, args)
 		local startIndex = math.max(1, tonumber(args[1]) or 1)
 		local endIndex = math.min(startIndex + 9, visitors._len)
 	
@@ -382,19 +405,17 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				table.concat(visitors, " ", creatorsEndIndex + 1, endIndex)
 			), player
 		)
+	end })
 
-		return
-
-	elseif cmd == "pw?" then
-		if not ranks.admin[player] then
-			return
-		end
-	
+newCmd({ name = "pw?",
+	rank = "admin",
+	fn = function(player, args)
 		tfm.exec.chatMessage("<v>[#] <d>owner: <bl>" .. tostring(roompw.owner), player)
 		tfm.exec.chatMessage("<v>[#] <d>password: <bl>" .. tostring(roompw.password), player)
-		return
+	end })
 
-	elseif cmd == "pw" then
+newCmd({ name = "pw",
+	fn = function(player, args)
 		if not records_admins or not records_admins[player] then
 			if not perms[player] or not perms[player].enable_review then return end
 
@@ -422,9 +443,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			roompw.owner = player
 		end
 		roompw.password = password
-		return
+	end })
 
-	elseif cmd == "roomlimit" then -- logged
+newCmd({ name = "roomlimit",
+	min_args = 1,
+	fn = function(player, args, cmd)
 		if not perms[player] or not perms[player].set_room_limit and not perms[player].set_room_limit_review then return end
 
 		local limit = tonumber(args[1])
@@ -439,10 +462,14 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		tfm.exec.setRoomMaxPlayers(limit)
 		tfm.exec.chatMessage("<v>[#] <d>Set room max players to " .. limit .. ".", player)
-		max_args = 1
 
-	elseif cmd == "langue" then
-		if quantity == 0 then
+		chatlogCmd(cmd, player, args)
+		logCmd(cmd, player, args)
+	end })
+
+newCmd({ name = {"langue", "lang"},
+	fn = function(player, args, cmd)
+		if args._len == 0 then
 			tfm.exec.chatMessage("<v>[#] <d>Available languages:", player)
 			for name, data in next, translations do
 				if name ~= "pt" then
@@ -462,11 +489,13 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				tfm.exec.chatMessage("<v>[#] <r>Unknown language: <b>" .. lang .. "</b>", player)
 			end
 		end
-		return
+	end })
 
-	elseif cmd == "forcestats" then -- logged
-		if not perms[player] or not perms[player].force_stats then return end
-
+newCmd({ name = "forcestats",
+	perm = "force_stats",
+	log = true,
+	chatlog = true,
+	fn = function(player, args)
 		if records_admins then
 			return tfm.exec.chatMessage("<v>[#] <r>you can't forcestats in a records room", player)
 		end
@@ -479,15 +508,15 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		tfm.exec.chatMessage("<v>[#] <d>count_stats set to true", player)
 		args[1] = room.currentMap
 		args[2] = room.xmlMapInfo and room.xmlMapInfo.permCode or -1
-		max_args = 2
-		quantity = 2
 		showStats()
+	end })
 
-	elseif cmd == "room" then -- logged
-		if quantity == 0 or capitalize(args[1]) == player then
-            tfm.exec.chatMessage("<v>[#] <d>" .. room.name, player)
-            return
-        end
+newCmd({ name = "room",
+	fn = function(player, args, cmd)
+		if args._len == 0 or capitalize(args[1]) == player then
+			tfm.exec.chatMessage("<v>[#] <d>" .. room.name, player)
+			return
+		end
 
 		if not perms[player] or not perms[player].get_player_room then return end
 
@@ -499,14 +528,8 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		fetching_player_room[fetching] = { player, os.time() + 1000 }
 		system.loadPlayerData(fetching)
-		max_args = 1
-
-	else
-		return
-	end
-
-	logCommand(player, cmd, math.min(quantity, max_args), args)
-end)
+		logCmd(cmd, player, args)
+	end })
 
 onEvent("ColorPicked", function(id, player, color)
 	if not perms[player] or not perms[player].set_name_color then return end
@@ -518,33 +541,9 @@ onEvent("ColorPicked", function(id, player, color)
 			if not file then
 				return tfm.exec.chatMessage("<v>[#] <r>" .. name .. " has left the room :(", player)
 			end
-			file.namecolor = color
-
-			tfm.exec.chatMessage(
-				string.format("<v>[#] <d>set name color of %s to <font color='#%06x'>#%06x</font>", name, color, color),
-				player
-			)
-			setNameColor(name)
-
-			savePlayerData(name)
-
-			logCommand(player, string.format("give %s namecolor #%06x", name, color))
+			eventChatCommand(player, string.format("give %s namecolor #%06x", name, color))
 			return
 		end
-	end
-end)
-
-onEvent("RawTextAreaCallback", function(id, player, callback)
-	if callback == "discord" then
-		tfm.exec.chatMessage("<rose>" .. links.discord, player)
-	elseif callback == "map_submission" then
-		tfm.exec.chatMessage("<rose>" .. links.maps, player)
-	elseif callback == "forum" then
-		tfm.exec.chatMessage("<rose>" .. links.forum, player)
-	elseif callback == "donate" then
-		tfm.exec.chatMessage("<rose>" .. links.donation, player)
-	elseif callback == "github" then
-		tfm.exec.chatMessage("<rose>" .. links.github, player)
 	end
 end)
 
@@ -666,19 +665,6 @@ onEvent("PacketReceived", function(channel, id, packet)
 			tfm.exec.chatMessage(msg, targetPlayer)
 		end
 	end
-end)
-
-onEvent("GameStart", function()
-	system.disableChatCommandDisplay("donate")
-	system.disableChatCommandDisplay("discord")
-	system.disableChatCommandDisplay("submit")
-	system.disableChatCommandDisplay("pause")
-	system.disableChatCommandDisplay("give")
-	system.disableChatCommandDisplay("pw")
-	system.disableChatCommandDisplay("roomlimit")
-	system.disableChatCommandDisplay("langue")
-	system.disableChatCommandDisplay("forcestats")
-	system.disableChatCommandDisplay("room")
 end)
 
 if records_admins then

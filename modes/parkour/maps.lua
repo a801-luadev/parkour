@@ -60,7 +60,6 @@ current_map = nil
 
 local chair_pos
 local levels
-local perms
 local review_mode
 local records_admins = string.find(room.lowerName, "records", 1, true) and {}
 local smol_completions = submode == "smol" and { _max = 0, _maxName = nil }
@@ -465,15 +464,15 @@ onEvent("Loop", function(elapsed, remaining)
 	end
 end)
 
-onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
-	if cmd == "map" then
+newCmd({ name = "map",
+	fn = function(player, args, cmd)
 		local records_cond = records_admins and records_admins[player]
 		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
 		local normal_cond = perms[player] and perms[player].change_map
 		local smol_cond = smol_completions and smol_completions._maxName == player
 		if not records_cond and not tribe_cond and not normal_cond and not smol_cond then return end
 
-		if quantity > 0 then
+		if args._len > 0 then
 			if not records_cond and not tribe_cond and not (perms[player] and perms[player].load_custom_map) then
 				return tfm.exec.chatMessage("<v>[#] <r>You can't load a custom map.", player)
 			end
@@ -481,24 +480,23 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			if args[1]:sub(1, 1):lower() == 'd' then
 				local difficulty = tonumber(args[1]:sub(2))
 				newMap(difficulty)
-				return
+			else
+				local map = tonumber(args[1]) or tonumber(string.sub(args[1], 2))
+				if not map or map < 1000 then
+					translatedChatMessage("invalid_syntax", player)
+					return
+				end
+				count_stats = false
+				current_map = map
+				tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped" and not records_admins)
 			end
-
-			local map = tonumber(args[1]) or tonumber(string.sub(args[1], 2))
-			if not map or map < 1000 then
-				translatedChatMessage("invalid_syntax", player)
-				return
-			end
-			count_stats = false
-			current_map = map
-			tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped" and not records_admins)
 		elseif os.time() < map_change_cd and not review_mode then
 			tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", player)
 		else
 			newMap()
 		end
 
-		inGameLogCommand(player, "map", args)
+		chatlogCmd(cmd, player, args, ranks.mapper)
 
 		if not records_cond and not tribe_cond and normal_cond then
 			-- logged when using staff powers
@@ -506,10 +504,9 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				-- legitimate review mode
 				return
 			end
-			logCommand(player, "map", math.min(quantity, 2), args)
+			logCmd(cmd, player, args)
 		end
-	end
-end)
+	end })
 
 onEvent("NewPlayer", renderMapImages)
 
@@ -519,6 +516,4 @@ onEvent("GameStart", function()
 	tfm.exec.disableAfkDeath(true)
 	tfm.exec.disableAutoTimeLeft(true)
 	tfm.exec.setAutoMapFlipMode(false)
-
-	system.disableChatCommandDisplay("map")
 end)

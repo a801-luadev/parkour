@@ -239,31 +239,15 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 	end)
 end
 
-function inGameLogCommand(player, command, args, extraTbl)
-	local params = table.concat(args, " ")
-	for name in next, room.playerList do
-		if ranks.admin[name] or ranks.mod[name] or extraTbl and extraTbl[name] then
-			tfm.exec.chatMessage("<BL>Ξ [" .. player .. "]<N2> !" .. command .. " " .. params, name)
-		end
-	end
-end
-
-local function handleBan(player, cmd, quantity, args)
-	if not ranks.admin[player] and (not perms[player] or not perms[player].ban) then
-		return
-	end
-
-	if quantity < 1 then
-		return translatedChatMessage("invalid_syntax", player)
-	end
-
-	inGameLogCommand(player, cmd, args)
-
+newCmd({ name = {"ban", "unban"},
+	perm = "ban",
+	min_args = 1,
+	log = true,
+	chatlog = true,
+	fn = function(player, args)
 	local targetPlayer = args[1]
 	local moderator = player
-	local time = cmd == 'ban' and 1 or -1 -- ban time changes depending on players previous bans
-
-	logCommand(player, cmd, math.min(quantity, 2), args)
+	local time = args[0] == 'ban' and 1 or -1 -- ban time changes depending on players previous bans
 
 	-- Ban by player id
 	if tonumber(targetPlayer) then
@@ -296,45 +280,9 @@ local function handleBan(player, cmd, quantity, args)
 	end, function()
 		tfm.exec.chatMessage("<v>[#] <r>Player doesn't seem to be online, try player id.", player)
 	end)
-end
+end })
 
-local function handleAdminBan(player, cmd, quantity, args)
-	if not ranks.admin[player] then
-		return
-	end
-
-	if cmd == "pban" and quantity < 2 then
-		return translatedChatMessage("invalid_syntax", player)
-	end
-
-	if cmd == "punban"  and quantity < 1 then
-		return translatedChatMessage("invalid_syntax", player)
-	end
-
-	local isPerma = args[2] == "perma"
-	local minutes = tonumber(args[2])
-	local targetPlayer = args[1]
-	local playerID = tonumber(targetPlayer)
-
-	if cmd == "pban" and (not minutes or minutes < 0) then
-		return translatedChatMessage("invalid_syntax", player)
-	end
-
-	inGameLogCommand(player, cmd, args)
-
-	local sanctionTime
-
-	if cmd == "pban" then
-		if isPerma or minutes == 1 then
-			sanctionTime = 2
-		else
-			sanctionTime = nil
-		end
-	else
-		sanctionTime = 0
-		minutes = 0
-	end
-
+local function handleAdminBan(player, ban, targetPlayer, playerID, sanctionTime, minutes)
 	-- Ban using name (must be in the same room)
 	tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
 	if not playerID then
@@ -346,7 +294,6 @@ local function handleAdminBan(player, cmd, quantity, args)
 		end
 
 		updateSanctions(roomPlayer.id, targetPlayer, sanctionTime, player, minutes)
-
 		return
 	end
 
@@ -354,18 +301,45 @@ local function handleAdminBan(player, cmd, quantity, args)
 	updateSanctions(playerID, nil, sanctionTime, player, minutes)
 end
 
-local function handleMap(player, cmd, quantity, args)
-	if not perms[player] or not perms[player].manage_maps then
-		return
+newCmd({ name = "pban",
+	rank = "admin",
+	min_args = 2,
+	fn = function(player, args)
+	local isPerma = args[2] == "perma"
+	local minutes = tonumber(args[2])
+	local targetPlayer = args[1]
+	local playerID = tonumber(targetPlayer)
+	local sanctionTime
+
+	if isPerma or minutes == 1 then
+		minutes = 1
+		sanctionTime = 2
 	end
 
-	inGameLogCommand(player, cmd, args)
-	logCommand(player, cmd, quantity, args)
-
-	if quantity < 2 then
+	if not minutes or minutes < 0 then
 		return translatedChatMessage("invalid_syntax", player)
 	end
 
+	handleAdminBan(player, true, targetPlayer, playerID, sanctionTime, minutes)
+	chatlogCmd(cmd, player, args)
+	logCmd(cmd, player, args)
+end })
+
+newCmd({ name = "punban",
+	rank = "admin",
+	min_args = 1,
+	log = true,
+	chatlog = true,
+	fn = function(player, args)
+	local targetPlayer = args[1]
+	local playerID = tonumber(targetPlayer)
+	handleAdminBan(player, false, targetPlayer, playerID, 0, 0)
+end })
+
+newCmd({ name = {"addmap", "removemap"},
+	perm = "manage_maps",
+	min_args = 2,
+	fn = function(player, args)
 	local diffMap = { diff1="maps", diff2="maps2", diff3="maps3" }
 	local rotation = diffMap[args[1]]
 	if not rotation then
@@ -376,9 +350,9 @@ local function handleMap(player, cmd, quantity, args)
 	local diffIndex = tonumber(args[1]:sub(5,5))
 	local codeMap, indexList = {}, {}
 	local mapcode, rotation_index
-	local addmap = cmd == "addmap"
+	local addmap = args[0] == "addmap"
 
-	for i=2,quantity do
+	for i=2,args._len do
 		mapcode = args[i]:gsub("^@", "")
 		mapcode = tonumber(mapcode)
 		if not mapcode then
@@ -406,7 +380,7 @@ local function handleMap(player, cmd, quantity, args)
 	end
 
 	table.sort(indexList)
-	tfm.exec.chatMessage("<v>[#] <j>Scheduled and map update job.", player)
+	tfm.exec.chatMessage("<v>[#] <j>Scheduled map update job.", player)
 	schedule("init", true, function(data)
 		local rotation_table = data[rotation]
 
@@ -425,7 +399,10 @@ local function handleMap(player, cmd, quantity, args)
 
 		tfm.exec.chatMessage("<v>[#] <j>Updated maps: " .. table.concat(indexList, ' '), player)
 	end)
-end
+
+	chatlogCmd(cmd, player, args, ranks.mapper)
+	logCmd(cmd, player, args)
+end })
 
 local function printSanctions(target, kind, name, pid, timestamp, time, level, mod, minutes)
 	local banState = ""
@@ -487,16 +464,10 @@ local function printSanctions(target, kind, name, pid, timestamp, time, level, m
 	)
 end
 
-local function handleSanctions(player, cmd, quantity, args)
-	if not perms[player] or not perms[player].view_sanctions then
-		return
-	end
-
-	if quantity < 1 then
-		translatedChatMessage("invalid_syntax", player)
-		return
-	end
-
+newCmd({ name = {"sanctions", "bancount", "baninfo"},
+	perm = "view_sanctions",
+	min_args = 1,
+	fn = function(player, args, cmd)
 	local targetName = capitalize(args[1])
 	local targetID = tonumber(targetName)
 
@@ -523,8 +494,6 @@ local function handleSanctions(player, cmd, quantity, args)
 				return
 			end
 
-			inGameLogCommand(player, cmd, args)
-
 			tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
 			schedule("sanction", true, function(data)
 				local file = data.sanction and data.sanction[targetID]
@@ -546,6 +515,10 @@ local function handleSanctions(player, cmd, quantity, args)
 					player
 				)
 			end)
+
+			chatlogCmd(cmd, player, args)
+			logCmd(cmd, player, args)
+
 			return
 		end
 	end
@@ -644,25 +617,17 @@ local function handleSanctions(player, cmd, quantity, args)
 			)
 		end
 	end
-end
+end })
 
-local function warnPlayer(player, cmd, quantity, args)
-	if not ranks.admin[player] and (not perms[player] or not perms[player].kill) then
-		return
-	end
-
-	inGameLogCommand(player, cmd, args)
-
-	if quantity < 2 then
-		translatedChatMessage("invalid_syntax", player)
-		return
-	end
-
+newCmd({ name = "kill",
+	perm = "kill",
+	min_args = 2,
+	fn = function(player, args)
 	local requestplayer = capitalize(args[1])
-	local killedTime = args[2]
+	local killedTime = tonumber(args[2])
 
-	if not tonumber(killedTime) then
-		tfm.exec.chatMessage("<v>[#] <r>" ..killedTime.. " doesn't seem like a number.", player)
+	if not killedTime then
+		tfm.exec.chatMessage("<v>[#] <r>" ..args[2].. " doesn't seem like a number.", player)
 		return
 	end
 	
@@ -676,7 +641,7 @@ local function warnPlayer(player, cmd, quantity, args)
 		return
 	end
 
-	logCommand(player, "kill", quantity, args)
+	chatlogCmd(cmd, player, args)
 	schedule_player(requestplayer, true, function(pdata)
 		sendPacket(
 			"common",
@@ -699,31 +664,18 @@ local function warnPlayer(player, cmd, quantity, args)
 		translatedChatMessage("killed", requestplayer, killedTime)
 		checkKill(requestplayer)
 	end)
-end
+end })
 
-local function handleSetrank(player, cmd, quantity, args)
-	if not ranks.admin[player] and not ranks.bot[player] then
-		return
-	end
-
-	inGameLogCommand(player, cmd, args)
-
-	if args[1] == player then
-		tfm.exec.chatMessage("<v>[#] <r>You can't change your rank.", player)
-		return
-	end
-
+newCmd({ name = "setrank",
+	rank = "admin",
+	min_args = 2,
+	fn = function(player, args)
 	local targetPlayer = capitalize(args[1])
 	local newRanks = {}
 	local ID = 0
 
 	if not string.find(targetPlayer, "#", 1, true) then
 		targetPlayer = targetPlayer .. "#0000"
-	end
-
-	if quantity < 2 then
-		translatedChatMessage("invalid_syntax", player)
-		return
 	end
 
 	if args[2] ~= "none" then
@@ -749,21 +701,15 @@ local function handleSetrank(player, cmd, quantity, args)
 	schedule("init", true, function(data)
 		data.ranks[targetPlayer] = ID
 	end)
-	logCommand(player, cmd, quantity, args)
-end
+	logCmd(cmd, player, args)
+end })
 
 local printSanctionList
 
-local function fileActions(player, cmd, quantity, args)
-	if not ranks.admin[player] and not ranks.bot[player] then
-		return
-	end
-
-	if quantity < 2 then
-		translatedChatMessage("invalid_syntax", player)
-		return
-	end
-
+newCmd({ name = "file",
+	rank = "admin",
+	min_args = 2,
+	fn = function(player, args, cmd)
 	local fileName = args[1]
 
 	if fileName == "weekly" then
@@ -801,13 +747,10 @@ local function fileActions(player, cmd, quantity, args)
 			)
 
 		elseif fileAction == "add" then
-
-			if quantity < 3 then
+			if args._len < 3 then
 				translatedChatMessage("invalid_syntax", player)
 				return
 			end
-
-			inGameLogCommand(player, cmd, args)
 
 			local count = tonumber(args[4]) or 100
 
@@ -820,6 +763,9 @@ local function fileActions(player, cmd, quantity, args)
 				pdata.week[1] = pdata.week[1] + count
 				tfm.exec.chatMessage("<v>[#] <j>"..requestplayer.."'s new weekly count: "..pdata.week[1], player)
 			end)
+
+			chatlogCmd(cmd, player, args)
+			logCmd(cmd, player, args)
 		end
 	elseif fileName == "maps" then
 		local category = args[2]
@@ -864,7 +810,7 @@ local function fileActions(player, cmd, quantity, args)
 			printSanctionList(player, fileAction)
 		end
 	end
-end
+end })
 
 printSanctionList = function(player, targetID, page)
 	local is_cached = schedule("sanction", false, function(data)
@@ -920,29 +866,23 @@ printSanctionList = function(player, targetID, page)
 	end
 end
 
-function roomAnnouncement(player, cmd, quantity, args)
-	if not ranks.admin[player] and not ranks.manager[player] then
-		return
-	end
+newCmd({ name = {"announcement", "announce"},
+	rank = "manager",
+	min_args = 1,
+	log = true,
+	chatlog = true,
+	fn = function(player, args, cmd)
+		local text = table.concat(args, " ")
+		tfm.exec.chatMessage("<ROSE>Ξ [Parkour] <N>" .. text)
+	end })
 
-	inGameLogCommand(player, cmd, args)
-
-	local announcementtext = table.concat(args, " ")
-	tfm.exec.chatMessage("<ROSE>Ξ [Parkour] <N>"..announcementtext)
-end
-
+do
 local skinsGeneralActions = { new=1, list=1, inspect=1, ownshop=1 }
 local newSkins = {}
-local function handleSkins(player, cmd, quantity, args)
-	if not ranks.admin[player] then
-		return
-	end
-
-	if quantity < 1 then
-		translatedChatMessage("invalid_syntax", player)
-		return
-	end
-
+newCmd({ name = {"skins", "coins"},
+	rank = "admin",
+	min_args = 1,
+	fn = function(player, args, cmd)
 	local action = args[1]
 	local playerName, pdata
 
@@ -1071,7 +1011,7 @@ local function handleSkins(player, cmd, quantity, args)
 		return
 
 	elseif action == "equip" or action == "unequip" or action == "set" then
-		if quantity < 4 then
+		if args._len < 4 then
 			translatedChatMessage("invalid_syntax", player)
 			return
 		end
@@ -1104,7 +1044,7 @@ local function handleSkins(player, cmd, quantity, args)
 		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
 
 	elseif action == "add" then
-		if quantity < 3 then
+		if args._len < 3 then
 			translatedChatMessage("invalid_syntax", player)
 			return
 		end
@@ -1127,7 +1067,7 @@ local function handleSkins(player, cmd, quantity, args)
 		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
 
 	elseif action == "remove" then
-		if quantity < 4 then
+		if args._len < 4 then
 			translatedChatMessage("invalid_syntax", player)
 			return
 		end
@@ -1145,24 +1085,24 @@ local function handleSkins(player, cmd, quantity, args)
 		savePlayerData(playerName)
 		tfm.exec.chatMessage("<v>[#] <j>Done.", player)
 
+	else
+		translatedChatMessage("invalid_syntax", player)
+		return
+
 	end
 
-	inGameLogCommand(player, cmd, args)
+	chatlogCmd(cmd, player, args)
+end })
 end
 
-local function eventDebugCmd(player, cmd, quantity, args)
-	if not ranks.admin[player] then
-		return
-	end
-
-	if quantity < 1 then
-		return tfm.exec.chatMessage('<r>Need event or player name', player)
-	end
-
+newCmd({ name = "event",
+	rank = "admin",
+	min_args = 1,
+	fn = function(player, args)
 	local name = args[1]
 	local evt = activeEvents[name]
 
-	if quantity == 1 then
+	if args._len == 1 then
 		if evt then
 			local rel = '-'
 			if evt.timestamp then
@@ -1188,12 +1128,13 @@ local function eventDebugCmd(player, cmd, quantity, args)
 		return tfm.exec.chatMessage('<r>Invalid event name', player)
 	end
 
-	evt.debug(player, cmd, quantity, args)
-end
+	evt.debug(player, args[0], args._len, args)
+end })
 
-local function disableSnow(player, cmd, quantity, args)
-	tfm.exec.snow(0, 10)
-end
+newCmd({ name = "snow",
+	fn = function()
+		tfm.exec.snow(0, 10)
+	end })
 
 local partyHost = {}
 
@@ -1207,10 +1148,10 @@ local function isPartyHost(name)
 	return true
 end
 
-local function handlePartyHost(player, cmd, quantity, args)
-	if records_admins or not ranks.admin[player] then
-		return
-	end
+newCmd({ name = "partyhost",
+	rank = "admin",
+	fn = function(player, args, cmd)
+	if records_admins then return end
 	if not args[1] then
 		local now = os.time()
 		tfm.exec.chatMessage('<j>Party Hosts:', player)
@@ -1222,7 +1163,7 @@ local function handlePartyHost(player, cmd, quantity, args)
 		return
 	end
 
-	inGameLogCommand(player, cmd, args)
+	chatlogCmd(cmd, player, args)
 
 	local time = os.time() + 60 * 60 * 1000 -- 1 hour
 
@@ -1250,9 +1191,11 @@ local function handlePartyHost(player, cmd, quantity, args)
 	else
 		tfm.exec.chatMessage(('<r>%s is not a party host anymore!'):format(args[1]), player)
 	end
-end
+end })
 
-local function linkMouse(player, cmd, quantity, args)
+newCmd({ name = "link",
+	min_args = 1,
+	fn = function(player, args, cmd)
 	if records_admins or not ranks.admin[player] and not isPartyHost(player) then
 		return
 	end
@@ -1272,33 +1215,44 @@ local function linkMouse(player, cmd, quantity, args)
 	tfm.exec.linkMice(firstPlayer, secondPlayer, true)
 
 	if not ranks.admin[player] then
-		inGameLogCommand(player, cmd, args, partyHost)
+		chatlogCmd(cmd, player, args, partyHost)
 	end
-end
+end })
 
-local function changeMouseSize(player, cmd, quantity, args)
+newCmd({ name = "size",
+	min_args = 2,
+	fn = function(player, args, cmd)
 	if records_admins or not ranks.admin[player] and not isPartyHost(player) then return end
 
 	local target = args[1]
-	local size = tonumber(args[2])
-	if not room.playerList[target] or not size or not ranks.admin[player] and not victory[target] then
+	if not room.playerList[target] then
+		return tfm.exec.chatMessage('<r>Target player is not in the room', player)
+	end
+	if not ranks.admin[player] and not victory[target] then
 		return tfm.exec.chatMessage('<r>Target player must complete the map', player)
+	end
+
+	local size = tonumber(args[2])
+	if not size then
+		return tfm.exec.chatMessage('<r>Second parameter should be a number', player)
 	end
 
 	tfm.exec.changePlayerSize(target, size)
 
 	if not ranks.admin[player] then
-		inGameLogCommand(player, cmd, args, partyHost)
+		chatlogCmd(cmd, player, args, partyHost)
 	end
-end
+end })
 
 local mouseImages = {}
 local function applyImage(player, img, factorY)
 	if mouseImages[player] and mouseImages[player][0] then return img[2] or 0 end
 	return tfm.exec.addImage(img[1], img[10] .. player, img[5], img[6], nil, img[3] * img[4] * img[9], img[4] * factorY, 0, img[7], 0.5 * img[3] * img[9], 0.5, false)
 end
-local function addMouseImage(player, cmd, quantity, args)
-	if quantity == 0 then
+
+newCmd({ name = "image",
+	fn = function(player, args, cmd)
+	if args._len == 0 then
 		if mouseImages[player] then
 			mouseImages[player][0] = not mouseImages[player][0]
 			if mouseImages[player][0] then
@@ -1333,7 +1287,11 @@ local function addMouseImage(player, cmd, quantity, args)
 	end
 
 	if not ranks.admin[player] then
-		inGameLogCommand(player, cmd, args, partyHost)
+		chatlogCmd(cmd, player, args, partyHost)
+	end
+
+	if not imageURL then
+		return tfm.exec.chatMessage('<r>Missing image parameter', player)
 	end
 
 	if playerName == "*" then
@@ -1367,7 +1325,7 @@ local function addMouseImage(player, cmd, quantity, args)
 		end
 	end
 
-	if not playerName or not imageURL or not room.playerList[playerName] then
+	if not playerName or not room.playerList[playerName] then
 		return tfm.exec.chatMessage('<r>Target player is not in the room', player)
 	end
 
@@ -1391,7 +1349,7 @@ local function addMouseImage(player, cmd, quantity, args)
 		end
 	end
 	mouseImages[playerName] = img
-end
+end })
 
 onEvent("Keyboard", function(player, key, down)
 	local img = mouseImages[player]
@@ -1414,7 +1372,8 @@ onEvent("Keyboard", function(player, key, down)
 	end
 end)
 
-local function handleReport(playerName, cmd, quantity, args)
+newCmd({ name = "report",
+	fn = function(playerName, args, cmd)
 	if is_tribe then
 		return
 	end
@@ -1432,7 +1391,7 @@ local function handleReport(playerName, cmd, quantity, args)
 		return
 	end
 
-	if quantity < 2 then
+	if args._len < 2 then
 		return translatedChatMessage("cmd_usage_report", playerName)
 	end
 
@@ -1445,7 +1404,7 @@ local function handleReport(playerName, cmd, quantity, args)
 		return translatedChatMessage("reported_invalid", playerName)
 	end
 
-	local reason = table.concat(args, ' ', 2, quantity)
+	local reason = table.concat(args, ' ', 2, args._len)
 	if #reason < 5 then
 		return translatedChatMessage("reason_too_short", playerName)
 	end
@@ -1471,25 +1430,20 @@ local function handleReport(playerName, cmd, quantity, args)
 		reason
 	)
 	translatedChatMessage("report_done", playerName)
-	inGameLogCommand(playerName, cmd, args)
-end
+	chatlogCmd(cmd, playerName, args)
+end })
 
-local function handleKarma(playerName, cmd, quantity, args)
-	if not ranks.admin[playerName] and not ranks.mod[playerName] then
-		return
-	end
-
-	if quantity < 1 then
-		return translatedChatMessage("invalid_syntax", playerName)
-	end
-
+newCmd({ name = "karma",
+	rank = "mod",
+	min_args = 1,
+	fn = function(playerName, args, cmd)
 	local target = args[1]:lower():gsub('^+?[a-z]', string.upper)
 	local pdata = players_file[target]
 	if not room.playerList[target] or not pdata then
 		return translatedChatMessage("invalid_syntax", playerName)
 	end
 
-	if quantity == 1 then
+	if args._len == 1 then
 		if pdata.report then
 			tfm.exec.chatMessage('<v>[#] <vp>' .. target .. ' can use !report.', playerName)
 		else
@@ -1497,8 +1451,6 @@ local function handleKarma(playerName, cmd, quantity, args)
 		end
 		return
 	end
-
-	inGameLogCommand(playerName, cmd, args)
 
 	local yes = args[2] == 'yes'
 	if not yes and args[2] ~= 'no' then
@@ -1514,18 +1466,14 @@ local function handleKarma(playerName, cmd, quantity, args)
 	pdata.karma = playerName
 	savePlayerData(target)
 	tfm.exec.chatMessage('<v>[#] <n>Done.', playerName)
-	logCommand(playerName, cmd, math.min(quantity, 2), args)
-end
+	chatlogCmd(cmd, playerName, args)
+	logCmd(cmd, playerName, args)
+end })
 
-local function skipMap(playerName, cmd, quantity, args)
-	if not perms[playerName] or not perms[playerName].skip_map then
-		return
-	end
-
-	if quantity < 1 then
-		return translatedChatMessage("invalid_syntax", playerName)
-	end
-
+newCmd({ name = "skip",
+	perm = "skip_map",
+	min_args = 1,
+	fn = function(playerName, args, cmd)
 	if os.time() < map_change_cd and not review_mode then
 		tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", playerName)
 		return
@@ -1535,18 +1483,19 @@ local function skipMap(playerName, cmd, quantity, args)
 	local mapCode = room.currentMap
 	local uniquePlayers = room.uniquePlayers
 
-	sendPacket("common", packets.rooms.skip_map, room.shortName .. "\000" .. playerName .. "\000" .. reason .. "\000" .. mapCode .. "\000" .. uniquePlayers .. "\000" .. player_count .. "\000" .. victory_count .. "\000" .. actual_player_count)
-	
-	newMap()
-	inGameLogCommand(playerName, cmd, args)
-end
-
-local function handleKick(playerName, cmd, quantity, args)
-	if playerName ~= "Parkour#0568" then
-		return
+	if not review_mode then
+		sendPacket("common", packets.rooms.skip_map, room.shortName .. "\000" .. playerName .. "\000" .. reason .. "\000" .. mapCode .. "\000" .. uniquePlayers .. "\000" .. player_count .. "\000" .. victory_count .. "\000" .. actual_player_count)
 	end
 
-	if quantity == 0 then
+	newMap()
+	chatlogCmd(cmd, playerName, args)
+end })
+
+newCmd({ name = "kick",
+	rank = "admin",
+	min_args = 1,
+	fn = function(playerName, args, cmd)
+	if playerName ~= "Parkour#0568" then
 		return
 	end
 
@@ -1566,12 +1515,15 @@ local function handleKick(playerName, cmd, quantity, args)
 	end
 
 	tfm.exec.kickPlayer(args[1])
-	logCommand(playerName, cmd, quantity, args)
-end
+	chatlogCmd(cmd, playerName, args)
+	logCmd(cmd, playerName, args)
+end })
 
-local function handleClaim(playerName, cmd, quantity, args)
+newCmd({ name = "claim",
+	rank = "admin",
+	min_args = 3,
+	fn = function(playerName, args)
 	if playerName ~= "Parkour#0568" then return end
-	if quantity < 3 then return end
 
 	local target, nonce, nextCmd = args[1], args[2], args[3]
 	local file = players_file[target]
@@ -1582,22 +1534,20 @@ local function handleClaim(playerName, cmd, quantity, args)
 
 	file.claim = nonce
 	savePlayerData(target)
+
 	table.remove(args, 1)
 	table.remove(args, 1)
 	table.remove(args, 1)
-	eventParsedChatCommand(playerName, nextCmd, quantity - 3, args)
-end
+	args[0] = string.lower(nextCmd)
+	args._len = args._len - 3
+	args[-1] = table.concat(args, ' ', 0, args._len)
+	execCmd(playerName, args)
+end })
 
-local function handlePing(playerName, cmd, quantity, args)
-	if not perms[playerName] or not perms[playerName].ping then
-		return
-	end
-
-	if quantity == 0 then
-		return tfm.exec.chatMessage('<v>[#] <r>Need player name.', playerName)
-	end
-
-	local target = args[1]
+newCmd({ name = "ping",
+	perm = "ping",
+	fn = function(playerName, args)
+	local target = args[1] or playerName
 	local targetPlayer = target and room.playerList[target]
 
 	if not targetPlayer then
@@ -1605,50 +1555,7 @@ local function handlePing(playerName, cmd, quantity, args)
 	end
 
 	tfm.exec.chatMessage('<v>[#] ' .. target .. '<n>\'s average latency: <bl>~' .. targetPlayer.averageLatency, playerName)
-end
-
-local commandDispatch = {
-	["ban"] = handleBan,
-	["unban"] = handleBan,
-	["pban"] = handleAdminBan,
-	["punban"] = handleAdminBan,
-	["addmap"] = handleMap,
-	["removemap"] = handleMap,
-	["bancount"] = handleSanctions,
-	["baninfo"] = handleSanctions,
-	["sanctions"] = handleSanctions,
-	["setrank"] = handleSetrank,
-	["file"] = fileActions,
-	["kill"] = warnPlayer,
-	["announcement"] = roomAnnouncement,
-	["skins"] = handleSkins,
-	["coins"] = handleSkins,
-	["event"] = eventDebugCmd,
-	["snow"] = disableSnow,
-	["link"] = linkMouse,
-	["size"] = changeMouseSize,
-	["image"] = addMouseImage,
-	["report"] = handleReport,
-	["karma"] = handleKarma,
-	["skip"] = skipMap,
-	["kick"] = handleKick,
-	["partyhost"] = handlePartyHost,
-	["ping"] = handlePing,
-	["claim"] = handleClaim,
-}
-
-onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
-	if not player or not cmd or not quantity or not args then
-		return
-	end
-	
-	local commandHandler = commandDispatch[cmd]
-	if not commandHandler then
-		return
-	end
-	
-	commandHandler(player, cmd, quantity, args)
-end)
+end })
 
 onEvent("PlayerDataParsed", checkWeeklyWinners)
 onEvent("PlayerDataParsed", playerDataRequests)
@@ -1682,9 +1589,5 @@ onEvent("Loop", function(elapsed)
 		end
 		pdataRequest[name] = nil
 	end
-end)
-
-onEvent("GameStart", function()
-	system.disableChatCommandDisplay(nil)
 end)
 end

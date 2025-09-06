@@ -26,6 +26,7 @@ review_mode = false
 local cp_available = {}
 local map_name
 local map_gravity = 10
+local cooldownMultiplier = 1
 
 local save_queue
 
@@ -38,7 +39,6 @@ local checkpoint_info = {
 local AfkInterface
 local checkCooldown
 local savePlayerData
-local ranks
 local bindKeyboard
 local showStats
 
@@ -374,7 +374,7 @@ onEvent("Keyboard", function(player, key)
 
 	elseif records_admins and key == 66 then
 		if checkCooldown(player, "redo_key", 500) then
-			eventParsedChatCommand(player, "redo")
+			eventChatCommand(player, "redo")
 		end
 	end
 end)
@@ -747,8 +747,8 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	end
 end)
 
-onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
-	if cmd == "review" then
+newCmd({ name = "review",
+	fn = function(player, args)
 		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
 		local normal_cond = (perms[player] and
 							perms[player].enable_review and
@@ -762,21 +762,26 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		if review_mode and disable_powers then
 			disable_powers = false
-			tfm.exec.chatMessage("<v>[#] <d>Powers enabled by " .. player .. ".")
+			translatedChatMessage("powers_enabled")
 		end
 
 		count_stats = false
 		review_mode = not review_mode
+		cooldownMultiplier = 1
+
 		if review_mode then
-			tfm.exec.chatMessage("<v>[#] <d>Review mode enabled by " .. player .. ".")
+			translatedChatMessage("review_enabled")
 		else
-			tfm.exec.chatMessage("<v>[#] <d>Review mode disabled by " .. player .. ".")
+			translatedChatMessage("review_disabled")
 			tfm.exec.setRoomMaxPlayers(room_max_players)
 			tfm.exec.chatMessage("<v>[#] <d>Room limit is restored to " .. room_max_players, player)
 		end
 		showStats()
+		chatlogCmd(cmd, player, args, ranks.mapper)
+	end })
 
-	elseif cmd == "cp" then
+newCmd({ name = "cp",
+	fn = function(player, args)
 		if not levels then return end
 		local checkpoint = tonumber(args[1])
 		if not checkpoint then
@@ -834,10 +839,12 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 				victory._last_level[player] = true
 			end
 		end
+	end })
 
-	elseif cmd == "spec" then
+newCmd({ name = "spec",
+	perm = "spectate",
+	fn = function(player, args, cmd)
 		if not players_file[player] then return end
-		if not perms[player] or not perms[player].spectate then return end
 
 		if args[1] then
 			if not perms[player].set_spectate and not review_mode then return end
@@ -846,15 +853,18 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 			end
 
 			enableSpecMode(args[1], not spec_mode[args[1]])
-			inGameLogCommand(player, cmd, args)
-			logCommand(player, cmd, quantity, args)
+			chatlogCmd(cmd, player, args, ranks.mapper)
+			logCmd(cmd, player, args)
 		else
 			enableSpecMode(player, not spec_mode[player])
 			players_file[player].spec = spec_mode[player]
 			savePlayerData(player)
 		end
+	end })
 
-	elseif cmd == "time" then
+newCmd({ name = "time",
+	min_args = 1,
+	fn = function(player, args, cmd)
 		if not records_admins or not records_admins[player] then
 			if not perms[player] then return end
 			if not perms[player].set_map_time then
@@ -872,9 +882,11 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		end
 
 		tfm.exec.setGameTime(time)
-		inGameLogCommand(player, "time", args)
+		chatlogCmd(cmd, player, args, ranks.mapper)
+	end })
 
-	elseif cmd == "redo" then
+newCmd({ name = "redo",
+	fn = function(player, args)
 		if not (records_admins or review_mode) then return end
 		if not players_level[player] then return end
 
@@ -908,8 +920,10 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 		if checkpoint_info.version == 1 then
 			tfm.exec.addBonus(0, x, y, bonusOffset + 2, 0, false, player)
 		end
+	end })
 
-	elseif cmd == "setcp" then
+newCmd({ name = "setcp",
+	fn = function(player, args)
 		if not records_admins or not records_admins[player] then
 			if not perms[player] or not perms[player].set_checkpoint_version then return end
 		end
@@ -924,8 +938,7 @@ onEvent("ParsedChatCommand", function(player, cmd, quantity, args)
 
 		checkpoint_info.next_version = version - 1
 		tfm.exec.chatMessage("<v>[#] <d>Changes will be applied in the next round.", player)
-	end
-end)
+	end })
 
 onEvent("PlayerDataParsed", function(player, data)
 	if players_file[player].spec then
@@ -963,11 +976,4 @@ onEvent("GameStart", function()
 	tfm.exec.setRoomMaxPlayers(room_max_players)
 	tfm.exec.setRoomPassword("")
 	tfm.exec.disableAutoScore(true)
-
-	system.disableChatCommandDisplay("review")
-	system.disableChatCommandDisplay("cp")
-	system.disableChatCommandDisplay("spec")
-	system.disableChatCommandDisplay("time")
-	system.disableChatCommandDisplay("redo")
-	system.disableChatCommandDisplay("setcp")
 end)

@@ -28,10 +28,12 @@ math.randomseed(os.time())
 local data_version = 12
 local room = tfm.get.room
 local links = {
-	donation = "https://a801-luadev.github.io/?redirect=parkour",
+	-- keys here become commands (e.g. !donate)
+	-- and textarea callbacks (check chat-ui.lua)
+	donate = "https://a801-luadev.github.io/?redirect=parkour",
 	github = "https://github.com/a801-luadev/parkour",
 	discord = "https://discord.gg/QRCjyVyg7B",
-	maps = "https://atelier801.com/topic?f=6&t=887284",
+	map_submission = "https://atelier801.com/topic?f=6&t=887284",
 	records = "https://tfmrecords.com/",
 	forum = "https://atelier801.com/topic?f=6&t=892086",
 	mod_apps = "https://bit.ly/parkourmods",
