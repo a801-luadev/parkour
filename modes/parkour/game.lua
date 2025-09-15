@@ -895,8 +895,11 @@ newCmd({ name = "redo",
 		changePlayerSize(player, levels[1].size)
 		times.generated[player] = nil
 		times.checkpoint[player] = nil
-		victory[player] = nil
-		victory_count = victory_count - 1
+
+		if victory[player] then
+			victory[player] = nil
+			victory_count = victory_count - 1
+		end
 
 		tfm.exec.setPlayerScore(player, 1, false)
 		tfm.exec.killPlayer(player)
