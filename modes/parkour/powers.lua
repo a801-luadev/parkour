@@ -1359,6 +1359,12 @@ onEvent("NewGame", function()
 		end
 	})
 
+	for player in next, ghost do
+		bindKeyboard(player, 1, true, false)
+		bindKeyboard(player, 3, true, false)
+	end
+	ghost, golem = {}, {}
+
 	local file
 	for player in next, in_room do
 		file = players_file[player]
@@ -1366,13 +1372,8 @@ onEvent("NewGame", function()
 			savePlayerData(player)
 		end
 		unbind(player)
+		updatePlayerCollision(player)
 	end
-
-	for player in next, ghost do
-		bindKeyboard(player, 1, true, false)
-		bindKeyboard(player, 3, true, false)
-	end
-	ghost, golem = {}, {}
 end)
 
 onEvent("NewPlayer", function(player)

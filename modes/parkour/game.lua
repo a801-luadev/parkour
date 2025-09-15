@@ -578,7 +578,6 @@ onEvent("NewGame", function()
 		for player in next, in_room do
 			players_level[player] = 1
 			changePlayerSize(player, size)
-			updatePlayerCollision(player)
 			tfm.exec.setPlayerScore(player, 1, false)
 			tfm.exec.linkMice(player, player, false)
 			tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
