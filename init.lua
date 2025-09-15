@@ -86,6 +86,30 @@ local function table_find(tbl, value)
 	end
 end
 
+local function printList(list, col, len, player)
+	for i=1, len, col do
+		tfm.exec.chatMessage(table.concat(list, ' ', i, math.min(i+col-1, len)), player)
+	end
+end
+
+local function sendChatFmt(msg, player, a, ...)
+	local message
+	if a == nil then
+		message = "<v>[#] <bl>" .. msg
+	else
+		message = string.format("<v>[#] <bl>" .. msg, a, ...)
+	end
+
+	if #message > 1000 then
+		-- Potential bug: this ignores empty lines
+		for line in message:gmatch("([^\n]+)") do
+			tfm.exec.chatMessage(line:sub(1, 1000):gsub('<[^>]+$', ''), player)
+		end
+	else
+		tfm.exec.chatMessage(message:gsub('<[^>]+$', ''), player)
+	end
+end
+
 local function capitalize(str)
 	local first = string.sub(str, 1, 1)
 	if first == "+" then

@@ -6,7 +6,6 @@ local actual_player_count = 0
 local victory_count = 0
 local less_time = false
 local victory = {_last_level = {}}
-local in_room = {}
 local online = {}
 local hidden = {}
 local bonusOffset = 0
@@ -21,7 +20,6 @@ local no_help, ghost, golem = {}, {}, {}
 local activeEvents = {}
 local spec_mode = {}
 local checkpoints = {}
-local players_file
 review_mode = false
 local cp_available = {}
 local map_name
@@ -38,7 +36,6 @@ local checkpoint_info = {
 }
 local AfkInterface
 local checkCooldown
-local savePlayerData
 local bindKeyboard
 local showStats
 
@@ -282,7 +279,6 @@ onEvent("NewPlayer", function(player, init)
 
 	ui.removeTextArea(987, nil)
 	spec_mode[player] = nil
-	in_room[player] = true
 
 	player_count = player_count + 1
 	actual_player_count = actual_player_count + 1
@@ -403,7 +399,6 @@ onEvent("PlayerLeft", function(player)
 	end
 
 	players_file[player] = nil
-	in_room[player] = nil
 	times.movement[player] = nil
 	lastPlayerLeft = player
 	actual_player_count = actual_player_count - 1

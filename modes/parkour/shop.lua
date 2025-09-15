@@ -394,10 +394,15 @@ local shop_skins = {
 }
 local file_skins = {}
 local shop_state = {}
+local room_skins = {}
+
+local spawnSkinObj2
 
 do
 	local sort, max = table.sort, math.max
 	local in_shop, last_id = {}, 0
+	local should_save = false
+	local room_skins_last_id = 9000
 
 	local function prepareSkins()
 		local tab
@@ -461,6 +466,33 @@ do
 		if data.shop then
 			if shop_state.parsed then
 				if not SplitRW.shouldParse(data.shop, shop_state) then
+					if should_save then
+						should_save = false
+
+						local last_id = shop_state.last_id
+						for key, skin in next, room_skins do
+							last_id = last_id + 1
+							skin.id = last_id
+							in_shop[skin.id] = true -- all room_skins are added in shop
+							SplitRW.update(shop_state, skin, "shop")
+						end
+
+						-- This is fine since everything is saved in file_skins now
+						room_skins = {}
+						room_skins_last_id = 9000
+
+						data.shop.skins = SplitRW.dump(shop_state)
+						data.shop.last_id = last_id
+						data.shop.ts = os.time()
+
+						eventSavingFile(nil, data, "shop")
+
+						for player in next, in_room do
+							if ranks.admin[player] then
+								sendChatFmt("<rose>Room skins have been saved, new shop last_id is %s", player, last_id)
+							end
+						end
+					end
 					return
 				end
 
@@ -481,4 +513,501 @@ do
 			end
 		end
 	end)
+
+	local actions, pactions = {}, {}
+
+	pactions.show = true
+	function actions.show(player, args)
+		local target, pdata = args.target, args.pdata
+		sendChatFmt(
+			"[Skins %s]\n" ..
+			"\tcoins = %s\n" ..
+			"\tec = %s\n" ..
+			"\tskins = %s\n" ..
+			"\tcskins = %s\n" ..
+			"\tpowers = %s\n" ..
+			"\tpowuse = %s\n" ..
+			"\tcpower = %s\n" ..
+			"\townshop = %s\n" ..
+			"\ttester = %s",
+			player, target,
+			tostring(pdata.coins), table.concat(pdata.ec, ' '),
+			table.concat(pdata.skins, ' '), table.concat(pdata.cskins, ' '),
+			table.concat(pdata.powers, ' '), table.concat(pdata.powuse, ' '),
+			tostring(pdata.cpower), tostring(pdata.ownshop), tostring(pdata:tester())
+		)
+		return true
+	end
+
+	pactions.default = true
+	function actions.default(player, args)
+		local target, pdata = args.target, args.pdata
+		sendChatFmt("(before) %s.cskins = %s", player, target, table.concat(pdata.cskins, ' '))
+		pdata:resetEquipped()
+		savePlayerData(target)
+		sendChatFmt("(default) %s.cskins = %s", player, target, table.concat(pdata.cskins, ' '))
+	end
+
+	function actions.ownshop(player)
+		local pdata = players_file[player]
+		if pdata then
+			pdata.ownshop = not pdata.ownshop or nil
+			savePlayerData(player)
+			sendChatFmt("%s.ownshop = %s", player, player, tostring(pdata.ownshop))
+		end
+		return true
+	end
+
+	pactions.tester = true
+	function actions.tester(player, args)
+		local target, pdata = args.target, args.pdata
+		pdata:setTester(not pdata:tester())
+		sendChatFmt("%s.tester = %s", player, target, tostring(pdata:tester()))
+	end
+
+	function actions.new(player, args)
+		if not shop_state.parsed then
+			sendChatFmt("<r>Shop is not loaded yet", player)
+			return true
+		end
+
+		if args._len < 3 then
+			sendChatFmt("Usage: !%s %s [category] [image] ([scale] [x] [y] [shop_scale])", player, args[0], args[1])
+			return true
+		end
+
+		local category = tonumber(args[2])
+		if not category and args[2] then
+			category = args[2]:lower()
+			if category == "bigbox" then
+				category = "bigBox"
+			end
+			category = table_find(shop_tabs, category)
+		end
+
+		category = category and math.floor(category)
+		if not category or category < 1 or category > 9 or category == 8 then
+			sendChatFmt("<r>Category must be 1-9 except 8", player)
+			return true
+		end
+
+		local image = args[3]
+		local testId = tfm.exec.addImage(image, "!1", 0, 0, "Tigrounette")
+		if not testId then
+			sendChatFmt("<r>Invalid image", player)
+			return true
+		end
+
+		local skin = {
+			tab = category,
+			price = -1,
+			hidden = true,
+		}
+
+		room_skins_last_id = room_skins_last_id + 1
+		skin.id = room_skins_last_id
+		room_skins[skin.id] = skin
+
+		local objId = default_skins_by_cat[category]
+		local scale = tonumber(args[4])
+		local x = tonumber(args[5])
+		local y = tonumber(args[6])
+		local shopScale = tonumber(args[7]) or scale
+
+		skin.so = objId
+		skin.img = image
+		skin.scale = scale
+		skin.x = x
+		skin.y = y
+		skin.shop_scale = shopScale
+
+		local tab = shop_items[category]
+		tab._len = tab._len + 1
+		table.insert(tab, 2, skin)
+		sendChatFmt("<j>Room skin %s has been added to tab %s", player, skin.id, category)
+
+		local pdata = players_file[player]
+		pdata:setTester(true)
+		pdata:equip(category, skin.id)
+	end
+
+	local key_fn = {
+		img = tostring,
+		price = tonumber,
+		scale = tonumber,
+		hidden = function(x) return x == "true" or x == "yes" or x == "1" end,
+		shop_img = function(x) return x ~= "-" and x or nil end,
+		shop_scale = tonumber,
+		x = tonumber,
+		y = tonumber,
+		so = tonumber,
+	}
+	local key_list = {}
+	for key in next, key_fn do
+		key_list[#key_list + 1] = key
+	end
+	key_list = table_concat(key_list, ' ')
+	function actions.edit(player, args)
+		if not shop_state.parsed then
+			sendChatFmt("<r>Shop is not loaded yet", player)
+			return true
+		end
+
+		if args._len < 4 then
+			sendChatFmt("Usage: !%s %s [id] [key] [value]", player, args[0], args[1])
+			return true
+		end
+
+		local id = tonumber(args[2])
+		local file_skin = file_skins[id]
+		local skin = file_skin or room_skins[id]
+		if not skin then
+			if shop_skins[id] then
+				sendChatFmt("<r>Cannot edit this skin", player)
+			else
+				sendChatFmt("<r>Skin not found", player)
+			end
+			return true
+		end
+
+		local key = args[3]:lower()
+		local fn = key_fn[key]
+		if not fn then
+			sendChatFmt("<r>Invalid key, available keys: %s", player, key_list)
+			return true
+		end
+
+		local value = args[4]
+		skin[key] = fn(value)
+
+		if file_skin then
+			SplitRW.update(shop_state, skin, "shop")
+		end
+
+		sendChatFmt("skin_%s.%s = %s", player, id, key, tostring(skin[key]))
+	end
+
+	function actions.delete(player, args)
+		if args._len < 2 then
+			sendChatFmt("Usage: !%s %s [id]", player, args[0], args[1])
+			return true
+		end
+
+		local id = tonumber(args[2])
+		local skin = room_skins[id]
+		if not skin then
+			sendChatFmt("<r>Skin not found", player)
+			return true
+		end
+
+		-- Remove from shop_items
+		local tab = shop_items[skin.tab]
+		if tab then
+			for i=1, tab._len do
+				if tab[i].id == id then
+					table.remove(tab, i)
+					tab._len = tab._len - 1
+					break
+				end
+			end
+		end
+
+		room_skins[id] = nil
+		sendChatFmt("skins[%s] = nil", player, id)
+	end
+
+	function actions.save(player, args)
+		if not shop_state.parsed then
+			sendChatFmt("<r>Shop is not loaded yet", player)
+			return true
+		end
+
+		should_save = true
+		sendChatFmt("Room skins will be saved soon", player)
+	end
+
+	function actions.preview(player, args)
+		if not review_mode then
+			sendChatFmt("<r>Only available in review mode", player)
+			return true
+		end
+
+		if args._len < 2 then
+			sendChatFmt("Usage: !%s %s [id] ([seconds] [x] [y])", player, args[0], args[1])
+			return true
+		end
+
+		local id = tonumber(args[2])
+		if not id then
+			sendChatFmt("<r>Invalid id", player)
+			return true
+		end
+
+		local time = (tonumber(args[3]) or 10) * 1000
+		local skin = shop_skins[id] or file_skins[id] or room_skins[id]
+		if not id then
+			sendChatFmt("<r>Skin not found", player)
+			return true
+		end
+
+		local x, y = tonumber(args[4]), tonumber(args[5])
+		if not x or not y then
+			local pos = room.playerList[player]
+			if not pos then return end
+			x, y = x or pos.x, y or pos.y + 20
+		end	
+
+		spawnSkinObj2(time, nil, skin.id, skin.tab, x, y)
+	end
+
+	function actions.inspect(player, args)
+		local id = tonumber(args[2])
+		local skin = shop_skins[id] or file_skins[id] or room_skins[id]
+		if not skin then
+			sendChatFmt("Skin not found", player)
+			return true
+		end
+		sendChatFmt(
+			"Skin %d\n" ..
+			"\ttab = %s\n" ..
+			"\timg = %s\n" ..
+			"\tprice = %s\n" ..
+			"\tscale = %s\n" ..
+			"\thidden = %s\n" ..
+			"\tshop_img = %s\n" ..
+			"\tshop_scale = %s\n" ..
+			"\tx = %s\n" ..
+			"\ty = %s\n" ..
+			"\tso = %s",
+			player,
+			tostring(skin.id),
+			tostring(skin.tab),
+			tostring(skin.img),
+			tostring(skin.price),
+			tostring(skin.scale),
+			tostring(skin.hidden),
+			tostring(skin.shop_img),
+			tostring(skin.shop_scale),
+			tostring(skin.x),
+			tostring(skin.y),
+			tostring(skin.so)
+		)
+		return true
+	end
+
+	function actions.list(player, args)
+		local type = args[2] and args[2]:lower()
+
+		if type and type ~= "shop" and type ~= "file" and type ~= "room" then
+			sendChatFmt("<r>Invalid type, available: shop file room", player)
+			return true
+		end
+
+		local list, count
+
+		if not type or type == "shop" then
+			list, count = {}, 0
+			for id in next, shop_skins do
+				count = 1 + count
+				list[count] = id
+			end
+
+			sendChatFmt("Shop Skin list:", player)
+			printList(list, 20, count, player)
+		end
+
+		if not type or type == "file" then
+			list, count = {}, 0
+			for id in next, file_skins do
+				count = 1 + count
+				list[count] = id
+			end
+
+			sendChatFmt("File Skin list:", player)
+			printList(list, 20, count, player)
+		end
+
+		if not type or type == "room" then
+			list, count = {}, 0
+			for id in next, room_skins do
+				count = 1 + count
+				list[count] = id
+			end
+
+			sendChatFmt("Room Skin list:", player)
+			printList(list, 20, count, player)
+		end
+
+		return true
+	end
+
+	pactions.equip = true
+	function actions.equip(player, args)
+		if args._len < 4 then
+			sendChatFmt("Usage: !%s %s %s [tab] [id]", player, args[0], args[1], args[2])
+			return true
+		end
+
+		local target, pdata = args.target, args.pdata
+		local index = tonumber(args[3])
+		local id = tonumber(args[4])
+
+		if not index or not id then
+			sendChatFmt("<r>Invalid tab or id", player)
+			return true
+		end
+
+		if args.action == "unequip" then
+			if not pdata:unequip(index, id) then
+				sendChatFmt("<r>Invalid index", player)
+				return true
+			end
+		else
+			if args.action == "set" then
+				pdata:setTester(true)
+			end
+
+			if not pdata:equip(index, id) then
+				sendChatFmt("<r>Invalid index", player)
+				return -- log anyway because tester mode is enabled
+			end
+		end
+
+		if args.action ~= "set" then
+			savePlayerData(target)
+		end
+
+		sendChatFmt("Done.", player)
+	end
+	pactions.unequip = true
+	actions.unequip = actions.equip
+	pactions.set = true
+	actions.set = actions.equip
+	
+	pactions.add = true
+	function actions.add(player, args)
+		if args.action == "add" then
+			if args._len < 3 then
+				sendChatFmt("Usage: !%s %s %s [id]", player, args[0], args[1], args[2])
+				return true
+			end
+		else
+			if args._len < 4 then
+				sendChatFmt("Usage: !%s %s %s [id] [use]", player, args[0], args[1], args[2])
+				return true
+			end
+		end
+
+		local target, pdata = args.target, args.pdata
+		local id = tonumber(args[3])
+		if not id then
+			sendChatFmt("<r>Invalid id", player)
+			return true
+		end
+
+		local powerUse
+
+		if args.action == "addpower" then
+			powerUse = tonumber(args[4])
+
+			if not powerUse or powerUse < 0 then
+				sendChatFmt("<r>Invalid power use", player)
+				return true
+			end
+		end
+
+		if not pdata:addItem(id, powerUse and 8, powerUse) then
+			sendChatFmt("<r>Player already have the skin %s", player, id)
+			return true
+		end
+
+		savePlayerData(target)
+		sendChatFmt("Done.", player)
+	end
+	pactions.addpower = true
+	actions.addpower = actions.add
+
+	pactions.remove = true
+	function actions.remove(player, args)
+		if args._len < 4 then
+			sendChatFmt("Usage: !%s %s %s [id] [tab]", player, args[0], args[1], args[2])
+			return true
+		end
+
+		local target, pdata = args.target, args.pdata
+		local id = tonumber(args[3])
+
+		if not id then
+			sendChatFmt("<r>Invalid id", player)
+			return true
+		end
+
+		local tab = tonumber(args[4])
+		if not tab then
+			sendChatFmt("<r>Invalid tab", player)
+			return true
+		end
+
+		if not pdata:removeItem(id, tab) then
+			sendChatFmt("<r>Player doesn't have that skin", player)
+			return true
+		end
+
+		savePlayerData(target)
+		sendChatFmt("Done.", player)
+	end
+
+	local actions_list = {}
+	for action in next, actions do
+		actions_list[#actions_list + 1] = action
+	end
+	actions_list = table_concat(actions_list, ' ')
+
+	newCmd({ name = {"skins", "coins"},
+		rank = "admin",
+		min_args = 1,
+		fn = function(player, args, cmd)
+			local action = args[1]:lower()
+			local target = args[2]
+
+			if not actions[action] then
+				if args._len == 1 then
+					if in_room[args[1]] then
+						action = "show"
+						target = args[1]
+					end
+				else
+					action = args[2]:lower()
+					target = args[1]
+				end
+			end
+
+			if not actions[action] then
+				return sendChatFmt("Invalid action. Available: %s", player, actions_list)
+			end
+
+			if pactions[action] then
+				if not target then
+					return sendChatFmt("<r>You must specify the target player.", player)
+				end
+
+				local pdata = players_file[target]
+
+				if not in_room[target] or not pdata then
+					return sendChatFmt("<r>%s is not here.", player, tostring(target))
+				end
+
+				args.target = target
+				args.pdata = pdata
+			end
+
+			args.action = action
+
+			if actions[action](player, args) then
+				return
+			end
+
+			chatlogCmd(cmd, player, args)
+		end
+	})
 end

@@ -106,8 +106,8 @@ local function despawnableObject(when, id, ...)
 	return obj
 end
 
-local function spawnSkinObj2(when, so, skin, tab, ...)
-	skin = skin and (shop_skins[skin] or file_skins[skin])
+function spawnSkinObj2(when, so, skin, tab, ...)
+	skin = skin and (shop_skins[skin] or file_skins[skin] or room_skins[skin])
 	so = so or skin and skin.so or default_skins_by_cat[tab]
 	if not so then return end
 
@@ -352,13 +352,13 @@ shop_powers[7] = {
 
 	cond = function(player, key, down, x, y)
 		local skinID = players_file[player]:getEquipped(7)
-		local skin = skinID and (shop_skins[skinID] or file_skins[skinID])
+		local skin = skinID and (shop_skins[skinID] or file_skins[skinID] or room_skins[skinID])
 		return skin and not ghost[player] and not golem[player]
 	end,
 
 	fnc = function(self, player, key, down, x, y)
 		local skinID = players_file[player]:getEquipped(7)
-		local skin = skinID and (shop_skins[skinID] or file_skins[skinID])
+		local skin = skinID and (shop_skins[skinID] or file_skins[skinID] or room_skins[skinID])
 		if not skin then return end
 		local imgID = tfm.exec.addImage(
 			skin.img or "img@196c5a94386",

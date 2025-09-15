@@ -106,8 +106,6 @@ titles = {
 	}
 }
 
-players_file = {}
-
 local data_migrations = {
 	["0.0"] = function(player, data)
 		data.parkour = data.modules.parkour
@@ -910,7 +908,8 @@ onEvent("PlayerDataLoaded", function(player, data)
 	eventPlayerDataParsed(player, data)
 end)
 
-onEvent("SavingFile", function(id, data)
+onEvent("SavingFile", function(id, data, name)
+	id = id or tostring(files[name])
 	local new_data = filemanagers[id]:dump(data)
 	if not new_data then return end
 	system.saveFile(new_data, id)

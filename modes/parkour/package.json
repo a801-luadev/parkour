@@ -8,6 +8,8 @@
 
 	{"type": "require-file", "file": "modes/parkour/timers.lua"},
 
+	{"type": "require-file", "file": "modes/parkour/player.lua"},
+
 	{"type": "require-file", "file": "modes/parkour/maps.lua"},
 
 	{"type": "require-file", "file": "modes/parkour/join-system.lua"},

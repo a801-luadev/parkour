@@ -20,10 +20,12 @@ do
 		if not tabItems or not pdata then return ret end
 
 		local count = 0
+		local item
 		for i=1, tabItems._len do
-			if not tabItems[i].hidden or pdata:findItem(tabItems[i].id, tab) then
+			item = tabItems[i]
+			if (not item.hidden and not room_skins[item.id]) or pdata:findItem(item.id, tab) then
 				count = 1 + count
-				ret[count] = tabItems[i]
+				ret[count] = item
 			end
 		end
 		ret._len = count
