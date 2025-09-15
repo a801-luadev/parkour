@@ -139,7 +139,8 @@ do
 				pausedEventInfo[i] = tostring(pausedEventInfo[i] or ""):sub(1, 20)
 			end
 
-			sendPacket(
+			local sendOrRecv = room.name == "*#parkour4bots" and eventPacketReceived or sendPacket
+			sendOrRecv(
 				"common", packets.rooms.paused_events,
 				room.shortName .. "\000" ..
 				(cycleId - startCycle) .. "\000" ..
