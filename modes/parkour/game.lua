@@ -98,6 +98,8 @@ local function changePlayerSize(name, size)
 end
 
 local function updatePlayerCollision(player)
+	if records_admins then return end
+
 	if ghost[player] then
 		tfm.exec.setPlayerCollision(player, 0)
 	elseif golem[player] then
