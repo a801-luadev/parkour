@@ -98,6 +98,20 @@ onEvent("PlayerWon", function(player)
 		if records_admins then
 			translatedChatMessage("records_submit", player)
 		end
+
+		if taken < 20000 and doStatsCount() then
+			sendPacket(
+				"common",
+				packets.rooms.suspicious,
+				player .. "\000" ..
+				id .. "\000" ..
+				file.c .. "\000" ..
+				taken .. "\000" ..
+				room.currentMap .. "\000" ..
+				room.shortName .. "\000" ..
+				room.uniquePlayers
+			)
+		end
 	end
 
 	setNameColor(player) -- just in case PlayerRespawn triggers first
