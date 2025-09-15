@@ -67,6 +67,7 @@ translations.tr = {
 	powers_enabled = "<vp>Yetenekler tekrardan kullanılabilir.",
 	event = "Etkinlik",
 	settings = "Ayarlar",
+	verify_sent = "<v>[#] <j>Discord doğrulama isteği gönderildi.",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Ve geri sayım başlıyor...",

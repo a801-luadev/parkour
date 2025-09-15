@@ -16,6 +16,7 @@ packets.rooms = {
   prev_kill = 15,
   skip_map = 16,
   paused_events = 17,
+  verify = 19,
 }
 
 packets.bots = {

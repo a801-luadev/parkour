@@ -184,6 +184,19 @@ newCmd({ name = "submit",
 		tfm.exec.chatMessage("<v>[#] <d>You can't send records with this way, check Records Discord server: https://discord.gg/zbjVYAxYzp", player)
 	end })
 
+newCmd({ name = "verify",
+	fn = function(player, args)
+		if args._len < 1 or #args[1] > 60 or args[1]:sub(1, 3) ~= "tfm" then
+			return translatedChatMessage("invalid_syntax", player)
+		end
+		if not checkCooldown(player, "verify", 120 * 1000) then
+			return translatedChatMessage("cooldown", player)
+		end
+		sendPacket("common", packets.rooms.verify, player .. "\000" .. args[1])
+		translatedChatMessage("verify_sent", player)
+	end
+})
+
 newCmd({ name = "pause",
 	rank = "admin",
 	log = true,

@@ -68,6 +68,7 @@ translations.en = {
 	powers_enabled = "<vp>Powers are enabled again.",
 	review_enabled = "<v>[#] <d>Review mode is enabled.",
 	review_disabled = "<v>[#] <d>Review mode is disabled.",
+	verify_sent = "<v>[#] <j>Discord verification request is sent.",
 
 	-- Easter Eggs
 	easter_egg_0  = "<ch>Finally the countdown begins...",
