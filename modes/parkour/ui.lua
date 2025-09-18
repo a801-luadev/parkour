@@ -362,7 +362,7 @@ newCmd({ name = {"profile", "p"},
 				request = request .. "#0000"
 			end
 
-			if request == "Parkour#0568" or request == "Holybot#0000" then
+			if channels[request] then
 				return translatedChatMessage("cant_load_bot_profile", player)
 			end
 
