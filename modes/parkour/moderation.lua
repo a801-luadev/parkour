@@ -263,6 +263,8 @@ newCmd({ name = {"ban", "unban"},
 		return
 	end
 
+	reported[targetPlayer] = nil
+
 	-- Ban a player using their name
 	schedule_player(targetPlayer, false, function(pdata)
 		if not pdata.playerid then
@@ -634,6 +636,8 @@ newCmd({ name = "kill",
 		tfm.exec.chatMessage("<v>[#] <r>" ..requestplayer.. " isn't here.", player)
 		return
 	end
+
+	reported[targetPlayer] = nil
 
 	chatlogCmd(cmd, player, args)
 	schedule_player(requestplayer, true, function(pdata)
@@ -1332,6 +1336,35 @@ newCmd({ name = "ping",
 	tfm.exec.chatMessage('<v>[#] ' .. target .. '<n>\'s average latency: <bl>~' .. targetPlayer.averageLatency, playerName)
 end })
 
+onEvent("PacketReceived", function(channel, id, packet)
+	if channel ~= "bots" then return end
+
+	if id == packets.bots.report_feedback then
+		local reported_name, handler, response, target = string.match(
+			packet,
+			"^([^\000]+)\000([^\000]+)\000([^\000]*)\000([^\000]*)$"
+		)
+
+		if in_room[handler] then
+			eventChatCommand(handler, "sanctions " .. reported_name)
+		end
+
+		if response == "" then return end
+		local report = reported[reported_name]
+		if target ~= "" then
+			if report then
+				report[target] = nil
+			end
+			translatedChatMessage("report_" .. response, target)
+		elseif report then
+			reported[reported_name] = nil
+			for target in next, report do
+				translatedChatMessage("report_" .. response, target)
+			end
+		end
+	end
+end)
+
 onEvent("PlayerDataParsed", checkWeeklyWinners)
 onEvent("PlayerDataParsed", playerDataRequests)
 onEvent("PlayerDataParsed", function(player, data)
@@ -1340,10 +1373,6 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 end)
 onEvent("OutPlayerDataParsed", playerDataRequests)
-
-onEvent("PlayerLeft", function(player)
-	reported[player] = nil
-end)
 
 onEvent("Loop", function(elapsed)
 	local now = os.time()

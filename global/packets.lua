@@ -31,4 +31,5 @@ packets.bots = {
   room_announce = 7,
   change_lock = 8,
   remote_command = 9,
+	report_feedback = 10,
 }
