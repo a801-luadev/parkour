@@ -1301,6 +1301,7 @@ end })
 newCmd({ name = "claim",
 	rank = "admin",
 	min_args = 3,
+	chatlog = true,
 	fn = function(playerName, args)
 	if playerName ~= "Parkour#0568" then return end
 
@@ -1321,6 +1322,7 @@ newCmd({ name = "claim",
 	args._len = args._len - 3
 	args[-1] = table.concat(args, ' ', 0, args._len)
 	execCmd(playerName, args)
+	translatedChatMessage("claim_done", playerName)
 end })
 
 newCmd({ name = "ping",
