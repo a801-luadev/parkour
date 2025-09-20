@@ -1358,7 +1358,7 @@ onEvent("PacketReceived", function(channel, id, packet)
 			"^([^\000]+)\000([^\000]+)\000([^\000]*)\000([^\000]*)$"
 		)
 
-		if in_room[handler] then
+		if in_room[handler] and not target then
 			eventChatCommand(handler, "sanctions " .. reported_name)
 		end
 
