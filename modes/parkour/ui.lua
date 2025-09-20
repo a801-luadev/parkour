@@ -39,14 +39,11 @@ local function closeAllInterfaces(player)
 	if Staff.open[player] then
 		Staff:remove(player)
 	end
-	if ShopInterface.open[player] then
-		ShopInterface:remove(player)
-	end
-	if QuestsInterface.open[player] then
-		QuestsInterface:remove(player)
-	end
 	if NPCInterface.open[player] then
 		NPCInterface:remove(player)
+	end
+	if ReportInterface.open[player] then
+		ReportInterface:remove(player)
 	end
 end
 
@@ -437,6 +434,8 @@ onEvent("RawTextAreaCallback", function(id, player, callback)
 		toggleInterface(QuestsInterface, player)
 	elseif callback == "leaderboard_button" then
 		toggleInterface(LeaderboardInterface, player)
+	elseif callback == "report_button" then
+		toggleInterface(ReportInterface, player)
 	elseif callback == "freeze" then
 		if not victory[player] then return end
 		tfm.exec.freezePlayer(player, true, true)

@@ -1170,8 +1170,14 @@ newCmd({ name = "report",
 		return
 	end
 
-	if args._len < 2 then
-		return translatedChatMessage("cmd_usage_report", playerName)
+	if args._len == 0 then
+		toggleInterface(ReportInterface, playerName)
+		return
+	end
+
+	if ReportValidReasons[args[1]] then
+		ReportInterface:show(playerName, args[1])
+		return
 	end
 
 	local reportedName = args[1]:lower():gsub('^+?[a-z]', string.upper)
@@ -1183,8 +1189,13 @@ newCmd({ name = "report",
 		return translatedChatMessage("reported_invalid", playerName)
 	end
 
+	if args._len == 1 then
+		ReportInterface:show(playerName, nil, reportedName)
+		return
+	end
+
 	local reason = table.concat(args, ' ', 2, args._len)
-	if #reason < 5 then
+	if #reason < 4 then
 		return translatedChatMessage("reason_too_short", playerName)
 	end
 

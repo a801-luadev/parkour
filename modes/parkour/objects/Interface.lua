@@ -226,6 +226,17 @@ do
 		-- it is at the end to let updateCallback know if it is an update or a show
 	end
 
+	function Interface:updatePartial(player, index, value)
+		if not self.open[player] then return end
+		self:update(
+			player,
+			index == 1 and value or self.args[player][1],
+			index == 2 and value or self.args[player][2],
+			index == 3 and value or self.args[player][3],
+			index == 4 and value or self.args[player][4]
+		)
+	end
+
 	function Interface:update(player, arg1, arg2, arg3, arg4)
 		if not self.open[player] then return end
 

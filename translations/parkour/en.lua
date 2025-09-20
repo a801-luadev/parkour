@@ -32,7 +32,23 @@ translations.en = {
 	help_rules = "<font size = '13'><B><J>All rules in the Transformice Terms and Conditions also apply to #parkour</J></B></font>\n\nIf you find any player breaking these rules, whisper the parkour mods in-game. If no mods are online, then it is recommended to report it in the discord server.\nWhen reporting, please include the server, room name, and player name.\n• Ex: en-#parkour10 Blank#3495 trolling\nEvidence, such as screenshots, videos and gifs are helpful and appreciated, but not necessary.\n\n<font size = '11'>• No <font color = '#ef1111'>hacks, glitches or bugs</font> are to be used in #parkour rooms\n• <font color = '#ef1111'>VPN farming</font> will be considered an <B>exploit</B> and is not allowed. <p align = 'center'><font color = '#cc2222' size = '12'><B>\nAnyone caught breaking these rules will be immediately banned.</B></font></p>\n\n<font size = '12'>Transformice allows the concept of trolling. However, <font color='#cc2222'><B>we will not allow it in parkour.</B></font></font>\n\n<p align = 'center'><J>Trolling is when a player intentionally uses their powers or consumables to prevent other players from finishing the map.</j></p>\n• Revenge trolling is <B>not a valid reason</B> to troll someone and you will still be punished.\n• Forcing help onto players trying to solo the map and refusing to stop when asked is also considered trolling.\n• <J>If a player does not want help or prefers to solo a map, please try your best to help other players</J>. However if another player needs help in the same checkpoint as the solo player, you can help them [both].\n\nIf a player is caught trolling, they will be punished on a time basis. Note that repeated trolling will lead to longer and more severe punishments.",
 	help_contribute = "<font size='14'>\n<p align='center'>The parkour management team loves open source code because it <t>helps the community</t>. You can <o>view</o> and <o>modify</o> the source code on <o><u><a href='event:github'>GitHub</a></u></o>.\n\nMaintaining the module is <t>strictly voluntary</t>, so any help regarding <t>code</t>, <t>bug reports</t>, <t>suggestions</t> and <t>creating maps</t> is always <u>welcome and appreciated</u>.\nYou can <vp>report bugs</vp> and <vp>give suggestions</vp> on <o><u><a href='event:discord'>Discord</a></u></o> and/or <o><u><a href='event:github'>GitHub</a></u></o>.\nYou can <vp>submit your maps</vp> in our <o><u><a href='event:map_submission'>Forum Thread</a></u></o>.\n\nMaintaining parkour is not expensive, but it is not free either. We'd love if you could help us by <t>donating any amount</t> <o><u><a href='event:donate'>here</a></u></o>.\n<u>All donations will go towards improving the module.</u></p>",
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>Quest system implemented. (Press <J><B>,</B></J> to open the quest page.)\n\n<font size='11'>• <font size='13'>Added an option to disable hotkeys for all interfaces like leaderboard, help, shop etc.\n\n<font size='11'>• <font size='13'>Added the <B><J>!cp [PlayerName#tag]</J></B> command to set your current checkpoint as the specified player's checkpoint.",
-	
+
+	-- Report Window
+	report_window = '<p align="center"><font size="20"><R><b>Parkour Player Report</b></R></font></p>\n' ..
+		'Please, choose a player and the reason for your report.\n' ..
+		'If you want to provide more details like video evidence, you can use <b>!report</b> command instead:\n' ..
+		'<i><b>!report Username#5903</b> trolling Username#1146 youtu.be/dQw4w9WgXcQ</i>',
+	report_troll = "Troll",
+	report_troll_desc = "Preventing someone from advancing to the next checkpoint (or completing the map) by abusing parkour powers/objects.",
+	report_force = "Force Help",
+	report_force_desc = "Intentionally and repeatedly trying to advance someone to the next checkpoint (or complete the map) <r>against their will</r> by using parkour power/objects.\n" ..
+		"<CH>If someone has a red line under their name, that means they don't want help.</CH>",
+	report_hack = "Hack",
+	report_hack_desc = "Using external tools/programs to gain unfair advantages.\n<rose>Also, you should report them to Transformice Staff using /report command.</rose>",
+	report_cheat = "Cheat",
+	report_cheat_desc = "Other cheating methods like using exploits, glitches or game bugs to gain unfair advantages.",
+	report_send = "<b>Send Report</b>",
+
 	-- Congratulation messages
 	reached_level = "<d>Congratulations! You've completed level <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> finished the parkour in <vp>%s</vp> seconds, <fc>congratulations!",
