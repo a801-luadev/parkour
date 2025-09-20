@@ -32,12 +32,12 @@ local links = {
 	-- and textarea callbacks (check chat-ui.lua)
 	donate = "https://a801-luadev.github.io/?redirect=parkour",
 	github = "https://github.com/a801-luadev/parkour",
-	discord = "https://discord.gg/QRCjyVyg7B",
+	discord = "https://discord.gg/eMmFyptwbs",
 	map_submission = "https://atelier801.com/topic?f=6&t=887284",
 	records = "https://tfmrecords.com/",
 	forum = "https://atelier801.com/topic?f=6&t=892086",
 	mod_apps = "https://bit.ly/parkourmods",
-	mapper_apps = "https://discord.gg/QRCjyVyg7B",
+	mapper_apps = "https://discord.gg/eMmFyptwbs",
 	mapper_event = "https://atelier801.com/topic?f=6&t=898915&p=1#m2",
 }
 local app_times = {
