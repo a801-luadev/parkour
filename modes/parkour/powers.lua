@@ -1435,6 +1435,16 @@ newCmd({ name = "cooldown",
 		chatlogCmd(cmd, player, args, ranks.mapper)
 	end })
 
+newCmd({ name = "unlink",
+	fn = function(player, args, cmd)
+		if args._len > 0 then
+			if not ranks.admin[player] then return end
+			tfm.exec.linkMice(args[1], args[2] or args[1], false)
+			return
+		end
+		tfm.exec.linkMice(player, player, false)
+	end })
+
 onEvent("PlayerBonusGrabbed", function(player, bonus)
 	local angle = booster[bonus]
 	if not angle then return end
