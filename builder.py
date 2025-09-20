@@ -5,12 +5,21 @@ import os
 import re
 import sys
 
-# Reading the script
-with open("init.lua", "rb") as file:
-	script = file.read()
+if '--ui' in sys.argv:
+	with open("scripts/testui.lua", "rb") as file:
+		script = file.read()
+
+elif '--migrate' in sys.argv:
+	with open("scripts/migrate.lua", "rb") as file:
+		script = file.read()
+
+else:
+	# Reading the script
+	with open("init.lua", "rb") as file:
+		script = file.read()
 
 if '--polyfill' in sys.argv or '--dev' in sys.argv:
-	with open("polyfill.lua", "rb") as file:
+	with open("scripts/polyfill.lua", "rb") as file:
 		script = file.read() + script
 
 # Evaluating tags (building the code)

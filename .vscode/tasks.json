@@ -1,0 +1,72 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "module build",
+      "command": "python",
+      "args": [
+        "builder.py"
+      ],
+      "group": {
+        "kind": "build"
+      }
+    },
+    {
+      "label": "migrate build",
+      "command": "python",
+      "args": [
+        "builder.py",
+        "--migrate"
+      ],
+      "group": {
+        "kind": "build"
+      }
+    },
+    {
+      "label": "dev build",
+      "command": "python",
+      "args": [
+        "builder.py",
+        "--dev"
+      ],
+      "group": {
+        "kind": "build"
+      }
+    },
+    {
+      "label": "dev build & copy (win)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "python builder.py --dev; if ($?) { Get-Content -Encoding UTF8 \"${workspaceFolder}\\builds\\latest.lua\" | Set-Clipboard }"
+      ],
+      "group": {
+        "kind": "build"
+      }
+    },
+    {
+      "label": "ui test build",
+      "command": "python",
+      "args": [
+        "builder.py",
+        "--ui"
+      ],
+      "group": {
+        "kind": "build"
+      }
+    },
+    {
+      "label": "ui test build & copy (win)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-Command",
+        "python builder.py --ui; if ($?) { Get-Content -Encoding UTF8 \"${workspaceFolder}\\builds\\latest.lua\" | Set-Clipboard }"
+      ],
+      "group": {
+        "kind": "build"
+      }
+    }
+  ]
+}
