@@ -637,7 +637,7 @@ newCmd({ name = "kill",
 		return
 	end
 
-	reported[targetPlayer] = nil
+	reported[requestplayer] = nil
 
 	chatlogCmd(cmd, player, args)
 	schedule_player(requestplayer, true, function(pdata)
