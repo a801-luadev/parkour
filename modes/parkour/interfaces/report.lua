@@ -14,7 +14,7 @@ local ReportInterface = Interface.new(168, 46, 500, 330, true)
 		text = function(self, player, reason, selected)
 			local list, count = {}, 0
 
-			for name in next, tfm.get.room.playerList do
+			for name in next, in_room do
 				if name ~= player then
 					count = count + 1
 					list[count] = '<a href="event:report:' .. name .. '">' .. name .. '</a>'
@@ -59,7 +59,9 @@ local ReportInterface = Interface.new(168, 46, 500, 330, true)
 	:loadComponent(
 		Button.new()
 			:setTranslation("report_send")
-			:onClick(function(self, player, reason, selected)
+			:onClick(function(self, player)
+				local reason = self.parent.args[player][1]
+				local selected = self.parent.args[player][2]
 				if not reason or not selected then return end
 				eventChatCommand(player, "report " .. selected .. " " .. reason)
 				self.parent:remove(player)
