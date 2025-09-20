@@ -314,22 +314,31 @@ shop_powers[5] = {
 	name = "booster",
 	cooldown_img = "img@1943409e46e",
 	cooldown_scale = 0.5,
-	cooldown = 5000,
+	cooldown = 10 * 1000,
+	despawn_time = 30 * 1000,
 
 	fnc = function(self, player, key, down, x, y, vx, vy)
 		local right = facing[player]
 		local id = allocateId("bonus", 1000, 10000)
 		local angle = vx and vy and (vx ~= 0 or vy ~= 0) and math.atan2(vy, vx) or (right and 0 or math.pi)
 		x = x + (right and 20 or -20)
-		local img = tfm.exec.addImage("img@1943409e46e", "!99", x, y, nil, 1, 1, angle, 1, 0.5, 0.5)
-		tfm.exec.addBonus(0, x, y, id, 0, false, nil)
-		booster[id] = angle
-		addNewTimer(self.cooldown, self.despawn, id, img)
+		local img = {}
+		local boost = {angle,x,y,img}
+		booster[id] = boost
+		for target in next, in_room do
+			img[target] = tfm.exec.addImage("img@1943409e46e", "!99", x, y, target, 1, 1, angle, 1, 0.5, 0.5)
+			tfm.exec.addBonus(0, boost[2], boost[3], id, 0, false, target)
+		end
+		addNewTimer(despawn_time, self.despawn, id)
 	end,
 
 	despawn = function(id, img)
+		local boost = booster[id]
+		if not boost then return end
+		for target in next, in_room do
+			tfm.exec.removeImage(boost[4][target])
+		end
 		tfm.exec.removeBonus(id)
-		tfm.exec.removeImage(img)
 		booster[id] = nil
 	end
 }
@@ -1336,6 +1345,7 @@ onEvent("NewGame", function()
 		no_powers[to_remove[index]] = nil
 	end
 
+	booster = {}
 	facing = {}
 	cooldowns = {}
 	obj_whitelist = {_count = 0, _index = 1}
@@ -1446,11 +1456,18 @@ newCmd({ name = "unlink",
 	end })
 
 onEvent("PlayerBonusGrabbed", function(player, bonus)
-	local angle = booster[bonus]
-	if not angle then return end
+	local boost = booster[bonus]
+	if not boost then return end
 	tfm.exec.removeBonus(bonus, player)
-	if no_help[player] then return end
-	local vx, vy = math.cos(angle), math.sin(angle)
+	local spawnTime = times.generated[player] and (os.time() - times.generated[player]) or 0
+	if no_help[player] or spawnTime < 5000 then
+		addNewTimer(spawnTime < 5000 and 5000 or 1000, tfm.exec.addBonus, 0, boost[2], boost[3], bonus, 0, false, player)
+		return
+	end
+	if boost[4][player] then
+		tfm.exec.removeImage(boost[4][player], true)
+	end
+	local vx, vy = math.cos(boost[1]), math.sin(boost[1])
 	tfm.exec.movePlayer(player, 0, 0, true, vx * 120, vy * 120, true)
 end)
 

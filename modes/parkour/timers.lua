@@ -4,17 +4,18 @@ do
 local timers = {}
 local aliveTimers = false
 
-function addNewTimer(delay, fnc, arg1, arg2, arg3, arg4, arg5, arg6)
+function addNewTimer(delay, fnc, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
 	aliveTimers = true
 	local list = timers[delay]
+	local elm = {os.time() + delay, fnc, arg1, arg2, arg3, arg4, arg5, arg6, arg7}
 	if list then
 		list._count = list._count + 1
-		list[list._count] = {os.time() + delay, fnc, arg1, arg2, arg3, arg4, arg5, arg6}
+		list[list._count] = elm
 	else
 		timers[delay] = {
 			_count = 1,
 			_pointer = 1,
-			[1] = {os.time() + delay, fnc, arg1, arg2, arg3, arg4, arg5, arg6}
+			[1] = elm
 		}
 	end
 end
@@ -30,7 +31,7 @@ onEvent("Loop", function()
 				timer = list[index]
 
 				if now >= timer[1] then
-					timer[2](timer[3], timer[4], timer[5], timer[6], timer[7], timer[8])
+					timer[2](timer[3], timer[4], timer[5], timer[6], timer[7], timer[8], timer[9])
 					newPointer = index + 1
 				else
 					break
