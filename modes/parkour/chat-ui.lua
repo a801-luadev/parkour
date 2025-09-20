@@ -99,7 +99,7 @@ onEvent("PlayerWon", function(player)
 			translatedChatMessage("records_submit", player)
 		end
 
-		if taken < 20000 and doStatsCount() then
+		if taken < 20 and doStatsCount() then
 			sendPacket(
 				"common",
 				packets.rooms.suspicious,
