@@ -139,6 +139,37 @@ newCmd({ name = "look",
   end
 end })
 
+newCmd({ name = "npc",
+  min_args = 1,
+  rank = "admin",
+  fn = function(player, args, cmd)
+  local info = room.playerList[player]
+  if not info then return end
+
+  local name = args[1]
+  local look = args[2] ~= 'remove' and args[2] ~= 'default' and args[2] or nil
+  local x = args[2] == 'remove' and -9000 or info.x
+  local y = args[2] == 'remove' and -9000 or info.y
+  local title = args[3]
+  local lookLeft = args[4] == 'left'
+  local lookAtPlayer = args[4] == 'auto'
+  local female = args[5] == 'f'
+
+  tfm.exec.addNPC(name, {
+    x = x,
+    y = y,
+    title = title,
+    look = look,
+    female = female,
+    lookLeft = lookLeft,
+    lookAtPlayer = lookAtPlayer,
+  })
+
+  if not ranks.admin[player] then
+    chatlogCmd(cmd, player, args, partyHost)
+  end
+end })
+
 local mouseImages = {}
 local function applyImage(player, img, factorY)
   if mouseImages[player] and mouseImages[player][0] then return img[2] or 0 end
