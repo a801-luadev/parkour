@@ -1004,6 +1004,25 @@ newCmd({ name = "skip",
 	chatlogCmd(cmd, playerName, args)
 end })
 
+newCmd({ name = "sync",
+	rank = "mod",
+	fn = function(playerName, args, cmd)
+	if args._len == 0 then
+		return sendChatFmt("<j>Current sync: <v>%s", playerName, tfm.exec.getPlayerSync())
+	end
+
+	local target = args[1]
+	if not in_room[target] then
+		return sendChatFmt("<r>Player isn't in the room.", playerName)
+	end
+
+	tfm.exec.setPlayerSync(target)
+	sendChatFmt("<j>New sync: <v>%s", playerName, target)
+
+	chatlogCmd(cmd, playerName, args)
+	logCmd(cmd, playerName, args)
+end })
+
 newCmd({ name = "kick",
 	rank = "admin",
 	min_args = 1,
