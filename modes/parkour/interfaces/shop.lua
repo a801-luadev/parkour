@@ -282,11 +282,18 @@ do
 				lastPageTab[player] = page * 100 + tab
 			end
 
+			local shop_img = shop_images[player]
+			local coin_img = coin_images[player]
 			for index = 1, 18 do
 				ui.removeTextArea(priceTAs[index], player)
 				ui.removeTextArea(consumableTAs[index], player)
-				tfm.exec.removeImage(shop_images[player][index])
-				tfm.exec.removeImage(coin_images[player][index])
+
+				if shop_img[index]	then
+					tfm.exec.removeImage(shop_img[index])
+				end
+				if coin_img[index] then
+					tfm.exec.removeImage(coin_img[index])
+				end
 			end
 		end)
 
