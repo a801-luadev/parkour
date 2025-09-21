@@ -874,42 +874,6 @@ newCmd({ name = {"announcement", "announce"},
 		tfm.exec.chatMessage("<ROSE>Ξ [Parkour] <N>" .. text)
 	end })
 
-newCmd({ name = "event",
-	rank = "admin",
-	min_args = 1,
-	fn = function(player, args)
-	local name = args[1]
-	local evt = activeEvents[name]
-
-	if args._len == 1 then
-		if evt then
-			local rel = '-'
-			if evt.timestamp then
-				rel = math.ceil((evt.timestamp - os.time()) / 1000) / 60
-				rel = ' (in ' .. rel .. ' minutes)'
-			end
-			tfm.exec.chatMessage(
-				'<j>rounds: ' .. tostring(evt.rounds) .. '\n' ..
-				'<j>timestamp: ' .. tostring(evt.timestamp) .. rel,
-				player
-			)
-			return
-		end
-
-		local file = players_file[name]
-		if not file or not file.ec then
-			return tfm.exec.chatMessage('<r>Player not found', player)
-		end
-		return tfm.exec.chatMessage('<j>' .. name .. ' event coins: ' .. table.concat(file.ec, ' '), player)
-	end
-
-	if not evt then
-		return tfm.exec.chatMessage('<r>Invalid event name', player)
-	end
-
-	evt.debug(player, args[0], args._len, args)
-end })
-
 newCmd({ name = "snow",
 	fn = function()
 		tfm.exec.snow(0, 10)
