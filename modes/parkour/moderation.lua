@@ -918,7 +918,7 @@ newCmd({ name = "report",
 	end
 
 	local reason = table.concat(args, ' ', 2, args._len)
-	if #reason < 4 then
+	if #reason < 3 then
 		return translatedChatMessage("reason_too_short", playerName)
 	end
 
