@@ -329,14 +329,15 @@ shop_powers[5] = {
 			img[target] = tfm.exec.addImage("img@1943409e46e", "!99", x, y, target, 1, 1, angle, 1, 0.5, 0.5)
 			tfm.exec.addBonus(0, boost[2], boost[3], id, 0, false, target)
 		end
-		addNewTimer(despawn_time, self.despawn, id)
+		addNewTimer(self.despawn_time, self.despawn, id)
 	end,
 
-	despawn = function(id, img)
+	despawn = function(id)
 		local boost = booster[id]
 		if not boost then return end
+		local img = boost[4]
 		for target in next, in_room do
-			tfm.exec.removeImage(boost[4][target])
+			tfm.exec.removeImage(img[target])
 		end
 		tfm.exec.removeBonus(id)
 		booster[id] = nil
