@@ -745,7 +745,7 @@ do
 
 		local time = (tonumber(args[3]) or 10) * 1000
 		local skin = shop_skins[id] or file_skins[id] or room_skins[id]
-		if not id then
+		if not skin then
 			sendChatFmt("<r>Skin not found", player)
 			return true
 		end
