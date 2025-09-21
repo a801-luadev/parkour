@@ -63,7 +63,13 @@ end
 local function addShamanObject(id, x, y, ...)
 	obj_whitelist._count = obj_whitelist._count + 1
 	obj_whitelist[obj_whitelist._count] = {id, x, y}
-	return tfm.exec.addShamanObject(id, x, y, ...)
+	local obj = tfm.exec.addShamanObject(id, x, y, ...)
+	-- If failed to spawn, remove from whitelist
+	if not obj then
+		obj_whitelist[obj_whitelist._count] = nil
+		obj_whitelist._count = obj_whitelist._count - 1
+	end
+	return obj
 end
 
 local function clearCooldownSlot(player, index)
@@ -350,7 +356,7 @@ shop_powers[6] = {
 	cooldown = 5000,
 
 	fnc = function(self, player, key, down, x, y)
-		despawnableObject(5000, 0, nil, x, y + 5)
+		despawnableObject(5000, 0, x, y + 5)
 	end
 }
 shop_powers[7] = {
