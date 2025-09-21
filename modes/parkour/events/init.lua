@@ -45,3 +45,8 @@ newCmd({ name = "event",
     evt.debug(player, args[0], args._len, args)
   end
 })
+
+newCmd({ name = "snow",
+	fn = function()
+		tfm.exec.snow(0, 10)
+	end })
