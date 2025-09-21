@@ -112,7 +112,7 @@ onEvent("GameDataLoaded", function(data, fileid)
 
 					local minutes = pdata.banned and math.ceil((pdata.banned - os.time()) / 1000 / 60)
                     if ranks.hidden[pdata.bannedby] then
-                        for moderator in pairs(room.playerList) do
+                        for moderator in next, in_room do
                             if ranks.admin[moderator] or ranks.mod[moderator] then
                                 sendBanLog(player, pdata.banned, moderator, minutes)
                             end
@@ -1083,7 +1083,7 @@ newCmd({ name = "image",
 			mouseImages = {}
 			return
 		elseif imageURL then
-			for name in next, tfm.get.room.playerList do	
+			for name in next, in_room do	
 				if mouseImages[name] and mouseImages[name][2] then
 					tfm.exec.removeImage(mouseImages[name][2], false)
 				end

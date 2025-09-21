@@ -16,7 +16,7 @@ do
     args.chatlogged = true
 
     local msg = "<BL>Ξ [" .. player .. "]<N2> !" .. args[-1]
-    for name in next, room.playerList do
+    for name in next, in_room do
       if ranks.admin[name] or ranks.mod[name] or extraTbl and extraTbl[name] then
         tfm.exec.chatMessage(msg, name)
       end

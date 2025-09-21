@@ -168,7 +168,7 @@ do
 
     function lemonade.render(target)
       if not target then
-        for name in next, room.playerList do
+        for name in next, in_room do
           lemonade.render(name)
         end
         return

@@ -34,7 +34,7 @@ onEvent("NewGame", function()
 		translatedChatMessage("min_players", nil, room.uniquePlayers, min_save)
 	end
 
-	for player in next, room.playerList do
+	for player in next, in_room do
 		checkMapQuest(player)
 	end
 end)

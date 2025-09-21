@@ -80,7 +80,7 @@ do
       christmas.gift_y = math.random(50, 700)
       christmas.msg = "find_gift" .. math.random(1, 5)
 
-      for player in next, room.playerList do
+      for player in next, in_room do
         christmas.createGift(player)
       end
 
