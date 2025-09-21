@@ -45,9 +45,11 @@ translations.tr = {
 		"<CH>Bir oyuncunun isminin altında kırmızı çizgi varsa, bu o oyuncunun yardım istemediği anlamına gelir.</CH>",
 	report_hack = "Hack",
 	report_hack_desc = "Haksız avantajlar elde etmek için harici araç/programlar kullanmak.\n<rose>Ayrıca /report komutunu kullanarak Transformice Ekibine bildirmelisiniz.</rose>",
-	report_cheat = "Hile",
-	report_cheat_desc = "Hile, açık veya oyun hatalarını kullanarak haksız avantajlar elde etmek gibi diğer hile yöntemleri.",
+	report_bug = "Oyun Açıkları",
+	report_bug_desc = "Haksız avantaj sağlamak için açık, bug veya hataları kullanmak.",
 	report_send = "<b>Bildir</b>",
+	report_reason = "<r><b>Sebep:</b> <n>",
+	report_room = "<r><b>Oda:</b> <n>",
 
 	-- Congratulation messages
 	reached_level = "<d>Tebrikler! <vp>%s</vp>. seviyeyi tamamladınız. (<t>%ss</t>)",

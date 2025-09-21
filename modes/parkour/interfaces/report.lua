@@ -1,4 +1,4 @@
-local ReportValidReasons = { "troll", "force", "hack", "cheat" }
+local ReportValidReasons = { "troll", "force", "hack", "bug" }
 local ReportInterface = Interface.new(168, 46, 500, 330, true)
 	:loadTemplate(WindowBackground)
 	:setShowCheck(function(player)
@@ -37,8 +37,19 @@ local ReportInterface = Interface.new(168, 46, 500, 330, true)
 	})
 	:addTextArea({
 		text = function(self, player, reason)
-			if not reason then return "" end
-			return translatedMessage("report_" .. reason .. "_desc", player)
+			return translatedMessage("report_room", player) .. room.name
+		end,
+		x = 10,
+		y = 275,
+		width = 480,
+		height = 20,
+		alpha = 0,
+		canUpdate = true,
+	})
+	:addTextArea({
+		text = function(self, player, reason)
+			if not reason then return translatedMessage("report_reason", player) end
+			return translatedMessage("report_reason", player) .. translatedMessage("report_" .. reason .. "_desc", player)
 		end,
 		x = 250,
 		y = 150,

@@ -45,9 +45,11 @@ translations.en = {
 		"<CH>If someone has a red line under their name, that means they don't want help.</CH>",
 	report_hack = "Hack",
 	report_hack_desc = "Using external tools/programs to gain unfair advantages.\n<rose>Also, you should report them to Transformice Staff using /report command.</rose>",
-	report_cheat = "Cheat",
-	report_cheat_desc = "Other cheating methods like using exploits, glitches or game bugs to gain unfair advantages.",
-	report_send = "<b>Send Report</b>",
+	report_bug = "Bug Abuse",
+	report_bug_desc = "Using exploits, glitches or game bugs to gain unfair advantages.",
+	report_send = "<r><b>Send Report</b>",
+	report_reason = "<r><b>Reason:</b> <n>",
+	report_room = "<r><b>Room:</b> <n>",
 
 	-- Congratulation messages
 	reached_level = "<d>Congratulations! You've completed level <vp>%s</vp>. (<t>%ss</t>)",
