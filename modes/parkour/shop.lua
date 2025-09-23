@@ -760,9 +760,21 @@ do
 		spawnSkinObj2(time, nil, skin.id, skin.tab, x, y)
 	end
 
+	local inspect_kind = { shop = shop_skins, file = file_skins, room = room_skins }
 	function actions.inspect(player, args)
 		local id = tonumber(args[2])
-		local skin = shop_skins[id] or file_skins[id] or room_skins[id]
+		local kind = args[3] and args[3]:lower()
+		local skin
+		if kind then
+			if inspect_kind[kind] then
+				skin = inspect_kind[kind][id]
+			else
+				sendChatFmt("<r>Invalid kind, available: shop file room", player)
+				return true
+			end
+		else
+			skin = shop_skins[id] or file_skins[id] or room_skins[id]
+		end
 		if not skin then
 			sendChatFmt("Skin not found", player)
 			return true
