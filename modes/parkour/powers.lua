@@ -1295,12 +1295,13 @@ onEvent("PlayerWon", function(player)
 			if hour_count >= 35 then
 				sendPacket("common", packets.rooms.hourly_record,
 					room.shortName .. "\000" ..
-					room.playerList[player].id .. "\000" ..
+					id .. "\000" ..
 					player .. "\000" ..
 					hour_count .. "\000" ..
 					(room.uniquePlayers or 1) .. "\000" ..
 					room.currentMap .. "\000" ..
-					(room.xmlMapInfo and room.xmlMapInfo.permCode or -1)
+					(room.xmlMapInfo and room.xmlMapInfo.permCode or -1) .. "\000" ..
+					file.c
 				)
 			end
 
