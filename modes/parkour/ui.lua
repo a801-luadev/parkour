@@ -77,6 +77,10 @@ end
 function setNameColor(player)
     local file = players_file[player]
 		if not file then return end
+		local map_author = room.xmlMapInfo and room.xmlMapInfo.author
+		if map_author and not map_author:find('#') then
+			map_author = map_author .. "#0000"
+		end
 
     tfm.exec.setNameColor(
         player,
@@ -93,7 +97,7 @@ function setNameColor(player)
             or ranks.translator[player] and 0xE0B856 -- translator
         )
         
-        or (room.xmlMapInfo and player == room.xmlMapInfo.author) and 0x10FFF3 -- author of the map
+        or player == map_author and 0x10FFF3 -- author of the map
         or 0x148DE6 -- default
     )
 end
