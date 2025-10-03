@@ -2,7 +2,7 @@ translations.ru = {
 	name = "ru",
 	fullname = "Русский",
 
-	-- Сообщения об ошибках
+	-- Error messages
 	corrupt_map = "<r>Поврежденная карта. Загружаем другую.",
 	corrupt_map_no_perm = "<r>[ОШИБКА] <n>Эта карта не защищена должным образом.",
 	corrupt_map_hole = "<r>[ОШИБКА] <n>На картах Паркур не может быть мышиной норы.",
@@ -32,6 +32,8 @@ translations.ru = {
 	help_contribute = "<font size='14'>\n<p align='center'>Команда управления Паркуром предпочитает открытый исходный код, потому что он <t>помогает сообществу</t>. Вы можете <o>посмотреть</o> и <o>улучшить</o> исходный код на <o><u><a href='event:github'>GitHub</a></u></o>.\nПоддержание модуля<t>строго добровольно</t>, так что любая помощь в отношении <t>кода</t>, <t>бага репортов</t>, <t>предложений</t> и <t>созданию карт</t> всегда <u>приветствуется и ценится</u>.\nВы можете <vp>оставлять жалобу</vp> и <vp>предлагать улучшения</vp> в нашем <o><u><a href='event:discord'>Дискорде</a></u></o> и/или в <o><u><a href='event:github'>GitHub</a></u></o>.\nВы можете <vp>отправить свои карты</vp> на нашем <o><u><a href='event:map_submission'>форуме</a></u></o>.\n\nПоддержание Паркура не дорогое, но и не бесплатное. Мы будем рады, если Вы поможете нам <t>любой суммой</t> <o><u><a href='event:donate'>здесь</a></u></o>.\n<u>Все пожертвования пойдут на улучшение модуля.</u></p>",
 	help_changelog = "<font size='13'><p align='center'><o>Версия 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>Введение квест-системы. (Нажмите <J><B>,</B></J> чтобы открыть страницу квестов.)\n\n<font size='11'>• <font size='13'>Добавлена возможность отключения горячих клавиш для всех меню, таких как: таблица лидеров, помощь, магазин и т.д.\n\n<font size='11'>• <font size='13'>Добавлена <B><J>!cp [ИмяИгрока#tag]</J></B> команда, устанавливающая Ваш текущий чекпоинт в качестве чекпоинта указанного игрока.",
 
+	-- Report Window
+
 	-- Congratulation messages
 	reached_level = "<d>Поздравляем! Вы достигли уровня <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> завершили Паркур за <vp>%s</vp> секунд, <fc>поздравляем!",
@@ -53,7 +55,7 @@ translations.ru = {
 	report = "<j>Хотите пожаловаться на игрока в Паркур? <t><b>!report Никнейм#0000 [причина]</b></t>",
 	killed = "<v>[#] <r>Вы не можете использовать свои способности %s минут из-за нарушения правил Паркура. Продолжительное нарушение правил ведет к бану. Пожалуйста, нажмите <b>H</b>, чтобы просмотреть правила.",
 	mapper_event = "<CE><B>Конкурс карт для Паркура 2024:</B>\n<n>Покажите нам Вашу кративность в создании карт, чтобы выиграть <D>сыр <n>и <pt>монеты Паркура<n>!\n<R>Приём заявок открыт до <B>31 января 2024 года</B>.\n<PS>Для дополнительной информации, посетите: %s",
-  cmd_usage_report = "<j>Применение: <bl>!report [Игрок#1234] [причина]",
+	cmd_usage_report = "<j>Применение: <bl>!report [Игрок#1234] [причина]",
 	reported_not_here = "<bl>Игрок, на которого вы пожаловались, должен быть в этой комнате.",
 	reported_invalid = "<bl>На этого игрока нельзя подать жалобу.",
 	reason_too_short = "<bl>Причина жалобы слишком короткая.",
@@ -62,24 +64,21 @@ translations.ru = {
 	quest_map = "<ch>Ваша карта квеста @%s уже здесь!",
 
 	-- Easter Eggs
-	easter_egg_0  = "<ch>Итак, наступает обратный отсчет...",
-	easter_egg_1  = "<ch>Остается меньше, чем 24 часа!",
-	easter_egg_2  = "<ch>Вау, Вы пришли очень рано! Вы слишком взволнованы?",
-	easter_egg_3  = "<ch>Ожидается сюрприз...",
-	easter_egg_4  = "<ch>Вы знаете о том, что должно произойти...?",
-	easter_egg_5  = "<ch>Часы продолжают тикать...",
-	easter_egg_6  = "<ch>Сюрприз близок!",
-	easter_egg_7  = "<ch>Вечеринка скоро начнется...",
-	easter_egg_8  = "<ch>Взгляните на часы, не пора ли?",
-	easter_egg_9  = "<ch>Будьте осторожны, время идет...",
+	easter_egg_0 = "<ch>Итак, наступает обратный отсчет...",
+	easter_egg_1 = "<ch>Остается меньше, чем 24 часа!",
+	easter_egg_2 = "<ch>Вау, Вы пришли очень рано! Вы слишком взволнованы?",
+	easter_egg_3 = "<ch>Ожидается сюрприз...",
+	easter_egg_4 = "<ch>Вы знаете о том, что должно произойти...?",
+	easter_egg_5 = "<ch>Часы продолжают тикать...",
+	easter_egg_6 = "<ch>Сюрприз близок!",
+	easter_egg_7 = "<ch>Вечеринка скоро начнется...",
+	easter_egg_8 = "<ch>Взгляните на часы, не пора ли?",
+	easter_egg_9 = "<ch>Будьте осторожны, время идет...",
 	easter_egg_10 = "<ch>Просто сядьте и расслабьтесь, это будет завтра в кратчайшие сроки!",
 	easter_egg_11 = "<ch>Давайте ляжем спать пораньше, это сделает время быстрее!",
 	easter_egg_12 = "<ch>Терпение - это добродетель",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Удвоенные карты и все силы доступы на неделе рождения Паркура!",
-	double_maps_start = "<rose>ЭТО НЕДЕЛЯ РОЖДЕНИЯ ПАРКУРА! Удвоенные карты и все силы были активированы. Спасибо за то, что играете с нами!",
-	double_maps_end = "<rose>Неделя рождения паркура закончилась. Спасибо за то, что играете с нами!",
-  anniversary = "<bv>Все способности и удвоение монет доступны на следующей неделе (по времени Франции), посвященной дню рождения Паркур!",
+	anniversary = "<bv>Все способности и удвоение монет доступны на следующей неделе (по времени Франции), посвященной дню рождения Паркур!",
 	anniversary_start = "<rose>НЕДЕЛЯ ДНЯ РОЖДЕНИЯ ПАРКУР! Двойные монеты и все способности были активированы. Спасибо вам за всю поддержку и за то, что вы играете в этот модуль!",
 	anniversary_end = "<rose>Неделя дня рождения Паркур закончилась. Спасибо вам за всю поддержку и за то, что вы играете в этот модуль!",
 
@@ -120,49 +119,25 @@ translations.ru = {
 	found_gift4 = "<ch>Поздравляем <J>%s</J> с выигрышем <J>%s</J> монет! Дух Рождества сияет ярко!",
 	found_gift5 = "<ch>Санта одарил <J>%s</J> <J>%s</J> ослепительными монетами!",
 
+	-- Lemonade
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>ВЫ В РЕЖИМЕ АФК</b></bv>\nНажмите клавишу передвижения, чтобы возродиться</font>\n\n<font size='30'><u><t>Напоминания:</t></u></font>\n\n<font size='15'><r>Игроки с красной линией над их именами не хотят помощи!\nТроллинг/блокировка пути другим игрокам запрещены!<d>\nПрисоединяйтесь к нашему дискорд серверу! <cep><a href='event:discord'>Дискорд сервер</a></cep>!\nХотите внести собственный вклад в код? Смотрите наш <cep><a href='event:github'>репозиторий github</a></cep>\nУ Вас есть хорошая карта, которую можно отправить? Разместите её в нашей <cep><a href='event:map_submission'>теме для публикации карт </a></cep>\nПроверьте наш <cep><a href='event:forum'>официальный пост</a></cep> для большей информации!\nПоддержите нас <cep><a href='event:donate'>здесь!</a></cep>",
-	options = "<p align='center'><font size='20'>Параметры Паркура</font></p>\n\n" ..
-		"Используйте <b>раскладку QWERTY</b> на клавиатуре\n" ..
-		"(отключить если <b>AZERTY</b>)\n" ..
-		"Используйте <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> горячую клавишу <b>/mort</b> (отключить <b>DEL</b>)\n\n" ..
-		"Показать Ваше время перезарядки\n\n" ..
-		"Показать кнопки интерфейса\n\n" ..
-		"Приветственное сообщение\n\n" ..
-		"Показать объявление о завершении карты\n\n" ..
-		"Показать символ \"помощь не нужна\"\n\n" ..
-		"Отключить все горячие клавиши пользовательского интерфейса\n" ..
-		"(таблица лидеров, помощь, магазин и т.д.)",
+	options = "<p align='center'><font size='20'>Параметры Паркура</font></p>\n\nИспользуйте <b>раскладку QWERTY</b> на клавиатуре\n(отключить если <b>AZERTY</b>)\nИспользуйте <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> горячую клавишу <b>/mort</b> (отключить <b>DEL</b>)\n\nПоказать Ваше время перезарядки\n\nПоказать кнопки интерфейса\n\nПриветственное сообщение\n\nПоказать объявление о завершении карты\n\nПоказать символ \"помощь не нужна\"\n\nОтключить все горячие клавиши пользовательского интерфейса\n(таблица лидеров, помощь, магазин и т.д.)",
 	cooldown = "<v>[#] <r>Подождите несколько минут, чтобы повторить действие.",
-	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> клавиатура" ..
-					 "\n\n<b>Скрыть</b> Подсчет карт" ..
-					 "\n\n<b>дефолт клавиша</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты" ..
-					"<font size='5'>\n\n</font>разблокированы" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты" ..
-					"<font size='5'>\n\n</font>обновлены" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v>" ..
-					"<font size='5'>\n\n</font>разблокирован" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v>" ..
-					"<font size='5'>\n\n</font>обновлен" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				 "<font size='5'>\n\n</font>Пройденые карты"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					"<font size='5'>\n\n</font>Общая таблица лидеров"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				   "<font size='5'>\n\n</font>Еженедельная таблица лидеров"),
+	power_options = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> клавиатура\n\n<b>Скрыть</b> Подсчет карт\n\n<b>дефолт клавиша</b>",
+	unlock_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты<font size='5'>\n\n</font>разблокированы<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Пройденные <v>%s</v> карты<font size='5'>\n\n</font>обновлены<font size='5'>\n\n</font><v>%s</v>",
+	unlock_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v><font size='5'>\n\n</font>разблокирован<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Ранг <v>%s</v><font size='5'>\n\n</font>обновлен<font size='5'>\n\n</font><v>%s</v>",
+	maps_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Пройденые карты",
+	overall_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Общая таблица лидеров",
+	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Еженедельная таблица лидеров",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Бейджи (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Количество карт этого игрока является частным.<a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
-				"Общая таблица лидеров: <b><v>%s</v></b>\n\n" ..
-				"Еженедельначя таблица лидеров: <b><v>%s</v></b>\n\n%s"),
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nОбщая таблица лидеров: <b><v>%s</v></b>\n\nЕженедельначя таблица лидеров: <b><v>%s</v></b>\n\n%s",
 	map_count = "Количество карт: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
-	title_count = ("<b><j>«!»</j></b> Пройденные карты: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
-				"<b><j>«!»</j></b> Собранные чекпоинты: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
+	title_count = "<b><j>«!»</j></b> Пройденные карты: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> Собранные чекпоинты: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "Значки - это достижение, которое может получить игрок. Нажмите на них, чтобы увидеть их описание.",
 	help_private_maps = "Этот игрок не любит открыто публиковать количество своих карт! Вы также можете скрыть их в своем профиле.",
 	help_yellow_maps = "Желтым цветом обозначены карты, завершенные на этой неделе.",
@@ -213,10 +188,10 @@ translations.ru = {
 	ranking_pos = "Рейтинг #%s",
 	completed_maps = "<p align='center'><BV><B>Пройденные карты: %s</B></p></BV>",
 	leaderboard = "Таблица лидеров",
-	position = "<V><p align=\"center\">Должность",
-	username = "<V><p align=\"center\">Имя пользователя",
-	community = "<V><p align=\"center\">Сообщество",
-	completed = "<V><p align=\"center\">Пройденные карты",
+	position = "<V><p align='center'>Должность",
+	username = "<V><p align='center'>Имя пользователя",
+	community = "<V><p align='center'>Сообщество",
+	completed = "<V><p align='center'>Пройденные карты",
 	overall_lb = "В целом",
 	weekly_lb = "Еженедельно",
 	new_lang = "<v>[#] <d>Язык установлен на Русский",

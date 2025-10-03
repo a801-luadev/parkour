@@ -30,8 +30,10 @@ translations.hu = {
 	help_staff = "<p align = 'center'><font size = '13'><r>FELHÍVÁS: A Parkour személyzet NEM Transformice személyzet és NEM rendelkeznek hatalommal a játékban, csak a modulon belül.</r>\nA Parkour személyzete gondoskodik arról, hogy a modul zökkenőmentesen működjön minimális problémákkal. Ők mindig rendelkezésre állnak, hogy szükség esetén segítsék a játékosokat.</font></p>\nÍrd be a <D>!staff</D> parancsot a chatbe, hogy lásd a személyzet listáját.\n\n<font color = '#E7342A'>Rendszergazdák <i>(admin)</i>:</font> Ők felelnek a modul karbantartásáért az új frissítések és hibák kijavításával.\n\n<font color = '#D0A9F0'>Csapatvezetők <i>(manager)</i>:</font> Ők felügyelik a Moderátorok és Pálya legénység csapatát odafigyelve arra, hogy megfelelően végezzék a munkájukat. Továbbá ők felelősek az új tagok toborzásáért a személyzet csapatába.\n\n<font color = '#FFAAAA'>Moderátorok <i>(mod)</i>:</font> Ők felelnek a modul szabályzatának betartásáért és a rájuk nem hallgató személyek büntetéséért.\n\n<font color = '#25C059'>Pálya legénység <i>(mapper)</i>:</font> Ők felelnek a pályák felülvizsgálatáért, hozzáadásáért és eltávolításáért a modulon belül annak érdekében, hogy a játékmenet élvezetes legyen.",
 	help_rules = "<font size = '13'><B><J>A Transformice Általános Szerződési feltételeinek minden szabálya vonatkozik a #parkour-ra</J></B></font>\n\nHa olyan játékost találsz, aki megsérti a szabályokat, akkor suttogásban szólj a moderátoroknak. Ha nem érhető el moderátor, akkor jelentsd a játékost a Discord felületen.\nJelentéskor kérjük, add meg a szerver-, a szoba- és a játékos nevét.\n• Például: hu-#parkour10 Blank#3495 trolling\nA bizonyítékok, mint például képernyőfotók, videók és gifek hasznosak és értékeljük, de nem szükségesek.\n\n<font size = '11'>• A #parkour szobákban nem lehet <font color = '#ef1111'>hacket, glitcheket vagy bugokat</font> használni.\n• A <font color = '#ef1111'>VPN farmolást</font> <B>kizsákmányolásnak</B> tekintjük, és nem engedélyezettek. <p align = 'center'><font color = '#cc2222' size = '12'><B>\n\nBárkit, akit szabályszegésen kapunk, azonnal kitiltjuk.</B></font></p>\n\n<font size = '12'>A Transformice engedélyezi a trollkodást, ettől függetlenül <font color='#cc2222'><B>a parkour-ban nem engedélyezzük ezt.</B></font></font>\n\n<p align = 'center'><J>Trollkodás akkor következik, ha egy játékos szándékosan arra használja a képességeit vagy fogyóeszközeit, hogy más játékosokat megakadályozzon a pálya végig játszásában.</j></p>\n• Bosszúból trollkodni nem megfelelő indok, és még mindig büntetjük.\n• Trollkodásnak tekintjük azt is, amikor egy játékos a kérés ellenére is megpróbálja segíteni azt a játékost, aki egyedül akarja végigjátszani a pályát.\n• <J>Ha egy játékos nem akar segítséget vagy egy pályát jobban szeretné egyedül végigjátszani, kérjük, segíts más játékosnak</J>. Ettől függetlenül, ha egy másik játékosnak segítségre van szüksége ugyan abban az ellenőrző pontban, akkor segíthetsz nekik [mindkettőnek].\n\nHa egy játékos trollkodik, azonnal büntetve lesz. Vedd figyelembe, hogy az ismétlődő trollkodás hosszabb és súlyosabb büntetésekkel jár.",
 	help_contribute = "<font size='14'>\n<p align='center'>A parkour menedzsment csapata szereti a nyílt forráskódot, mert ez <t>segít a közösségnek</t>. <o>Megtekintheted</o> és <o>módosíthatod</o> a nyílt forráskódot a <o><u><a href='event:github'>GitHub</a></u></oú>-on.\n\nA modul karbantartása <t>szigorúan önkéntes</t>, ezért a <t>kód</t> olvasásával, <t>hibajelentésekkel</t>, <t>javaslatokkal</t> és <t>pályakészítéssel</t> kapcsolatos bármilyen segítséget <u>mindig örömmel fogadunk és értékeljük</u>.\nTehetsz <vp>hibajelentéseket</vp> és <vp>javaslatokat</vp> a <o><u><a href='event:discord'>Discord</a></u></o>-on és/vagy <o><u><a href='event:github'>GitHub</a></u></o>-on.\nA <vp>pályádat beküldheted</vp> a mi <o><u><a href='event:map_submission'>Fórum témánkba</a></u></o>.\n\nA parkour fenntartása nem drága, de nem is ingyenes. Szeretnénk, ha <t>bármekkora összeggel</t> támogatnál minket <o><u><a href='event:donate'>ide</a></u></o> kattintva.\n<u>Minden támogatás a modul fejlesztésére irányul.</u></p>",
-	help_changelog = "<font size='13'><p align='center'><o>Verzió 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>Küldetésrendszer kivitelezve. (Nyomd meg a  <J><B>,</B></J> hogy megnyisd a küldetés oldalt.)\n\n<font size='11'>• <font size='13'>Hozzáadtunk a lehetőséget a gyorsbillenytűk letiltására minden felülethez, mint pl. ranglista, súgó, bolt, stb.)\n\n<font size='11'>• <font size='13'>Hozzáadtuk a <B><J>!cp [JátékosNév#tag]</J></B> parancsot hogy be tudd állítani a saját szintedet az adott játékos szintjére.",	
-	
+	help_changelog = "<font size='13'><p align='center'><o>Verzió 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>Küldetésrendszer kivitelezve. (Nyomd meg a  <J><B>,</B></J> hogy megnyisd a küldetés oldalt.)\n\n<font size='11'>• <font size='13'>Hozzáadtunk a lehetőséget a gyorsbillenytűk letiltására minden felülethez, mint pl. ranglista, súgó, bolt, stb.)\n\n<font size='11'>• <font size='13'>Hozzáadtuk a <B><J>!cp [JátékosNév#tag]</J></B> parancsot hogy be tudd állítani a saját szintedet az adott játékos szintjére.",
+
+	-- Report Window
+
 	-- Congratulation messages
 	reached_level = "<d>Gratulálunk! Elérted a következő szintet: <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> befejezte a parkour pályát <vp>%s</vp> másodperc alatt. <fc>Gratulálunk!",
@@ -62,23 +64,20 @@ translations.hu = {
 	quest_map = "<ch>A küldetés pályád @%s itt van!",
 
 	-- Easter Eggs
-	easter_egg_0  = "<ch>Szóval a visszaszámlálás elkezdődött...",
-	easter_egg_1  = "<ch>Kevesebb, mint 24 óra maradt hátra!",
-	easter_egg_2  = "<ch>Wow, korán érkeztél! Túl izgatott vagy?",
-	easter_egg_3  = "<ch>A meglepetés már vár...",
-	easter_egg_4  = "<ch>Tudod, hogy mi fog történni...?",
-	easter_egg_5  = "<ch>Az óra ketyeg tovább...",
-	easter_egg_6  = "<ch>A meglepetés már közel!",
-	easter_egg_7  = "<ch>A party épphogy kezdődik...",
-	easter_egg_8  = "<ch>Csekkold az órád, eljött már az idő?",
-	easter_egg_9  = "<ch>Légy óvatos, az idő eltelik...",
+	easter_egg_0 = "<ch>Szóval a visszaszámlálás elkezdődött...",
+	easter_egg_1 = "<ch>Kevesebb, mint 24 óra maradt hátra!",
+	easter_egg_2 = "<ch>Wow, korán érkeztél! Túl izgatott vagy?",
+	easter_egg_3 = "<ch>A meglepetés már vár...",
+	easter_egg_4 = "<ch>Tudod, hogy mi fog történni...?",
+	easter_egg_5 = "<ch>Az óra ketyeg tovább...",
+	easter_egg_6 = "<ch>A meglepetés már közel!",
+	easter_egg_7 = "<ch>A party épphogy kezdődik...",
+	easter_egg_8 = "<ch>Csekkold az órád, eljött már az idő?",
+	easter_egg_9 = "<ch>Légy óvatos, az idő eltelik...",
 	easter_egg_10 = "<ch>Csak dőlj hátra és pihenj, nemsoká holnap lesz!",
 	easter_egg_11 = "<ch>Feküdj le hamar, úgy gyorsabban telik az idő!",
 	easter_egg_12 = "<ch>A türelem egy jó tulajdonság",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Dupla pályák egész Szombaton (GMT+2) és az összes erő aktiválva van a parkour szülinapi hetén!",
-	double_maps_start = "<rose>ELJÖTT A PARKOUR SZÜLINAPI HETE! Duplán számítanak a pályák, és az összes erő elérhető. Köszönjük, hogy velünk játszol!",
-	double_maps_end = "<rose>A parkour szülinapi hete véget ért. Köszönjük, hogy velünk játszol!",
 	anniversary = "<bv>Dupla parkour érmék jövő héten (francia idő szerint) és minden képesség elérhető a parkour szülinapi hetén!",
 	anniversary_start = "<rose>A PARKOUR SZÜLINAPI HETE VAN! Dupla érmék és minden képesség aktiválva van. Köszönjük a támogatást, és hogy játszol a modulon!",
 	anniversary_end = "<rose>A parkour szülinapi hete véget ért. Parkour's birthday week has ended. Köszönjük a támogatást, és hogy játszol a modulon!",
@@ -110,57 +109,35 @@ translations.hu = {
 
 	-- Christmas
 	find_gift1 = "<ch>Mikulás épp itt volt! Vadássz a Karácsonyi ajándék után a pályán, és bontsd ki a meglepetést!",
-    find_gift2 = "<ch>Cseng és bong az út! Egy különleges Karácsonyi ajándék csodás módon előbukkant a pályán - keresd meg!",
-    find_gift3 = "<ch>Ho, ho, hó! Mikulás kis segédje itthagyott egy ajándékot neked, hogy megtaláld az aktuális pályán!",
-    find_gift4 = "<ch>Karácsony szelleme már köztünk száll! Találd meg a rejtett Karácsonyi ajándékot a pályán!",
-    find_gift5 = "<ch>Boldog Parkourácsonyt! A manók elrejtettek egy titkos ajándékot neked. Meg fogod tudni találni?",
-    found_gift1 = "<ch>Hurrá! <J>%s</J> kibontotta az ajándékot és talált <J>%s</J> érmét benne!",
-    found_gift2 = "<ch>Hurrá, <J>%s</J>! Te nyertél <J>%s</J> fényes érmét a Mikulás varázslatos ajándékából!",
-    found_gift3 = "<ch>A nyertes épp <J>%s</J>! <J>%s</J> érmével gazdagabb, Mikulásnak köszönhetően!",
-    found_gift4 = "<ch>Gratuláció neked <J>%s</J> mert nyertél <J>%s</J> érmét! A Karácsony szelleme fényesen ragyog!",
-    found_gift5 = "<ch>Mikulás ajándéka megjutalmazta <J>%s</J> -t <J>%s</J> káprázatos érmével!",
+	find_gift2 = "<ch>Cseng és bong az út! Egy különleges Karácsonyi ajándék csodás módon előbukkant a pályán - keresd meg!",
+	find_gift3 = "<ch>Ho, ho, hó! Mikulás kis segédje itthagyott egy ajándékot neked, hogy megtaláld az aktuális pályán!",
+	find_gift4 = "<ch>Karácsony szelleme már köztünk száll! Találd meg a rejtett Karácsonyi ajándékot a pályán!",
+	find_gift5 = "<ch>Boldog Parkourácsonyt! A manók elrejtettek egy titkos ajándékot neked. Meg fogod tudni találni?",
+	found_gift1 = "<ch>Hurrá! <J>%s</J> kibontotta az ajándékot és talált <J>%s</J> érmét benne!",
+	found_gift2 = "<ch>Hurrá, <J>%s</J>! Te nyertél <J>%s</J> fényes érmét a Mikulás varázslatos ajándékából!",
+	found_gift3 = "<ch>A nyertes épp <J>%s</J>! <J>%s</J> érmével gazdagabb, Mikulásnak köszönhetően!",
+	found_gift4 = "<ch>Gratuláció neked <J>%s</J> mert nyertél <J>%s</J> érmét! A Karácsony szelleme fényesen ragyog!",
+	found_gift5 = "<ch>Mikulás ajándéka megjutalmazta <J>%s</J> -t <J>%s</J> káprázatos érmével!",
+
+	-- Lemonade
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MÓDBAN VAGY</b></bv>\nMOZOGJ HOGY ÚJRAÉLEDJ</font>\n\n<font size='30'><u><t>Emlékeztetők:</t></u></font>\n\n<font size='15'><r>A játékosok piros vonallal a fejük felett nem kérnek segítséget!\nTrollkodás/blokkolás más játékosokkal szemben a parkourban NEM megengedett!<d>\nCsatlakozz a <cep><a href='event:discord'>discord szerverünkhöz</a></cep>!\nSzertnél közreműködni kódolással? Tekintsd meg a <cep><a href='event:github'>github gyűjteményünket</a></cep>\nVan egy jó pályád amit bemutatnál? Posztold ki a <cep><a href='event:map_submission'>pálya beadvány témához</a></cep>\nCsekkold le a <cep><a href='event:forum'>official topic fület</a></cep> több információért!\nTámogass minket <cep><a href='event:donate'>adománnyal!</a></cep>",
-	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\n" ..
-		"Használd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\n" ..
-		"Használd az <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\n" ..
-		"Mutassa a képességek újratöltési idejét\n\n" ..
-		"Mutasd a felület gombokat\n\n" ..
-		"Üdvözlő üzenet\n\n" ..
-		"Mutassa a teljesített pályák mennyiségét\n\n" ..
-		"Jelenítse meg a <b>nincs segítség</b> szimbólumot\n\n" ..
-		"Gyorsbillentyűk kikapcsolása (ranglista, segítség, bolt, stb.)",
+	options = "<p align='center'><font size='20'>Parkour Beállítások</font></p>\n\nHasználd a <b>QWERTY</b> billentyűzetet (tiltsd le, ha <b>AZERTY</b>-d van)\n\nHasználd az <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> gombot a <b>/mort</b> parancshoz (tiltsd le, ha <b>DEL</b> legyen)\n\nMutassa a képességek újratöltési idejét\n\nMutasd a felület gombokat\n\nÜdvözlő üzenet\n\nMutassa a teljesített pályák mennyiségét\n\nJelenítse meg a <b>nincs segítség</b> szimbólumot\n\nGyorsbillentyűk kikapcsolása (ranglista, segítség, bolt, stb.)",
 	cooldown = "<v>[#] <r>Várj néhány másodpercet, mielőtt újra ezt tennéd.",
-	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> billentyűzet" ..
-					 "\n\nTeljesített pályák <b>elrejtése</b>" ..
-					 "\n\nUse <b>default key</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Teljesíts <v>%s</v> pályát" ..
-					"<font size='5'>\n\n</font>a(z) <v>%s</v>" ..
-					"<font size='5'>\n\n</font>feloldásához"),
-	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Teljesíts <v>%s</v> pályát" ..
-					"<font size='5'>\n\n</font>a(z) <v>%s</v>" ..
-					"<font size='5'>\n\n</font>frissítéséhez"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Érd el a(z) <v>%s</v>" ..
-					"<font size='5'>\n\n</font>rangot a(z) <v>%s</v>" ..
-					"<font size='5'>\n\n</font>feloldásához"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Érd el a(z) <v>%s</v>" ..
-					"<font size='5'>\n\n</font>rangot a(z) <v>%s</v>" ..
-					"<font size='5'>\n\n</font>frissítéséhez"),
-	maps_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				 "<font size='5'>\n\n</font>Teljesített pálya"),
-	overall_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'>Pozíció a Teljes ranglistán:" ..
-					"<font size='5'>\n\n</font><b><v>%s</v></b>"),
-	weekly_info = ("<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'>Pozíció a Heti ranglistán:" ..
-				   "<font size='5'>\n\n</font><b><v>%s</v></b>"),
+	power_options = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> billentyűzet\n\nTeljesített pályák <b>elrejtése</b>\n\nUse <b>default key</b>",
+	unlock_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Teljesíts <v>%s</v> pályát<font size='5'>\n\n</font>a(z) <v>%s</v><font size='5'>\n\n</font>feloldásához",
+	upgrade_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Teljesíts <v>%s</v> pályát<font size='5'>\n\n</font>a(z) <v>%s</v><font size='5'>\n\n</font>frissítéséhez",
+	unlock_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Érd el a(z) <v>%s</v><font size='5'>\n\n</font>rangot a(z) <v>%s</v><font size='5'>\n\n</font>feloldásához",
+	upgrade_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Érd el a(z) <v>%s</v><font size='5'>\n\n</font>rangot a(z) <v>%s</v><font size='5'>\n\n</font>frissítéséhez",
+	maps_info = "<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Teljesített pálya",
+	overall_info = "<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'>Pozíció a Teljes ranglistán:<font size='5'>\n\n</font><b><v>%s</v></b>",
+	weekly_info = "<p align='center'><font size='11' face='Lucida Console,Liberation Mono,Courier New'>Pozíció a Heti ranglistán:<font size='5'>\n\n</font><b><v>%s</v></b>",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Kitűzők (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>A játékos teljesített pályáinak száma privát. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
-				"Pozíció a Teljes ranglistán: <b><v>%s</v></b>\n\n" ..
-				"Pozíció a Heti ranglistán: <b><v>%s</v></b>\n\n%s"),
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nPozíció a Teljes ranglistán: <b><v>%s</v></b>\n\nPozíció a Heti ranglistán: <b><v>%s</v></b>\n\n%s",
 	map_count = "Pályák száma: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
-	title_count = ("<b><j>«!»</j></b> Befejezett pályák: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
-				"<b><j>«!»</j></b> Összegyűjtött ellenőrző pontok: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
+	title_count = "<b><j>«!»</j></b> Befejezett pályák: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> Összegyűjtött ellenőrző pontok: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "A Kitűzők olyan eredmények, melyeket a játékosok szerezhetnek. Kattints rájuk, hogy lásd a leírásukat.",
 	help_private_maps = "A játékos nem szeretné nyilvánosan megosztani a Teljesített pályáinak a számát! Te is elrejtheted a profilodon.",
 	help_yellow_maps = "A sárga pálya teljesítve lett ezen a héten.",
@@ -211,10 +188,10 @@ translations.hu = {
 	ranking_pos = "Rang #%s",
 	completed_maps = "<p align='center'><BV><B>Teljesített pályák: %s</B></p></BV>",
 	leaderboard = "Ranglista",
-	position = "<V><p align=\"center\">Pozíció",
-	username = "<V><p align=\"center\">Felhasználónév",
-	community = "<V><p align=\"center\">Közösség",
-	completed = "<V><p align=\"center\">Teljesített pályák",
+	position = "<V><p align='center'>Pozíció",
+	username = "<V><p align='center'>Felhasználónév",
+	community = "<V><p align='center'>Közösség",
+	completed = "<V><p align='center'>Teljesített pályák",
 	overall_lb = "Teljes",
 	weekly_lb = "Heti",
 	new_lang = "<v>[#] <d>A játék nyelvét Magyarra változtattad",

@@ -31,7 +31,9 @@ translations.jp = {
 	help_rules = "<font size = '13'><B><J>Transformiceに適用されるすべての利用規約は#parkourにも適用されます。</J></B></font>\n\nルールを破っているプレイヤーを見た場合、ゲーム内でParkourモデレーターにささやきしてください。 オンラインのモデレーターがいない場合は、Discordサーバーに報告することをお勧めします。\n報告の際は、サーバー名、ルーム名、プレイヤー名を明記してください。.\n• 例： en-#parkour10 Blank#3495 trolling\nスクリーンショット、ビデオ、GIFなどの証拠は有用であり、ありがたいですが、必須ではありません。.\n\n<font size = '11'>• #parkourルームでは、<font color = '#ef1111'>ハック、グリッチ、バグ</font>を使ってはいけません。\n• <font color = '#ef1111'>VPNファーミング</font>は<B>悪用</B>とみなされ、禁止です。<p align = 'center'><font color = '#cc2222' size = '12'><B>\nルールに違反したプレイヤーは即刻BANされます。</B></font></p>\n\n<font size = '12'>Transformiceはトローリングを許しますが、<font color='#cc2222'><B>parkourでは禁止です。</B></font></font>\n\n<p align = 'center'><J>トローリングとは、パワーなどを使って、他のプレイヤーがマップクリアできないように邪魔をすることです。</j></p>\n• トローリングされたからと言って返しにトローリングをするのは<B>正当な言い訳にはならない</B>ので、懲戒対象となります。\n• マップをソロでやりたいプレイヤーに助けを強要し、言われてもやめないこともトローリングとみなされます。\n• <J>助けを求めないプレイヤー、またはソロでマップをやりたいプレイヤーがいたら、別の人を手伝ってみましょう</J>。 ただし、助けが必要なプレイヤーがいて、たまたまソロプレイヤーも同じチェックポイントにいる場合は、[二人]を手伝ってもいいです。\n\nプレイヤーがトローリングをしているのが見つかった場合は、時間に基づいて罰せられます。 破壊的な行為を繰り返すと、より長くて厳しい懲戒処分が科せられます。",
 	help_contribute = "<font size='14'>\n<p align='center'>Parkour管理チームは、<t>コミュニティに役立つ</t>ため、オープンソースコードが大好きです。 <o><u><a href='event:github'>GitHub</a></u></o>でソースコードを<o>閲覧</o>や<o>変更</o>することができます。\n\nこのモジュールの保守は<t>自主的</t>なものであるため、<t>コード</t>、<t>バグの報告</t>、<t>提案</t>、<t>マップの作成</t>に関する協力は<u>大歓迎で、ありがたいです</u>。\n<o><u><a href='event:discord'>Discord</a></u></o>や<o><u><a href='event:github'>GitHub</a></u></o>で<vp>バグを報告したり</vp>、<vp>提案を行ったり</vp>できます。 \n<o><u><a href='event:map_submission'>フォーラムスレッド</a></u></o>に<vp>マップを送信</vp>できます。\n\nParkourの維持は高くないですが、無料でもありません。<t>金額に関わらず<o><u><a href='event:donate'>こちら</a></u></o>にご寄付いただけましたら</t>幸いです。\n<u>すべての寄付金はこのモジュールの改善に使用されます。</u></p>",
 	help_changelog = "<font size='13'><p align='center'><o>バージョン 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>新しいクエストシステムが追加されました。 (「<J><B>,</B></J>」を押すとクエストが表示されます)\n\n<font size='11'>• <font size='13'>リーダーボード、ヘルプ、ショップなどのすべてのインターフェイスのホットキーを無効にするオプションを追加しました。\n\n<font size='11'>• <font size='13'>プレイヤーのチェックポイントを今自分がいるチェックポイントとして設定する「<B><J>!cp [PlayerName#tag]</J></B>」コマンドを追加しました。",
-	
+
+	-- Report Window
+
 	-- Congratulation messages
 	reached_level = "<d>やった！レベル<vp>%s</vp>クリア！(<t>%ss</t>)",
 	finished = "<d><o>%s</o>は<vp>%s</vp>秒でparkourをクリアしました。<fc>お疲れ様！",
@@ -62,23 +64,20 @@ translations.jp = {
 	quest_map = "<ch>あなたのクエストマップ @%s が来ました！",
 
 	-- Easter Eggs
-	easter_egg_0  = "<ch>いよいよカウントダウンが始まった...",
-	easter_egg_1  = "<ch>残り24時間を切った！",
-	easter_egg_2  = "<ch>わあ、ずいぶん早いね！ワクワクしすぎじゃない？",
-	easter_egg_3  = "<ch>サプライズが待っている...",
-	easter_egg_4  = "<ch>これから何が起こるんだろうね…？",
-	easter_egg_5  = "<ch>時間は刻々と過ぎていく...",
-	easter_egg_6  = "<ch>もうすぐだよ！",
-	easter_egg_7  = "<ch>パーティーは今にも始まるよ...",
-	easter_egg_8  = "<ch>時間を確認して。まだか？",
-	easter_egg_9  = "<ch>気をつけよう、時間は過ぎていく...",
+	easter_egg_0 = "<ch>いよいよカウントダウンが始まった...",
+	easter_egg_1 = "<ch>残り24時間を切った！",
+	easter_egg_2 = "<ch>わあ、ずいぶん早いね！ワクワクしすぎじゃない？",
+	easter_egg_3 = "<ch>サプライズが待っている...",
+	easter_egg_4 = "<ch>これから何が起こるんだろうね…？",
+	easter_egg_5 = "<ch>時間は刻々と過ぎていく...",
+	easter_egg_6 = "<ch>もうすぐだよ！",
+	easter_egg_7 = "<ch>パーティーは今にも始まるよ...",
+	easter_egg_8 = "<ch>時間を確認して。まだか？",
+	easter_egg_9 = "<ch>気をつけよう、時間は過ぎていく...",
 	easter_egg_10 = "<ch>リラックスして。すぐに明日が来るよ。",
 	easter_egg_11 = "<ch>早く寝よう！早く明日になってほしい！",
 	easter_egg_12 = "<ch>忍耐は美徳",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>土曜日（GMT+2）parkourのバースデーウィークにはダブルマップと全てのパワーが使用可能になります！",
-	double_maps_start = "<rose>Parkourのバースデーウィークがきた！ダブルマップと全てのパワーがオンになっています。応援ありがとうございます。",
-	double_maps_end = "<rose>Parkourのバースデーウィークが終わりました。いつも応援してくれて、このモジュールをプレイしてくれてありがとうございます！",
 	anniversary = "<bv>来週（フランス時間）Parkourコインが2倍になり、Parkourの誕生週にはすべてのパワーが使用可能になります！",
 	anniversary_start = "<rose>Parkourの誕生週です！Parkourコインが2倍になり、すべてのパワーが使用可能です。応援とこのモジュールをプレーしていただきありがとうございます。",
 	anniversary_end = "<rose>Parkourの誕生週が終了しました。応援とこのモジュールをプレーしていただきありがとうございます。",
@@ -120,47 +119,25 @@ translations.jp = {
 	found_gift4 = "<ch><J>%s</J>はコインを<J>%s</J>枚ゲットした！おめでとう。クリスマスを感じるね~",
 	found_gift5 = "<ch>サンタさんのプレゼントは<J>%s</J>にキラキラのコインを<J>%s</J>枚授けた！",
 
+	-- Lemonade
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFKモードです。</b></bv>\n復活するために動いてください。</font>\n\n<font size='30'><u><t>リマインダー：</t></u></font>\n\n<font size='15'><r>赤い線が引かれているプレイヤーは助けを求めていません。\nほかのプレイヤーの邪魔をしてはいけません。<d>\nParkourの<cep><a href='event:discord'>Discordサーバー</a></cep>に入ってみてください！\nコードで貢献したい場合、私たちの<cep><a href='event:github'>githubリポジトリ</a></cep>をご覧ください。\n提出したい良いマップはありますか。 Parkourの<cep><a href='event:map_submission'>マップ投稿トピック</a></cep>に投稿してください。 \n詳しくは私たちの<cep><a href='event:forum'>公式トピック</a></cep>をチェックしてみてください。\n<cep><a href='event:donate'>寄付</a></cep>して私たちを応援してください。",
-	options = "<p align='center'><font size='20'>設定</font></p>\n\n" ..
-		" <b>QWERTY</b>キーボードを使用する（<b>AZERTY</b>の場合は無効にする）\n\n" ..
-		"<b>/mort</b>のホットキーを「<J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J>」にする(無効にすると「<b>DEL</b>」になる)\n\n" ..
-		"パワーのクールダウンを表示する\n\n" ..
-		"インターフェイスのボタンを表示する\n\n" ..
-		"歓迎のメッセージ\n\n" ..
-		"マップクリアの発表を表示する\n\n" ..
-		"「ヘルプなし」の印をつける\n\n" ..
-		"すべてのインターフェースのホットキーを無効にする（リーダーボード、ヘルプ、ショップ、など。）",
+	options = "<p align='center'><font size='20'>設定</font></p>\n\n <b>QWERTY</b>キーボードを使用する（<b>AZERTY</b>の場合は無効にする）\n\n<b>/mort</b>のホットキーを「<J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J>」にする(無効にすると「<b>DEL</b>」になる)\n\nパワーのクールダウンを表示する\n\nインターフェイスのボタンを表示する\n\n歓迎のメッセージ\n\nマップクリアの発表を表示する\n\n「ヘルプなし」の印をつける\n\nすべてのインターフェースのホットキーを無効にする（リーダーボード、ヘルプ、ショップ、など。）",
 	cooldown = "<v>[#] <r>もう一度実行する前に、数秒待ってください。",
-	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b>キーボード" ..
-					 "\n\nマップの数を<b>非表示</b>" ..
-					 "\n\n<b>デフォルト・キー</b>を使用する"),
-	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v>マップをクリアして" ..
-					"<font size='5'>\n\n</font><v>%s</v>" ..
-					"<font size='5'>\n\n</font>をゲット"),
-	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v>マップをクリアして" ..
-					"<font size='5'>\n\n</font><v>%s</v>" ..
-					"<font size='5'>\n\n</font>にアップグレード"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>ランキング<v>%s</v>で" ..
-					"<font size='5'>\n\n</font><v>%s</v>" ..
-					"<font size='5'>\n\n</font>をゲット"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>ランキング<v>%s</v>で" ..
-					"<font size='5'>\n\n</font><v>%s</v>" ..
-					"<font size='5'>\n\n</font>にアップグレード"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				 "<font size='5'>\n\n</font>クリアしたマップ"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					"<font size='5'>\n\n</font>総合リーダーボード"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				   "<font size='5'>\n\n</font>週間リーダーボード"),
+	power_options = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b>キーボード\n\nマップの数を<b>非表示</b>\n\n<b>デフォルト・キー</b>を使用する",
+	unlock_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v>マップをクリアして<font size='5'>\n\n</font><v>%s</v><font size='5'>\n\n</font>をゲット",
+	upgrade_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v>マップをクリアして<font size='5'>\n\n</font><v>%s</v><font size='5'>\n\n</font>にアップグレード",
+	unlock_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>ランキング<v>%s</v>で<font size='5'>\n\n</font><v>%s</v><font size='5'>\n\n</font>をゲット",
+	upgrade_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>ランキング<v>%s</v>で<font size='5'>\n\n</font><v>%s</v><font size='5'>\n\n</font>にアップグレード",
+	maps_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>クリアしたマップ",
+	overall_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>総合リーダーボード",
+	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>週間リーダーボード",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>バッジ (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>このプレイヤーのマップ数は非公開です。 <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
-				"総合リーダーボードの順位： <b><v>%s</v></b>\n\n" ..
-				"週間リーダーボードの順位： <b><v>%s</v></b>\n\n%s"),
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n総合リーダーボードの順位： <b><v>%s</v></b>\n\n週間リーダーボードの順位： <b><v>%s</v></b>\n\n%s",
 	map_count = "マップ数： <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
-	title_count = ("<b><j>«!»</j></b> クリアしたマップ：<b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
-				"<b><j>«!»</j></b> 通過したチェックポイント：<b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
+	title_count = "<b><j>«!»</j></b> クリアしたマップ：<b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> 通過したチェックポイント：<b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "バッジはプレイヤーが手に入れた実績です。 クリックすると説明が表示されます。",
 	help_private_maps = "このプレイヤーは自分のマップ数を非公開にしています。 あなたもプロフィールで非表示にすることができます。",
 	help_yellow_maps = "黄色いのは今週クリアしたマップの数です。",
@@ -211,10 +188,10 @@ translations.jp = {
 	ranking_pos = "ランキング #%s",
 	completed_maps = "<p align='center'><BV><B>クリアしたマップ: %s</B></p></BV>",
 	leaderboard = "リーダーボード",
-	position = "<V><p align=\"center\">順位",
-	username = "<V><p align=\"center\">名前",
-	community = "<V><p align=\"center\">コミュニティ",
-	completed = "<V><p align=\"center\">クリアしたマップ",
+	position = "<V><p align='center'>順位",
+	username = "<V><p align='center'>名前",
+	community = "<V><p align='center'>コミュニティ",
+	completed = "<V><p align='center'>クリアしたマップ",
 	overall_lb = "総合",
 	weekly_lb = "週間",
 	new_lang = "<v>[#] <d>言語を日本語に設定しました。",

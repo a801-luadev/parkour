@@ -46,6 +46,16 @@
       }
     },
     {
+      "label": "fetch translations",
+      "command": "python",
+      "args": [
+        "update-translations.py"
+      ],
+      "group": {
+        "kind": "build"
+      }
+    },
+    {
       "label": "ui test build",
       "command": "python",
       "args": [

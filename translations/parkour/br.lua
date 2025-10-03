@@ -32,6 +32,8 @@ translations.br = {
 	help_contribute = "<font size='14'>\n<p align='center'>A equipe do parkour adora ter um código aberto, pois isso <t>ajuda a comunidade</t>. Você pode <o>ver</o> ou <o>contribuir</o> com o código no <o><u><a href='event:github'>GitHub</a></u></o>.\n\nManter o módulo é parte de um trabalho <t>voluntário</t>, então qualquer contribuição é <u>bem vinda</u>, seja com a <t>programação</t>, <t>reporte de erros</t>, <t>sugestões</t> e <t>criação de mapas</t>.\nVocê pode <vp>reportar erros</vp> ou <vp>dar sugestões</vp> no nosso <o><u><a href='event:discord'>Discord</a></u></o> e/ou no <o><u><a href='event:github'>GitHub</a></u></o>.\nVocê pode <vp>enviar seus mapas</vp> no nosso <o><u><a href='event:map_submission'>Tópico no Fórum</a></u></o>.\n\nManter o jogo não é caro, mas também não é grátis. Nós adoraríamos se você pudesse incentivar o desenvolvimento do jogo <t>doando qualquer valor</t> <o><u><a href='event:donate'>aqui</a></u></o>.\n<u>Todos os fundos arrecadados serão direcionados para o desenvolvimento do módulo.</u></p>",
 	help_changelog = "<font size='13'><p align='center'><o>Versão 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>Sistema de missões implementado. (Aperte <J><B>,</B></J> para abrir painel de missões.)\n\n<font size='11'>• <font size='13'>Adicionado uma opção para desativar as teclas de atalho de todas as interfaces tipo rank, ajuda, loja, etc.\n\n<font size='11'>• <font size='13'>Adicionado <B><J>!cp [PlayerName#tag]</J></B> comando para ir direto para o checkpoint de um jogador especifico.",
 
+	-- Report Window
+
 	-- Congratulation messages
 	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> terminou o parkour em <vp>%s</vp> segundos, <fc>parabéns!",
@@ -51,7 +53,7 @@ translations.br = {
 	tempbanned = "<r>Você foi banido do #parkour por %s minutos.",
 	forum_topic = "<rose>Para mais informações sobre o módulo, acesse o link: %s",
 	report = "<j>Quer reportar um jogador de parkour? <t><b>!report Username#0000 [razão]</b></t>",
-	mapper_event ="<CE><B>Concurso de criação de mapas parkour 2024:</B>\n<n>Nos mostre sua criatividade na criação de mapas pela chance de ganhar <D>quejios <n>e <pt>moedas<n>!\n<R>Inscrições abertas até <B>31 de Janeiro de 2024</B>.\n<PS>Para mais informações, visite: %s", 
+	mapper_event = "<CE><B>Concurso de criação de mapas parkour 2024:</B>\n<n>Nos mostre sua criatividade na criação de mapas pela chance de ganhar <D>quejios <n>e <pt>moedas<n>!\n<R>Inscrições abertas até <B>31 de Janeiro de 2024</B>.\n<PS>Para mais informações, visite: %s",
 	cmd_usage_report = "<j>Modo de uso: <bl>!report [Player#1234] [razão]",
 	reported_not_here = "<bl>O jogador reportado deve estar nessa sala.",
 	reported_invalid = "<bl>Este jogador não pode ser reportado.",
@@ -61,23 +63,20 @@ translations.br = {
 	quest_map = "<ch>O mapa da sua missão está aqui: @%s!",
 
 	-- Easter Eggs
-	easter_egg_0  = "<ch>E a contagem regressiva começa...",
-	easter_egg_1  = "<ch>Menos de 24 horas restantes!",
-	easter_egg_2  = "<ch>Eita, você está muito adiantado! Está muito ansioso?",
-	easter_egg_3  = "<ch>Uma surpresa está no forno...",
-	easter_egg_4  = "<ch>Você sabe o que está prestes a acontecer...?",
-	easter_egg_5  = "<ch>O tempo está passando...",
-	easter_egg_6  = "<ch>A surpresa está próxima!",
-	easter_egg_7  = "<ch>A festa está prestes a começar...",
-	easter_egg_8  = "<ch>Que horas são? Já deu a hora?",
-	easter_egg_9  = "<ch>Atente-se, o tempo está passando...",
+	easter_egg_0 = "<ch>E a contagem regressiva começa...",
+	easter_egg_1 = "<ch>Menos de 24 horas restantes!",
+	easter_egg_2 = "<ch>Eita, você está muito adiantado! Está muito ansioso?",
+	easter_egg_3 = "<ch>Uma surpresa está no forno...",
+	easter_egg_4 = "<ch>Você sabe o que está prestes a acontecer...?",
+	easter_egg_5 = "<ch>O tempo está passando...",
+	easter_egg_6 = "<ch>A surpresa está próxima!",
+	easter_egg_7 = "<ch>A festa está prestes a começar...",
+	easter_egg_8 = "<ch>Que horas são? Já deu a hora?",
+	easter_egg_9 = "<ch>Atente-se, o tempo está passando...",
 	easter_egg_10 = "<ch>Apenas sente e relaxe, será amanhã sem horário definido!",
 	easter_egg_11 = "<ch>Vamos para a cama mais cedo, o tempo vai passar mais rápido!",
 	easter_egg_12 = "<ch>Paciência é uma virtude",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Você ganhará duas vezes mais vitórias no Sábado (GMT+2) e todos os poderes estarão disponíveis na semana de aniversário do Parkour!",
-	double_maps_start = "<rose>É A SEMANA DE ANIVERSÁRIO DO PARKOUR! Você ganhará duas vezes mais vitórias e todos os poderes foram ativados. Muito obrigado por jogar com a gente!",
-	double_maps_end = "<rose>A semana de aniversário do Parkour terminou. Muito obrigado por jogar com a gente!",
 	anniversary = "<bv>Teremos o dobro de moedas parkour na próxima semana (horário da França) e todos os poderes disponiveis para a semana de aniversário!!",
 	anniversary_start = "<rose>É A SEMANA DE ANIVERSÁRIO DO PARKOUR! Dobro de moedas e todos os poderes liberados. Muito obrigado por todo apoio e por jogarem esse module!",
 	anniversary_end = "<rose>A semana de aniversário do parkour acabou. Muito obrigado por todo apoio e por jogarem esse module!",
@@ -109,57 +108,35 @@ translations.br = {
 
 	-- Christmas
 	find_gift1 = "<ch>Papai Noel passou por aqui! Procure o presente de Natal no mapa e desembrulhe para uma surpresa!",
-    find_gift2 = "<ch>Som dos sinos em todos os lugares! Um presente especial de natal apareceu magicamente no mapa – corra e ache ele!",
-    find_gift3 = "<ch>Ho, ho, ho! O ajudante do Papai Noel deixou um presente para você nesse mapa!",
-    find_gift4 = "<ch>O espírito natalino no ar! Ache o presente escondido nesse mapa!",
-    find_gift5 = "<ch>Feliz Natal! Os elfos esconderam um presente para você. Você consegue encontrar ele?",
-    found_gift1 = "<ch>Bravo! <J>%s</J> desembrulhou um presente e achou <J>%s</J> moedas dentro!",
-    found_gift2 = "<ch>Parabéns, <J>%s</J>! Você ganhou <J>%s</J> moedas brilhantes de presente do Papai Noel!",
-    found_gift3 = "<ch>Uma vitória para <J>%s</J>! <J>%s</J> mais rico, obrigado Papai Noel!",
-    found_gift4 = "<ch>Parabéns para <J>%s</J> que ganhou <J>%s</J> moedas! O espirito natalino esta com tudo!",
-    found_gift5 = "<ch>Papai Noel concedeu <J>%s</J> com <J>%s</J> lindas moedas!",
+	find_gift2 = "<ch>Som dos sinos em todos os lugares! Um presente especial de natal apareceu magicamente no mapa – corra e ache ele!",
+	find_gift3 = "<ch>Ho, ho, ho! O ajudante do Papai Noel deixou um presente para você nesse mapa!",
+	find_gift4 = "<ch>O espírito natalino no ar! Ache o presente escondido nesse mapa!",
+	find_gift5 = "<ch>Feliz Natal! Os elfos esconderam um presente para você. Você consegue encontrar ele?",
+	found_gift1 = "<ch>Bravo! <J>%s</J> desembrulhou um presente e achou <J>%s</J> moedas dentro!",
+	found_gift2 = "<ch>Parabéns, <J>%s</J>! Você ganhou <J>%s</J> moedas brilhantes de presente do Papai Noel!",
+	found_gift3 = "<ch>Uma vitória para <J>%s</J>! <J>%s</J> mais rico, obrigado Papai Noel!",
+	found_gift4 = "<ch>Parabéns para <J>%s</J> que ganhou <J>%s</J> moedas! O espirito natalino esta com tudo!",
+	found_gift5 = "<ch>Papai Noel concedeu <J>%s</J> com <J>%s</J> lindas moedas!",
+
+	-- Lemonade
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>VOCê ESTÁ NO MODO AFK</b></bv>\nMOVA-SE PARA RENASCER</font>\n\n<font size='30'><u><t>Lembretes:</t></u></font>\n\n<font size='15'><r>Jogadores com uma linha vermelha em cima deles não querem ajuda!\nTrollar/bloquear outros jogadores no parkour NÃO é permitido!<d>\nEntre em nosso <cep><a href='event:discord'>servidor no Discord</a></cep>!\nQuer contribuir com código? Veja nosso <cep><a href='event:github'>repositório no Github</a></cep>\nVocê tem um mapa bom pra enviar? Mande-o em nosso <cep><a href='event:map_submission'>tópico de submissão de mapas</a></cep>\nCheque nosso <cep><a href='event:forum'>tópico oficial no fórum</a></cep> para mais informações!\nNos apoie com <cep><a href='event:donate'>doações!</a></cep>",
-	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\n" ..
-		"Usar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\n" ..
-		"Usar a tecla <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\n" ..
-		"Mostrar o delay do seu poder\n\n" ..
-		"Mostrar interface de botões\n\n" ..
-		"Mensagem de Boas-vindas\n\n" ..
-		"Mostrar mensagens de mapa completado\n\n" ..
-		"Mostrar símbolo de não ajudar\n\n" ..
-		"Desative as teclas de atalho de todas as interfaces (leaderboard, help, shop, etc.)",
+	options = "<p align='center'><font size='20'>Opções do Parkour</font></p>\n\nUsar o teclado <b>QWERTY</b> (desativar caso seja <b>AZERTY</b>)\n\nUsar a tecla <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> como <b>/mort</b> (desativar caso seja <b>DEL</b>)\n\nMostrar o delay do seu poder\n\nMostrar interface de botões\n\nMensagem de Boas-vindas\n\nMostrar mensagens de mapa completado\n\nMostrar símbolo de não ajudar\n\nDesative as teclas de atalho de todas as interfaces (leaderboard, help, shop, etc.)",
 	cooldown = "<v>[#] <r>Aguarde alguns segundos antes de fazer isso novamente.",
-	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Teclado <b>QWERTY</b>" ..
-					 "\n\n<b>Esconder</b> contagem de mapas" ..
-					 "\n\nUsar <b>tecla padrão</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> mapas" ..
-					"<font size='5'>\n\n</font>para desbloquear" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> mapas" ..
-					"<font size='5'>\n\n</font>para evoluir para" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Seja top <v>%s</v>" ..
-					"<font size='5'>\n\n</font>para desbloquear" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Seja top <v>%s</v>" ..
-					"<font size='5'>\n\n</font>para evoluir para" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				 "<font size='5'>\n\n</font>Mapas completados"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					"<font size='5'>\n\n</font>Ranking Geral"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				   "<font size='5'>\n\n</font>Ranking Semanal"),
+	power_options = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'>Teclado <b>QWERTY</b>\n\n<b>Esconder</b> contagem de mapas\n\nUsar <b>tecla padrão</b>",
+	unlock_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> mapas<font size='5'>\n\n</font>para desbloquear<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> mapas<font size='5'>\n\n</font>para evoluir para<font size='5'>\n\n</font><v>%s</v>",
+	unlock_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Seja top <v>%s</v><font size='5'>\n\n</font>para desbloquear<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Seja top <v>%s</v><font size='5'>\n\n</font>para evoluir para<font size='5'>\n\n</font><v>%s</v>",
+	maps_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Mapas completados",
+	overall_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Ranking Geral",
+	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Ranking Semanal",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Medalhas (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>A contagem de mapas deste jogador é privado. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
-				"Posição no Ranking geral: <b><v>%s</v></b>\n\n" ..
-				"Posição no Ranking semanal: <b><v>%s</v></b>\n\n%s"),
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nPosição no Ranking geral: <b><v>%s</v></b>\n\nPosição no Ranking semanal: <b><v>%s</v></b>\n\n%s",
 	map_count = "Contagem de mapas: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
-	title_count = ("<b><j>«!»</j></b> Mapas completados: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
-		"<b><j>«!»</j></b> Checkpoints coletados: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
+	title_count = "<b><j>«!»</j></b> Mapas completados: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> Checkpoints coletados: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "Medalhas são objetivos que um jogador pode conseguir. Clique nelas para ler suas descrições.",
 	help_private_maps = "Este jogador não gosta de divulgar sua contagem de mapas publicamente! Você também pode escondê-la em seu perfil.",
 	help_yellow_maps = "Mapas em amarelo são os mapas completados nesta semana.",
@@ -210,10 +187,10 @@ translations.br = {
 	ranking_pos = "Rank #%s",
 	completed_maps = "<p align='center'><BV><B>Mapas completados: %s</B></p></BV>",
 	leaderboard = "Ranking",
-	position = "<V><p align=\"center\">Posição",
-	username = "<V><p align=\"center\">Nome",
-	community = "<V><p align=\"center\">Comunidade",
-	completed = "<V><p align=\"center\">Mapas completados",
+	position = "<V><p align='center'>Posição",
+	username = "<V><p align='center'>Nome",
+	community = "<V><p align='center'>Comunidade",
+	completed = "<V><p align='center'>Mapas completados",
 	overall_lb = "Geral",
 	weekly_lb = "Semanal",
 	new_lang = "<v>[#] <d>Idioma definido para Português",

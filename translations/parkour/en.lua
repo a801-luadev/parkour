@@ -34,15 +34,11 @@ translations.en = {
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>Quest system implemented. (Press <J><B>,</B></J> to open the quest page.)\n\n<font size='11'>• <font size='13'>Added an option to disable hotkeys for all interfaces like leaderboard, help, shop etc.\n\n<font size='11'>• <font size='13'>Added the <B><J>!cp [PlayerName#tag]</J></B> command to set your current checkpoint as the specified player's checkpoint.",
 
 	-- Report Window
-	report_window = '<p align="center"><font size="20"><R><b>Parkour Player Report</b></R></font></p>\n' ..
-		'Please, choose a player and the reason for your report.\n' ..
-		'If you want to provide more details like video evidence, you can use <b>!report</b> command instead:\n' ..
-		'<i><b>!report Username#5903</b> trolling Username#1146 youtu.be/dQw4w9WgXcQ</i>',
+	report_window = "<p align='center'><font size='20'><R><b>Parkour Player Report</b></R></font></p>\nPlease, choose a player and the reason for your report.\nIf you want to provide more details like video evidence, you can use <b>!report</b> command instead:\n<i><b>!report Username#5903</b> trolling Username#1146 youtu.be/dQw4w9WgXcQ</i>",
 	report_troll = "Troll",
 	report_troll_desc = "Preventing someone from advancing to the next checkpoint (or completing the map) by abusing parkour powers/objects.",
 	report_force = "Force Help",
-	report_force_desc = "Intentionally and repeatedly trying to advance someone to the next checkpoint (or complete the map) <r>against their will</r> by using parkour power/objects.\n" ..
-		"<CH>If someone has a red line under their name, that means they don't want help.</CH>",
+	report_force_desc = "Intentionally and repeatedly trying to advance someone to the next checkpoint (or complete the map) <r>against their will</r> by using parkour power/objects.\n<CH>If someone has a red line under their name, that means they don't want help.</CH>",
 	report_hack = "Hack",
 	report_hack_desc = "Using external tools/programs to gain unfair advantages.\n<rose>Also, you should report them to Transformice Staff using /report command.</rose>",
 	report_bug = "Bug Abuse",
@@ -94,16 +90,16 @@ translations.en = {
 	claim_done = "<v>[#] <j>You have claimed a reward code successfully.",
 
 	-- Easter Eggs
-	easter_egg_0  = "<ch>Finally the countdown begins...",
-	easter_egg_1  = "<ch>Less than 24 hours remaining!",
-	easter_egg_2  = "<ch>Woah, you're quite early! Aren't you too excited?",
-	easter_egg_3  = "<ch>A surprise is waiting...",
-	easter_egg_4  = "<ch>Do you know what's about to happen...?",
-	easter_egg_5  = "<ch>The clock keeps ticking...",
-	easter_egg_6  = "<ch>The time is near!",
-	easter_egg_7  = "<ch>The party is about to begin...",
-	easter_egg_8  = "<ch>Check your clock, is it time yet?",
-	easter_egg_9  = "<ch>Be careful, time is passing...",
+	easter_egg_0 = "<ch>Finally the countdown begins...",
+	easter_egg_1 = "<ch>Less than 24 hours remaining!",
+	easter_egg_2 = "<ch>Woah, you're quite early! Aren't you too excited?",
+	easter_egg_3 = "<ch>A surprise is waiting...",
+	easter_egg_4 = "<ch>Do you know what's about to happen...?",
+	easter_egg_5 = "<ch>The clock keeps ticking...",
+	easter_egg_6 = "<ch>The time is near!",
+	easter_egg_7 = "<ch>The party is about to begin...",
+	easter_egg_8 = "<ch>Check your clock, is it time yet?",
+	easter_egg_9 = "<ch>Be careful, time is passing...",
 	easter_egg_10 = "<ch>Just sit back and relax, it'll be tomorrow in no time!",
 	easter_egg_11 = "<ch>Let's go to bed early, it'll make the time go faster!",
 	easter_egg_12 = "<ch>Patience is a virtue",
@@ -165,45 +161,21 @@ translations.en = {
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
-	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\n" ..
-		"Use <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\n" ..
-		"Use <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\n" ..
-		"Show your power cooldowns\n\n" ..
-		"Show interface buttons\n\n" ..
-		"Welcome message\n\n" ..
-		"Show map completion announcements\n\n" ..
-		"Show no help symbol\n\n" ..
-		"Disable hotkeys for all interfaces (leaderboard, help, shop, etc.)",
+	options = "<p align='center'><font size='20'>Parkour Options</font></p>\n\nUse <b>QWERTY</b> keyboard (disable if <b>AZERTY</b>)\n\nUse <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> hotkey for <b>/mort</b> (disable for <b>DEL</b>)\n\nShow your power cooldowns\n\nShow interface buttons\n\nWelcome message\n\nShow map completion announcements\n\nShow no help symbol\n\nDisable hotkeys for all interfaces (leaderboard, help, shop, etc.)",
 	cooldown = "<v>[#] <r>Wait a few seconds before doing that again.",
-	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> keyboard" ..
-					 "\n\n<b>Hide</b> map count" ..
-					 "\n\nUse <b>default key</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> maps" ..
-					"<font size='5'>\n\n</font>to unlock" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> maps" ..
-					"<font size='5'>\n\n</font>to upgrade to" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Rank <v>%s</v>" ..
-					"<font size='5'>\n\n</font>to unlock" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Rank <v>%s</v>" ..
-					"<font size='5'>\n\n</font>to upgrade to" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				 "<font size='5'>\n\n</font>Completed Maps"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					"<font size='5'>\n\n</font>Overall Leaderboard"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				   "<font size='5'>\n\n</font>Weekly Leaderboard"),
+	power_options = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> keyboard\n\n<b>Hide</b> map count\n\nUse <b>default key</b>",
+	unlock_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> maps<font size='5'>\n\n</font>to unlock<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Complete <v>%s</v> maps<font size='5'>\n\n</font>to upgrade to<font size='5'>\n\n</font><v>%s</v>",
+	unlock_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Rank <v>%s</v><font size='5'>\n\n</font>to unlock<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Rank <v>%s</v><font size='5'>\n\n</font>to upgrade to<font size='5'>\n\n</font><v>%s</v>",
+	maps_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Completed Maps",
+	overall_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Overall Leaderboard",
+	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Weekly Leaderboard",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Badges (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>This player's map count is private. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
-				"Overall leaderboard position: <b><v>%s</v></b>\n\n" ..
-				"Weekly leaderboard position: <b><v>%s</v></b>\n\n%s"),
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nOverall leaderboard position: <b><v>%s</v></b>\n\nWeekly leaderboard position: <b><v>%s</v></b>\n\n%s",
 	map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
-	title_count = ("<b><j>«!»</j></b> Finished maps: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
-				"<b><j>«!»</j></b> Collected checkpoints: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
+	title_count = "<b><j>«!»</j></b> Finished maps: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> Collected checkpoints: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "Badges are accomplishments a player can get. Click over them to see their description.",
 	help_private_maps = "This player doesn't like to share their map count publicly! You can hide them too in your profile.",
 	help_yellow_maps = "Maps in yellow are the maps completed this week.",
@@ -255,10 +227,10 @@ translations.en = {
 	ranking_pos = "Rank #%s",
 	completed_maps = "<p align='center'><BV><B>Completed maps: %s</B></p></BV>",
 	leaderboard = "Leaderboard",
-	position = "<V><p align=\"center\">Position",
-	username = "<V><p align=\"center\">Username",
-	community = "<V><p align=\"center\">Community",
-	completed = "<V><p align=\"center\">Completed maps",
+	position = "<V><p align='center'>Position",
+	username = "<V><p align='center'>Username",
+	community = "<V><p align='center'>Community",
+	completed = "<V><p align='center'>Completed maps",
 	overall_lb = "Overall",
 	weekly_lb = "Weekly",
 	new_lang = "<v>[#] <d>Language set to English",

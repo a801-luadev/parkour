@@ -29,6 +29,8 @@ translations.ro = {
 	help_contribute = "<font size='14'>\n<p align='center'>Echipa parkour adoră codul open source deoarece <t>ajută comunitatea</t>. Poți <o>vedea</o> și <o>modifica</o> codul sursă pe <o><u><a href='event:github'>GitHub</a></u></o>.\n\nÎntreținerea modulului este <t>strict voluntară</t>, așa că orice ajutor în legătură cu <t>codul</t>, <t>probleme ale jocului</t>, <t>sugestii</t> și <t>crearea de hărți</t> este mereu <u>primită și apreciată</u>.\nPoți <vp>raporta probleme</vp> și <vp>da sugestii</vp> pe <o><u><a href='event:discord'>Discord</a></u></o> și/sau <o><u><a href='event:github'>GitHub</a></u></o>.\nPoți să <vp>trimiți hărțile</vp> în discuția <o><u><a href='event:map_submission'>de pe forum</a></u></o>.\n\nÎntreținerea parkourului nu este scumpă, dar nici gratis. Am aprecia dacă ne-ai ajuta <t>donând orice sumă</t> <o><u><a href='event:donate'>aici</a></u></o>.\n<u>Toate donațiile vor duce la îmbunătățirea modulului.</u></p>",
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.10.0 - 17/04/2021</o></p>\n\n<font size='11'>• <font size='13'><b><j>TREI</J></b> titluri Transformice noi care pot fi deblocate doar jucând <font color='#1A7EC9'><b>#parkour</b></font>!</font>\n• Două statusuri noi adăugate profilului.\n• Ajustări minore de text.",
 
+	-- Report Window
+
 	-- Congratulation messages
 	reached_level = "<d>Felicitări! Ai atins nivelul <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> a terminat parkour în <vp>%s</vp> secunde, <fc>felicitări!",
@@ -50,23 +52,20 @@ translations.ro = {
 	report = "<j>Vrei să raportezi un jucător? <t><b>!report Username#0000 [reason]</b></t>",
 
 	-- Easter Eggs
-	easter_egg_0  = "<ch>Numărătoarea a început...",
-	easter_egg_1  = "<ch>Au mai rămas mai puțin de 24 de ore!",
-	easter_egg_2  = "<ch>Wow, ai venit cam devreme! Ești prea nerăbdător?",
-	easter_egg_3  = "<ch>O surpriză vă așteaptă...",
-	easter_egg_4  = "<ch>Ai vreo idee de ce va avea loc...?",
-	easter_egg_5  = "<ch>Ceasul continuă să ticăie...",
-	easter_egg_6  = "<ch>Surpriza e aproape!",
-	easter_egg_7  = "<ch>Petrecerea e pe cale să înceapă...",
-	easter_egg_8  = "<ch>Verifică ceasul, e timpul?",
-	easter_egg_9  = "<ch>Ai grijă, timpul trece...",
+	easter_egg_0 = "<ch>Numărătoarea a început...",
+	easter_egg_1 = "<ch>Au mai rămas mai puțin de 24 de ore!",
+	easter_egg_2 = "<ch>Wow, ai venit cam devreme! Ești prea nerăbdător?",
+	easter_egg_3 = "<ch>O surpriză vă așteaptă...",
+	easter_egg_4 = "<ch>Ai vreo idee de ce va avea loc...?",
+	easter_egg_5 = "<ch>Ceasul continuă să ticăie...",
+	easter_egg_6 = "<ch>Surpriza e aproape!",
+	easter_egg_7 = "<ch>Petrecerea e pe cale să înceapă...",
+	easter_egg_8 = "<ch>Verifică ceasul, e timpul?",
+	easter_egg_9 = "<ch>Ai grijă, timpul trece...",
 	easter_egg_10 = "<ch>Relaxează-te, va fi mâine în curând!",
 	easter_egg_11 = "<ch>Hai să ne culcăm devreme, va face timpul să treacă mai repede!",
 	easter_egg_12 = "<ch>Răbdarea e o virtute",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Hărți duble Sâmbătă (GMT+2) și toate puterile puterile deblocate în săptămâna aniversării parkour!",
-	double_maps_start = "<rose>E SĂPTĂMÂNA ANIVERSĂRII PARKOUR! Hărți duble și toate puterile deblocate vă așteaptă. Mulțumim că joci parkour!",
-	double_maps_end = "<rose>Săptămâna aniversării Parkour s-a sfârșit. Mulțumim că joci parkour!",
 
 	-- Records
 	records_enabled = "<v>[#] <d>Modul de record a fost pornit pe această sală. Statisticile nu vor conta iar puterile sunt dezactivate!\nPoți afla mai multe pe <b>%s</b>",
@@ -78,39 +77,29 @@ translations.ro = {
 	records_already_submitted = "<v>[#] <r>Deja ai trimis un record pentru această hartă!",
 	records_submitted = "<v>[#] <d>Recordul tău pentru harta <b>%s</b> a fost trimis.",
 
+	-- Quests
+
+	-- Christmas
+
+	-- Lemonade
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>EȘTI ÎN MODUL AFK</b></bv>\nMIȘCĂ-TE PENTRU A JUCA</font>\n\n<font size='30'><u><t>Reamintire:</t></u></font>\n\n<font size='15'><r>Jucătorii cu o linie roșie deasupra lor nu doresc ajutor!\nTrolling/blocarea altor jucători în parkour NU este permisă!<d>\nAlătură-te <cep><a href='event:discord'>serverului nostru de discord</a></cep>!\nVrei să contribui cu cod? Vizitează <cep><a href='event:github'>pagina noastră github</a></cep>\nAi o hartă bună? Posteaz-o în <cep><a href='event:map_submission'>firul pentru hărți parkour</a></cep>\nVerifică <cep><a href='event:forum'>firul oficial</a></cep> pentru mai multe informații!\nAjută-ne <cep><a href='event:donate'>donând!</a></cep>",
 	options = "<p align='center'><font size='20'>Opțiuni Parkour</font></p>\n\nFolosește <b>QWERTY</b> (oprește dacă <b>AZERTY</b>)\n\nFolosește scurtătura <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> pentru <b>/mort</b> (oprește pentru <b>DEL</b>)\n\nArată-ți cooldown-urile pentru puteri\n\nArată butonul de puteri\n\nArată butonul de ajutor\n\nArată anunțurile de completare a hărților\n\nArată simbolul de „fără ajutor”\n\nDisable all UI (leaderboard, help, shop etc.) hotkeys",
 	cooldown = "<v>[#] <r>Așteaptă câteva secunde pentru a face asta din nou.",
-	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'>tastatură <b>QWERTY</b>" ..
-					 "\n\n<b>Ascunde</b> numărul hărților completate" ..
-					 "\n\nPune <b>tasta obișnuită</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completează <v>%s</v> hărți" ..
-					"<font size='5'>\n\n</font>pentru a debloca" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completează <v>%s</v> hărți" ..
-					"<font size='5'>\n\n</font>pentru a îmbunătăți" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Fii pe locul <v>%s</v>" ..
-					"<font size='5'>\n\n</font>pentru a debloca" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Fii pe locul <v>%s</v>" ..
-					"<font size='5'>\n\n</font>pentru a îmbunătăți" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				 "<font size='5'>\n\n</font>Hărți completate"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					"<font size='5'>\n\n</font>Clasamentul general"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				   "<font size='5'>\n\n</font>Clasamentul săptămânal"),
+	power_options = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'>tastatură <b>QWERTY</b>\n\n<b>Ascunde</b> numărul hărților completate\n\nPune <b>tasta obișnuită</b>",
+	unlock_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completează <v>%s</v> hărți<font size='5'>\n\n</font>pentru a debloca<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Completează <v>%s</v> hărți<font size='5'>\n\n</font>pentru a îmbunătăți<font size='5'>\n\n</font><v>%s</v>",
+	unlock_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Fii pe locul <v>%s</v><font size='5'>\n\n</font>pentru a debloca<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>Fii pe locul <v>%s</v><font size='5'>\n\n</font>pentru a îmbunătăți<font size='5'>\n\n</font><v>%s</v>",
+	maps_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Hărți completate",
+	overall_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Clasamentul general",
+	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Clasamentul săptămânal",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Insigne (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Hărțile acestui jucător sunt private. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
-				"Poziția în clasamentul general: <b><v>%s</v></b>\n\n" ..
-				"Poziția în clasamentul săptămânal<b><v>%s</v></b>\n\n%s"),
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nPoziția în clasamentul general: <b><v>%s</v></b>\n\nPoziția în clasamentul săptămânal<b><v>%s</v></b>\n\n%s",
 	map_count = "Hărți completate: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
-	title_count = ("<b><j>«!»</j></b> Hărți completate: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
-				"<b><j>«!»</j></b> Checkpointuri colectate: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
+	title_count = "<b><j>«!»</j></b> Hărți completate: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> Checkpointuri colectate: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "Insignele sunt realizări pe care jucătorii le pot debloca. Apasă pe ele pentru a afla mai multe.",
 	help_private_maps = "Acest jucător nu vrea să-și arate numărul hărților! Le poți ascunde și tu pe profil.",
 	help_yellow_maps = "Hărțile galbene sunt hărțile completate în această săptămână.",
@@ -161,10 +150,10 @@ translations.ro = {
 	ranking_pos = "Rang #%s",
 	completed_maps = "<p align='center'><BV><B>Hărți completate: %s</B></p></BV>",
 	leaderboard = "Clasament",
-	position = "<V><p align=\"center\">Poziție",
-	username = "<V><p align=\"center\">Nume",
-	community = "<V><p align=\"center\">Comunitate",
-	completed = "<V><p align=\"center\">Hărți completate",
+	position = "<V><p align='center'>Poziție",
+	username = "<V><p align='center'>Nume",
+	community = "<V><p align='center'>Comunitate",
+	completed = "<V><p align='center'>Hărți completate",
 	overall_lb = "În general",
 	weekly_lb = "Săptămânal",
 	new_lang = "<v>[#] <d>Limbă a fost setată în Română",
@@ -195,5 +184,4 @@ translations.ro = {
 	campfire = "Foc de tabără",
 	chair = "Scaun",
 	link = "Suflet pereche",
-
 }

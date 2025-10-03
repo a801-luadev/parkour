@@ -3,12 +3,12 @@ translations.tr = {
 	fullname = "Türkçe",
 
 	-- Error messages
-	corrupt_map= "<r>Harita bozulmuş. Başka bir tane yükleniyor.",
+	corrupt_map = "<r>Harita bozulmuş. Başka bir tane yükleniyor.",
 	corrupt_map_no_perm = "<r>[HATA] <n>Bu harita yanlış kategorilendirilmiş.",
 	corrupt_map_hole = "<r>[HATA] <n>Parkur haritalarında fare deliği bulunamaz.",
 	corrupt_map_vanilla = "<r>[HATA] <n>Bu harita hakkında bilgi alınamıyor.",
-	corrupt_map_mouse_start= "<r>[HATA] <n>Bu haritanın bir başlangıç noktası olması gerekiyor (fare başlangıç noktası).",
-	corrupt_map_needing_chair= "<r>[HATA] <n>Haritanın bitiş koltuğu olması gerekiyor.",
+	corrupt_map_mouse_start = "<r>[HATA] <n>Bu haritanın bir başlangıç noktası olması gerekiyor (fare başlangıç noktası).",
+	corrupt_map_needing_chair = "<r>[HATA] <n>Haritanın bitiş koltuğu olması gerekiyor.",
 	corrupt_map_missing_checkpoints = "<r>[HATA] <n>Haritada en az bir kontrol noktası olması gerekiyor(sarı çivi).",
 	corrupt_data = "<r>Maalesef, sizin verileriniz kayboldu ve sıfırlandı.",
 	min_players = "<r>Verinizin kaydedilebilmesi için odada en az 4 farklı oyuncunun bulunması gerekmektedir. <bl>[%s/%s]",
@@ -34,15 +34,11 @@ translations.tr = {
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>Görev sistemi eklendi. (Görevler sayfasını açmak için <B><J>,</J></B> tuşuna basın.)\n\n<font size='11'>• <font size='13'>Kısayol tuşlarını (lider tablosu, yardım, market vb.) devre dışı bırakmak için bir ayar eklendi. \n\n<font size='11'>• <font size='13'>Artık <B><J>!cp [kullanıcıadı#etiket]</J></B> yazarak belirttiğiniz oyuncunun bulunduğu seviyeye ışınlanabilirsiniz.",
 
 	-- Report Window
-	report_window = '<p align="center"><font size="20"><R><b>Parkour Oyuncu Şikayeti</b></R></font></p>\n' ..
-		'Lütfen bir oyuncu ve rapor sebebi seçin.\n' ..
-		'Daha fazla detay (video kanıtı gibi) vermek isterseniz, bunun yerine <b>!report</b> komutunu kullanabilirsiniz:\n' ..
-		'<i><b>!report KullanıcıAdı#5903</b> trolling KullanıcıAdı#1146 youtu.be/dQw4w9WgXcQ</i>',
+	report_window = "<p align='center'><font size='20'><R><b>Parkour Oyuncu Şikayeti</b></R></font></p>\nLütfen bir oyuncu ve rapor sebebi seçin.\nDaha fazla detay (video kanıtı gibi) vermek isterseniz, bunun yerine <b>!report</b> komutunu kullanabilirsiniz:\n<i><b>!report KullanıcıAdı#5903</b> trolling KullanıcıAdı#1146 youtu.be/dQw4w9WgXcQ</i>",
 	report_troll = "Trol",
 	report_troll_desc = "Parkur güçlerini/nesnelerini kötüye kullanarak birinin bir sonraki kontrol noktasına (veya haritayı tamamlamasına) ilerlemesini engellemek.",
 	report_force = "Zorla Yardım",
-	report_force_desc = "Parkur güçlerini/nesnelerini kullanarak birinin bir sonraki kontrol noktasına (veya haritayı tamamlamasına) ilerlemesini <r>istemediği halde</r> kasıtlı ve sürekli olarak engellemek.\n" ..
-		"<CH>Bir oyuncunun isminin altında kırmızı çizgi varsa, bu o oyuncunun yardım istemediği anlamına gelir.</CH>",
+	report_force_desc = "Parkur güçlerini/nesnelerini kullanarak birinin bir sonraki kontrol noktasına (veya haritayı tamamlamasına) ilerlemesini <r>istemediği halde</r> kasıtlı ve sürekli olarak engellemek.\n<CH>Bir oyuncunun isminin altında kırmızı çizgi varsa, bu o oyuncunun yardım istemediği anlamına gelir.</CH>",
 	report_hack = "Hack",
 	report_hack_desc = "Haksız avantajlar elde etmek için harici araç/programlar kullanmak.\n<rose>Ayrıca /report komutunu kullanarak Transformice Ekibine bildirmelisiniz.</rose>",
 	report_bug = "Oyun Açıkları",
@@ -87,28 +83,23 @@ translations.tr = {
 	quest_map = "<ch>Görev haritanız @%s burada!",
 	powers_disabled = "<r>Yetenekler bu odada çalışmamaktadır.",
 	powers_enabled = "<vp>Yetenekler tekrardan kullanılabilir.",
-	event = "Etkinlik",
-	settings = "Ayarlar",
 	verify_sent = "<v>[#] <j>Discord doğrulama isteği gönderildi.",
 
 	-- Easter Eggs
-	easter_egg_0  = "<ch>Ve geri sayım başlıyor...",
-	easter_egg_1  = "<ch>24 saatten daha az kaldı!",
-	easter_egg_2  = "<ch>Vay be, bayağı erkencisin! Çok mu heyecanlandın?",
-	easter_egg_3  = "<ch>Bir sürprizim var...",
-	easter_egg_4  = "<ch>Birazdan ne olacak biliyor musun...?",
-	easter_egg_5  = "<ch>Saat işliyor...",
-	easter_egg_6  = "<ch>Sürpriz yakın!",
-	easter_egg_7  = "<ch>Parti başlamak üzere...",
-	easter_egg_8  = "<ch>Saatini kontrol et, zamanı geldi mi?",
-	easter_egg_9  = "<ch>Dikkatli ol, zaman geçiyor...",
+	easter_egg_0 = "<ch>Ve geri sayım başlıyor...",
+	easter_egg_1 = "<ch>24 saatten daha az kaldı!",
+	easter_egg_2 = "<ch>Vay be, bayağı erkencisin! Çok mu heyecanlandın?",
+	easter_egg_3 = "<ch>Bir sürprizim var...",
+	easter_egg_4 = "<ch>Birazdan ne olacak biliyor musun...?",
+	easter_egg_5 = "<ch>Saat işliyor...",
+	easter_egg_6 = "<ch>Sürpriz yakın!",
+	easter_egg_7 = "<ch>Parti başlamak üzere...",
+	easter_egg_8 = "<ch>Saatini kontrol et, zamanı geldi mi?",
+	easter_egg_9 = "<ch>Dikkatli ol, zaman geçiyor...",
 	easter_egg_10 = "<ch>Arkana yaslan ve rahatla, yarın vaktinde devam edecek!",
 	easter_egg_11 = "<ch>Hadi artık yat, böylece zaman daha hızlı geçecek!",
 	easter_egg_12 = "<ch>Sabır erdemdir",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>Çifte haritalar cumartesi (GMT+2) açılıyor ve tüm güçler parkur'un doğum haftası için açık!",
-	double_maps_start = "<rose>ŞU AN PARKUR'UN DOĞUM GÜNÜ HAFTASI! Çifte haritalar ve bütün güçler açıldı. Bizimle oynadığın için teşekkürler!",
-	double_maps_end = "<rose>Parkur'un doğum günü haftası bitti. Bizimle oynadığın için teşekkürler!",
 	anniversary = "<bv>Gelecek hafta (Fransa saatiyle) iki kat Parkour coin aktif ve Parkour'un doğum günü haftasında tüm güçler açık!",
 	anniversary_start = "<rose>PARKUR'UN DOĞUM GÜNÜ HAFTASI BAŞLADI! İki kat parkur parası ve tüm güçler etkinleştirildi. Tüm desteğiniz ve bu modülü oynadığınız için teşekkürler!",
 	anniversary_end = "<rose>Parkur'un doğum günü haftası sona erdi. Tüm desteğiniz ve bu modülü oynadığınız için teşekkürler!",
@@ -130,10 +121,10 @@ translations.tr = {
 	weekly_quests = "<p align='center'><font size='20'><B><D>Haftalık Görevler</D></B></font>",
 	quest_1 = "<B><D>%s/%s</D></B> harita tamamlayın.",
 	quest_2 = "<B><D>%s/%s</D></B> kontrol noktası (CP) toplayın.",
-	quest_3 = "Herhangi bir haritayı <B><D>%s/%s</D></B> defa ilk sırada tamamlayın.", 
+	quest_3 = "Herhangi bir haritayı <B><D>%s/%s</D></B> defa ilk sırada tamamlayın.",
 	quest_4 = "Bir haritayı <B><D>%s</D></B> saniyenin altında tamamlayın.",
 	quest_5 = "<B><D>@%s</D></B> haritasını tamamlayın.",
-	quest_6 = "<PT><b>%s</b></PT> becerisini <B><D>%s/%s</D></B> kere kullanın.", 
+	quest_6 = "<PT><b>%s</b></PT> becerisini <B><D>%s/%s</D></B> kere kullanın.",
 	next_reset = "<b><D>Sıfırlama:\n</b></D>%s",
 	quest_completed = "<b><D>Tebrikler!</D></b> \nBir %s görev tamamladınız!",
 	quest_reset = "<V>[#]</V> <O>%s görevleriniz sıfırlandı.</O>",
@@ -166,45 +157,21 @@ translations.tr = {
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>AFK MODDASIN</b></bv>\nYENİDEN DOĞMAK İÇİN HAREKET ET. </font>\n\n<font size='30'><u><t>Hatırlatıcılar:</t></u></font>\n\n<font size='15'><r>Üzerinde kırmızı çizgi olan oyuncular yardım istemiyordur!\nParkurdaki diğer oyuncuları trollemek/engellemek YASAKTIR!<d>\n<cep><a href='event:discord'>Discord</a></cep>'umuza katıl!\nKodumuza katkıda bulunmak mı istiyorsun? <cep><a href='event:github'>Github depomuza</a></cep> bir bak\nSunacak iyi bir haritanız mı var? <cep><a href='event:map_submission'>Harita öneri başlığımıza</a></cep> gönderin!\nDaha fazla bilgi için<cep><a href='event:forum'>resmi başlığımıza</a></cep> bakın!\nBizi desteklemek için <cep><a href='event:donate'>bağış yap!</a></cep>",
-	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\n" ..
-		"<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n" ..
-		"<b>/mort</b>'un kısayolu <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\n" ..
-		"Beceri bekleme sürelerini göster.\n\n" ..
-		"Arayüz butonlarını göster.\n\n" ..
-		"Karşılama mesajı\n\n" ..
-		"Harita bitirme duyurularını göster.\n\n" ..
-		"Yardım istemiyorum simgesini göster.\n\n" ..
-		"Tüm arayüzler (liderlik tablosu, yardım, market vb.) için kısayol tuşlarını devre dışı bırak.",	
+	options = "<p align='center'><font size='20'>Parkur ayarları</font></p>\n\n<b>QWERTY</b> klavye kullan (Kapatıldığında <b>AZERTY</b> klavye kullanılır).\n\n<b>/mort</b>'un kısayolu <J><a href='event:keyboardmort:'><u><b>%s</b></u></a></J> tuşudur (<b>DELETE</b> tuşu olması için kapat.).\n\nBeceri bekleme sürelerini göster.\n\nArayüz butonlarını göster.\n\nKarşılama mesajı\n\nHarita bitirme duyurularını göster.\n\nYardım istemiyorum simgesini göster.\n\nTüm arayüzler (liderlik tablosu, yardım, market vb.) için kısayol tuşlarını devre dışı bırak.",
 	cooldown = "<v>[#] <r>Bunu tekrar yapmadan önce birkaç saniye bekleyin",
-	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> Klavye" ..
-					 "\n\nTamamlanan harita sayısını <b>gizle</b>" ..
-					 "\n\n<b>Varsayılan tuşu</b> kullan"),
-	unlock_power = ("<font size='5'>\n\n</font>Kilidi açmak için" ..
-					"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v> harita tamamlayınız" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='5'>\n\n</font>Yükseltmek için" ..
-					"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v> harita tamamlayınız" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='5'>\n\n</font>Kilidi açmak için" ..
-					"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='5'>\n\n</font>Yükseltmek için" ..
-					"<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>sıralamanız <v>%s</v> olmalıdır" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				 "<font size='5'>\n\n</font>Tamamlanmış Harita"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					"<font size='5'>\n\n</font>Genel Sıralamanız"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					"<font size='5'>\n\n</font>Bu Haftaki Sıralamanız"),
+	power_options = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> Klavye\n\nTamamlanan harita sayısını <b>gizle</b>\n\n<b>Varsayılan tuşu</b> kullan",
+	unlock_power = "<font size='5'>\n\n</font>Kilidi açmak için<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v> harita tamamlayınız<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power = "<font size='5'>\n\n</font>Yükseltmek için<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'><v>%s</v> harita tamamlayınız<font size='5'>\n\n</font><v>%s</v>",
+	unlock_power_rank = "<font size='5'>\n\n</font>Kilidi açmak için<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>sıralamanız <v>%s</v> olmalıdır<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power_rank = "<font size='5'>\n\n</font>Yükseltmek için<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>sıralamanız <v>%s</v> olmalıdır<font size='5'>\n\n</font><v>%s</v>",
+	maps_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Tamamlanmış Harita",
+	overall_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Genel Sıralamanız",
+	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Bu Haftaki Sıralamanız",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Rozetler (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Bu oyuncunun tamamladığı harita sayısı özeldir. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
-				"Genel skor tablosu konumu: <b><v>%s</v></b>\n\n" ..
-				"Haftalık liderlik sıralaması: <b><v>%s</v></b>\n\n%s"),
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nGenel skor tablosu konumu: <b><v>%s</v></b>\n\nHaftalık liderlik sıralaması: <b><v>%s</v></b>\n\n%s",
 	map_count = "Tamamlanan harita sayısı: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
-	title_count = ("<b><j>«!»</j></b> Bitirilen haritalar: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n" ..
-				"<b><j>«!»</j></b> Toplanan kontrol noktaları: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>"),
+	title_count = "<b><j>«!»</j></b> Bitirilen haritalar: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> Toplanan kontrol noktaları: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "Rozetler, bir oyuncunun elde edebileceği başarıdır. Açıklamalarını görmek için üzerlerine tıklayın.",
 	help_private_maps = "Bu oyuncu tamamladığı harita sayısını herkese açık olarak paylaşmaktan hoşlanmıyor! İstersen sen de kendi profilinde bu bilgileri gizleyebilirsin.",
 	help_yellow_maps = "Sarı haritalar son bir hafta içinde bitirdiklerinizdir.",
@@ -256,10 +223,10 @@ translations.tr = {
 	ranking_pos = "Sıralama #%s",
 	completed_maps = "<p align='center'><BV><B>Tamamlanan haritalar: %s</B></p></BV>",
 	leaderboard = "Lider sıralaması",
-	position = "<V><p align=\"center\">Sıralama",
-	username = "<V><p align=\"center\">Kullanıcı adı",
-	community = "<V><p align=\"center\">Topluluk",
-	completed = "<V><p align=\"center\">Tamamlanan haritalar",
+	position = "<V><p align='center'>Sıralama",
+	username = "<V><p align='center'>Kullanıcı adı",
+	community = "<V><p align='center'>Topluluk",
+	completed = "<V><p align='center'>Tamamlanan haritalar",
 	overall_lb = "Genel",
 	weekly_lb = "Haftalık",
 	new_lang = "<v>[#] <d>Diliniz Türkçe olarak ayarlandı",
@@ -274,6 +241,8 @@ translations.tr = {
 	saving = "<p align='right'>Kaydediliyor...",
 	new_image = "<J>Görünüşünüz değiştirildi. Normal haline döndürmek için !image yazabilirsiniz.",
 	smol_best = "<j>Yeni smol oda lideri: %s, %s harita tamamladı!",
+	event = "Etkinlik",
+	settings = "Ayarlar",
 
 	-- Power names
 	balloon = "Balon",

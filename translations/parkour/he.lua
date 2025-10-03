@@ -29,6 +29,8 @@ translations.he = {
 	help_contribute = "<font size='14'>\n<p align='center'>צוות הניהול של פארקור אוהב לפתוח את קוד המקור מכיוון שזה <t>עוזר לקהילה</t>. אתה יכול <o>לראות</o> ו<o>לערוך</o> את קוד המקור ב-<o><u><a href='event:github'>GitHub</a></u></o>.\n\nשמירה על המודול היא <t>התנדבותית לחלוטין</t>. לכן, כל עזרה ב<t>קודים</t>, <t>דיווח על באגים</t>, <t>הצעות</t> ו<t>יצירת מפות</t> תמיד <u>מתקבלת בברכה ומוערכת</u>.\nאתה יכול <vp>לדווח אודות באגים</vp> ו<vp>להציע הצעות</vp> ב<o><u><a href='event:discord'>דיסקורד</a></u></o> ו/או ב-<o><u><a href='event:github'>GitHub</a></u></o>.\nאתה יכול <vp>להגיש את מפותיך</vp> ב<o><u><a href='event:map_submission'>נושא הפורום</a></u></o> שלנו.\n\nאחזקת פארקור איננה יקרה, אך גם איננה חינמית. אנו נשמח אם תוכלו לעזור לנו עי <t>תרומה בכל סכום</t> <o><u><a href='event:donate'>כאן</a></u></o>.\n<u>כל התרומות הולכות היישר לשיפור המודול.</u></p>",
 	help_changelog = "<font size='13'><p align='center'><o>Version 2.10.0 - 17/04/2021</o></p>\n\n<font size='11'>• <font size='13'><b><j>THREE</J></b> brand new Transformice titles that can only be unlocked by playing <font color='#1A7EC9'><b>#parkour</b></font>!</font>\n• Two new statuses added to the profile.\n• Minor text adjustments.",
 
+	-- Report Window
+
 	-- Congratulation messages
 	reached_level = "<d>ברכות! עלית לרמה <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> סיים את הפארקור תוך <vp>%s</vp> שניות, <fc>ברכות!",
@@ -50,23 +52,20 @@ translations.he = {
 	report = "<j>רוצים לדווח על שחקן? <t><b>!report Username#0000 [reason]</b></t>",
 
 	-- Easter Eggs
-	easter_egg_0  = "<ch>הספירה מתחילה...",
-	easter_egg_1  = "<ch>פחות מ24 שעות נותרו!",
-	easter_egg_2  = "<ch>וואו, הגעת מוקדם! גם אתה מתרגש?",
-	easter_egg_3  = "<ch>הפתעה מחכה...",
-	easter_egg_4  = "<ch>אתה יודע מה הולך לקרות...?",
-	easter_egg_5  = "<ch>השעון ממשיך לתקתק...",
-	easter_egg_6  = "<ch>ההפתעה קרבה!",
-	easter_egg_7  = "<ch>המסיבה עוד רגע מתחילה...",
-	easter_egg_8  = "<ch>תסתכל בשעות, כבר הגיע הזמן?",
-	easter_egg_9  = "<ch>תיזהר, הזמן עובר מהר...",
+	easter_egg_0 = "<ch>הספירה מתחילה...",
+	easter_egg_1 = "<ch>פחות מ24 שעות נותרו!",
+	easter_egg_2 = "<ch>וואו, הגעת מוקדם! גם אתה מתרגש?",
+	easter_egg_3 = "<ch>הפתעה מחכה...",
+	easter_egg_4 = "<ch>אתה יודע מה הולך לקרות...?",
+	easter_egg_5 = "<ch>השעון ממשיך לתקתק...",
+	easter_egg_6 = "<ch>ההפתעה קרבה!",
+	easter_egg_7 = "<ch>המסיבה עוד רגע מתחילה...",
+	easter_egg_8 = "<ch>תסתכל בשעות, כבר הגיע הזמן?",
+	easter_egg_9 = "<ch>תיזהר, הזמן עובר מהר...",
 	easter_egg_10 = "<ch>פשוט שב ותירגע, מחר יגיע במהרה!",
 	easter_egg_11 = "<ch>לך לישון מוקדם, זה יגרום לזמן לעבור מהר יותר!",
 	easter_egg_12 = "<ch>סבלנות היא מעלה",
 	easter_egg_13 = "<ch>https://youtu.be/9jK-NcRmVcw",
-	double_maps = "<bv>מפות כפולות וכל הכוחות זמינים בשביל שבוע היום הולדת של פארקור!",
-	double_maps_start = "<rose>זה שבוע היום הולדת של פארקור! מפות כפולות וכל הכוחות הופעלו.תודה שאתם משחקים איתנו!",
-	double_maps_end = "<rose>שבוע היום הולדת של פארקור נגמר. תודה ששיחקתם!",
 
 	-- Records
 	records_enabled = "<v>[#] <d>מצב שיאים הופעל בחדר זה. סטטיסטיקה לא תיחשב וכוחות לא יפעלו. תוכלו למצוא מידע נוסף על שיאים ב <b>%s</b>",
@@ -78,36 +77,27 @@ translations.he = {
 	records_already_submitted = "<v>[#] <r>כבר הגשת את השיא שלך בשביל מפה זו!",
 	records_submitted = "<v>[#] <d>השיא שלך למפה <b>%s</b> הוגש.",
 
+	-- Quests
+
+	-- Christmas
+
+	-- Lemonade
+
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>אתה במצב AFK</b></bv>\nזוז כדי לחזור</font>\n\n<font size='30'><u><t>תזכורות:</t></u></font>\n\n<font size='15'><r>שחקנים עם קו אדום מעליהם אינם מעוניינים בעזרה!\nהטרלת/חסימת שחקנים אחרים בפארקור אסורה!<d>\nהצטרפו ל<cep><a href='event:discord'>שרת הדיסקורד</a></cep> שלנו!\nרוצה לתרום קוד? ראה את <cep><a href='event:github'>מאגר ה-GitHub</a></cep> שלנו.\nיש לך מפה טובה להגיש?  שלח את זה ב<cep><a href='event:map_submission'>נושא הגשת המפות</a></cep> שלנו\nבידקו את <cep><a href='event:forum'>הנושא הרשמי</a></cep> שלנו למידע נוסף!\nתמוך בנו על ידי <cep><a href='event:donate'>תרומה!</a></cep>",
 	options = "<p align='center'><font size='20'>אפשרויות פארקור</font></p>\n\nהשתמש במקלדת <b>QWERTY</b> (כבה אם <b>AZERTY</b> בשימוש)\n\nהשתמש באות <b>צ</b> במקום <b>/mort</b> (משבית את <b>DEL</b>)\n\nהראה את זמן טעינת הכוחות\n\nהראה כפתור כוחות\n\nהראה כפתור עזרה\n\nהראה הכרזות השלמת מפות\n\nהצג סימן 'ללא עזרה'\n\nDisable all UI (leaderboard, help, shop etc.) hotkeys",
 	cooldown = "<v>[#] <r>המתן מספר שניות לפני שאתה עושה זאת.",
-	power_options = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> מקלדת" ..
-					 "\n\n<b>הסתר</b> ספירת מפות" ..
-					 "\n\nהשתמש ב<b>מקשים מקוריים</b>"),
-	unlock_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>השלם <v>%s</v> מפות" ..
-					"<font size='5'>\n\n</font>בכדי להשיג" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>השלם <v>%s</v> מפות" ..
-					"<font size='5'>\n\n</font>כדי לשדרג ל" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	unlock_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>דרגה <v>%s</v>" ..
-					"<font size='5'>\n\n</font>בכדי להשיג" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	upgrade_power_rank = ("<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>דרגה <v>%s</v>" ..
-					"<font size='5'>\n\n</font>כדי לשדרג ל" ..
-					"<font size='5'>\n\n</font><v>%s</v>"),
-	maps_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				 "<font size='5'>\n\n</font>מפות שהושלמו"),
-	overall_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-					"<font size='5'>\n\n</font>לוח תוצאות כללי"),
-	weekly_info = ("<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b>" ..
-				   "<font size='5'>\n\n</font>לוח תוצאות שבועי"),
+	power_options = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><b>QWERTY</b> מקלדת\n\n<b>הסתר</b> ספירת מפות\n\nהשתמש ב<b>מקשים מקוריים</b>",
+	unlock_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>השלם <v>%s</v> מפות<font size='5'>\n\n</font>בכדי להשיג<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>השלם <v>%s</v> מפות<font size='5'>\n\n</font>כדי לשדרג ל<font size='5'>\n\n</font><v>%s</v>",
+	unlock_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>דרגה <v>%s</v><font size='5'>\n\n</font>בכדי להשיג<font size='5'>\n\n</font><v>%s</v>",
+	upgrade_power_rank = "<font size='13' face='Lucida Console,Liberation Mono,Courier New'><p align='center'>דרגה <v>%s</v><font size='5'>\n\n</font>כדי לשדרג ל<font size='5'>\n\n</font><v>%s</v>",
+	maps_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>מפות שהושלמו",
+	overall_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>לוח תוצאות כללי",
+	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>לוח תוצאות שבועי",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>תגים (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>מספר המפות של שחקן זה הינו פרטי. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = ("<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n" ..
-				"דרגה בלוח התוצאות הכללי: <b><v>%s</v></b>\n\n" ..
-				"דרגה בלוח התוצאות השבועי: <b><v>%s</v></b>\n\n%s"),
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nדרגה בלוח התוצאות הכללי: <b><v>%s</v></b>\n\nדרגה בלוח התוצאות השבועי: <b><v>%s</v></b>\n\n%s",
 	map_count = "מספר מפות: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "תגים הינם הישגים ששחקן יכול לקבל. לחץ עליהם על מנת לקבל פירוט.",
 	help_private_maps = "משתמש זה אינו מעוניין לשתף את מספר המפות שלו בפומבי! אתה יכול להסתיר את זה גם בפרופיל שלך.",
@@ -157,10 +147,10 @@ translations.he = {
 	ranking_pos = "דרגה #%s",
 	completed_maps = "<p align='center'><BV><B>מפות שהושלמו: %s</B></p></BV>",
 	leaderboard = "לוח תוצאות",
-	position = "<V><p align=\"center\">דרגה",
-	username = "<V><p align=\"center\">שם משתמש",
-	community = "<V><p align=\"center\">קהילה",
-	completed = "<V><p align=\"center\">מפות שהושלמו",
+	position = "<V><p align='center'>דרגה",
+	username = "<V><p align='center'>שם משתמש",
+	community = "<V><p align='center'>קהילה",
+	completed = "<V><p align='center'>מפות שהושלמו",
 	overall_lb = "כללי",
 	weekly_lb = "שבועי",
 	new_lang = "<v>[#] <d>השפה הוגדרה ל-עברית",
@@ -191,5 +181,4 @@ translations.he = {
 	campfire = "מדורה",
 	chair = "כסא",
 	link = "נפש תאומה",
-
 }
