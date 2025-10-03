@@ -193,7 +193,7 @@ do
 				if questCompleted then
 					return "18bdfe01bb3.png"
 				elseif questSkipped then
-					return "a.png"
+					return "img@199ac2e9c66"
 				else
 					return "18bab04d3a9.png"
 				end
