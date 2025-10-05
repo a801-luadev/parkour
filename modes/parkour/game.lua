@@ -457,11 +457,21 @@ onEvent("PlayerDied", function(player)
 	end
 end)
 
-onEvent("PlayerWon", function(player)
-	if not room.playerList[player] then return end
-	if bans[ room.playerList[player].id ] then return end
-	if victory[player] then return end
+onEvent("PlayerWon", function(player, time, reltime)
+	if not levels then return end
 
+	local info = room.playerList[player]
+	if not info or bans[info.id] or victory[player] then return end
+
+	local file = players_file[player]
+	if not file then return end
+
+	if time and time < 3000 then return end
+
+	eventPlayerCompleted(player, info, file)
+end)
+
+onEvent("PlayerCompleted", function(player, info, file)
 	if smol_completions and player:sub(1, 1) ~= "*" then
 		smol_completions[player] = 1 + (smol_completions[player] or 0)
 

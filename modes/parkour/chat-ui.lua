@@ -65,14 +65,8 @@ onEvent("PlayerLeft", function(player)
 	end
 end)
 
-onEvent("PlayerWon", function(player)
-	if not room.playerList[player] then return end
-	local id = room.playerList[player].id
-	if bans[id] then return end
-	if victory[player] then return end
-	local file = players_file[player]
-	if not file then return end
-	if not levels then return end
+onEvent("PlayerCompleted", function(player, info, file)
+	local id = info.id
 
 	victory[player] = os.time() + 10000 * (1 + math.max(0, file.bancount or 0))
 
