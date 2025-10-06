@@ -88,6 +88,7 @@ translations.en = {
 	review_disabled = "<v>[#] <d>Review mode is disabled.",
 	verify_sent = "<v>[#] <j>Discord verification request is sent.",
 	claim_done = "<v>[#] <j>You have claimed a reward code successfully.",
+	golem_around = "<CH>Someone is using golem power, you can hold <V>SPACE <CH>key to get help!",
 
 	-- Easter Eggs
 	easter_egg_0 = "<ch>Finally the countdown begins...",

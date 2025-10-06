@@ -122,8 +122,15 @@ local shop_items = {
 		},
 		{
 			price = 200,
-			img = "img@198c8bc6054",
+			img = "img@199beb124bf",
 			id = 7,
+			uses = 10,
+			hidden = true,
+		},
+		{
+			price = 300,
+			img = "img@199beb0acb7",
+			id = 8,
 			uses = 10,
 			hidden = true,
 		},

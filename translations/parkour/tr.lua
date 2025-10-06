@@ -84,6 +84,7 @@ translations.tr = {
 	powers_disabled = "<r>Yetenekler bu odada çalışmamaktadır.",
 	powers_enabled = "<vp>Yetenekler tekrardan kullanılabilir.",
 	verify_sent = "<v>[#] <j>Discord doğrulama isteği gönderildi.",
+	golem_around = "<CH>Birisi golem gücünü kullanıyor, <V>BOŞLUK <CH>tuşuna basılı tutarak yardım alabilirsin!",
 
 	-- Easter Eggs
 	easter_egg_0 = "<ch>Ve geri sayım başlıyor...",

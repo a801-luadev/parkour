@@ -97,21 +97,18 @@ local function changePlayerSize(name, size)
 	return tfm.exec.changePlayerSize(name, size)
 end
 
-local function updatePlayerCollision(player)
+local function updatePlayerCollision(player, allowGolem)
 	if records_admins then return end
 
 	if ghost[player] then
 		tfm.exec.setPlayerCollision(player, 0)
 	elseif golem[player] then
-		tfm.exec.setPlayerCollision(player, 2)
+		tfm.exec.setPlayerCollision(player, -1, 1 + 512, 2 + 4 + 16 + 256)
+	elseif allowGolem then
+		tfm.exec.setPlayerCollision(player, -1, 1 + 256, 2 + 4 + 16 + 512)
 	else
-		local file = players_file[player]
-		if file and file.settings[8] == 1 then
-			-- 4 + 16 = normal objects + mice only objects
-			tfm.exec.setPlayerCollision(player, -1, 1, 20)
-		else
-			tfm.exec.setPlayerCollision(player, 1)
-		end
+		-- default is 2 + 4 + 16
+		tfm.exec.setPlayerCollision(player, 1)
 	end
 end
 
@@ -955,7 +952,6 @@ onEvent("PlayerDataParsed", function(player, data)
 		tfm.exec.chatMessage("<v>[#] <d>Your spec mode has been carried to this room since it's enabled.", player)
 	end
 
-	updatePlayerCollision(player)
 	checkBan(player, data)
 end)
 

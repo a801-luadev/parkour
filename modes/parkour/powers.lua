@@ -19,6 +19,7 @@ local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local cooldownSlots = {}
 local booster = {}
+local golem_message_ts = 0
 
 -- Keep track of the times the key has been binded and wrap system.bindKeyboard
 function bindKeyboard(player, key, down, active)
@@ -361,10 +362,10 @@ shop_powers[6] = {
 }
 shop_powers[7] = {
 	name = "golem",
-	cooldown_img = "img@198c8bc6054",
+	cooldown_img = "img@199beb124bf",
 	cooldown_scale = 0.5,
-	cooldown = 2* 60 * 1000,
-	despawn_time = 20 * 1000,
+	cooldown = 2 * 60 * 1000,
+	despawn_time = 30 * 1000,
 
 	cond = function(player, key, down, x, y)
 		local skinID = players_file[player]:getEquipped(7)
@@ -388,6 +389,11 @@ shop_powers[7] = {
 		updatePlayerCollision(player)
 		addNewTimer(self.despawn_time - 1000, self.fadeOutImage, imgID)
 		addNewTimer(self.despawn_time, self.despawn, player)
+
+		if golem_message_ts < os.time() then
+			golem_message_ts = os.time() + 5 * 60 * 1000
+			translatedChatMessage("golem_around", nil)
+		end
 	end,
 
 	fadeOutImage = function(imgID)
@@ -397,6 +403,53 @@ shop_powers[7] = {
 	despawn = function(player)
 		golem[player] = nil
 		updatePlayerCollision(player)
+	end
+}
+shop_powers[8] = {
+	name = "golem_balloon",
+	cooldown_img = "img@199beb0acb7",
+	cooldown_scale = 0.5,
+	cooldown = 2 * 60 * 1000,
+	despawn_time = 30 * 1000,
+
+	cond = function(player, key, down, x, y)
+		local skinID = players_file[player]:getEquipped(7)
+		local skin = skinID and (shop_skins[skinID] or file_skins[skinID] or room_skins[skinID])
+		return skin and not ghost[player] and not golem[player]
+	end,
+
+	fnc = function(self, player, key, down, x, y)
+		local skinID = players_file[player]:getEquipped(4)
+		local skin = skinID and (shop_skins[skinID] or file_skins[skinID] or room_skins[skinID])
+		if not skin then return end
+		local imgID = tfm.exec.addImage(
+			skin.img or skin.shop_img or "1752b1aa57c.png",
+			"$" .. player,
+			0, 0, nil,
+			skin.scale or 1, skin.scale or 1, 0, 1,
+			skin.x or 0.5, skin.y or 0.5,
+			true
+		)
+		golem[player] = true
+		updatePlayerCollision(player)
+		addNewTimer(self.despawn_time - 1000, self.fadeOutImage, imgID)
+		addNewTimer(self.despawn_time, self.despawn, player)
+		tfm.exec.setPlayerGravityScale(player, 0.5, 0.5)
+
+		if golem_message_ts < os.time() then
+			golem_message_ts = os.time() + 5 * 60 * 1000
+			translatedChatMessage("golem_around", nil)
+		end
+	end,
+
+	fadeOutImage = function(imgID)
+		tfm.exec.removeImage(imgID, true)
+	end,
+
+	despawn = function(player)
+		golem[player] = nil
+		updatePlayerCollision(player)
+		tfm.exec.setPlayerGravityScale(player, 1, 1)
 	end
 }
 
@@ -1121,6 +1174,14 @@ local function usePower(player, _power, key, down, x, y, chairCd, onlyVisual, vx
 end
 
 onEvent("Keyboard", function(player, key, down, x, y, vx, vy)
+	if victory[player] then return end
+	if key == 32 then
+		updatePlayerCollision(player, down)
+		return
+	end
+end)
+
+onEvent("Keyboard", function(player, key, down, x, y, vx, vy)
 	if not victory[player] or not players_file[player] or not keys.triggers[player] then return end
 	if spec_mode[player] then return end
 
@@ -1397,6 +1458,12 @@ onEvent("NewPlayer", function(player)
 			tfm.exec.setPlayerGravityScale(player2, 0, 0)
 		end
 	end
+
+	-- skip souris
+	if player:sub(1, 1) == "*" then return end
+
+	bindKeyboard(player, 32, true, true)
+	bindKeyboard(player, 32, false, true)
 end)
 
 onEvent("PlayerDied", function(player)

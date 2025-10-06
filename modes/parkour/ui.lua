@@ -160,7 +160,6 @@ onEvent("Keyboard", function(player, key, down, x, y)
 			translatedChatMessage("nohelp", player)
 		end
 
-		updatePlayerCollision(player)
 		savePlayerData(player)
 	end
 end)
