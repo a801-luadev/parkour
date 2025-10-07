@@ -186,6 +186,7 @@ do
 local firstCall = true
 invalidMap = function(arg)
 	levels = nil
+	if tfm_mode == "village" then return end
 	is_invalid = os.time() + 3000
 	if firstCall then
 		firstCall = nil

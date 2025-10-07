@@ -48,15 +48,23 @@ local app_times = {
 local starting = string.sub(room.name, 1, 2)
 
 local is_tribe = starting == "*\003"
-local tribe, module_name, submode
+local tribe, module_name, submode, tfm_mode
 local flags = ""
-
-if is_tribe then
-	tribe = string.sub(room.name, 3)
-end
 
 room.lowerName = string.lower(room.name)
 room.shortName = string.gsub(room.name, "%-?#parkour", "", 1)
+
+if is_tribe then
+	tribe = string.sub(room.name, 3)
+else
+	local modes = {"bootcamp", "survivor", "vanilla", "racing", "defilante", "village"}
+	for i=1, #modes do
+		if room.lowerName:find(modes[i], 1, true) then
+			tfm_mode = modes[i]
+			break
+		end
+	end
+end
 
 local function enlargeName(name)
 	if string.sub(name, 1, 1) == "*" then
@@ -143,6 +151,12 @@ end
 
 local function initialize_parkour() -- so it uses less space after building
 	{% require-package "modes/parkour" %}
+
+	if submode == "smol" then
+		{% require-package "modes/smol" %}
+	elseif tfm_mode == "village" then
+		{% require-package "modes/village" %}
+	end
 end
 
 if is_tribe then
@@ -176,9 +190,6 @@ else
 		{% require-package "modes/freezertag" %}
 	elseif submode == "rocketlaunch" then
 		{% require-package "modes/rocketlaunch" %}
-	elseif submode == "smol" then
-		initialize_parkour()
-		{% require-package "modes/smol" %}
 	else
 		initialize_parkour()
 	end

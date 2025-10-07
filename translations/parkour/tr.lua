@@ -20,6 +20,7 @@ translations.tr = {
 	max_power_keys = "<v>[#] <r>Aynı tuşta sadece %s güç bulundurabilirsin",
 	room_name_length = "<ROSE><b>[HATA]</b> Oda adı, izin verilen <b>45</b karakter uzunluğunu aşıyor. Lütfen daha kısa bir oda adı seçin.",
 	bad_outfit = "<r>Farenizin üzerinde parkour odalarında kullanılamayan bir eşya/kürk var.",
+	insufficient_coins = "<v>[#] <r>Yeterli miktarda coin bulunmamakta.",
 
 	-- Help window
 	help = "Yardım",
@@ -84,6 +85,7 @@ translations.tr = {
 	powers_disabled = "<r>Yetenekler bu odada çalışmamaktadır.",
 	powers_enabled = "<vp>Yetenekler tekrardan kullanılabilir.",
 	verify_sent = "<v>[#] <j>Discord doğrulama isteği gönderildi.",
+	npc_sell_power = "Bu market gücü indirimde!",
 	golem_around = "<CH>Birisi golem gücünü kullanıyor, <V>BOŞLUK <CH>tuşuna basılı tutarak yardım alabilirsin!",
 
 	-- Easter Eggs

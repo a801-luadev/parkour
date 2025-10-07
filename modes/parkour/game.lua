@@ -132,6 +132,7 @@ end
 
 local function doStatsCount()
 	return count_stats and
+		tfm_mode ~= "village" and
 		room.uniquePlayers >= min_save and
 		player_count >= min_save and
 		not records_admins and

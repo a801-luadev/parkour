@@ -1,0 +1,5 @@
+[
+	{"type": "require-file", "file": "modes/village/npc.lua"},
+	{"type": "require-file", "file": "modes/village/actions.lua"},
+	{"type": "require-file", "file": "modes/village/init.lua"}
+]

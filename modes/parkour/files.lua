@@ -34,7 +34,7 @@ local total_files = #file_queue
 local file_index = 1
 local next_file_load
 
-local function scheduleFile(name)
+function scheduleFile(name)
 	if not files[name] then return end
 	if file_schedule then
 		file_schedule[name] = true
@@ -528,7 +528,7 @@ do
 		if category ~= 8 or uses == 0 then return end
 
 		uses = uses + useChange
-		if uses > 99 then
+		if uses > 1000000 then
 			return
 		end
 

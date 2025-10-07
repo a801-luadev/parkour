@@ -125,4 +125,39 @@ local filemanagers = {
 			}
 		}
 	}):disableValidityChecks():prepare(),
+
+	["51"] = FileManager.new({
+		type = "dictionary",
+		map = {
+			{
+				name = "npc",
+				type = "dictionary",
+				objects = { -- key is npc name
+					type = "dictionary",
+					map = {
+						{
+							name = "action",
+							type = "string"
+						},
+						{
+							name = "param",
+							type = "string"
+						},
+						{
+							name = "active",
+							type = "number"
+						},
+						{
+							name = "look",
+							type = "string"
+						},
+						{
+							name = "definition",
+							type = "string"
+						},
+					}
+				}
+			}
+		}
+	}):disableValidityChecks():prepare(),
 }

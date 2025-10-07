@@ -430,7 +430,7 @@ do
 			if refundMode[player] or tab == 0 then return end
 			if item_price < 0 then return end
 			if file.coins < item_price then
-				tfm.exec.chatMessage("<v>[#] <r>You don't have enough coins.", player)
+				translatedChatMessage("insufficient_coins", player)
 				return
 			end
 

@@ -20,6 +20,7 @@ translations.en = {
 	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 	room_name_length = "<ROSE><b>[ERROR]</b> The room name exceeds the allowed length of <b>45</b> characters. Please choose a shorter name.",
 	bad_outfit = "<r>Your outfit contains an item/fur that cannot be used in parkour.",
+	insufficient_coins = "<v>[#] <r>You don't have enough coins.",
 
 	-- Help window
 	help = "Help",
@@ -88,6 +89,7 @@ translations.en = {
 	review_disabled = "<v>[#] <d>Review mode is disabled.",
 	verify_sent = "<v>[#] <j>Discord verification request is sent.",
 	claim_done = "<v>[#] <j>You have claimed a reward code successfully.",
+	npc_sell_power = "This shop power is on sale!",
 	golem_around = "<CH>Someone is using golem power, you can hold <V>SPACE <CH>key to get help!",
 
 	-- Easter Eggs

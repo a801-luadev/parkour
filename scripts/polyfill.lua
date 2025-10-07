@@ -11,7 +11,7 @@ do
   force_stats_count_debug = true
 
   -- Room
-	tfm.get.room.name = "*#parkour0test"
+  local isActuallyTribe = tfm.get.room.isTribeHouse
 	tfm.get.room.uniquePlayers = 4
   tfm.get.room.isTribeHouse = false
   --tfm.get.room.debugLanguage = "tr"
@@ -19,7 +19,7 @@ do
   --{% require-file "scripts/debugui.lua" %}
 
   -- Tribe House Alternatives
-  if tfm.exec.getPlayerSync() == nil then
+  if tfm.exec.getPlayerSync() == nil and isActuallyTribe then
     tfm.exec.chatMessage = function(message, playerName)
       print(tostring(playerName) .. ' -- ' .. tostring(message))
     end
@@ -193,4 +193,5 @@ do
   {% require-file "scripts/file_leaderboard.lua" %}
   {% require-file "scripts/file_sanction.lua" %}
   {% require-file "scripts/file_shop.lua" %}
+  {% require-file "scripts/file_npc.lua" %}
 end
