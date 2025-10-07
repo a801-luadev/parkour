@@ -922,6 +922,18 @@ newCmd({ name = "report",
 		return translatedChatMessage("reason_too_short", playerName)
 	end
 
+	if reason == "troll" or reason == "force" then
+		if not victory[reportedName] then
+			return translatedChatMessage("report_invalid", playerName)
+		end
+
+		local reported_data = players_file[reportedName]
+
+		if not reported_data or (reported_data.killed and reported_data.killed > os.time()) then
+			return translatedChatMessage("report_invalid", playerName)
+		end
+	end
+
 	if reported[reportedName] then
 		if reported[reportedName][playerName] then
 			return translatedChatMessage("report_done", playerName)
