@@ -125,14 +125,12 @@ local shop_items = {
 			img = "img@199beb124bf",
 			id = 7,
 			uses = 10,
-			hidden = true,
 		},
 		{
 			price = 300,
 			img = "img@199beb0acb7",
 			id = 8,
 			uses = 10,
-			hidden = true,
 		},
 	},
 	{ -- snowball
