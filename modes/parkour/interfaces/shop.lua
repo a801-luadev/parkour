@@ -199,13 +199,12 @@ do
 				local y = self.y + 15
 				local item
 				local file = players_file[player]
-				local color, currency
+				local color, currency, itemPrice, uses
 
 				for index = 1, 18 do
 					item = data[page + index - 1]
 					if file and item and page + index - 1 <= data._len then
-						local itemPrice = item.price
-
+						itemPrice = item.price
 						color = ''
 
 						if refundMode[player] and tab ~= 8 and not item.currency and item.price > 0 then
@@ -243,10 +242,11 @@ do
 							)
 						else
 							if item.uses then
-								local uses = file:getItemAmount(item.id, tab)
+								uses = file:getItemAmount(item.id, tab)
+								if uses == 0 then uses = '' end
 								ui.addTextArea(
-									consumableTAs[index], "<b><p align='right'>" .. uses .. "/" .. item.uses, player,
-									x, y + 20, 55, 15,
+									consumableTAs[index], "<b><font size='10'><p align='right'>" .. uses .. "\n\n\n\n<j>x" .. item.uses, player,
+									x, y + 20, 55, 70,
 									0, 0, 0,
 									true
 								)
