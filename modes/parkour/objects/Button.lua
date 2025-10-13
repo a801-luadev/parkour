@@ -54,10 +54,33 @@ do
 		return self
 	end
 
+	function Button:setImage(image, width, height)
+		self.image = image
+
+		if not width or not height then
+			return self
+		end
+
+		local xr = math.ceil(width / 91.25)
+		local yr = math.ceil(height / 71.25)
+
+		self.imageOnly = true
+		self.text_str = "<font face='Verdana' size='60'>" .. string.rep(string.rep("\t", xr) .. "\n", yr)
+		self.width = width + 10
+		self.height = height + 10
+
+		image.target = image.target or "~10"
+
+		return self
+	end
+
 	function Button:asTemplate(interface)
 		local enabled_prefix = "<a href='event:" .. self.callback .. "'><p align='center'>" 
 		local disabled_prefix = "<p align='center'>"
+		local imageOnly = self.imageOnly
 		local textarea = {
+			image = self.image,
+
 			x = self.x, y = self.y,
 			width = self.width, height = self.height,
 
@@ -69,6 +92,7 @@ do
 			enabled = {},
 			disable = function(self, player)
 				self.enabled[player] = false
+				if imageOnly then return end
 				ui.addTextArea(
 					self.id,
 					self.text_str,
@@ -83,6 +107,7 @@ do
 			end,
 			enable = function(self, player)
 				self.enabled[player] = true
+				if imageOnly then return end
 				ui.addTextArea(
 					self.id,
 					self.text_str,
@@ -97,6 +122,8 @@ do
 			end
 		}
 		local text = {
+			image = self.image,
+
 			x = self.x, y = self.y,
 			width = self.width, height = self.height + 2,
 
@@ -128,6 +155,19 @@ do
 			fnc = self.clickCallback,
 			class = textarea
 		}
+
+		if self.image then
+			self.image.x = self.image.x or (self.x + 5)
+			self.image.y = self.image.y or (self.y + 5)
+			interface:addImage(self.image)
+		end
+
+		if self.imageOnly then
+			textarea.color = nil
+			textarea.alpha = 0
+			interface:addTextArea(textarea):addTextArea(text)
+			return
+		end
 
 		interface:addTextArea({
 			x = self.x - 1, y = self.y - 1,
