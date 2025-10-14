@@ -450,11 +450,12 @@ local overall = {
   }
 }
 
-saveFile(21, {
+saveFile(41, {
   weekly = {
     wl = {},
     ts = "1754863200000",
     ranks = weekly,
   },
   ranking = overall,
+  coinranking = {},
 })

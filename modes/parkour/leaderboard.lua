@@ -2,11 +2,8 @@ local loaded_leaderboard = false
 do
 max_leaderboard_rows = 73
 local max_weekleaderboard_rows = 31
-leaderboard = {}
-weekleaderboard = {}
 -- {id, name, completed_maps, community}
 weeklyfile = {}
-roomleaderboard = {}
 local default_leaderboard_user = {0, nil, 0, "xx"}
 
 local function leaderboardSort(a, b)
@@ -19,10 +16,7 @@ end
 
 local remove, sort = table.remove, table.sort
 
-local function checkPlayersPosition(lbtype) -- 1 = weekly 2 = overall 3 = room
-	if lbtype == 3 then return end
-	local max_lb_rows = lbtype == 1 and max_weekleaderboard_rows or lbtype == 2 and max_leaderboard_rows
-	local lb = lbtype == 1 and weekleaderboard or lbtype == 2 and leaderboard
+local function checkPlayersPosition(lb, max_lb_rows)
 	local totalRankedPlayers = #lb or 0
 	local cachedPlayers = {}
 
@@ -49,28 +43,35 @@ local function checkPlayersPosition(lbtype) -- 1 = weekly 2 = overall 3 = room
 	totalRankedPlayers = totalRankedPlayers - counterRemoved
 
 	local cacheData
-	local playerFile, playerData, completedMaps
+	local playerFile, playerData, completedMaps, name
 
 	for player in next, in_room do
 		playerFile = players_file[player]
 
 		if playerFile then
-			completedMaps = lbtype == 1 and playerFile.week[1] or lbtype == 2 and playerFile.c
+			if lb == leaderboard then
+				completedMaps = playerFile.c
+			elseif lb == weekleaderboard then
+				completedMaps = playerFile.week[1]
+			elseif lb == coinleaderboard then
+				completedMaps = playerFile.coins
+			end
 			playerData = room.playerList[player]
 			if playerData then
 				playerId = playerData.id
 
 				if not bans[playerId] then
 					cacheData = cachedPlayers[playerId]
+					name = player
 					if cacheData then
-						cacheData[2] = player
+						cacheData[2] = name
 						cacheData[3] = completedMaps
 						cacheData[4] = playerData.community
 					else
 						totalRankedPlayers = totalRankedPlayers + 1
 						lb[totalRankedPlayers] = {
 							playerId,
-							player,
+							name,
 							completedMaps,
 							playerData.community
 						}
@@ -86,7 +87,7 @@ local function checkPlayersPosition(lbtype) -- 1 = weekly 2 = overall 3 = room
 		lb[index] = nil
 	end
 
-	if lbtype == 2 then
+	if lb == leaderboard then
 		local name, badges, badge
 		for pos = 1, #lb do
 			name = lb[pos][2]
@@ -119,8 +120,12 @@ onEvent("GameDataLoaded", function(data)
 		end
 
 		leaderboard = data.ranking
+		checkPlayersPosition(leaderboard, max_leaderboard_rows)
+	end
 
-		checkPlayersPosition(2)
+	if data.coinranking then
+		coinleaderboard = data.coinranking
+		checkPlayersPosition(coinleaderboard, max_leaderboard_rows)
 	end
 
 	if data.weekly then
@@ -167,7 +172,7 @@ onEvent("GameDataLoaded", function(data)
 			tfm.exec.chatMessage("<j>The weekly leaderboard has been reset.")
 		end
 
-		checkPlayersPosition(1)
+		checkPlayersPosition(weekleaderboard, max_weekleaderboard_rows)
 	end
 end)
 
@@ -178,7 +183,7 @@ onEvent("LeaderboardUpdate", function(player, time)
 	if playerData then
 		local playerId = playerData.id
 		local playerCommunity = playerData.community
-		local playerCount = not #roomleaderboard and 0 or #roomleaderboard
+		local playerCount = #roomleaderboard
 
 		roomleaderboard[playerCount + 1] = {
 			playerId,
@@ -189,8 +194,8 @@ onEvent("LeaderboardUpdate", function(player, time)
 
 		sort(roomleaderboard, roomLeaderboardSort)
 
-		if #roomleaderboard > 14 then
-			roomleaderboard[15] = nil
+		if playerCount == 99 then
+			roomleaderboard[99] = nil
 		end
 	end
 end)

@@ -1,5 +1,4 @@
 local max_leaderboard_rows
-local leaderboard
 local keyboard
 
 no_powers = {}

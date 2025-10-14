@@ -39,8 +39,8 @@ do
 		:avoidDoubleUpdates()
 		:loadTemplate(WindowBackground)
 		:setShowCheck(function(self, player, data, page, weekly)
-			if not loaded_leaderboard then
-				translatedChatMessage("leaderboard_not_loaded", player)
+			if not loaded_leaderboard and data ~= roomleaderboard then
+				self:show(player, roomleaderboard, 0, 3)
 				return false
 			end
 			if not data then
@@ -80,12 +80,17 @@ do
 			width = 105, height = 20,
 			canUpdate = true,
 			text = function(self, player, data, page, weekly)
+				local header
 
 				if weekly == 3 then
-					return translatedMessage("time", player)
+					header = translatedMessage("time", player)
+				elseif weekly == 4 then
+					header = translatedMessage("coins", player)
 				else
-					return translatedMessage("completed", player)
+					header = translatedMessage("completed", player)
 				end
+
+				return "<V><p align='center'>" .. header
 			end,
 			alpha = 0
 		})
@@ -113,8 +118,9 @@ do
 
 			canUpdate = true,
 			text = function(self, player, data, page, weekly)
+				local hide_names = weekly == 4 and not ranks.admin[player]
 				local names = {}
-				local row, name, unknown
+				local row, name, unknown, anonymous
 				for index = 1, 14 do
 					row = data[14 * page + index]
 
@@ -123,6 +129,11 @@ do
 							unknown = translatedMessage("unknown", player)
 						end
 						names[index] = unknown
+					elseif hide_names then
+						if not anonymous then
+							anonymous = translatedMessage("hidden_player", player)
+						end
+						names[index] = anonymous
 					else
 						names[index] = '<a href="event:profile:' .. row[2] .. '">' .. row[2] .. '</a>'
 					end
@@ -224,14 +235,17 @@ do
 		):loadComponent( -- Right arrow
 			Button.new():setText("&gt;")
 
-			:onClick(function(self, player, data, page, weekly)
+			:onClick(function(self, player)
 				local args = self.parent.args[player]
-				-- args[3] = weekly, args[2] = page, args[1] = data
-				self.parent:update(player, args[1], math.min(args[2] + 1, args[3] == 1 and 1 or args[3] == 2 and 4 or args[3] == 3 and 0), args[3])
+				local data = args[1]
+				local page = args[2]
+				local weekly = args[3]
+				page = math.min(page + 1, weekly == 1 and 1 or (weekly == 2 or weekly == 4) and 4 or weekly == 3 and 6)
+				self.parent:update(player, data, page, weekly)
 			end)
 
 			:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
-				if (page == 1 and weekly == 1) or (page == 4 and weekly == 2) or (page == 0 and weekly == 3) then
+				if (page == 1 and weekly == 1) or (page == 4 and (weekly == 2 or weekly == 4)) or (page == 6 and weekly == 3) then
 					self:disable(player)
 				else
 					self:enable(player)
@@ -243,10 +257,16 @@ do
 
 		-- Leaderboard type
 		:loadComponent( -- Overall button
-			Button.new():setTranslation("overall_lb")
+			Button.new()
 
 			:onClick(function(self, player)
 				local args = self.parent.args[player]
+				local lbtype = args[3]
+				if lbtype == 2 then return end
+				if not loaded_leaderboard then
+					translatedChatMessage("leaderboard_not_loaded", player)
+					return
+				end
 				self.parent:update(player, leaderboard, 0, 2)
 			end):canUpdate(true)
 			:onUpdate(function(self, player, data, page, weekly)
@@ -255,12 +275,28 @@ do
 				else
 					self:enable(player)
 				end
-			end):setPosition(85, 300):setSize(90, 20)
+			end):setPosition(140, 290)
+			:setImage({
+				image = function(self, player)
+					if self.button.enabled[player] then
+						return "img@199eabf6f71"
+					else
+						return "img@199eabf292b"
+					end
+				end,
+				canUpdate = true,
+			}, 30, 30)
 		):loadComponent( -- Weekly button
-			Button.new():setTranslation("weekly_lb")
+			Button.new()
 
 			:onClick(function(self, player)
 				local args = self.parent.args[player]
+				local lbtype = args[3]
+				if lbtype == 1 then return end
+				if not loaded_leaderboard then
+					translatedChatMessage("leaderboard_not_loaded", player)
+					return
+				end
 				self.parent:update(player, weekleaderboard, 0, 1)
 			end)
 
@@ -270,14 +306,58 @@ do
 				else
 					self:enable(player)
 				end
-			end) 
+			end)
 
-			:setPosition(190, 300):setSize(90, 20)
-		):loadComponent( -- Room button
-			Button.new():setTranslation("room")
+			:setPosition(190, 290)
+			:setImage({
+				image = function(self, player)
+					if self.button.enabled[player] then
+						return "img@199eabf55f0"
+					else
+						return "img@199eabf32ef"
+					end
+				end,
+				canUpdate = true,
+			}, 30, 30)
+		):loadComponent( -- Coin button
+			Button.new()
 
 			:onClick(function(self, player)
 				local args = self.parent.args[player]
+				local lbtype = args[3]
+				if lbtype == 4 then return end
+				if not loaded_leaderboard then
+					translatedChatMessage("leaderboard_not_loaded", player)
+					return
+				end
+				self.parent:update(player, coinleaderboard, 0, 4)
+			end)
+
+			:canUpdate(true):onUpdate(function(self, player, data, page, weekly)
+				if weekly == 4 then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end)
+			:setPosition(240, 290)
+			:setImage({
+				image = function(self, player)
+					if self.button.enabled[player] then
+						return "img@199eac6e20c"
+					else
+						return "img@199eac6d471"
+					end
+				end,
+				canUpdate = true,
+			}, 30, 30)
+		):loadComponent( -- Room button
+			Button.new()
+
+			:onClick(function(self, player)
+				local args = self.parent.args[player]
+				local lbtype = args[3]
+				if lbtype == 3 then return end
 				self.parent:update(player, roomleaderboard, 0, 3)
 			end)
 
@@ -287,8 +367,18 @@ do
 				else
 					self:enable(player)
 				end
-			end) 
+			end)
 
-			:setPosition(295, 300):setSize(90, 20)
+			:setPosition(290, 290)
+			:setImage({
+				image = function(self, player)
+					if self.button.enabled[player] then
+						return "img@199eabf7749"
+					else
+						return "img@199eabf3fc7"
+					end
+				end,
+				canUpdate = true,
+			}, 30, 30)
 		)
 end

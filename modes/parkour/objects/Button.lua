@@ -157,6 +157,7 @@ do
 		}
 
 		if self.image then
+			self.image.button = textarea
 			self.image.x = self.image.x or (self.x + 5)
 			self.image.y = self.image.y or (self.y + 5)
 			interface:addImage(self.image)

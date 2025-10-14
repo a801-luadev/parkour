@@ -33,7 +33,7 @@ local filemanagers = {
 		}
 	}):disableValidityChecks():prepare(),
 
-	["21"] = FileManager.new({
+	["41"] = FileManager.new({
 		type = "dictionary",
 		map = {
 			{
@@ -93,6 +93,28 @@ local filemanagers = {
 						type = "dictionary",
 						objects = {
 							type= "number"
+						}
+					}
+				}
+			},
+			{
+				name = "coinranking",
+				type = "array",
+				objects = {
+					type = "array",
+					map = {
+						{
+							type = "number"
+						},
+						{
+							type = "string",
+						},
+						{
+							type = "number"
+						},
+						{
+							type = "string",
+							length = 2
 						}
 					}
 				}

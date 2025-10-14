@@ -220,6 +220,7 @@ translations.tr = {
 	idk = "Bilmiyorum",
 	vote_map = "<font color='#ffffff' size='13'><b>Bu haritayı beğendin mi? <font size='14'><a href='event:mapPollYes'><PT>Evet</a> <a href='event:mapPollidk'><N>Bilmiyorum</a> <a href='event:mapPollNo'><R>Hayır</a>",
 	unknown = "Bilinmiyor",
+	hidden_player = "Anonim Oyuncu",
 	powers = "Beceriler",
 	press = "<vp>%s Tuşuna Bas",
 	click = "<vp>Sol tık",

@@ -26,6 +26,7 @@ local map_name
 local map_gravity = 10
 local cooldownMultiplier = 1
 
+local leaderboard, weekleaderboard, roomleaderboard, coinleaderboard = {}, {}, {}, {}
 local save_queue
 
 local difficulty_color = { 'vp', 'j', 'ch2' }
