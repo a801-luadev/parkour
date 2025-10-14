@@ -959,7 +959,7 @@ newCmd({ name = "report",
 end })
 
 newCmd({ name = "karma",
-	rank = "mod",
+	rank = "admin",
 	min_args = 1,
 	fn = function(playerName, args, cmd)
 	local target = args[1]:lower():gsub('^+?[a-z]', string.upper)
