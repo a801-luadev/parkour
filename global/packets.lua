@@ -18,6 +18,7 @@ packets.rooms = {
   paused_events = 17,
   suspicious = 18,
   verify = 19,
+  map_stats = 20,
 }
 
 packets.bots = {

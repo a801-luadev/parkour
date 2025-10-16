@@ -35,5 +35,6 @@
 	{"type": "require-dir", "dir": "modes/parkour/events", "recursive": false},
 
 	{"type": "require-file", "file": "modes/parkour/moderation.lua"},
+	{"type": "require-file", "file": "modes/parkour/map_stats.lua"},
 	{"type": "require-file", "file": "modes/parkour/init.lua"}
 ]
