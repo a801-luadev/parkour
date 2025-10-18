@@ -33,37 +33,31 @@ local shop_items = {
 			price = 1,
 			img = "18c73e40d6d.png",
 			id = 1,
-			uses = 100,
 		},
 		{
 			price = 1,
 			img = "img@197ed411401",
 			id = 3,
-			uses = 10,
 		},
 		{
 			price = 1,
 			img = "img@197ed41077c",
 			id = 4,
-			uses = 10,
 		},
 		{
 			price = 1,
 			img = "img@197ed410214",
 			id = 5,
-			uses = 10,
 		},
 		{
 			price = 1,
 			img = "img@197ed3a7e0a",
 			id = 6,
-			uses = 10,
 		},
 		{
 			price = 5,
 			img = "img@198008a0cb4",
 			id = 2,
-			uses = 100,
 		},
 	},
 	{ -- smallbox
