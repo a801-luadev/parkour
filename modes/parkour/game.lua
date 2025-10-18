@@ -79,14 +79,16 @@ do
 		newGame(code, reversed)
 	end
 
-	local respawnPlayer = tfm.exec.respawnPlayer
-	tfm.exec.respawnPlayer = function(player)
-		local info = room.playerList[player]
-		if info and info.look:find('327;', 1, true) == 1 then
-			tfm.exec.setPlayerLook(player, "1;0,0,0,0,0,0,0,0,0,0,0,0")
-			translatedChatMessage("bad_outfit", player)
+	if tfm_mode ~= 'village' then
+		local respawnPlayer = tfm.exec.respawnPlayer
+		tfm.exec.respawnPlayer = function(player)
+			local info = room.playerList[player]
+			if info and info.look:find('327;', 1, true) == 1 then
+				tfm.exec.setPlayerLook(player, info.look:gsub('327;', '1;'))
+				translatedChatMessage("bad_outfit", player)
+			end
+			return respawnPlayer(player)
 		end
-		return respawnPlayer(player)
 	end
 end
 
