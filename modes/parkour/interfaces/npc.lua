@@ -1,7 +1,13 @@
-do	
+do
+local confirming = {}
 local closeButton = Button.new()
 NPCInterface = Interface.new(200, 35, 400, 350, true)
 	:loadTemplate(WindowBackground)
+	:setShowCheck(function(self, player)
+		confirming[player] = nil
+		return true
+	end)
+
 	:addTextArea({ -- Title
 		x = 10, y = 5,
 		width = 380, height = 30,
@@ -50,11 +56,18 @@ NPCInterface = Interface.new(200, 35, 400, 350, true)
 		Button.new()
 		:setText(function(self, player)
 			local data = self.parent.args[player][1]
-			return data.left_button and translatedMessage(data.left_button, player) or ""
+			if not data.left_button then return '' end
+			if confirming[player] == true then return translatedMessage('yes', player) end
+			return translatedMessage(data.left_button, player)
 		end)
 		:onClick(function(self, player)
 			if eventTradeNPC then
 				local data = self.parent.args[player][1]
+				if confirming[player] ~= true then
+					confirming[player] = true
+					self.parent:update(player, data)
+					return
+				end
 				eventTradeNPC(player, data.name, true)
 			end
 		end)
@@ -97,11 +110,18 @@ NPCInterface = Interface.new(200, 35, 400, 350, true)
 		Button.new()
 		:setText(function(self, player)
 			local data = self.parent.args[player][1]
-			return data.right_button and translatedMessage(data.right_button, player) or ''
+			if not data.right_button then return '' end
+			if confirming[player] == false then return translatedMessage('yes', player) end
+			return translatedMessage(data.right_button, player)
 		end)
 		:onClick(function(self, player)
 			if eventTradeNPC then
 				local data = self.parent.args[player][1]
+				if confirming[player] ~= false then
+					confirming[player] = false
+					self.parent:update(player, data)
+					return
+				end
 				eventTradeNPC(player, data.name, false)
 			end
 		end)
