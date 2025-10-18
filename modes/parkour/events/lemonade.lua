@@ -405,7 +405,7 @@ do
         -- check ingredients first
         for i=3, 6 do
           if file:getItemAmount(i, 0) < 1 then
-            translatedChatMessage("lemonade_insufficient", player)
+            translatedChatMessage("insufficient_event_coins", player)
             return
           end
         end
@@ -452,7 +452,7 @@ do
           NPCInterface:remove(player)
         end
       else
-        NPCInterface:update(player, shop, "lemonade_insufficient")
+        NPCInterface:update(player, shop, "insufficient_event_coins")
       end
     end)
   end

@@ -32,11 +32,26 @@ onEvent("GameDataLoaded", function(data)
 		parkour_npc = data.npc
 
     -- changes 4 times a day (6 hour intervals)
-    local counter = math.floor(os.time() / (1000 * 60 * 60 * 6))
-    local def
+    local now = os.time()
+    local counter = math.floor(now / (1000 * 60 * 60 * 6))
+    local day, month, year = os.date("%d"), os.date("%m"), os.date("%Y")
+    local def, start_ts, end_ts
 
     for name, npc in next, parkour_npc do
-      npc.active = npc.active == 0 or (counter % npc.active) == 0
+      if npc.active == 0 then
+        npc.active = false
+      elseif npc.active == 1 then
+        npc.active = true
+      elseif npc.active > 200000000 then
+        npc.active = now < npc.active
+      elseif npc.active > 100000000 then
+        ms, ds, me, de = tostring(npc.active):match('1(%d%d)(%d%d)(%d%d)(%d%d)')
+        start_ts = os.time({ year=year, month=ms, day=ds })
+        end_ts = os.time({ year=year, month=me, day=de })
+        npc.active = now > start_ts and now < end_ts
+      else
+        npc.active = (counter % npc.active) == 0
+      end
 
       if npc.active then
         def = split(npc.definition)

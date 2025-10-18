@@ -21,6 +21,7 @@ translations.en = {
 	room_name_length = "<ROSE><b>[ERROR]</b> The room name exceeds the allowed length of <b>45</b> characters. Please choose a shorter name.",
 	bad_outfit = "<r>Your outfit contains an item/fur that cannot be used in parkour.",
 	insufficient_coins = "<v>[#] <r>You don't have enough coins.",
+	insufficient_event_coins = "<r>Hmm, something's off. Mind checking your bag again?",
 
 	-- Help window
 	help = "Help",
@@ -89,7 +90,10 @@ translations.en = {
 	review_disabled = "<v>[#] <d>Review mode is disabled.",
 	verify_sent = "<v>[#] <j>Discord verification request is sent.",
 	claim_done = "<v>[#] <j>You have claimed a reward code successfully.",
-	npc_sell_power = "This shop power is on sale!",
+	npc_sell_power = "<v>This shop power is on sale!",
+	npc_sell_badge = "<v>Bring me enough coins of this type and get the badge!",
+	npc_sell_skin = "<v>Do you want this skin? Get me this type of coins.",
+	npc_sell_skin_sale = "<v>This skin is on sale!",
 	golem_around = "<CH>Someone is using golem power, you can hold <V>SPACE <CH>key to get help!",
 
 	-- Easter Eggs
@@ -158,7 +162,6 @@ translations.en = {
 	lemonade_rip = "Bring me 30 lemonades and I'll hand over this Tombstone skin!",
 	lemonade_balloon = "Hey there! Want a balloon? Then bring me 10 lemonades!",
 	lemonade_cloud = "This Cloud doesn't look like it's raining anytime soon. Want it? Then bring me 20 lemonades!",
-	lemonade_insufficient = "<r>Hmm, something's off. Mind checking your bag again?",
 	lemonade_found = "<v>[#] <j>Sweet! Another step closer to making awesome lemonade!",
 	lemonade_toomuch = "<v>[#] <r>You've collected plenty of this for lemonade. Maybe use some first?",
 
@@ -252,6 +255,7 @@ translations.en = {
 	smol_best = "<j>New smol mode room leader: <v>%s</v> with <vp>%s</vp> map completions!",
 	event = "Event",
 	settings = "Settings",
+	npc_thanks = "<j>Thank you!",
 
 	-- Power names
 	balloon = "Balloon",

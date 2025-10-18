@@ -21,6 +21,7 @@ translations.tr = {
 	room_name_length = "<ROSE><b>[HATA]</b> Oda adı, izin verilen <b>45</b karakter uzunluğunu aşıyor. Lütfen daha kısa bir oda adı seçin.",
 	bad_outfit = "<r>Farenizin üzerinde parkour odalarında kullanılamayan bir eşya/kürk var.",
 	insufficient_coins = "<v>[#] <r>Yeterli miktarda coin bulunmamakta.",
+	insufficient_event_coins = "<r>Sanırım bir şeyler yanlış, çantanı tekrar kontrol eder misin?",
 
 	-- Help window
 	help = "Yardım",
@@ -85,7 +86,10 @@ translations.tr = {
 	powers_disabled = "<r>Yetenekler bu odada çalışmamaktadır.",
 	powers_enabled = "<vp>Yetenekler tekrardan kullanılabilir.",
 	verify_sent = "<v>[#] <j>Discord doğrulama isteği gönderildi.",
-	npc_sell_power = "Bu market gücü indirimde!",
+	npc_sell_power = "<v>Bu market gücü indirimde!",
+	npc_sell_badge = "<v>Bu coin türünde yeterli miktarda getir ve bu rozet senin olsun!",
+	npc_sell_skin = "<v>Bu eşyayı istiyor musun? Bana bu coinlerden getir.",
+	npc_sell_skin_sale = "<v>Bu eşya indirimde!",
 	golem_around = "<CH>Birisi golem gücünü kullanıyor, <V>BOŞLUK <CH>tuşuna basılı tutarak yardım alabilirsin!",
 
 	-- Easter Eggs
@@ -154,7 +158,6 @@ translations.tr = {
 	lemonade_rip = "Eğer 30 adet limonata getirirsen, sana bu Mezar Taşı görünümünü verebilirim.",
 	lemonade_balloon = "Selam! Balon ister misin? o zaman bana 10 adet limonata getir!",
 	lemonade_cloud = "Bu Bulut kesinlikle yağmur yağdırmıyor. Onu ister misin? O zaman bana 20 adet limonata getirmelisin!",
-	lemonade_insufficient = "<r>Sanırım bir şeyler yanlış, çantanı tekrar kontrol eder misin?",
 	lemonade_found = "<v>[#] <j>Harika! Mükemmel bir limonataya bir adım daha yaklaştın!",
 	lemonade_toomuch = "<v>[#] <r>Limonata yapmak için bundan fazlasıyla var. Önce birazını kullan istersen?",
 
@@ -247,6 +250,7 @@ translations.tr = {
 	smol_best = "<j>Yeni smol oda lideri: %s, %s harita tamamladı!",
 	event = "Etkinlik",
 	settings = "Ayarlar",
+	npc_thanks = "<j>Teşekkürler!",
 
 	-- Power names
 	balloon = "Balon",
