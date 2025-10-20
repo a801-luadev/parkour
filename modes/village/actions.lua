@@ -58,6 +58,17 @@ function npc_actions.sell_skin(player, npc)
   NPCInterface:show(player, shop)
 end
 
+function npc_actions.chat(player, npc)
+  local msg_type = npc.param[1]
+  local key = npc.param[2]
+  if msg_type == 'random' then
+    local first = npc.param[3]
+    local last = npc.param[4]
+    key = key .. '_' .. math.random(first, last)
+  end
+  translatedChatMessage(key, player)
+end
+
 onEvent("TradeNPC", function(player, npc)
   local shop = npc_shop[npc]
   local file = players_file[player]
