@@ -950,6 +950,13 @@ newCmd({ name = "setcp",
 		tfm.exec.chatMessage("<v>[#] <d>Changes will be applied in the next round.", player)
 	end })
 
+newCmd({ name = "hideall",
+	fn = function(player)
+		for target in next, in_room do
+			tfm.exec.addImage("img@19a052b8a83", "%" .. target, 0, 0, player)
+		end
+	end })
+
 onEvent("PlayerDataParsed", function(player, data)
 	if players_file[player].spec then
 		enableSpecMode(player, true)
