@@ -119,6 +119,8 @@ translations.hu = {
 	found_gift4 = "<ch>Gratuláció neked <J>%s</J> mert nyertél <J>%s</J> érmét! A Karácsony szelleme fényesen ragyog!",
 	found_gift5 = "<ch>Mikulás ajándéka megjutalmazta <J>%s</J> -t <J>%s</J> káprázatos érmével!",
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

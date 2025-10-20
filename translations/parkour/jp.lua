@@ -119,6 +119,8 @@ translations.jp = {
 	found_gift4 = "<ch><J>%s</J>はコインを<J>%s</J>枚ゲットした！おめでとう。クリスマスを感じるね~",
 	found_gift5 = "<ch>サンタさんのプレゼントは<J>%s</J>にキラキラのコインを<J>%s</J>枚授けた！",
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

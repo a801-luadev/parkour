@@ -119,6 +119,8 @@ translations.fr = {
 	found_gift4 = "<ch>Félicitations à <J>%s</J> d'avoir gagné <J>%s</J> pièces! L'esprit de Noël embaume l'air !",
 	found_gift5 = "<ch>Le cadeau de Noël a englouti <J>%s</J> de <J>%s</J> scintillantes pièces !",
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

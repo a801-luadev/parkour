@@ -119,6 +119,8 @@ translations.ru = {
 	found_gift4 = "<ch>Поздравляем <J>%s</J> с выигрышем <J>%s</J> монет! Дух Рождества сияет ярко!",
 	found_gift5 = "<ch>Санта одарил <J>%s</J> <J>%s</J> ослепительными монетами!",
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

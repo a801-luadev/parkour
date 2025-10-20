@@ -81,6 +81,8 @@ translations.ro = {
 
 	-- Christmas
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

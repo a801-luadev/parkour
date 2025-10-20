@@ -145,6 +145,8 @@ translations.pl = {
 	found_gift4 = "<ch> Gratulacje dla <J>%s</J> wygranej <J>%s</J> ,monet!  Duch Bożego narodzenia jaśnieje!",
 	found_gift5 = "<ch> Prezentem od świętego Mikołaja został obdarowany <J>%s</J> a w nim <J>%s</J> olśniewających monet!",
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

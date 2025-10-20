@@ -77,3 +77,10 @@ onEvent("TalkToNPC", function(player, name)
   if not action then return end
   action(player, npc)
 end)
+
+newCmd({ name = "pos",
+	fn = function(player)
+    local info = room.playerList[player]
+    if not info then return end
+		sendChatFmt("%s;%s", player, info.x, info.y)
+	end })

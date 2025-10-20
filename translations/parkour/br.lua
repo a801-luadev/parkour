@@ -118,6 +118,8 @@ translations.br = {
 	found_gift4 = "<ch>Parabéns para <J>%s</J> que ganhou <J>%s</J> moedas! O espirito natalino esta com tudo!",
 	found_gift5 = "<ch>Papai Noel concedeu <J>%s</J> com <J>%s</J> lindas moedas!",
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

@@ -81,6 +81,8 @@ translations.he = {
 
 	-- Christmas
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

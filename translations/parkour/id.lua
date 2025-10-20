@@ -119,6 +119,8 @@ translations.id = {
 	found_gift4 = "<ch>Selamat kepada <J>%s</J> yang memenangkan <J>%s</J> koin! Semangat Natal bersinar terang!",
 	found_gift5 = "<ch>Hadiah dari Santa telah memberkahi <J>%s</J> dengan <J>%s</J> koin yang memukau!",
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

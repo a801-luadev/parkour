@@ -109,6 +109,8 @@ translations.es = {
 
 	-- Christmas
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

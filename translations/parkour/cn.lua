@@ -119,6 +119,8 @@ translations.cn = {
 	found_gift4 = "<ch>恭喜 <J>%s</J> 得到了 <J>%s</J> 枚金幣! 聖誕氣氛更濃烈了!",
 	found_gift5 = "<ch>聖誕老人的禮物賜給了 <J>%s</J> <J>%s</J> 枚非常吸引的金幣!",
 
+	-- Halloween
+
 	-- Lemonade
 
 	-- Miscellaneous

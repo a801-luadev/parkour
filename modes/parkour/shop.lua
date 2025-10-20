@@ -18,12 +18,22 @@ end
 local shop_currencies = {
 	-- ec index, image, scale
 	coins = { 0, "18b2a0bc298.png" },
+	-- Christmas
 	gifts = { 1, "18c73e40d6d.png", 0.5 },
+	-- Lemonade
 	lemonade = { 2, "img@198008a0320" },
 	ice = { 3, "img@197ed411401" },
 	sugar = { 4, "img@197ed41077c" },
 	water = { 5, "img@197ed410214" },
 	lemon = { 6, "img@197ed3a7e0a" },
+	-- Halloween Materials
+	bone = { 7, "199afb51582.png" },
+	spider_silk = { 8, "199afb45ff4.png" },
+	bat_wing = { 9, "199afb4823a.png" },
+	ghost_dust = { 10, "199afb4f2ba.png" },
+	pumpkin_seed = { 11, "199afb4d0bf.png" },
+	crystal_shard = { 12, "199afb4a9ed.png" },
+	halloween_potion = { 13, "199c9e183ac.png", 0.5 },
 }
 local shop_tabs = { [0]="event", "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
 local shop_tab_to_power = { 6, 10, 11, 4, 9, 7, 8, 3, 3 }
@@ -58,6 +68,43 @@ local shop_items = {
 			price = 5,
 			img = "img@198008a0cb4",
 			id = 2,
+		},
+		-- Halloween Materials
+		{
+			price = 1,
+			img = "199afb51582.png",
+			id = 7,
+		},
+		{
+			price = 1,
+			img = "199afb45ff4.png",
+			id = 8,
+		},
+		{
+			price = 2,
+			img = "199afb4823a.png",
+			id = 9,
+		},
+		{
+			price = 2,
+			img = "199afb4f2ba.png",
+			id = 10,
+		},
+		{
+			price = 3,
+			img = "199afb4d0bf.png",
+			id = 11,
+		},
+		{
+			price = 3,
+			img = "199afb4a9ed.png",
+			id = 12,
+		},
+		-- Halloween Potion
+		{
+			price = 15,
+			img = "199c9e183ac.png",
+			id = 13,
 		},
 	},
 	{ -- smallbox
@@ -389,6 +436,47 @@ local shop_skins = {
 	shop_scale = 0.7,
 	tab = 7,
 	y = 0.55
+},
+
+-- Halloween
+[2001] = {
+	currency = 'halloween_potion',
+	img = 'img@19a03dc061c',
+	price = 20,
+	shop_scale = 0.7,
+	tab = 6,
+},
+[2002] = {
+	currency = 'halloween_potion',
+	img = 'img@19a03e34014',
+	price = 10,
+	tab = 7,
+},
+[2003] = {
+	currency = 'halloween_potion',
+	img = 'img@19a03db56c4',
+	price = 10,
+	tab = 2,
+},
+[2004] = {
+	currency = 'halloween_potion',
+	img = 'img@19a03db742d',
+	price = 5,
+	tab = 2,
+},
+[2005] = {
+	currency = 'halloween_potion',
+	img = 'img@19a03db81d5',
+	price = 5,
+	tab = 4,
+},
+[2006] = {
+	currency = 'halloween_potion',
+	img = 'img@19a03f68aa1',
+	shop_img = 'img@19a04a02e1e',
+	price = 20,
+	tab = 3,
+	y = 0.3,
 },
 }
 local file_skins = {}

@@ -59,6 +59,7 @@ function npc_actions.sell_skin(player, npc)
 end
 
 function npc_actions.chat(player, npc)
+  if not checkCooldown(player, "npc_" .. npc.name, 5000) then return end
   local msg_type = npc.param[1]
   local key = npc.param[2]
   if msg_type == 'random' then
