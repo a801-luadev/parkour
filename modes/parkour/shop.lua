@@ -43,68 +43,81 @@ local shop_items = {
 			price = 1,
 			img = "18c73e40d6d.png",
 			id = 1,
+			limit = 100,
 		},
 		{
 			price = 1,
 			img = "img@197ed411401",
 			id = 3,
+			limit = 10,
 		},
 		{
 			price = 1,
 			img = "img@197ed41077c",
 			id = 4,
+			limit = 10,
 		},
 		{
 			price = 1,
 			img = "img@197ed410214",
 			id = 5,
+			limit = 10,
 		},
 		{
 			price = 1,
 			img = "img@197ed3a7e0a",
 			id = 6,
+			limit = 10,
 		},
 		{
 			price = 5,
 			img = "img@198008a0cb4",
 			id = 2,
+			limit = 100,
 		},
 		-- Halloween Materials
 		{
 			price = 1,
 			img = "199afb51582.png",
 			id = 7,
+			limit = 100,
 		},
 		{
 			price = 1,
 			img = "199afb45ff4.png",
 			id = 8,
+			limit = 100,
 		},
 		{
 			price = 2,
 			img = "199afb4823a.png",
 			id = 9,
+			limit = 100,
 		},
 		{
 			price = 2,
 			img = "199afb4f2ba.png",
 			id = 10,
+			limit = 100,
 		},
 		{
 			price = 3,
 			img = "199afb4d0bf.png",
 			id = 11,
+			limit = 100,
 		},
 		{
 			price = 3,
 			img = "199afb4a9ed.png",
 			id = 12,
+			limit = 100,
 		},
 		-- Halloween Potion
 		{
 			price = 15,
 			img = "199c9e183ac.png",
 			id = 13,
+			limit = 200,
 		},
 	},
 	{ -- smallbox
