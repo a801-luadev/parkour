@@ -16,6 +16,10 @@ local times = {
 	checkpoint = {},
 	movement = {}
 }
+local cp_img = {
+	[true] = "17797d878fa.png", -- soulmate
+	[false] = "17797d860b6.png", -- no soulmate
+}
 local no_help, ghost, golem = {}, {}, {}
 local activeEvents = {}
 local spec_mode = {}
@@ -123,13 +127,7 @@ local function addCheckpointImage(player, x, y)
 	end
 
 	local data = room.playerList[player]
-	local img
-	if data and data.spouseId then
-		img = "17797d878fa.png" -- soulmate
-	else
-		img = "17797d860b6.png" -- no soulmate
-	end
-
+	local img = cp_img[data and data.spouseId and true or false]
 	checkpoints[player] = tfm.exec.addImage(img, "!1", x - 15, y - 15, player)
 end
 
