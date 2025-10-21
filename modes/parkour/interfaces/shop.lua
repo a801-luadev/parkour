@@ -170,7 +170,7 @@ do
 				end
 				item = data[page + index - 1]
 				if item then
-					images[index] = tfm.exec.addImage(item.shop_img_fnc and file and item.shop_img_fnc(player, file) or item.shop_img or item.img, "~20", x + 30, y + (item.uses and 10 or 0), player, item.shop_scale, item.shop_scale, 0, 1, 0.5, 0.5)
+					images[index] = tfm.exec.addImage(item.shop_img_fnc and file and item.shop_img_fnc(player, file) or item.shop_img or item.img, "~20", x + 30, y + ((item.limit or item.uses) and 10 or 0), player, item.shop_scale, item.shop_scale, 0, 1, 0.5, 0.5)
 					x = x + 75
 
 					if index == 9 then
@@ -199,7 +199,7 @@ do
 				local y = self.y + 15
 				local item
 				local file = players_file[player]
-				local color, currency, itemPrice, uses
+				local color, currency, itemPrice, uses, text
 
 				for index = 1, 18 do
 					item = data[page + index - 1]
@@ -241,11 +241,18 @@ do
 								true
 							)
 						else
-							if item.uses then
+							if item.limit or item.uses then
 								uses = file:getItemAmount(item.id, tab)
-								if uses == 0 then uses = '' end
+								if uses == 0 and item.uses then uses = '' end
+								text = "<b><font size='10'><p align='right'>" .. uses
+								if item.limit then
+									text = text .. "/" .. item.limit
+								end
+								if item.uses then
+									text = text .. "\n\n\n\n<j>x" .. item.uses
+								end
 								ui.addTextArea(
-									consumableTAs[index], "<b><font size='10'><p align='right'>" .. uses .. "\n\n\n\n<j>x" .. item.uses, player,
+									consumableTAs[index], text, player,
 									x, y + 20, 55, 70,
 									0, 0, 0,
 									true
