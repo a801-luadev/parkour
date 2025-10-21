@@ -19,6 +19,9 @@ translations.es = {
 	leaderboard_not_loaded = "<r>La tabla de clasificación aun no ha sido cargada. Espera un minuto.",
 	max_power_keys = "<v>[#] <r>Solo puedes tener como máximo %s poderes en la misma tecla.",
 	room_name_length = "<ROSE><b>[ERROR]</b> El nombre de la sala excede el tamaño máximo de <b>45</b> caracteres. Por favor elige un nombre más corto.",
+	bad_outfit = "<r>Tu atuendo contiene un accesorio/piel que no puede ser usado en parkour.",
+	insufficient_coins = "<v>[#] <r>No tienes suficientes monedas.",
+	insufficient_event_coins = "<r>Hmm, algo anda mal. Te importaria revisar tu cartera de nuevo?",
 
 	-- Help window
 	help = "Ayuda",
@@ -33,6 +36,16 @@ translations.es = {
 	help_changelog = "<font size='13'><p align='center'><o>Versión 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>Se implementó un sistema de misiones. (Presiona <J><B>,</B></J> para abrir el panel de misiones.)\n\n<font size='11'>• <font size='13'>Se añadió una opción para desactivar todas las teclas espciales como ranking, ayuda, tienda, etc.\n\n<font size='11'>• <font size='13'>Se añadió el comando <B><J>!cp [PlayerName#tag]</J></B> para ir al checkpoint del jugador especificado.",
 
 	-- Report Window
+	report_troll = "Troll",
+	report_troll_desc = "Impedir a alguien avanzar al siguiente punto de control (o completar el mapa) abusando de los poderes de parkour/objetos.",
+	report_force = "Ayuda forzada",
+	report_force_desc = "Intencionalmente y repetitivamente intentar avanzar a alguien al siguiente punto de control (o completar el mapa)<r>contra su voluntad</r> usando poderes de parkour/objetos.\n<CH>Si alguien tiene una linea roja sobre su nombre, lo cual significa que no quiere ayuda.</CH>",
+	report_hack = "Hack",
+	report_hack_desc = "Usando herramientas externas/programas para tener ventajas injustas.\n<rose>Tambien, deberias reportarlo al Staff de Transformice usando /report command.</rose>\"",
+	report_bug = "Abuso de bugs",
+	report_send = "<r><b>Enviar reporte</b>",
+	report_reason = "<r><b>Razón:</b> <n>",
+	report_room = "<r><b>Sala:</b> <n>",
 
 	-- Congratulation messages
 	reached_level = "<d>¡Felicitaciones! Completaste el nivel <vp>%s</vp>. (<t>%ss</t>)",
@@ -41,6 +54,7 @@ translations.es = {
 
 	-- Information messages
 	mod_apps = "<j>¡Las aplicaciones para moderador de parkour están abiertas! Usa este link: <rose>%s",
+	mapper_apps = "<j>Las aplicaciones para mapeadores de parkour están abiertas! Usa este link: <rose>%s",
 	staff_power = "<r>El staff de Parkour <b>no tiene</b> ningún poder afuera de las salas de #parkour.",
 	donate = "<vp>¡Escribe <b>!donate</b> si te gustaría donar a este módulo!",
 	paused_events = "<cep><b>[¡Advertencia!]</b> <n>El módulo está entrando en estado crítico y está siendo pausado.",
@@ -48,6 +62,7 @@ translations.es = {
 	welcome = "<n>¡Bienvenido a <t>#parkour</t>!",
 	module_update = "<r><b>[¡Advertencia!]</b> <n>El módulo se actualizará en <d>%02d:%02d</d>.",
 	leaderboard_loaded = "<j>La tabla de clasificación ha sido cargada. Presiona L para abrirla.",
+	shop_loaded = "<j>Los objetos de la tienda han sido cargados.",
 	kill_minutes = "<R>Tus poderes fueron desactivados por %s minutos.",
 	permbanned = "<r>Has sido baneado permanentemente de #parkour.",
 	tempbanned = "<r>Has sido baneado de #parkour por %s minutos.",
@@ -62,6 +77,8 @@ translations.es = {
 	report_done = "<j>Gracias por tu reporte.",
 	nohelp = "<r>Le estás mostrando a otros que no querés ayuda al activar la línea roja. Presiona <v>F</v> para desactivarla.",
 	quest_map = "<ch>¡Este es el mapa @%s de tu misión!",
+	powers_disabled = "<r>Los poderes están deshabilitados en esta sala.",
+	powers_enabled = "<vp>Los poderes estan habilitados nuevamente.",
 
 	-- Easter Eggs
 	easter_egg_0 = "<ch>La cuenta atrás empezó...",
@@ -110,6 +127,51 @@ translations.es = {
 	-- Christmas
 
 	-- Halloween
+	halloween_msg_2 = "<J>Un susurro sombrío se extiende a través del aire... colecta los <B>dark ingredients</B> antes de que se esfumen.",
+	halloween_collect_hint = "<ROSE>Recolecta materiales y ve a <b><u>/room #parkour0cauldron</u></b> para preparar pociones!",
+	halloween_cauldron_hint = "<ROSE>Puedes ir a <b><u>/room #parkour0village</u></b> para intercambiar tus pociones por recompensas exclusivas!",
+	halloween_npc_3 = "Shh... incluso los fantasmas guardan silencio cuando hablo.",
+	halloween_npc_4 = "Ya estás atrapado en mi tela? Que predecible.",
+	halloween_npc_5 = "Aún luces vivo. No te preocupes... No durará.",
+	halloween_npc_6 = "Los murciélagos me dijeron tu nombre. Les dije que lo olvidaran.",
+	halloween_npc_7 = "Las insignias se desvanecen, pero el arrepentimiento no.",
+	halloween_npc_8 = "<O>No te muevas! Estoy leyendo tu aura. Hmm... Tostada quemada y malas decisiones.",
+	halloween_npc_10 = "<O>Me volvi invisible ayer. Todos me ignoraron... Eso prueba que funcionó.",
+	halloween_npc_11 = "<O>Quieres ver magia verdadera? Cierra los ojos... Allí. Aterrador, no es así?",
+	halloween_npc_12 = "<O>No necesito dormir. Los sueños vienen a mi en busca de consejos.",
+	halloween_npc_14 = "<O>Silencio! Estoy concentrando mi energía... Principalmente en verme impresionante.",
+	halloween_npc_15 = "<O> Los espíritus me llaman poderoso. Los vecinos me llaman problematico.",
+	halloween_npc_16 = "<O>Podría convertirte en un sapo... pero ya prometí al último que dejaría de hacerlo.",
+	halloween_bone = "<N>Hueso</N>",
+	halloween_spider_silk = "<N>Tela de araña</N>",
+	halloween_bat_wing = "<PT>Ala de muciélago</PT>",
+	halloween_ghost_dust = "<PT>Polvo de fantasma</PT>",
+	halloween_pumpkin_seed = "<FC>Semilla de calabaza</FC>",
+	halloween_crystal_shard = "<FC>Fragmento de cristal</FC>",
+	halloween_potion = "Poción",
+	halloween_found_material = "<BL>Has encontrado</BL> %s!",
+	halloween_cauldron_ritual_begin = "<VP>El ritual ha iniciado... Alimenta a el caldero con tus ofrendas.",
+	halloween_cauldron_ritual_end = "<VP>El ritual ha terminado. El caldero cae de forma silenciosa",
+	halloween_cauldron_no_offerings = "<R>El caldero silva — las ofrendas no fueron hechas.",
+	halloween_cauldron_fizzles = "<R>La mezcla falla. El caldero rechaza tus materiales.",
+	halloween_cauldron_complete = "<VP>El ritual esta completado! <B>%s</B> los ratones unieron fuerzas, y el caldero ahora rebalsa con <B>%s</B> pociones encantadas.",
+	halloween_cauldron_reward = "<BV>El caldero te recompensa con <B>%s</B> pociones por tu <B>%s%%</B> devoción al ritual!",
+	halloween_deposits_disabled = "<R>El ritual se acerca a su fin — las ofrendas ahora estan selladas!",
+	halloween_all_deposits_cleared = "<VP>Todas las ofrendas retiradas!",
+	halloween_all_materials_selected = "<VP>Todos los materiales disponibles preparados para el ritual!",
+	halloween_deposits_disabled_ui = "Sellado",
+	halloween_no_deposits_to_clear = "<R>No tienes ofrendas para retirar!",
+	halloween_no_materials_available = "<R>No llevas ningún material valioso para el ritual!",
+	halloween_add_all = "AÑADIR TODO",
+	halloween_remove_all = "ELIMINAR TODO",
+	halloween_ritual = "Ritual",
+	halloween_distribution = "Distribución",
+	halloween_cauldron_need_players = "<R>El ritual requiere al menos 4 participantes para comenzar!",
+	halloween_cauldron_cancelled = "<R>El ritual ha sido cancelado debido a la insuficiencia de participantes!",
+	halloween_insufficient_materials = "<R>No tienes suficientes materiales para preparar una pocion.",
+	halloween_material_limit = "<R>Has alcanzado el limite máximo para este material.",
+	halloween_potion_limit_reached = "<R>Has alcanzado el limite de pociones! No puedes añadir mas materiales a el caldero.",
+	halloween_materials_limited = "<ROSE>Tus materiales han sido ajustados para garantizarte <B>%s</B> pociones. Los materiales sobrantes permanecen en tu inventario.",
 
 	-- Lemonade
 
@@ -159,6 +221,8 @@ translations.es = {
 	help_badge_21 = "Este jugador tuvo el tiempo más rápido en 30 mapas.",
 	help_badge_22 = "Este jugador tuvo el tiempo más rápido en 35 mapas.",
 	help_badge_23 = "Este jugador tuvo el tiempo más rápido en 40 mapas.",
+	help_badge_24 = "Este jugador ha comprado esta insignia en el festival de la limonada.",
+	help_badge_25 = "Este jugador ha comprado esta insignia en el evento de Halloween.",
 	make_public = "hacer público",
 	make_private = "hacer privado",
 	moderators = "Moderadores",
@@ -174,6 +238,7 @@ translations.es = {
 	idk = "No lo sé",
 	vote_map = "<font color='#ffffff' size='13'><b>¿Te gusta este mapa? <font size='14'><a href='event:mapPollYes'><PT>Sí</a> <a href='event:mapPollidk'><N>No lo sé</a> <a href='event:mapPollNo'><R>No</a>",
 	unknown = "Desconocido",
+	hidden_player = "Jugador anónimo",
 	powers = "Poderes",
 	press = "<vp>Presiona %s",
 	click = "<vp>Haz clic",
@@ -189,11 +254,19 @@ translations.es = {
 	new_lang = "<v>[#] <d>Lenguaje cambiado a Español",
 	room = "Sala",
 	time = "Tiempo",
+	coins = "Monedas",
 	buy = "Comprar",
+	sell = "Vender",
+	refund = "Reembolsar",
+	refund_info = "<p align='right'><font size='10'><b><g>Reembolsa el 70% de las monedas gastadas en artículos de la tienda.",
 	equip = "Equipar",
 	equipped = "<font size = '10'>Equipado</font>",
+	saving = "<p align='right'>Guardando...",
 	new_image = "<J>Tu apariencia ha cambiado. Podés volver a la normalidad escribiendo !image",
 	smol_best = "<j>Nuevo líder de la sala pequeña: ¡%s con %s mapas completados!",
+	event = "Evento",
+	settings = "Ajustes",
+	npc_thanks = "<j>Gracias!",
 
 	-- Power names
 	balloon = "Globo",
@@ -216,4 +289,6 @@ translations.es = {
 	campfire = "Fogata",
 	chair = "Silla",
 	link = "Pareja",
+	shop_power = "Poderes de la tienda",
+	ladder = "Escalera",
 }

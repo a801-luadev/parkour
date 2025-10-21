@@ -57,6 +57,7 @@ translations.tr = {
 
 	-- Information messages
 	mod_apps = "<j>Parkour moderatör alımları şimdi açık! Bu bağlantıyı kullanın: <rose>%s",
+	mapper_apps = "<j>Parkour harita ekibi başvuruları açılmıştır! Daha fazla bilgi için Discord sunucumuza katılın: <rose>%s",
 	staff_power = "<r>Parkour personelinin #parkour odalarının dışında hiçbir gücü <b>yoktur</b>.",
 	donate = "<vp>Bu modül için bağış yapmak istiyorsanız <b>!donate</b> yazın!",
 	paused_events = "<cep><b>[Dikkat!]</b> <n>Modül kritik seviyeye ulaştı ve durduruluyor.",
@@ -85,7 +86,10 @@ translations.tr = {
 	quest_map = "<ch>Görev haritanız @%s burada!",
 	powers_disabled = "<r>Yetenekler bu odada çalışmamaktadır.",
 	powers_enabled = "<vp>Yetenekler tekrardan kullanılabilir.",
+	review_enabled = "<v>[#] <d>Değerlendirme modu aktifleştirildi.",
+	review_disabled = "<v>[#] <d>Değerlendirme modu kapatıldı.",
 	verify_sent = "<v>[#] <j>Discord doğrulama isteği gönderildi.",
+	claim_done = "<v>[#] <j>Hediye kodunu başarıyla aktifleştirdin.",
 	npc_sell_power = "<v>Bu market gücü indirimde!",
 	npc_sell_badge = "<v>Bu coin türünde yeterli miktarda getir ve bu rozet senin olsun!",
 	npc_sell_skin = "<v>Bu eşyayı istiyor musun? Bana bu coinlerden getir.",
@@ -200,6 +204,9 @@ translations.tr = {
 	halloween_cauldron_need_players = "<R>Ritüeli başlatmak için en az 4 katılımcı gerekiyor!",
 	halloween_cauldron_cancelled = "<R>Yetersiz katılımcı nedeniyle ritüel iptal edildi!",
 	halloween_insufficient_materials = "<R>İksir hazırlamak için yeterli malzemen yok.",
+	halloween_material_limit = "<R>Bu malzeme için maksimum limite ulaştın!",
+	halloween_potion_limit_reached = "<R>İksir limitine ulaştın! Kazana daha fazla malzeme ekleyemezsin.",
+	halloween_materials_limited = "<ROSE>Malzemelerin, <B>%s</B> iksir kazanman için ayarlandı. Fazla malzemeler envanterinde kaldı.",
 
 	-- Lemonade
 	lemonade_welcome = "<j>Limonata Festivali'ne hoş geldin! Biraz serinlemeye ne dersin? Malzemeleri topla, limonatayı nasıl yapacağını keşfet ve ödülleri kap!",
@@ -261,6 +268,7 @@ translations.tr = {
 	help_badge_22 = "Bu oyuncu 35 haritayı en kısa sürede tamamladı.",
 	help_badge_23 = "Bu oyuncu 40 haritayı en kısa sürede tamamladı.",
 	help_badge_24 = "Bu oyuncu Limonata Festivalinde bu rozeti satın aldı.",
+	help_badge_25 = "Bu oyuncu Cadılar Bayramında bu rozeti satın aldı.",
 	make_public = "herkese açık",
 	make_private = "kişiye özel",
 	moderators = "Moderatörler",
@@ -292,6 +300,7 @@ translations.tr = {
 	new_lang = "<v>[#] <d>Diliniz Türkçe olarak ayarlandı",
 	room = "Oda",
 	time = "Süre",
+	coins = "Coinler",
 	buy = "Satın Al",
 	sell = "Sat",
 	refund = "İade Et",

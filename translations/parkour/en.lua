@@ -204,6 +204,9 @@ translations.en = {
 	halloween_cauldron_need_players = "<R>The ritual requires at least 4 participants to begin!",
 	halloween_cauldron_cancelled = "<R>The ritual has been cancelled due to insufficient participants!",
 	halloween_insufficient_materials = "<R>You don’t have enough materials to brew a Potion.",
+	halloween_material_limit = "<R>You've reached the maximum limit for this material!",
+	halloween_potion_limit_reached = "<R>You've reached the potion limit! You can't add more materials to the cauldron.",
+	halloween_materials_limited = "<ROSE>Your materials have been adjusted to grant you <B>%s</B> potions. Excess materials remain in your inventory.",
 
 	-- Lemonade
 	lemonade_welcome = "<j>Welcome to the Lemonade Festival! Ready to cool off? Gather the ingredients, figure out how to make lemonade, and grab some awesome rewards!",
@@ -265,6 +268,7 @@ translations.en = {
 	help_badge_22 = "This player has got the fastest time in 35 maps.",
 	help_badge_23 = "This player has got the fastest time in 40 maps.",
 	help_badge_24 = "This player has bought this badge in Lemonade Festival.",
+	help_badge_25 = "This player has bought this badge in Halloween Event.",
 	make_public = "make public",
 	make_private = "make private",
 	moderators = "Moderators",
