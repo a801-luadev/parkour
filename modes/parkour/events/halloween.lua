@@ -19,7 +19,7 @@ do
       potionEcIndex = 13,
       state = WAIT,
       materialTypes = 6,
-      minPlayers = 4,
+      minPlayers = 2,
       materials = {
         { name = "halloween_bone", ec = 7, rarity = 1, weight = 30, image = "199f896d411.png" },
         { name = "halloween_spider_silk", ec = 8, rarity = 1, weight = 25, image = "199f89752fb.png" },
@@ -33,6 +33,9 @@ do
         active = false,
         endTime = 0,
         duration = 300000,
+        ready = {},
+        readyCount = 0,
+        depositCount = 0,
         labels = {
           potTA = allocateId("textarea", 40000),
           timerTA = allocateId("textarea", 40000),
@@ -273,14 +276,12 @@ do
     end
 
     local function startCauldronSession()
-      if actual_player_count < halloween.minPlayers then
-        translatedChatMessage("halloween_cauldron_need_players")
-        return
-      end
-
       halloween.state = DEPOSIT
       halloween.cauldron.active = true
       halloween.cauldron.endTime = os.time() + halloween.cauldron.duration
+      halloween.cauldron.ready = {}
+      halloween.cauldron.readyCount = 0
+      halloween.cauldron.depositCount = 0
       halloween_cauldron.clearAllDeposits()
       halloween_cauldron.updateCauldronDisplay()
       tfm.exec.setGameTime(600)
@@ -424,16 +425,25 @@ do
           return
         end
         local remainingSeconds = math.floor(remaining / 1000)
-        local mm = math.floor(remainingSeconds / 60)
-        local ss = remainingSeconds % 60
-        local label = string.format("<p align='center'><font size='13'><B><N>%02d:%02d", mm, ss)
-
+        
+        if remainingSeconds == 10 then
+          if actual_player_count < halloween.minPlayers then
+            translatedChatMessage("halloween_cauldron_need_players")
+            halloween.cauldron.endTime = os.time() + 300000
+            tfm.exec.setGameTime(30)
+            return
+          end
+        end
+        
         if remainingSeconds <= 10 then
           halloween_cauldron.disableDeposits()
           finalizeCauldronSession()
           return
         end
-
+        
+        local mm = math.floor(remainingSeconds / 60)
+        local ss = remainingSeconds % 60
+        local label = string.format("<p align='center'><font size='13'><B><N>%02d:%02d", mm, ss)
         ui.updateTextArea(halloween.cauldron.labels.timerTA, label)
 
       elseif halloween.state == DISTRIBUTING then
@@ -519,16 +529,17 @@ do
 
     onEvent("PlayerDataParsed", function(player, init)
       if halloween.isCauldronAllowed() then
-        if halloween.cauldron.active then
-          if halloween.state == DEPOSIT then
-            halloween_cauldron.show(player)
-          end
-        elseif actual_player_count >= halloween.minPlayers then
-          startCauldronSession()
+        if halloween.cauldron.active and halloween.state == DEPOSIT then
+          halloween_cauldron.show(player)
         end
         return
       end
-      if halloween.state == WAIT then return end  
+      if halloween.state == WAIT then return end
+      
+      if halloween.state == COLLECT then
+        translatedChatMessage("halloween_collect_hint", player)
+      end
+      
       halloween.render(player)
       if halloween.isCauldronAllowed() and halloween.cauldron.active then
         halloween_cauldron.show(player)
@@ -549,16 +560,13 @@ do
       end
 
       if halloween.state == DEPOSIT and halloween.cauldron.active then
-        if actual_player_count < halloween.minPlayers then
-          halloween.cauldron.active = false
-          halloween.state = WAIT
-          for name in next, in_room do
-            halloween_cauldron.hide(name)
+        if halloween_cauldron.hasDeposits(player) then
+          halloween.cauldron.depositCount = halloween.cauldron.depositCount - 1
+          if halloween.cauldron.ready[player] then
+            halloween.cauldron.readyCount = halloween.cauldron.readyCount - 1
           end
-          translatedChatMessage("halloween_cauldron_cancelled")
-          return
         end
-
+        halloween.cauldron.ready[player] = nil
         halloween_cauldron.clearPlayerDeposits(player)
         halloween_cauldron.updateCauldronDisplay()
       end
@@ -571,6 +579,29 @@ do
       elseif event == "cauldron_add_all" then
         halloween_cauldron.addAll(player)
         return
+      elseif event == "cauldron_ready" then
+        if not halloween_cauldron.hasDeposits(player) then
+          return
+        end
+        
+        if halloween.cauldron.ready[player] then
+          halloween.cauldron.ready[player] = nil
+          halloween.cauldron.readyCount = halloween.cauldron.readyCount - 1
+          halloween_cauldron.updateReadyButton(player)
+          return
+        end
+        
+        halloween.cauldron.ready[player] = true
+        halloween.cauldron.readyCount = halloween.cauldron.readyCount + 1
+        halloween_cauldron.updateReadyButton(player)
+        
+        if halloween.cauldron.depositCount > 0 and halloween.cauldron.readyCount == halloween.cauldron.depositCount then
+          local remaining = halloween.cauldron.endTime - os.time()
+          if math.floor(remaining / 1000) > 15 then
+            halloween.cauldron.endTime = os.time() + 15000
+            tfm.exec.setGameTime(15)
+          end
+        end
       end
     end)
 

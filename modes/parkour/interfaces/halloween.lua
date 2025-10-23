@@ -2,6 +2,7 @@ local function HalloweenInterface(halloween)
   local cauldron = {}
   local CLEAR_ALL_BUTTON = allocateId("textarea", 40000)
   local ADD_ALL_BUTTON = allocateId("textarea", 40000)
+  local READY_BUTTON = allocateId("textarea", 40000)
 
   local materials = halloween.materials
   local material_count = halloween.materialTypes
@@ -62,7 +63,12 @@ local function HalloweenInterface(halloween)
     ui.addTextArea(CLEAR_ALL_BUTTON, "<p align='center'><a href='event:cauldron_clear_all'><font size='12' color='#ffffff'><B>" .. translatedMessage("halloween_remove_all", player) .. "</B></font></a>", player, 640, 127, 120, 30, 0, 0, 0, false)
     images[player][last_index + 2] = tfm.exec.addImage("199c8c6076f.png", "!10", 600, 100, player, 1, 1, 0, 1, 0, 0, true)
 
-    images[player]._len = last_index + 2
+    local readyText = halloween.cauldron.ready[player] and translatedMessage("halloween_cancel", player) or translatedMessage("halloween_ready", player)
+    local readyColor = halloween.cauldron.ready[player] and "#32CD32" or "#ffffff"
+    ui.addTextArea(READY_BUTTON, "<p align='center'><a href='event:cauldron_ready'><font size='12' color='" .. readyColor .. "'><B>" .. readyText .. "</B></font></a>", player, 365, 117, 80, 30, 0, 0, 0, false)
+    images[player][last_index + 3] = tfm.exec.addImage("19a07dad74e.png", "!10", 332, 110, player, 1, 1, 0, 1, 0, 0, true)
+
+    images[player]._len = last_index + 3
   end
 
   function cauldron.hide(player)
@@ -77,6 +83,7 @@ local function HalloweenInterface(halloween)
 
     ui.removeTextArea(CLEAR_ALL_BUTTON, player)
     ui.removeTextArea(ADD_ALL_BUTTON, player)
+    ui.removeTextArea(READY_BUTTON, player)
 
     local img = images[player]
     if img then
@@ -122,6 +129,12 @@ local function HalloweenInterface(halloween)
         translatedChatMessage("halloween_deposits_disabled", player)
         return
       end
+    end
+
+    halloween.cauldron.depositCount = halloween.cauldron.depositCount - 1
+    if halloween.cauldron.ready[player] then
+      halloween.cauldron.readyCount = halloween.cauldron.readyCount - 1
+      halloween.cauldron.ready[player] = nil
     end
 
     for i=1, material_count do
@@ -258,6 +271,8 @@ local function HalloweenInterface(halloween)
       end
     end
 
+    halloween.cauldron.depositCount = halloween.cauldron.depositCount + 1
+
     cauldron.updateCauldronDisplay()
 
     if refundAmount and refundAmount > 0 then
@@ -286,6 +301,17 @@ local function HalloweenInterface(halloween)
     for i=1, material_count do
       deposits[i][player] = nil
     end
+  end
+
+  function cauldron.hasDeposits(player)
+    return hasDeposits(player)
+  end
+
+  function cauldron.updateReadyButton(player)
+    if not isOpen[player] then return end
+    local readyText = halloween.cauldron.ready[player] and translatedMessage("halloween_cancel", player) or translatedMessage("halloween_ready", player)
+    local readyColor = halloween.cauldron.ready[player] and "#32CD32" or "#ffffff"
+    ui.updateTextArea(READY_BUTTON, "<p align='center'><a href='event:cauldron_ready'><font size='12' color='" .. readyColor .. "'><B>" .. readyText .. "</B></font></a>", player)
   end
 
   return cauldron
