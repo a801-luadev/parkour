@@ -157,6 +157,8 @@ local function initialize_parkour() -- so it uses less space after building
 	elseif tfm_mode == "village" then
 		{% require-package "modes/village" %}
 	end
+
+	eventGameStart()
 end
 
 if is_tribe then
