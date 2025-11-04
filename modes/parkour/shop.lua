@@ -602,7 +602,7 @@ do
 			end
 
 			shop_state.ts = data.shop.ts
-			shop_state.last_id = max(last_id, data.shop.last_id)
+			shop_state.last_id = data.shop.last_id
 			file_skins = SplitRW.parse(data.shop.skins, shop_state, 300, "shop")
 
 			prepareFileSkins(file_skins, shop_state.indexMap, shop_state.prev, shop_state.index - 1)
