@@ -814,8 +814,9 @@ onEvent("PlayerDataLoaded", function(player, data)
 		done, data = pcall(json.decode, data)
 
 		if not done then
-			data = {}
+			print(data)
 			translatedChatMessage("corrupt_data", player)
+			return
 		end
 	end
 
