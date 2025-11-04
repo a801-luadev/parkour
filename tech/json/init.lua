@@ -38,6 +38,8 @@ local string_gsub = string.gsub
 local string_sub = string.sub
 local string_find = string.find
 local string_char = string.char
+local string_match = string.match
+local string_gmatch = string.gmatch
 local math_floor = math.floor
 
 -------------------------------------------------------------------------------
@@ -232,6 +234,17 @@ end
 
 
 local function parse_string(str, i)
+  -- fast path
+  local end_pos = string_find(str, '"', i + 1, true)
+  if end_pos then
+    local s = string_sub(str, i + 1, end_pos - 1)
+    local escape_pos = string_find(s, "\\", 1 + 1, true)
+    if not escape_pos then
+      return s, end_pos + 1
+    end
+  end
+
+  -- slow path
   local has_unicode_escape = false
   local has_surrogate_escape = false
   local has_escape = false
@@ -309,6 +322,25 @@ local function parse_array(str, i)
   local res = {}
   local n = 1
   i = i + 1
+
+  -- fast path
+  local end_pos = string_find(str, "]", i, true)
+  if end_pos then
+    local s = string_sub(str, i, end_pos - 1)
+    local nested = string_find(s, "[", 1, true)
+    if not nested then
+      -- array of numbers?
+      local array_of_num = not string_find(s, "[^,%d%-?%.]")
+      if array_of_num then
+        for num in string_gmatch(s, "[^,]+") do
+          res[n] = tonumber(num)
+          n = n + 1
+        end
+        return res, end_pos + 1
+      end
+    end
+  end
+
   while 1 do
     local x
     i = next_char(str, i, space_chars, true)
