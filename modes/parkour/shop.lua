@@ -564,45 +564,52 @@ do
 
 	onEvent("GameDataLoaded", function(data)
 		if data.shop then
-			if shop_state.parsed then
-				if not SplitRW.shouldParse(data.shop, shop_state) then
-					if should_save then
-						should_save = false
-
-						local last_id = shop_state.last_id
-						for key, skin in next, room_skins do
-							last_id = last_id + 1
-							skin.id = last_id
-							in_shop[skin.id] = true -- all room_skins are added in shop
-							SplitRW.update(shop_state, skin, "shop")
-						end
-
-						-- This is fine since everything is saved in file_skins now
-						room_skins = {}
-						room_skins_last_id = 9000
-
-						data.shop.skins = SplitRW.dump(shop_state)
-						data.shop.last_id = last_id
-						data.shop.ts = os.time()
-
-						eventSavingFile(nil, data, "shop")
-
-						for player in next, in_room do
-							if ranks.admin[player] then
-								sendChatFmt("<rose>Room skins have been saved, new shop last_id is %s", player, last_id)
-							end
-						end
-					end
-					return
-				end
-
+			-- data changed
+			if SplitRW.shouldParse(data.shop, shop_state) then
+				-- reset state, we need to re-parse everything
 				shop_state = {
 					items = shop_state.items, -- reuse existing tables
+					ts = data.shop.ts,
+					last_id = data.shop.last_id,
 				}
+			elseif shop_state.parsed then
+				-- there's no change and everything is already parsed
+				-- we are ready to make changes
+				if should_save then
+					should_save = false
+
+					local last_id = shop_state.last_id
+					for key, skin in next, room_skins do
+						last_id = last_id + 1
+						skin.id = last_id
+						in_shop[skin.id] = true -- all room_skins are added in shop
+						SplitRW.update(shop_state, skin, "shop")
+					end
+
+					-- This is fine since everything is saved in file_skins now
+					room_skins = {}
+					room_skins_last_id = 9000
+
+					local updated = SplitRW.dump(shop_state)
+					if not updated then
+						return
+					end
+
+					data.shop.skins = updated
+					data.shop.last_id = last_id
+					data.shop.ts = os.time()
+
+					eventSavingFile(nil, data, "shop")
+
+					for player in next, in_room do
+						if ranks.admin[player] then
+							sendChatFmt("<rose>Room skins have been saved, new shop last_id is %s", player, last_id)
+						end
+					end
+				end
+				return
 			end
 
-			shop_state.ts = data.shop.ts
-			shop_state.last_id = data.shop.last_id
 			file_skins = SplitRW.parse(data.shop.skins, shop_state, 300, "shop")
 
 			prepareFileSkins(file_skins, shop_state.indexMap, shop_state.prev, shop_state.index - 1)
