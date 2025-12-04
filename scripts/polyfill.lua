@@ -18,6 +18,36 @@ do
 
   --{% require-file "scripts/debugui.lua" %}
 
+  -- Event Hooks
+  local hookEvent
+  do
+    local original, hook = {}, {}
+
+    setmetatable(_G, {
+      __index = function(tbl, key)
+        if original[key] then
+          return hook[key]
+        end
+
+        return rawget(tbl, key)
+      end,
+      __newindex = function(tbl, key, val)
+        if hook[key] then
+          original[key] = val
+          return
+        end
+
+        return rawset(_G, key, val)
+      end,
+    })
+
+    function hookEvent(name, func)
+      hook[name] = function(...)
+        return func(original[name], ...)
+      end
+    end
+  end
+
   -- Tribe House Alternatives
   if tfm.exec.getPlayerSync() == nil and isActuallyTribe then
     tfm.exec.chatMessage = function(message, playerName)
@@ -45,9 +75,7 @@ do
       end
     end
 
-    local eventLoop
-
-    local function loop(...)
+    hookEvent('eventLoop', function(eventLoop, ...)
       local dead, count = {}, 0
       local now = os.time()
 
@@ -69,25 +97,7 @@ do
       end
 
       eventLoop(...)
-    end
-
-    setmetatable(_G, {
-      __index = function(tbl, key)
-        if key == 'eventLoop' then
-          return loop
-        end
-
-        return rawget(tbl, key)
-      end,
-      __newindex = function(tbl, key, val)
-        if key == 'eventLoop' then
-          eventLoop = val
-          return
-        end
-
-        return rawset(_G, key, val)
-      end,
-    })
+    end)
 
     -- supress warnings
     tfm.exec.setRoomMaxPlayers = function(number)
@@ -114,6 +124,16 @@ do
     print(tostring(data):gsub('&', '&amp;'):gsub('<', '&lt;'):gsub('\000', '\\0'))
     print("<ROSE>==================")
   end
+
+
+  -- Event Execution Time Log
+  -- hookEvent('eventGameDataLoaded', function(original, data, id)
+  --   measureTime("Executing eventGameDataLoaded:" .. id, 5, original, data, id)
+  -- end)
+
+  -- hookEvent('eventSavingFile', function(original, id, data)
+  --   measureTime("Executing eventSavingFile:" .. id, 0, original, id, data)
+  -- end)
 
 
   -- Player Data
@@ -182,7 +202,6 @@ do
 
   -- Parkour Files
   {% require-package "tech/filemanager" %}
-  {% require-file "modes/parkour/sanctionfilemanager.lua" %}
   {% require-file "modes/parkour/filemanagers.lua" %}
 
   local function saveFile(id, data)
