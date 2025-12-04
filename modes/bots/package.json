@@ -1,10 +1,6 @@
 [
 	{
 		"type": "require-file",
-		"file": "modes/parkour/sanctionfilemanager.lua"
-	},
-	{
-		"type": "require-file",
 		"file": "modes/parkour/filemanagers.lua"
 	},
 	{

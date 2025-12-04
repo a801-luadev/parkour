@@ -2,7 +2,6 @@
 	{"type": "require-file", "file": "modes/parkour/player.lua"},
 	{"type": "require-file", "file": "modes/parkour/commands.lua"},
 
-	{"type": "require-file", "file": "modes/parkour/sanctionfilemanager.lua"},
 	{"type": "require-file", "file": "modes/parkour/filemanagers.lua"},
 
 	{"type": "require-dir", "dir": "translations/parkour", "recursive": false},

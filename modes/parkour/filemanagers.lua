@@ -122,7 +122,20 @@ local filemanagers = {
 		}
 	}):disableValidityChecks():prepare(),
 
-	["43"] = SanctionFileManager,
+	["63"] = FileManager.new({
+		type = "dictionary",
+		map = {
+			{
+				name = "sanction",
+				type = "dictionary",
+				map = {
+					{ name = "ts", type = "number" },
+					{ name = "mods", type = "array", objects = { type = "string" } },
+					{ name = "data", type = "string" },
+				}
+			}
+		}
+	}):disableValidityChecks():prepare(),
 
 	["54"] = FileManager.new({
 		type = "dictionary",

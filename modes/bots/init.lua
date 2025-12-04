@@ -72,30 +72,32 @@ local function apply_file_operation(data, operation, file, raw_data)
 
 		return
 	elseif action == 'sanction' then
-		if not data.mods then
-			return "no mods field"
-		end
 		if not data.sanction then
 			return "no sanction field"
 		end
 
 		local playerid, moderator = operation[3], operation[4]
+		playerid = tonumber(playerid)
+		if not playerid then
+			return "invalid player id"
+		end
 		if not moderator then
-			data.sanction[playerid] = nil
-			return
+			return "invalid moderator"
 		end
 
-		local prev_sanction = data.sanction[playerid]
+		local sanction_data = "\1" .. data.sanction.data .. "\1"
+		local prev_sanction = SplitRW.find(sanction_data, "sanction", playerid)
 		local time, level = tonumber(operation[5]), tonumber(operation[6])
-		local mod_index = table_find(data.mods, moderator)
+		local mods = data.sanction.mods
+		local mod_index = table_find(mods, moderator)
 		local now = os.time()
 
 		if not mod_index then
-			data.mods[1 + #data.mods] = moderator
-			mod_index = #data.mods
+			mods[1 + #mods] = moderator
+			mod_index = #mods
 		end
 
-		local sanctionLevel = data.sanction[playerid] and data.sanction[playerid].level or 0
+		local sanctionLevel = prev_sanction and prev_sanction.level or 0
 		if level then
 			if operation[6]:sub(1,1) == '+' or operation[6]:sub(1,1) == '-' then
 				sanctionLevel = math.min(4, math.max(0, sanctionLevel + level))
@@ -118,18 +120,24 @@ local function apply_file_operation(data, operation, file, raw_data)
 			end
 		end
 
-		data.sanction[playerid] = {
+		local new_sanction = {
+			id = playerid,
 			timestamp = now,
 			time = time,
 			info = mod_index,
 			level = sanctionLevel,
 		}
+		sanction_data = SplitRW.updateSingle(sanction_data, new_sanction, "sanction")
+		if sanction_data then
+			data.sanction.ts = now
+			data.sanction.data = sanction_data:sub(2, -2)
+		end
 
 		tfm.exec.playMusic(
 			'sanction:' .. tostring(playerid),
 			json.encode({
 				prev = prev_sanction,
-				current = data.sanction[playerid]
+				current = new_sanction,
 			}),
 			0, false, false, parkour_bot
 		)

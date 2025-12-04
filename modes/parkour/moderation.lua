@@ -5,16 +5,17 @@ local cached_files = {
 	[tostring(files["sanction"])] = false,
 }
 local reported = {}
+local sanction_state, file_sanctions = { mods={} }, {}
 
 -- if it doesn't require save, we can call callback right away using cache
 -- returns true if it hits the cache
-local function schedule(fileid, save, callback)
+local function schedule(fileid, save, callback, a, b, c, d)
 	if not save and cached_files[tostring(files[fileid])] then
-		callback(cached_files[tostring(files[fileid])])
+		callback(cached_files[tostring(files[fileid])], a, b, c, d)
 		return true
 	end
 
-	to_do[#to_do + 1] = { fileid, save, callback }
+	to_do[#to_do + 1] = { fileid, save, callback, a, b, c, d }
 end
 
 -- by principle the room player is in has the most up to date player data
@@ -56,16 +57,103 @@ local function checkWeeklyWinners(player, data)
 	end)
 end
 
-local function sendBanLog(playerName, time, target, minutes)
-    if not time then
-        tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been unbanned.", target)
-    elseif time > 2 then
-        tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned for " .. minutes .. " minutes.", target)
-    elseif time == 2 then
-        tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been banned permanently.", target)
-    else
-        tfm.exec.chatMessage("<v>[#] <j>" .. playerName .. " has been unbanned.", target)
-    end
+local function getSanction(id, data)
+	local sanction
+
+	if sanction_state.parsed then
+		sanction = file_sanctions[id]
+	else
+		data = "\1" .. data .. "\1"
+		sanction = SplitRW.find(data, "sanction", id)
+	end
+
+	return sanction, data
+end
+
+local function updateSanctionFile(sanction, data, sanction_data)
+	if sanction_state.parsed then
+		SplitRW.update(sanction_state, sanction, "sanction")
+	else
+		sanction_data = SplitRW.updateSingle(sanction_data, sanction, "sanction")
+		data.sanction.data = sanction_data:sub(2, -2)
+		data.sanction.ts = os.time()
+	end
+end
+
+local function sendBanLog(player, time, target, minutes)
+	if not time then
+		sendChatFmt("<j>%s has been unbanned.", target, player)
+	elseif time > 2 then
+		sendChatFmt("<j>%s has been banned for %s minutes.", target, player, minutes)
+	elseif time == 2 then
+		sendChatFmt("<j>%s has been banned permanently.", target, player)
+	else
+		sendChatFmt("<j>%s has been unbanned.", target, player)
+	end
+end
+
+local function cacheBans(sanctions, map, start, last)
+	local id, t, sanction
+	local now = os.time()
+
+	for i=start, last do
+		id = map[i]
+		sanction = sanctions[id]
+		t = sanction.time
+
+		if t == 1 or t == 2 or now < t then
+			bans[id] = sanction.timestamp
+		end
+	end
+end
+
+local function applyBan(player, pdata, data)
+	local now = os.time()
+	local sanction = file_sanctions[data.id]
+
+	if sanction and sanction.timestamp ~= pdata.lastsanction then
+		pdata.bancount = sanction.level
+		pdata.lastsanction = sanction.timestamp
+		pdata.bannedby = sanction_state.mods[sanction.info] or sanction.info
+		pdata.banned = sanction.time
+
+		savePlayerData(player)
+
+		local minutes = pdata.banned and math.ceil((pdata.banned - os.time()) / 1000 / 60)
+		if ranks.hidden[pdata.bannedby] then
+			for moderator in next, in_room do
+				if ranks.admin[moderator] or ranks.mod[moderator] then
+					sendBanLog(player, pdata.banned, moderator, minutes)
+				end
+			end
+		else
+			sendBanLog(player, pdata.banned, nil, minutes)
+		end
+	end
+
+	if pdata.banned and (pdata.banned == 2 or os.time() < pdata.banned) then
+		if pdata.banned == 2 then
+			translatedChatMessage("permbanned", player)
+		else
+			local minutes = math.ceil((pdata.banned - os.time()) / 1000 / 60)
+			if minutes > 0 then
+				translatedChatMessage("tempbanned", player, minutes)
+			end
+		end
+	end
+end
+
+local function checkBansInRoom()
+	local pdata, data
+	for player in next, in_room do
+		pdata = players_file[player]
+		data = room.playerList[player]
+
+		if data and pdata then
+			applyBan(player, pdata, data)
+			checkBan(player, pdata, data.id)
+		end
+	end
 end
 
 onEvent("GameDataLoaded", function(data, fileid)
@@ -76,8 +164,9 @@ onEvent("GameDataLoaded", function(data, fileid)
 	for index = 1, len do
 		action = to_do[index]
 		if files[action[1]] == tonumber(fileid) then
-			action[3](data)
-			save = action[2]
+			if not action[3](data, action[4], action[5], action[6], action[7]) then
+				save = save or action[2]
+			end
 			to_do[index] = false
 		end
 	end
@@ -93,53 +182,33 @@ onEvent("GameDataLoaded", function(data, fileid)
 	end
 
 	if data.sanction then
-		local now = os.time()
-		local playerList = room.playerList
-		local id, banInfo, banDays
+		local skip = false -- skips parsing if already parsed
 
-		for player, pdata in next, players_file do
-			if playerList[player] and in_room[player] then
-				id = tostring(playerList[player].id)
-				banInfo = id and data.sanction[id]
+		-- should re-parse?
+		if SplitRW.shouldParse(data.sanction, sanction_state) then
+			-- we can reuse existing items table
+			-- as long as we never delete sanctions
+			sanction_state = {
+				items = sanction_state.items,
+				mods = data.sanction.mods,
+				ts = data.sanction.ts,
+			}
+		elseif sanction_state.parsed then
+			skip = true
+		end
 
-				if banInfo and banInfo.timestamp ~= pdata.lastsanction then
-					pdata.bancount = banInfo.level
-					pdata.lastsanction = banInfo.timestamp
-					pdata.bannedby = data.mods[banInfo.info] or banInfo.info
-					pdata.banned = banInfo.time
+		if not skip then
+			file_sanctions = SplitRW.parse(data.sanction.data, sanction_state, 500, "sanction")
+			cacheBans(file_sanctions, sanction_state.indexMap, sanction_state.prev, sanction_state.index - 1)
+		end
 
-					savePlayerData(player)
+		checkBansInRoom()
 
-					local minutes = pdata.banned and math.ceil((pdata.banned - os.time()) / 1000 / 60)
-                    if ranks.hidden[pdata.bannedby] then
-                        for moderator in next, in_room do
-                            if ranks.admin[moderator] or ranks.mod[moderator] then
-                                sendBanLog(player, pdata.banned, moderator, minutes)
-                            end
-                        end
-                    else
-                        sendBanLog(player, pdata.banned, nil, minutes)
-                	end
-				end
-
-				if pdata.banned and (pdata.banned == 2 or os.time() < pdata.banned) then
-					if not banInfo then
-						data:setSanction(id, {
-							timestamp = 0,
-							time = pdata.banned,
-							level = pdata.banned == 2 and 4 or 1,
-						})
-						save = true
-					end
-
-					if pdata.banned == 2 then
-						translatedChatMessage("permbanned", player)
-					else
-						local minutes = math.floor((pdata.banned - os.time()) / 1000 / 60)
-						translatedChatMessage("tempbanned", player, minutes)
-					end
-				end
-			end
+		local updated = SplitRW.dump(sanction_state)
+		if updated then
+			data.sanction.ts = os.time()
+			data.sanction.data = updated
+			save = true
 		end
 	end
 
@@ -162,27 +231,32 @@ local function playerDataRequests(player, data)
 end
 
 local function updateSanctions(playerID, playerName, time, moderator, minutes)
+	playerID = tonumber(playerID)
+	playerName = playerName or playerID
+
+	if not playerID then
+		return sendChatFmt('<r>Invalid player id', moderator)
+	end
+
 	schedule("sanction", true, function(data)
 		local now = os.time()
+		local sanction, sanction_data = getSanction(playerID, data.sanction.data)
 
-		playerID = tostring(playerID)
-		playerName = playerName or playerID
 		time = time or (now + minutes * 60 * 1000)
 
-		local baninfo = data.sanction[playerID]
 		if time > 0 then
-			if baninfo and (baninfo.time == 2 or baninfo.time > now) and not minutes then
-				tfm.exec.chatMessage("<v>[#] <r>" .. playerName .. " is banned already.", moderator)
-				return
+			if sanction and (sanction.time == 2 or sanction.time > now) and not minutes then
+				sendChatFmt("<r>%s is banned already.", moderator, playerName)
+				return true
 			end
 		else
-			if not baninfo or baninfo.time < 1 then
-				tfm.exec.chatMessage("<v>[#] <r>" .. playerName .. " doesn't seem to be banned.", moderator)
-				return
+			if not sanction or sanction.time < 1 then
+				sendChatFmt("<r>%s doesn't seem to be banned.", moderator, playerName)
+				return true
 			end
 		end
 
-		local sanctionLevel = baninfo and baninfo.level or 0
+		local sanctionLevel = sanction and sanction.level or 0
 		if time == 1 then
 			sanctionLevel = math.min(4, sanctionLevel + 1)
 			if sanctionLevel == 1 then
@@ -204,32 +278,38 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 			minutes = 0
 		end
 
-		if time == 0 and in_room[playerName] then
-			enableSpecMode(playerName, false)
+		local mods = data.sanction.mods
+		local mod_index = table_find(mods, moderator)
+
+		if not mod_index then
+			mods[1 + #mods] = moderator
+			mod_index = #mods
 		end
 
-		data:setSanction(playerID, {
-			timestamp = now,
-			time = time,
-			info = moderator,
-			level = sanctionLevel
-		})
+		local packet = {
+			playerID,
+			playerName,
+			time,
+			moderator,
+			minutes,
+			sanction and sanction.timestamp or "-",
+			sanction and sanction.time or "-",
+			sanction and (mods[sanction.info] or sanction.info) or "-",
+			sanction and sanction.level or "-",
+		}
 
+		sanction.timestamp = now
+		sanction.time = time
+		sanction.info = mod_index
+		sanction.level = sanctionLevel
+
+		updateSanctionFile(sanction, data, sanction_data)
 		sendPacket(
 			"common",
 			packets.rooms.ban_logs,
-			playerID .. "\000" ..
-			playerName .. "\000" ..
-			time .. "\000" ..
-			moderator .. "\000" ..
-			minutes .. "\000" ..
-			-- prev sanction
-			(baninfo and baninfo.timestamp or "-") .. "\000" ..
-			(baninfo and baninfo.time or "-") .. "\000" ..
-			(baninfo and baninfo.info and (data.mods[baninfo.info] or baninfo.info) or "-") .. "\000" ..
-			(baninfo and baninfo.level or "-")
+			table.concat(packet, "\000")
 		)
-		sendBanLog(playerName, time, moderator, minutes)
+		sendBanLog(playerID, time, moderator, minutes)
 	end)
 end
 
@@ -460,6 +540,27 @@ local function printSanctions(target, kind, name, pid, timestamp, time, level, m
 	)
 end
 
+local function printSanctionOnLoad(data, targetID, targetName, player)
+	local file = getSanction(targetID, data.sanction.data)
+	if not file then
+		tfm.exec.chatMessage(
+			("<v>[#] <r>%s not found in file data"):format(targetID),
+			player
+		)
+		return
+	end
+	printSanctions(
+		player,
+		'file',
+		targetName or targetID,
+		targetID,
+		file.timestamp,
+		file.time,
+		file.level,
+		tostring(data.sanction.mods[file.info] or file.info)
+	)
+end
+
 newCmd({ name = {"sanctions", "bancount", "baninfo"},
 	perm = "view_sanctions",
 	min_args = 1,
@@ -479,10 +580,6 @@ newCmd({ name = {"sanctions", "bancount", "baninfo"},
 		end
 	end
 
-	if targetID then
-		targetID = tostring(targetID)
-	end
-
 	if ranks.admin[player] then
 		if args[2] == "reset" then
 			if not targetID then
@@ -492,7 +589,7 @@ newCmd({ name = {"sanctions", "bancount", "baninfo"},
 
 			tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
 			schedule("sanction", true, function(data)
-				local file = data.sanction and data.sanction[targetID]
+				local file, sanction_data = getSanction(targetID, data.sanction.data)
 				if not file or not file.level or file.level == 0 then
 					tfm.exec.chatMessage(
 						("<v>[#] <j>%s's sanction level is already at zero."):format(
@@ -500,10 +597,11 @@ newCmd({ name = {"sanctions", "bancount", "baninfo"},
 						),
 						player
 					)
-					return
+					return true
 				end
 
 				file.level = 0
+				updateSanctionFile(file, data, sanction_data)
 				tfm.exec.chatMessage(
 					("<v>[#] <j>%s's sanction level has been reset."):format(
 						targetName or targetID
@@ -549,68 +647,23 @@ newCmd({ name = {"sanctions", "bancount", "baninfo"},
 
 			if not targetID and pdata.playerid then
 				targetID = pdata.playerid
-				local is_cached = schedule("sanction", false, function(data)
-					local file = data and data.sanction and data.sanction[targetID]
-					if not file then
-						tfm.exec.chatMessage(
-							("<v>[#] <r>%s not found in file data"):format(targetID),
-							player
-						)
-						return
-					end
-					printSanctions(
-						player,
-						'file',
-						targetName or targetID,
-						targetID,
-						file.timestamp,
-						file.time,
-						file.level,
-						tostring(data.mods[file.info] or file.info)
-					)
-				end)
+				local is_cached = schedule("sanction", false, printSanctionOnLoad, targetID, targetName, player)
 				if not is_cached then
-					tfm.exec.chatMessage(
-						("<v>[#] <bl>Checking file data for %s's sanctions..."):format(targetName),
-						player
-					)
+					sendChatFmt("Checking file data for %s's sanctions...", player, targetName)
 				end
 			end
+		end, function()
+			sendChatFmt('<r>Could not load player data for %s, try id', player, targetName)
 		end)
 		if not is_cached then
-			tfm.exec.chatMessage(
-				("<v>[#] <bl>Checking player data for %s's sanctions..."):format(targetName),
-				player
-			)
+			sendChatFmt("Checking player data for %s's sanctions...", player, targetName)
 		end
 	end
 
 	if targetID then
-		local is_cached = schedule("sanction", false, function(data)
-			local file = data and data.sanction and data.sanction[targetID]
-			if not file then
-				tfm.exec.chatMessage(
-					("<v>[#] <r>%s not found in file data"):format(targetID),
-					player
-				)
-				return
-			end
-			printSanctions(
-				player,
-				'file',
-				targetName or targetID,
-				targetID,
-				file.timestamp,
-				file.time,
-				file.level,
-				tostring(data.mods[file.info] or file.info)
-			)
-		end)
+		local is_cached = schedule("sanction", false, printSanctionOnLoad, targetID, targetName, player)
 		if not is_cached then
-			tfm.exec.chatMessage(
-				("<v>[#] <bl>Checking file data for %s's sanctions..."):format(targetID),
-				player
-			)
+			sendChatFmt("Checking file data for %s's sanctions...", player, targetID)
 		end
 	end
 end })
@@ -701,8 +754,6 @@ newCmd({ name = "setrank",
 	end)
 	logCmd(cmd, player, args)
 end })
-
-local printSanctionList
 
 newCmd({ name = "file",
 	rank = "admin",
@@ -798,71 +849,8 @@ newCmd({ name = "file",
 
 		tfm.exec.chatMessage("<v>[#] <j>" .. rankName .. ":", player)
 		printList(list, 10, list._count, player)
-
-	elseif fileName == "sanction" then
-		local fileAction = args[2]
-		if fileAction == "list" then
-			local page = tonumber(args[3]) or 1
-			printSanctionList(player, nil, page)
-		else
-			printSanctionList(player, fileAction)
-		end
 	end
 end })
-
-printSanctionList = function(player, targetID, page)
-	local is_cached = schedule("sanction", false, function(data)
-		local sanctions_file = data.sanction
-		if not targetID then
-			local page_size = 90
-
-			if not data._keys then
-				tfm.exec.chatMessage("<v>[#] <r>Not loaded yet", player)
-				return
-			end
-
-			local playerIDs, len = {}, 0
-			for id in next, data._keys do
-				len = len + 1
-				playerIDs[len] = id
-			end
-
-			local totalPages = math.ceil(len / page_size)
-
-			if not page or page < 1 or page > totalPages then
-				tfm.exec.chatMessage("<v>[#] <j>Invalid page number. Available pages: 1 - " .. totalPages, player)
-				return
-			end
-
-			local startIndex = (page - 1) * page_size + 1
-			local endIndex = math.min(startIndex + page_size - 1, len)
-			local message = table.concat(playerIDs, ', ', startIndex, endIndex)
-
-			tfm.exec.chatMessage("<v>[#] <j>Count: " .. len, player)
-			tfm.exec.chatMessage("<v>[#] <j>" ..message, player)
-		else
-			if not tonumber(targetID) then
-				tfm.exec.chatMessage("<v>[#] <j>"..targetID.." doesn't seem like player id?", player)
-				return
-			end
-
-			if not sanctions_file[targetID] then 
-				tfm.exec.chatMessage("<v>[#] <j>The file has not been loaded yet or does not exist.", player)
-				return
-			end
-
-			local playerFile = sanctions_file[targetID]
-			tfm.exec.chatMessage("<v>[#] <j>Timestamp: "..playerFile.timestamp, player)
-			tfm.exec.chatMessage("<v>[#] <j>Time: "..playerFile.time, player)
-			tfm.exec.chatMessage("<v>[#] <j>Info: "..tostring(data.mods[playerFile.info] or playerFile.info), player)
-			tfm.exec.chatMessage("<v>[#] <j>Level: "..playerFile.level, player)
-		end
-	end)
-
-	if not is_cached then
-		tfm.exec.chatMessage("<v>[#] <j>Loading the sanctions file...", player)
-	end
-end
 
 newCmd({ name = {"announcement", "announce"},
 	rank = "manager",

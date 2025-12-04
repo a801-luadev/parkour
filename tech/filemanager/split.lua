@@ -5,6 +5,7 @@ do
   local gmatch, match = string.gmatch, string.match
   local rep, min = string.rep, math.min
   local concat = table.concat
+  local string_find, string_sub = string.find, string.sub
 
   local function createInnerPattern(length)
     return "^" .. rep("([^\2]+)\2", length - 1) .. "([^\2]+)$"
@@ -156,11 +157,62 @@ do
     return concat(state.all, "\1")
   end
 
+  local function find(str, kind, id)
+    local index = string_find(str, "\1" .. id .. "\2", 1, true)
+    if not index then return end
+
+    local nextIndex = string_find(str, "\1", index + 1, true)
+    local itemStr = string_sub(str, index + 1, nextIndex - 1)
+    local item
+
+    if kind == "shop" then
+      -- TODO implement if needed
+    elseif kind == "sanction" then
+      item = pack(match(itemStr, sanction_pattern))
+      item.id = tonumber(item[1])
+      item.timestamp = tonumber(item[2])
+      item.time = tonumber(item[3])
+      item.info = tonumber(item[4]) or 0
+      item.level = tonumber(item[5])
+    else
+      error("Invalid kind: " .. tostring(kind))
+    end
+
+    return item
+  end
+
+  local function updateSingle(str, item, kind)
+    local id = item.id
+
+    if kind == "shop" then
+      -- TODO implement if needed
+    elseif kind == "sanction" then
+      item[1] = id
+      item[2] = item.timestamp
+      item[3] = item.time
+      item[4] = item.info
+      item[5] = item.level
+      item = concat(item, "\2")
+    else
+      error("Invalid kind: " .. tostring(kind))
+    end
+
+    local index = string_find(str, "\1" .. id .. "\2", 1, true)
+    if not index then
+      return str .. item .. "\1"
+    end
+
+    local nextIndex = string_find(str, "\1", index + 1, true)
+    return string_sub(str, 1, index) .. item .. string_sub(str, nextIndex)
+  end
+  
   SplitRW = {
     shouldParse = shouldParse,
     split = split,
     parse = parse,
     update = update,
     dump = dump,
+    find = find,
+    updateSingle = updateSingle,
   }
 end

@@ -33,6 +33,8 @@ local cooldownMultiplier = 1
 local leaderboard, weekleaderboard, roomleaderboard, coinleaderboard = {}, {}, {}, {}
 local save_queue
 
+local bans = {}
+
 local difficulty_color = { 'vp', 'j', 'ch2' }
 local checkpoint_info = {
 	version = 1, -- 0 = old, 1 = new
@@ -243,11 +245,18 @@ local function checkBan(player, data, id)
 		if not data.lastsanction or bans[id] > data.lastsanction then
 			enableSpecMode(player, true)
 		else
-			bans[id] = false
+			bans[id] = nil
 			enableSpecMode(player, false)
+			return
 		end
 	elseif id == 0 then
 		enableSpecMode(player, true)
+	else
+		return
+	end
+
+	if AfkInterface.open[player] then
+		AfkInterface:remove(player)
 	end
 end
 
@@ -966,23 +975,6 @@ end)
 
 onEvent("PlayerDataUpdated", function(player, data)
 	checkBan(player, data)
-end)
-
-onEvent("GameDataLoaded", function(data)
-	if data.sanction then
-		if bans == data then return end
-		bans = data
-		for player, data in next, room.playerList do
-			if in_room[player] then
-				if bans[data.id] then
-					if AfkInterface.open[player] then
-						AfkInterface:remove(player)
-					end
-					enableSpecMode(player, true)
-				end
-			end
-		end
-	end
 end)
 
 onEvent("GameStart", function()
