@@ -110,6 +110,14 @@ do
       local msg = math.random(1, 5)
       if prize > 50 or prize == 0 then
         translatedChatMessage("found_gift" .. msg, nil, player, prize)
+        sendPacket(
+          "common",
+          packets.rooms.christmas_gift,
+          room.shortName .. "\000" ..
+          player .. "\000" ..
+          prize .. "\000" ..
+          msg
+        )
       else
         translatedChatMessage("found_gift" .. msg, player, player, prize)
       end

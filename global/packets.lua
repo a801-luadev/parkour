@@ -19,6 +19,7 @@ packets.rooms = {
   suspicious = 18,
   verify = 19,
   map_stats = 20,
+  christmas_gift = 21,
 }
 
 packets.bots = {
