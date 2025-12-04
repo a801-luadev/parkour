@@ -12,7 +12,6 @@ local interfaces_ordered = {_count = 0}
 local profile_request = {}
 local update_at = 0
 local previous_power_quantity = 0
-local reset_powers = false
 local online_staff = {
 	next_request = 0,
 	next_show = 0,
@@ -33,8 +32,10 @@ local function closeAllInterfaces(player)
 	if Profile.open[player] then
 		Profile:remove(player)
 	end
-	if PowerTracker.open[player] then
-		PowerTracker:remove(player)
+	for i=1, 3 do
+		if PowerTracker[i].open[player] then
+			PowerTracker[i]:remove(player)
+		end
 	end
 	if Staff.open[player] then
 		Staff:remove(player)
@@ -338,10 +339,12 @@ newCmd({ name = "hide",
 newCmd({ name = "track",
 	perm = "use_tracker",
 	fn = function(player)
-		if PowerTracker.open[player] then return end
+		local i = math.max(1, math.min(3, players_file[player].tracki or 2))
+
+		if PowerTracker[i].open[player] then return end
 
 		closeAllInterfaces(player)
-		PowerTracker:show(player, used_powers)
+		PowerTracker[i]:show(player, used_powers)
 	end })
 
 newCmd({ name = {"profile", "p"},
@@ -454,6 +457,18 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 	elseif action == "profile" then
 		if not checkCooldown(player, "clickprofile", 2000) then return end
 		eventChatCommand(player, "profile " .. args)
+	elseif action == "showpow" then
+		if perms[player] and perms[player].use_tracker then
+			if not checkCooldown(player, "showpow", 5000) then return end
+			local x, y = args:match("(%d+):(%d+)")
+			if not x or not y then return end
+			addNewTimer(
+				5000,
+				tfm.exec.removeImage,
+				tfm.exec.addImage("img@19aea039025", "!9999", x, y, player, 1, 1, 0, 1, 0.5, 0.5),
+				true
+			)
+		end
 	elseif action == "change_quest" then
 		if not checkCooldown(player, "changequest", 5000) then return end
 
@@ -538,7 +553,9 @@ onEvent("PlayerRespawn", function(player)
 end)
 
 onEvent("NewGame", function(player)
-	reset_powers = false
+	used_powers.keep = {_count=0}
+	used_powers._count = used_powers._count + 1
+	used_powers[used_powers._count] = '-'
 	no_help = {}
 
 	if current_poll then
@@ -598,16 +615,17 @@ onEvent("Loop", function(elapsed)
 		end
 	end
 
-	if not reset_powers and elapsed >= 27000 then
-		used_powers = {_count = 0}
-		reset_powers = true
+	if used_powers.keep and elapsed >= 27000 then
+		used_powers = used_powers.keep
 	end
 
 	if previous_power_quantity ~= used_powers._count then
 		previous_power_quantity = used_powers._count
 
-		for player in next, PowerTracker.open do
-			PowerTracker:update(player, used_powers)
+		for i=1, 3 do
+			for player in next, PowerTracker[i].open do
+				PowerTracker[i]:update(player, used_powers)
+			end
 		end
 	end
 

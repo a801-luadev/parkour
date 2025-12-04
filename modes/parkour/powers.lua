@@ -1113,8 +1113,15 @@ end
 
 local function addTracklist(power, player, x, y)
 	if not power.isVisual then
+		local item = {player, power.name, x, y}
 		used_powers._count = used_powers._count + 1
-		used_powers[ used_powers._count ] = {player, power.name, x, y}
+		used_powers[ used_powers._count ] = item
+
+		local keep = used_powers.keep
+		if keep then
+			keep._count = keep._count + 1
+			keep[ keep._count ] = item
+		end
 	end
 end
 
