@@ -138,6 +138,7 @@ function migrate_sanctions_2512()
   local prevId = 43
   local newId = 63
   local loaded_data = nil
+  local concat = table.concat
 
   tfm.exec.setRoomMaxPlayers(1)
 
@@ -173,9 +174,11 @@ function migrate_sanctions_2512()
       end
 
       saveFile(newId, {
-        ts = os.time(),
-        mods = loaded_data.mods,
-        data = concat(data, '\1'),
+        sanction = {
+          ts = os.time(),
+          mods = loaded_data.mods,
+          data = concat(data, '\1'),
+        }
       })
 
       tfm.exec.chatMessage("Saved file: " .. tostring(#loaded_data.mods) .. " mods, " .. tostring(count) .. " sanctions")
