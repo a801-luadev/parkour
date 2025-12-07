@@ -4,6 +4,11 @@ do
   local is_christmas_time = (month == 12 and day >= 15) or (month == 1 and day <= 15) or force_christmas_debug
 
   if is_christmas_time then
+    cp_img = {
+      [true] = "img@19af1ca9ec8", -- soulmate
+      [false] = "img@19af1cac163", -- no soulmate
+    }
+
     shop_skins[1].img = "18c72bad79e.png"
     shop_skins[1].shop_img = "18c72bd8ad1.png"
     shop_skins[2].img = "18c72ba3321.png"
