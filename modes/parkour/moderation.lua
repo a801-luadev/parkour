@@ -298,6 +298,12 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 			sanction and sanction.level or "-",
 		}
 
+		if not sanction then
+			sanction = {
+				id = playerID,
+			}
+		end
+
 		sanction.timestamp = now
 		sanction.time = time
 		sanction.info = mod_index
