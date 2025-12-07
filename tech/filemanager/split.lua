@@ -166,7 +166,18 @@ do
     local item
 
     if kind == "shop" then
-      -- TODO implement if needed
+      item = pack(match(itemStr, shop_pattern))
+      item.id = tonumber(item[1])
+      item.tab = tonumber(item[2])
+      item.img = item[3] ~= "." and item[3]
+      item.price = tonumber(item[4]) or -1
+      item.scale = item[5] ~= "." and tonumber(item[5]) or nil
+      item.hidden = item[6] ~= '0'
+      item.shop_img = item[7] ~= "." and item[7]
+      item.shop_scale = item[8] ~= "." and tonumber(item[8]) or nil
+      item.x = item[9] ~= "." and tonumber(item[9]) or nil
+      item.y = item[10] ~= "." and tonumber(item[10]) or nil
+      item.so = item[11] ~= "." and tonumber(item[11]) or nil
     elseif kind == "sanction" then
       item = pack(match(itemStr, sanction_pattern))
       item.id = tonumber(item[1])
@@ -185,7 +196,17 @@ do
     local id = item.id
 
     if kind == "shop" then
-      -- TODO implement if needed
+      item[1] = id
+      item[2] = item.tab
+      item[3] = item.img or "."
+      item[4] = item.price or -1
+      item[5] = item.scale or 1
+      item[6] = item.hidden and "1" or "0"
+      item[7] = item.shop_img or "."
+      item[8] = item.shop_scale or 1
+      item[9] = item.x or "."
+      item[10] = item.y or "."
+      item[11] = item.so or "."
     elseif kind == "sanction" then
       item[1] = id
       item[2] = item.timestamp

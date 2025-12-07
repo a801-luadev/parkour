@@ -71,6 +71,45 @@ local function apply_file_operation(data, operation, file, raw_data)
 		current[operation[#operation]] = parsed
 
 		return
+	elseif action == 'get_skin' then
+		local id = tonumber(operation[3])
+		if not id then return "invalid id" end
+
+		local data = "\1" .. data.shop.skins .. "\1"
+		local skin = SplitRW.find(data, "shop", id)
+
+		tfm.exec.playMusic(
+			'skin:' .. tostring(id),
+			json.encode(skin),
+			0, false, false, parkour_bot
+		)
+		return
+	elseif action == 'set_skin' then
+		local done, skin = pcall(json.decode, operation[3])
+		if not done then
+			return "invalid value: " .. tostring(operation[3])
+		end
+
+		if not skin.id then
+			skin.id = data.shop.last_id + 1
+		end
+		if not skin.tab then return "need tab" end
+
+		local shop_data = "\1" .. data.shop.skins .. "\1"
+		shop_data = SplitRW.updateSingle(shop_data, skin, "shop")
+
+		if shop_data then
+			data.shop.ts = os.time()
+			data.shop.last_id = math.max(data.shop.last_id, skin.id)
+			data.shop.skins = shop_data:sub(2, -2)
+		end
+
+		tfm.exec.playMusic(
+			'skin:' .. tostring(id),
+			json.encode(skin),
+			0, false, false, parkour_bot
+		)
+		return
 	elseif action == 'sanction' then
 		if not data.sanction then
 			return "no sanction field"
