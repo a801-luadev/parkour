@@ -427,6 +427,28 @@ local shop_skins = {
 	price = 30,
 	tab = 2
 },
+[2007] = {
+	currency = 'gifts',
+	img = 'img@19b2f3f55d0',
+	price = 60,
+	tab = 6,
+	shop_scale = 0.7,
+	y = 0.35
+},
+[2008] = {
+	currency = 'gifts',
+	img = 'img@19b2f3f71a3',
+	price = 60,
+	tab = 6,
+	shop_scale = 0.7
+},
+[2009] = {
+	currency = 'gifts',
+	img = 'img@198299bd98f',
+	price = 60,
+	tab = 2,
+},
+
 
 -- Lemonade
 [213] = {

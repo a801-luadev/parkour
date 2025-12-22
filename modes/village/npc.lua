@@ -47,7 +47,7 @@ onEvent("GameDataLoaded", function(data)
       elseif npc.active > 100000000 then
         ms, ds, me, de = tostring(npc.active):match('1(%d%d)(%d%d)(%d%d)(%d%d)')
         start_ts = os.time({ year=year, month=ms, day=ds })
-        end_ts = os.time({ year=year, month=me, day=de })
+        end_ts = os.time({ year=ms > me and (year+1) or year, month=me, day=de })
         npc.active = now > start_ts and now < end_ts
       else
         npc.active = (counter % npc.active) == 0

@@ -151,6 +151,7 @@ translations.tr = {
 	found_gift3 = "<J>%s</J> <ch>şanslı gününde! Yılbaşı hediyesi sayesinde <J>%s</J> coin daha zengin!",
 	found_gift4 = "<ch>Tebrikler, <J>%s</J>! <J>%s</J> coin kazandın!",
 	found_gift5 = "<ch>Muazzam! <J>%s</J>, Noel Baba'nın sürpriz hediyesini açtın ve <J>%s</J> coin kaptın!",
+	christmas_village = "<ROSE>Şimdi <b><u>/room #parkour0village</u></b> odasına giderek hediye kutularını özel ödüllerle takas edebilirsin!",
 
 	-- Halloween
 	halloween_msg_1 = "<CE>Perde inceliyor... <B>Büyülü malzemeler</B> ortaya saçıldı! Toplayabildiğini topla!",

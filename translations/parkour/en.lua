@@ -151,6 +151,7 @@ translations.en = {
 	found_gift3 = "<ch>It's a win for <J>%s</J>! <J>%s</J> coins richer thanks to Santa!",
 	found_gift4 = "<ch>Congratulations to <J>%s</J> on winning <J>%s</J> coins! The Christmas spirit is shining bright!",
 	found_gift5 = "<ch>Santa's gift has bestowed <J>%s</J> with <J>%s</J> dazzling coins!",
+	christmas_village = "<ROSE>You can go to <b><u>/room #parkour0village</u></b> to trade your gifts for exclusive rewards!",
 
 	-- Halloween
 	halloween_msg_1 = "<CE>The veil between worlds trembles... <B>Arcane materials</B> have emerged!",
