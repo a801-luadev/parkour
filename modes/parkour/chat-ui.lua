@@ -271,11 +271,11 @@ newCmd({ name = "give",
 				return tfm.exec.chatMessage("<v>[#] <r>" .. args[3] .. " doesnt look like a badge group?", player)
 			elseif not badge then
 				return tfm.exec.chatMessage("<v>[#] <r>" .. args[4] .. " doesnt look like a badge id?", player)
-			elseif group < 1 or group > #badges then
+			elseif not badges[group] then
 				return tfm.exec.chatMessage(
 					"<v>[#] <r>there are " .. #badges .. " badge groups but u want to give the n° " .. badge .. "?", player
 				)
-			elseif badge < 0 or badge > #badges[group] then
+			elseif badge ~= 0 and not badges[group][badge] then
 				return tfm.exec.chatMessage(
 					"<v>[#] <r>that group has ids 0-" .. #badges[group] .. " but u want " .. badge .. "?", player
 				)
