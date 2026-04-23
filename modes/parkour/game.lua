@@ -957,10 +957,12 @@ newCmd({ name = "setcp",
 		tfm.exec.chatMessage("<v>[#] <d>Changes will be applied in the next round.", player)
 	end })
 
-newCmd({ name = "hideall",
+newCmd({ name = "leader",
 	fn = function(player)
-		for target in next, in_room do
-			tfm.exec.addImage("img@19a052b8a83", "%" .. target, 0, 0, player)
+		if smol_completions and smol_completions._maxName then
+			sendChatFmt("<d>Room leader is %s with %s maps.", player, smol_completions._maxName, smol_completions._max)
+		else
+			sendChatFmt("<d>There is no room leader.", player)
 		end
 	end })
 
