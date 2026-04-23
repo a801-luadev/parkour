@@ -283,6 +283,12 @@ newCmd({ name = "give",
 				return tfm.exec.chatMessage("<v>[#] <r>that badge group can only be affected by bots", player)
 			end
 
+			if args[5] == "best" then
+				if file.badges[group] >= badge then
+					return tfm.exec.chatMessage("<v>[#] <r>current badge is the same or better", player)
+				end
+			end
+
 			file.badges[group] = badge
 			if badge > 0 then
 				NewBadgeInterface:show(target, group, badge)
