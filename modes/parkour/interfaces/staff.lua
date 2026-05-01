@@ -59,7 +59,10 @@ do
 		return function(self, player)
 			local image_x, image_y = self.parent.x + x, self.parent.y + 56
 			local imgs = images[container][player]
-			local show_hidden = perms[player] and perms[player].see_hidden_staff
+			local show_hidden = perms[player] and (
+				perms[player].see_hidden_staff or
+				tab[player] == 1 and perms[player].see_hidden_mapper
+			)
 
 			if not imgs then
 				imgs = {_count = 0}

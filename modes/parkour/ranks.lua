@@ -69,7 +69,7 @@ local ranks_permissions = {
 		see_map_polls = true,
 		set_map_time_review = true,
 		change_roommod = true,
-		see_hidden_staff = true,
+		see_hidden_mapper = true,
 		set_room_limit_review = true,
 	},
 	trainee = {
