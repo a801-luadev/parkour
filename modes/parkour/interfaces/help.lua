@@ -3,9 +3,13 @@ do
 	local texts = { -- name, max chars
 		{"help", nil},
 		{"staff", 700},
-		{"rules", 800},
 		{"contribute", nil},
-		{"changelog", nil}
+		{"changelog", nil},
+		{"rules", 800},
+		{"rules2", 800},
+		{"rules3", 800},
+		{"rules4", 800},
+		{"rules5", 800},
 	}
 	local extra_chars = {
 		ru = 250,
@@ -20,10 +24,10 @@ do
 
 		for index = 1, #texts do
 			local info = texts[index]
-			local text = translation["help_" .. info[1]]
+			local text = translation["help_" .. info[1]] or translations.en["help_" .. info[1]]
 			local data = {}
 
-			if #text > 1100 and info[2] then
+			if #text > 1300 and info[2] then
 				text = "\n" .. text
 
 				local breakpoint = info[2] + (extra_chars[lang] or 0)
@@ -59,7 +63,7 @@ do
 	end
 
 	local closeButton = Button.new()
-	HelpInterface = Interface.new(100, 50, 600, 330, true)
+	HelpInterface = Interface.new(50, 50, 700, 330, true)
 		:setDefaultArgs("help")
 		:loadTemplate(WindowBackground)
 
@@ -83,25 +87,6 @@ do
 			end
 		end)
 
-		-- Close button
-		:loadComponent(
-			closeButton:setText("")
-			:onClick(function(self, player)
-				self.parent:remove(player)
-			end)
-			:setPosition(60, 312):setSize(480, 10)
-		)
-		:addTextArea({
-			x = 60, y = 308,
-			width = 480, height = 15,
-			text = function(self, player)
-				return ("<a href='event:" .. closeButton.callback ..
-						"'><p align='center'>" .. translatedMessage("close", player) ..
-						"\n")
-			end,
-			alpha = 0
-		})
-
 		-- Tabs
 		:loadComponent( -- Help
 			Button.new():setTranslation("help")
@@ -120,7 +105,7 @@ do
 				end
 			end)
 
-			:setPosition(60, 10):setSize(80, 18)
+			:setPosition(10, 15):setSize(80, 18)
 		)
 		:loadComponent( -- Staff
 			Button.new():setTranslation("staff")
@@ -139,26 +124,7 @@ do
 				end
 			end)
 
-			:setPosition(160, 10):setSize(80, 18)
-		)
-		:loadComponent( -- Rules
-			Button.new():setTranslation("rules")
-
-			:onClick(function(self, player, page)
-				if not checkCooldown(player, "helpbuttons", 1500) then return end
-				scroll_info[player] = 1
-				self.parent:update(player, "rules")
-			end)
-
-			:canUpdate(true):onUpdate(function(self, player, page)
-				if page == "rules" then
-					self:disable(player)
-				else
-					self:enable(player)
-				end
-			end)
-
-			:setPosition(260, 10):setSize(80, 18)
+			:setPosition(10, 50):setSize(80, 18)
 		)
 		:loadComponent( -- Contribute
 			Button.new():setTranslation("contribute")
@@ -177,7 +143,7 @@ do
 				end
 			end)
 
-			:setPosition(360, 10):setSize(80, 18)
+			:setPosition(10, 85):setSize(80, 18)
 		)
 		:loadComponent( -- Changelog
 			Button.new():setTranslation("changelog")
@@ -196,12 +162,107 @@ do
 				end
 			end)
 
-			:setPosition(460, 10):setSize(80, 18)
+			:setPosition(10, 120):setSize(80, 18)
+		)
+		:loadComponent( -- Rules
+			Button.new():setTranslation("rules")
+
+			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
+				scroll_info[player] = 1
+				self.parent:update(player, "rules")
+			end)
+
+			:canUpdate(true):onUpdate(function(self, player, page)
+				if page == "rules" then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end)
+
+			:setPosition(10, 155):setSize(80, 18)
+		)
+		:loadComponent( -- Rules Page 2
+			Button.new():setTranslation("report_troll")
+
+			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
+				scroll_info[player] = 1
+				self.parent:update(player, "rules2")
+			end)
+
+			:canUpdate(true):onUpdate(function(self, player, page)
+				if page == "rules2" then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end)
+
+			:setPosition(20, 190):setSize(70, 18)
+		)
+		:loadComponent( -- Rules Page 3
+			Button.new():setTranslation("tab_misc")
+
+			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
+				scroll_info[player] = 1
+				self.parent:update(player, "rules3")
+			end)
+
+			:canUpdate(true):onUpdate(function(self, player, page)
+				if page == "rules3" then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end)
+
+			:setPosition(20, 225):setSize(70, 18)
+		)
+		:loadComponent( -- Rules Page 4
+			Button.new():setTranslation("report_hack")
+
+			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
+				scroll_info[player] = 1
+				self.parent:update(player, "rules4")
+			end)
+
+			:canUpdate(true):onUpdate(function(self, player, page)
+				if page == "rules4" then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end)
+
+			:setPosition(20, 260):setSize(70, 18)
+		)
+		:loadComponent( -- Rules Page 5
+			Button.new():setTranslation("tab_ban")
+
+			:onClick(function(self, player, page)
+				if not checkCooldown(player, "helpbuttons", 1500) then return end
+				scroll_info[player] = 1
+				self.parent:update(player, "rules5")
+			end)
+
+			:canUpdate(true):onUpdate(function(self, player, page)
+				if page == "rules5" then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end)
+
+			:setPosition(20, 295):setSize(70, 18)
 		)
 
 		:addTextArea({
-			x = 0, y = 35,
-			width = 0, height = 270,
+			x = 100, y = 0,
+			width = 0, height = 330,
 			canUpdate = true,
 			text = function(self, player, page)
 				local info = page_info[ player_langs[player].name ][ page ]
@@ -213,8 +274,8 @@ do
 						img = {
 							[1] = tfm.exec.addImage(
 								"1719e0e550a.png", "~10",
-								HelpInterface.x + 585,
-								HelpInterface.y + 40,
+								HelpInterface.x + 685,
+								HelpInterface.y + 50,
 								player
 							) -- scroll frame
 						}
@@ -228,8 +289,8 @@ do
 					end
 					img[2] = tfm.exec.addImage(
 						"1719e173ac6.png", "~10",
-						HelpInterface.x + 585,
-						HelpInterface.y + 40 + (125 / (#info - 1)) * (scroll - 1),
+						HelpInterface.x + 685,
+						HelpInterface.y + 50 + (125 / (#info - 1)) * (scroll - 1),
 						player
 					)
 
@@ -263,7 +324,7 @@ do
 					images[player] = nil
 				end
 
-				local desiredWidth = 600
+				local desiredWidth = 580
 				if self.width ~= desiredWidth then
 					self.width = desiredWidth
 					ui.addTextArea(
@@ -293,7 +354,7 @@ do
 			isScrollArrow = true,
 
 			canUpdate = true,
-			x = 580, y = 15,
+			x = 680, y = 25,
 			width = 20, height = 20,
 			text = "<a href='event:help_scroll_up'>/\\",
 			alpha = 0
@@ -302,10 +363,18 @@ do
 			isScrollArrow = true,
 
 			canUpdate = true,
-			x = 580, y = 295,
+			x = 680, y = 305,
 			width = 20, height = 20,
 			text = "<a href='event:help_scroll_down'>\\/\n",
 			alpha = 0
+		})
+
+		-- Close button
+		:addTextArea({
+			text = "<a href='event:close_help'><font color='#b84c36' size='15'><b>X</b></font></a>",
+			alpha = 0,
+			x = 680, y = 0,
+			width = 20, height = 20
 		})
 
 	local function scrollHelp(player, up)
@@ -324,6 +393,11 @@ do
 	end
 
 	onEvent("RawTextAreaCallback", function(id, player, cb)
+		if cb == "close_help" then
+		if not checkCooldown(player, "close_help", 1000) then return end
+			HelpInterface:remove(player)
+			return
+		end
 		if not checkCooldown(player, "helpscroll", 2000) then return end
 		if cb == "help_scroll_up" then
 			scrollHelp(player, true)
