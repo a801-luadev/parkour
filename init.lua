@@ -51,6 +51,7 @@ local is_tribe = starting == "*\003"
 local tribe, module_name, submode, tfm_mode
 local flags = ""
 
+room.starting = starting
 room.lowerName = string.lower(room.name)
 room.shortName = string.gsub(room.name, "%-?#parkour", "", 1)
 
@@ -168,6 +169,9 @@ else
 	if starting == "*#" then
 		module_name = string.match(room.name, "^%*#([a-z]+)")
 		pos = #module_name + 3
+	elseif starting == "@#" then
+		module_name = string.match(room.name, "^@#([a-z]+)")
+		pos = #module_name + 3
 	else
 		module_name = string.match(room.name, "^[a-z][a-z]%-#([a-z]+)")
 		pos = #module_name + 5
@@ -186,7 +190,7 @@ else
 		return 
 	end
 
-	if room.name == "*#parkour4bots" then
+	if starting == "@#" then
 		{% require-package "modes/bots" %}
 	elseif submode == "freezertag" then
 		{% require-package "modes/freezertag" %}

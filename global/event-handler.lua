@@ -46,8 +46,8 @@ do
 
 		tfm.exec.chatMessage(name .. " - " .. msg)
 
-		if room.name == "*#parkour4bots" then
-			ui.addTextArea(0, "*4bots\000" .. name .. "\000" .. msg)
+		if room.starting == "@#" then
+			ui.addTextArea(0, room.shortName .. "\000" .. name .. "\000" .. msg)
 			return
 		end
 
@@ -139,7 +139,7 @@ do
 				pausedEventInfo[i] = tostring(pausedEventInfo[i] or ""):sub(1, 20)
 			end
 
-			local sendOrRecv = room.name == "*#parkour4bots" and eventPacketReceived or sendPacket
+			local sendOrRecv = room.starting == "@#" and eventPacketReceived or sendPacket
 			sendOrRecv(
 				"common", packets.rooms.paused_events,
 				room.shortName .. "\000" ..
