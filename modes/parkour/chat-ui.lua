@@ -691,6 +691,23 @@ onEvent("PacketReceived", function(channel, id, packet)
 			-- targets a player (regardless of the room)
 			tfm.exec.chatMessage(msg, targetPlayer)
 		end
+	elseif id == packets.bots.player_list then
+		local names, ids, n = {}, {}, 0
+
+		for name, info in next, room.playerList do
+			n = 1 + n
+			names[n] = name
+			ids[n] = info.id
+		end
+
+		sendPacket(
+			"common",
+			packets.rooms.player_list,
+			room.shortName .. "\000" ..
+			room.uniquePlayers .. "\000" ..
+			table.concat(names, "\001") .. "\000" ..
+			table.concat(ids, "\001")
+		)
 	end
 end)
 

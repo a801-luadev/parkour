@@ -20,6 +20,7 @@ packets.rooms = {
   verify = 19,
   map_stats = 20,
   christmas_gift = 21,
+  player_list = 22,
 }
 
 packets.bots = {
@@ -34,4 +35,5 @@ packets.bots = {
   change_lock = 8,
   remote_command = 9,
 	report_feedback = 10,
+  player_list = 11,
 }
