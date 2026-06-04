@@ -19,15 +19,20 @@ translations.br = {
 	leaderboard_not_loaded = "<r>O ranking ainda não foi carregado. Aguarde um minuto.",
 	max_power_keys = "<v>[#] <r>Você pode ter no máximo %s poderes na mesma tecla.",
 	room_name_length = "<ROSE><b>[ERRO]</b> O nome da sala excede o tamanho máximo de <b>45</b> caracteres. Por favor, escolha um nome menor.",
+	bad_outfit = "<r>Seu pelo ou algum item que esteja usando não pode ser usado em Parkour.",
+	insufficient_coins = "<v>[#] <r>Você não tem moedas suficiente. ",
+	insufficient_event_coins = "<r>Hmm, tem algo errado. Pode verificar a sua bolsa novamente?",
 
 	-- Help window
 	help = "Ajuda",
 	staff = "Staff",
 	rules = "Regras",
+	tab_ban = "Ban",
 	contribute = "Contribuir",
 	changelog = "Novidades",
 	help_help = "<p align = 'center'><font size = '14'>Bem-vindo ao <T>#parkour!</T></font></p>\n<font size = '12'><p align='center'><J>Seu objetivo é chegar em todos os checkpoints até que você complete o mapa.</J></p>\n\n<N>• Aperte <O>O</O>, digite <O>!op</O> ou clique no <O>botão de configuração</O> para abrir o <T>menu de opções</T>.\n• Aperte <O>P</O> ou clique no <O>ícone de mão</O> no parte superior direita para abrir o <T>menu de poderes</T>.\n• Aperte <O>L</O> ou digite <O>!lb</O> parar abrir o <T>ranking</T>.\n• Aperte <O>M</O> ou a tecla <O>Delete</O> para <T>/mort</T>, você pode alterar as teclas no moenu de <J>Opções</J>.\n• Para saber mais sobre nossa <O>staff</O> e as <O>regras do parkour</O>, clique nas abas <T>Staff</T> e <T>Regras</T>, respectivamente.\n• Clique <a href='event:discord'><o>aqui</o></a> para obter um link de convide para o nosso servidor no Discord e <a href='event:map_submission'><o>aqui</o></a> para obter o link do tópico de avaliação de mapas.\n• Use as setas <o>para cima</o> ou <o>para baixo</o> quando você precisar rolar a página.\n\n<p align = 'center'><font size = '13'><T>Contribuições agora estão disponíveis! Para mais detalhes, clique na aba <O>Contribuir</O>!</T></font></p>",
 	help_staff = "<p align = 'center'><font size = '13'><r>AVISO: A staff do Parkour não faz parte da staff do Transformice e não tem nenhum poder no jogo em si, apenas no módulo.</r>\nStaff do Parkour assegura que o módulo rode com problemas mínimos, e estão sempre disponíveis para dar assistência aos jogadores quando necessário.</font></p>\nVocê pode digitar <D>!staff</D> no chat para ver a lista de staff.\n\n<font color = '#E7342A'>Administradores:</font> São responsáveis por manter o módulo propriamente dito, atualizando-o e corrigindo bugs.\n\n<font color = '#D0A9F0'>Gerenciadores das Equipes:</font> Observam as equipes de Moderação e de Mapas, assegurando que todos estão fazendo um bom trabalho. Também são responsáveis por recrutar novos membros para a staff.\n\n<font color = '#FFAAAA'>Moderadores:</font> São responsáveis por aplicar as regras no módulo e punir aqueles que não as seguem.\n\n<font color = '#25C059'>Mappers:</font> São responsáveis por avaliar, adicionar e remover mapas do módulo para assegurar que você tenha uma jogatina divertida.",
+	help_rules = "<font size='+2'><B><J>Todas as regras dos Termos de Condições do Transformice também se aplicam ao #parkour</J></B></font>\n\nSe você vir alguém infringindo alguma dessas regras, por favor, digite <R>!report</R> no chat da sala ou <R>!report (Jogador#tag) [motivo]</R> Se o jogador não estiver mais na sala.\n\nSe você tiver evidência em video do troll, você pode enviar para parkour <font color='#5865f2'><a href='event:discord'>discord</a></font> report-players chat. (screenshots não podem ser aceitas, já que elas podem ser alteradas)\n\n<b>Qualquer reporte relacionado a (Insultos/Obscenidade) precisam ser reportados para <J>Transformice moderadores.</J> Funcionários do Parkour não são funcionários do Transformice, portanto, não temos as ferramentas necessárias para lidar com problemas relacionas ao chat</b>\n\n<R>A premissa de trollagem pode ser aceita no Transformice, mas é proibida no #parkour module\nNote que a trollagem repetida resultará em punições mais longas e severas.</R>\n\n• SEM <R>hacks, glitches ou bugs</R> devem ser usados em salas #parkour\n• <R>VPN farming</R> será considerado <B>exploração</B> e nao é permitido.\n<R><B>.Qualquer um que for pego infringindo essas regras será imediatamente banido</B></R>\n\nPor favor, lembrem-se de que a equipe de parkour é formada por voluntários que também têm vidas fora do jogo. Embora eles se esforcem ao máximo para tornar este module o mais agradável possível, a vida pessoal sempre vem em primeiro lugar. Não peguem no pé da nossa equipe, estamos todos aqui para nos divertir e jogar :)",
 	help_contribute = "<font size='14'>\n<p align='center'>A equipe do parkour adora ter um código aberto, pois isso <t>ajuda a comunidade</t>. Você pode <o>ver</o> ou <o>contribuir</o> com o código no <o><u><a href='event:github'>GitHub</a></u></o>.\n\nManter o módulo é parte de um trabalho <t>voluntário</t>, então qualquer contribuição é <u>bem vinda</u>, seja com a <t>programação</t>, <t>reporte de erros</t>, <t>sugestões</t> e <t>criação de mapas</t>.\nVocê pode <vp>reportar erros</vp> ou <vp>dar sugestões</vp> no nosso <o><u><a href='event:discord'>Discord</a></u></o> e/ou no <o><u><a href='event:github'>GitHub</a></u></o>.\nVocê pode <vp>enviar seus mapas</vp> no nosso <o><u><a href='event:map_submission'>Tópico no Fórum</a></u></o>.\n\nManter o jogo não é caro, mas também não é grátis. Nós adoraríamos se você pudesse incentivar o desenvolvimento do jogo <t>doando qualquer valor</t> <o><u><a href='event:donate'>aqui</a></u></o>.\n<u>Todos os fundos arrecadados serão direcionados para o desenvolvimento do módulo.</u></p>",
 	help_changelog = "<font size='13'><p align='center'><o>Versão 2.15.0 - 1/12/2023</o></p>\n\n<font size='11'>• <font size='13'>Sistema de missões implementado. (Aperte <J><B>,</B></J> para abrir painel de missões.)\n\n<font size='11'>• <font size='13'>Adicionado uma opção para desativar as teclas de atalho de todas as interfaces tipo rank, ajuda, loja, etc.\n\n<font size='11'>• <font size='13'>Adicionado <B><J>!cp [PlayerName#tag]</J></B> comando para ir direto para o checkpoint de um jogador especifico.",
 
@@ -37,6 +42,7 @@ translations.br = {
 	reached_level = "<d>Parabéns! Você atingiu o nível <vp>%s</vp>. (<t>%ss</t>)",
 	finished = "<d><o>%s</o> terminou o parkour em <vp>%s</vp> segundos, <fc>parabéns!",
 	unlocked_power = "<ce><d>%s</d> desbloqueou o poder <vp>%s</vp>.",
+	unlocked_skin = "<ce><d>%s</d> desbloqueou uma skin para o <vp>%s</vp> poder.",
 
 	-- Information messages
 	mod_apps = "<j>As inscrições para moderador do parkour estão abertas! Use esse link: <rose>%s",
@@ -47,6 +53,7 @@ translations.br = {
 	welcome = "<n>Bem-vindo(a) ao <t>#parkour</t>!",
 	module_update = "<r><b>[Atenção!]</b> <n>O módulo irá atualizar em <d>%02d:%02d</d>.",
 	leaderboard_loaded = "<j>O ranking foi carregado. Aperte L para abri-lo.",
+	shop_loaded = "<j>Os itens da loja foram carregados",
 	kill_minutes = "<R>Seus poderes foram desativados por %s minutos.",
 	permbanned = "<r>Você foi banido permanentemente do #parkour.",
 	tempbanned = "<r>Você foi banido do #parkour por %s minutos.",
@@ -167,6 +174,8 @@ translations.br = {
 	help_badge_21 = "Este jogador teve o tempo mais rápido em 30 mapas.",
 	help_badge_22 = "Este jogador teve o tempo mais rápido em 35 mapas.",
 	help_badge_23 = "Este jogador teve o tempo mais rápido em 40 mapas.",
+	help_badge_24 = "Este jogador comprou essa medalha no Festival da Limonada.",
+	help_badge_25 = "Este jogador comprou essa medalha no evento de Halloween.",
 	make_public = "tornar público",
 	make_private = "tornar privado",
 	moderators = "Moderadores",
@@ -182,6 +191,7 @@ translations.br = {
 	idk = "Não sei",
 	vote_map = "<font color='#ffffff' size='13'><b>Você gosta deste mapa? <font size='14'><a href='event:mapPollYes'><PT>Sim</a> <a href='event:mapPollidk'><N>Não sei</a> <a href='event:mapPollNo'><R>Não</a>",
 	unknown = "Desconhecido",
+	hidden_player = "Jogador anônimo",
 	powers = "Poderes",
 	press = "<vp>Aperte %s",
 	click = "<vp>Use click",
@@ -197,12 +207,19 @@ translations.br = {
 	new_lang = "<v>[#] <d>Idioma definido para Português",
 	room = "Sala",
 	time = "Tempo",
+	coins = "moedas",
 	buy = "Comprar",
+	sell = "vender",
+	refund = "reembolso",
+	refund_info = "<p align='right'><font size='10'><b><g>Reembolsar 70% das moedas usadas nos itens.",
 	equip = "Equipe",
 	equipped = "<font size = '10'>Equipado</font>",
 	saving = "<p align='right'>Salvando...",
 	new_image = "<J>Sua aparência mudou. Você pode voltar ao normal escrevendo !image",
 	smol_best = "<j>Novo líder da sala smol: %s com %s mapas completados!",
+	event = "Evento",
+	settings = "Configurações",
+	npc_thanks = "<j>Obrigado!",
 
 	-- Power names
 	balloon = "Balão",
@@ -225,5 +242,7 @@ translations.br = {
 	campfire = "Fogueira",
 	chair = "Cadeira",
 	link = "Alma gêmea",
+	shop_power = "Poder da loja",
+	ladder = "Escada",
 }
 translations.pt = translations.br
