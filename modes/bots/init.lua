@@ -110,6 +110,25 @@ local function apply_file_operation(data, operation, file, raw_data)
 			0, false, false, parkour_bot
 		)
 		return
+	elseif action == 'get_sanction' then
+		if not data.sanction then
+			return "no sanction field"
+		end
+
+		local playerid = tonumber(operation[3])
+		if not playerid then
+			return "invalid player id"
+		end
+
+		local sanction_data = "\1" .. data.sanction.data .. "\1"
+		local sanction = SplitRW.find(sanction_data, "sanction", playerid)
+
+		tfm.exec.playMusic(
+			'sanctiondata:' .. tostring(playerid),
+			json.encode(sanction),
+			0, false, false, parkour_bot
+		)
+		return
 	elseif action == 'sanction' then
 		if not data.sanction then
 			return "no sanction field"
