@@ -27,6 +27,7 @@ local textareas = {
 	heartbeat = 1 + 255,
 	file_action_status = 2 + 255,
 	pdata_update_status = 3 + 255,
+	bot_room_pw = 4 + 255,
 }
 
 local parkour_bot = "Parkour#0568"
@@ -248,6 +249,10 @@ end
 onEvent("NewPlayer", function(player)
 	if player ~= parkour_bot then return end
 	file_updates = nil
+
+	local password = generateRandomString(10)
+	tfm.exec.setRoomPassword(password)
+	addTextArea(textareas.bot_room_pw, password, parkour_bot)
 end)
 
 onEvent("PlayerLeft", function(player)
