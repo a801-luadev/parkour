@@ -38,6 +38,7 @@ local maplist_index = 0
 local next_map
 local mapIsAboutToChange
 local map_images
+local map_features = {}
 
 for i=1,3 do
 	maps[i] = {
@@ -271,7 +272,9 @@ onEvent("NewGame", function()
 	local map_code_num = tonumber(tostring(room.currentMap):sub(2))
 
 	map_images = nil
+	map_features = {}
 	current_difficulty = 0
+
 	for i=1, 3 do
 		if table_find(maps[i].list, map_code_num) then
 			current_difficulty = i
@@ -378,6 +381,34 @@ onEvent("NewGame", function()
 		for index = 1, count do
 			levels[index].x = 1600 - levels[index].x
 		end
+	end
+
+	if string.find(xml, '<S [^>]*T="19"') then
+		map_features.acid = true
+	end
+
+	if string.find(xml, ' friction="', 1, true) or string.find(xml, '<S [^>]*T="20"') then
+		map_features.honey = true
+	end
+
+	if string.find(xml, ' name="', 1, true) and string.find(xml, ' target="', 1, true) then
+		map_features.galaxy = true
+	end
+
+	if string.find(xml, ' archAcc="', 1, true) or string.find(xml, ' archCheeseMax="', 1, true) or string.find(xml, ' archMax="', 1, true) then
+		map_features.water = true
+	end
+
+	if string.find(xml, ' dodue=""', 1, true) then
+		map_features.cheese = true
+	end
+
+	if string.find(xml, ' aie="', 1, true) then
+		map_features.aie = true
+	end
+
+	if string.find(xml, ' mgoc="-1"', 1, true) then
+		map_features.mgoc = true
 	end
 
 	tfm.exec.setGameTime(1080)

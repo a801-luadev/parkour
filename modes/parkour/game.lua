@@ -966,6 +966,23 @@ newCmd({ name = "leader",
 		end
 	end })
 
+newCmd({ name = "info",
+	fn = function(player, args, cmd)
+		local features = {}
+
+		for feature in next, map_features do
+			features[1 + #features] = feature
+		end
+
+		sendChatFmt(
+			"<BV>%s\nDiff: %s\nFeatures: %s",
+			player,
+			tostring(map_name),
+			current_difficulty,
+			table.concat(features, ' ')
+		)
+	end })
+
 onEvent("PlayerDataParsed", function(player, data)
 	if players_file[player].spec then
 		enableSpecMode(player, true)
