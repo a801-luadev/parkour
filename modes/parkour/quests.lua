@@ -618,4 +618,46 @@ Quests[7] = {
 		end
 	end,
 }
+
+local feature_mapping = { 'acid', 'water', 'honey' }
+
+Quests[8] = {
+	description = function(player, data, index)
+		local feature = data:quest_extra(index)
+		return translatedMessage(
+			"quest_8",
+			player,
+			data:quest_progress(index),
+			data:quest_target(index),
+			translatedMessage("quest_8_" .. feature, player)
+		)
+	end,
+
+	target = function(weekly)
+		return weekly and random(5, 25) or random(1, 5)
+	end,
+
+	prize = function(player, data, index)
+		local coins = data:quest_target(index) * (index > 4 and 2 or 3)
+		return ceil(coins / 5) * 5 -- per map
+	end,
+
+	extra = function()
+		return random(1, 3)
+	end,
+
+	progress_completion = function(player, data, index)
+		if not map_features[feature_mapping[data:quest_extra(index)]] then return end
+
+		local target = data:quest_target(index)
+		local new = 1 + data:quest_progress(index)
+
+		data:quest_progress(index, new)
+
+		if new >= target then
+			completeQuest(player, data, index)
+			return true
+		end
+	end,
+}
 end
