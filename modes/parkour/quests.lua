@@ -79,16 +79,18 @@ end
 local function assign_quest(data, slot, available, power_ids, weekly)
 	local randomIndex = random(#available)
 	local randomQuest = available[randomIndex]
+	local quest = Quests[randomQuest]
+	local extra
+
+	if quest.extra then
+		extra = quest.extra(weekly, power_ids)
+		data:quest_extra(slot, extra)
+	end
 
 	data:quest_id(slot, randomQuest)
 	data:quest_ts(slot, 0)
-	data:quest_target(slot, Quests[randomQuest].target(weekly))
+	data:quest_target(slot, quest.target(weekly, extra))
 	data:quest_progress(slot, 0)
-
-	if randomQuest == 6 then
-		local randomPower = power_ids[random(#power_ids)]
-		data:quest_extra(slot, randomPower)
-	end
 
 	table_remove(available, randomIndex)
 end
@@ -336,7 +338,7 @@ newCmd({ name = {"aquest", "aq"},
 				end
 
 				sendChatFmt(
-					"[%s %s] id:%s ts:%s pg:%s tg:%s pow:%s",
+					"[%s %s] id:%s ts:%s pg:%s tg:%s extra:%s",
 					player,
 					i > 4 and "weekly" or "daily",
 					i > 4 and (i - 4) or i,
@@ -553,6 +555,67 @@ Quests[6] = {
 		return ceil(coins / 5) * 5 -- per use
 	end,
 
+	extra = function(weekly, power_ids)
+		return power_ids[random(#power_ids)]
+	end,
+
 	progress_power = linear_progress,
+}
+
+Quests[7] = {
+	description = function(player, data, index)
+		local colortag = difficulty_color[current_difficulty] or 'fc'
+		return translatedMessage(
+			"quest_7",
+			player,
+			data:quest_progress(index),
+			data:quest_target(index),
+			colortag,
+			('★'):rep(data:quest_extra(index) or 1),
+			colortag
+		)
+	end,
+
+	target = function(weekly, difficulty)
+		if difficulty == 1 then
+			return weekly and random(30, 60) or random(8, 15)
+		elseif difficulty == 3 then
+			return weekly and random(10, 25) or random(3, 5)
+		end
+		return weekly and random(20, 50) or random(5, 10)
+	end,
+
+	prize = function(player, data, index)
+		local diff = data:quest_extra(index)
+		local target = data:quest_target(index)
+		local mult = 1
+
+		if diff == 2 then
+			mult = index > 4 and 1.5 or 2
+		elseif diff == 3 then
+			mult = index > 4 and 3.5 or 5
+		end
+
+		local coins = target * mult
+		return ceil(coins / 5) * 5 -- per map
+	end,
+
+	extra = function(weekly, power_ids)
+		return weekly and random(1, 3) or random(1, 2)
+	end,
+
+	progress_completion = function(player, data, index)
+		if current_difficulty ~= data:quest_extra(index) then return end
+
+		local target = data:quest_target(index)
+		local new = 1 + data:quest_progress(index)
+
+		data:quest_progress(index, new)
+
+		if new >= target then
+			completeQuest(player, data, index)
+			return true
+		end
+	end,
 }
 end

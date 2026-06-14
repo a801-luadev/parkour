@@ -142,6 +142,7 @@ translations.en = {
 	quest_4 = "Complete a map in under <B><D>%s</D></B> seconds.",
 	quest_5 = "Complete the map <B><D>@%s</D></B>",
 	quest_6 = "Use the <PT><b>%s</b></PT> power <B><D>%s/%s</D></B> times.",
+	quest_7 = "Complete <B><D>%s/%s</D></B> maps rated <%s>%s</%s>",
 	next_reset = "<b><D>Reset:\n</b></D>%s",
 	quest_completed = "<b><D>Congratulations!</D></b> \nYou've completed a %s quest!",
 	quest_reset = "<V>[#]</V> <O>Your %s quests have been reset.</O>",
