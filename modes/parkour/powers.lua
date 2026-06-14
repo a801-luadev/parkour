@@ -1160,22 +1160,7 @@ local function usePower(player, _power, key, down, x, y, chairCd, onlyVisual, vx
 	addTracklist(power, player, x, y)
 
 	if doStatsCount() then
-		if power_quest[player] and (power_quest[player].w or power_quest[player].d) then
-			local save = false
-			local file = players_file[player].quests
-			if power_quest[player].w and power_quest[player].w == power.id then
-				quests[6].updateProgress(player, file[power_quest[player].wi], true)
-				save = true
-			end
-			if power_quest[player].d and power_quest[player].d == power.id then
-				quests[6].updateProgress(player, file[power_quest[player].di], false)
-				save = true
-			end
-
-			if save then
-				savePlayerData(player)
-			end
-		end
+		Quests.trigger_power(player, power.id)
 	end
 end
 
@@ -1309,24 +1294,6 @@ end)
 onEvent("PlayerDataUpdated", function(player, data)
 	checkKill(player)
 
-	if data.quests then
-		for i = 1, #data.quests do
-			if data.quests[i].id == 6 then
-				if not power_quest[player] then
-					power_quest[player] = {}
-				end
-
-				if i <= 4 then
-					power_quest[player].d = data.quests[i].pr
-					power_quest[player].di = i
-				else
-					power_quest[player].w = data.quests[i].pr
-					power_quest[player].wi = i
-				end
-			end
-		end
-	end
-
 	if fixHourCount(data) then
 		savePlayerData(player)
 	end
@@ -1380,17 +1347,7 @@ onEvent("PlayerCompleted", function(player, info, file)
 			first_player = player
 		end
 
-		if file.quests then
-			for questIndex = 1, #file.quests do
-				local questID = file.quests[questIndex].id
-				local isWeekly = questIndex > 4
-
-				if questID < 6 then
-					quests[file.quests[questIndex].id].updateProgress(player, file.quests[questIndex], isWeekly)
-				end
-			end
-		end
-		
+		Quests.trigger_completion(player, file)
 		savePlayerData(player)
 	end
 

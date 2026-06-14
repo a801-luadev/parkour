@@ -1,39 +1,21 @@
+local QuestsInterface
+
 do
-	local isQuestSkipped = {}
-	local function checkQuestSkipped(player)
-		if not players_file[player] then return end
-		if not players_file[player].quests then return end
-
-		isQuestSkipped[player] = {
-			weekly = false,
-			daily = false,
-		}
-
-		for i = 1, #players_file[player].quests do
-			if players_file[player].quests[i].skp and players_file[player].quests[i].skp > 1 then
-				if i <= 4 then
-					isQuestSkipped[player].daily = true
-				else
-					isQuestSkipped[player].weekly = true
-				end
-			end
-		end
-	end
-
 	local closeButton = Button.new()
+
 	QuestsInterface = Interface.new(200, 35, 400, 350, true)
 		:loadTemplate(WindowBackground)
 		:setShowCheck(function(self, player, page, data)
-			checkQuestSkipped(player)
-			if not players_file[player].quests then
-				tfm.exec.chatMessage("<c> No quest data.", player)
-				return false
-			end
 			if not data then
-				local getPage = page and page or 1
-				self:show(player, getPage, players_file[player].quests)
+				data = players_file[player]
+
+				if data then
+					self:show(player, page or 1, data)
+				end
+
 				return false
 			end
+
 			return true
 		end)
 
@@ -59,7 +41,9 @@ do
 
 			:onClick(function(self, player, page)
 				if not checkCooldown(player, "daily_quest_button", 3000) then return end
-				self.parent:update(player, 1)
+				if not players_file[player] then return end
+
+				self.parent:update(player, 1, players_file[player])
 			end)
 
 			:canUpdate(true):onUpdate(function(self, player, page)
@@ -78,7 +62,9 @@ do
 
 			:onClick(function(self, player, page)
 				if not checkCooldown(player, "weekly_quest_button", 3000) then return end
-				self.parent:update(player, 2)
+				if not players_file[player] then return end
+
+				self.parent:update(player, 2, players_file[player])
 			end)
 
 			:canUpdate(true):onUpdate(function(self, player, page)
@@ -98,14 +84,14 @@ do
 			canUpdate = true,
 			text = function(self, player, page)
 				local currentTime = os.time()
-				local reset_time = getQuestsResetTime() -- reset_time = {last_daily_reset, last_weekly_reset, next_daily_reset, next_weekly_reset}
+				local next_daily, next_weekly = Quests.get_next_reset()
 
 				local day = 24 * 60 * 60 * 1000
 				local hour = 1 * 60 * 60 * 1000
 				local minute = 1 * 60 * 1000
 
-				local weekly_diff = reset_time[4] - currentTime
-				local daily_diff = reset_time[3] - currentTime
+				local daily_diff = next_daily - currentTime
+				local weekly_diff = next_weekly - currentTime
 
 				local weekly_days = math.floor(weekly_diff / day)
 				local weekly_hours = math.floor((weekly_diff % day) / hour)
@@ -159,10 +145,10 @@ do
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[i].id or players_file[player].quests[i + 4].id
-				local isWeekly = (page ~= 1)
+				local index = i + (page == 2 and 4 or 0)
 				return string.format(
-					"<p align='center'><font color='#ffffff' size='14' face='Verdana'><b>%s", quests[questID].prize(player, isWeekly)
+					"<p align='center'><font color='#ffffff' size='14' face='Verdana'><b>%s",
+					Quests[data:quest_id(index)].prize(player, data, index)
 				)
 			end
 		})
@@ -172,57 +158,48 @@ do
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, data)
-				local questID = page == 1 and players_file[player].quests[i].id or players_file[player].quests[i + 4].id
-				local isWeekly = (page ~= 1)
-				return quests[questID].description(player, isWeekly)
+				local index = i + (page == 2 and 4 or 0)
+				return Quests[data:quest_id(index)].description(player, data, index)
 			end
 		})
-		:addImage({ -- Button Image
+		:addImage({ -- State Image
 			canUpdate = true,
 			image = function(self, player, page, data)
-				local questCompleted = false
-				if (page == 1 and players_file[player].quests[i].ts) or (page == 2 and players_file[player].quests[i + 4].ts) then
-					questCompleted = true
-				end
+				local index = i + (page == 2 and 4 or 0)
 
-				local questSkipped = false
-				if (page == 1 and isQuestSkipped[player].daily) or (page == 2 and isQuestSkipped[player].weekly) then
-					questSkipped = true
-				end
-
-				if questCompleted then
+				-- completed
+				if data:quest_ts(index) > 0 then
 					return "18bdfe01bb3.png"
-				elseif questSkipped then
-					return "img@199ac2e9c66"
-				else
-					return "18bab04d3a9.png"
 				end
+
+				-- skipped
+				if Quests.skipped(data, index) then
+					return "img@199ac2e9c66"
+				end
+
+				return "18bab04d3a9.png"
 			end,
 			
 			target = "~10",
 			x = 360, y = 35 + 60 * i,
 		})
-		:addTextArea({ -- Change TA
+		:addTextArea({ -- Skip Button
 			x = 360, y = 35 + 60 * i,
 			width = 20, height = 20,
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, data)
-				local questID = page == 1 and i or (i + 4)
+				local index = i + (page == 2 and 4 or 0)
 
-				local questCompleted = false
-				if players_file[player].quests[questID].ts then
-					questCompleted = true
-				end
+				-- skipped
+				if Quests.skipped(data, index) then return "" end
 
-				local questSkipped = false
-				if (page == 1 and isQuestSkipped[player].daily) or (page == 2 and isQuestSkipped[player].weekly) then
-					questSkipped = true
-				end
+				local ts = data:quest_ts(index)
 
-				if questSkipped or questCompleted then return "" end
-				
-				return string.format("<a href='event:change_quest:%s:%s'><font size='50'>  </font></a>", questID, page)
+				-- completed
+				if ts > 0 then return "" end
+
+				return string.format("<a href='event:change_quest:%s'><font size='50'>  </font></a>", index)
 			end
 		})
 	end

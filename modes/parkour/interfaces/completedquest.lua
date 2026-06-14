@@ -1,3 +1,5 @@
+local CompletedQuestsInterface
+
 do
 	CompletedQuestsInterface = Interface.new(480, 350, 300, 40, true)
 		:loadTemplate(WindowBackground)

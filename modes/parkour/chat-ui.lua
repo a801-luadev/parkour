@@ -35,7 +35,7 @@ onEvent("NewGame", function()
 	end
 
 	for player in next, in_room do
-		checkMapQuest(player)
+		Quests.trigger_map(player)
 	end
 end)
 
@@ -590,7 +590,7 @@ onEvent("PlayerDataParsed", function(player, data)
 	end
 
 	checkRoomRequest(player, data)
-	checkMapQuest(player)
+	Quests.trigger_map(player)
 
 	if records_admins then
 		if string.find(room.lowerName, string.lower(player), 1, true) then

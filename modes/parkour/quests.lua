@@ -1,36 +1,213 @@
-local checkMapQuest
-
 do
-local function getPlayerQuest(player, questID, isWeekly)
-	if not players_file[player] or not players_file[player].quests then
-		return false
+local floor, ceil, random, tonumber = math.floor, math.ceil, math.random, tonumber
+local os_time, table_remove = os.time, table.remove
+
+local a_day = 24 * 60 * 60 * 1000
+local a_week = 7 * a_day
+
+Quests = {}
+
+local static_reset_delta = os_time()
+
+local function get_last_reset_delta()
+	local ts = os_time() + static_reset_delta
+	local delta = ts - WEEKLY_RESET_INIT
+	local daily = WEEKLY_RESET_INIT + a_day * floor(delta / a_day)
+	local weekly = WEEKLY_RESET_INIT + a_week * floor(delta / a_week)
+	return daily, weekly
+end
+
+local function get_last_reset_actual()
+	local ts = os_time()
+	local delta = ts - WEEKLY_RESET_INIT
+	local daily = WEEKLY_RESET_INIT + a_day * floor(delta / a_day)
+	local weekly = WEEKLY_RESET_INIT + a_week * floor(delta / a_week)
+	return daily, weekly
+end
+
+local get_last_reset = get_last_reset_actual
+
+function Quests.get_next_reset()
+	local daily, weekly = get_last_reset()
+	return daily + a_day, weekly + a_week
+end
+
+local ALLOWED_POWERS = { 4, 6, 7, 8, 9, 10, 11, 12, 13 }
+
+local function get_powers(map_count)
+	local available = {}
+
+  for _, id in ipairs(ALLOWED_POWERS) do
+		if map_count >= powers[id].maps then
+			available[1 + #available] = id
+		end
 	end
 
-	local min = isWeekly and 5 or 1
-	local max = isWeekly and 8 or 4
+	return available
+end
 
-	local playerQuests = players_file[player].quests
+local function get_available(data, reset_time, min, max)
+	local excluded = {}
+	local ts
 
 	for i = min, max do
-		if playerQuests[i] and playerQuests[i].id == questID then
-			return playerQuests[i]
+		ts = data:quest_ts(i)
+
+		-- not completed (includes skipped quest) or done during this reset period
+		if ts == 0 or ts > reset_time then
+			excluded[data:quest_id(i)] = true
+		end
+	end
+
+	local power_ids = get_powers(data.c)
+
+	if #power_ids == 0 then
+		excluded[6] = true
+	end
+
+	local quest_ids = {}
+
+	for i = 1, #Quests do
+		if not excluded[i] then
+			quest_ids[1 + #quest_ids] = i
+		end
+	end
+
+	return quest_ids, power_ids
+end
+
+local function assign_quest(data, slot, available, power_ids, weekly)
+	local randomIndex = random(#available)
+	local randomQuest = available[randomIndex]
+
+	data:quest_id(slot, randomQuest)
+	data:quest_ts(slot, 0)
+	data:quest_target(slot, Quests[randomQuest].target(weekly))
+	data:quest_progress(slot, 0)
+
+	if randomQuest == 6 then
+		local randomPower = power_ids[random(#power_ids)]
+		data:quest_extra(slot, randomPower)
+	end
+
+	table_remove(available, randomIndex)
+end
+
+local function fill_quests(data, weekly)
+	local daily_reset, weekly_reset = get_last_reset()
+	local reset_time = weekly and weekly_reset or daily_reset
+
+	local min = weekly and 5 or 1
+	local max = weekly and 8 or 4
+
+	local available, power_ids = get_available(data, reset_time, min, max)
+	local ts, ret
+
+	for i = min, max do
+		ts = data:quest_ts(i)
+
+		-- init pdata or completed before last reset
+		if data:quest_id(i) == 0 or ts > 0 and ts < reset_time then
+			assign_quest(data, i, available, power_ids, weekly)
+			ret = true
+		end
+	end
+
+	return ret
+end
+
+function Quests.skipped(data, index)
+	local daily_reset, weekly_reset = get_last_reset()
+	local reset_time = index > 4 and weekly_reset or daily_reset
+
+	return data:quest_skipped(index) >= reset_time
+end
+
+function Quests.skip(data, index)
+	if index < 1 or index > 8 then return end
+
+	-- completed
+	if data:quest_ts(index) > 0 then return end
+
+	local weekly = index > 4
+	local daily_reset, weekly_reset = get_last_reset()
+	local reset_time = weekly and weekly_reset or daily_reset
+
+	if data:quest_skipped(index) >= reset_time then return end
+
+	local min = weekly and 5 or 1
+	local max = weekly and 8 or 4
+
+	local available, power_ids = get_available(data, reset_time, min, max)
+
+	assign_quest(data, index, available, power_ids, weekly)
+	data:quest_skipped(index, os_time())
+	savePlayerData(player)
+
+	return true
+end
+
+function Quests.trigger_load(player, data)
+	local daily = fill_quests(data, false)
+	local weekly = fill_quests(data, true)
+
+	if daily then
+		local daily_text = translatedMessage("daily_q", player)
+		daily_text = daily_text:lower()
+		translatedChatMessage("quest_reset", player, daily_text)
+	end
+
+	if weekly then
+		local weekly_text = translatedMessage("weekly_q", player)
+		weekly_text = weekly_text:lower()
+		translatedChatMessage("quest_reset", player, weekly_text)
+	end
+end
+
+function Quests.trigger_map(player)
+	local data = players_file[player]
+	if not data then return end
+	if #maps[1].list == 1 then return end -- list not loaded yet
+
+	local difficulty, index
+
+	for i=1, 8 do
+		if data:quest_id(i) == 5 and data:quest_ts(i) == 0 then
+			difficulty = i > 4 and 3 or 1
+			index = 1 + ((data:quest_target(i) - 1) % maps[difficulty].count)
+
+			if maps[difficulty].list[index] == tonumber(current_map) then
+				return translatedChatMessage("quest_map", player, current_map)
+			end
 		end
 	end
 end
 
-function checkMapQuest(player)
-	local pdata = players_file[player] and players_file[player].quests
-	if not pdata then
-		return
-	end
-	if #maps[1].list == 1 then return end -- list not loaded yet
+function Quests.trigger_power(player, power_id)
+	local data = players_file[player]
+	if not data then return end
 
-	local diff
-	for i=1, #pdata do
-		if pdata[i].id == 5 then
-			diff = i > 4 and 3 or 1
-			if maps[diff].list[((pdata[i].tg-1)%maps[diff].count) + 1] == tonumber(current_map) then
-				return translatedChatMessage("quest_map", player, current_map)
+	for i=1, 8 do
+		-- quest not completed and has power quest for matching power
+		if data:quest_ts(i) == 0 and data:quest_id(i) == 6 and data:quest_extra(i) == power_id then
+			if Quests[6].progress_power(player, data, i) then
+				savePlayerData(player)
+			end
+		end
+	end
+end
+
+-- pdata is saved after this
+function Quests.trigger_completion(player, data)
+	local quest
+
+	for i = 1, 8 do
+		-- quest not completed
+		if data:quest_ts(i) == 0 then
+			quest = Quests[data:quest_id(i)]
+
+			if quest.progress_completion then
+				quest.progress_completion(player, data, i)
 			end
 		end
 	end
@@ -42,326 +219,340 @@ local function removeCompletedQuestUI(player)
 	end
 end
 
-local function completeQuest(player, questData, isWeekly, questID)
-	if not questData then return end
+local function completeQuest(player, data, index)
 	if not room.playerList[player] then return end
-	if questData.ts then return end
+
+	-- already completed
+	if data:quest_ts(index) > 0 then return end
 
 	if QuestsInterface.open[player] then
 		QuestsInterface:remove(player)
 	end
 
-	local file = players_file[player]
-	local questPrize = quests[questID].prize(player, isWeekly)
+	local quest = Quests[data:quest_id(index)]
+	if not quest then return end
 
-	if not questPrize or not file then return end
+	local prize = quest.prize(player, data, index)
+	if not prize then return end
 
-	questData.ts = os.time()
-	file.coins = file.coins + questPrize
+	data:quest_ts(index, os_time())
+	data.coins = data.coins + prize
 
 	if not CompletedQuestsInterface.open[player] then
-		CompletedQuestsInterface:show(player, isWeekly, questPrize) 
+		CompletedQuestsInterface:show(player, index > 4, prize) 
 		addNewTimer(5000, removeCompletedQuestUI, player)
 	end
 end
 
-quests = {
-	{
-		description = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 1, isWeekly)
-			if not questData then return end
-
-			return translatedMessage("quest_1", player, questData.pg, questData.tg)
-	  	end,
-
-		target = function(isWeekly)
-			local questTarget = isWeekly and math.random(100, 250) or math.random(25, 50)
-			questTarget = math.floor(questTarget / 5) * 5
-
-            return tonumber(questTarget)
-		end,
-
-		prize = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 1, isWeekly)
-			if not questData then return end
-
-			local prize = questData.tg * (isWeekly and 1.5 or 2)
-			return math.ceil(prize / 5) * 5 -- per map
-		end,
-
-		updateProgress = function(player, questData, isWeekly)
-			if questData and questData.ts then return end
-			questData.pg = questData.pg + 1
-			
-			if questData.pg >= questData.tg then
-				completeQuest(player, questData, isWeekly, 1)
-			end
-
-		end,
-	},
-	{
-		description = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 2, isWeekly)
-			if not questData then return end
-
-			return translatedMessage("quest_2", player, questData.pg, questData.tg)
-	  	end,
-
-		target = function(isWeekly)
-			local questTarget = isWeekly and math.random(500, 900) or math.random(150, 300)
-			questTarget = math.floor(questTarget / 5) * 5
-
-            return tonumber(questTarget)
-		end,
-
-		prize = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 2, isWeekly)
-			if not questData then return end
-
-			local prize = questData.tg * (isWeekly and 0.2 or 0.3)
-			return math.ceil(prize / 5 ) * 5 -- per cp
-		end,
-
-		updateProgress = function(player, questData, isWeekly)
-			if questData and questData.ts then return end
-			questData.pg = questData.pg + #levels - 1
-
-			if questData.pg >= questData.tg then
-				completeQuest(player, questData, isWeekly, 2)
-			end
-		end,
-		
-	},
-	{
-		description = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 3, isWeekly)
-			if not questData then return end
-
-			return translatedMessage("quest_3", player, questData.pg, questData.tg)
-	  	end,
-
-		target = function(isWeekly)
-			local questTarget = isWeekly and math.random(25, 50) or math.random(5, 10)
-
-            return tonumber(questTarget)
-		end,
-
-		prize = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 3, isWeekly)
-			if not questData then return end
-
-			local prize = questData.tg * (isWeekly and 6 or 9)
-			return math.ceil(prize / 5 ) * 5 -- per map
-		end,
-
-		updateProgress = function(player, questData, isWeekly)
-			if questData and questData.ts then return end
-			
-			if first_player == player then
-				questData.pg = questData.pg + 1 
-			end
-
-			if questData.pg >= questData.tg then
-				completeQuest(player, questData, isWeekly, 3)
-			end
-		end,
-	},
-	{
-		description = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 4, isWeekly)
-			if not questData then return end
-
-			return translatedMessage("quest_4", player, questData.tg)
-	  	end,
-
-		target = function(isWeekly)
-			local questTarget = isWeekly and 40 or 60
-
-            return tonumber(questTarget)
-		end,
-
-		prize = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 4, isWeekly)
-			if not questData then return end
-
-			if isWeekly then
-				return 100
-			else
-				return 75
-			end
-		end,
-
-		updateProgress = function(player, questData, isWeekly)
-			if questData and questData.ts then return end
-			local taken = (os.time() - (times.generated[player] or times.map_start)) / 1000
-			if taken < questData.tg	then
-				questData.pg = questData.tg
-
-				if questData.pg >= questData.tg then
-					completeQuest(player, questData, isWeekly, 4)
-				end	
-			end
-		end,
-	},
-	{
-		description = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 5, isWeekly)
-			if not questData then return end
-
-			local diff = isWeekly and 3 or 1
-			local mapCode = maps[diff].list[((questData.tg-1)%maps[diff].count) + 1 ] or "N/A"
-
-			return translatedMessage("quest_5", player, mapCode)
-	  	end,
-
-		target = function(isWeekly)
-			local mapIndex = math.random(1000)
-			
-			local questTarget = mapIndex
-            return tonumber(questTarget)
-		end,
-
-		prize = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 5, isWeekly)
-			if not questData then return end
-
-			return isWeekly and 200 or 100
-		end,
-		
-		updateProgress = function(player, questData, isWeekly)
-			if questData and questData.ts then return end
-			local diff = isWeekly and 3 or 1
-			if maps[diff].list[((questData.tg - 1)%maps[diff].count) + 1 ] == tonumber(current_map) then
-				questData.pg = questData.tg
-
-				if questData.pg >= questData.tg then
-					completeQuest(player, questData, isWeekly, 5)
-				end	
-			end
-		end,
-	},
-	{
-		description = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 6, isWeekly)
-			if not questData then return end
-			local powerName = translatedMessage(powers[questData.pr].name, player)
-			
-			return translatedMessage("quest_6", player, powerName, questData.pg, questData.tg )
-	  	end,
-
-		target = function(isWeekly)
-			local questTarget = isWeekly and math.random(100, 150) or math.random(20, 50)
-			questTarget = math.floor(questTarget / 5) * 5
-
-            return tonumber(questTarget)
-		end,
-
-		prize = function(player, isWeekly)
-			local questData = getPlayerQuest(player, 6, isWeekly)
-			if not questData then return end
-
-			local prize = questData.tg * (isWeekly and 1 or 1.5)
-			return math.ceil(prize / 5) * 5 -- per use
-		end,
-
-		updateProgress = function(player, questData, isWeekly)
-			if questData and questData.ts then return end
-			
-			questData.pg = questData.pg + 1
-
-			if questData.pg >= questData.tg then
-				completeQuest(player, questData, isWeekly, 6)
-
-				if isWeekly then
-					power_quest[player].w = nil
-					power_quest[player].wi = nil
-				else
-					power_quest[player].d = nil
-					power_quest[player].di = nil
-				end
-			end
-		end,
-	}
+local fieldMapping = {
+	id = "quest_id",
+	ts = "quest_ts",
+	skip = "quest_skipped",
+	progress = "quest_progress",
+	target = "quest_target",
+	extra = "quest_extra",
+}
+local triggerMapping = {
+	load = "trigger_load",
+	map = "trigger_map",
+	power = "trigger_power",
+	completion = "trigger_completion",
 }
 
-local function getPowerList(data)
-	if not data then return end
-	local availablePowers = {4,6,7,8,9,10,11,12,13}
-	local playerPowers = {}
-
-	for i = 1, #availablePowers do
-		if data.c >= powers[availablePowers[i]].maps then
-			table.insert(playerPowers, availablePowers[i])
-		end
-	end
-
-	return playerPowers
-end
-
-function fillQuests(data, questList, isWeekly, skipQuest)
-	local reset_times = getQuestsResetTime()
-	local reset_time = isWeekly and reset_times[2] or reset_times[1]
-
-	local min = isWeekly and 5 or 1
-	local max = isWeekly and 8 or 4
-
-	local availableQuests = {}
-	for i = 1, #quests do
-		availableQuests[i] = i
-	end
-
-	for i = min, max do
-		if not questList[i] then break end
-		if not questList[i].ts or (questList[i].ts > reset_time) or (skipQuest and questList[i].skp and questList[i].skp == 0) then
-			availableQuests[questList[i].id] = -1
-		end
-	end
-
-	local listOfPowers = getPowerList(data)
-
-	if #listOfPowers < 1 then
-		availableQuests[6] = -1
-	end
-
-	for i = #quests, 1, -1 do
-		if availableQuests[i] == -1 then
-			table.remove(availableQuests, i)
-		end
-	end
-
-	for i = min, max do
-		if (not skipQuest and questList[i] and questList[i].skp and questList[i].skp ~= 0 and questList[i].skp < reset_time) then
-			if questList[i].skp then
-				questList[i].skp = nil 
-			end
+newCmd({ name = {"aquest", "aq"},
+	rank = "admin",
+	fn = function(player, args, cmd)
+		if not args[1] then
+			return sendChatFmt("!aquest setreset/raw/view/edit/trigger/skip", player)
 		end
 
-		if not questList[i] or (not skipQuest and (questList[i].ts and questList[i].ts < reset_time)) or (skipQuest and questList[i].skp and questList[i].skp == 0) then
+		local action = args[1]:lower()
 
-			local randomIndex = math.random(#availableQuests)
-			local randomQuest = availableQuests[randomIndex]
+		if action == "setreset" then
+			local value = args[2]
 
-			if randomQuest == 6 then
-				local randomIdx = math.random(#listOfPowers)
-				local randomPower = listOfPowers[randomIdx]
-
-				questList[i] = {
-					id = randomQuest,
-					tg = quests[randomQuest].target(isWeekly),
-					pg = 0,
-					pr = randomPower,
-				}
-			else
-				questList[i] = {
-					id = randomQuest,
-					tg = quests[randomQuest].target(isWeekly),
-					pg = 0,
-				}
+			if value == "revert" then
+				get_last_reset = get_last_reset_actual
+				return
 			end
 
-			table.remove(availableQuests, randomIndex)
+			value = tonumber(value)
+
+			if not value then
+				return sendChatFmt("!aquest setreset [+ms/-ms]/revert", player)
+			end
+
+			get_last_reset = get_last_reset_delta
+			static_reset_delta = value
+			sendChatFmt("static_reset_delta = %s", player, tostring(value))
+			chatlogCmd(cmd, player, args)
+
+			return
 		end
+
+		local target = args[2]
+
+		if not target then
+			return sendChatFmt("<r>You must specify the target player.", player)
+		end
+
+		local data = players_file[target]
+
+		if not in_room[target] or not data then
+			return sendChatFmt("<r>%s is not here.", player, tostring(target))
+		end
+
+		if action == "raw" then
+			sendChatFmt(
+				"Raw quest data for %s: %s",
+				player,
+				target,
+				table.concat(data.quests, ' ')
+			)
+			return
+		elseif action == "view" then
+			sendChatFmt(
+				"Quest data for %s:\ndaily skip: %s %s\nweekly skip: %s %s",
+				player,
+				target,
+				data:quest_skipped(1), Quests.skipped(data, 1) and "skipped" or "available",
+				data:quest_skipped(5), Quests.skipped(data, 5) and "skipped" or "available"
+			)
+
+			local mapIndex, mapList, mapCode, target, id
+
+			for i = 1, 8 do
+				id = data:quest_id(i)
+				target = data:quest_target(i)
+
+				if id == 5 then
+					mapIndex = target
+					mapList = maps[i > 4 and 3 or 1]
+					mapCode = mapList.list[1 + ((mapIndex - 1) % mapList.count)]
+
+					if mapCode then
+						target = target .. " (@" .. mapCode .. ")"
+					end
+				end
+
+				sendChatFmt(
+					"[%s %s] id:%s ts:%s pg:%s tg:%s pow:%s",
+					player,
+					i > 4 and "weekly" or "daily",
+					i > 4 and (i - 4) or i,
+
+					id,
+					data:quest_ts(i),
+					data:quest_progress(i),
+					target,
+					data:quest_extra(i)
+				)
+			end
+			return
+		elseif action == "edit" then
+			local index = tonumber(args[3])
+			local field = args[4]
+			local value = tonumber(args[5])
+			local fn = data[fieldMapping[field]]
+
+			if not index or index < 1 or index > 8 or floor(index) ~= index or not fn or not value then
+				return sendChatFmt("!aquest edit %s [1-8] id/ts/skip/progress/target/extra [value]", player, target)
+			end
+
+			if field == "id" and (value < 1 or value > #Quests or floor(value) ~= value) then
+				return sendChatFmt("Invalid id, must be an integer between 1-%s", player, 1, #Quests)
+			end
+
+			local old_value = fn(data, index)
+			local new_value = fn(data, index, value)
+
+			sendChatFmt("%s.quests[%s].%s: %s -> %s", player, target, index, field, tostring(old_value), tostring(new_value))
+		elseif action == "trigger" then
+			local trigger = args[3]
+			local powerId = tonumber(args[4])
+			local fn = Quests[triggerMapping[trigger]]
+
+			if not fn then
+				return sendChatFmt("!aquest trigger %s load/map/power/completion ([power id])", player, target)
+			end
+
+			if trigger == "power" and not powerId then
+				return sendChatFmt("Invalid power id, must be an integer", player)
+			end
+
+			fn(target, trigger == "power" and powerId or data)
+			sendChatFmt("Triggered %s for %s with parameter of %s", player, trigger, target, tostring(powerId))
+		elseif action == "skip" then
+			local index = tonumber(args[3])
+
+			if not index or index < 1 or index > 8 or floor(index) ~= index then
+				return sendChatFmt("!aquest skip %s [1-8]", player, target)
+			end
+
+			local yes = Quests.skip(data, index)
+
+			sendChatFmt("Attempted to skip %s's quest-%s: %s", player, target, index, yes and "success" or "failed")
+		end
+
+		chatlogCmd(cmd, player, args)
 	end
-	return questList
+})
+
+local function linear_progress(player, data, index)
+	local target = data:quest_target(index)
+	local new = 1 + data:quest_progress(index)
+
+	data:quest_progress(index, new)
+
+	if new >= target then
+		completeQuest(player, data, index)
+		return true
+	end
 end
+
+Quests[1] = {
+	description = function(player, data, index)
+		return translatedMessage("quest_1", player, data:quest_progress(index), data:quest_target(index))
+	end,
+
+	target = function(weekly)
+		return weekly and random(20, 50) or random(5, 10)
+	end,
+
+	prize = function(player, data, index)
+		local coins = data:quest_target(index) * (index > 4 and 1.5 or 2)
+		return ceil(coins / 5) * 5 -- per map
+	end,
+
+	progress_completion = linear_progress,
+}
+
+Quests[2] = {
+	description = function(player, data, index)
+		return translatedMessage("quest_2", player, data:quest_progress(index), data:quest_target(index))
+	end,
+
+	target = function(weekly)
+		return weekly and random(100, 180) or random(30, 60)
+	end,
+
+	prize = function(player, data, index)
+		local coins = data:quest_target(index) * (index > 4 and 0.2 or 0.3)
+		return ceil(coins / 5) * 5 -- per cp
+	end,
+
+	progress_completion = function(player, data, index)
+		local target = data:quest_target(index)
+		local new = #levels - 1 + data:quest_progress(index)
+
+		data:quest_progress(index, new)
+
+		if new >= target then
+			completeQuest(player, data, index)
+			return true
+		end
+	end,
+}
+
+Quests[3] = {
+	description = function(player, data, index)
+		return translatedMessage("quest_3", player, data:quest_progress(index), data:quest_target(index))
+	end,
+
+	target = function(weekly)
+		return weekly and random(25, 50) or random(5, 10)
+	end,
+
+	prize = function(player, data, index)
+		local coins = data:quest_target(index) * (index > 4 and 6 or 9)
+		return ceil(coins / 5) * 5 -- per map
+	end,
+
+	progress_completion = function(player, data, index)
+		if first_player ~= player then return end
+
+		local target = data:quest_target(index)
+		local new = 1 + data:quest_progress(index)
+
+		data:quest_progress(index, new)
+
+		if new >= target then
+			completeQuest(player, data, index)
+			return true
+		end
+	end,
+}
+
+Quests[4] = {
+	description = function(player, data, index)
+		return translatedMessage("quest_4", player, data:quest_target(index))
+	end,
+
+	target = function(isWeekly)
+		return isWeekly and 40 or 60
+	end,
+
+	prize = function(player, data, index)
+		return index > 4 and 100 or 75
+	end,
+
+	progress_completion = function(player, data, index)
+		local taken = (os_time() - (times.generated[player] or times.map_start)) / 1000
+		local target = data:quest_target(index)
+
+		if taken < target then
+			completeQuest(player, data, index)
+			return true
+		end
+	end,
+}
+
+Quests[5] = {
+	description = function(player, data, index)
+		local mapIndex = data:quest_target(index)
+		local mapList = maps[index > 4 and 3 or 1]
+		local mapCode = mapList.list[1 + ((mapIndex - 1) % mapList.count)] or "N/A"
+		return translatedMessage("quest_5", player, mapCode)
+	end,
+
+	target = function()
+		return random(1000)
+	end,
+
+	prize = function(player, data, index)
+		return index > 4 and 200 or 100
+	end,
+
+	progress_completion = function(player, data, index)
+		local mapIndex = data:quest_target(index)
+		local mapList = maps[index > 4 and 3 or 1]
+		local mapCode = mapList.list[1 + ((mapIndex - 1) % mapList.count)]
+
+		if mapCode == tonumber(current_map) then
+			completeQuest(player, data, index)
+			return true
+		end
+	end,
+}
+
+Quests[6] = {
+	description = function(player, data, index)
+		local power = powers[data:quest_extra(index)]
+		if not power then return "N/A" end
+
+		local powerName = translatedMessage(power.name, player)
+		return translatedMessage("quest_6", player, powerName, data:quest_progress(index), data:quest_target(index))
+	end,
+
+	target = function(weekly)
+		return weekly and random(20, 30) or random(4, 10)
+	end,
+
+	prize = function(player, data, index)
+		local coins = data:quest_target(index) * (index > 4 and 1 or 1.5)
+		return ceil(coins / 5) * 5 -- per use
+	end,
+
+	progress_power = linear_progress,
+}
 end
