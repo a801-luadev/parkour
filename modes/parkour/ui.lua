@@ -459,11 +459,11 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 		eventChatCommand(player, "profile " .. args)
 	elseif action == "showpow" then
 		if perms[player] and perms[player].use_tracker then
-			if not checkCooldown(player, "showpow", 5000) then return end
+			if not checkCooldown(player, "showpow", 1000) then return end
 			local x, y = args:match("(%d+):(%d+)")
 			if not x or not y then return end
 			addNewTimer(
-				5000,
+				1000,
 				tfm.exec.removeImage,
 				tfm.exec.addImage("img@19aea039025", "!9999", x, y, player, 1, 1, 0, 1, 0.5, 0.5),
 				true
