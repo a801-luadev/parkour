@@ -150,6 +150,10 @@ translations.en = {
 	next_reset = "<b><D>Reset:\n</b></D>%s",
 	quest_completed = "<b><D>Congratulations!</D></b> \nYou've completed a %s quest!",
 	quest_reset = "<V>[#]</V> <O>Your %s quests have been reset.</O>",
+	quest_daily_streak = "<V>[#]</V> <O>Your daily quest streak is %s days.</O>",
+	quest_weekly_streak = "<V>[#]</V> <O>Your weekly quest streak is %s weeks.</O>",
+	quest_daily_streak_reset = "<V>[#]</V> <O>Your daily quest streak of %s days has been broken.</O>",
+	quest_weekly_streak_reset = "<V>[#]</V> <O>Your weekly quest streak of %s weeks has been broken.</O>",
 
 	-- Christmas
 	find_gift1 = "<ch>Santa has just dropped by! Hunt for the Christmas gift on the map and unwrap a surprise!",

@@ -1308,6 +1308,10 @@ onEvent("PlayerCompleted", function(player, info, file)
 		file.c = file.c + 1
 		file.coins = file.coins + earned_coins
 
+		if file.dc[current_difficulty] then
+			file.dc[current_difficulty] = 1 + file.dc[current_difficulty]
+		end
+
 		file.tc = math.max(
 			checkTitleAndNextFieldValue(player, titles.press_m, 1, file, id),
 			checkTitleAndNextFieldValue(player, titles.piglet, 1, file, id)

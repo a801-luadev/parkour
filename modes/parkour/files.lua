@@ -339,12 +339,21 @@ local data_migrations = {
 		data.v = 13
 
 		local old_quests = data.quests
-		local new_quests = { 0, 0 } -- daily skip ts, weekly skip ts
+		local new_quests = {
+			0, -- daily skip ts
+			0, -- weekly skip ts
+			0, -- daily streak ts
+			0, -- weekly streak ts
+			0, -- daily completions
+			0, -- weekly completions
+			0, -- daily streak
+			0, -- weekly streak
+		}
 		local quest, offset
 
 		for i=1, 8 do
 			quest = old_quests and old_quests[i]
-			offset = 2 + 5 * (i - 1)
+			offset = 8 + 5 * (i - 1)
 
 			if quest then
 				new_quests[1 + offset] = quest.id -- quest type/id
@@ -366,6 +375,7 @@ local data_migrations = {
 		end
 
 		data.quests = new_quests
+		data.dc = { 0, 0, 0 } -- completions for each diff
 	end,
 }
 
@@ -716,27 +726,32 @@ do
 		return true
 	end
 
-	function pdataFunctions.quest_skipped(file, index, new_value)
-		local offset = index > 4 and 2 or 1
+	local function quest_fn(field, daily, weekly)
+		return function(file, index, new_value, add)
+			local offset
 
-		if new_value then
-			file.quests[offset] = new_value
-		end
-
-		return file.quests[offset]
-	end
-
-	local function quest_fn(field)
-		return function(file, index, new_value)
-			local offset = 2 + field + 5 * (index - 1)
+			if field then
+				offset = 8 + field + 5 * (index - 1)
+			else
+				offset = index > 4 and weekly or daily
+			end
 
 			if new_value then
-				file.quests[offset] = new_value
+				if add then
+					file.quests[offset] = new_value + file.quests[offset]
+				else
+					file.quests[offset] = new_value
+				end
 			end
 
 			return file.quests[offset]
 		end
 	end
+
+	pdataFunctions.quest_skipped = quest_fn(nil, 1, 2)
+	pdataFunctions.quest_streak_ts = quest_fn(nil, 3, 4)
+	pdataFunctions.quest_completions = quest_fn(nil, 5, 6)
+	pdataFunctions.quest_streak = quest_fn(nil, 7, 8)
 
 	pdataFunctions.quest_id = quest_fn(1)
 	pdataFunctions.quest_ts = quest_fn(2)

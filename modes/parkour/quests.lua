@@ -27,6 +27,16 @@ end
 
 local get_last_reset = get_last_reset_actual
 
+local function get_recent_reset(is_weekly)
+	local daily, weekly = get_last_reset()
+
+	if is_weekly then
+		return weekly - a_week, weekly
+	end
+
+	return daily - a_day, daily
+end
+
 function Quests.get_next_reset()
 	local daily, weekly = get_last_reset()
 	return daily + a_day, weekly + a_week
@@ -149,21 +159,47 @@ function Quests.skip(data, index)
 	return true
 end
 
+local function check_reset(player, data, index)
+	if fill_quests(data, index > 4) then
+		translatedChatMessage(
+			"quest_reset",
+			player,
+			translatedMessage(
+				index > 4 and "weekly_q" or "daily_q",
+				player
+			):lower()
+		)
+	end
+
+	local prev_reset, last_reset = get_recent_reset(index > 4)
+	local streak_ts = data:quest_streak_ts(index)
+	local streak = data:quest_streak(index)
+
+	if streak_ts > 0 and streak > 0 then
+		if streak_ts > prev_reset then
+			if streak > 1 and streak_ts <= last_reset then
+				translatedChatMessage(
+					index > 4 and "quest_weekly_streak" or "quest_daily_streak",
+					player, streak
+				)
+			end
+		else
+			if streak > 1 then
+				translatedChatMessage(
+					index > 4 and "quest_weekly_streak_reset" or "quest_daily_streak_reset",
+					player, data:quest_streak(index)
+				)
+			end
+
+			data:quest_streak(index, 0)
+			savePlayerData(player)
+		end
+	end
+end
+
 function Quests.trigger_load(player, data)
-	local daily = fill_quests(data, false)
-	local weekly = fill_quests(data, true)
-
-	if daily then
-		local daily_text = translatedMessage("daily_q", player)
-		daily_text = daily_text:lower()
-		translatedChatMessage("quest_reset", player, daily_text)
-	end
-
-	if weekly then
-		local weekly_text = translatedMessage("weekly_q", player)
-		weekly_text = weekly_text:lower()
-		translatedChatMessage("quest_reset", player, weekly_text)
-	end
+	check_reset(player, data, 1)
+	check_reset(player, data, 5)
 end
 
 function Quests.trigger_map(player)
@@ -237,7 +273,17 @@ local function completeQuest(player, data, index)
 	local prize = quest.prize(player, data, index)
 	if not prize then return end
 
-	data:quest_ts(index, os_time())
+	local now = os_time()
+	local prev_reset, last_reset = get_recent_reset(index > 4)
+	local streak_ts = data:quest_streak_ts(index)
+
+	if streak_ts == 0 or streak_ts > prev_reset and streak_ts <= last_reset then
+		data:quest_streak(index, 1, true)
+		data:quest_streak_ts(index, now)
+	end
+
+	data:quest_completions(index, 1, true)
+	data:quest_ts(index, now)
 	data.coins = data.coins + prize
 
 	if not CompletedQuestsInterface.open[player] then
@@ -253,6 +299,9 @@ local fieldMapping = {
 	progress = "quest_progress",
 	target = "quest_target",
 	extra = "quest_extra",
+	streak = "quest_streak",
+	streak_ts = "quest_streak_ts",
+	completions = "quest_completions",
 }
 local triggerMapping = {
 	load = "trigger_load",
@@ -314,11 +363,14 @@ newCmd({ name = {"aquest", "aq"},
 			return
 		elseif action == "view" then
 			sendChatFmt(
-				"Quest data for %s:\ndaily skip: %s %s\nweekly skip: %s %s",
+				"Quest data for %s:\ndaily skip: %s %s\nweekly skip: %s %s\ncompletions: %s %s\nstreak ts: %s %s\nstreak: %s %s",
 				player,
 				target,
 				data:quest_skipped(1), Quests.skipped(data, 1) and "skipped" or "available",
-				data:quest_skipped(5), Quests.skipped(data, 5) and "skipped" or "available"
+				data:quest_skipped(5), Quests.skipped(data, 5) and "skipped" or "available",
+				data:quest_completions(1), data:quest_completions(5),
+				data:quest_streak_ts(1), data:quest_streak_ts(5),
+				data:quest_streak(1), data:quest_streak(5)
 			)
 
 			local mapIndex, mapList, mapCode, target, id
@@ -358,7 +410,7 @@ newCmd({ name = {"aquest", "aq"},
 			local fn = data[fieldMapping[field]]
 
 			if not index or index < 1 or index > 8 or floor(index) ~= index or not fn or not value then
-				return sendChatFmt("!aquest edit %s [1-8] id/ts/skip/progress/target/extra [value]", player, target)
+				return sendChatFmt("!aquest edit %s [1-8] id/ts/skip/progress/target/extra/streak/streak_ts/completions [value]", player, target)
 			end
 
 			if field == "id" and (value < 1 or value > #Quests or floor(value) ~= value) then
