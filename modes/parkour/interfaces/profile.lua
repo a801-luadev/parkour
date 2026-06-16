@@ -36,9 +36,9 @@ do
 		:loadTemplate(WindowBackground)
 
 		:addTextArea({
-			x = 10, y = 265,
+			x = 10, y = 270,
 			width = 380,
-			height = 85,
+			height = 80,
 			color = {0x0C1A1E, 0x0C1A1E, 1},
 		})
 
@@ -86,7 +86,7 @@ do
 
 			x = self.x + 15
 			local limit = x + 40 * 9
-			local y = self.y + 270
+			local y = self.y + 275
 			local pbg = (data or players_file[profile]).badges
 			if pbg then
 				local badge
