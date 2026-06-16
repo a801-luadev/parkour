@@ -14,6 +14,8 @@ do
   if is_lemonade_time then
     local WAIT, COLLECT, TRADE = 0, 1, 2
     local lemonade = {
+      hint = {},
+      hint2 = {},
       bonus = {},
       bonus_rev = {},
       collectibles = {
@@ -283,6 +285,11 @@ do
       pdata:updateItem(ecIndex, 0, 1)
       savePlayerData(player)
       translatedChatMessage("lemonade_found", player)
+
+      if not lemonade.hint[player] then
+        translatedChatMessage("lemonade_craft_hint", player)
+        lemonade.hint[player] = true
+      end
     end)
 
     onEvent("TextAreaCallback", function(id, player, event)
@@ -311,7 +318,11 @@ do
         lemonade.jug.progress[player] = 1
         lemonade.renderJug(player)
 
-        if file:getItemAmount(2, 0) > 99 then return end -- limited to 100 lemonades
+        -- limited to 100 lemonades
+        if file:getItemAmount(2, 0) > 99 then
+          translatedChatMessage("lemonade_toomuch_lemonade", player)
+          return
+        end
 
         -- check ingredients first
         for i=3, 6 do
@@ -328,6 +339,11 @@ do
         for i=3, 6 do file:updateItem(i, 0, -1) end
         for i=2, 6 do lemonade.updateCounter(player, i) end
         savePlayerData(player)
+
+        if not lemonade.hint2[player] then
+          translatedChatMessage("lemonade_reward_hint", player)
+          lemonade.hint2[player] = true
+        end
         return
       end
 

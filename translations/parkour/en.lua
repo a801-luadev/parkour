@@ -237,7 +237,10 @@ translations.en = {
 	lemonade_balloon = "Hey there! Want a balloon? Then bring me 10 lemonades!",
 	lemonade_cloud = "This Cloud doesn't look like it's raining anytime soon. Want it? Then bring me 20 lemonades!",
 	lemonade_found = "<v>[#] <j>Sweet! Another step closer to making awesome lemonade!",
-	lemonade_toomuch = "<v>[#] <r>You've collected plenty of this for lemonade. Maybe use some first?",
+	lemonade_toomuch = "<v>[#] <r>You've collected plenty of this for lemonade. Try using some first?",
+	lemonade_toomuch_lemonade = "<v>[#] <r>You've reached the maximum number of lemonades you can carry.",
+	lemonade_craft_hint = "<ROSE>Collect ingredients and go to <b><u>/room #parkour0lemonade</u></b> to make lemonades!",
+	lemonade_reward_hint = "<ROSE>You can go to <b><u>/room #parkour0village</u></b> to trade your lemonades for exclusive rewards!",
 
 	-- Miscellaneous
 	afk_popup = "\n<p align='center'><font size='30'><bv><b>YOU'RE ON AFK MODE</b></bv>\nMOVE TO RESPAWN</font>\n\n<font size='30'><u><t>Reminders:</t></u></font>\n\n<font size='15'><r>Players with a red line over them don't want help!\nTrolling/blocking other players in parkour is NOT allowed!<d>\nJoin our <cep><a href='event:discord'>discord server</a></cep>!\nWant to contribute with code? See our <cep><a href='event:github'>github repository</a></cep>\nDo you have a good map to submit? Post it in our <cep><a href='event:map_submission'>map submission topic</a></cep>\nCheck our <cep><a href='event:forum'>official topic</a></cep> for more information!\nSupport us by <cep><a href='event:donate'>donating!</a></cep>",
