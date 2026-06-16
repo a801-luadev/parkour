@@ -27,22 +27,25 @@ do
 		badgeTAs[i] = allocateId("textarea", 20000)
 	end
 
-	Profile = Interface.new(200, 50, 400, 360, true)
+	Profile = Interface.new(200, 30, 400, 360, true)
 		:setShowCheck(function(self, player, profile, data)
 			local file = data or players_file[profile]
 			return (file
 					and file.v == data_version)
 		end)
+		:loadTemplate(WindowBackground)
 
-		:addImage({
-			image = "178de11fd0c.png",
-			target = ":1",
-			x = -5, y = -5
+		:addTextArea({
+			x = 10, y = 265,
+			width = 380,
+			height = 85,
+			color = {0x0C1A1E, 0x0C1A1E, 1},
 		})
 
 		:addTextArea({
 			alpha = 0,
 			x = 5, y = 5,
+			width = 370,
 			height = 100,
 			canUpdate = true,
 			text = function(self, player, profile)
@@ -70,7 +73,7 @@ do
 				container._count = 0
 			end
 
-			local x = self.x + 370
+			local x = self.x + 355
 			if not (data or players_file[profile]).hidden then
 				for index = 1, #staff do
 					if ranks[ staff[index][1] ][profile] then
@@ -83,7 +86,7 @@ do
 
 			x = self.x + 15
 			local limit = x + 40 * 9
-			local y = self.y + 205
+			local y = self.y + 270
 			local pbg = (data or players_file[profile]).badges
 			if pbg then
 				local badge
@@ -92,7 +95,7 @@ do
 						badge = badges[index][pbg[index]]
 
 						container._count = container._count + 1
-						container[ container._count ] = tfm.exec.addImage(badge[2], ":2", x, y, player)
+						container[ container._count ] = tfm.exec.addImage(badge[2], "~1", x, y, player)
 						ui.addTextArea(
 							badgeTAs[index],
 							"<a href='event:big_badge:" .. index .. ":" .. pbg[index] .. "'>\n\n\n\n\n\n",
@@ -132,6 +135,13 @@ do
 					"profile", player,
 					file.private_maps and translatedMessage("private_maps", player) or "",
 
+					displayStats and string.format(
+						"<%s>★ %s</%s> <G>-</G> <%s>★★ %s</%s> <G>-</G> <%s>★★★ %s</%s>\n\n",
+						difficulty_color[1], file.dc[1], difficulty_color[1],
+						difficulty_color[2], file.dc[2], difficulty_color[2],
+						difficulty_color[3], file.dc[3], difficulty_color[3]
+					) or "",
+
 					displayStats and translatedMessage("map_count", player, file.c, file.week[1], #file.hour) or "",
 
 					profile == player and string.format(
@@ -144,14 +154,21 @@ do
 
 					weekleaderboard[profile] and ("#" .. weekleaderboard[profile]) or "N/A",
 
-					displayStats and translatedMessage("title_count", player, file.tc, file.cc) or ""
+					displayStats and translatedMessage("title_count", player, file.tc, file.cc) or "",
+
+					displayStats and translatedMessage(
+						"quest_stats",
+						player,
+						file:quest_completions(5), file:quest_completions(1),
+						file:quest_streak(5), file:quest_streak(1)
+					) or ""
 				)
 			end,
-			alpha = 0, height = 150
+			alpha = 0, height = 200
 		})
 
 		:addTextArea({
-			x = 5, y = 175,
+			x = 5, y = 240,
 			canUpdate = true,
 			text = function(self, player, profile, data)
 				local count = 0
@@ -169,13 +186,12 @@ do
 			alpha = 0
 		})
 
-		:loadComponent(
-			Button.new():setTranslation("close")
-			:onClick(function(self, player)
-				self.parent:remove(player)
-			end)
-			:setPosition(10, 300):setSize(380, 15)
-		)
+		:addTextArea({
+			text = "<a href='event:hideprofile'><font color='#b84c36' size='15'><b>X</b></font></a>",
+			alpha = 0,
+			x = 380, y = 0,
+			width = 20, height = 20
+		})
 
 	onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 		if action == "big_badge" then

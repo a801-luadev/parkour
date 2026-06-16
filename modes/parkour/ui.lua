@@ -434,6 +434,8 @@ onEvent("RawTextAreaCallback", function(id, player, callback)
 		toggleInterface(HelpInterface, player)
 	elseif callback == "powers" then
 		toggleInterface(PowersInterface, player)
+	elseif callback == "hideprofile" then
+		Profile:remove(player)
 	elseif callback == "shop_button" then
 		toggleInterface(ShopInterface, player)
 	elseif callback == "quests_button" then
