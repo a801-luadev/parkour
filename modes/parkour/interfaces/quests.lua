@@ -54,7 +54,7 @@ do
 				end
 			end)
 
-			:setPosition(20, 15):setSize(170, 18)
+			:setPosition(10, 15):setSize(120, 18)
 		)
 
 		:loadComponent( -- Weekly button
@@ -75,7 +75,28 @@ do
 				end
 			end)
 
-			:setPosition(210, 15):setSize(170, 18)
+			:setPosition(150, 15):setSize(110, 18)
+		)
+
+		:loadComponent( -- Milestone button
+			Button.new():setTranslation("milestone_q")
+
+			:onClick(function(self, player, page)
+				if not checkCooldown(player, "milestone_quest_button", 3000) then return end
+				if not players_file[player] then return end
+
+				self.parent:update(player, 3, players_file[player])
+			end)
+
+			:canUpdate(true):onUpdate(function(self, player, page)
+				if page == 3 then
+					self:disable(player)
+				else
+					self:enable(player)
+				end
+			end)
+
+			:setPosition(280, 15):setSize(110, 18)
 		)
 
 		:addTextArea({ -- Reset Time
@@ -83,6 +104,8 @@ do
 			width = 120, height = 40,
 			canUpdate = true,
 			text = function(self, player, page)
+				if page == 3 then return "" end
+
 				local currentTime = os.time()
 				local next_daily, next_weekly = Quests.get_next_reset()
 
@@ -119,8 +142,10 @@ do
 			text = function(self, player, page)
 				if page == 1 then
 					return translatedMessage("daily_quests", player)
-				else
+				elseif page == 2 then
 					return translatedMessage("weekly_quests", player)
+				else
+					return translatedMessage("milestone_quests", player)
 				end
 			end,
 			alpha = 0
@@ -134,10 +159,16 @@ do
 			alpha = 0,
 			color = {0x314e57, 0x314e57}
 		})
-		:addImage({ -- Coin Image
-			image = "18b29f6977c.png",
+		:addImage({ -- Reward Image
+			canUpdate = true,
 			target = "~8",
 			x = 25, y = 22 + 60 * i,
+			image = function(self, player, page, data)
+				if page == 3 then
+					return "01010101010.png"
+				end
+				return "18b29f6977c.png"
+			end,
 		})
 		:addTextArea({ -- Prize
 			x = 15, y = 50 + 60 * i,
@@ -145,6 +176,10 @@ do
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, data)
+				if page == 3 then
+					return ""
+				end
+
 				local index = i + (page == 2 and 4 or 0)
 				return string.format(
 					"<p align='center'><font color='#ffffff' size='14' face='Verdana'><b>%s",
@@ -153,18 +188,28 @@ do
 			end
 		})
 		:addTextArea({ -- Description
-			x = 80, y = 25 + 60 * i,
-			width = 270, height = 40,
+			x = 10, y = 25 + 60 * i,
+			width = 340, height = 40,
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, data)
+				if page == 3 then
+					return "<textformat leftMargin='0'>" .. Milestones[i].description(player, data)
+				end
+
 				local index = i + (page == 2 and 4 or 0)
-				return Quests[data:quest_id(index)].description(player, data, index)
+				return "<textformat leftMargin='70'>" .. Quests[data:quest_id(index)].description(player, data, index)
 			end
 		})
 		:addImage({ -- State Image
 			canUpdate = true,
 			image = function(self, player, page, data)
+				if page == 3 then
+					local completed = Milestones[i].completed(player, data)
+					if completed == nil then return "01010101010.png" end
+					return completed and "17797d878fa.png" or "17797d860b6.png"
+				end
+
 				local index = i + (page == 2 and 4 or 0)
 
 				-- completed
@@ -181,7 +226,8 @@ do
 			end,
 			
 			target = "~10",
-			x = 360, y = 35 + 60 * i,
+			x = 370, y = 45 + 60 * i,
+			anchorX = 0.5, anchorY = 0.5,
 		})
 		:addTextArea({ -- Skip Button
 			x = 360, y = 35 + 60 * i,
@@ -189,6 +235,8 @@ do
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, data)
+				if page == 3 then return "" end
+
 				local index = i + (page == 2 and 4 or 0)
 
 				-- skipped

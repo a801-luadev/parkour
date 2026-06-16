@@ -134,8 +134,13 @@ translations.tr = {
 	-- Quests
 	daily_q = "Günlük",
 	weekly_q = "Haftalık",
+	milestone_q = "Başarımlar",
 	daily_quests = "<p align='center'><font size='20'><B><D>Günlük Görevler</D></B></font>",
 	weekly_quests = "<p align='center'><font size='20'><B><D>Haftalık Görevler</D></B></font>",
+	milestone_quests = "<p align='center'><font size='20'><B><D>Başarımlar</D></B></font>",
+	milestone_title_map = "<B><D>%s/%s</D></B> harita tamamlayarak <vp>%s</vp> ünvanını kazan.",
+	milestone_title_cp = "<B><D>%s/%s</D></B> kontrol noktası toplayarak <vp>%s</vp> ünvanını kazan.",
+	milestone_2 = "M tuşuna basın",
 	quest_1 = "<B><D>%s/%s</D></B> harita tamamlayın.",
 	quest_2 = "<B><D>%s/%s</D></B> kontrol noktası (CP) toplayın.",
 	quest_3 = "Herhangi bir haritayı <B><D>%s/%s</D></B> defa ilk sırada tamamlayın.",

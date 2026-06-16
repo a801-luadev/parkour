@@ -5,7 +5,7 @@ local no_powers
 local unbind
 local bindNecessary
 local NewBadgeInterface
-local Quests
+local Quests, Milestones
 
 local badges, titles
 

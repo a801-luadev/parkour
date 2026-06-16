@@ -6,6 +6,7 @@ local a_day = 24 * 60 * 60 * 1000
 local a_week = 7 * a_day
 
 Quests = {}
+Milestones = {}
 
 local static_reset_delta = os_time()
 
@@ -710,6 +711,64 @@ Quests[8] = {
 			completeQuest(player, data, index)
 			return true
 		end
+	end,
+}
+
+Milestones[1] = {
+	completed = function(player, data)
+		return data.cc >= 3000
+	end,
+
+	description = function(player, data)
+		return translatedMessage(
+			"milestone_title_cp",
+			player,
+			math.min(data.cc, 3000),
+			3000,
+			translatedMessage("milestone_1", player)
+		)
+	end,
+}
+
+Milestones[2] = {
+	completed = function(player, data)
+		return data.tc >= 1500
+	end,
+
+	description = function(player, data)
+		return translatedMessage(
+			"milestone_title_map",
+			player,
+			math.min(data.tc, 1500),
+			1500,
+			translatedMessage("milestone_2", player)
+		)
+	end,
+}
+
+Milestones[3] = {
+	completed = function(player, data)
+		return data.tc >= 6000
+	end,
+
+	description = function(player, data)
+		return translatedMessage(
+			"milestone_title_map",
+			player,
+			math.min(data.tc, 6000),
+			6000,
+			translatedMessage("milestone_3", player)
+		)
+	end,
+}
+
+Milestones[4] = {
+	completed = function(player, data)
+		return
+	end,
+
+	description = function(player, data)
+		return ""
 	end,
 }
 end
