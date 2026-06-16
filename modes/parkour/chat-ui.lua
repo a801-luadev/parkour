@@ -314,6 +314,29 @@ newCmd({ name = "give",
 			file.coins = file.coins + coin_count
 			tfm.exec.chatMessage("<v>[#] <d>" .. target .. "'s new coin count: " .. file.coins, player)
 
+		elseif thing == "ec" then
+			if args._len < 4 then
+				return sendChatFmt("!give %s ec [index] [amount]", player, target)
+			end
+
+			local index = tonumber(args[3])
+			if not index or index < 1 then
+				return sendChatFmt("<r>index must be a positive integer", player)
+			end
+
+			local amount = tonumber(args[4])
+			if not amount then
+				return sendChatFmt("<r>amount must be an integer", player)
+			end
+
+			local old_value = file.ec[index]
+			if file:updateItem(index, 0, amount) then
+				local new_value = file.ec[index]
+				sendChatFmt("%s.ec[%s] = %s + %s = %s", player, target, index, old_value, amount, new_value)
+			else
+				sendChatFmt("<r>failed to give event coin, make sure index is valid", player)
+			end
+
 		elseif thing == "namecolor" then
 			if not perms[player].set_name_color then
 				return tfm.exec.chatMessage("<v>[#] <r>u cant set a player's namecolor", player)
