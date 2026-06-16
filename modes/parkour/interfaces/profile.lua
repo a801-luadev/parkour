@@ -168,7 +168,7 @@ do
 		})
 
 		:addTextArea({
-			x = 5, y = 240,
+			x = 5, y = 245,
 			canUpdate = true,
 			text = function(self, player, profile, data)
 				local count = 0
