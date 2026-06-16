@@ -222,7 +222,7 @@ translations.cn = {
 	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>每周排行榜",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>徽章 (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>玩家的地圖通過數已設定為私人。 <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n整體排行榜名次: <b><v>%s</v></b>\n\n每周排行榜名次: <b><v>%s</v></b>\n\n%s",
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s%s %s\n\n整體排行榜名次: <b><v>%s</v></b>\n\n每周排行榜名次: <b><v>%s</v></b>\n\n%s%s",
 	map_count = "地圖通過數: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	title_count = "<b><j>«!»</j></b> 完成地圖次數: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> 到達重生點次數: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "徽章是玩家可以得到的成就。點擊它們查看介紹。",

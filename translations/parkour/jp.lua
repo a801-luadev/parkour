@@ -233,7 +233,7 @@ translations.jp = {
 	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>週間リーダーボード",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>バッジ (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>このプレイヤーのマップ数は非公開です。 <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\n総合リーダーボードの順位： <b><v>%s</v></b>\n\n週間リーダーボードの順位： <b><v>%s</v></b>\n\n%s",
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s%s %s\n\n総合リーダーボードの順位： <b><v>%s</v></b>\n\n週間リーダーボードの順位： <b><v>%s</v></b>\n\n%s%s",
 	map_count = "マップ数： <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	title_count = "<b><j>«!»</j></b> クリアしたマップ：<b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> 通過したチェックポイント：<b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "バッジはプレイヤーが手に入れた実績です。 クリックすると説明が表示されます。",

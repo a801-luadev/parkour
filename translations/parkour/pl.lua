@@ -162,7 +162,7 @@ translations.pl = {
 	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Tygodniowa tablica wyników",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Odznaki (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Liczba map tego gracza jest prywatna. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nOgólna pozycja w tabeli liderów: <b><v>%s</v></b>\n\nTygodniowa pozycja w tabeli liderów: <b><v>%s</v></b>\n\n%s",
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s%s %s\n\nOgólna pozycja w tabeli liderów: <b><v>%s</v></b>\n\nTygodniowa pozycja w tabeli liderów: <b><v>%s</v></b>\n\n%s%s",
 	map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	title_count = "<b><j>«!»</j></b> Ukończone Mapy:<b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b>Zebrane Punkty Kontrolne<b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "Odznaki to osiągnięcie, które gracz może zdobyć. Kliknij je, aby zobaczyć ich opis.",

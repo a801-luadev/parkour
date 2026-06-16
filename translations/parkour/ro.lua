@@ -98,7 +98,7 @@ translations.ro = {
 	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Clasamentul săptămânal",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Insigne (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>Hărțile acestui jucător sunt private. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nPoziția în clasamentul general: <b><v>%s</v></b>\n\nPoziția în clasamentul săptămânal<b><v>%s</v></b>\n\n%s",
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s%s %s\n\nPoziția în clasamentul general: <b><v>%s</v></b>\n\nPoziția în clasamentul săptămânal<b><v>%s</v></b>\n\n%s%s",
 	map_count = "Hărți completate: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	title_count = "<b><j>«!»</j></b> Hărți completate: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> Checkpointuri colectate: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "Insignele sunt realizări pe care jucătorii le pot debloca. Apasă pe ele pentru a afla mai multe.",

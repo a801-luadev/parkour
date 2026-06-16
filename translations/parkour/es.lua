@@ -230,7 +230,7 @@ translations.es = {
 	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>Posición Semanal",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>Insignias (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>La cantidad de mapas de este jugador es privada. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nPosición general: <b><v>%s</v></b>\n\nPosición semanal: <b><v>%s</v></b>\n\n%s",
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s%s %s\n\nPosición general: <b><v>%s</v></b>\n\nPosición semanal: <b><v>%s</v></b>\n\n%s%s",
 	map_count = "Cantidad de mapas: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	title_count = "<b><j>«!»</j></b> Mapas completados: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> Checkpoints obtenidos: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
 	help_badge = "Las insignias son logros que un usuario puede obtener. Clickéalas para ver su descripción.",

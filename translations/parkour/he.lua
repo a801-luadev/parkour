@@ -98,7 +98,7 @@ translations.he = {
 	weekly_info = "<p align='center'><font size='13' face='Lucida Console,Liberation Mono,Courier New'><b><v>%s</v></b><font size='5'>\n\n</font>לוח תוצאות שבועי",
 	badges = "<font size='14' face='Lucida Console,Liberation Mono,Courier New,Verdana'>תגים (%s): <a href='event:_help:badge'><j>[?]</j></a>",
 	private_maps = "<bl>מספר המפות של שחקן זה הינו פרטי. <a href='event:_help:private_maps'><j>[?]</j></a></bl>\n",
-	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s %s\n\nדרגה בלוח התוצאות הכללי: <b><v>%s</v></b>\n\nדרגה בלוח התוצאות השבועי: <b><v>%s</v></b>\n\n%s",
+	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s%s %s\n\nדרגה בלוח התוצאות הכללי: <b><v>%s</v></b>\n\nדרגה בלוח התוצאות השבועי: <b><v>%s</v></b>\n\n%s%s",
 	map_count = "מספר מפות: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	help_badge = "תגים הינם הישגים ששחקן יכול לקבל. לחץ עליהם על מנת לקבל פירוט.",
 	help_private_maps = "משתמש זה אינו מעוניין לשתף את מספר המפות שלו בפומבי! אתה יכול להסתיר את זה גם בפרופיל שלך.",
