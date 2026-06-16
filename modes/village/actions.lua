@@ -89,6 +89,7 @@ onEvent("TradeNPC", function(player, npc)
 
   if shop.reward == 'power' then
     if not file:updateItem(shop.power_id, 8, shop.right_amount) then return end
+    translatedChatMessage("npc_thanks", player)
   elseif shop.reward == 'badge' then
     if file.badges[shop.badge_group] == shop.badge_index then return end
     file.badges[shop.badge_group] = shop.badge_index

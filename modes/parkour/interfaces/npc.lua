@@ -1,10 +1,8 @@
 do
-local confirming = {}
 local closeButton = Button.new()
 NPCInterface = Interface.new(200, 35, 400, 350, true)
 	:loadTemplate(WindowBackground)
 	:setShowCheck(function(self, player)
-		confirming[player] = nil
 		return true
 	end)
 
@@ -56,19 +54,21 @@ NPCInterface = Interface.new(200, 35, 400, 350, true)
 		Button.new()
 		:setText(function(self, player)
 			local data = self.parent.args[player][1]
+			local confirming = self.parent.args[player][2]
 			if not data.left_button then return '' end
-			if confirming[player] == true then return translatedMessage('yes', player) end
+			if confirming == true then return translatedMessage('yes', player) end
 			return translatedMessage(data.left_button, player)
 		end)
 		:onClick(function(self, player)
 			if eventTradeNPC then
 				local data = self.parent.args[player][1]
-				if confirming[player] ~= true then
-					confirming[player] = true
-					self.parent:update(player, data)
+				local confirming = self.parent.args[player][2]
+				if confirming ~= true then
+					self.parent:update(player, data, true)
 					return
 				end
 				eventTradeNPC(player, data.name, true)
+				self.parent:update(player, data)
 			end
 		end)
 		:canUpdate(true):onUpdate(function(self, player)
@@ -111,18 +111,21 @@ NPCInterface = Interface.new(200, 35, 400, 350, true)
 		:setText(function(self, player)
 			local data = self.parent.args[player][1]
 			if not data.right_button then return '' end
-			if confirming[player] == false then return translatedMessage('yes', player) end
+			local confirming = self.parent.args[player][2]
+			if confirming == false then return translatedMessage('yes', player) end
 			return translatedMessage(data.right_button, player)
 		end)
 		:onClick(function(self, player)
 			if eventTradeNPC then
 				local data = self.parent.args[player][1]
-				if confirming[player] ~= false then
-					confirming[player] = false
-					self.parent:update(player, data)
+				local confirming = self.parent.args[player][2]
+				if confirming ~= false then
+					confirming = false
+					self.parent:update(player, data, false)
 					return
 				end
 				eventTradeNPC(player, data.name, false)
+				self.parent:update(player, data)
 			end
 		end)
 		:canUpdate(true):onUpdate(function(self, player)
