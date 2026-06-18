@@ -43,7 +43,7 @@ function Quests.get_next_reset()
 	return daily + a_day, weekly + a_week
 end
 
-local ALLOWED_POWERS = { 4, 6, 7, 8, 9, 10, 11, 12, 13 }
+local ALLOWED_POWERS = { 4, 6, 7, 8, 9, 10, 11, 12 }
 
 local function get_powers(map_count)
 	local available = {}
