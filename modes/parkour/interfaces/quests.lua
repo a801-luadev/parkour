@@ -201,13 +201,27 @@ do
 				return "<textformat leftMargin='70'>" .. Quests[data:quest_id(index)].description(player, data, index)
 			end
 		})
-		:addImage({ -- State Image
+		:addImage({ -- Milestone Image
+			canUpdate = true,
+			image = function(self, player, page, data)
+				if page ~= 3 then
+					return "01010101010.png"
+				end
+
+				local completed = Milestones[i].completed(player, data)
+				if completed == nil then return "01010101010.png" end
+				return completed and "17797d878fa.png" or "17797d860b6.png"
+			end,
+
+			target = "~10",
+			x = 370, y = 45 + 60 * i,
+			anchorX = 0.5, anchorY = 0.5,
+		})
+		:addImage({ -- Skip Button Image
 			canUpdate = true,
 			image = function(self, player, page, data)
 				if page == 3 then
-					local completed = Milestones[i].completed(player, data)
-					if completed == nil then return "01010101010.png" end
-					return completed and "17797d878fa.png" or "17797d860b6.png"
+					return "01010101010.png"
 				end
 
 				local index = i + (page == 2 and 4 or 0)
@@ -224,10 +238,9 @@ do
 
 				return "18bab04d3a9.png"
 			end,
-			
+
 			target = "~10",
-			x = 370, y = 45 + 60 * i,
-			anchorX = 0.5, anchorY = 0.5,
+			x = 360, y = 35 + 60 * i,
 		})
 		:addTextArea({ -- Skip Button
 			x = 360, y = 35 + 60 * i,
