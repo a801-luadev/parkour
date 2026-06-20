@@ -185,7 +185,7 @@ newCmd({ name = "image",
         if mouseImages[player][2] then
           tfm.exec.removeImage(mouseImages[player][2], false)
         end
-        tfm.exec.killPlayer(player)
+        killPlayer(player, true)
       end
     end
     return

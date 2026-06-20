@@ -33,6 +33,9 @@ local cooldownMultiplier = 1
 local leaderboard, weekleaderboard, roomleaderboard, coinleaderboard = {}, {}, {}, {}
 local save_queue
 
+local death_count, skip_death_count = {}, {}
+local less_life_quest = {}
+
 local bans = {}
 
 local difficulty_color = { 'vp', 'j', 'ch2' }
@@ -95,6 +98,21 @@ do
 			end
 			return respawnPlayer(player)
 		end
+	end
+end
+
+local killPlayer
+do
+	local kill = tfm.exec.killPlayer
+	killPlayer = function(player, dont_count)
+		if dont_count and not victory[player] then
+			local p = room.playerList[player]
+			if p and not p.isDead then
+				skip_death_count[player] = true
+			end
+		end
+
+		kill(player)
 	end
 end
 
@@ -446,6 +464,31 @@ onEvent("PlayerLeft", function(player)
 end)
 
 onEvent("PlayerDied", function(player)
+	if not victory[player] then
+		if not skip_death_count[player] then
+			local new_count = 1 + (death_count[player] or 0)
+			local life = less_life_quest[player]
+
+			if life then
+				for i=1, #life do
+					if life[i] == new_count then
+						translatedChatMessage("quest_life_over", player, new_count)
+
+						if i == #life then
+							less_life_quest[player] = nil
+						end
+
+						break
+					end
+				end
+			end
+
+			death_count[player] = new_count
+		end
+
+		skip_death_count[player] = false
+	end
+
 	local info = room.playerList[player]
 
 	if not info then return end
@@ -535,6 +578,7 @@ onEvent("NewGame", function()
 	tfm.exec.disablePhysicalConsumables(true)
 	tfm.exec.disableMinimalistMode(true)
 
+	death_count, skip_death_count = {}, {}
 	roomleaderboard = {}
 	check_position = 6
 	victory_count = 0
@@ -757,7 +801,7 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 
 	if level.stop then
 		tfm.exec.movePlayer(player, 0, 0, true, 1, 1, false)
-		tfm.exec.killPlayer(player)
+		killPlayer(player, true)
 	end
 end)
 

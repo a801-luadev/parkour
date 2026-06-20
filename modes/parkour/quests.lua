@@ -43,6 +43,47 @@ function Quests.get_next_reset()
 	return daily + a_day, weekly + a_week
 end
 
+local function get_quest_map_code(data, index)
+	local target = data:quest_target(index) or 0
+	local difficulty = ceil(target / 1000)
+	local diff_maps = maps[difficulty]
+
+	if not diff_maps then
+		return nil, difficulty
+	end
+
+	return diff_maps.list[1 + ((target - 1) % diff_maps.count)], difficulty
+end
+
+local function gen_life_quest(data)
+	local new_life = {}
+	local id, code, difficulty
+
+	for i=1, 8 do
+		if data:quest_ts(i) == 0 then
+			id = data:quest_id(i)
+
+			if id == 9 then
+				code, difficulty = get_quest_map_code(data, i)
+
+				if code == tonumber(current_map) then
+					new_life[1 + #new_life] = 2 + difficulty
+				end
+			elseif id == 10 then
+				if current_difficulty == data:quest_extra(i) then
+					new_life[1 + #new_life] = 1
+				end
+			end
+		end
+	end
+
+	if #new_life == 0 then return end
+
+	table.sort(new_life)
+
+	return new_life
+end
+
 local ALLOWED_POWERS = { 4, 6, 7, 8, 9, 10, 11, 12 }
 
 local function get_powers(map_count)
@@ -136,7 +177,7 @@ function Quests.skipped(data, index)
 	return data:quest_skipped(index) >= reset_time
 end
 
-function Quests.skip(data, index)
+function Quests.skip(player, data, index)
 	if index < 1 or index > 8 then return end
 
 	-- completed
@@ -156,6 +197,7 @@ function Quests.skip(data, index)
 	assign_quest(data, index, available, power_ids, weekly)
 	data:quest_skipped(index, os_time())
 	savePlayerData(player)
+	less_life_quest[player] = gen_life_quest(data)
 
 	return true
 end
@@ -208,14 +250,17 @@ function Quests.trigger_map(player)
 	if not data then return end
 	if #maps[1].list == 1 then return end -- list not loaded yet
 
-	local difficulty, index
+	less_life_quest[player] = gen_life_quest(data)
+
+	if less_life_quest[player] then
+		return translatedChatMessage("quest_map", player, current_map)
+	end
 
 	for i=1, 8 do
-		if data:quest_id(i) == 5 and data:quest_ts(i) == 0 then
-			difficulty = i > 4 and 3 or 1
-			index = 1 + ((data:quest_target(i) - 1) % maps[difficulty].count)
+		if data:quest_ts(i) == 0 and data:quest_id(i) == 5 then
+			local code = get_quest_map_code(data, i)
 
-			if maps[difficulty].list[index] == tonumber(current_map) then
+			if code == tonumber(current_map) then
 				return translatedChatMessage("quest_map", player, current_map)
 			end
 		end
@@ -325,10 +370,16 @@ newCmd({ name = {"aquest", "aq"},
 
 			if value == "revert" then
 				get_last_reset = get_last_reset_actual
+				sendChatFmt("Restored original reset timer", player)
+				chatlogCmd(cmd, player, args)
 				return
+			elseif value == "1d" then
+				value = 60 * 60 * 24 * 1000
+			elseif value == "1w" then
+				value = 60 * 60 * 24 * 1000 * 7
+			else
+				value = tonumber(value)
 			end
-
-			value = tonumber(value)
 
 			if not value then
 				return sendChatFmt("!aquest setreset [+ms/-ms]/revert", player)
@@ -374,16 +425,14 @@ newCmd({ name = {"aquest", "aq"},
 				data:quest_streak(1), data:quest_streak(5)
 			)
 
-			local mapIndex, mapList, mapCode, target, id
+			local target, id
 
 			for i = 1, 8 do
 				id = data:quest_id(i)
 				target = data:quest_target(i)
 
-				if id == 5 then
-					mapIndex = target
-					mapList = maps[i > 4 and 3 or 1]
-					mapCode = mapList.list[1 + ((mapIndex - 1) % mapList.count)]
+				if id == 5 or id == 9 then
+					local mapCode = get_quest_map_code(data, i)
 
 					if mapCode then
 						target = target .. " (@" .. mapCode .. ")"
@@ -444,9 +493,11 @@ newCmd({ name = {"aquest", "aq"},
 				return sendChatFmt("!aquest skip %s [1-8]", player, target)
 			end
 
-			local yes = Quests.skip(data, index)
+			local yes = Quests.skip(target, data, index)
 
 			sendChatFmt("Attempted to skip %s's quest-%s: %s", player, target, index, yes and "success" or "failed")
+		else
+			return sendChatFmt("!aquest setreset/raw/view/edit/trigger/skip", player)
 		end
 
 		chatlogCmd(cmd, player, args)
@@ -465,7 +516,7 @@ local function linear_progress(player, data, index)
 	end
 end
 
-Quests[1] = {
+Quests[1] = { -- Complete n maps
 	description = function(player, data, index)
 		return translatedMessage("quest_1", player, data:quest_progress(index), data:quest_target(index))
 	end,
@@ -482,7 +533,7 @@ Quests[1] = {
 	progress_completion = linear_progress,
 }
 
-Quests[2] = {
+Quests[2] = { -- Collect n checkpoints
 	description = function(player, data, index)
 		return translatedMessage("quest_2", player, data:quest_progress(index), data:quest_target(index))
 	end,
@@ -509,7 +560,7 @@ Quests[2] = {
 	end,
 }
 
-Quests[3] = {
+Quests[3] = { -- Get n firsts
 	description = function(player, data, index)
 		return translatedMessage("quest_3", player, data:quest_progress(index), data:quest_target(index))
 	end,
@@ -538,7 +589,7 @@ Quests[3] = {
 	end,
 }
 
-Quests[4] = {
+Quests[4] = { -- Complete under n seconds
 	description = function(player, data, index)
 		return translatedMessage("quest_4", player, data:quest_target(index))
 	end,
@@ -562,26 +613,23 @@ Quests[4] = {
 	end,
 }
 
-Quests[5] = {
+Quests[5] = { -- Complete @x
 	description = function(player, data, index)
-		local mapIndex = data:quest_target(index)
-		local mapList = maps[index > 4 and 3 or 1]
-		local mapCode = mapList.list[1 + ((mapIndex - 1) % mapList.count)] or "N/A"
+		local mapCode = get_quest_map_code(data, index) or "N/A"
 		return translatedMessage("quest_5", player, mapCode)
 	end,
 
 	target = function()
-		return random(1000)
+		return weekly and random(1000, 3000) or random(2000)
 	end,
 
 	prize = function(player, data, index)
-		return index > 4 and 200 or 100
+		local difficulty = ceil(data:quest_target(index) / 1000)
+		return (index > 4 and 200 or 100) * difficulty
 	end,
 
 	progress_completion = function(player, data, index)
-		local mapIndex = data:quest_target(index)
-		local mapList = maps[index > 4 and 3 or 1]
-		local mapCode = mapList.list[1 + ((mapIndex - 1) % mapList.count)]
+		local mapCode = get_quest_map_code(data, index)
 
 		if mapCode == tonumber(current_map) then
 			completeQuest(player, data, index)
@@ -590,7 +638,7 @@ Quests[5] = {
 	end,
 }
 
-Quests[6] = {
+Quests[6] = { -- Use power x, n times
 	description = function(player, data, index)
 		local power = powers[data:quest_extra(index)]
 		if not power then return "N/A" end
@@ -615,16 +663,17 @@ Quests[6] = {
 	progress_power = linear_progress,
 }
 
-Quests[7] = {
+Quests[7] = { -- Complete n maps in diff x
 	description = function(player, data, index)
-		local colortag = difficulty_color[current_difficulty] or 'fc'
+		local difficulty = data:quest_extra(index)
+		local colortag = difficulty_color[difficulty] or 'fc'
 		return translatedMessage(
 			"quest_7",
 			player,
 			data:quest_progress(index),
 			data:quest_target(index),
 			colortag,
-			('★'):rep(data:quest_extra(index) or 1),
+			('★'):rep(difficulty),
 			colortag
 		)
 	end,
@@ -674,7 +723,7 @@ Quests[7] = {
 
 local feature_mapping = { 'acid', 'water', 'honey' }
 
-Quests[8] = {
+Quests[8] = { -- Complete n maps with x
 	description = function(player, data, index)
 		local feature = data:quest_extra(index)
 		return translatedMessage(
@@ -701,6 +750,85 @@ Quests[8] = {
 
 	progress_completion = function(player, data, index)
 		if not map_features[feature_mapping[data:quest_extra(index)]] then return end
+
+		local target = data:quest_target(index)
+		local new = 1 + data:quest_progress(index)
+
+		data:quest_progress(index, new)
+
+		if new >= target then
+			completeQuest(player, data, index)
+			return true
+		end
+	end,
+}
+
+Quests[9] = { -- Complete @x with n life
+	description = function(player, data, index)
+		local mapCode, difficulty = get_quest_map_code(data, index)
+		local life = 2 + difficulty
+		mapCode = mapCode or "N/A"
+		return translatedMessage("quest_9", player, mapCode, life)
+	end,
+
+	target = function(weekly)
+		return weekly and random(1000, 3000) or random(2000)
+	end,
+
+	prize = function(player, data, index)
+		local difficulty = ceil(data:quest_target(index) / 1000)
+		return (index > 4 and 180 or 110) * difficulty
+	end,
+
+	progress_completion = function(player, data, index)
+		local mapCode, difficulty = get_quest_map_code(data, index)
+		local life = 2 + difficulty
+
+		if death_count[player] and death_count[player] >= life then return end
+
+		if mapCode == tonumber(current_map) then
+			completeQuest(player, data, index)
+			return true
+		end
+	end,
+}
+
+Quests[10] = { -- Complete n maps with 1 life in diff x
+	description = function(player, data, index)
+		local difficulty = data:quest_extra(index)
+		local colortag = difficulty_color[difficulty] or 'fc'
+		return translatedMessage(
+			"quest_10",
+			player,
+			data:quest_progress(index),
+			data:quest_target(index),
+			colortag,
+			('★'):rep(difficulty),
+			colortag
+		)
+	end,
+
+	target = function(weekly, difficulty)
+		return weekly and random(4, 20 - 5 * difficulty) or random(1, 4 - difficulty)
+	end,
+
+	prize = function(player, data, index)
+		local difficulty = data:quest_extra(index)
+		local target = data:quest_target(index)
+		local mult = difficulty == 3 and (index > 4 and 3.5 or 5)
+							or difficulty == 2 and (index > 4 and 1.5 or 2)
+							or 1
+		local coins = target * mult * (index > 4 and 2.4 or 3)
+		return ceil(coins / 5) * 5
+	end,
+
+	extra = function(weekly, power_ids)
+		return weekly and random(1, 3) or random(1, 2)
+	end,
+
+	progress_completion = function(player, data, index)
+		if death_count[player] and death_count[player] > 0 then return end
+		if current_difficulty ~= data:quest_extra(index) then return end
 
 		local target = data:quest_target(index)
 		local new = 1 + data:quest_progress(index)

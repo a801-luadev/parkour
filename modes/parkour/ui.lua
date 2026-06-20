@@ -479,7 +479,7 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 
 		local index = math.floor(tonumber(args) or 0)
 
-		if Quests.skip(data, index) then
+		if Quests.skip(player, data, index) then
 			QuestsInterface:update(player, index > 4 and 2 or 1, data)
 		end
 	end

@@ -34,6 +34,8 @@ onEvent("NewGame", function()
 		translatedChatMessage("min_players", nil, room.uniquePlayers, min_save)
 	end
 
+	less_life_quest = {}
+
 	for player in next, in_room do
 		Quests.trigger_map(player)
 	end
