@@ -27,6 +27,7 @@ translations.br = {
 	help = "Ajuda",
 	staff = "Staff",
 	rules = "Regras",
+	tab_misc = "Misc",
 	tab_ban = "Ban",
 	contribute = "Contribuir",
 	changelog = "Novidades",

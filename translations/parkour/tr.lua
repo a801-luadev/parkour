@@ -62,7 +62,7 @@ translations.tr = {
 	unlocked_skin = "<ce><d>%s</d>, <vp>%s</vp> becerisi için bir eşya görünümü kazandı.",
 
 	-- Information messages
-	mod_apps = "<j>Parkour moderatör alımları şimdi açık! Bu bağlantıyı kullanın: <rose>%s",
+	mod_apps = "<j>Parkour moderatör alımları açıldı! Bu bağlantıyı kullanın: <rose>%s",
 	mapper_apps = "<j>Parkour harita ekibi başvuruları açılmıştır! Daha fazla bilgi için Discord sunucumuza katılın: <rose>%s",
 	staff_power = "<r>Parkour personelinin #parkour odalarının dışında hiçbir gücü <b>yoktur</b>.",
 	donate = "<vp>Bu modül için bağış yapmak istiyorsanız <b>!donate</b> yazın!",
