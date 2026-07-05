@@ -14,6 +14,7 @@ local getPowerUpgrade
 do
 local facing = {}
 local cooldowns = {}
+local secondary_power_effects = {}
 local obj_whitelist = {_count = 0, _index = 1}
 local keybindings = {}
 local cooldownSlots = {}
@@ -755,6 +756,7 @@ powers = {
 			tfm.exec.addPhysicObject(id1, x + 13, y, circles)
 			tfm.exec.addPhysicObject(id2, x - 5, y + 2, circles)
 
+			secondary_power_effects[id1] = true
 			addNewTimer(5000, powers.pig.explode, id1, id2, img, x, y)
 			if yScale == 1 then
 				addNewTimer(
@@ -766,6 +768,8 @@ powers = {
 		end,
 
 		explode = function(id1, id2, img, x, y)
+			if not secondary_power_effects[id1] then return end
+
 			tfm.exec.removePhysicObject(id1)
 			tfm.exec.removePhysicObject(id2)
 			tfm.exec.removeImage(img)
@@ -860,11 +864,13 @@ powers = {
 						friction = 0.3,
 						width = 30
 					})
-
+					secondary_power_effects[id] = true
 					addNewTimer(5000, powers.toilet.water, img, id, x, y)
 				end,
 
 				water = function(img, id, x, y)
+					if not secondary_power_effects[id] then return end
+
 					tfm.exec.removeImage(img)
 
 					local obj = addShamanObject(63, x, y)
@@ -903,11 +909,13 @@ powers = {
 						friction = 0.3,
 						width = 80
 					})
-
+					secondary_power_effects[id] = true
 					addNewTimer(5000, powers.bathtub.water, img, id, x, y)
 				end,
 
 				water = function(img, id, x, y)
+					if not secondary_power_effects[id] then return end
+
 					tfm.exec.removeImage(img)
 
 					tfm.exec.addPhysicObject(id, x, y - 40, {
@@ -1379,6 +1387,7 @@ onEvent("NewGame", function()
 	booster = {}
 	facing = {}
 	cooldowns = {}
+	secondary_power_effects = {}
 	obj_whitelist = {_count = 0, _index = 1}
 
 	setmetatable(room.objectList, {
