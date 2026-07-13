@@ -717,6 +717,10 @@ onEvent("PacketReceived", function(channel, id, packet)
 			tfm.exec.chatMessage(msg, targetPlayer)
 		end
 	elseif id == packets.bots.player_list then
+		if packet ~= "" and room.name ~= packet then
+			return
+		end
+
 		local names, ids, n = {}, {}, 0
 
 		for name, info in next, room.playerList do
