@@ -31,10 +31,7 @@ local textareas = {
 }
 
 local parkour_bot = "Parkour#0568"
-
-if not room.playerList[parkour_bot] then
-	system.exit()
-end
+local bot_joined = false
 
 local function apply_file_operation(data, operation, file, raw_data)
 	local action = operation[2]
@@ -247,7 +244,14 @@ local function apply_file_operation(data, operation, file, raw_data)
 end
 
 onEvent("NewPlayer", function(player)
-	if player ~= parkour_bot then return end
+	if player ~= parkour_bot then
+		if not bot_joined then
+			system.exit()
+		end
+		return
+	end
+
+	bot_joined = true
 	file_updates = nil
 
 	local password = generateRandomString(10)
