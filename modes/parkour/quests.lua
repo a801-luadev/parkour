@@ -113,7 +113,7 @@ local function get_available(data, reset_time, min, max)
 
 	local power_ids = get_powers(data.c)
 
-	if #power_ids == 0 then
+	if data.settings[8] == 1 or #power_ids == 0 then
 		excluded[6] = true
 	end
 
