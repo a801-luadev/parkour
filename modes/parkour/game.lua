@@ -455,8 +455,8 @@ onEvent("PlayerLeft", function(player)
 				if required == 0 then break end
 			end
 
-			for name = 1, #to_remove do
-				AfkInterface:remove(name)
+			for i = 1, #to_remove do
+				AfkInterface:remove(to_remove[i])
 			end
 		end
 	end
