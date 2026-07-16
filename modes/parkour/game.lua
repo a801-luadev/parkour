@@ -2,6 +2,7 @@ local min_save = 4
 
 local check_position = 6
 local player_count = 0
+local prev_player_count = 0
 local actual_player_count = 0
 local victory_count = 0
 local less_time = false
@@ -202,25 +203,40 @@ function showStats()
 	))
 end
 
-local function enableSpecMode(player, enable)
-	if spec_mode[player] and enable then return end
-	if not spec_mode[player] and not enable then return end
+local function enableSpecMode(player, mode)
+	local current = spec_mode[player]
 
-	if enable then
-		spec_mode[player] = true
-		tfm.exec.killPlayer(player)
+	mode = mode or nil
+
+	if current == mode then return end
+
+	spec_mode[player] = mode
+
+	if mode == true then
 		tfm.exec.setPlayerScore(player, -1, false)
+	else -- nil or 2
+		tfm.exec.setPlayerScore(player, players_level[player] or 1, false)
+
+		if current == true then
+			player_count = player_count + 1
+
+			if victory[player] then
+				victory_count = victory_count + 1
+			end
+		end
+	end
+
+	if mode then
+		tfm.exec.killPlayer(player)
+
+		-- include in stats count
+		if mode == 2 then return end
 
 		player_count = player_count - 1
 		if victory[player] then
 			victory_count = victory_count - 1
-		elseif player_count == victory_count and not less_time then
-			tfm.exec.setGameTime(5)
-			less_time = true
 		end
 	else
-		spec_mode[player] = nil
-		tfm.exec.setPlayerScore(player, players_level[player] or 1, false)
 
 		if (not levels) or (not players_level[player]) then return end
 
@@ -229,14 +245,7 @@ local function enableSpecMode(player, enable)
 		cp_available[player] = os.time() + 750
 		tfm.exec.respawnPlayer(player)
 		tfm.exec.movePlayer(player, level.x, level.y)
-
-		player_count = player_count + 1
-		if victory[player] then
-			victory_count = victory_count + 1
-		end
 	end
-
-	showStats()
 end
 
 local function checkBan(player, data, id)
@@ -431,36 +440,16 @@ onEvent("PlayerLeft", function(player)
 	lastPlayerLeft = player
 	actual_player_count = actual_player_count - 1
 
-	if spec_mode[player] then return end
+	local mode = spec_mode[player]
+	spec_mode[player] = nil
+
+	if mode == true then return end
 
 	player_count = player_count - 1
 
 	if victory[player] then
 		victory_count = victory_count - 1
-	elseif player_count == victory_count and not less_time then
-		tfm.exec.setGameTime(5)
-		less_time = true
 	end
-
-	if not AfkInterface.open[player] then
-		local required = 4 - player_count
-
-		if required > 0 then
-			local to_remove = {}
-
-			for name in next, AfkInterface.open do
-				enableSpecMode(name, false)
-				to_remove[required] = name
-				required = required - 1
-				if required == 0 then break end
-			end
-
-			for i = 1, #to_remove do
-				AfkInterface:remove(to_remove[i])
-			end
-		end
-	end
-	showStats()
 end)
 
 onEvent("PlayerDied", function(player)
@@ -666,6 +655,33 @@ end)
 
 onEvent("Loop", function()
 	if not levels then return end
+
+	if prev_player_count ~= player_count then
+		if player_count == victory_count and not less_time then
+			tfm.exec.setGameTime(5)
+			less_time = true
+		end
+
+		if player_count < min_save then
+			local required = 4 - player_count
+			local to_remove = {}
+
+			for name in next, AfkInterface.open do
+				enableSpecMode(name, false)
+				to_remove[required] = name
+				required = required - 1
+
+				if required == 0 then break end
+			end
+
+			for i=1, #to_remove do
+				AfkInterface:remove(to_remove[i])
+			end
+		end
+
+		prev_player_count = player_count
+		showStats()
+	end
 
 	if check_position > 0 then
 		check_position = check_position - 1
@@ -899,23 +915,33 @@ newCmd({ name = "cp",
 		end
 	end })
 
+newCmd({ name = "counts",
+	rank = "mod",
+	fn = function(player, args, cmd)
+		sendChatFmt("victory: %s\nplaying: %s\ntotal: %s\nunique: %s", player, victory_count, player_count, actual_player_count, room.uniquePlayers)
+	end })
+
 newCmd({ name = "spec",
 	perm = "spectate",
 	fn = function(player, args, cmd)
 		if not players_file[player] then return end
 
-		if args[1] then
+		local target = args[1]
+
+		if target and target ~= "-1" then
 			if not perms[player].set_spectate and not review_mode then return end
-			if not room.playerList[args[1]] or not players_file[args[1]] then
-				return translatedChatMessage("invalid_syntax", player)
+			if not in_room[target] or not players_file[target] then
+				return sendChatFmt("<r>Player is not here.", player)
 			end
 
-			enableSpecMode(args[1], not spec_mode[args[1]])
+			enableSpecMode(target, not spec_mode[target])
 			chatlogCmd(cmd, player, args, ranks.mapper)
 			logCmd(cmd, player, args)
 		else
-			enableSpecMode(player, not spec_mode[player])
-			players_file[player].spec = spec_mode[player]
+			local mode = not spec_mode[player]
+			mode = mode and not target and 2 or mode
+			enableSpecMode(player, mode)
+			players_file[player].spec = mode
 			savePlayerData(player)
 		end
 	end })
@@ -1028,8 +1054,10 @@ newCmd({ name = "info",
 	end })
 
 onEvent("PlayerDataParsed", function(player, data)
-	if players_file[player].spec then
-		enableSpecMode(player, true)
+	local spec = data.spec
+
+	if spec then
+		enableSpecMode(player, spec)
 		tfm.exec.chatMessage("<v>[#] <d>Your spec mode has been carried to this room since it's enabled.", player)
 	end
 
