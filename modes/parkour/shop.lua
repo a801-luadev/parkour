@@ -513,6 +513,38 @@ local shop_skins = {
 	tab = 3,
 	y = 0.3,
 },
+
+-- Lemonade 2026
+[2010] = {
+	currency = 'lemonade',
+	img = 'img@19f7dc847db',
+	shop_img = 'img@19f7dd06c32',
+	price = 60,
+	tab = 5,
+},
+[2011] = {
+	currency = 'lemonade',
+	img = 'img@19f7dc8559a',
+	shop_img = 'img@19f7dd29ee3',
+	price = 60,
+	tab = 3,
+	y = 0.45,
+},
+[2012] = {
+	currency = 'lemonade',
+	img = 'img@19f7dc88896',
+	shop_img = 'img@19f7dc88896',
+	price = 60,
+	tab = 4,
+},
+[2013] = {
+	currency = 'lemonade',
+	img = 'img@19f7dc8750c',
+	shop_img = 'img@19f7dc8750c',
+	price = 60,
+	tab = 2,
+	shop_scale = 0.9,
+},
 }
 local file_skins = {}
 local shop_state = {}
