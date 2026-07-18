@@ -49,7 +49,6 @@ local starting = string.sub(room.name, 1, 2)
 
 local is_tribe = starting == "*\003"
 local tribe, module_name, submode, tfm_mode
-local flags = ""
 
 room.starting = starting
 room.lowerName = string.lower(room.name)
@@ -128,6 +127,35 @@ local function capitalize(str)
 	end
 end
 
+local function migrateSubmode(onEvent, new_module, new_submode)
+	if not module_name then return end
+
+	local prefix = starting
+
+	if prefix ~= "*#" and prefix ~= "@#" then
+		prefix = room.name:sub(1, 3)
+	end
+
+	local pos = 1 + #prefix + #module_name
+	local before = string.match(room.name, "^([^a-zA-Z]-)[a-z_]+", pos)
+	local after = string.sub(room.name, pos + #before + #submode)
+	local new_room
+
+	if new_submode then
+		new_room = "<rose>/room " .. prefix .. new_module .. before .. new_submode .. after
+	else
+		new_room = "<rose>/room " .. prefix .. new_module .. after
+	end
+
+	onEvent("NewPlayer", function(player)
+		tfm.exec.chatMessage(new_room, player)
+	end)
+
+	onEvent("PlayerDataParsed", function(player)
+		tfm.exec.chatMessage(new_room, player)
+	end)
+end
+
 do
 	local savePlayerData = system.savePlayerData
 	system.savePlayerData = function(playerName, ...)
@@ -153,10 +181,20 @@ end
 local function initialize_parkour() -- so it uses less space after building
 	{% require-package "modes/parkour" %}
 
+	if tfm_mode == "village" then
+		{% require-package "modes/village" %}
+	end
+
 	if submode == "smol" then
 		{% require-package "modes/smol" %}
-	elseif tfm_mode == "village" then
-		{% require-package "modes/village" %}
+
+	-- migrated modules
+	elseif submode == "freezertag" then
+		migrateSubmode(onEvent, "freezertag")
+	elseif submode == "rocketlaunch" then
+		migrateSubmode(onEvent, "freezertag", "rocketlaunch")
+	elseif submode == "records" then
+		migrateSubmode(onEvent, "records", "parkour")
 	end
 
 	eventGameStart()
@@ -178,9 +216,6 @@ else
 	end
 
 	submode = string.match(room.name, "^[^a-zA-Z]-([a-z_]+)", pos)
-	if submode then
-		flags = string.sub(room.name, pos + #submode + 2)
-	end
 
 	local nameLength = string.len(room.name)
 	if nameLength > 45 then 
@@ -192,10 +227,6 @@ else
 
 	if starting == "@#" then
 		{% require-package "modes/bots" %}
-	elseif submode == "freezertag" then
-		{% require-package "modes/freezertag" %}
-	elseif submode == "rocketlaunch" then
-		{% require-package "modes/rocketlaunch" %}
 	else
 		initialize_parkour()
 	end
