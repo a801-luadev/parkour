@@ -1167,7 +1167,7 @@ local function usePower(player, _power, key, down, x, y, chairCd, onlyVisual, vx
 
 	addTracklist(power, player, x, y)
 
-	if doStatsCount() then
+	if stats_enabled then
 		Quests.trigger_power(player, power.id)
 	end
 end
@@ -1310,7 +1310,7 @@ end)
 onEvent("PlayerCompleted", function(player, info, file)
 	local id = info.id
 
-	if doStatsCount() then
+	if stats_enabled then
 		local earned_coins = (is_anniversary and 2 or 1) * current_difficulty
 
 		file.c = file.c + 1

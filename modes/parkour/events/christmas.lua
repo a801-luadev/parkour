@@ -171,7 +171,7 @@ do
     christmas.reset()
 
     onEvent("NewGame", function()
-      if doStatsCount() then
+      if stats_enabled then
         christmas.initRound()
       else
         christmas.resetRound()

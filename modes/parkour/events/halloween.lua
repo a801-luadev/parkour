@@ -471,7 +471,7 @@ do
         return
       end
 
-      local shouldRun = doStatsCount() or halloween.forceNext or halloween.forceCollect or halloween.forceCauldron
+      local shouldRun = stats_enabled or halloween.forceNext or halloween.forceCollect or halloween.forceCauldron
 
       if shouldRun then
         if halloween.forceCauldron then

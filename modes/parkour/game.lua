@@ -1,10 +1,17 @@
 local min_save = 4
+local grace_period = 5000
 
 local check_position = 6
 local player_count = 0
 local prev_player_count = 0
 local actual_player_count = 0
 local victory_count = 0
+
+local enough_player_till
+local force_stats_count_debug = force_stats_count_debug
+local stats_room = tfm_mode ~= "village" and not records_admins and not is_tribe and submode ~= "smol"
+local stats_enabled = force_stats_count_debug
+
 local less_time = false
 local victory = {_last_level = {}}
 local online = {}
@@ -152,14 +159,24 @@ local function addCheckpointImage(player, x, y)
 	checkpoints[player] = tfm.exec.addImage(img, "!1", x - 15, y - 15, player)
 end
 
-local function doStatsCount()
-	return count_stats and
-		tfm_mode ~= "village" and
-		room.uniquePlayers >= min_save and
-		player_count >= min_save and
-		not records_admins and
-		not is_tribe and
-		not review_mode or force_stats_count_debug
+local function updateStatsCount(left)
+	-- force_stats_count_debug never changes
+	if force_stats_count_debug then return end
+
+	if stats_room and count_stats and not review_mode then
+		if room.uniquePlayers >= min_save and player_count >= min_save then
+			stats_enabled = true
+			enough_player_till = nil -- no need for grace period anymore
+		elseif enough_player_till then
+			stats_enabled = true
+		elseif left and stats_enabled then
+			enough_player_till = os.time() + grace_period
+		else
+			stats_enabled = false
+		end
+	else
+		stats_enabled = false
+	end
 end
 
 local function rewardSkin(player, id)
@@ -180,8 +197,15 @@ function showStats()
 
 	if not map_name then return end
 
-	local text = doStatsCount() and
-		"<v>Stats count" or
+	local text = stats_enabled and
+		(
+			enough_player_till and
+			string.format(
+				"<fc>Stats count for %ss",
+				math.max(0, math.ceil((enough_player_till - os.time()) / 1000))
+			) or
+			"<v>Stats count"
+		) or
 		(
 			review_mode and
 			"<bv>Review Mode" or
@@ -223,6 +247,8 @@ local function enableSpecMode(player, mode)
 			if victory[player] then
 				victory_count = victory_count + 1
 			end
+
+			updateStatsCount()
 		end
 	end
 
@@ -236,6 +262,8 @@ local function enableSpecMode(player, mode)
 		if victory[player] then
 			victory_count = victory_count - 1
 		end
+
+		updateStatsCount(true)
 	else
 
 		if (not levels) or (not players_level[player]) then return end
@@ -385,6 +413,7 @@ onEvent("NewPlayer", function(player, init)
 		bindKeyboard(player, 66, true, true) -- B key
 	end
 
+	updateStatsCount()
 	showStats()
 end)
 
@@ -450,6 +479,8 @@ onEvent("PlayerLeft", function(player)
 	if victory[player] then
 		victory_count = victory_count - 1
 	end
+
+	updateStatsCount(true)
 end)
 
 onEvent("PlayerDied", function(player)
@@ -601,10 +632,6 @@ onEvent("NewGame", function()
 		count_stats = false
 	end
 
-	if submode == "smol" then
-		count_stats = false
-	end
-
 	if records_admins then
 		less_time = true
 	else
@@ -650,6 +677,8 @@ onEvent("NewGame", function()
 	for player in next, spec_mode do
 		tfm.exec.killPlayer(player)
 	end
+
+	updateStatsCount()
 	showStats()
 end)
 
@@ -677,9 +706,23 @@ onEvent("Loop", function()
 			for i=1, #to_remove do
 				AfkInterface:remove(to_remove[i])
 			end
+
+			updateStatsCount()
+		end
+
+		if not enough_player_till then
+			showStats()
 		end
 
 		prev_player_count = player_count
+	end
+
+	if enough_player_till then
+		if os.time() > enough_player_till then
+			enough_player_till = nil
+			updateStatsCount()
+		end
+
 		showStats()
 	end
 
@@ -850,6 +893,8 @@ newCmd({ name = "review",
 			tfm.exec.setRoomMaxPlayers(room_max_players)
 			tfm.exec.chatMessage("<v>[#] <d>Room limit is restored to " .. room_max_players, player)
 		end
+
+		updateStatsCount()
 		showStats()
 		chatlogCmd(cmd, player, args, ranks.mapper)
 	end })
@@ -938,8 +983,7 @@ newCmd({ name = "spec",
 			chatlogCmd(cmd, player, args, ranks.mapper)
 			logCmd(cmd, player, args)
 		else
-			local mode = not spec_mode[player]
-			mode = mode and not target and 2 or mode
+			local mode = target == "-1" or not spec_mode[player] and 2
 			enableSpecMode(player, mode)
 			players_file[player].spec = mode
 			savePlayerData(player)

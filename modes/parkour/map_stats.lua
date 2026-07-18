@@ -76,7 +76,7 @@ do
     stats._len = stats._len + 1
     stats[stats._len] = { time, file.c }
 
-    if doStatsCount() and room.uniquePlayers >= PLAYER_TRESHOLD then
+    if stats_enabled and room.uniquePlayers >= PLAYER_TRESHOLD then
       stats._valid = stats._valid + 1
     end
   end)

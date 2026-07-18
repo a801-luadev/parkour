@@ -95,7 +95,7 @@ onEvent("PlayerCompleted", function(player, info, file)
 			translatedChatMessage("records_submit", player)
 		end
 
-		if taken < 20 and doStatsCount() then
+		if taken < 20 and stats_enabled then
 			sendPacket(
 				"common",
 				packets.rooms.suspicious,
@@ -135,7 +135,7 @@ onEvent("PlayerCompleted", function(player, info, file)
 	if is_tribe then
 		translatedChatMessage("tribe_house", player)
 
-	elseif room.uniquePlayers < min_save or player_count < min_save then
+	elseif not stats_enabled and (room.uniquePlayers < min_save or player_count < min_save) then
 		translatedChatMessage(
 			"min_players",
 			player,
@@ -143,7 +143,7 @@ onEvent("PlayerCompleted", function(player, info, file)
 			min_save
 		)
 
-	elseif count_stats and not records_admins and not review_mode then
+	elseif stats_enabled then
 		local power
 		for index = 1, #powers do
 			power = powers[index]
@@ -560,6 +560,7 @@ newCmd({ name = "forcestats",
 		tfm.exec.chatMessage("<v>[#] <d>count_stats set to true", player)
 		args[1] = room.currentMap
 		args[2] = room.xmlMapInfo and room.xmlMapInfo.permCode or -1
+		updateStatsCount()
 		showStats()
 	end })
 

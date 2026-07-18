@@ -250,7 +250,7 @@ do
         return
       end
 
-      if doStatsCount() then
+      if stats_enabled then
         lemonade.initRound()
       else
         lemonade.resetWait()
