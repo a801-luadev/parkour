@@ -1311,7 +1311,7 @@ onEvent("PlayerCompleted", function(player, info, file)
 	local id = info.id
 
 	if stats_enabled then
-		local earned_coins = (is_anniversary and 2 or 1) * current_difficulty
+		local earned_coins = (is_anniversary and 2 or 1) * (inreview_map and 3 or current_difficulty)
 
 		file.c = file.c + 1
 		file.coins = file.coins + earned_coins

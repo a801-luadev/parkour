@@ -30,6 +30,27 @@ local filemanagers = {
 					type = "number"
 				}
 			},
+			{
+				name = "maps4",
+				type = "array",
+				objects = {
+					type = "number"
+				}
+			},
+			{
+				name = "maps5",
+				type = "array",
+				objects = {
+					type = "number"
+				}
+			},
+			{
+				name = "map_polls",
+				type = "array",
+				objects = {
+					type = "number"
+				}
+			},
 		}
 	}):disableValidityChecks():prepare(),
 

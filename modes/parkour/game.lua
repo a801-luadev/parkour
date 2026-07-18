@@ -46,7 +46,7 @@ local less_life_quest = {}
 
 local bans = {}
 
-local difficulty_color = { 'vp', 'j', 'ch2' }
+local difficulty_color = { 'vp', 'j', 'ch2', 'ce', 'vi' }
 local checkpoint_info = {
 	version = 1, -- 0 = old, 1 = new
 	radius = 15 ^ 2, -- radius of 15px
@@ -216,12 +216,12 @@ function showStats()
 	ui.setMapName(string.format(
 		"%s%s<g>   |   %s",
 		map_name,
+		inreview_map and ' - <bv>In-Review' or
 		colortag and string.format(
 			' - <%s>%s',
 			colortag,
 			('★'):rep(current_difficulty)
 		)
-		or current_difficulty == 4 and ' - <bv>In-Review'
 		or '',
 		text
 	))

@@ -18,7 +18,6 @@ local online_staff = {
 	requesters = {_count = 0}
 }
 local shown_ranks = {"trainee", "mod", "mapper", "manager", "admin"}
-local map_polls = {}
 local current_poll
 
 local function closeAllInterfaces(player)
@@ -391,7 +390,11 @@ onEvent("PollVote", function(poll, player, button)
 	if not current_poll or current_poll.voters[player] then return end
 
 	if global_poll then
-		sendPacket("common", 8, tostring(button)) -- 1 = yes, 2 = no, 3 = idk
+		sendPacket("common", packets.rooms.poll_answer,
+			player .. "\000" ..
+			room.currentMap .. "\000" ..
+			tostring(button) -- 1 = yes, 2 = no, 3 = idk
+		)
 	end
 
 	current_poll.voters[player] = true

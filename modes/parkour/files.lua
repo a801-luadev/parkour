@@ -12,7 +12,7 @@ local badges, titles
 local dont_parse_data = {}
 
 local files = {
-	init = 40, -- ranks, maps, maps2, maps3
+	init = 40, -- ranks, maps, maps2, maps3, maps4, maps5, map_polls
 	leaderboard = 41, -- ranking, weekly
 	sanction = 63, -- sanction
 	shop = 54, -- shop
@@ -375,7 +375,7 @@ local data_migrations = {
 		end
 
 		data.quests = new_quests
-		data.dc = { 0, 0, 0 } -- completions for each diff
+		data.dc = { 0, 0, 0, 0, 0 } -- completions for each diff
 	end,
 }
 

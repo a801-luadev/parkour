@@ -34,13 +34,14 @@ local maps = {
 	polls = {_count = 0},
 }
 local current_difficulty = 0
+local inreview_map = false
 local maplist_index = 0
 local next_map
 local mapIsAboutToChange
 local map_images
 local map_features = {}
 
-for i=1,3 do
+for i=1,5 do
 	maps[i] = {
 		sections = {
 			_count = 0,
@@ -50,8 +51,12 @@ for i=1,3 do
 		list = {7171137},
 		count = 1,
 		odds = 100,
+		odd_mult = 1,
 	}
 end
+
+maps[2].odd_mult = 2
+maps[4].odd_mult = 2
 
 local is_invalid = false
 local count_stats = true
@@ -150,7 +155,7 @@ local function selectMap(sections, list, count)
 	return list[map]
 end
 
-local function newMap(difficulty)
+local function newMap(difficulty, max_difficulty)
 	count_stats = not review_mode
 	map_change_cd = os.time() + 20000
 
@@ -161,14 +166,14 @@ local function newMap(difficulty)
 		return
 	end
 
-	-- This might break if we move them to different files
 	local map
 
-	if difficulty then
-		difficulty = math.min(3, math.max(1, difficulty))
-	else
-		local chosen = math.random(maps[3].odds)
-		for i=1,3 do
+	difficulty = difficulty or 1
+	max_difficulty = max_difficulty or 3
+
+	if difficulty ~= max_difficulty then
+		local chosen = math.random(maps[max_difficulty].odds)
+		for i=difficulty, max_difficulty do
 			if chosen <= maps[i].odds then
 				difficulty = i
 				break
@@ -216,16 +221,16 @@ local function renderMapImages(player)
 end
 
 onEvent("GameDataLoaded", function(data)
-	if data.maps or data.maps2 or data.maps3 then
-		local in_file = { data.maps, data.maps2, data.maps3 }
+	if data.maps then
+		local in_file = { data.maps, data.maps2, data.maps3, data.maps4, data.maps5 }
 		local memory, sections
 
-		for i=1, 3 do
+		for i=1, 5 do
 			if in_file[i] then
 				memory = maps[i]
 				memory.list = in_file[i]
 				memory.count = #in_file[i]
-				memory.odds = memory.count * 1000000 * (i == 2 and 2 or 1) + (maps[i - 1] and maps[i - 1].odds or 0)
+				memory.odds = memory.count * memory.odd_mult
 
 				if memory.count == 0 then
 					memory.list = {7171137}
@@ -253,6 +258,11 @@ onEvent("GameDataLoaded", function(data)
 			end
 		end
 
+		for i=2, 5 do
+			memory = maps[i]
+			memory.odds = memory.odds + maps[i - 1].odds
+		end
+
 		if first_data_load then
 			newMap()
 			first_data_load = false
@@ -275,16 +285,14 @@ onEvent("NewGame", function()
 	map_features = {}
 	current_difficulty = 0
 
-	for i=1, 3 do
+	for i=1, 5 do
 		if table_find(maps[i].list, map_code_num) then
 			current_difficulty = i
 			break
 		end
 	end
 
-	if current_difficulty == 0 and room.xmlMapInfo and room.xmlMapInfo.permCode == 42 then
-		current_difficulty = 4
-	end
+	inreview_map = current_difficulty == 0 and room.xmlMapInfo and room.xmlMapInfo.permCode == 42
 
 	-- When a map is loaded, this function reads the XML to know where the
 	-- checkpoints are
@@ -510,8 +518,8 @@ newCmd({ name = "map",
 			end
 
 			if args[1]:sub(1, 1):lower() == 'd' then
-				local difficulty = tonumber(args[1]:sub(2))
-				newMap(difficulty)
+				local difficulty = math.max(1, math.min(5, math.floor(tonumber(args[1]:sub(2)))))
+				newMap(difficulty, difficulty)
 			else
 				local map = tonumber(args[1]) or tonumber(string.sub(args[1], 2))
 				if not map or map < 1000 then

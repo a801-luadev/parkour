@@ -422,14 +422,18 @@ newCmd({ name = {"addmap", "removemap"},
 	perm = "manage_maps",
 	min_args = 2,
 	fn = function(player, args)
-	local diffMap = { diff1="maps", diff2="maps2", diff3="maps3" }
+	local diffMap = {
+		diff1="maps", diff2="maps2", diff3="maps3", diff4="maps4", diff5="maps5",
+		d1="maps", d2="maps2", d3="maps3", d4="maps4", d5="maps5",
+		["1"]="maps", ["2"]="maps2", ["3"]="maps3", ["4"]="maps4", ["5"]="maps5",
+	}
 	local rotation = diffMap[args[1]]
 	if not rotation then
-		tfm.exec.chatMessage("<v>[#] <r>Type a valid difficulty: diff1-3", player)
+		tfm.exec.chatMessage("<v>[#] <r>Type a valid difficulty: diff1-5", player)
 		return
 	end
 
-	local diffIndex = tonumber(args[1]:sub(5,5))
+	local diffIndex = tonumber(rotation:sub(5,5))
 	local codeMap, indexList = {}, {}
 	local mapcode, rotation_index
 	local addmap = args[0] == "addmap"
@@ -825,7 +829,7 @@ newCmd({ name = "file",
 	elseif fileName == "maps" then
 		local category = args[2]
 		local len
-		for j=1,3 do
+		for j=1,5 do
 			if category == "all" or category == tostring(j) then
 				len = maps[j].count
 				tfm.exec.chatMessage("<v>[#] <v>diff" .. tostring(j) .. " maps: " .. tostring(len), player)
