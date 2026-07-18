@@ -269,6 +269,7 @@ translations.en = {
 	profile = "<font size='12' face='Lucida Console,Liberation Mono,Courier New,Verdana'>%s%s%s %s\n\nOverall leaderboard position: <b><v>%s</v></b>\n\nWeekly leaderboard position: <b><v>%s</v></b>\n\n%s%s",
 	map_count = "Map count: <b><v>%s</v> / <a href='event:_help:yellow_maps'><j>%s</j></a> / <a href='event:_help:red_maps'><r>%s</r></a></b>",
 	title_count = "<b><j>«!»</j></b> Finished maps: <b><a href='event:_help:map_count_title'><v>%s</v></a></b>\n\n<b><j>«!»</j></b> Collected checkpoints: <b><a href='event:_help:checkpoint_count_title'><v>%s</v></a></b>",
+	tribe_house_review = "<j>Tribe members can toggle review mode here by using !review command.",
 	quest_stats = "\n\nCompleted quests: <b><a href='event:_help:weekly_quest_completions'><j>%s</j></a> / <a href='event:_help:daily_quest_completions'><r>%s</r></a></b>\n\nQuest streak: <b><a href='event:_help:weekly_quest_streak'><j>%s</j></a> / <a href='event:_help:daily_quest_streak'><r>%s</r></a></b>",
 	help_badge = "Badges are accomplishments a player can get. Click over them to see their description.",
 	help_private_maps = "This player doesn't like to share their map count publicly! You can hide them too in your profile.",

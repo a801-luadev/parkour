@@ -30,6 +30,7 @@ onEvent("NewGame", function()
 
 	if is_tribe then
 		translatedChatMessage("tribe_house")
+		translatedChatMessage("tribe_house_review")
 	elseif room.uniquePlayers < min_save then
 		translatedChatMessage("min_players", nil, room.uniquePlayers, min_save)
 	end
@@ -45,6 +46,7 @@ onEvent("NewPlayer", function(player)
 	if levels then
 		if is_tribe then
 			translatedChatMessage("tribe_house", player)
+			translatedChatMessage("tribe_house_review", player)
 		elseif room.uniquePlayers < min_save then
 			translatedChatMessage("min_players", player, room.uniquePlayers, min_save)
 		end
