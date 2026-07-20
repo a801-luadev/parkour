@@ -54,7 +54,11 @@ do
     if records_admins or submode == "smol" or tfm_mode == "village" then return end
     if not room.xmlMapInfo or (room.xmlMapInfo.permCode ~= 41 and room.xmlMapInfo.permCode ~= 42) then return end
 
-    stats = { code = room.currentMap, _len = 0, _valid = 0 }
+    stats = {
+      code = (room.mirroredMap and "f" or "") .. room.currentMap,
+      _len = 0,
+      _valid = 0,
+    }
     views = {}
 
     for player in next, in_room do
