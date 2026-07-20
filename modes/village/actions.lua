@@ -58,6 +58,59 @@ function npc_actions.sell_skin(player, npc)
   NPCInterface:show(player, shop)
 end
 
+function npc_actions.multi_shop(player, npc)
+  local shop = npc_shop[npc.name]
+  if not shop then
+    local skin_id, skin, currency
+    local message = npc.param[1]
+    local first = {}
+
+    shop = first
+
+    for i=2, #npc.param do
+      skin_id = tonumber(npc.param[i])
+      skin = shop_skins[skin_id]
+
+      if skin then
+        currency = shop_currencies[skin.currency]
+
+        if currency then
+          shop.next = {
+            name = npc.name,
+            message = message,
+            left_disabled = true,
+            left_image = currency.shop_img or currency.img or currency.coin_img,
+            left_amount = skin.price,
+            right_amount = 1,
+            right_button = "buy",
+            right_image = skin.shop_img or shop_img.img,
+            coin_type = currency.id,
+            reward = "skin",
+            skin_id = skin_id,
+            prev = shop,
+          }
+          shop = shop.next
+        end
+      end
+    end
+
+    if not first.next then return end
+
+    if first.next == shop then
+      first = shop
+      shop.prev = nil
+      shop.next = nil
+    else
+      shop.next = first.next
+      first.next.prev = shop
+      first = shop
+    end
+
+    npc_shop[npc.name] = first
+  end
+  NPCInterface:show(player, shop)
+end
+
 function npc_actions.chat(player, npc)
   if not checkCooldown(player, "npc_" .. npc.name, 5000) then return end
   local msg_type = npc.param[1]
@@ -70,8 +123,7 @@ function npc_actions.chat(player, npc)
   translatedChatMessage(key, player)
 end
 
-onEvent("TradeNPC", function(player, npc)
-  local shop = npc_shop[npc]
+onEvent("TradeNPC", function(player, shop)
   local file = players_file[player]
   if not shop or not file then return end
 
@@ -91,12 +143,23 @@ onEvent("TradeNPC", function(player, npc)
     if not file:updateItem(shop.power_id, 8, shop.right_amount) then return end
     translatedChatMessage("npc_thanks", player)
   elseif shop.reward == 'badge' then
-    if file.badges[shop.badge_group] == shop.badge_index then return end
+    if file.badges[shop.badge_group] == shop.badge_index then
+      if NPCInterface.open[player] then
+        NPCInterface:update(player, shop, "npc_already_have")
+      end
+      return translatedChatMessage("npc_already_have", player)
+    end
     file.badges[shop.badge_group] = shop.badge_index
     if shop.badge_index > 0 then
       NewBadgeInterface:show(player, shop.badge_group, shop.badge_index)
     end
   elseif shop.reward == 'skin' then
+    if file:findItem(shop.skin_id) then
+      if NPCInterface.open[player] then
+        NPCInterface:update(player, shop, "npc_already_have")
+      end
+      return translatedChatMessage("npc_already_have", player)
+    end
     if not rewardSkin(player, shop.skin_id) then return end
   else
     return

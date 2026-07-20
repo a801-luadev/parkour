@@ -262,7 +262,7 @@ do
 							end
 						end
 
-						images[index] = tfm.exec.addImage(currency[2], "~20", x+2, y+7, player, currency[3], currency[3], 0, 1, 0.5, 0.5)
+						images[index] = tfm.exec.addImage(currency.coin_img or currency.img, "~20", x+2, y+7, player, currency.coin_scale, currency.coin_scale, 0, 1, 0.5, 0.5)
 
 						x = x + 75 
 						if index == 9 then

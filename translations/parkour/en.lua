@@ -17,6 +17,7 @@ translations.en = {
 	code_error = "<r>An error appeared: <bl>%s-%s-%s %s",
 	emergency_mode = "<r>Initiating emergency shutdown, no new players allowed. Please go to another #parkour room.",
 	leaderboard_not_loaded = "<r>The leaderboard has not been loaded yet. Wait a minute.",
+	npc_already_have = "<r>You already have this.",
 	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 	room_name_length = "<ROSE><b>[ERROR]</b> The room name exceeds the allowed length of <b>45</b> characters. Please choose a shorter name.",
 	bad_outfit = "<r>Your outfit contains an item/fur that cannot be used in parkour.",

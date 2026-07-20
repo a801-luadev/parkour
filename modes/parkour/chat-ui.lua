@@ -333,10 +333,10 @@ newCmd({ name = "give",
 				return sendChatFmt("<r>amount must be an integer", player)
 			end
 
-			local old_value = file.ec[index]
+			local old_value = file.ec[index] or 0
 			if file:updateItem(index, 0, amount) then
 				local new_value = file.ec[index]
-				sendChatFmt("%s.ec[%s] = %s + %s = %s", player, target, index, old_value, amount, new_value)
+				sendChatFmt("%s.ec[%s] = %s + %s = %s", player, target, index, tostring(old_value), amount, tostring(new_value))
 			else
 				sendChatFmt("<r>failed to give event coin, make sure index is valid", player)
 			end

@@ -15,110 +15,101 @@ local function findValueTbl(arr, key, val)
 	end
 end
 
+-- items here are reused in event tab of shop_items, ids are indices
 local shop_currencies = {
-	-- ec index, image, scale
-	coins = { 0, "18b2a0bc298.png" },
+	coins = {
+		img = "18b2a0bc298.png",
+		id = 0,
+	},
 	-- Christmas
-	gifts = { 1, "18c73e40d6d.png", 0.5 },
+	gifts = {
+		coin_scale = 0.5,
+		price = 1,
+		img = "18c73e40d6d.png",
+		id = 1,
+		limit = 100,
+	},
 	-- Lemonade
-	lemonade = { 2, "img@198008a0320" },
-	ice = { 3, "img@197ed411401" },
-	sugar = { 4, "img@197ed41077c" },
-	water = { 5, "img@197ed410214" },
-	lemon = { 6, "img@197ed3a7e0a" },
+	lemonade = {
+		coin_img = "img@198008a0320",
+		price = 5,
+		img = "img@198008a0cb4",
+		id = 2,
+		limit = 100,
+	},
+	ice = {
+		price = 1,
+		img = "img@197ed411401",
+		id = 3,
+		limit = 10,
+	},
+	sugar = {
+		price = 1,
+		img = "img@197ed41077c",
+		id = 4,
+		limit = 10,
+	},
+	water = {
+		price = 1,
+		img = "img@197ed410214",
+		id = 5,
+		limit = 10,
+	},
+	lemon = {
+		price = 1,
+		img = "img@197ed3a7e0a",
+		id = 6,
+		limit = 10,
+	},
 	-- Halloween Materials
-	bone = { 7, "199afb51582.png" },
-	spider_silk = { 8, "199afb45ff4.png" },
-	bat_wing = { 9, "199afb4823a.png" },
-	ghost_dust = { 10, "199afb4f2ba.png" },
-	pumpkin_seed = { 11, "199afb4d0bf.png" },
-	crystal_shard = { 12, "199afb4a9ed.png" },
-	halloween_potion = { 13, "199c9e183ac.png", 0.5 },
+	bone = {
+		price = 1,
+		img = "199afb51582.png",
+		id = 7,
+		limit = 100,
+	},
+	spider_silk = {
+		price = 1,
+		img = "199afb45ff4.png",
+		id = 8,
+		limit = 100,
+	},
+	bat_wing = {
+		price = 2,
+		img = "199afb4823a.png",
+		id = 9,
+		limit = 100,
+	},
+	ghost_dust = {
+		price = 2,
+		img = "199afb4f2ba.png",
+		id = 10,
+		limit = 100,
+	},
+	pumpkin_seed = {
+		price = 3,
+		img = "199afb4d0bf.png",
+		id = 11,
+		limit = 100,
+	},
+	crystal_shard = {
+		price = 3,
+		img = "199afb4a9ed.png",
+		id = 12,
+		limit = 100,
+	},
+	halloween_potion = {
+		coin_scale = 0.5,
+		price = 15,
+		img = "199c9e183ac.png",
+		id = 13,
+		limit = 200,
+	},
 }
 local shop_tabs = { [0]="event", "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
 local shop_tab_to_power = { 6, 10, 11, 4, 9, 7, 8, 3, 3 }
 local shop_items = {
 	[0] = { -- Event
-		{
-			price = 1,
-			img = "18c73e40d6d.png",
-			id = 1,
-			limit = 100,
-		},
-		{
-			price = 1,
-			img = "img@197ed411401",
-			id = 3,
-			limit = 10,
-		},
-		{
-			price = 1,
-			img = "img@197ed41077c",
-			id = 4,
-			limit = 10,
-		},
-		{
-			price = 1,
-			img = "img@197ed410214",
-			id = 5,
-			limit = 10,
-		},
-		{
-			price = 1,
-			img = "img@197ed3a7e0a",
-			id = 6,
-			limit = 10,
-		},
-		{
-			price = 5,
-			img = "img@198008a0cb4",
-			id = 2,
-			limit = 100,
-		},
-		-- Halloween Materials
-		{
-			price = 1,
-			img = "199afb51582.png",
-			id = 7,
-			limit = 100,
-		},
-		{
-			price = 1,
-			img = "199afb45ff4.png",
-			id = 8,
-			limit = 100,
-		},
-		{
-			price = 2,
-			img = "199afb4823a.png",
-			id = 9,
-			limit = 100,
-		},
-		{
-			price = 2,
-			img = "199afb4f2ba.png",
-			id = 10,
-			limit = 100,
-		},
-		{
-			price = 3,
-			img = "199afb4d0bf.png",
-			id = 11,
-			limit = 100,
-		},
-		{
-			price = 3,
-			img = "199afb4a9ed.png",
-			id = 12,
-			limit = 100,
-		},
-		-- Halloween Potion
-		{
-			price = 15,
-			img = "199c9e183ac.png",
-			id = 13,
-			limit = 200,
-		},
 	},
 	{ -- smallbox
 	},
@@ -553,6 +544,14 @@ local room_skins = {}
 local spawnSkinObj2
 
 do
+	local event_items = shop_items[0]
+
+	for _, currency in next, shop_currencies do
+		if currency.id ~= 0 then
+			event_items[currency.id] = currency
+		end
+	end
+
 	local sort, max = table.sort, math.max
 	local in_shop, last_id = {}, 0
 	local should_save = false
