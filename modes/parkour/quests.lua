@@ -508,8 +508,9 @@ local function linear_progress(player, data, index)
 
 	if new >= target then
 		completeQuest(player, data, index)
-		return true
 	end
+
+	return true
 end
 
 Quests[1] = { -- Complete n maps
@@ -551,8 +552,9 @@ Quests[2] = { -- Collect n checkpoints
 
 		if new >= target then
 			completeQuest(player, data, index)
-			return true
 		end
+
+		return true
 	end,
 }
 
@@ -580,8 +582,9 @@ Quests[3] = { -- Get n firsts
 
 		if new >= target then
 			completeQuest(player, data, index)
-			return true
 		end
+
+		return true
 	end,
 }
 
@@ -712,8 +715,9 @@ Quests[7] = { -- Complete n maps in diff x
 
 		if new >= target then
 			completeQuest(player, data, index)
-			return true
 		end
+
+		return true
 	end,
 }
 
@@ -754,8 +758,9 @@ Quests[8] = { -- Complete n maps with x
 
 		if new >= target then
 			completeQuest(player, data, index)
-			return true
 		end
+
+		return true
 	end,
 }
 
@@ -833,8 +838,9 @@ Quests[10] = { -- Complete n maps with 1 life in diff x
 
 		if new >= target then
 			completeQuest(player, data, index)
-			return true
 		end
+
+		return true
 	end,
 }
 
