@@ -27,7 +27,7 @@ channels = {
 		"Parkour#8558"
 	},
 	bots = { -- from bots (all orders, low traffic)
-		room.starting == "@#", false, 10000,
+		room.starting ~= "@#", false, 10000,
 		false,
 		"Parkour#0568", "Sharpiebot#0000"
 	}
