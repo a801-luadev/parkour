@@ -725,11 +725,12 @@ onEvent("PacketReceived", function(channel, id, packet)
 		end
 
 		local names, ids, n = {}, {}, 0
+		local pl = room.playerList
 
-		for name, info in next, room.playerList do
+		for name in next, in_room do
 			n = 1 + n
 			names[n] = name
-			ids[n] = info.id
+			ids[n] = pl[name] and pl[name].id
 		end
 
 		sendPacket(
