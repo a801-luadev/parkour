@@ -229,7 +229,7 @@ end
 
 local function setSpecScore(player, current, mode)
 	if mode == true then
-		tfm.exec.setPlayerScore(player, -1, false)
+		tfm.exec.setPlayerScore(player, 0, false)
 	else -- nil or 2
 		tfm.exec.setPlayerScore(player, players_level[player] or 1, false)
 
