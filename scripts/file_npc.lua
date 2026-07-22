@@ -71,7 +71,7 @@ local parkour_npc = {
   },
   ["Lemonade"] = {
     active = 107150901,
-    action = "multi_shop",
+    action = "multishop",
     param = "npc_sell_skin;2010;2011;2012;2013",
     definition = "1734;760;615;1",
     look = "135;0,0,41,0,0,0,0,0,0,0,0,0",
