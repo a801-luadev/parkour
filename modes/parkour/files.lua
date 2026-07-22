@@ -835,6 +835,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 	end
 
 	data.settings.__len = settings_length
+	setmetatable(data, pdataFunctions)
 	eventOutPlayerDataParsed(player, data)
 end)
 
