@@ -221,7 +221,7 @@ function migrate_init_260720()
 				}
 			},
 		}
-	}):disableValidityChecks():prepare(),
+	}):disableValidityChecks():prepare()
 
   function eventFileLoaded(fileNumber, fileData)
     if prevId == tonumber(fileNumber) then
