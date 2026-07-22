@@ -58,7 +58,7 @@ function npc_actions.sell_skin(player, npc)
   NPCInterface:show(player, shop)
 end
 
-function npc_actions.multi_shop(player, npc)
+function npc_actions.multishop(player, npc)
   local shop = npc_shop[npc.name]
   if not shop then
     local skin_id, skin, currency

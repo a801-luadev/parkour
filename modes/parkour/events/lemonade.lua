@@ -1,7 +1,7 @@
 do
   local day = tonumber(os.date("%d"))
   local month = tonumber(os.date("%m"))
-  local is_lemonade_time = (month == 7 and day >= 25) or month == 8 or force_lemonade_debug
+  local is_lemonade_time = (month == 7 and day >= 22) or month == 8 or force_lemonade_debug
 
   local function isLemonadeRoom()
     local roomName = room.lowerName
