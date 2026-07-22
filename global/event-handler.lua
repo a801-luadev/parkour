@@ -124,7 +124,7 @@ do
 			local arr, n = {}, 0
 
 			for name, evt in next, events do
-				if evt._cycle == cycleId - 1 then
+				if evt._cycle == cycleId - 3 then
 					n = 1 + n
 					arr[n] = (
 						evt._name .. "\001" ..
