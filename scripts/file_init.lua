@@ -12,7 +12,7 @@ local maps4 = { 7967255 }
 local maps5 = { 7967541 }
 local map_polls = { 7971144 }
 
-saveFile(40, {
+saveFile(17, {
   ranks = ranks,
   maps = maps,
   maps2 = maps2,

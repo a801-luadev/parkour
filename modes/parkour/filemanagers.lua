@@ -1,5 +1,5 @@
 local filemanagers = {
-	["40"] = FileManager.new({
+	["17"] = FileManager.new({
 		type = "dictionary",
 		map = {
 			{

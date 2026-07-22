@@ -186,8 +186,59 @@ function migrate_sanctions_2512()
   end
 end
 
+function migrate_init_260720()
+  local prevId = 40
+  local newId = 17
+  local oldManager = FileManager.new({
+		type = "dictionary",
+		map = {
+			{
+				name = "ranks",
+				type = "dictionary",
+				objects = {
+					type = "number"
+				}
+			},
+			{
+				name = "maps",
+				type = "array",
+				objects = {
+					type = "number"
+				}
+			},
+			{
+				name = "maps2",
+				type = "array",
+				objects = {
+					type = "number"
+				}
+			},
+			{
+				name = "maps3",
+				type = "array",
+				objects = {
+					type = "number"
+				}
+			},
+		}
+	}):disableValidityChecks():prepare(),
+
+  function eventFileLoaded(fileNumber, fileData)
+    if prevId == tonumber(fileNumber) then
+      local data = oldManager:load(fileData)
+      data.maps4 = {}
+      data.maps5 = {}
+      data.map_polls = {}
+      saveFile(newId, data)
+    end
+  end
+
+  system.loadFile(prevId)
+end
+
 --init_shop()
 --init_npc()
 --migrate_leaderboard()
 --fix_shop_2512()
 --migrate_sanctions_2512()
+--migrate_init_260720()
