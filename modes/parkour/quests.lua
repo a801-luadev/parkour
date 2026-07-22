@@ -252,10 +252,6 @@ function Quests.trigger_map(player)
 
 	less_life_quest[player] = gen_life_quest(data)
 
-	if less_life_quest[player] then
-		return translatedChatMessage("quest_map", player, current_map)
-	end
-
 	for i=1, 8 do
 		if data:quest_ts(i) == 0 and data:quest_id(i) == 5 then
 			local code = get_quest_map_code(data, i)
