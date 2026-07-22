@@ -227,15 +227,7 @@ function showStats()
 	))
 end
 
-local function enableSpecMode(player, mode)
-	local current = spec_mode[player]
-
-	mode = mode or nil
-
-	if current == mode then return end
-
-	spec_mode[player] = mode
-
+local function setSpecScore(player, current, mode)
 	if mode == true then
 		tfm.exec.setPlayerScore(player, -1, false)
 	else -- nil or 2
@@ -251,9 +243,20 @@ local function enableSpecMode(player, mode)
 			updateStatsCount()
 		end
 	end
+end
+
+local function enableSpecMode(player, mode)
+	local current = spec_mode[player]
+
+	mode = mode or nil
+
+	if current == mode then return end
+
+	spec_mode[player] = mode
 
 	if mode then
 		tfm.exec.killPlayer(player)
+		setSpecScore(player, current, mode)
 
 		-- include in stats count
 		if mode == 2 then return end
@@ -265,6 +268,7 @@ local function enableSpecMode(player, mode)
 
 		updateStatsCount(true)
 	else
+		setSpecScore(player, current, mode)
 
 		if (not levels) or (not players_level[player]) then return end
 
@@ -656,7 +660,9 @@ onEvent("NewGame", function()
 		for player in next, in_room do
 			players_level[player] = 1
 			changePlayerSize(player, size)
-			tfm.exec.setPlayerScore(player, 1, false)
+			if spec_mode[player] ~= true then
+				tfm.exec.setPlayerScore(player, 1, false)
+			end
 			tfm.exec.linkMice(player, player, false)
 			tfm.exec.movePlayer(player, levels[1].x, levels[1].y)
 
