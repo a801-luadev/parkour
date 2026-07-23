@@ -618,7 +618,7 @@ Quests[5] = { -- Complete @x
 		return translatedMessage("quest_5", player, mapCode)
 	end,
 
-	target = function()
+	target = function(weekly)
 		return weekly and random(1000, 3000) or random(2000)
 	end,
 
