@@ -974,8 +974,6 @@ newCmd({ name = "counts",
 newCmd({ name = "spec",
 	perm = "spectate",
 	fn = function(player, args, cmd)
-		if not players_file[player] then return end
-
 		local target = args[1]
 
 		if target and target ~= "-1" then
@@ -990,8 +988,11 @@ newCmd({ name = "spec",
 		else
 			local mode = target == "-1" or not spec_mode[player] and 2
 			enableSpecMode(player, mode)
-			players_file[player].spec = mode
-			savePlayerData(player)
+
+			if players_file[player] then
+				players_file[player].spec = mode
+				savePlayerData(player)
+			end
 		end
 	end })
 
