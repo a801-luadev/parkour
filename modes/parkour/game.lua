@@ -255,7 +255,7 @@ local function enableSpecMode(player, mode)
 	spec_mode[player] = mode
 
 	if mode then
-		tfm.exec.killPlayer(player)
+		killPlayer(player, not times.generated[player])
 		setSpecScore(player, current, mode)
 
 		-- include in stats count
@@ -489,7 +489,7 @@ end)
 
 onEvent("PlayerDied", function(player)
 	if not victory[player] then
-		if not skip_death_count[player] then
+		if not skip_death_count[player] and times.generated[player] then
 			local new_count = 1 + (death_count[player] or 0)
 			local life = less_life_quest[player]
 
@@ -680,7 +680,7 @@ onEvent("NewGame", function()
 	end
 
 	for player in next, spec_mode do
-		tfm.exec.killPlayer(player)
+		killPlayer(player, true)
 	end
 
 	updateStatsCount()
@@ -741,19 +741,19 @@ onEvent("Loop", function()
 		end
 
 		local now = os.time()
-		local player
-		for name in next, in_room do
-			player = room.playerList[name]
-			if player then
-				if spec_mode[name] or player.id == 0 or name:sub(1, 1) == "*" or bans[player.id] then
-					tfm.exec.killPlayer(name)
+		local info
+		for player in next, in_room do
+			info = room.playerList[player]
+			if info then
+				if spec_mode[player] or bans[info.id] then
+					killPlayer(player, not times.generated[player])
 				elseif (player_count > 4
 						and not records_admins
 						and not review_mode
-						and not victory[name]
-						and now >= times.movement[name] + 120000) then -- 2 mins afk
-					enableSpecMode(name, true)
-					AfkInterface:show(name)
+						and not victory[player]
+						and now >= times.movement[player] + 120000) then -- 2 mins afk
+					enableSpecMode(player, true)
+					AfkInterface:show(player)
 				end
 			end
 		end
