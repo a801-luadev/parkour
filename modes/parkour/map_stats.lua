@@ -62,7 +62,9 @@ do
     views = {}
 
     for player in next, in_room do
-      views[player] = true
+      if player:sub(1, 1) ~= "*" then
+        views[player] = true
+      end
     end
   end)
 

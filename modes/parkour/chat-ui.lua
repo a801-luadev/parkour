@@ -38,7 +38,9 @@ onEvent("NewGame", function()
 	less_life_quest = {}
 
 	for player in next, in_room do
-		Quests.trigger_map(player)
+		if player:sub(1, 1) ~= "*" then
+			Quests.trigger_map(player)
+		end
 	end
 end)
 

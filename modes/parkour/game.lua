@@ -375,7 +375,7 @@ onEvent("NewPlayer", function(player, init)
 		end
 	end
 
-	if levels then
+	if levels and player:sub(1, 1) ~= "*" then
 		tfm.exec.respawnPlayer(player)
 
 		if victory[player] then
@@ -516,7 +516,6 @@ onEvent("PlayerDied", function(player)
 	local info = room.playerList[player]
 
 	if not info then return end
-	if info.id == 0 or player:sub(1, 1) == "*" then return end
 	if bans[info.id] then return end
 	if (not levels) or (not players_level[player]) then return end
 

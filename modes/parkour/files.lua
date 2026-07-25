@@ -797,6 +797,7 @@ end
 onEvent("PlayerDataLoaded", function(player, data)
 	if channels[player] then return end
 	if in_room[player] then return end
+	if player:sub(1, 1) == "*" then return end
 
 	if dont_parse_data[player] then
 		dont_parse_data[player] = nil
@@ -842,6 +843,7 @@ end)
 onEvent("PlayerDataLoaded", function(player, data)
 	if channels[player] then return end
 	if not in_room[player] then return end
+	if player:sub(1, 1) == "*" then return end
 
 	if dont_parse_data[player] then
 		dont_parse_data[player] = nil
@@ -968,7 +970,12 @@ end)
 
 onEvent("NewPlayer", function(player)
 	players_file[player] = nil -- don't cache lol
-	system.loadPlayerData(player)
+
+	if player:sub(1, 1) == "*" then
+		enableSpecMode(player, true)
+	else
+		system.loadPlayerData(player)
+	end
 end)
 
 onEvent("PlayerDataParsed", function(player, data)
