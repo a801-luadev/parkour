@@ -312,7 +312,7 @@ local function completeQuest(player, data, index)
 	local quest = Quests[data:quest_id(index)]
 	if not quest then return end
 
-	local prize = quest.prize(player, data, index)
+	local prize = quest.prize(index > 4, data:quest_target(index), data:quest_extra(index))
 	if not prize then return end
 
 	local now = os_time()
@@ -513,18 +513,29 @@ local function linear_progress(player, data, index)
 	return true
 end
 
+local function graded_reward(weekly, target, dailyRate)
+	local rate = weekly and (5 * dailyRate / 6) or dailyRate
+	return 5 * ceil((target * rate) / 5)
+end
+
+local function graded_target(weekly, dMin, dMax)
+	if weekly then
+		return random(6 * dMin, 6 * dMax)
+	end
+	return random(dMin, dMax)
+end
+
 Quests[1] = { -- Complete n maps
 	description = function(player, data, index)
 		return translatedMessage("quest_1", player, data:quest_progress(index), data:quest_target(index))
 	end,
 
 	target = function(weekly)
-		return weekly and random(20, 50) or random(5, 10)
+		return graded_target(weekly, 5, 10)
 	end,
 
-	prize = function(player, data, index)
-		local coins = data:quest_target(index) * (index > 4 and 1.5 or 2)
-		return ceil(coins / 5) * 5 -- per map
+	prize = function(weekly, target)
+		return graded_reward(weekly, target, 4) -- 4 coins/map
 	end,
 
 	progress_completion = linear_progress,
@@ -536,12 +547,11 @@ Quests[2] = { -- Collect n checkpoints
 	end,
 
 	target = function(weekly)
-		return weekly and random(100, 180) or random(30, 60)
+		return graded_target(weekly, 30, 60)
 	end,
 
-	prize = function(player, data, index)
-		local coins = data:quest_target(index) * (index > 4 and 0.2 or 0.3)
-		return ceil(coins / 5) * 5 -- per cp
+	prize = function(weekly, target)
+		return graded_reward(weekly, target, 0.7) -- 0.7 coins/cp
 	end,
 
 	progress_completion = function(player, data, index)
@@ -564,12 +574,11 @@ Quests[3] = { -- Get n firsts
 	end,
 
 	target = function(weekly)
-		return weekly and random(25, 50) or random(5, 10)
+		return graded_target(weekly, 5, 10)
 	end,
 
-	prize = function(player, data, index)
-		local coins = data:quest_target(index) * (index > 4 and 6 or 9)
-		return ceil(coins / 5) * 5 -- per map
+	prize = function(weekly, target)
+		return graded_reward(weekly, target, 9.5) -- 9.5 coins/first
 	end,
 
 	progress_completion = function(player, data, index)
@@ -593,12 +602,12 @@ Quests[4] = { -- Complete under n seconds
 		return translatedMessage("quest_4", player, data:quest_target(index))
 	end,
 
-	target = function(isWeekly)
-		return isWeekly and 40 or 60
+	target = function(weekly)
+		return weekly and 40 or 60
 	end,
 
-	prize = function(player, data, index)
-		return index > 4 and 100 or 75
+	prize = function(weekly, target)
+		return weekly and 130 or 90
 	end,
 
 	progress_completion = function(player, data, index)
@@ -622,9 +631,9 @@ Quests[5] = { -- Complete @x
 		return weekly and random(1000, 3000) or random(2000)
 	end,
 
-	prize = function(player, data, index)
-		local difficulty = ceil(data:quest_target(index) / 1000)
-		return (index > 4 and 200 or 100) * difficulty
+	prize = function(weekly, target)
+		local difficulty = ceil(target / 1000)
+		return (weekly and 200 or 100) * difficulty
 	end,
 
 	progress_completion = function(player, data, index)
@@ -647,12 +656,11 @@ Quests[6] = { -- Use power x, n times
 	end,
 
 	target = function(weekly)
-		return weekly and random(20, 30) or random(4, 10)
+		return graded_target(weekly, 4, 10)
 	end,
 
-	prize = function(player, data, index)
-		local coins = data:quest_target(index) * (index > 4 and 1 or 1.5)
-		return ceil(coins / 5) * 5 -- per use
+	prize = function(weekly, target)
+		return graded_reward(weekly, target, 1.5) -- 1.5 coins/use
 	end,
 
 	extra = function(weekly, power_ids)
@@ -679,26 +687,26 @@ Quests[7] = { -- Complete n maps in diff x
 
 	target = function(weekly, difficulty)
 		if difficulty == 1 then
-			return weekly and random(30, 60) or random(8, 15)
+			return graded_target(weekly, 8, 15)
+		elseif difficulty == 2 then
+			return graded_target(weekly, 5, 10)
 		elseif difficulty == 3 then
-			return weekly and random(10, 25) or random(3, 5)
+			return graded_target(weekly, 3, 5)
 		end
-		return weekly and random(20, 50) or random(5, 10)
 	end,
 
-	prize = function(player, data, index)
-		local diff = data:quest_extra(index)
-		local target = data:quest_target(index)
-		local mult = 1
+	prize = function(weekly, target, difficulty)
+		local multiplier
 
-		if diff == 2 then
-			mult = index > 4 and 1.5 or 2
-		elseif diff == 3 then
-			mult = index > 4 and 3.5 or 5
+		if difficulty == 1 then
+			multiplier = 3
+		elseif difficulty == 2 then
+			multiplier = 5.5
+		elseif difficulty == 3 then
+			multiplier = 14
 		end
 
-		local coins = target * mult
-		return ceil(coins / 5) * 5 -- per map
+		return graded_reward(weekly, target, multiplier)
 	end,
 
 	extra = function(weekly, power_ids)
@@ -736,16 +744,15 @@ Quests[8] = { -- Complete n maps with x
 	end,
 
 	target = function(weekly)
-		return weekly and random(5, 25) or random(1, 5)
+		return graded_target(weekly, 2, 5)
 	end,
 
-	prize = function(player, data, index)
-		local coins = data:quest_target(index) * (index > 4 and 2 or 3)
-		return ceil(coins / 5) * 5 -- per map
+	prize = function(weekly, target)
+		return graded_reward(weekly, target, 10) -- 10 coins/map
 	end,
 
 	extra = function()
-		return random(1, 3)
+		return random(1, 3) -- feature index
 	end,
 
 	progress_completion = function(player, data, index)
@@ -776,9 +783,9 @@ Quests[9] = { -- Complete @x with n life
 		return weekly and random(1000, 3000) or random(2000)
 	end,
 
-	prize = function(player, data, index)
-		local difficulty = ceil(data:quest_target(index) / 1000)
-		return (index > 4 and 180 or 110) * difficulty
+	prize = function(weekly, target)
+		local difficulty = ceil(target / 1000)
+		return (weekly and 240 or 120) * difficulty
 	end,
 
 	progress_completion = function(player, data, index)
@@ -810,21 +817,31 @@ Quests[10] = { -- Complete n maps with 1 life in diff x
 	end,
 
 	target = function(weekly, difficulty)
-		return weekly and random(4, 20 - 5 * difficulty) or random(1, 4 - difficulty)
+		if difficulty == 1 then
+			return graded_target(weekly, 2, 5)
+		elseif difficulty == 2 then
+			return graded_target(weekly, 1, 2)
+		elseif difficulty == 3 then
+			return graded_target(weekly, 1, 1)
+		end
 	end,
 
-	prize = function(player, data, index)
-		local difficulty = data:quest_extra(index)
-		local target = data:quest_target(index)
-		local mult = difficulty == 3 and (index > 4 and 3.5 or 5)
-							or difficulty == 2 and (index > 4 and 1.5 or 2)
-							or 1
-		local coins = target * mult * (index > 4 and 2.4 or 3)
-		return ceil(coins / 5) * 5
+	prize = function(weekly, target, difficulty)
+		local multiplier
+
+		if difficulty == 1 then
+			multiplier = 15
+		elseif difficulty == 2 then
+			multiplier = 28
+		elseif difficulty == 3 then
+			multiplier = 70
+		end
+
+		return graded_reward(weekly, target, multiplier)
 	end,
 
-	extra = function(weekly, power_ids)
-		return weekly and random(1, 3) or random(1, 2)
+	extra = function(weekly)
+		return weekly and 2 or 1 -- difficulty
 	end,
 
 	progress_completion = function(player, data, index)

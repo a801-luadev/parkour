@@ -183,7 +183,7 @@ do
 				local index = i + (page == 2 and 4 or 0)
 				return string.format(
 					"<p align='center'><font color='#ffffff' size='14' face='Verdana'><b>%s",
-					Quests[data:quest_id(index)].prize(player, data, index)
+					Quests[data:quest_id(index)].prize(index > 4, data:quest_target(index), data:quest_extra(index))
 				)
 			end
 		})
