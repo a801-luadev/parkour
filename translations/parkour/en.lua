@@ -20,7 +20,7 @@ translations.en = {
 	npc_already_have = "<r>You already have this.",
 	max_power_keys = "<v>[#] <r>You can only have at most %s powers in the same key.",
 	room_name_length = "<ROSE><b>[ERROR]</b> The room name exceeds the allowed length of <b>45</b> characters. Please choose a shorter name.",
-	bad_outfit = "<r>Your outfit contains an item/fur that cannot be used in parkour.",
+	bad_outfit = "<r>Spirit fur is disabled in #parkour because it affects everyone's game performance.",
 	insufficient_coins = "<v>[#] <r>You don't have enough coins.",
 	insufficient_event_coins = "<r>Hmm, something's off. Mind checking your bag again?",
 
