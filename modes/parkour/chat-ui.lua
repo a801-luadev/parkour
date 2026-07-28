@@ -609,6 +609,12 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 		tfm.exec.chatMessage("<v>[#] <d>" .. translatedMessage("help_" .. args, player), player)
 	elseif action == "msg" then
 		tfm.exec.chatMessage("<j>" .. args, player)
+	elseif action == "room" then
+		if args == "nohelp" then
+			tfm.exec.chatMessage("<v>[#] <d>*#parkour0nohelp", player)
+		else
+			tfm.exec.chatMessage("<v>[#] <d>" .. room.name, player)
+		end
 	end
 end)
 

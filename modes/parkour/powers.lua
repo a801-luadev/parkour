@@ -3,7 +3,6 @@ local keyboard
 
 no_powers = {}
 local used_powers = {_count = 0}
-disable_powers = room.name:lower():find('nohelp') and true
 local first_player = nil
 
 local keys

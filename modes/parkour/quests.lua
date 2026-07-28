@@ -1,4 +1,5 @@
-do
+-- wrap in a function to circumvent "more than 200 local variables" error
+;(function()
 local floor, ceil, random, tonumber = math.floor, math.ceil, math.random, tonumber
 local os_time, table_remove = os.time, table.remove
 
@@ -63,15 +64,9 @@ local function gen_life_quest(data)
 		if data:quest_ts(i) == 0 then
 			id = data:quest_id(i)
 
-			if id == 9 then
-				code, difficulty = get_quest_map_code(data, i)
-
-				if code == tonumber(current_map) then
-					new_life[1 + #new_life] = 2 + difficulty
-				end
-			elseif id == 10 then
+			if id == 10 then
 				if current_difficulty == data:quest_extra(i) then
-					new_life[1 + #new_life] = 1
+					new_life[1 + #new_life] = 2 + current_difficulty
 				end
 			end
 		end
@@ -633,7 +628,7 @@ Quests[5] = { -- Complete @x
 
 	prize = function(weekly, target)
 		local difficulty = ceil(target / 1000)
-		return (weekly and 200 or 100) * difficulty
+		return (weekly and 100 or 50) * difficulty
 	end,
 
 	progress_completion = function(player, data, index)
@@ -748,7 +743,7 @@ Quests[8] = { -- Complete n maps with x
 	end,
 
 	prize = function(weekly, target)
-		return graded_reward(weekly, target, 10) -- 10 coins/map
+		return graded_reward(weekly, target, 8) -- 8 coins/map
 	end,
 
 	extra = function()
@@ -771,12 +766,11 @@ Quests[8] = { -- Complete n maps with x
 	end,
 }
 
-Quests[9] = { -- Complete @x with n life
+Quests[9] = { -- Complete @x as first or without help
 	description = function(player, data, index)
 		local mapCode, difficulty = get_quest_map_code(data, index)
-		local life = 2 + difficulty
 		mapCode = mapCode or "N/A"
-		return translatedMessage("quest_9", player, mapCode, life)
+		return translatedMessage("quest_9", player, mapCode)
 	end,
 
 	target = function(weekly)
@@ -785,14 +779,13 @@ Quests[9] = { -- Complete @x with n life
 
 	prize = function(weekly, target)
 		local difficulty = ceil(target / 1000)
-		return (weekly and 240 or 120) * difficulty
+		return (weekly and 160 or 80) * difficulty
 	end,
 
 	progress_completion = function(player, data, index)
-		local mapCode, difficulty = get_quest_map_code(data, index)
-		local life = 2 + difficulty
+		if nohelp_room or first_player ~= player then return end
 
-		if death_count[player] and death_count[player] >= life then return end
+		local mapCode, difficulty = get_quest_map_code(data, index)
 
 		if mapCode == tonumber(current_map) then
 			completeQuest(player, data, index)
@@ -801,10 +794,11 @@ Quests[9] = { -- Complete @x with n life
 	end,
 }
 
-Quests[10] = { -- Complete n maps with 1 life in diff x
+Quests[10] = { -- Complete n maps with n life in diff x
 	description = function(player, data, index)
 		local difficulty = data:quest_extra(index)
 		local colortag = difficulty_color[difficulty] or 'fc'
+		local life = 2 + difficulty
 		return translatedMessage(
 			"quest_10",
 			player,
@@ -812,7 +806,8 @@ Quests[10] = { -- Complete n maps with 1 life in diff x
 			data:quest_target(index),
 			colortag,
 			('★'):rep(difficulty),
-			colortag
+			colortag,
+			life
 		)
 	end,
 
@@ -830,9 +825,9 @@ Quests[10] = { -- Complete n maps with 1 life in diff x
 		local multiplier
 
 		if difficulty == 1 then
-			multiplier = 15
+			multiplier = 20
 		elseif difficulty == 2 then
-			multiplier = 28
+			multiplier = 40
 		elseif difficulty == 3 then
 			multiplier = 70
 		end
@@ -845,8 +840,11 @@ Quests[10] = { -- Complete n maps with 1 life in diff x
 	end,
 
 	progress_completion = function(player, data, index)
-		if death_count[player] and death_count[player] > 0 then return end
-		if current_difficulty ~= data:quest_extra(index) then return end
+		local difficulty = data:quest_extra(index)
+		if current_difficulty ~= difficulty then return end
+
+		local life = 2 + difficulty
+		if death_count[player] and death_count[player] >= life then return end
 
 		local target = data:quest_target(index)
 		local new = 1 + data:quest_progress(index)
@@ -918,4 +916,4 @@ Milestones[4] = {
 		return ""
 	end,
 }
-end
+end)();

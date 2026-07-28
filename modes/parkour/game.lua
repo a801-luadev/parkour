@@ -12,6 +12,9 @@ local force_stats_count_debug = force_stats_count_debug
 local stats_room = tfm_mode ~= "village" and not records_admins and not is_tribe and submode ~= "smol"
 local stats_enabled = force_stats_count_debug
 
+local nohelp_room = string.find(room.lowerName, 'nohelp', 1, true) and true
+local disable_powers = nohelp_room
+
 local less_time = false
 local victory = {_last_level = {}}
 local online = {}
