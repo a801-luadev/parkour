@@ -60,30 +60,37 @@ badges = { -- badge id, small image, big image
 		{11, "1745a54a1e3.png", "1745afb4333.png"}, -- 45
 		{12, "1745a541bdd.png", "1745afc2c32.png"}, -- 50
 		{13, "1745a54869e.png", "1745afc5c2e.png"}, -- 55
+		{14, "img@19fbafba2e9", "img@19fbafb9def"}, -- 60
+		{15, "img@19fbafbacec", "img@19fbafba7b4"}, -- 65
+		{16, "img@19fbafbbcac", "img@19fbafbb1ce"}, -- 70
 	},
 	[5] = { -- discord
 		-- filePriority = true, -- always takes the value from the file
 
-		{14, "1746ef93af1.png", "1746ef8f813.png"},
+		{17, "1746ef93af1.png", "1746ef8f813.png"},
 	},
 	[6] = { -- records
 		-- filePriority = true,
 
-		{15, "1755b8540b8.png", "1755b851704.png"}, -- 1
-		{16, "1755b858a36.png", "1755b85628e.png"}, -- 5
-		{17, "1755b85f345.png", "1755b85cc7e.png"}, -- 10
-		{18, "1755b865284.png", "1755b861ef0.png"}, -- 15
-		{19, "1755baac7c8.png", "1755baa9e31.png"}, -- 20
-		{20, "1755bab889c.png", "1755bab5995.png"}, -- 25
-		{21, "1755babf3c0.png", "1755babbd2d.png"}, -- 30
-		{22, "1755bac4ab9.png", "1755bac1ed3.png"}, -- 35
-		{23, "1755bacbdd6.png", "1755bac996d.png"}, -- 40
+		{18, "1755b8540b8.png", "1755b851704.png"}, -- 1
+		{19, "1755b858a36.png", "1755b85628e.png"}, -- 5
+		{20, "1755b85f345.png", "1755b85cc7e.png"}, -- 10
+		{21, "1755b865284.png", "1755b861ef0.png"}, -- 15
+		{22, "1755baac7c8.png", "1755baa9e31.png"}, -- 20
+		{23, "1755bab889c.png", "1755bab5995.png"}, -- 25
+		{24, "1755babf3c0.png", "1755babbd2d.png"}, -- 30
+		{25, "1755bac4ab9.png", "1755bac1ed3.png"}, -- 35
+		{26, "1755bacbdd6.png", "1755bac996d.png"}, -- 40
+		{27, "img@19fbaf8e63a", "img@19fbaf51523"}, -- 45
+		{28, "img@19fbaf8d35c", "img@19fbaf51cbd"}, -- 50
+		{29, "img@19fbaf8dacf", "img@19fbaf521e0"}, -- 55
+		{30, "img@19fbaf8dfab", "img@19fbaf526c6"}, -- 60
 	},
 	[7] = { -- Lemonade Event
-		{24, "img@197eae1e011", "img@197eae1cec8"},
+		{31, "img@197eae1e011", "img@197eae1cec8"},
 	},
 	[8] = { -- Halloween Event
-		{25, "img@19a0404cea1", "img@19a04047b46"},
+		{32, "img@19a0404cea1", "img@19a04047b46"},
 	},
 }
 titles = {
