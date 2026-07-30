@@ -17,27 +17,15 @@ do
       "img@19b2f188e0b", -- glasses
       "img@19b2f18a327", -- roasted
     }
-
     powers[12].cooldown_img = "img@19b2f344c4d"
-
-    powers[12].fnc = function(player, key, down, x, y)
-      local id1 = allocateId("ground", 1000, 10000)
-      local id2 = allocateId("ground", 1000, 10000)
-      local sprite = powers.pig.piggies[math.random(#powers.pig.piggies)]
-      local yScale = map_gravity <= 0 and -1 or 1
-      local img = tfm.exec.addImage(sprite, "_101", x + 5, y + 5, nil, 1, yScale, 0, 1, 0.5, 0.5 * yScale)
-
-      local circles = {
-        type = 14,
-        friction = 0.3,
-        width = 10,
-        height = 10,
-      }
-      tfm.exec.addPhysicObject(id1, x + 13, y, circles)
-      tfm.exec.addPhysicObject(id2, x - 5, y + 2, circles)
-
-      addNewTimer(5000, powers.pig.explode, id1, id2, img, x, y)
-    end
+    powers[12].circlesPhysics = {
+      type = 14,
+      friction = 0.3,
+      width = 10,
+      height = 10,
+      contactListener = true,
+    }
+    powers[12].crownImg = nil
 
     shop_skins[1].img = "18c72bad79e.png"
     shop_skins[1].shop_img = "18c72bd8ad1.png"

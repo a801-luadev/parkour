@@ -45,7 +45,11 @@ do
 						if power == '-' then
 							pieces[count] = '<p align="center"><R>------ NEW ROUND ------</R></p>'
 						else
-							pieces[count] = formatName(power[1]) .. "<n> -> </n><a href='event:showpow:" .. power[3] .. ":" .. power[4] .. "'>" .. power[2] .. "</a>"
+							pieces[count] = string.format(
+								"%s<n> -> </n><a href='event:showpow:%s:%s:%s:%s'>%s [%s]</a>",
+								formatName(power[1]),
+								power[3], power[4], power[5], power[6], power[2], power[5]
+							)
 						end
 					end
 

@@ -10,7 +10,8 @@ do
 	local DONT_SCHEDULE = {
 		["Loop"] = true,
 		["Keyboard"] = true,
-		["After"] = true
+		["After"] = true,
+		["ContactListener"] = true,
 	}
 
 	-- Optimization

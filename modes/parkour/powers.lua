@@ -3,6 +3,7 @@ local keyboard
 
 no_powers = {}
 local used_powers = {_count = 0}
+local power_collisions = {_id=0}
 local first_player = nil
 
 local keys
@@ -119,7 +120,7 @@ function spawnSkinObj2(when, so, skin, tab, ...)
 
 	local obj = despawnableObject(when, so, ...)
 	if not obj then return end
-	if not skin or not skin.img then return end
+	if not skin or not skin.img then return obj end
 	tfm.exec.addImage(
 		skin.img,
 		"#"..obj,
@@ -127,6 +128,7 @@ function spawnSkinObj2(when, so, skin, tab, ...)
 		skin.scale or 1, skin.scale or 1, 0, 1,
 		skin.x or 0.5, skin.y or 0.52
 	)
+	return obj
 end
 
 local function spawnSkinObj(when, player, tab, ...)
@@ -212,7 +214,9 @@ shop_powers[1] = {
 
 	fnc = function(self, player, key, down, x, y)
 		local right = facing[player]
-		spawnSkinObj(5000, player, 9, x + (right and 20 or -20), y, right and 0 or 180, right and 10 or -10)
+		return spawnSkinObj(5000, player, 9, x + (right and 20 or -20), y, right and 0 or 180, right and 10 or -10, 0, false, {
+			contactListener = true,
+		})
 	end
 }
 shop_powers[2] = {
@@ -542,8 +546,9 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local antiGrav = map_gravity <= 0
-			spawnSkinObj(2000, player, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
+			return spawnSkinObj(2000, player, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
 				fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
+				contactListener = true,
 			} or nil)
 		end,
 
@@ -560,8 +565,9 @@ powers = {
 
 				fnc = function(player, key, down, x, y)
 					local antiGrav = map_gravity <= 0
-					spawnSkinObj(3000, player, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
+					return spawnSkinObj(3000, player, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
 						fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
+						contactListener = true,
 					} or nil)
 				end
 			},
@@ -578,8 +584,9 @@ powers = {
 				fnc = function(player, key, down, x, y)
 					local skinID = players_file[player]:getEquipped(4)
 					local antiGrav = map_gravity <= 0
-					spawnSkinObj2(4000, skinID == 28 and 59 or nil, skinID, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
+					return spawnSkinObj2(4000, skinID == 28 and 59 or nil, skinID, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
 						fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
+						contactListener = true,
 					} or nil)
 				end
 			},
@@ -618,7 +625,9 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local antiGrav = map_gravity <= 0
-			spawnSkinObj(3000, player, 1, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			return spawnSkinObj(3000, player, 1, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, {
+				contactListener = true,
+			})
 		end
 	},
 	{
@@ -637,7 +646,9 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local antiGrav = map_gravity <= 0
-			spawnSkinObj(2000, player, 6, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			return spawnSkinObj(2000, player, 6, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, {
+				contactListener = true,
+			})
 		end
 	},
 	{
@@ -656,7 +667,9 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local antiGrav = map_gravity <= 0
-			spawnSkinObj(4000, player, 7, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			return spawnSkinObj(4000, player, 7, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, {
+				contactListener = true,
+			})
 		end
 	},
 	{
@@ -674,7 +687,9 @@ powers = {
 		default = {5, 1}, -- CTRL
 
 		fnc = function(player, key, down, x, y)
-			spawnSkinObj(4000, player, 5, x + 20 * (facing[player] and 1 or -1), y - 30, 90)
+			return spawnSkinObj(4000, player, 5, x + 20 * (facing[player] and 1 or -1), y - 30, 90, 0, 0, false, {
+				contactListener = true,
+			})
 		end
 	},
 	{
@@ -693,7 +708,9 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local antiGrav = map_gravity <= 0
-			spawnSkinObj(4000, player, 2, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			return spawnSkinObj(4000, player, 2, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, {
+				contactListener = true,
+			})
 		end
 	},
 	{
@@ -712,7 +729,9 @@ powers = {
 
 		fnc = function(player, key, down, x, y)
 			local antiGrav = map_gravity <= 0
-			spawnSkinObj(4000, player, 3, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0)
+			return spawnSkinObj(4000, player, 3, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, {
+				contactListener = true,
+			})
 		end
 	},
 	{
@@ -741,6 +760,13 @@ powers = {
 			"1745e9316ae.png", -- roasted
 		},
 
+		circlesPhysics = {
+			type = 14,
+			friction = 0.3,
+			contactListener = true,
+		},
+		crownImg = "17797e8de0d.png",
+
 		fnc = function(player, key, down, x, y)
 			local id1 = allocateId("ground", 1000, 10000)
 			local id2 = allocateId("ground", 1000, 10000)
@@ -748,22 +774,21 @@ powers = {
 			local yScale = map_gravity <= 0 and -1 or 1
 			local img = tfm.exec.addImage(sprite, "_101", x + 5, y + 5, nil, 1, yScale, 0, 1, 0.5, 0.5 * yScale)
 
-			local circles = {
-				type = 14,
-				friction = 0.3,
-			}
-			tfm.exec.addPhysicObject(id1, x + 13, y, circles)
-			tfm.exec.addPhysicObject(id2, x - 5, y + 2, circles)
+			tfm.exec.addPhysicObject(id1, x + 13, y, powers.pig.circlesPhysics)
+			tfm.exec.addPhysicObject(id2, x - 5, y + 2, powers.pig.circlesPhysics)
+			power_collisions[id1] = {}
+			power_collisions[id2] = power_collisions[id1]
 
 			secondary_power_effects[id1] = true
 			addNewTimer(5000, powers.pig.explode, id1, id2, img, x, y)
-			if yScale == 1 then
+			if yScale == 1 and powers.pig.crownImg then
 				addNewTimer(
 					5000,
 					tfm.exec.removeImage,
-					tfm.exec.addImage("17797e8de0d.png", "_102", x - 30, y - 28)
+					tfm.exec.addImage(powers.pig.crownImg, "_102", x - 30, y - 28)
 				)
 			end
+			return id1
 		end,
 
 		explode = function(id1, id2, img, x, y)
@@ -833,10 +858,12 @@ powers = {
 			tfm.exec.addPhysicObject(id, x, y + 13, {
 				type = 14,
 				friction = 0.3,
-				width = 30
+				width = 30,
+				contactListener = true,
 			})
 
 			addNewTimer(5000, powers.sink.despawn, id, img)
+			return id
 		end,
 
 		despawn = function(id, img)
@@ -989,10 +1016,12 @@ powers = {
 			tfm.exec.addPhysicObject(id, x - 5, y + 10 + 10 * yScale, {
 				type = 14,
 				friction = 0.3,
-				width = 32
+				width = 32,
+				contactListener = true,
 			})
 
 			addNewTimer(14000, powers.chair.despawn, id, img)
+			return id
 		end,
 
 		despawn = function(id, img)
@@ -1118,9 +1147,9 @@ function checkKill(player)
 	end
 end
 
-local function addTracklist(power, player, x, y)
+local function addTracklist(power, player, x, y, id)
 	if not power.isVisual then
-		local item = {player, power.name, x, y}
+		local item = {player, power.name, x, y, id or 0, power_collisions._id}
 		used_powers._count = used_powers._count + 1
 		used_powers[ used_powers._count ] = item
 
@@ -1128,6 +1157,10 @@ local function addTracklist(power, player, x, y)
 		if keep then
 			keep._count = keep._count + 1
 			keep[ keep._count ] = item
+		end
+
+		if id and not power_collisions[id] then
+			power_collisions[id] = {}
 		end
 	end
 end
@@ -1158,18 +1191,27 @@ local function usePower(player, _power, key, down, x, y, chairCd, onlyVisual, vx
 		players_file[player].settings[3] == 1
 	) then return end
 
+	local id
+
 	if key == -1 then -- mouse click
-		_power.fnc(player, x, y)
+		id = _power.fnc(player, x, y)
 	else
-		_power.fnc(player, key, down, x, y, vx, vy)
+		id = _power.fnc(player, key, down, x, y, vx, vy)
 	end
 
-	addTracklist(power, player, x, y)
+	addTracklist(power, player, x, y, id)
 
 	if stats_enabled then
 		Quests.trigger_power(player, power.id)
 	end
 end
+
+onEvent("ContactListener", function(player, id, pos)
+	local col = power_collisions[id]
+	if col and not col[player] then
+		col[player] = no_help[player] or true
+	end
+end)
 
 onEvent("Keyboard", function(player, key, down, x, y, vx, vy)
 	if victory[player] then return end
@@ -1370,6 +1412,7 @@ end)
 onEvent("NewGame", function()
 	local now = os.time()
 	first_player = nil
+	power_collisions = {_id=1+power_collisions._id}
 
 	local to_remove, count = {}, 0
 	for player in next, no_powers do

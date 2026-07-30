@@ -465,14 +465,30 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 	elseif action == "showpow" then
 		if perms[player] and perms[player].use_tracker then
 			if not checkCooldown(player, "showpow", 1000) then return end
-			local x, y = args:match("(%d+):(%d+)")
-			if not x or not y then return end
+			local x, y, id, pcid = args:match("(%d+):(%d+):(%d+):(%d+)")
+			id = tonumber(id)
+			pcid = tonumber(pcid)
+			if not x or not y or not id or not pcid then return end
 			addNewTimer(
 				1000,
 				tfm.exec.removeImage,
 				tfm.exec.addImage("img@19aea039025", "!9999", x, y, player, 1, 1, 0, 1, 0.5, 0.5),
 				true
 			)
+			local cols = power_collisions[id]
+			if power_collisions._id == pcid and cols then
+				local list, len = {}, 0
+				for name, nohelp in next, cols do
+					len = 1 + len
+					list[len] = nohelp == true and name or ('<R>' .. name .. '</R>')
+				end
+				if len > 0 then
+					sendChatFmt("Players that touched object-%s:", player, id)
+					printList(list, 10, len, player)
+				else
+					sendChatFmt("No players has touched object-%s", player, id)
+				end
+			end
 		end
 	elseif action == "change_quest" then
 		if not checkCooldown(player, "change_quest", 5000) then return end
