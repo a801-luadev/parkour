@@ -544,12 +544,23 @@ powers = {
 		cooldown = 10000,
 		default = {2, 2}, -- Q, A
 
+		physics_default = {
+			contactListener = true,
+		},
+
+		physics_antigrav = {
+			fixedYSpeed = 0.8,
+			contactListener = true,
+		},
+
+		physics_nograv = {
+			fixedYSpeed = 0.1,
+			contactListener = true,
+		},
+
 		fnc = function(player, key, down, x, y)
 			local antiGrav = map_gravity <= 0
-			return spawnSkinObj(2000, player, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
-				fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
-				contactListener = true,
-			} or nil)
+			return spawnSkinObj(2000, player, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and (map_gravity == 0 and powers.balloon.physics_nograv or powers.balloon.physics_antigrav) or powers.balloon.physics_default)
 		end,
 
 		upgrades = {
@@ -565,10 +576,7 @@ powers = {
 
 				fnc = function(player, key, down, x, y)
 					local antiGrav = map_gravity <= 0
-					return spawnSkinObj(3000, player, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
-						fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
-						contactListener = true,
-					} or nil)
+					return spawnSkinObj(3000, player, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and (map_gravity == 0 and powers.balloon.physics_nograv or powers.balloon.physics_antigrav) or powers.balloon.physics_default)
 				end
 			},
 			{
@@ -584,10 +592,7 @@ powers = {
 				fnc = function(player, key, down, x, y)
 					local skinID = players_file[player]:getEquipped(4)
 					local antiGrav = map_gravity <= 0
-					return spawnSkinObj2(4000, skinID == 28 and 59 or nil, skinID, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and {
-						fixedYSpeed = map_gravity == 0 and 0.1 or 0.8,
-						contactListener = true,
-					} or nil)
+					return spawnSkinObj2(4000, skinID == 28 and 59 or nil, skinID, 4, x, y + 10 * (antiGrav and -1 or 1), antiGrav and 180 or 0, 0, 0, false, antiGrav and (map_gravity == 0 and powers.balloon.physics_nograv or powers.balloon.physics_antigrav) or powers.balloon.physics_default)
 				end
 			},
 		}

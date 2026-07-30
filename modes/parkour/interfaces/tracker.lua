@@ -39,7 +39,7 @@ do
 					if start == powers._count then
 						pageIndex[player] = nil
 					end
-					for index = start, math.max(start - 18, 1), -1 do
+					for index = start, math.max(start - 12, 1), -1 do
 						power = powers[index]
 						count = count + 1
 						if power == '-' then
@@ -82,7 +82,7 @@ do
 					end
 					self.parent:remove(player)
 					PowerTracker[2]:show(player, self.parent.args[player][1])
-					players_file[player].tracki = 1
+					players_file[player].tracki = 2
 					savePlayerData(player)
 				end)
 
