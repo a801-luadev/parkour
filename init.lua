@@ -33,7 +33,7 @@ local links = {
 	donate = "https://a801-luadev.github.io/?redirect=parkour",
 	github = "https://github.com/a801-luadev/parkour",
 	discord = "https://discord.gg/eMmFyptwbs",
-	map_submission = "https://atelier801.com/topic?f=6&t=887284",
+	map_submission = "https://atelier801.com/topic?f=6&t=898915",
 	records = "https://tfmrecords.com/",
 	forum = "https://atelier801.com/topic?f=6&t=892086",
 	mod_apps = "https://tinyurl.com/pkmodapps",
