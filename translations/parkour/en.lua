@@ -155,7 +155,7 @@ translations.en = {
 	quest_8_1 = "acid ground",
 	quest_8_2 = "modified water",
 	quest_8_3 = "sticky or slippery effect",
-	quest_9 = "Complete the map <B><D>@%s</D></B> in first place or in a <vp><a href=\"event:room:nohelp\">nohelp</a></vp> room.",
+	quest_9 = "Complete the map <B><D>@%s</D></B> in first place or in a <vp><a href=\"event:room:nohelp\"><u>nohelp</u></a></vp> room.",
 	quest_10 = "Complete <B><D>%s/%s</D></B> maps rated <%s>%s</%s> before dying <B><D>%s</D></B> times.",
 	quest_life_over = "<r>You failed your quest(s) this round because you died %s time(s) before completing the map.",
 	next_reset = "<b><D>Reset:\n</b></D>%s",
