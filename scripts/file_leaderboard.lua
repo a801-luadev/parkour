@@ -450,6 +450,17 @@ local overall = {
   }
 }
 
+local coinranking = {}
+
+for i=1, #overall do
+  coinranking[i] = {
+    overall[i][1],
+    overall[i][2],
+    overall[i][3] * 3,
+    overall[i][4],
+  }
+end
+
 saveFile(41, {
   weekly = {
     wl = {},
@@ -457,5 +468,5 @@ saveFile(41, {
     ranks = weekly,
   },
   ranking = overall,
-  coinranking = {},
+  coinranking = coinranking,
 })
