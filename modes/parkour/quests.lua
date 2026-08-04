@@ -783,7 +783,7 @@ Quests[9] = { -- Complete @x as first or without help
 	end,
 
 	progress_completion = function(player, data, index)
-		if nohelp_room or first_player ~= player then return end
+		if first_player ~= player and not nohelp_room then return end
 
 		local mapCode, difficulty = get_quest_map_code(data, index)
 
