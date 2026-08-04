@@ -519,6 +519,7 @@ newCmd({ name = "map",
 
 			if args[1]:sub(1, 1):lower() == 'd' then
 				local difficulty = math.max(1, math.min(5, math.floor(tonumber(args[1]:sub(2)))))
+				count_stats = false
 				newMap(difficulty, difficulty)
 			else
 				local map = tonumber(args[1]) or tonumber(string.sub(args[1], 2))
