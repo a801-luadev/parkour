@@ -1,7 +1,7 @@
 do
   local day = tonumber(os.date("%d"))
   local month = tonumber(os.date("%m"))
-  local is_lemonade_time = (month == 7 and day >= 22) or month == 8 or force_lemonade_debug
+  local is_lemonade_time = month == 8 or month == 9 or force_lemonade_debug
 
   local function isLemonadeRoom()
     local roomName = room.lowerName
@@ -93,8 +93,8 @@ do
     end
 
     function lemonade.resetRound()
-      lemonade.rounds = math.random(3, 6)
-      lemonade.timestamp = os.time() + math.random(20, 40) * 60 * 1000
+      lemonade.rounds = math.random(2, 4)
+      lemonade.timestamp = os.time() + math.random(15, 35) * 60 * 1000
     end
 
     function lemonade.reset()
