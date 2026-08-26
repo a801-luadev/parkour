@@ -156,7 +156,7 @@ translations.cn = {
 	quest_8_2 = "重力水",
 	quest_8_3 = "黏稠或冰滑效果",
 	quest_9 = "以第一位或在 <vp><a href=\"event:room:nohelp\"><u>nohelp</u></a></vp> 房間中完成地圖 <B><D>@%s</D></B>。",
-	quest_10 = "在死亡不超過 <B><D>%s</D></B> 次下完成 <B><D>%s/%s</D></B> 輪 <%s>%s</%s> 地圖。",
+	quest_10 = "達成以下條件 <B><D>%s/%s</D></B> 次: 在完成 <%s>%s</%s> 地圖之前不可以死亡超過 <B><D>%s</D></B> 次。",
 	quest_life_over = "<r>因為你已經在完成地圖前死了 %s 次, 你的任務在這個回合中失敗了。",
 	next_reset = "<b><D>下一次重置:\n</b></D>%s",
 	quest_completed = "<b><D>恭喜!</D></b> \n你已經完成了一項%s任務!",
