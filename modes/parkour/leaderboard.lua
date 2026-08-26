@@ -112,6 +112,8 @@ local function checkPlayersPosition(lb, max_lb_rows)
 end
 
 onEvent("GameDataLoaded", function(data)
+	local split_state
+
 	if data.ranking then
 		if not loaded_leaderboard then
 			loaded_leaderboard = true
@@ -119,18 +121,44 @@ onEvent("GameDataLoaded", function(data)
 			translatedChatMessage("leaderboard_loaded")
 		end
 
-		leaderboard = data.ranking
+		split_state = {}
+		leaderboard = SplitRW.parse(
+			data.ranking,
+			split_state,
+			100,
+			"leaderboard"
+		)
+
 		checkPlayersPosition(leaderboard, max_leaderboard_rows)
+
+		SplitRW.updateAll(split_state, "leaderboard")
+		data.ranking = SplitRW.dump(split_state)
 	end
 
 	if data.coinranking then
-		coinleaderboard = data.coinranking
+		split_state = {}
+		coinleaderboard = SplitRW.parse(
+			data.coinranking,
+			split_state,
+			100,
+			"leaderboard"
+		)
+
 		checkPlayersPosition(coinleaderboard, max_leaderboard_rows)
+
+		SplitRW.updateAll(split_state, "leaderboard")
+		data.coinranking = SplitRW.dump(split_state)
 	end
 
 	if data.weekly then
+		split_state = {}
 		weeklyfile = data.weekly
-		weekleaderboard = data.weekly.ranks
+		weekleaderboard = SplitRW.parse(
+			data.weekly.ranks,
+			split_state,
+			100,
+			"leaderboard"
+		)
 
 		local ts = os.time() --+ 60 * 60 * 1000
 		local file_reset = tonumber(data.weekly.ts) or WEEKLY_RESET_INIT
@@ -157,7 +185,13 @@ onEvent("GameDataLoaded", function(data)
 			end
 
 			data.weekly.ts = tostring(new_reset)
-			data.weekly.ranks = {}
+			split_state = {
+				items = {},
+				all = {},
+				count = 0,
+				parsed = true,
+			}
+			weekleaderboard = split_state.items
 		end
 
 		if last_weekly_reset_ts ~= new_reset then
@@ -173,6 +207,9 @@ onEvent("GameDataLoaded", function(data)
 		end
 
 		checkPlayersPosition(weekleaderboard, max_weekleaderboard_rows)
+
+		SplitRW.updateAll(split_state, "leaderboard")
+		data.weekly.ranks = SplitRW.dump(split_state)
 	end
 end)
 

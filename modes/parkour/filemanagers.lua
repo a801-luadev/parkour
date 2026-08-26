@@ -54,30 +54,12 @@ local filemanagers = {
 		}
 	}):disableValidityChecks():prepare(),
 
-	["41"] = FileManager.new({
+	["77"] = FileManager.new({
 		type = "dictionary",
 		map = {
 			{
 				name = "ranking",
-				type = "array",
-				objects = {
-					type = "array",
-					map = {
-						{
-							type = "number"
-						},
-						{
-							type = "string",
-						},
-						{
-							type = "number"
-						},
-						{
-							type = "string",
-							length = 2
-						}
-					}
-				}
+				type = "string",
 			},
 			{
 				name = "weekly",
@@ -85,25 +67,7 @@ local filemanagers = {
 				map = {
 					{
 						name = "ranks",
-						type = "array",
-						objects = {
-							type = "array",
-							map = {
-								{
-									type = "number"
-								},
-								{
-									type = "string",
-								},
-								{
-									type = "number"
-								},
-								{
-									type = "string",
-									length = 2
-								}
-							}
-						}
+						type = "string",
 					},
 					{
 						name = "ts",
@@ -120,26 +84,20 @@ local filemanagers = {
 			},
 			{
 				name = "coinranking",
-				type = "array",
-				objects = {
-					type = "array",
-					map = {
-						{
-							type = "number"
-						},
-						{
-							type = "string",
-						},
-						{
-							type = "number"
-						},
-						{
-							type = "string",
-							length = 2
-						}
-					}
-				}
-			}
+				type = "string",
+			},
+			{
+				name = "diff1ranking",
+				type = "string",
+			},
+			{
+				name = "diff2ranking",
+				type = "string",
+			},
+			{
+				name = "diff3ranking",
+				type = "string",
+			},
 		}
 	}):disableValidityChecks():prepare(),
 

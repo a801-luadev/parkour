@@ -1,12 +1,14 @@
+local concat = table.concat
+
 local weekly = {}
 
 for i=1, 30 do
-  weekly[i] = {
+  weekly[i] = concat({
     math.random(1, 200000000),
     "Player#" .. string.format("%04d", math.random(0, 9999)),
     math.random(100, 600),
     (math.random(1, 3) == 1 and "tr") or (math.random(1, 2) == 1 and "es" or "en"),
-  }
+  }, '\2')
 end
 
 local overall = {
@@ -453,20 +455,21 @@ local overall = {
 local coinranking = {}
 
 for i=1, #overall do
-  coinranking[i] = {
+  coinranking[i] = concat({
     overall[i][1],
     overall[i][2],
     overall[i][3] * 3,
     overall[i][4],
-  }
+  }, '\2')
+  overall[i] = concat(overall[i], '\2')
 end
 
-saveFile(41, {
+saveFile(77, {
   weekly = {
     wl = {},
     ts = "1754863200000",
-    ranks = weekly,
+    ranks = concat(weekly, '\1'),
   },
-  ranking = overall,
-  coinranking = coinranking,
+  ranking = concat(overall, '\1'),
+  coinranking = concat(coinranking, '\1'),
 })

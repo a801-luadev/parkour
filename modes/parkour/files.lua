@@ -13,7 +13,7 @@ local dont_parse_data = {}
 
 local files = {
 	init = 17, -- ranks, maps, maps2, maps3, maps4, maps5, map_polls
-	leaderboard = 41, -- ranking, weekly
+	leaderboard = 77, -- ranking, weekly
 	sanction = 63, -- sanction
 	shop = 54, -- shop
 	npc = 51, -- npc, xml
