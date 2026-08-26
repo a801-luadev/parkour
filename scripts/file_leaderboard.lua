@@ -472,4 +472,7 @@ saveFile(77, {
   },
   ranking = concat(overall, '\1'),
   coinranking = concat(coinranking, '\1'),
+  diff1ranking = "",
+  diff2ranking = "",
+  diff3ranking = "",
 })
