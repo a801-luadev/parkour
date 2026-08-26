@@ -98,20 +98,20 @@ onEvent("PlayerCompleted", function(player, info, file)
 		if records_admins then
 			translatedChatMessage("records_submit", player)
 		end
+	end
 
-		if taken < 20 and stats_enabled then
-			sendPacket(
-				"common",
-				packets.rooms.suspicious,
-				player .. "\000" ..
-				id .. "\000" ..
-				file.c .. "\000" ..
-				taken .. "\000" ..
-				room.currentMap .. "\000" ..
-				room.shortName .. "\000" ..
-				room.uniquePlayers
-			)
-		end
+	if stats_enabled and taken < 30 and (disable_powers or fastest.player == player) then
+		sendPacket(
+			"common",
+			packets.rooms.suspicious,
+			player .. "\000" ..
+			id .. "\000" ..
+			file.c .. "\000" ..
+			taken .. "\000" ..
+			room.currentMap .. "\000" ..
+			room.shortName .. "\000" ..
+			room.uniquePlayers
+		)
 	end
 
 	setNameColor(player) -- just in case PlayerRespawn triggers first
