@@ -389,12 +389,17 @@ end)
 onEvent("PollVote", function(poll, player, button)
 	if not current_poll or current_poll.voters[player] then return end
 
-	if global_poll then
-		sendPacket("common", packets.rooms.poll_answer,
-			player .. "\000" ..
-			room.currentMap .. "\000" ..
-			tostring(button) -- 1 = yes, 2 = no, 3 = idk
-		)
+	if global_poll and count_stats then
+		local info = room.playerList[player]
+		local file = players_file[player]
+		if info and file then
+			sendPacket("common", packets.rooms.poll_answer,
+				info.id .. "\000" ..
+				math.min(300, math.floor(file.c / 100)) .. "\000" .. -- map count buckets up to 30k
+				room.currentMap .. "\000" ..
+				tostring(button) -- 1 = yes, 2 = no, 3 = idk
+			)
+		end
 	end
 
 	current_poll.voters[player] = true
