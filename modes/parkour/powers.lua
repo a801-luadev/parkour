@@ -10,6 +10,7 @@ local keys
 local powers
 local checkKill
 local getPowerUpgrade
+local powerContact = {}
 
 do
 local facing = {}
@@ -1215,6 +1216,7 @@ onEvent("ContactListener", function(player, id, pos)
 	local col = power_collisions[id]
 	if col and not col[player] then
 		col[player] = no_help[player] or true
+		powerContact[player] = true
 	end
 end)
 
@@ -1418,6 +1420,8 @@ onEvent("NewGame", function()
 	local now = os.time()
 	first_player = nil
 	power_collisions = {_id=1+power_collisions._id}
+
+	powerContact = {}
 
 	local to_remove, count = {}, 0
 	for player in next, no_powers do
