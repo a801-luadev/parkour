@@ -18,8 +18,8 @@ channels = {
 	common = { -- to bots (common data, low traffic)
 		room.starting == "@#", true, 10000,
 		false,
-		"Funcorp#0801", "Delphilante#1225",
-		"Recordsbot#8598", "Buildtool#0800",
+		"Recordsbot#8598",
+		"Buildtool#0800",
 	},
 	victory = { -- to bots (all victory logs, high traffic)
 		room.starting == "@#", true, 10000,
@@ -29,7 +29,8 @@ channels = {
 	bots = { -- from bots (all orders, low traffic)
 		room.starting ~= "@#", false, 10000,
 		false,
-		"Parkour#0568", "Sharpiebot#0000"
+		"Parkour#0568",
+		"Sharpiebot#0000",
 	}
 }
 
