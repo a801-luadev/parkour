@@ -216,7 +216,43 @@ local function renderMapImages(player)
 	if not map_images then return end
 	for index = 1, map_images._len do
 		local image = map_images[index]
-		tfm.exec.addImage(image[4], "+" .. image[1], image[2], image[3], player, 1, 1, image[5], 1, 0, 0, false)
+		tfm.exec.addImage(image[4], image[1], image[2], image[3], player, 1, 1, 0, 1, 0, 0, false)
+	end
+end
+
+local function parseMapImages(params, images, limit, target)
+	if params then
+		local match, addImage, tonumber = string.match, tfm.exec.addImage, tonumber
+		local sub = string.sub
+
+		local count = 0
+		local testId, image, x, y
+
+		for parts in string.gmatch(params, '[^;]+') do
+			image, x, y = match(parts, "^(.-),(.-),(.-)$")
+
+			if x and y and image then
+				if sub(image, -4) ~= ".png" then
+					image = "img@" .. image
+				end
+
+				testId = addImage(image, "!0", x, y, "Tigrounette")
+				if testId then
+					images[1 + #images] = {
+						target,
+						tonumber(x) or 0,
+						tonumber(y) or 0,
+						image
+					}
+				end
+			end
+
+			count = 1 + count
+
+			if count > limit then
+				break
+			end
+		end
 	end
 end
 
@@ -443,7 +479,7 @@ onEvent("NewGame", function()
 	end
 
 	if review_mode or info.permCode == 41 or info.permCode == 42 then
-		if not xml:find(' i="', 1, true) or not xml:find(' lua="', 1, true) then
+		if not xml:find(' d="', 1, true) and not xml:find(' D="', 1, true) then
 			return
 		end
 
@@ -451,44 +487,26 @@ onEvent("NewGame", function()
 			return
 		end
 
-		local images, count, gcount = {}, 0, 0
-		local props, testId, x, y, w, h, rot, image
+		local props = string.match(xml, '<P( .-)/>')
 
-		for ground in string.gmatch(xml, '<S( .-)/>') do
-			props = getTagProperties(ground)
-			if props.lua and props.i then
-				x, y, image = string.match(props.i, "^(.-),(.-),(.-)$")
-				rot = props.P and string.match(props.P, "^.-,.-,.-,.-,(.-),")
-				rot = math.rad(tonumber(rot) or 0)
-				if x and y and image then
-					if image:sub(-4) ~= ".png" then
-						image = "img@" .. image
-					end
-					testId = tfm.exec.addImage(image, "+" .. props.lua, x, y, "Tigrounette")
-					if testId then
-						w = math.max(10, tonumber(props.L) or 10)
-						h = math.max(10, tonumber(props.H) or 10)
-						x = tonumber(x) or 0
-						y = tonumber(y) or 0
-						x = x - w / 2
-						y = y - h / 2
-
-						count = count + 1
-						images[count] = { props.lua, x, y, image, rot }
-
-						if count == 60 then break	end
-					end
-				end
-			end
-
-			gcount = gcount + 1
-			if gcount == 60 then break end
+		if not props then
+			return
 		end
 
-		if count > 0 then
-			images._len = count
-			map_images = images
-			renderMapImages()
+		local background = string.match(props, ' D="(.-)"')
+		local foreground = string.match(props, ' d="(.-)"')
+	
+		if background or foreground then
+			local images = {}
+
+			parseMapImages(background, images, 60, "_0")
+			parseMapImages(foreground, images, 60, "!0")
+
+			if #images > 0 then
+				images._len = #images
+				map_images = images
+				renderMapImages()
+			end
 		end
 	end
 end)
