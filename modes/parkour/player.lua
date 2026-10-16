@@ -1,5 +1,6 @@
 local in_room = {}
 local players_file = {}
+local actual_player_count = 0
 
 local savePlayerData
 

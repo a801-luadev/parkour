@@ -4,7 +4,6 @@ local grace_period = 5000
 local check_position = 6
 local player_count = 0
 local prev_player_count = 0
-local actual_player_count = 0
 local victory_count = 0
 
 local enough_player_till
