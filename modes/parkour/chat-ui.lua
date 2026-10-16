@@ -83,8 +83,10 @@ onEvent("PlayerCompleted", function(player, info, file)
 	-- If the player joined the room after the map started,
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (times.generated[player] or times.map_start)) / 1000
+	local first = not fastest.record
+	local contact = powerContact[player]
 
-	if not fastest.record or taken < fastest.record then
+	if first or taken < fastest.record then
 		local old = fastest.player
 
 		fastest.record = taken
@@ -100,7 +102,11 @@ onEvent("PlayerCompleted", function(player, info, file)
 		end
 	end
 
-	if stats_enabled and taken < 30 and (disable_powers or fastest.player == player) then
+	if stats_enabled and (
+		taken < 20 or
+		taken < 30 and (disable_powers or not contact) or
+		taken < 50 and fastest.player == player
+ 	) then
 		sendPacket(
 			"common",
 			packets.rooms.suspicious,
@@ -110,7 +116,8 @@ onEvent("PlayerCompleted", function(player, info, file)
 			taken .. "\000" ..
 			room.currentMap .. "\000" ..
 			room.shortName .. "\000" ..
-			room.uniquePlayers
+			room.uniquePlayers .. "\000" ..
+			(first and "1" or "0") .. (contact and "1" or "0") .. (disable_powers and "1" or "0")
 		)
 	end
 
