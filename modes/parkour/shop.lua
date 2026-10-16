@@ -536,6 +536,38 @@ local shop_skins = {
 	tab = 2,
 	shop_scale = 0.9,
 },
+
+-- Halloween 2026
+[2014] = {
+	currency = 'halloween_potion',
+	img = '1a12b1849e9.png',
+	shop_img = 'img@1a14ce2ecec',
+	price = 10,
+	tab = 3,
+	y = 0.6,
+},
+[2015] = {
+	currency = 'halloween_potion',
+	img = '1a12b186158.png',
+	price = 10,
+	tab = 4,
+	y = 0.5,
+},
+[2016] = {
+	currency = 'halloween_potion',
+	img = '1a12b1878ca.png',
+	price = 10,
+	tab = 2,
+	shop_scale = 0.9,
+},
+[2017] = {
+	currency = 'halloween_potion',
+	img = '1a12b1918e3.png',
+	price = 10,
+	tab = 1,
+	scale = 0.5,
+	shop_scale = 0.5,
+},
 }
 local file_skins = {}
 local shop_state = {}
