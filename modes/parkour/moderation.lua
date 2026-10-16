@@ -1037,7 +1037,9 @@ newCmd({ name = "kick",
 		return
 	end
 
-	if args[1] == "*" then
+	local target = args[1]
+
+	if target == "*" then
 		for name in next, room.playerList do
 			tfm.exec.kickPlayer(name)
 		end
@@ -1045,14 +1047,14 @@ newCmd({ name = "kick",
 	end
 
 	if args[2] then
-		local file = players_file[args[1]]
-		if file then
+		local file = players_file[target]
+		if file and in_room[target] then
 			file.kick = tonumber(args[2])
-			savePlayerData(args[1])
+			savePlayerData(target)
 		end
 	end
 
-	tfm.exec.kickPlayer(args[1])
+	tfm.exec.kickPlayer(target)
 	chatlogCmd(cmd, playerName, args)
 	logCmd(cmd, playerName, args)
 end })
