@@ -92,14 +92,18 @@ function sendPacket(channel, id, packet)
 	end
 
 	local buffer = channel.buffer or ""
-	if #buffer + #packet > 1985 then -- too large
-		buffer = ""
-	end
+	local append
 
 	if channel.structure then
-		buffer = buffer .. packet
+		append = packet
 	else
-		buffer = buffer .. ";" .. id .. "," .. string.gsub(packet, "[&;,]", encoder)
+		append = ";" .. id .. "," .. string.gsub(packet, "[&;,]", encoder)
+	end
+
+	if #buffer + #append > 4985 then -- too large
+		buffer = append
+	else
+		buffer = buffer .. append
 	end
 
 	channel.buffer = buffer
@@ -154,7 +158,7 @@ function pipeHandler(pipe, data)
 		channel.buffer = nil
 
 		if now < expire then -- data didn't expire, we have to keep it
-			if #data + #buffer <= 1985 then -- if it doesn't fit, we just delete old data
+			if #data + #buffer <= 4985 then -- if it doesn't fit, we just delete old data
 				buffer = data .. buffer
 			end
 		end
