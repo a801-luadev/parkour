@@ -735,7 +735,7 @@ onEvent("PacketReceived", function(channel, id, packet)
 			tfm.exec.chatMessage(msg, targetPlayer)
 		end
 	elseif id == packets.bots.player_list then
-		if packet ~= "" and room.name ~= packet then
+		if packet ~= "" and room.name ~= packet or room.community ~= packet then
 			return
 		end
 
@@ -753,6 +753,32 @@ onEvent("PacketReceived", function(channel, id, packet)
 			packets.rooms.player_list,
 			room.shortName .. "\000" ..
 			room.uniquePlayers .. "\000" ..
+			table.concat(names, "\001") .. "\000" ..
+			table.concat(ids, "\001")
+		)
+	elseif id == packets.bots.creators then
+		if packet ~= "" and room.name ~= packet or room.community ~= packet then
+			return
+		end
+
+		local names, ids, n = {}, {}, 0
+		local pl = room.playerList
+		local name
+
+		for i=1, math.min(visitors._len, 12) do
+			name = visitors[i]
+
+			if visitors[name] < init_time + 1000 then
+				n = 1 + n
+				names[n] = name
+				ids[n] = pl[name] and pl[name].id
+			end
+		end
+
+		sendPacket(
+			"common",
+			packets.rooms.creators,
+			room.shortName .. "\000" ..
 			table.concat(names, "\001") .. "\000" ..
 			table.concat(ids, "\001")
 		)
