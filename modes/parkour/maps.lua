@@ -40,6 +40,7 @@ local next_map
 local mapIsAboutToChange
 local map_images
 local map_features = {}
+local chair_img
 
 for i=1,5 do
 	maps[i] = {
@@ -213,6 +214,10 @@ local function getTagProperties(tag)
 end
 
 local function renderMapImages(player)
+	if chair_img and chair_pos and submode ~= "smol" then
+		tfm.exec.addImage(chair_img, chair_pos[3], chair_pos[1], chair_pos[2] + 10, player, 1, 1, 0, 1, 0.5, 0.5)
+	end
+
 	if not map_images then return end
 	for index = 1, map_images._len do
 		local image = map_images[index]
@@ -229,9 +234,9 @@ local function parseMapImages(params, images, limit, target)
 		local testId, image, x, y
 
 		for parts in string.gmatch(params, '[^;]+') do
-			image, x, y = match(parts, "^(.-),(.-),(.-)$")
+			image, x, y = match(parts, "^([^,]+),([^,]+),([^,]+)$")
 
-			if x and y and image then
+			if x and y and image and (#image == 11 or #image == 15) then
 				if sub(image, -4) ~= ".png" then
 					image = "img@" .. image
 				end
@@ -380,12 +385,22 @@ onEvent("NewGame", function()
 		end
 	end
 
+	local props = string.match(xml, '<P( .-)/>')
+	local map_width = 800
+
+	if props then
+		map_width = tonumber(string.match(props, ' L="([^"]+)"'))
+		map_width = math.floor(math.max(0, map_width or 800) + 0.5)
+	end
+
 	chair_pos = nil
 	for tag in string.gmatch(xml, '<P%s+(.-)%s*/>') do
 		properties = getTagProperties(tag)
 
 		if properties.T == 19 and properties.C == "329cd2" then
-			chair_pos = { properties.X, properties.Y - 40 }
+			local foreground = properties.P and (properties.P == "1" or properties.P:sub(1, 2) == "1,")
+
+			chair_pos = { properties.X, properties.Y - 40, foreground and "!999" or "_999" }
 			count = count + 1
 			levels[count] = {
 				x = properties.X, y = properties.Y - 40,
@@ -423,8 +438,14 @@ onEvent("NewGame", function()
 
 	if room.mirroredMap then
 		for index = 1, count do
-			levels[index].x = 1600 - levels[index].x
+			levels[index].x = map_width - levels[index].x
 		end
+
+		chair_pos[1] = map_width - chair_pos[1]
+	end
+
+	if chair_img and submode ~= "smol" then
+		tfm.exec.addImage(chair_img, chair_pos[3], chair_pos[1], chair_pos[2] + 10, nil, 1, 1, 0, 1, 0.5, 0.5)
 	end
 
 	if string.find(xml, '<S [^>]*T="19"') then
@@ -487,14 +508,12 @@ onEvent("NewGame", function()
 			return
 		end
 
-		local props = string.match(xml, '<P( .-)/>')
-
 		if not props then
 			return
 		end
 
-		local background = string.match(props, ' D="(.-)"')
-		local foreground = string.match(props, ' d="(.-)"')
+		local background = string.match(props, ' D="([^"]+)"')
+		local foreground = string.match(props, ' d="([^"]+)"')
 	
 		if background or foreground then
 			local images = {}
