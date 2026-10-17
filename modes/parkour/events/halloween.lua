@@ -7,7 +7,7 @@ do
   end
 
   if is_halloween_time() then
-
+    chair_img = "img@1a14dddfccd"
     cp_img = {
       [true] = "img@19a0879fecd", -- soulmate
       [false] = "img@19a087a2182", -- no soulmate
