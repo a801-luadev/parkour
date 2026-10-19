@@ -7,7 +7,15 @@ do
   end
 
   if is_halloween_time() then
-    chair_img = "img@1a14dddfccd"
+    local chairs = {
+      "img@1a14dddfccd",
+      "img@1a15bbd740f",
+      "img@1a15bc745ba",
+      "img@1a15bd92cf6",
+      "img@1a15bf4b06f",
+    }
+
+    chair_img = chairs[math.random(#chairs)]
     cp_img = {
       [true] = "img@19a0879fecd", -- soulmate
       [false] = "img@19a087a2182", -- no soulmate
