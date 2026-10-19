@@ -361,7 +361,6 @@ onEvent("PacketReceived", function(channel, id, packet, map, time)
 	elseif channel == "victory" then
 		tfm.exec.playMusic('victory', tostring(packet), 0, false, false, parkour_bot)
 	end
-
 end)
 
 onEvent("Loop", function()

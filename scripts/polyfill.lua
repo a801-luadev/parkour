@@ -138,7 +138,7 @@ do
 
   -- Player Data
 	local pdata = {
-    ["Tocutoeltuco#5522"] = [[{ "week_r": "12/10/2020", "kill": "0", "c": 9007, "killedby": "Lays#1146", "report": true, "tracki": 1, "playerid": 5419276, "badges": [ 0, 0, 0, 1, 1, 1, 1, 1 ], "settings": [ 0, 46, 1, 0, 1, 0, 0, 0, null ], "keys": [ 32, 0, 219, 81, 17, 0, 0, 0, 85, 0, 0, 0, 221 ], "killed": 1741305011082, "cpower": 3, "cc": 3005, "ec": [ 29, 0, 0, 3, 0, 2, 5, 0, 0, 0, 0, 0, 85 ], "week_c": 0, "coins": 10371, "room": "*#parkour4test", "banned": 0, "week": [ 15, 1765749600000 ], "cslen": [ 1, 1, 1, 2, 1, 2, 1, 0, 1 ], "cskins": [ 109, 222, 236, 76, 240, 164, 2001, 218, 237, 148 ], "skins": [ 59, 26, 12, 56, 203, 93, 126, 52, 158, 116, 5, 4, 3, 182, 85, 72, 97, 212, 104, 110, 51, 68, 94, 123, 50, 40, 54, 6, 32, 229, 214, 215, 2005, 2002, 2004, 2006, 2003 ], "v": 12, "claim": 1758642851080, "quests": [ { "id": 5, "pg": 0, "tg": 622 }, { "id": 3, "pg": 4, "tg": 7 }, { "pr": 7, "pg": 11, "tg": 40, "id": 6 }, { "id": 2, "pg": 136, "tg": 160 }, { "id": 3, "pg": 14, "tg": 37 }, { "id": 5, "pg": 0, "tg": 766 }, { "pr": 13, "pg": 83, "tg": 120, "id": 6 }, { "id": 1, "pg": 39, "tg": 120 } ], "lastsanction": 1764889392120, "commu": "en", "hour": {}, "tc": 6000, "hour_r": 1765925685536, "namecolor": 16777215, "langue": "en", "powers": [ 4, 2, 6, 7, 8, 5, 3 ], "bancount": 3, "powuse": [ 0, 0, 7, 10, 10, 99, 65 ], "bannedby": "Lays#1146", "hidden": true }]],
+    ["Tocutoeltuco#0000"] = [[{ "week_r": "12/10/2020", "kill": "0", "c": 9007, "killedby": "Lays#1146", "report": true, "tracki": 1, "playerid": 5419276, "badges": [ 0, 0, 0, 1, 1, 1, 1, 1 ], "settings": [ 0, 46, 1, 0, 1, 0, 0, 0, null ], "keys": [ 32, 0, 219, 81, 17, 0, 0, 0, 85, 0, 0, 0, 221 ], "killed": 1741305011082, "cpower": 3, "cc": 3005, "ec": [ 29, 0, 0, 3, 0, 2, 5, 0, 0, 0, 0, 0, 85 ], "week_c": 0, "coins": 10371, "room": "*#parkour4test", "banned": 0, "week": [ 15, 1765749600000 ], "cslen": [ 1, 1, 1, 2, 1, 2, 1, 0, 1 ], "cskins": [ 109, 222, 236, 76, 240, 164, 2001, 218, 237, 148 ], "skins": [ 59, 26, 12, 56, 203, 93, 126, 52, 158, 116, 5, 4, 3, 182, 85, 72, 97, 212, 104, 110, 51, 68, 94, 123, 50, 40, 54, 6, 32, 229, 214, 215, 2005, 2002, 2004, 2006, 2003 ], "v": 12, "claim": 1758642851080, "quests": [ { "id": 5, "pg": 0, "tg": 622 }, { "id": 3, "pg": 4, "tg": 7 }, { "pr": 7, "pg": 11, "tg": 40, "id": 6 }, { "id": 2, "pg": 136, "tg": 160 }, { "id": 3, "pg": 14, "tg": 37 }, { "id": 5, "pg": 0, "tg": 766 }, { "pr": 13, "pg": 83, "tg": 120, "id": 6 }, { "id": 1, "pg": 39, "tg": 120 } ], "lastsanction": 1764889392120, "commu": "en", "hour": {}, "tc": 6000, "hour_r": 1765925685536, "namecolor": 16777215, "langue": "en", "powers": [ 4, 2, 6, 7, 8, 5, 3 ], "bancount": 3, "powuse": [ 0, 0, 7, 10, 10, 99, 65 ], "bannedby": "Lays#1146", "hidden": true }]],
   }
 
 	system.loadPlayerData = function(name)
@@ -149,7 +149,7 @@ do
     if eventPlayerDataLoaded then
       system.newTimer(function()
         measureTime("Loading player data for " .. tostring(name), 5, function()
-          local data = pdata[name] or pdata["Tocutoeltuco#5522"]
+          local data = pdata[name] or ""
           eventPlayerDataLoaded(name, data)
         end)
       end, 500, false)
