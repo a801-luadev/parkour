@@ -1,8 +1,6 @@
 do
 local function initParty()
 
-if records_admins then return end
-
 local party = {}
 activeEvents.party = party
 

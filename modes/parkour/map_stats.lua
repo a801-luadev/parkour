@@ -51,7 +51,7 @@ do
 
     stats, views = nil, nil
 
-    if records_admins or submode == "smol" or tfm_mode == "village" then return end
+    if submode == "smol" or tfm_mode == "village" then return end
     if not room.xmlMapInfo or (room.xmlMapInfo.permCode ~= 41 and room.xmlMapInfo.permCode ~= 42) then return end
 
     stats = {

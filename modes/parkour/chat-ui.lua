@@ -76,10 +76,6 @@ onEvent("PlayerCompleted", function(player, info, file)
 
 	victory[player] = os.time() + 10000 * (1 + math.max(0, file.bancount or 0))
 
-	if records_admins then
-		translatedChatMessage("records_completed", player)
-	end
-
 	-- If the player joined the room after the map started,
 	-- eventPlayerWon's time is wrong. Also, eventPlayerWon's time sometimes bug.
 	local taken = (os.time() - (times.generated[player] or times.map_start)) / 1000
@@ -95,10 +91,6 @@ onEvent("PlayerCompleted", function(player, info, file)
 
 		if old and in_room[old] then
 			setNameColor(old)
-		end
-
-		if records_admins then
-			translatedChatMessage("records_submit", player)
 		end
 	end
 
@@ -146,14 +138,6 @@ onEvent("PlayerCompleted", function(player, info, file)
 
 	eventLeaderboardUpdate(player, taken)
 
-	if records_admins then
-		tfm.exec.chatMessage(
-			"<v>[#] <d>" .. room.currentMap .. " - CP: " ..
-			(checkpoint_info.version == 0 and "old" or "new")
-			, player
-		)
-	end
-
 	if is_tribe then
 		translatedChatMessage("tribe_house", player)
 
@@ -197,24 +181,6 @@ do
 		end
 	end)
 end
-
-newCmd({ name = "submit",
-	fn = function(player, args)
-		if not records_admins then return end
-		-- local map = tonumber(string.sub(room.currentMap, 2))
-
-		-- if fastest.player ~= player then
-		-- 	return translatedChatMessage("records_not_fastest", player)
-		-- end
-		-- if fastest.submitted then
-		-- 	return translatedChatMessage("records_already_submitted", player)
-		-- end
-
-		-- fastest.submitted = true
-		-- fastest.wait_send = true
-		
-		tfm.exec.chatMessage("<v>[#] <d>You can't send records with this way, check Records Discord server: https://discord.gg/zbjVYAxYzp", player)
-	end })
 
 newCmd({ name = "verify",
 	fn = function(player, args)
@@ -400,64 +366,6 @@ newCmd({ name = "give",
 		logCmd(cmd, player, args)
 	end })
 
-newCmd({ name = "roommod",
-	min_args = 1,
-	fn = function(player, args, cmd)
-		if not records_admins then return end
-
-		local has_perm = perms[player] and perms[player].change_roommod
-		local is_owner = records_admins[player]
-		if not has_perm and not is_owner then
-			return
-		end
-
-		local target = args[1]
-		if records_admins[target] or not room.playerList[target] then
-			return translatedChatMessage("invalid_syntax", player)
-		end
-
-		records_admins[target] = 1
-		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is a room mod now.")
-
-		chatlogCmd(cmd, player, args, records_admins)
-
-		-- don't log room owner actions
-		if is_owner then
-			return
-		end
-
-		logCmd(cmd, player, args)
-	end })
-
-newCmd({ name = "deroommod",
-	min_args = 1,
-	fn = function(player, args, cmd)
-		if not records_admins then return end
-
-		local has_perm = perms[player] and perms[player].change_roommod
-		local is_owner = records_admins[player]
-		if not has_perm and not is_owner then
-			return
-		end
-
-		local target = args[1]
-		if records_admins[target] ~= 1 then
-			return translatedChatMessage("invalid_syntax", player)
-		end
-
-		records_admins[target] = nil
-		tfm.exec.chatMessage("<v>[#] <d>" .. target .. " is not a room mod anymore.")
-
-		chatlogCmd(cmd, player, args, records_admins)
-
-		-- don't log room owner actions
-		if is_owner then
-			return
-		end
-
-		logCmd(cmd, player, args)
-	end })
-
 newCmd({ name = {"creators", "visitors"},
 	perm = "view_creators",
 	fn = function(player, args)
@@ -489,13 +397,10 @@ newCmd({ name = "pw?",
 	end })
 
 newCmd({ name = "pw",
+	perm = "enable_review",
 	fn = function(player, args)
-		if not records_admins or not records_admins[player] then
-			if not perms[player] or not perms[player].enable_review then return end
-
-			if not review_mode and not ranks.admin[player] then
-				return tfm.exec.chatMessage("<v>[#] <r>You can't set the password of a room without review mode.", player)
-			end
+		if not review_mode and not ranks.admin[player] then
+			return tfm.exec.chatMessage("<v>[#] <r>You can't set the password of a room without review mode.", player)
 		end
 
 		if roompw.owner and roompw.owner ~= player and not ranks.admin[player] then
@@ -570,10 +475,6 @@ newCmd({ name = "forcestats",
 	log = true,
 	chatlog = true,
 	fn = function(player, args)
-		if records_admins then
-			return tfm.exec.chatMessage("<v>[#] <r>you can't forcestats in a records room", player)
-		end
-
 		if args[1] and args[1] ~= room.currentMap then
 			return
 		end
@@ -646,12 +547,6 @@ onEvent("PlayerDataParsed", function(player, data)
 	checkRoomRequest(player, data)
 	Quests.trigger_map(player)
 
-	if records_admins then
-		if string.find(room.lowerName, string.lower(player), 1, true) then
-			records_admins[player] = true
-		end
-	end
-
 	if data.settings[6] == 1 then
 		translatedChatMessage("welcome", player)
 		tfm.exec.chatMessage("<rose>" .. links.discord, player)
@@ -672,14 +567,6 @@ onEvent("PlayerDataParsed", function(player, data)
 			translatedChatMessage("anniversary_start", player)
 		elseif is_after_anniversary then
 			translatedChatMessage("anniversary_end", player)
-		end
-
-		if records_admins then
-			translatedChatMessage("records_enabled", player, links.records)
-
-			if records_admins[player] then
-				translatedChatMessage("records_admin", player)
-			end
 		end
 
 		if disable_powers then
@@ -795,33 +682,4 @@ onEvent("PacketReceived", function(channel, id, packet)
 		)
 	end
 end)
-
-if records_admins then
-	onEvent("CantSendData", function(channel)
-		if channel == "common" and fastest.wait_send then
-			fastest.submitted = false
-			fastest.wait_send = false
-			tfm.exec.chatMessage(
-				"<v>[#] <r>Your record couldn't be submitted. Type <b>!submit</b> again in a few minutes.",
-				fastest.player
-			)
-		end
-	end)
-
-	onEvent("RetrySendData", function(channel)
-		if channel == "common" and fastest.wait_send then
-			tfm.exec.chatMessage(
-				"<v>[#] <r>Failed to send your record. Retrying in a moment.",
-				fastest.player
-			)
-		end
-	end)
-
-	onEvent("PacketSent", function(channel)
-		if channel == "common" and fastest.wait_send then
-			translatedChatMessage("records_submitted", fastest.player, room.currentMap)
-			fastest.wait_send = false
-		end
-	end)
-end
 end

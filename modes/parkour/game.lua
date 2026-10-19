@@ -8,7 +8,7 @@ local victory_count = 0
 
 local enough_player_till
 local force_stats_count_debug = force_stats_count_debug
-local stats_room = tfm_mode ~= "village" and not records_admins and not is_tribe and submode ~= "smol"
+local stats_room = tfm_mode ~= "village" and not is_tribe and submode ~= "smol"
 local stats_enabled = force_stats_count_debug
 
 local nohelp_room = string.find(room.lowerName, 'nohelp', 1, true) and true
@@ -49,11 +49,6 @@ local less_life_quest = {}
 local bans = {}
 
 local difficulty_color = { 'vp', 'j', 'ch2', 'ce', 'vi' }
-local checkpoint_info = {
-	version = 1, -- 0 = old, 1 = new
-	radius = 15 ^ 2, -- radius of 15px
-	next_version = 1
-}
 local AfkInterface
 local checkCooldown
 local bindKeyboard
@@ -135,8 +130,6 @@ local function changePlayerSize(name, size)
 end
 
 local function updatePlayerCollision(player, allowGolem)
-	if records_admins then return end
-
 	if ghost[player] then
 		tfm.exec.setPlayerCollision(player, 0)
 	elseif golem[player] then
@@ -409,14 +402,8 @@ onEvent("NewPlayer", function(player, init)
 
 		if next_level then
 			addCheckpointImage(player, next_level.x, next_level.y)
-			if checkpoint_info.version == 1 then
-				tfm.exec.addBonus(0, next_level.x, next_level.y, bonusOffset + players_level[player] + 1, 0, false, player)
-			end
+			tfm.exec.addBonus(0, next_level.x, next_level.y, bonusOffset + players_level[player] + 1, 0, false, player)
 		end
-	end
-
-	if records_admins then
-		bindKeyboard(player, 66, true, true) -- B key
 	end
 
 	updateStatsCount()
@@ -429,20 +416,12 @@ onEvent("Keyboard", function(player, key)
 		if players_level[player] == 1 and not times.generated[player] then
 			times.generated[player] = now
 			times.checkpoint[player] = now
-			if records_admins then
-				tfm.exec.freezePlayer(player, false)
-			end
 		end
 		times.movement[player] = now
 
 		if AfkInterface.open[player] then
 			enableSpecMode(player, false)
 			AfkInterface:remove(player)
-		end
-
-	elseif records_admins and key == 66 then
-		if checkCooldown(player, "redo_key", 500) then
-			eventChatCommand(player, "redo")
 		end
 	end
 end)
@@ -579,12 +558,6 @@ onEvent("PlayerRespawn", function(player)
 	if bans[room.playerList[player].id] then return tfm.exec.killPlayer(player) end
 	if (not levels) or (not players_level[player]) then return end
 
-	if (players_level[player] == 1
-		and not times.generated[player]
-		and records_admins) then
-		tfm.exec.freezePlayer(player, true)
-	end
-
 	tfm.exec.linkMice(player, player, false)
 	updatePlayerCollision(player)
 
@@ -611,7 +584,6 @@ onEvent("NewGame", function()
 	players_level = {}
 	times.generated = {}
 	times.map_start = os.time()
-	checkpoint_info.version = checkpoint_info.next_version
 	bonusOffset = bonusOffset == 0 and 500 or 0
 
   local info = room.xmlMapInfo
@@ -637,18 +609,12 @@ onEvent("NewGame", function()
 		count_stats = false
 	end
 
-	if records_admins then
-		less_time = true
-	else
-		less_time = false
-	end
+	less_time = false
 
 	local start_x, start_y
 	if levels then
 		start_x, start_y = levels[2].x, levels[2].y
-		if checkpoint_info.version == 1 then
-			tfm.exec.addBonus(0, start_x, start_y, bonusOffset + 2, 0, false)
-		end
+		tfm.exec.addBonus(0, start_x, start_y, bonusOffset + 2, 0, false)
 
 		for player in next, in_room do
 			if checkpoints[player] then
@@ -671,12 +637,6 @@ onEvent("NewGame", function()
 				tfm.exec.giveCheese(player)
 			elseif levels[1].uncheese then
 				tfm.exec.removeCheese(player)
-			end
-		end
-
-		if records_admins then
-			for player in next, in_room do
-				tfm.exec.freezePlayer(player, true)
 			end
 		end
 	end
@@ -750,7 +710,6 @@ onEvent("Loop", function()
 				if spec_mode[player] or bans[info.id] then
 					killPlayer(player, not times.generated[player])
 				elseif (player_count > 4
-						and not records_admins
 						and not review_mode
 						and not victory[player]
 						and now >= times.movement[player] + 120000) then -- 2 mins afk
@@ -759,64 +718,10 @@ onEvent("Loop", function()
 				end
 			end
 		end
-
-		if checkpoint_info.version ~= 0 then return end
-
-		local last_level = #levels
-		local level_id, next_level, player
-		local taken
-		for name in next, in_room do
-			player = room.playerList[name]
-			if player and now >= cp_available[name] then
-				level_id = (players_level[name] or 1) + 1
-				next_level = levels[level_id]
-
-				if next_level then
-					if ((player.x - next_level.x) ^ 2 + (player.y - next_level.y) ^ 2) <= checkpoint_info.radius then
-						taken = (now - (times.checkpoint[player] or times.map_start)) / 1000
-						times.checkpoint[player] = now
-						players_level[name] = level_id
-
-						if next_level.size ~= levels[ level_id - 1 ].size then
-							-- need to change the size
-							changePlayerSize(name, next_level.size)
-						end
-
-						if next_level.cheese then
-							tfm.exec.giveCheese(name)
-						elseif next_level.uncheese then
-							tfm.exec.removeCheese(name)
-						end
-
-						if not victory[name] then
-							tfm.exec.setPlayerScore(name, level_id, false)
-						end
-						tfm.exec.removeImage(checkpoints[name])
-						
-						tfm.exec.linkMice(player, player, false)
-
-						if level_id == last_level then
-							translatedChatMessage("reached_level", name, level_id-1, taken)
-							if not victory[name] then -- !cp
-								victory._last_level[name] = true
-								tfm.exec.giveCheese(name)
-								tfm.exec.playerVictory(name)
-								tfm.exec.respawnPlayer(name)
-								tfm.exec.movePlayer(name, next_level.x, next_level.y)
-							end
-						else
-							translatedChatMessage("reached_level", name, level_id-1, taken)
-							addCheckpointImage(name, levels[level_id + 1].x, levels[level_id + 1].y)
-						end
-					end
-				end
-			end
-		end
 	end
 end)
 
 onEvent("PlayerBonusGrabbed", function(player, bonus)
-	if checkpoint_info.version ~= 1 then return end
 	if not levels then return end
 	local checkpointIndex = bonus - bonusOffset
 	local level = levels[checkpointIndex]
@@ -876,8 +781,6 @@ newCmd({ name = "review",
 		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
 		local normal_cond = (perms[player] and
 							perms[player].enable_review and
-							not records_admins and
-
 							(string.find(room.lowerName, "review") or
 							ranks.admin[player]))
 		if not tribe_cond and not normal_cond then
@@ -933,9 +836,7 @@ newCmd({ name = "cp",
 		end
 		if not players_level[player] then return end
 
-		if checkpoint_info.version == 1 then
-			tfm.exec.removeBonus(players_level[player] + 1, player)
-		end
+		tfm.exec.removeBonus(players_level[player] + 1, player)
 		cp_available[player] = os.time() + 750
 		players_level[player] = checkpoint
 		changePlayerSize(player, levels[checkpoint].size)
@@ -957,13 +858,9 @@ newCmd({ name = "cp",
 		end
 		if next_level then
 			addCheckpointImage(player, next_level.x, next_level.y)
-			if checkpoint_info.version == 1 then
-				tfm.exec.addBonus(0, next_level.x, next_level.y, bonusOffset + checkpoint + 1, 0, false, player)
-			end
+			tfm.exec.addBonus(0, next_level.x, next_level.y, bonusOffset + checkpoint + 1, 0, false, player)
 		else
-			if not records_admins then
-				victory._last_level[player] = true
-			end
+			victory._last_level[player] = true
 		end
 	end })
 
@@ -1001,15 +898,13 @@ newCmd({ name = "spec",
 newCmd({ name = "time",
 	min_args = 1,
 	fn = function(player, args, cmd)
-		if not records_admins or not records_admins[player] then
-			if not perms[player] then return end
-			if not perms[player].set_map_time then
-				if perms[player].set_map_time_review then
-					if not review_mode then
-						return tfm.exec.chatMessage("<v>[#] <r>You can only change the map time with review mode enabled.", player)
-					end
-				else return end
-			end
+		if not perms[player] then return end
+		if not perms[player].set_map_time then
+			if perms[player].set_map_time_review then
+				if not review_mode then
+					return tfm.exec.chatMessage("<v>[#] <r>You can only change the map time with review mode enabled.", player)
+				end
+			else return end
 		end
 
 		local time = tonumber(args[1])
@@ -1023,13 +918,10 @@ newCmd({ name = "time",
 
 newCmd({ name = "redo",
 	fn = function(player, args)
-		if not (records_admins or review_mode) then return end
+		if not review_mode then return end
 		if not players_level[player] then return end
 
-		if checkpoint_info.version == 1 then
-			tfm.exec.removeBonus(players_level[player] + 1, player)
-		end
-
+		tfm.exec.removeBonus(players_level[player] + 1, player)
 		cp_available[player] = os.time() + 750
 		players_level[player] = 1
 		changePlayerSize(player, levels[1].size)
@@ -1056,27 +948,7 @@ newCmd({ name = "redo",
 			tfm.exec.removeImage(checkpoints[player])
 		end
 		addCheckpointImage(player, x, y)
-		if checkpoint_info.version == 1 then
-			tfm.exec.addBonus(0, x, y, bonusOffset + 2, 0, false, player)
-		end
-	end })
-
-newCmd({ name = "setcp",
-	fn = function(player, args)
-		if not records_admins or not records_admins[player] then
-			if not perms[player] or not perms[player].set_checkpoint_version then return end
-		end
-
-		local version = tonumber(args[1])
-		if not version then
-			return tfm.exec.chatMessage("<v>[#] <r>Usage: <b>!setcp 1</b> or <b>!setcp 2</b>.", player)
-		end
-		if version ~= 1 and version ~= 2 then
-			return tfm.exec.chatMessage("<v>[#] <r>Checkpoint version can either be 1 or 2.", player)
-		end
-
-		checkpoint_info.next_version = version - 1
-		tfm.exec.chatMessage("<v>[#] <d>Changes will be applied in the next round.", player)
+		tfm.exec.addBonus(0, x, y, bonusOffset + 2, 0, false, player)
 	end })
 
 newCmd({ name = "leader",

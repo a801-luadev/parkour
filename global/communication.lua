@@ -5,10 +5,7 @@
 	channelHandler(load_now)
 	sendPacket(channel, id, packet)
 
-	eventPacketSent(channel)
 	eventPacketReceived(channel, id, packet)
-	eventRetrySendData(channel)
-	eventCantSendData(channel)
 ]]
 
 channels = {
@@ -167,10 +164,6 @@ function pipeHandler(pipe, data)
 			buffer = ";" .. buffer
 		end
 
-		if eventPacketSent then
-			eventPacketSent(channel.name)
-		end
-
 		system.savePlayerData(pipe, (now + channel.ttl) .. buffer)
 	end
 end
@@ -190,13 +183,6 @@ function channelHandler(load_now)
 					data.selected = (data.selected + 1) % data.pipes
 
 					system.loadPlayerData(data[ data.selected + 1 ])
-
-					if eventRetrySendData then
-						eventRetrySendData(name)
-					end
-
-				elseif eventCantSendData then
-					eventCantSendData(name)
 				end
 			end
 		end

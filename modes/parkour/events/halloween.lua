@@ -65,9 +65,8 @@ do
     function halloween.isCauldronAllowed()
       local roomName = room.lowerName
       local isCauldron = string.find(roomName, "cauldron", 1, true)
-      local isRecords = string.find(roomName, "records", 1, true)
       local isVillage = string.find(roomName, "village", 1, true)
-      return isCauldron and not isRecords and not isVillage
+      return isCauldron and not isVillage
     end
 
     if halloween.isCauldronAllowed() then

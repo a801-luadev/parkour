@@ -1082,8 +1082,7 @@ function bindNecessary(player)
 	for index = 1, #powers do
 		power = getPowerUpgrade(completed, pos, powers[index], true, review_mode or is_anniversary)
 
-		if (power and
-			(power.isVisual or (not records_admins and submode ~= "smol"))) then
+		if power and (power.isVisual or submode ~= "smol") then
 			if power.click then
 				system.bindMouse(player, true)
 			end
@@ -1282,7 +1281,7 @@ onEvent("Keyboard", function(player, key, down, x, y, vx, vy)
 	if power then
 		local chairCd = victory[player] > os.time() and
 			chair_pos and ((x - chair_pos[1]) ^ 2 + (y - chair_pos[2]) ^ 2) <= 10000
-		local onlyVisual = records_admins or disable_powers or submode == "smol"
+		local onlyVisual = disable_powers or submode == "smol"
 		for index = 1, power._count do
 			if power[index] then
 				usePower(player, power[index], key, down, x, y, chairCd, onlyVisual, vx, vy)
@@ -1298,7 +1297,7 @@ onEvent("Mouse", function(player, x, y)
 	local power = powers.teleport
 	local chairCd = victory[player] > os.time() and
 		chair_pos and ((x - chair_pos[1]) ^ 2 + (y - chair_pos[2]) ^ 2) <= 10000
-	local onlyVisual = records_admins or disable_powers or submode == "smol"
+	local onlyVisual = disable_powers or submode == "smol"
 	if players_file[player].c >= power.maps or review_mode then
 		usePower(player, power, -1, true, x, y, chairCd, onlyVisual)
 	end

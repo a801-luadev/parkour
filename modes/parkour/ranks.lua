@@ -22,13 +22,11 @@ local ranks_id = {
 do
 local ranks_permissions = {
 	admin = {
-		set_checkpoint_version = true,
 		set_name_color = true,
 		give_command = true,
 		view_creators = true,
 	}, -- will get every permission
 	bot = {
-		set_checkpoint_version = true
 	}, -- will get every permission
 	manager = {
 		force_stats = true,
@@ -37,7 +35,6 @@ local ranks_permissions = {
 		hide = true,
 		handle_map_polls = true,
 		see_map_polls = true,
-		change_roommod = true,
 		see_hidden_staff = true,
 		manage_maps = true,
 	},
@@ -54,7 +51,6 @@ local ranks_permissions = {
 		see_private_maps = true,
 		use_tracker = true,
 		hide = true,
-		change_roommod = true,
 		see_hidden_staff = true,
 		view_sanctions = true,
 		skip_map = true,
@@ -68,7 +64,6 @@ local ranks_permissions = {
 		start_round_poll = true,
 		see_map_polls = true,
 		set_map_time_review = true,
-		change_roommod = true,
 		see_hidden_mapper = true,
 		set_room_limit_review = true,
 	},

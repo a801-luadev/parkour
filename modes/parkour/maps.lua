@@ -68,20 +68,8 @@ current_map = nil
 local chair_pos
 local levels
 local review_mode
-local records_admins = string.find(room.lowerName, "records", 1, true) and {}
 local smol_completions = submode == "smol" and { _max = 0, _maxName = nil }
 local isAieMap
-
-if records_admins and submode == "smol" then
-	records_admins = nil
-end
-
-if records_admins then
-	tfm.exec.playerVictory = function(name)
-		tfm.exec.removeCheese(name)
-		eventPlayerWon(name)
-	end
-end
 
 local function selectMap(sections, list, count)
 	if sections._map_pointer > maps_per_section then
@@ -185,7 +173,7 @@ local function newMap(difficulty, max_difficulty)
 	map = selectMap(maps[difficulty].sections, maps[difficulty].list, maps[difficulty].count)
 
 	current_map = map
-	tfm.exec.newGame(map, not records_admins and math.random(3000000) <= 1000000)
+	tfm.exec.newGame(map, math.random(3000000) <= 1000000)
 end
 
 local invalidMap
@@ -480,7 +468,6 @@ onEvent("NewGame", function()
 
 	if (count_stats
 		and not is_tribe
-		and not records_admins
 		and not review_mode
 		and info.permCode ~= 41
 		and info.author ~= "#Module") then
@@ -531,7 +518,7 @@ onEvent("NewGame", function()
 end)
 
 onEvent("Loop", function(elapsed, remaining)
-	if review_mode or records_admins then return end
+	if review_mode then return end
 
 	mapIsAboutToChange = remaining < 1500
 
@@ -555,14 +542,13 @@ end })
 
 newCmd({ name = "map",
 	fn = function(player, args, cmd)
-		local records_cond = records_admins and records_admins[player]
 		local tribe_cond = is_tribe and room.playerList[player].tribeName == string.sub(room.name, 3)
 		local normal_cond = perms[player] and perms[player].change_map
 		local smol_cond = smol_completions and smol_completions._maxName == player
-		if not records_cond and not tribe_cond and not normal_cond and not smol_cond then return end
+		if not tribe_cond and not normal_cond and not smol_cond then return end
 
 		if args._len > 0 then
-			if not records_cond and not tribe_cond and not (perms[player] and perms[player].load_custom_map) then
+			if not tribe_cond and not (perms[player] and perms[player].load_custom_map) then
 				return tfm.exec.chatMessage("<v>[#] <r>You can't load a custom map.", player)
 			end
 
@@ -578,7 +564,7 @@ newCmd({ name = "map",
 				end
 				count_stats = false
 				current_map = map
-				tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped" and not records_admins)
+				tfm.exec.newGame(args[1], args[2] and string.lower(args[2]) == "flipped")
 			end
 		elseif os.time() < map_change_cd and not review_mode then
 			tfm.exec.chatMessage("<v>[#] <r>You need to wait a few seconds before changing the map.", player)
@@ -588,7 +574,7 @@ newCmd({ name = "map",
 
 		chatlogCmd(cmd, player, args, ranks.mapper)
 
-		if not records_cond and not tribe_cond and normal_cond then
+		if not tribe_cond and normal_cond then
 			-- logged when using staff powers
 			if review_mode and perms[player].enable_review then
 				-- legitimate review mode

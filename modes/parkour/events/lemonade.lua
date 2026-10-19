@@ -6,9 +6,8 @@ do
   local function isLemonadeRoom()
     local roomName = room.lowerName
     local isLemonade = string.find(roomName, "lemonade", 1, true)
-    local isRecords = string.find(roomName, "records", 1, true)
     local isVillage = string.find(roomName, "village", 1, true)
-    return isLemonade and not isRecords and not isVillage
+    return isLemonade and not isVillage
   end
 
   if is_lemonade_time then
