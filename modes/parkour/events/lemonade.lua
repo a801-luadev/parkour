@@ -13,6 +13,7 @@ do
   if is_lemonade_time then
     local WAIT, COLLECT, TRADE = 0, 1, 2
     local lemonade = {
+      ev = tonumber(os.date("%Y")) % 100 * 10000 + 930, -- end date (yymmdd), see syncEventRun
       hint = {},
       hint2 = {},
       bonus = {},

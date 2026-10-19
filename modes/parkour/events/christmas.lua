@@ -42,6 +42,9 @@ do
     findValueTbl(shop_items[8], "id", 2).hidden = false
 
     local christmas = {
+      -- end date (yymmdd), see syncEventRun
+      -- the run that starts in december ends in january of the next year
+      ev = (tonumber(os.date("%Y")) % 100 + (month == 12 and 1 or 0)) * 10000 + 115,
       bonusId = allocateId("bonus", 20000),
       imageName = "18c73e40d6d.png",
       imageTarget = "!999",

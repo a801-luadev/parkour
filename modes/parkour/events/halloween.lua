@@ -24,6 +24,7 @@ do
     local WAIT, COLLECT, DEPOSIT, DISTRIBUTING = 0, 1, 2, 3
 
     local halloween = {
+      ev = tonumber(os.date("%Y")) % 100 * 10000 + 1120, -- end date (yymmdd), see syncEventRun
       potionEcIndex = 13,
       state = WAIT,
       materialTypes = 6,

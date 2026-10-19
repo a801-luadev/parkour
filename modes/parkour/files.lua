@@ -111,6 +111,9 @@ titles = {
 	}
 }
 
+local pdataFunctions = {}
+pdataFunctions.__index = pdataFunctions
+
 local data_migrations = {
 	["0.0"] = function(player, data)
 		data.parkour = data.modules.parkour
@@ -384,10 +387,20 @@ local data_migrations = {
 		data.quests = new_quests
 		data.dc = { 0, 0, 0, 0, 0 } -- completions for each diff
 	end,
-}
+	[13] = function(player, data)
+		data.v = 14
 
-local pdataFunctions = {}
-pdataFunctions.__index = pdataFunctions
+		-- refund items at their previous prices
+		local potion = shop_currencies.halloween_potion
+		local skin
+		for id=2014, 2017 do
+			skin = shop_skins[id]
+			if pdataFunctions.removeItem(data, id, skin.tab) then
+				pdataFunctions.updateItem(data, potion.id, 0, 10)
+			end
+		end
+	end,
+}
 
 do
 	local _cache = {
@@ -429,6 +442,67 @@ do
 
 		table.remove(list, index)
 		refreshCache(file, key, index)
+	end
+
+	local currency_price = {}
+	local event_run, event_run_ready
+
+	for _, currency in next, shop_currencies do
+		currency_price[currency.id] = currency.price or 0
+	end
+
+	-- events that use ec currencies set `ev` on their own table: the date they end (yymmdd)
+	-- returns the running one, nil if none
+	local function getEventRun()
+		if event_run_ready then
+			return event_run
+		end
+
+		event_run_ready = true
+
+		for _, evt in next, activeEvents do
+			if evt.ev and (not event_run or evt.ev < event_run) then
+				event_run = evt.ev -- smallest wins so it's stable if several are forced on
+			end
+		end
+
+		return event_run
+	end
+
+	-- converts all ec into coins when the stored run is missing or has ended
+	-- returns the amount of coins given, nil if the stored run is still valid
+	function pdataFunctions.syncEventRun(file)
+		local run = getEventRun()
+		local ev = file.ev
+
+		if ev then
+			if ev == run then
+				return
+			end
+
+			-- stored run is still going, this room is just older than it
+			-- (started before the event began), so don't touch anything
+			local today = tonumber(os.date("%Y")) % 100 * 10000
+				+ tonumber(os.date("%m")) * 100
+				+ tonumber(os.date("%d"))
+
+			if ev >= today then
+				return
+			end
+		end
+
+		local coins = 0
+		for id=1, #file.ec do
+			coins = coins + (file.ec[id] or 0) * (currency_price[id] or 0)
+		end
+
+		if #file.ec > 0 then
+			file.ec = {}
+		end
+		file.ev = run
+		file.coins = file.coins + coins
+
+		return coins
 	end
 
 	function pdataFunctions.tester(file)
@@ -783,6 +857,9 @@ function savePlayerData(player, immediate)
 end
 
 local function updateData(player, data)
+	-- migrations can use file functions (e.g. removeItem)
+	setmetatable(data, pdataFunctions)
+
 	if not data.v and not data.parkour then
 		if data.modules then
 			data.parkour = {v = "0.0"}
@@ -909,6 +986,11 @@ onEvent("PlayerDataLoaded", function(player, data)
 	if playerObj then
 		data.commu = playerObj.community
 		data.playerid = playerObj.id
+	end
+
+	local event_coins = data:syncEventRun()
+	if event_coins and event_coins > 0 then
+		translatedChatMessage("event_over", player, event_coins)
 	end
 
 	Quests.trigger_load(player, data)

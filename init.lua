@@ -25,7 +25,7 @@
 
 
 math.randomseed(os.time())
-local data_version = 13
+local data_version = 14
 local room = tfm.get.room
 local links = {
 	-- keys here become commands (e.g. !donate)
