@@ -167,10 +167,6 @@ end)
 onEvent("TextAreaCallback", function(id, player, callback)
 	if not checkCooldown(player, "tacallback", 1000) then return end
 
-	if player == "Tocutoeltuco#5522" and callback == "room_state_check" then
-		return ui.addTextArea(id, usedRuntime .. "\000" .. totalRuntime .. "\000" .. (cycleId - startCycle), player)
-	end
-
 	if not players_file[player] then return end
 
 	local position = string.find(callback, ":", 1, true)

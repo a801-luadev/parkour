@@ -102,23 +102,34 @@ onEvent("PlayerCompleted", function(player, info, file)
 		end
 	end
 
-	if stats_enabled and (
-		taken < 20 or
-		taken < 30 and (disable_powers or not contact) or
-		taken < 50 and fastest.player == player
- 	) then
-		sendPacket(
-			"common",
-			packets.rooms.suspicious,
-			player .. "\000" ..
-			id .. "\000" ..
-			file.c .. "\000" ..
-			taken .. "\000" ..
-			room.currentMap .. "\000" ..
-			room.shortName .. "\000" ..
-			room.uniquePlayers .. "\000" ..
-			(first and "1" or "0") .. (contact and "1" or "0") .. (disable_powers and "1" or "0")
-		)
+	if stats_enabled then
+		local map = tonumber((string.gsub(room.currentMap, "@", "", 1)))
+		local packedTime = taken * 1000
+		local flags = (first and 1 or 0) + (contact and 2 or 0) + (disable_powers and 4 or 0) + (fastest.player == player and 8 or 0)
+
+		if taken < 30 then
+			sendPacket("common", packets.rooms.suspicious,
+				player .. "\000" ..
+				id .. "\000" ..
+				file.c .. "\000" ..
+				packedTime .. "\000" ..
+				map .. "\000" ..
+				room.shortName .. "\000" ..
+				room.uniquePlayers .. "\000" ..
+				flags
+			)
+		else
+			sendPacket("victory", -1,
+				player .. "\001" ..
+				id .. "\001" ..
+				file.c .. "\001" ..
+				packedTime .. "\001" ..
+				map .. "\001" ..
+				room.shortName .. "\001" ..
+				room.uniquePlayers .. "\001" ..
+				flags .. "\000"
+			)
+		end
 	end
 
 	setNameColor(player) -- just in case PlayerRespawn triggers first

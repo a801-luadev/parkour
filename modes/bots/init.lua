@@ -246,7 +246,7 @@ end
 onEvent("NewPlayer", function(player)
 	if player ~= parkour_bot then
 		if not bot_joined then
-			system.exit()
+			events.Loop._count = 0
 		end
 		return
 	end
@@ -261,7 +261,7 @@ end)
 
 onEvent("PlayerLeft", function(player)
 	if player == parkour_bot then
-		system.exit()
+		events.Loop._count = 0
 	end
 end)
 
@@ -354,11 +354,14 @@ onEvent("SendingPacket", function(id, packet)
 end)
 
 onEvent("PacketReceived", function(channel, id, packet, map, time)
-	if channel ~= "common" then return end
-
-	if id <= 255 then -- see textareas
-		addTextArea(id, packet, parkour_bot)
+	if channel == "common" then
+		if id <= 255 then -- see textareas
+			addTextArea(id, packet, parkour_bot)
+		end
+	elseif channel == "victory" then
+		tfm.exec.playMusic('victory', tostring(packet), 0, false, false, parkour_bot)
 	end
+
 end)
 
 onEvent("Loop", function()
