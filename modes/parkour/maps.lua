@@ -541,6 +541,18 @@ onEvent("Loop", function(elapsed, remaining)
 	end
 end)
 
+newCmd({ name = "setchair",
+	rank = "admin",
+	min_args = 1,
+	fn = function(playerName, args, cmd)
+	if args[1] == "none" then
+		chair_img = nil
+	else
+		chair_img = args[1]
+	end
+	chatlogCmd(cmd, playerName, args)
+end })
+
 newCmd({ name = "map",
 	fn = function(player, args, cmd)
 		local records_cond = records_admins and records_admins[player]
