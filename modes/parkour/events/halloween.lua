@@ -8,7 +8,7 @@ do
 
   if is_halloween_time() then
     local chairs = {
-      "img@1a14dddfccd",
+      "img@1a15cf3bfd0",
       "img@1a15bbd740f",
       "img@1a15bc745ba",
       "img@1a15bd92cf6",
