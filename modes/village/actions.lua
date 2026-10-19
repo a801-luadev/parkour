@@ -83,7 +83,7 @@ function npc_actions.multishop(player, npc)
             left_amount = skin.price,
             right_amount = 1,
             right_button = "buy",
-            right_image = skin.shop_img or shop_img.img,
+            right_image = skin.shop_img or skin.img,
             coin_type = currency.id,
             reward = "skin",
             skin_id = skin_id,
