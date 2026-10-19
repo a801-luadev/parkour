@@ -643,7 +643,7 @@ onEvent("PacketReceived", function(channel, id, packet)
 		for name in next, in_room do
 			n = 1 + n
 			names[n] = name
-			ids[n] = pl[name] and pl[name].id
+			ids[n] = pl[name] and pl[name].id or 0
 		end
 
 		sendPacket(
@@ -659,7 +659,7 @@ onEvent("PacketReceived", function(channel, id, packet)
 			return
 		end
 
-		local names, ids, n = {}, {}, 0
+		local names, n = {}, 0
 		local pl = room.playerList
 		local name
 
@@ -669,7 +669,6 @@ onEvent("PacketReceived", function(channel, id, packet)
 			if visitors[name] < init_time + 1000 then
 				n = 1 + n
 				names[n] = name
-				ids[n] = pl[name] and pl[name].id
 			end
 		end
 
@@ -677,8 +676,7 @@ onEvent("PacketReceived", function(channel, id, packet)
 			"common",
 			packets.rooms.creators,
 			room.shortName .. "\000" ..
-			table.concat(names, "\001") .. "\000" ..
-			table.concat(ids, "\001")
+			table.concat(names, "\001")
 		)
 	end
 end)
