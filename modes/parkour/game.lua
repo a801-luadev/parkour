@@ -708,7 +708,9 @@ onEvent("Loop", function()
 			info = room.playerList[player]
 			if info then
 				if spec_mode[player] or bans[info.id] then
-					killPlayer(player, not times.generated[player])
+					if not info.isDead then
+						killPlayer(player, not times.generated[player])
+					end
 				elseif (player_count > 4
 						and not review_mode
 						and not victory[player]

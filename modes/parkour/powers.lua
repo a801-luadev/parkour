@@ -1232,8 +1232,9 @@ onEvent("Keyboard", function(player, key, down, x, y, vx, vy)
 	if spec_mode[player] then return end
 
 	if key == 0 or key == 2 then
+		local prev = facing[player]
 		facing[player] = key == 2
-		if ghost[player] then
+		if ghost[player] and prev ~= facing[player] then
 			if ghost[player] ~= -1 then
 				tfm.exec.removeImage(ghost[player])
 			end

@@ -10,9 +10,16 @@ do
 	local DONT_SCHEDULE = {
 		["Loop"] = true,
 		["Keyboard"] = true,
+		["Mouse"] = true,
 		["After"] = true,
 		["ContactListener"] = true,
 	}
+
+	-- Bot room may need textarea callbacks for communication
+	-- so we need to schedule them there
+	if room.starting ~= "@#" then
+		DONT_SCHEDULE["TextAreaCallback"] = true
+	end
 
 	-- Optimization
 	local os_time = os.time

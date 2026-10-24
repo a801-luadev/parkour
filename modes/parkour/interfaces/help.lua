@@ -407,9 +407,9 @@ do
 	end)
 
 	onEvent("Keyboard", function(player, key, down)
+		if not down or key ~= 1 and key ~= 3 then return end
+		if not HelpInterface.open[player] then return end
 		if not checkCooldown(player, "helpscroll", 2000) then return end
-		if key ~= 1 and key ~= 3 then return end
-		if not down then return end
 		scrollHelp(player, key == 1)
 	end)
 end
