@@ -26,12 +26,21 @@ do
 	local stoppingAt = 0
 	local checkingRuntime = false
 	local paused = false
+	local pausedCycle = -1
+	local pausedAt = "" -- event name and listener line that hit the limit
+	local childTime = 0 -- time spent in nested events inside the running listener
 	local scheduled = {_count = 0, _pointer = 1}
 
 	-- Listeners
 	local events = {}
 
 	local function errorHandler(name, msg)
+		-- The failed call never finished: reset the runtime breaker so the
+		-- emergency mode listeners can run
+		checkingRuntime = false
+		paused = false
+		scheduled = {_count = 0, _pointer = 1}
+
 		tfm.exec.disableAutoNewGame(true)
 		tfm.exec.disableAfkDeath(true)
 		tfm.exec.disablePhysicalConsumables(true)
@@ -60,55 +69,64 @@ do
 		channels.canRead = false
 		sendPacket("common", 0, room.shortName .. "\000" .. name .. "\000" .. msg)
 		channelHandler(true) -- load channel now to send all the data
-
-		events.Loop._count = 1
-		events.Loop[1] = channelHandler
-
-		events.PlayerDataLoaded._count = 2
-		events.PlayerDataLoaded[1] = pipeHandler
-		events.PlayerDataLoaded[2] = function(player)
-			if channels[player] and channels[player].buffer then
-				events.Loop._count = 0
-				events.PlayerDataLoaded._count = 0
-			end
-		end
+		onEvent("Loop", channelHandler)
+		onEvent("PlayerDataLoaded", pipeHandler)
 	end
 
 	-- isDirect = not a scheduled or an indirect call
-	local function callListeners(evt, a, b, c, d, e, f, g, offset, isDirect, measure)
-    local total = evt._runtime
-		local ts
+	-- returns true if the rest of this event has been scheduled to resume later
+	local function callListeners(evt, a, b, c, d, e, f, g, offset, isDirect)
+		local total, calls = evt._runtime, evt._calls
+		local now, elapsed, outerChildTime
+		local continued = false
 
-    if measure and cycleId ~= evt._cycle then
-      evt._cycle = cycleId
+		-- Runtime is measured per cycle, for direct and nested calls alike
+		if cycleId ~= evt._cycle then
+			evt._cycle = cycleId
 
-      for index=1, evt._count do
-        total[index] = 0
-      end
-    end
+			for index = 1, evt._count do
+				total[index] = 0
+				calls[index] = 0
+			end
+		end
 
+		-- The time a listener ends at is also when the next one starts at
+		local ts = os_time()
 		for index = offset, evt._count do
-			if not initializingModule and os_time() >= stoppingAt then
-				if index < evt._count then
-					-- If this event didn't end, we need to resume from
-					-- where it has been left!
-					scheduled._count = scheduled._count + 1
-					scheduled[ scheduled._count ] = {evt, a, b, c, d, e, f, g, index}
-				end
+			if not initializingModule and ts >= stoppingAt then
+				-- This listener didn't run yet, we need to resume from it!
+				scheduled._count = scheduled._count + 1
+				scheduled[ scheduled._count ] = {evt, a, b, c, d, e, f, g, index}
+				continued = true
 
 				if not paused then
 					translatedChatMessage("paused_events")
+
+					-- Remember which cycle got paused, so its runtime can be
+					-- reported no matter when the module resumes
+					pausedCycle = cycleId
+					pausedAt = evt._name .. "\001" .. evt._lines[index]
+					cycleId = cycleId + 2
 				end
 
 				paused = true
-				cycleId = cycleId + 2
 
 				break
 			end
 
-			ts = os_time()
+			-- Only the listener's own time is recorded: the time spent in
+			-- events it calls is already recorded by their own listeners
+			outerChildTime = childTime
+			childTime = 0
+
 			evt[index](a, b, c, d, e, f, g)
-      total[index] = total[index] + (os_time() - ts)
+			now = os_time()
+			elapsed = now - ts
+			ts = now
+
+			total[index] = total[index] + elapsed - childTime
+			calls[index] = 1 + calls[index]
+			childTime = outerChildTime + elapsed
 		end
 
 		if isDirect then
@@ -116,22 +134,30 @@ do
 				eventAfter()
 			end
 		end
+
+		return continued
 	end
 
 	local function resumeModule()
 		local count = scheduled._count
 
 		do
+			-- Every listener that spent runtime in the paused cycle, as
+			-- line \001 ms \001 calls
+			-- (line numbers are unique in the build, so event names aren't needed)
 			local arr, n = {}, 0
+			local runtime, calls, lines
 
 			for name, evt in next, events do
-				if evt._cycle == cycleId - 3 then
-					n = 1 + n
-					arr[n] = (
-						evt._name .. "\001" ..
-						table.concat(evt._runtime, "\002") .. "\001" ..
-						table.concat(evt._lines, "\002")
-					)
+				if evt._cycle == pausedCycle then
+					runtime, calls, lines = evt._runtime, evt._calls, evt._lines
+
+					for index = 1, evt._count do
+						if runtime[index] > 0 then
+							n = 1 + n
+							arr[n] = lines[index] .. "\001" .. runtime[index] .. "\001" .. calls[index]
+						end
+					end
 				end
 			end
 
@@ -143,6 +169,7 @@ do
 					(cycleId - startCycle) .. "\000" ..
 					totalRuntime .. "\000" ..
 					room.uniquePlayers .. "\000" ..
+					pausedAt .. "\000" ..
 					table.concat(arr, '\000', 1, n)
 				)
 			end
@@ -151,11 +178,12 @@ do
 		local event
 		for index = scheduled._pointer, count do
 			event = scheduled[index]
-			callListeners(event[1], event[2], event[3], event[4], event[5], event[6], event[7], event[8], event[9], false, true)
+			local continued = callListeners(event[1], event[2], event[3], event[4], event[5], event[6], event[7], event[8], event[9], false)
 
 			if paused then
-				if scheduled._count > count then
-					-- If a new event has been scheduled, it is this one.
+				if continued then
+					-- This event didn't end, and the last scheduled item is its rest
+					-- (events it called may have been scheduled before it).
 					-- It should be the first one to run on the next attempt to resume.
 					event[9] = scheduled[ scheduled._count ][9]
 
@@ -165,7 +193,8 @@ do
 					-- execute twice!
 					scheduled._count = scheduled._count - 1
 				else
-					-- If no event has been scheduled, this one has successfully ended.
+					-- This one has successfully ended. Anything scheduled during it
+					-- (events it called) stays in the queue after the current items.
 					-- We just tell the next attempt to resume to start from the next one.
 					scheduled._pointer = index + 1
 				end
@@ -239,6 +268,7 @@ do
 							scheduled._count = scheduled._count + 1
 							scheduled[ scheduled._count ] = {evt, a, b, c, d, e, f, g, 1}
 						end
+						checkingRuntime = false
 						return
 					end
 				end
@@ -255,7 +285,7 @@ do
 				return
 			end
 
-			local done, result = pcall(callListeners, evt, a, b, c, d, e, f, g, 1, true, true)
+			local done, result = pcall(callListeners, evt, a, b, c, d, e, f, g, 1, true)
 			if not done then
 				errorHandler(name, result)
 				return
@@ -273,7 +303,7 @@ do
 
 		if not evt then
 			-- Unregistered event
-			evt = {_count = 0, _name=name, _lines={}, _cycle=-1, _runtime={}}
+			evt = {_count = 0, _name=name, _lines={}, _cycle=-1, _runtime={}, _calls={}}
 			events[name] = evt
 
 			_G["event" .. name] = registerEvent(name)
@@ -282,7 +312,8 @@ do
 		-- Register callback
 		evt._count = evt._count + 1
 		evt[ evt._count ] = callback
-		evt._lines[ evt._count ] = debug.traceback(nil, 2):match(':(%d+)')
+		evt._lines[ evt._count ] = debug.traceback(nil, 2):match(':(%d+)') or "0"
 		evt._runtime[ evt._count ] = 0
+		evt._calls[ evt._count ] = 0
 	end
 end

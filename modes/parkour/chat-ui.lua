@@ -211,6 +211,16 @@ newCmd({ name = "runtime",
 		tfm.exec.chatMessage("<v>[#] <d>used " .. usedRuntime .. "ms for cycle " .. (cycleId - startCycle) .. " and spent total of " .. totalRuntime .. "ms", player)
 	end })
 
+newCmd({ name = "crash",
+	rank = "admin",
+	fn = function(player, args)
+		-- Puts the room in emergency mode, to test it.
+		-- It can't be logged as a command since it never returns, so the
+		-- crash message tells who did it
+		local msg = args._len > 0 and table.concat(args, " ") or "test crash"
+		error(msg .. " (by " .. player .. ")", 0)
+	end })
+
 newCmd({ name = "give",
 	perm = "give_command",
 	min_args = 2,
