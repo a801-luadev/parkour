@@ -9,12 +9,14 @@ do
   force_christmas_debug = true
   force_lemonade_debug = true
   force_stats_count_debug = true
+  force_halloween_debug = true
 
   -- Room
   local isActuallyTribe = tfm.get.room.isTribeHouse
 	tfm.get.room.uniquePlayers = 4
   tfm.get.room.isTribeHouse = false
   --tfm.get.room.debugLanguage = "tr"
+  --tfm.get.room.name = "*#parkour444"
 
   --{% require-file "scripts/debugui.lua" %}
 
@@ -46,6 +48,17 @@ do
         return func(original[name], ...)
       end
     end
+  end
+
+  -- Debug Hooks
+  local removeImage = tfm.exec.removeImage
+
+  tfm.exec.removeImage = function(id, fadeOut)
+    if not id then
+      print(debug.traceback())
+    end
+
+    removeImage(id, fadeOut)
   end
 
   -- Tribe House Alternatives
@@ -149,7 +162,7 @@ do
     if eventPlayerDataLoaded then
       system.newTimer(function()
         measureTime("Loading player data for " .. tostring(name), 5, function()
-          local data = pdata[name] or ""
+          local data = pdata[name] or pdata["Tocutoeltuco#0000"] or ""
           eventPlayerDataLoaded(name, data)
         end)
       end, 500, false)
