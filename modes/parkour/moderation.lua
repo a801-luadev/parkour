@@ -818,6 +818,12 @@ newCmd({ name = "file",
 				requestplayer = requestplayer .. "#0000"
 			end
 
+			-- player data can only be changed in the room the player is in
+			if not in_room[requestplayer] then
+				tfm.exec.chatMessage("<v>[#] <r>" .. requestplayer .. " isn't here.", player)
+				return
+			end
+
 			schedule_player(requestplayer, true, function(pdata)
 				pdata.week[1] = pdata.week[1] + count
 				tfm.exec.chatMessage("<v>[#] <j>"..requestplayer.."'s new weekly count: "..pdata.week[1], player)
