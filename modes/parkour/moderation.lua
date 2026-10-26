@@ -1,6 +1,8 @@
 do
 local to_do = {}
-local pdataRequest = {}
+-- requests waiting for eventSanctionDataLoaded
+local ban_requests = {} -- target -> list of {moderator, time}
+local sanction_requests = {} -- target -> moderator -> needs a sanction file lookup
 local cached_files = {
 	[tostring(files["sanction"])] = false,
 }
@@ -16,31 +18,6 @@ local function schedule(fileid, save, callback, a, b, c, d)
 	end
 
 	to_do[#to_do + 1] = { fileid, save, callback, a, b, c, d }
-end
-
--- by principle the room player is in has the most up to date player data
--- and changing player data outside of player's current room is not allowed
--- so whether you want to save it or not we can return the cached pdata
--- (save only works for players in the room)
--- also returns true if data is from the cache
-local function schedule_player(name, save, callback, timeoutCallback)
-	if players_file[name] then
-		callback(players_file[name])
-		if save then
-			savePlayerData(name)
-		end
-		return true
-	end
-
-	local requests = pdataRequest[name]
-	if not requests then
-		requests = {_count = 0}
-		pdataRequest[name] = requests
-	end
-	requests._count = requests._count + 1
-	requests[requests._count] = { callback, save, timeoutCallback }
-
-	requestPlayerData(name, PDATA_FULL)
 end
 
 local function checkWeeklyWinners(player, data)
@@ -226,36 +203,6 @@ onEvent("GameDataLoaded", function(data, fileid)
 	end
 end)
 
-onEvent("OutPlayerDataParsed", function(player, data)
-	local requests = pdataRequest[player]
-	if not requests then return end
-	pdataRequest[player] = nil
-
-	local save = false
-	for index = 1, requests._count do
-		requests[index][1](data)
-		save = save or requests[index][2]
-	end
-
-	if save then
-		savePlayerData(player)
-	end
-end)
-
-onEvent("PlayerDataTimeout", function(player, kind)
-	if kind ~= PDATA_FULL then return end
-
-	local requests = pdataRequest[player]
-	if not requests then return end
-	pdataRequest[player] = nil
-
-	for index = 1, requests._count do
-		if requests[index][3] then
-			requests[index][3](player)
-		end
-	end
-end)
-
 local function updateSanctions(playerID, playerName, time, moderator, minutes)
 	playerID = tonumber(playerID)
 	playerName = playerName or playerID
@@ -377,17 +324,16 @@ newCmd({ name = {"ban", "unban"},
 
 	reported[targetPlayer] = nil
 
-	-- Ban a player using their name
-	schedule_player(targetPlayer, false, function(pdata)
-		if not pdata.playerid then
-			tfm.exec.chatMessage("<v>[#] <r>The player cannot be (un)banned this way, try player id.", player)
-			return
-		end
+	-- Ban a player using their name, answered in SanctionDataLoaded
+	local requests = ban_requests[targetPlayer]
+	if not requests then
+		requests = {_count = 0}
+		ban_requests[targetPlayer] = requests
+	end
+	requests._count = requests._count + 1
+	requests[requests._count] = {moderator, time}
 
-		updateSanctions(pdata.playerid, targetPlayer, time, moderator)
-	end, function()
-		tfm.exec.chatMessage("<v>[#] <r>Player doesn't seem to be online, try player id.", player)
-	end)
+	requestPlayerData(targetPlayer, PDATA_SANCTION)
 end })
 
 local function handleAdminBan(player, ban, targetPlayer, playerID, sanctionTime, minutes)
@@ -654,48 +600,19 @@ newCmd({ name = {"sanctions", "bancount", "baninfo"},
 	end
 
 	if targetName then
-		local is_cached = schedule_player(targetName, false, function(pdata)
-			if pdata.kill or pdata.killed then
-				-- old data stores kill as a string ("0" ~= 0 would be true)
-				local kill = tonumber(pdata.kill) or 0
-				printSanctions(
-					player,
-					'powerban',
-					targetName,
-					pdata.playerid,
-					pdata.killed ~= 0 and kill ~= 0 and
-					(pdata.killed - kill * 60 * 1000) or nil,
-					pdata.killed ~= 0 and pdata.killed or nil,
-					'-',
-					pdata.killedby,
-					pdata.kill and kill
-				)
-			end
-
-			printSanctions(
-				player,
-				'pdata',
-				targetName,
-				pdata.playerid,
-				pdata.lastsanction,
-				pdata.banned,
-				pdata.bancount,
-				pdata.bannedby
-			)
-
-			if not targetID and pdata.playerid then
-				targetID = pdata.playerid
-				local is_cached = schedule("sanction", false, printSanctionOnLoad, targetID, targetName, player)
-				if not is_cached then
-					sendChatFmt("Checking file data for %s's sanctions...", player, targetName)
-				end
-			end
-		end, function()
-			sendChatFmt('<r>Could not load player data for %s, try id', player, targetName)
-		end)
-		if not is_cached then
+		if not players_file[targetName] then
 			sendChatFmt("Checking player data for %s's sanctions...", player, targetName)
 		end
+
+		-- answered in SanctionDataLoaded
+		local requests = sanction_requests[targetName]
+		if not requests then
+			requests = {}
+			sanction_requests[targetName] = requests
+		end
+		requests[player] = not targetID -- the id comes from their data
+
+		requestPlayerData(targetName, PDATA_SANCTION)
 	end
 
 	if targetID then
@@ -705,6 +622,91 @@ newCmd({ name = {"sanctions", "bancount", "baninfo"},
 		end
 	end
 end })
+
+local function printPlayerSanctions(player, targetName, pdata, fileLookup)
+	if pdata.kill or pdata.killed then
+		-- old data stores kill as a string ("0" ~= 0 would be true)
+		local kill = tonumber(pdata.kill) or 0
+		printSanctions(
+			player,
+			'powerban',
+			targetName,
+			pdata.playerid,
+			pdata.killed ~= 0 and kill ~= 0 and
+			(pdata.killed - kill * 60 * 1000) or nil,
+			pdata.killed ~= 0 and pdata.killed or nil,
+			'-',
+			pdata.killedby,
+			pdata.kill and kill
+		)
+	end
+
+	printSanctions(
+		player,
+		'pdata',
+		targetName,
+		pdata.playerid,
+		pdata.lastsanction,
+		pdata.banned,
+		pdata.bancount,
+		pdata.bannedby
+	)
+
+	if fileLookup and pdata.playerid then
+		local is_cached = schedule("sanction", false, printSanctionOnLoad, pdata.playerid, targetName, player)
+		if not is_cached then
+			sendChatFmt("Checking file data for %s's sanctions...", player, targetName)
+		end
+	end
+end
+
+onEvent("SanctionDataLoaded", function(name, pdata)
+	local requests = ban_requests[name]
+	if requests then
+		ban_requests[name] = nil
+
+		local request
+		for index = 1, requests._count do
+			request = requests[index]
+			if pdata.playerid then
+				updateSanctions(pdata.playerid, name, request[2], request[1])
+			else
+				tfm.exec.chatMessage("<v>[#] <r>The player cannot be (un)banned this way, try player id.", request[1])
+			end
+		end
+	end
+
+	requests = sanction_requests[name]
+	if requests then
+		sanction_requests[name] = nil
+
+		for moderator, fileLookup in next, requests do
+			printPlayerSanctions(moderator, name, pdata, fileLookup)
+		end
+	end
+end)
+
+onEvent("PlayerDataTimeout", function(name, kind)
+	if kind ~= PDATA_SANCTION then return end
+
+	local requests = ban_requests[name]
+	if requests then
+		ban_requests[name] = nil
+
+		for index = 1, requests._count do
+			tfm.exec.chatMessage("<v>[#] <r>Player doesn't seem to be online, try player id.", requests[index][1])
+		end
+	end
+
+	requests = sanction_requests[name]
+	if requests then
+		sanction_requests[name] = nil
+
+		for moderator in next, requests do
+			sendChatFmt('<r>Could not load player data for %s, try id', moderator, name)
+		end
+	end
+end)
 
 newCmd({ name = "kill",
 	perm = "kill",
@@ -730,29 +732,34 @@ newCmd({ name = "kill",
 
 	reported[requestplayer] = nil
 
+	local pdata = players_file[requestplayer]
+	if not pdata then
+		sendChatFmt("<r>Pdata of %s hasn't loaded yet.", player, requestplayer)
+		return
+	end
+
 	chatlogCmd(cmd, player, args)
-	schedule_player(requestplayer, true, function(pdata)
-		sendPacket(
-			"common",
-			packets.rooms.kill_logs,
-			requestplayer .. "\000" ..
-			killedTime .. "\000" ..
-			player .. "\000" ..
-			roomPlayer.id .. "\000" ..
-			(args[3] or '') .. "\000" ..
-			pdata.killed .. "\000" ..
-			pdata.kill .. "\000" ..
-			(pdata.killedby or '-')
-		)
+	sendPacket(
+		"common",
+		packets.rooms.kill_logs,
+		requestplayer .. "\000" ..
+		killedTime .. "\000" ..
+		player .. "\000" ..
+		roomPlayer.id .. "\000" ..
+		(args[3] or '') .. "\000" ..
+		pdata.killed .. "\000" ..
+		pdata.kill .. "\000" ..
+		(pdata.killedby or '-')
+	)
 
-		pdata.killedby = player
-		pdata.killed = os.time() + killedTime * 60 * 1000
-		pdata.kill = killedTime
+	pdata.killedby = player
+	pdata.killed = os.time() + killedTime * 60 * 1000
+	pdata.kill = killedTime
+	savePlayerData(requestplayer)
 
-		tfm.exec.chatMessage("<v>[#] <V>"..requestplayer.. " <j>can't use their powers for <b>"..killedTime.."</b> minutes.", nil)
-		translatedChatMessage("killed", requestplayer, killedTime)
-		checkKill(requestplayer)
-	end)
+	sendChatFmt("<V>%s <j>can't use their powers for <b>%s</b> minutes.", nil, requestplayer, killedTime)
+	translatedChatMessage("killed", requestplayer, killedTime)
+	checkKill(requestplayer)
 end })
 
 newCmd({ name = "setrank",
@@ -852,10 +859,15 @@ newCmd({ name = "file",
 				return
 			end
 
-			schedule_player(requestplayer, true, function(pdata)
-				pdata.week[1] = pdata.week[1] + count
-				tfm.exec.chatMessage("<v>[#] <j>"..requestplayer.."'s new weekly count: "..pdata.week[1], player)
-			end)
+			local pdata = players_file[requestplayer]
+			if not pdata then
+				sendChatFmt("<r>Pdata of %s hasn't loaded yet.", player, requestplayer)
+				return
+			end
+
+			pdata.week[1] = pdata.week[1] + count
+			savePlayerData(requestplayer)
+			sendChatFmt("<j>New weekly count for %s: %s", player, requestplayer, pdata.week[1])
 
 			chatlogCmd(cmd, player, args)
 			logCmd(cmd, player, args)

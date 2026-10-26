@@ -5,6 +5,9 @@
 --   PDATA_STAFF: eventStaffDataLoaded(name, commu, isHidden)
 --   PDATA_ROOM:  eventRoomDataLoaded(name, commu, room)
 --   PDATA_FULL:  eventOutPlayerDataParsed(name, data)
+--   PDATA_SANCTION: eventSanctionDataLoaded(name, data)
+--     data is either the parsed data or a table with only the sanction fields
+--     (playerid, banned, bancount, lastsanction, bannedby, killed, kill, killedby)
 -- If the server doesn't answer in time (they're offline):
 --   eventPlayerDataTimeout(name, kind)
 --
@@ -19,6 +22,7 @@ local PDATA_STAFF = 1
 local PDATA_ROOM = 2
 local PDATA_FULL = 3
 local PDATA_JOIN = 4
+local PDATA_SANCTION = 5
 
 -- defined in files.lua
 local parseOutPlayerData, parseRoomPlayerData
@@ -29,18 +33,36 @@ do
 	-- merged requests needing this many kinds parse the whole data at once
 	local FULL_PARSE_KINDS = 3
 
-	local find, match = string.find, string.match
+	local find, match, tonumber = string.find, string.match, tonumber
+
+	-- {key, pattern, is number}
+	local sanctionFields = {
+		{"playerid", nil, true},
+		{"banned", nil, true},
+		{"bancount", nil, true},
+		{"lastsanction", nil, true},
+		{"bannedby"},
+		{"killed", nil, true},
+		{"kill", nil, true},
+		{"killedby"},
+	}
+	for index = 1, #sanctionFields do
+		-- old data may store numbers as strings
+		sanctionFields[index][2] = '"' .. sanctionFields[index][1] .. '":%s*"?([^",}%s]*)'
+	end
 
 	-- fromRaw reads the few keys a kind needs straight from the json,
 	-- fromData answers from a parsed file. A kind without fromRaw needs a full parse.
 	-- Only use top-level keys that hold a single value in fromRaw.
+	-- Kinds with flatOnly need a full parse for data older than v0,
+	-- since their keys were somewhere else back then.
 	local kinds = {
 		[PDATA_STAFF] = {
 			fromRaw = function(name, raw)
 				eventStaffDataLoaded(
 					name,
-					match(raw, '"commu":"([^"]*)"'),
-					find(raw, '"hidden":true', 1, true) ~= nil
+					match(raw, '"commu":%s*"([^"]*)"'),
+					find(raw, '"hidden":%s*true') ~= nil
 				)
 			end,
 			fromData = function(name, data)
@@ -51,8 +73,8 @@ do
 			fromRaw = function(name, raw)
 				eventRoomDataLoaded(
 					name,
-					match(raw, '"commu":"([^"]*)"'),
-					match(raw, '"room":"([^"]*)"')
+					match(raw, '"commu":%s*"([^"]*)"'),
+					match(raw, '"room":%s*"([^"]*)"')
 				)
 			end,
 			fromData = function(name, data)
@@ -62,6 +84,24 @@ do
 		[PDATA_FULL] = {
 			fromData = function(name, data)
 				eventOutPlayerDataParsed(name, data)
+			end,
+		},
+		[PDATA_SANCTION] = {
+			flatOnly = true,
+			fromRaw = function(name, raw)
+				local data, field, value = {}
+				for index = 1, #sanctionFields do
+					field = sanctionFields[index]
+					value = match(raw, field[2])
+					if value and field[3] then
+						value = tonumber(value)
+					end
+					data[field[1]] = value
+				end
+				eventSanctionDataLoaded(name, data)
+			end,
+			fromData = function(name, data)
+				eventSanctionDataLoaded(name, data)
 			end,
 		},
 	}
@@ -75,8 +115,20 @@ do
 		pending[name] = nil
 
 		local requested = request.kinds
-		if not data and (request.count >= FULL_PARSE_KINDS or requested[PDATA_FULL]) then
-			data = parseOutPlayerData(name, raw)
+		if not data then
+			local parse = request.count >= FULL_PARSE_KINDS or requested[PDATA_FULL]
+			if not parse then
+				for kind in next, requested do
+					if kinds[kind].flatOnly then
+						-- data from v0 on has a top-level "v":number
+						parse = not find(raw, '"v":%s*%d')
+						break
+					end
+				end
+			end
+			if parse then
+				data = parseOutPlayerData(name, raw)
+			end
 		end
 
 		for kind in next, requested do
