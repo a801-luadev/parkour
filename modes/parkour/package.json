@@ -16,6 +16,7 @@
 
 	{"type": "require-file", "file": "modes/parkour/game.lua"},
 
+	{"type": "require-file", "file": "modes/parkour/pdata-loader.lua"},
 	{"type": "require-file", "file": "modes/parkour/files.lua"},
 	{"type": "require-file", "file": "modes/parkour/ranks.lua"},
 

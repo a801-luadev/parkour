@@ -30,7 +30,7 @@ local json = { _version = "0.1.2" }
 -- accessible via a single variable and by disabling some encoding/decoding
 -- checks. It is not recommended to use this version if you're not 100% sure your
 -- data is totally valid.
-
+do
 local string_format = string.format
 local string_byte = string.byte
 local table_concat = table.concat
@@ -41,6 +41,13 @@ local string_char = string.char
 local string_match = string.match
 local string_gmatch = string.gmatch
 local math_floor = math.floor
+-- globals are slow to look up, these are used for every value
+local tonumber = tonumber
+local tostring = tostring
+local type = type
+local rawget = rawget
+local select = select
+local pcall = pcall
 
 -------------------------------------------------------------------------------
 -- Encode
@@ -442,4 +449,141 @@ function json.decode(str)
     decode_error(str, idx, "trailing garbage")
   end
   return res
+end
+
+
+-------------------------------------------------------------------------------
+-- Flat objects
+-------------------------------------------------------------------------------
+-- A flat object only holds strings, numbers, booleans and lists of numbers
+-- (like player data). These handle that layout faster than decode/encode.
+
+local function flat_decode(str)
+  if string_byte(str, 1) ~= 123 then return end -- {
+
+  local res, pos = {}, 2
+  local _, last, key, chr, val, list, n, num
+
+  while true do
+    _, last, key = string_find(str, '^"([^"]+)":', pos)
+    if not key then return end
+    pos = last + 1
+    chr = string_byte(str, pos)
+
+    if chr == 34 then -- "string"
+      _, last = string_find(str, '"', pos + 1, true)
+      if not last then return end
+      val = string_sub(str, pos + 1, last - 1)
+      if string_find(val, "\\", 1, true) then return end -- escaped characters
+      res[key] = val
+      pos = last + 1
+
+    elseif chr == 91 or chr == 123 then -- [numbers] or an empty {}
+      _, last = string_find(str, chr == 91 and "]" or "}", pos, true)
+      if not last then return end
+      val = string_sub(str, pos + 1, last - 1)
+      list, n = {}, 0
+
+      if not string_find(val, "n", 1, true) then
+        -- no nulls: + 0 converts much faster than tonumber. A plain search
+        -- for "n" is used since a pattern check costs more than + 0 saves.
+        -- + 0 throws if the list holds something else (strings, tables),
+        -- json.flat_decode catches it.
+        for item in string_gmatch(val, "[^,]+") do
+          n = n + 1
+          list[n] = item + 0
+        end
+      else
+        for item in string_gmatch(val, "[^,]+") do
+          n = n + 1
+          if item ~= "null" then
+            num = tonumber(item)
+            if not num then return end -- not a list of numbers
+            list[n] = num
+          end
+        end
+      end
+
+      res[key] = list
+      pos = last + 1
+
+    else -- number, true, false or null
+      _, last = string_find(str, "[,}]", pos)
+      if not last then return end
+      val = string_sub(str, pos, last - 1)
+      if val == "true" then
+        res[key] = true
+      elseif val == "false" then
+        res[key] = false
+      elseif val ~= "null" then
+        num = tonumber(val)
+        if not num then return end
+        res[key] = num
+      end
+      pos = last
+    end
+
+    chr = string_byte(str, pos)
+    if chr == 125 then -- }
+      if pos ~= #str then return end -- trailing garbage
+      return res
+    end
+    if chr ~= 44 then return end -- ,
+    pos = pos + 1
+  end
+end
+
+-- Returns nil if str isn't a flat object, so the caller can fall back to
+-- json.decode.
+function json.flat_decode(str)
+  local done, res = pcall(flat_decode, str)
+  if done then
+    return res
+  end
+end
+
+
+-- Same output as json.encode, but lists of whole numbers are joined with a
+-- single table.concat instead of encoding each number. Keys must be plain
+-- strings (no characters that need escaping).
+function json.flat_encode(val)
+  local res, n = {}, 0
+  local kind, len, plain, item
+
+  for k, v in next, val do
+    kind = type(v)
+
+    if kind == "table" then
+      plain = rawget(v, 1) ~= nil -- encode treats it as a list
+      if plain then
+        len = v.__len or #v
+        for i = 1, len do
+          item = v[i]
+          if type(item) ~= "number" or item % 1 ~= 0 then
+            plain = false
+            break
+          end
+        end
+      end
+
+      if plain then
+        v = "[" .. table_concat(v, ",", 1, len) .. "]"
+      else
+        v = encode(v)
+      end
+
+    elseif kind == "string" then
+      v = encode_string(v)
+    elseif kind == "number" then
+      v = encode_number(v)
+    else
+      v = tostring(v)
+    end
+
+    n = n + 1
+    res[n] = '"' .. k .. '":' .. v
+  end
+
+  return "{" .. table_concat(res, ",") .. "}"
+end
 end

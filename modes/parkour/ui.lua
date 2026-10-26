@@ -48,16 +48,15 @@ local function closeAllInterfaces(player)
 end
 
 local function checkProfileRequest(player, data)
-	local fetch = profile_request[player]
-	if fetch then
-		local requester = fetch[1]
+	local requester = profile_request[player]
+	if requester then
+		profile_request[player] = nil
 		if Profile.open[requester] then
 			Profile:update(requester, player, data)
 		else
 			closeAllInterfaces(requester)
 			Profile:show(requester, player, data)
 		end
-		profile_request[player] = nil
 	end
 end
 
@@ -294,8 +293,7 @@ newCmd({ name = "staff",
 
 					if not requested[member] then
 						requested[member] = true
-						dont_parse_data[member] = true
-						system.loadPlayerData(member)
+						requestPlayerData(member, PDATA_STAFF)
 					end
 				end
 			end
@@ -372,8 +370,8 @@ newCmd({ name = {"profile", "p"},
 					Profile:show(player, request)
 				end
 			else
-				profile_request[request] = {player, os.time() + 1000}
-				system.loadPlayerData(request)
+				profile_request[request] = player
+				requestPlayerData(request, PDATA_FULL)
 			end
 		end
 	end })
@@ -588,8 +586,6 @@ onEvent("PlayerDataParsed", function(player, data)
 		no_help[player] = tfm.exec.addImage("1722eeef19f.png", "$" .. player, -10, -35)
 	end
 
-	checkProfileRequest(player, data)
-
 	setNameColor(player)
 
 	if data.settings[4] == 1 then
@@ -599,17 +595,26 @@ end)
 
 onEvent("OutPlayerDataParsed", checkProfileRequest)
 
+onEvent("PlayerDataTimeout", function(player, kind)
+	if kind ~= PDATA_FULL then return end
+
+	local requester = profile_request[player]
+	if not requester then return end
+	profile_request[player] = nil
+
+	translatedChatMessage("cant_load_profile", requester, player)
+end)
+
+onEvent("StaffDataLoaded", function(player, commu, isHidden)
+	if isHidden then
+		hidden[player] = commu or "xx"
+	else
+		online[player] = commu or "xx"
+	end
+end)
+
 onEvent("Loop", function(elapsed)
 	local now = os.time()
-
-	local to_remove, count = {}, 0
-	for player, data in next, profile_request do
-		if now >= data[2] then
-			count = count + 1
-			to_remove[count] = player
-			translatedChatMessage("cant_load_profile", data[1], player)
-		end
-	end
 
 	if used_powers.keep and elapsed >= 27000 then
 		used_powers = used_powers.keep
@@ -623,10 +628,6 @@ onEvent("Loop", function(elapsed)
 				PowerTracker[i]:update(player, used_powers)
 			end
 		end
-	end
-
-	for idx = 1, count do
-		profile_request[to_remove[idx]] = nil
 	end
 
 	if update_at >= now then
@@ -645,8 +646,7 @@ onEvent("Loop", function(elapsed)
 		local commu, players, list
 		local rank_name, rank, info
 		local player, tbl, hide
-		dont_parse_data = {}
-		
+
 		for i = 1, #shown_ranks do
 			rank_name = shown_ranks[i]
 			rank = ranks[rank_name]

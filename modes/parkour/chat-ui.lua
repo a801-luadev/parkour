@@ -12,18 +12,28 @@ local init_time = os.time()
 local visitors = { _len=0 }
 local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 
-local function checkRoomRequest(player, data)
-	local fetch = fetching_player_room[player]
-	if fetch then
-		if data.commu then
-			tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s community: <d>" .. data.commu, fetch[1])
-		end
-		if data.room then
-			tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. data.room, fetch[1])
-		end
-		fetching_player_room[player] = nil
+onEvent("RoomDataLoaded", function(player, commu, room_name)
+	local requester = fetching_player_room[player]
+	if not requester then return end
+	fetching_player_room[player] = nil
+
+	if commu then
+		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s community: <d>" .. commu, requester)
 	end
-end
+	if room_name then
+		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. room_name, requester)
+	end
+end)
+
+onEvent("PlayerDataTimeout", function(player, kind)
+	if kind ~= PDATA_ROOM then return end
+
+	local requester = fetching_player_room[player]
+	if not requester then return end
+	fetching_player_room[player] = nil
+
+	tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n> is offline.", requester)
+end)
 
 onEvent("NewGame", function()
 	fastest = {}
@@ -512,8 +522,8 @@ newCmd({ name = "room",
 			return
 		end
 
-		fetching_player_room[fetching] = { player, os.time() + 1000 }
-		system.loadPlayerData(fetching)
+		fetching_player_room[fetching] = player
+		requestPlayerData(fetching, PDATA_ROOM)
 		logCmd(cmd, player, args)
 	end })
 
@@ -547,14 +557,11 @@ onEvent("ParsedTextAreaCallback", function(id, player, action, args)
 	end
 end)
 
-onEvent("OutPlayerDataParsed", checkRoomRequest)
-
 onEvent("PlayerDataParsed", function(player, data)
 	if data.langue and translations[data.langue] then
 		player_langs[player] = translations[data.langue]
 	end
 
-	checkRoomRequest(player, data)
 	Quests.trigger_map(player)
 
 	if data.settings[6] == 1 then
@@ -587,19 +594,6 @@ end)
 
 onEvent("Loop", function()
 	local now = os.time()
-
-	local to_remove, count = {}, 0
-	for player, data in next, fetching_player_room do
-		if now >= data[2] then
-			count = count + 1
-			to_remove[count] = player
-			tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n> is offline.", data[1])
-		end
-	end
-
-	for idx = 1, count do
-		fetching_player_room[to_remove[idx]] = nil
-	end
 
 	if now >= next_easter_egg then
 		next_easter_egg = now + math.random(30, 60) * 60 * 1000

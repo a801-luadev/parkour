@@ -9,7 +9,6 @@ local Quests, Milestones
 
 local badges, titles
 
-local dont_parse_data = {}
 
 local files = {
 	init = 17, -- ranks, maps, maps2, maps3, maps4, maps5, map_polls
@@ -852,7 +851,7 @@ function savePlayerData(player, immediate)
 	eventPlayerDataUpdated(player, players_file[player])
 	system.savePlayerData(
 		player,
-		json.encode(players_file[player])
+		json.flat_encode(players_file[player])
 	)
 end
 
@@ -878,79 +877,45 @@ local function updateData(player, data)
 	end
 end
 
-onEvent("PlayerDataLoaded", function(player, data)
-	if channels[player] then return end
-	if in_room[player] then return end
-	if player:sub(1, 1) == "*" then return end
+-- Player data is a flat object (strings, numbers, booleans and lists of
+-- numbers), json.flat_decode reads it much faster than json.decode, which is
+-- only used for what it can't read (escaped strings, nested tables...).
+-- Returns nil if the data is corrupt.
+local function decodePlayerData(raw)
+	local data = json.flat_decode(raw)
+	if data then return data end
 
-	if dont_parse_data[player] then
-		dont_parse_data[player] = nil
-		local isHidden = data:find('"hidden":true')
-		local commu = data:match('"commu":"(.-)"') or "xx"
-
-		if isHidden then
-			hidden[player] = commu
-		else
-			online[player] = commu
-		end
-
-		return
+	local done
+	done, data = pcall(json.decode, raw)
+	if done and type(data) == "table" then
+		return data
 	end
+	print(data)
+end
 
-	if data == "" then
-		data = {}
-	else
-		local done
-		done, data = pcall(json.decode, data)
-
-		if not done then
-			data = {}
-		end
-	end
+-- Parses the data of a player who isn't in the room (used by requestPlayerData)
+function parseOutPlayerData(player, data)
+	data = data ~= "" and decodePlayerData(data) or {}
 
 	if data.v ~= data_version then
 		updateData(player, data)
 	end
 
-	local commu = data.commu or "xx"
-	if not data.hidden then
-		online[player] = commu
-	else
-		hidden[player] = commu
-	end
-
 	data.settings.__len = settings_length
 	setmetatable(data, pdataFunctions)
-	eventOutPlayerDataParsed(player, data)
-end)
+	return data
+end
 
-onEvent("PlayerDataLoaded", function(player, data)
-	if channels[player] then return end
-	if not in_room[player] then return end
-	if player:sub(1, 1) == "*" then return end
-
-	if dont_parse_data[player] then
-		dont_parse_data[player] = nil
-		local isHidden = data:find('"hidden":true')
-		local commu = data:match('"commu":"(.-)"') or room.community
-
-		if isHidden then
-			hidden[player] = commu
-		else
-			online[player] = commu
-		end
-
-		return
-	end
+-- Parses the data of a player who joined the room (used by requestPlayerData)
+function parseRoomPlayerData(player, data)
+	if players_file[player] then return end
 
 	if data == "" then
 		data = {}
 	else
-		local done
-		done, data = pcall(json.decode, data)
+		data = decodePlayerData(data)
 
-		if not done then
-			print(data)
+		if not data then
 			translatedChatMessage("corrupt_data", player)
 			return
 		end
@@ -969,10 +934,6 @@ onEvent("PlayerDataLoaded", function(player, data)
 		online[player] = commu
 	else
 		hidden[player] = commu
-	end
-
-	if players_file[player] then
-		return
 	end
 
 	players_file[player] = data
@@ -996,7 +957,7 @@ onEvent("PlayerDataLoaded", function(player, data)
 	Quests.trigger_load(player, data)
 	savePlayerData(player)
 	eventPlayerDataParsed(player, data)
-end)
+end
 
 onEvent("SavingFile", function(id, data, name)
 	id = id or tostring(files[name])
@@ -1063,7 +1024,7 @@ onEvent("NewPlayer", function(player)
 	if player:sub(1, 1) == "*" then
 		enableSpecMode(player, true)
 	else
-		system.loadPlayerData(player)
+		requestPlayerData(player, PDATA_JOIN)
 	end
 end)
 

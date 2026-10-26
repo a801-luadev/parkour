@@ -21,6 +21,7 @@ end
 -- by principle the room player is in has the most up to date player data
 -- and changing player data outside of player's current room is not allowed
 -- so whether you want to save it or not we can return the cached pdata
+-- (save only works for players in the room)
 -- also returns true if data is from the cache
 local function schedule_player(name, save, callback, timeoutCallback)
 	if players_file[name] then
@@ -30,8 +31,16 @@ local function schedule_player(name, save, callback, timeoutCallback)
 		end
 		return true
 	end
-	pdataRequest[name] = { callback, os.time() + 1000, save, timeoutCallback }
-	system.loadPlayerData(name)
+
+	local requests = pdataRequest[name]
+	if not requests then
+		requests = {_count = 0}
+		pdataRequest[name] = requests
+	end
+	requests._count = requests._count + 1
+	requests[requests._count] = { callback, save, timeoutCallback }
+
+	requestPlayerData(name, PDATA_FULL)
 end
 
 local function checkWeeklyWinners(player, data)
@@ -217,18 +226,35 @@ onEvent("GameDataLoaded", function(data, fileid)
 	end
 end)
 
-local function playerDataRequests(player, data)
-	local fetchData = pdataRequest[player]
-	if fetchData then
-		fetchData[1](data)
+onEvent("OutPlayerDataParsed", function(player, data)
+	local requests = pdataRequest[player]
+	if not requests then return end
+	pdataRequest[player] = nil
 
-		if fetchData[3] then
-			system.savePlayerData(player, json.encode(data))
-		end
-
-		pdataRequest[player] = nil
+	local save = false
+	for index = 1, requests._count do
+		requests[index][1](data)
+		save = save or requests[index][2]
 	end
-end
+
+	if save then
+		savePlayerData(player)
+	end
+end)
+
+onEvent("PlayerDataTimeout", function(player, kind)
+	if kind ~= PDATA_FULL then return end
+
+	local requests = pdataRequest[player]
+	if not requests then return end
+	pdataRequest[player] = nil
+
+	for index = 1, requests._count do
+		if requests[index][3] then
+			requests[index][3](player)
+		end
+	end
+end)
 
 local function updateSanctions(playerID, playerName, time, moderator, minutes)
 	playerID = tonumber(playerID)
@@ -630,17 +656,19 @@ newCmd({ name = {"sanctions", "bancount", "baninfo"},
 	if targetName then
 		local is_cached = schedule_player(targetName, false, function(pdata)
 			if pdata.kill or pdata.killed then
+				-- old data stores kill as a string ("0" ~= 0 would be true)
+				local kill = tonumber(pdata.kill) or 0
 				printSanctions(
 					player,
 					'powerban',
 					targetName,
 					pdata.playerid,
-					pdata.killed ~= 0 and pdata.kill ~= 0 and
-					(pdata.killed - pdata.kill * 60 * 1000) or nil,
+					pdata.killed ~= 0 and kill ~= 0 and
+					(pdata.killed - kill * 60 * 1000) or nil,
 					pdata.killed ~= 0 and pdata.killed or nil,
 					'-',
 					pdata.killedby,
-					pdata.kill
+					pdata.kill and kill
 				)
 			end
 
@@ -1137,32 +1165,9 @@ onEvent("PacketReceived", function(channel, id, packet)
 end)
 
 onEvent("PlayerDataParsed", checkWeeklyWinners)
-onEvent("PlayerDataParsed", playerDataRequests)
 onEvent("PlayerDataParsed", function(player, data)
 	if data and data.kick and (data.kick == 1 or os.time() < data.kick) then
 		tfm.exec.kickPlayer(player)
-	end
-end)
-onEvent("OutPlayerDataParsed", playerDataRequests)
-
-onEvent("Loop", function(elapsed)
-	local now = os.time()
-	
-	local to_remove, count = {}, 0
-	for player, data in next, pdataRequest do
-		if now >= data[2] then
-			count = count + 1
-			to_remove[count] = player
-		end
-	end
-	
-	local name
-	for idx = 1, count do
-		name = to_remove[idx]
-		if pdataRequest[name][4] then
-			pdataRequest[name][4](name)
-		end
-		pdataRequest[name] = nil
 	end
 end)
 end
