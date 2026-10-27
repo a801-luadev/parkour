@@ -8,6 +8,7 @@ do
 	local refundMode = newSessionTable()
 	local confirmIndex = newSessionTable()
 	local lastPageTab = newSessionTable()
+	local renderedPageTab = newSessionTable()
 
 	for i=1, 18 do
 		priceTAs[i] = allocateId("textarea", 30000)
@@ -152,6 +153,13 @@ do
 			alpha = 0,
 			canUpdate = true,
 			text = function(self, player, page, tab, data)
+			-- item images only depend on the page, skip them on buy/equip/refund clicks
+			local pagetab = page * 100 + tab
+			if renderedPageTab[player] == pagetab then
+				return ""
+			end
+			renderedPageTab[player] = pagetab
+
 			local images = shop_images[player] or {}
 			shop_images[player] = images
 			for index = 1, #images do
@@ -282,6 +290,8 @@ do
 				savePlayerData(player)
 				isSave[player] = nil
 			end
+
+			renderedPageTab[player] = nil
 
 			local page = self.args[player][1]
 			local tab = self.args[player][2]

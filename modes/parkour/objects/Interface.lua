@@ -256,15 +256,17 @@ do
 			data = self.textareas[index]
 
 			if data.canUpdate then
-				ui.updateTextArea(
-					data.id,
+				-- static text never changes, only its onUpdate needs to run
+				if data.translation or not data.text_str then
+					ui.updateTextArea(
+						data.id,
 
-					data.translation and translatedMessage(data.translation, player) or
-					data.text_str and data.text_str or
-					data:text_fnc(player, arg1, arg2, arg3, arg4),
+						data.translation and translatedMessage(data.translation, player) or
+						data:text_fnc(player, arg1, arg2, arg3, arg4),
 
-					player
-				)
+						player
+					)
+				end
 
 				if data.onUpdate then
 					data:onUpdate(player, arg1, arg2, arg3, arg4)

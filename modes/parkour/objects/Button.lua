@@ -91,6 +91,8 @@ do
 
 			enabled = {},
 			disable = function(self, player)
+				-- already drawn this way (show always redraws, open is set after it)
+				if self.enabled[player] == false and interface.open[player] then return end
 				self.enabled[player] = false
 				if imageOnly then return end
 				ui.addTextArea(
@@ -106,6 +108,7 @@ do
 				)
 			end,
 			enable = function(self, player)
+				if self.enabled[player] == true and interface.open[player] then return end
 				self.enabled[player] = true
 				if imageOnly then return end
 				ui.addTextArea(
