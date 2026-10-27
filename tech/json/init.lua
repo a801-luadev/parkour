@@ -30,7 +30,7 @@ local json = { _version = "0.1.2" }
 -- accessible via a single variable and by disabling some encoding/decoding
 -- checks. It is not recommended to use this version if you're not 100% sure your
 -- data is totally valid.
-do
+
 local string_format = string.format
 local string_byte = string.byte
 local table_concat = table.concat
@@ -53,7 +53,7 @@ local pcall = pcall
 -- Encode
 -------------------------------------------------------------------------------
 
-
+do
 local encode
 
 local escape_char_map = {

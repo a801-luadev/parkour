@@ -18,16 +18,17 @@
 -- Requests for the same player are merged into a single load. Players in the
 -- room are answered from players_file.
 
-local PDATA_STAFF = 1
-local PDATA_ROOM = 2
-local PDATA_FULL = 3
-local PDATA_JOIN = 4
-local PDATA_SANCTION = 5
+-- Keeping these as globals since we are reaching 200 locals limit
+PDATA_STAFF = 1
+PDATA_ROOM = 2
+PDATA_FULL = 3
+PDATA_JOIN = 4
+PDATA_SANCTION = 5
 
 -- defined in files.lua
-local parseOutPlayerData, parseRoomPlayerData
+--local parseOutPlayerData, parseRoomPlayerData
 
-local requestPlayerData
+--local requestPlayerData
 do
 	local REQUEST_TIMEOUT = 1000
 	-- merged requests needing this many kinds parse the whole data at once
