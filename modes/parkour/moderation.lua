@@ -20,29 +20,6 @@ local function schedule(fileid, save, callback, a, b, c, d)
 	to_do[#to_do + 1] = { fileid, save, callback, a, b, c, d }
 end
 
-local function checkWeeklyWinners(player, data)
-	if not room.playerList[player] then return end
-	local id = tostring(room.playerList[player].id)
-
-	if not weeklyfile or not weeklyfile.wl or not weeklyfile.wl[id] then 
-		return
-	end
-
-	if os.time() < weeklyfile.wl[id] then
-		return
-	end
-
-	if data.badges[3] ~= 1 then
-		data.badges[3] = 1
-		NewBadgeInterface:show(player, 3, 1)
-		savePlayerData(player)
-	end
-
-	schedule("leaderboard", true, function(filedata)
-		filedata.weekly.wl[id] = nil
-	end)
-end
-
 local function getSanction(id, data)
 	local sanction
 
@@ -198,7 +175,7 @@ onEvent("GameDataLoaded", function(data, fileid)
 		end
 	end
 
-	if save or (data.ranking or data.weekly) then
+	if save then
 		eventSavingFile(fileid, data)
 	end
 end)
@@ -1176,7 +1153,6 @@ onEvent("PacketReceived", function(channel, id, packet)
 	end
 end)
 
-onEvent("PlayerDataParsed", checkWeeklyWinners)
 onEvent("PlayerDataParsed", function(player, data)
 	if data and data.kick and (data.kick == 1 or os.time() < data.kick) then
 		tfm.exec.kickPlayer(player)

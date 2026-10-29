@@ -13,7 +13,6 @@ do
 
   local shop_pattern = createInnerPattern(11)
   local sanction_pattern = createInnerPattern(5)
-  local leaderboard_pattern = createInnerPattern(4)
 
   local function split(str)
     local arr, len = {}, 0
@@ -90,14 +89,6 @@ do
         items[item.id] = item
       end
 
-    elseif kind == "leaderboard" then
-      for i=index, last do
-        item = pack(match(all[i], leaderboard_pattern))
-        item[1] = tonumber(item[1])
-        item[3] = tonumber(item[3])
-        items[i] = item
-      end
-
     else
       error("Invalid kind: " .. tostring(kind))
     end
@@ -110,35 +101,6 @@ do
     end
 
     return items
-  end
-
-  local function updateAll(state, kind)
-    if not state.parsed then
-      return
-    end
-
-    if kind ~= "leaderboard" then
-      error("Invalid kind: " .. tostring(kind))
-    end
-
-    local items = state.items
-    local all = state.all
-	  local oldCount = state.count
-    local count = #items
-
-    state.updated = true
-    state.count = count
-
-    for i = 1, count do
-      all[i] = concat(items[i], "\2")
-    end
-
-    -- Remove old serialized entries if the new leaderboard is shorter.
-    for i = count + 1, oldCount do
-      all[i] = nil
-    end
-
-    return true
   end
 
   local function update(state, item, kind)
@@ -273,6 +235,5 @@ do
     dump = dump,
     find = find,
     updateSingle = updateSingle,
-    updateAll = updateAll,
   }
 end

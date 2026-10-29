@@ -6,5 +6,9 @@
 	{
 		"type": "require-file",
 		"file": "tech/filemanager/split.lua"
+	},
+	{
+		"type": "require-file",
+		"file": "tech/filemanager/leaderboard.lua"
 	}
 ]
