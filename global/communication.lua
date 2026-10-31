@@ -6,6 +6,7 @@
 	sendPacket(channel, id, packet)
 
 	eventPacketReceived(channel, id, packet)
+	eventRawPacketsReceived(channel, pipe, data) -- if defined, replaces eventPacketReceived
 ]]
 
 channels = {
@@ -126,7 +127,11 @@ function pipeHandler(pipe, data)
 
 		channel[pipe] = expire
 
-		if eventPacketReceived then
+		if eventRawPacketsReceived then
+			-- the whole pipe content, unparsed (the bot room forwards it as is)
+			eventRawPacketsReceived(channel.name, pipe, data)
+
+		elseif eventPacketReceived then
 			if channel.structure then
 				for packet in string.gmatch(data, channel.structure) do
 					eventPacketReceived(channel.name, -1, packet)

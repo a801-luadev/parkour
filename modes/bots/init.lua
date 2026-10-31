@@ -353,13 +353,14 @@ onEvent("SendingPacket", function(id, packet)
 	sendPacket("bots", id, packet)
 end)
 
-onEvent("PacketReceived", function(channel, id, packet, map, time)
-	if channel == "common" then
-		if id <= 255 then -- see textareas
-			addTextArea(id, packet, parkour_bot)
-		end
-	elseif channel == "victory" then
-		tfm.exec.playMusic('victory', tostring(packet), 0, false, false, parkour_bot)
+onEvent("RawPacketsReceived", function(channel, pipe, data)
+	tfm.exec.playMusic('channel:' .. channel .. ':' .. pipe, data, 0, false, false, parkour_bot)
+end)
+
+-- packets that don't come from a pipe (paused_events in event-handler.lua)
+onEvent("PacketReceived", function(channel, id, packet)
+	if channel == "common" and id <= 255 then -- see textareas
+		addTextArea(id, packet, parkour_bot)
 	end
 end)
 
