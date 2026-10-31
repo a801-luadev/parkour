@@ -750,7 +750,10 @@ onEvent("PlayerBonusGrabbed", function(player, bonus)
 	if not victory[player] then
 		tfm.exec.setPlayerScore(player, checkpointIndex, false)
 	end
-	tfm.exec.removeImage(checkpoints[player])
+	if checkpoints[player] then
+		tfm.exec.removeImage(checkpoints[player])
+		checkpoints[player] = nil
+	end
 	tfm.exec.linkMice(player, player, false)
 
 	if checkpointIndex == #levels then
@@ -838,7 +841,7 @@ newCmd({ name = "cp",
 		end
 		if not players_level[player] then return end
 
-		tfm.exec.removeBonus(players_level[player] + 1, player)
+		tfm.exec.removeBonus(bonusOffset + players_level[player] + 1, player)
 		cp_available[player] = os.time() + 750
 		players_level[player] = checkpoint
 		changePlayerSize(player, levels[checkpoint].size)
@@ -923,7 +926,7 @@ newCmd({ name = "redo",
 		if not review_mode then return end
 		if not players_level[player] then return end
 
-		tfm.exec.removeBonus(players_level[player] + 1, player)
+		tfm.exec.removeBonus(bonusOffset + players_level[player] + 1, player)
 		cp_available[player] = os.time() + 750
 		players_level[player] = 1
 		changePlayerSize(player, levels[1].size)

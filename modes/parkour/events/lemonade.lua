@@ -69,7 +69,7 @@ do
 
     -- bonus id for item pickups
     for i=1, 3 do
-      lemonade.bonus_rev[i] = allocateId("bonus", 20000)
+      lemonade.bonus_rev[i] = allocateId("bonus:event", 20000)
       lemonade.bonus[lemonade.bonus_rev[i]] = i
     end
 

@@ -225,7 +225,7 @@ do
         item = { x = math.random(50, 1580), y = math.random(50, 700), type = selectMaterial(difficulty) }
         halloween.collect.items[i] = item
         if not halloween.collect.bonus_rev[i] then
-          halloween.collect.bonus_rev[i] = allocateId("bonus", 20000)
+          halloween.collect.bonus_rev[i] = allocateId("bonus:event", 20000)
           halloween.collect.bonus[halloween.collect.bonus_rev[i]] = i
         end
       end
@@ -538,6 +538,7 @@ do
     onEvent("PlayerDataParsed", function(player, init)
       if halloween.isCauldronAllowed() then
         if halloween.cauldron.active and halloween.state == DEPOSIT then
+          halloween_cauldron.hide(player)
           halloween_cauldron.show(player)
         end
         return
@@ -563,8 +564,10 @@ do
     end)
 
     onEvent("PlayerLeft", function(player)
-      if halloween.collect.images[player] then
-        halloween.collect.images[player] = nil
+      for i=1, 3 do
+        if halloween.collect.images[i] then
+          halloween.collect.images[i][player] = nil
+        end
       end
 
       if halloween.state == DEPOSIT and halloween.cauldron.active then
