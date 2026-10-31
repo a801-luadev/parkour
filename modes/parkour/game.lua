@@ -210,7 +210,7 @@ function showStats()
 
 	ui.setMapName(string.format(
 		"%s%s<g>   |   %s",
-		map_name,
+		map_name:gsub('([Hh][Tt])([Tt][Pp])', '%1\226\128\139%2'),
 		inreview_map and ' - <bv>In-Review' or
 		colortag and string.format(
 			' - <%s>%s',
