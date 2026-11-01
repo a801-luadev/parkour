@@ -382,7 +382,7 @@ newCmd({ name = {"addmap", "removemap"},
 		return
 	end
 
-	local diffIndex = tonumber(rotation:sub(5,5))
+	local diffIndex = tonumber(rotation:sub(5,5)) or 1 -- "maps" is difficulty 1
 	local codeMap, indexList = {}, {}
 	local mapcode, rotation_index
 	local addmap = args[0] == "addmap"
