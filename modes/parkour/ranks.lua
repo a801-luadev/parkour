@@ -95,7 +95,62 @@ for rank, perms in next, ranks_permissions do
 	end
 end
 
-onEvent("GameDataLoaded", function(data)
+-- !setrank changes waiting for the init file: name -> rank id, or false to remove
+local rank_changes = {}
+
+newCmd({ name = "setrank",
+	rank = "admin",
+	min_args = 2,
+	fn = function(player, args)
+	local targetPlayer = capitalize(args[1])
+	local newRanks = {}
+	local ID = 0
+
+	if not string.find(targetPlayer, "#", 1, true) then
+		targetPlayer = targetPlayer .. "#0000"
+	end
+
+	if args[2] ~= "none" then
+		for i = 2, #args do
+			if ranks_id[args[i]] then
+				ID = ID + ranks_id[args[i]]
+				newRanks[args[i]] = true
+			else
+				return tfm.exec.chatMessage("<v>[#] <r>Invalid rank: " .. args[i], player)
+			end
+		end
+	end
+
+	if ID == 0 then
+		player_ranks[targetPlayer] = nil
+		rank_changes[targetPlayer] = false
+		tfm.exec.chatMessage("<v>[#] <r>All ranks removed from " .. targetPlayer, player)
+	else
+		player_ranks[targetPlayer] = newRanks
+		rank_changes[targetPlayer] = ID
+		tfm.exec.chatMessage("<v>[#] <r>Ranks has been set.", player)
+	end
+
+	logCmd(cmd, player, args)
+end })
+
+onEvent("GameDataLoaded", function(data, fileid)
+	local save = maps.init_changed -- maps.lua's listener runs before this one
+	maps.init_changed = nil
+
+	-- applied before the rebuild, so the ranks in memory have them too
+	if data.ranks and next(rank_changes) then
+		for name, id in next, rank_changes do
+			data.ranks[name] = id or nil
+		end
+		rank_changes = {}
+		save = true
+	end
+
+	if save then
+		eventSavingFile(fileid, data)
+	end
+
 	if data.ranks then
 		ranks, perms, player_ranks = {
 			admin = {_count = 0},

@@ -367,78 +367,6 @@ newCmd({ name = "punban",
 	handleAdminBan(player, false, targetPlayer, playerID, 0, 0)
 end })
 
-newCmd({ name = {"addmap", "removemap"},
-	perm = "manage_maps",
-	min_args = 2,
-	fn = function(player, args)
-	local diffMap = {
-		diff1="maps", diff2="maps2", diff3="maps3", diff4="maps4", diff5="maps5",
-		d1="maps", d2="maps2", d3="maps3", d4="maps4", d5="maps5",
-		["1"]="maps", ["2"]="maps2", ["3"]="maps3", ["4"]="maps4", ["5"]="maps5",
-	}
-	local rotation = diffMap[args[1]]
-	if not rotation then
-		tfm.exec.chatMessage("<v>[#] <r>Type a valid difficulty: diff1-5", player)
-		return
-	end
-
-	local diffIndex = tonumber(rotation:sub(5,5)) or 1 -- "maps" is difficulty 1
-	local codeMap, indexList = {}, {}
-	local mapcode, rotation_index
-	local addmap = args[0] == "addmap"
-
-	for i=2,args._len do
-		mapcode = args[i]:gsub("^@", "")
-		mapcode = tonumber(mapcode)
-		if not mapcode then
-			return tfm.exec.chatMessage("<v>[#] <r>Invalid map code: " .. args[i], player)
-		end
-
-		if not codeMap[mapcode] then
-			rotation_index = table_find(maps[diffIndex].list, mapcode)
-
-			if addmap and rotation_index then
-				tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " is already in rotation.", player)
-				return
-			elseif not addmap and not rotation_index then
-				tfm.exec.chatMessage("<v>[#] <r>Map @" .. mapcode .. " is not in rotation.", player)
-				return
-			else
-				indexList[1 + #indexList] = rotation_index or mapcode
-				codeMap[mapcode] = true
-			end
-		end
-	end
-
-	if #indexList == 0 then
-		return
-	end
-
-	table.sort(indexList)
-	tfm.exec.chatMessage("<v>[#] <j>Scheduled map update job.", player)
-	schedule("init", true, function(data)
-		local rotation_table = data[rotation]
-
-		if addmap then
-			for mapcode in next, codeMap do
-				rotation_table[1 + #rotation_table] = mapcode
-			end
-		else
-			local index
-			for i=#indexList, 1, -1 do
-				index = indexList[i]
-				indexList[i] = rotation_table[index]
-				table.remove(rotation_table, index)
-			end
-		end
-
-		tfm.exec.chatMessage("<v>[#] <j>Updated maps: " .. table.concat(indexList, ' '), player)
-	end)
-
-	chatlogCmd(cmd, player, args, ranks.mapper)
-	logCmd(cmd, player, args)
-end })
-
 local function printSanctions(target, kind, name, pid, timestamp, time, level, mod, minutes)
 	local banState = ""
 
@@ -737,44 +665,6 @@ newCmd({ name = "kill",
 	sendChatFmt("<V>%s <j>can't use their powers for <b>%s</b> minutes.", nil, requestplayer, killedTime)
 	translatedChatMessage("killed", requestplayer, killedTime)
 	checkKill(requestplayer)
-end })
-
-newCmd({ name = "setrank",
-	rank = "admin",
-	min_args = 2,
-	fn = function(player, args)
-	local targetPlayer = capitalize(args[1])
-	local newRanks = {}
-	local ID = 0
-
-	if not string.find(targetPlayer, "#", 1, true) then
-		targetPlayer = targetPlayer .. "#0000"
-	end
-
-	if args[2] ~= "none" then
-		for i = 2, #args do
-			if ranks_id[args[i]] then
-				ID = ID + ranks_id[args[i]]
-				newRanks[args[i]] = true
-			else
-				return tfm.exec.chatMessage("<v>[#] <r>Invalid rank: " .. args[i], player)
-			end
-		end
-	end
-
-	if ID == 0 then
-		player_ranks[targetPlayer] = nil
-		ID = nil
-		tfm.exec.chatMessage("<v>[#] <r>All ranks removed from " .. targetPlayer, player)
-	else
-		player_ranks[targetPlayer] = newRanks
-		tfm.exec.chatMessage("<v>[#] <r>Ranks has been set.", player)
-	end
-
-	schedule("init", true, function(data)
-		data.ranks[targetPlayer] = ID
-	end)
-	logCmd(cmd, player, args)
 end })
 
 newCmd({ name = "file",

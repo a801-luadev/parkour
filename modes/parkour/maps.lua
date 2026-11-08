@@ -125,12 +125,16 @@ local function selectMap(sections, list, count)
 			section[index] = section[swap]
 			section[swap] = current
 		end
+	end
 
-	elseif (section._pointer == sections._count -- is it the las section?
-			and section._count < maps_per_section -- does it have less maps than a regular section?
-			and sections._map_pointer > section._count) then -- have all the maps from this section been played?
-		sections._map_pointer = sections._map_pointer + 1 -- increase map pointer
-		return selectMap(sections, list, count) -- and select another map
+	-- the short section (sections are shuffled, so it can be anywhere) has no
+	-- map left at this pointer: move on to the next section
+	if sections._map_pointer > section._count then
+		if sections._pointer == sections._count then
+			-- the last section moves the map pointer, as below
+			sections._map_pointer = sections._map_pointer + 1
+		end
+		return selectMap(sections, list, count)
 	end
 
 	local map = section[sections._map_pointer]
@@ -249,8 +253,116 @@ local function parseMapImages(params, images, limit, target)
 	end
 end
 
+-- !addmap / !removemap changes waiting for the init file: {add, key, codes, player}
+maps.changes = {_count = 0}
+
+do
+local rotation_keys = {
+	diff1 = "maps", diff2 = "maps2", diff3 = "maps3", diff4 = "maps4", diff5 = "maps5",
+	d1 = "maps", d2 = "maps2", d3 = "maps3", d4 = "maps4", d5 = "maps5",
+	["1"] = "maps", ["2"] = "maps2", ["3"] = "maps3", ["4"] = "maps4", ["5"] = "maps5",
+}
+
+newCmd({ name = {"addmap", "removemap"},
+	perm = "manage_maps",
+	min_args = 2,
+	fn = function(player, args)
+	local key = rotation_keys[args[1]]
+	if not key then
+		tfm.exec.chatMessage("<v>[#] <r>Type a valid difficulty: diff1-5", player)
+		return
+	end
+
+	if first_data_load then
+		tfm.exec.chatMessage("<v>[#] <r>Maps aren't loaded yet, try again later.", player)
+		return
+	end
+
+	local list = maps[tonumber(key:sub(5, 5)) or 1].list -- "maps" is difficulty 1
+	local add = args[0] == "addmap"
+	local codes, seen = {}, {}
+	local code, in_rotation
+
+	for i = 2, args._len do
+		code = tonumber((args[i]:gsub("^@", "")))
+		if not code then
+			return tfm.exec.chatMessage("<v>[#] <r>Invalid map code: " .. args[i], player)
+		end
+
+		if not seen[code] then
+			in_rotation = table_find(list, code)
+
+			if add and in_rotation then
+				tfm.exec.chatMessage("<v>[#] <r>Map @" .. code .. " is already in rotation.", player)
+				return
+			elseif not add and not in_rotation then
+				tfm.exec.chatMessage("<v>[#] <r>Map @" .. code .. " is not in rotation.", player)
+				return
+			end
+
+			seen[code] = true
+			codes[#codes + 1] = code
+		end
+	end
+
+	local changes = maps.changes
+	changes._count = changes._count + 1
+	changes[changes._count] = {add, key, codes, player}
+
+	tfm.exec.chatMessage("<v>[#] <j>Scheduled map update job.", player)
+	chatlogCmd(cmd, player, args, ranks.mapper)
+	logCmd(cmd, player, args)
+end })
+
+-- applies the queued changes by code, against the file's lists (another room
+-- may have changed them since the command checked the room's rotation)
+local function applyMapChanges(data)
+	local changes = maps.changes
+	if changes._count == 0 then return end
+
+	local change, list, codes, code, index, done, player
+	for i = 1, changes._count do
+		change = changes[i]
+		changes[i] = nil
+		list, codes, player = data[change[2]], change[3], change[4]
+		if not list then
+			list = {}
+			data[change[2]] = list
+		end
+
+		done = {}
+		for j = 1, #codes do
+			code = codes[j]
+			index = table_find(list, code)
+
+			if change[1] then
+				if index then
+					tfm.exec.chatMessage("<v>[#] <r>Map @" .. code .. " is already in rotation.", player)
+				else
+					list[#list + 1] = code
+					done[#done + 1] = code
+				end
+			elseif index then
+				table.remove(list, index)
+				done[#done + 1] = code
+			else
+				tfm.exec.chatMessage("<v>[#] <r>Map @" .. code .. " is not in rotation.", player)
+			end
+		end
+
+		if done[1] then
+			table.sort(done)
+			tfm.exec.chatMessage("<v>[#] <j>Updated maps: " .. table.concat(done, ' '), player)
+			maps.init_changed = true -- saved by ranks.lua's listener, which runs after this one
+		end
+	end
+	changes._count = 0
+end
+
 onEvent("GameDataLoaded", function(data)
 	if data.maps then
+		applyMapChanges(data)
+
 		local in_file = { data.maps, data.maps2, data.maps3, data.maps4, data.maps5 }
 		local memory, sections
 
@@ -271,15 +383,16 @@ onEvent("GameDataLoaded", function(data)
 					if sections._count ~= math.ceil(memory.count / maps_per_section) then
 						sections._map_pointer = maps_per_section + 1 -- reset everything
 
-					elseif sections._count == needed then
-						local section = sections[sections._count]
+					else
+						-- same number of sections, but the last one has to match the new length
+						-- (# since _count is only set once a section is shuffled)
 						local modulo = memory.count % maps_per_section
 
 						if modulo == 0 then
 							modulo = maps_per_section
 						end
 
-						if section._count ~= 0 and section._count ~= modulo then
+						if #sections[sections._count] ~= modulo then
 							sections._map_pointer = maps_per_section + 1
 						end
 					end
@@ -306,6 +419,7 @@ onEvent("GameDataLoaded", function(data)
 		maps.polls._count = #data.map_polls
 	end
 end)
+end
 
 onEvent("NewGame", function()
 	local map_code_num = tonumber(tostring(room.currentMap):sub(2))
