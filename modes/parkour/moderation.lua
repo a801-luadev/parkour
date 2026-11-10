@@ -1,23 +1,20 @@
 do
-local to_do = {}
 -- requests waiting for eventSanctionDataLoaded
 local ban_requests = {} -- target -> list of {moderator, time}
 local sanction_requests = {} -- target -> moderator -> needs a sanction file lookup
-local cached_files = {
-	[tostring(files["sanction"])] = false,
-}
+-- jobs waiting for the sanction file, run in order:
+--   {"set", id, name, time, moderator, minutes}
+--   {"reset", id, name, player}
+--   {"view", id, name, player}
+local sanction_jobs = {_count = 0}
+local loaded_sanction -- data.sanction of the last load, for views answered at once
 local reported = {}
 local sanction_state, file_sanctions = { mods={} }, {}
 
--- if it doesn't require save, we can call callback right away using cache
--- returns true if it hits the cache
-local function schedule(fileid, save, callback, a, b, c, d)
-	if not save and cached_files[tostring(files[fileid])] then
-		callback(cached_files[tostring(files[fileid])], a, b, c, d)
-		return true
-	end
-
-	to_do[#to_do + 1] = { fileid, save, callback, a, b, c, d }
+local function queueSanctionJob(job)
+	sanction_jobs._count = sanction_jobs._count + 1
+	sanction_jobs[sanction_jobs._count] = job
+	scheduleFile("sanction")
 end
 
 local function getSanction(id, data)
@@ -119,60 +116,251 @@ local function checkBansInRoom()
 	end
 end
 
-onEvent("GameDataLoaded", function(data, fileid)
-	local action
-	local save
-	local len = #to_do
+local function printSanctions(target, kind, name, pid, timestamp, time, level, mod, minutes)
+	local banState = ""
 
-	for index = 1, len do
-		action = to_do[index]
-		if files[action[1]] == tonumber(fileid) then
-			if not action[3](data, action[4], action[5], action[6], action[7]) then
-				save = save or action[2]
+	if not time then
+		banState = "has never been banned before "
+	elseif time == 0 then
+		banState = "was unbanned "
+	elseif time == 2 or time > os.time() then
+		banState = "is <r>currently banned</r> "
+	else
+		banState = "was banned "
+	end
+
+	local byMod = mod and ("by <bv>" .. mod .. "</bv> ") or ""
+	local forMinutes = ""
+	local onDate = ""
+	local minRemaining = ""
+
+	if timestamp then
+		if time then
+			if time == 2 then
+				forMinutes = "permanently "
+			elseif time > 2 then
+				local minutes = math.floor((time - timestamp) / 1000 / 60)
+				forMinutes = "for <v>" .. minutes .. "</v> minutes "
 			end
-			to_do[index] = false
+		end
+
+		onDate = "on <bl>" .. os.date("%B %d %Y %H:%M.%S", timestamp) .. "</bl> (france time) "
+	end
+
+	if time and minutes then
+		forMinutes = "for <v>" .. minutes .. "</v> minutes "
+	end
+
+	if time and time > 2 then
+		local minutes = math.floor((time - os.time()) / 1000 / 60)
+
+		if minutes >= 0 then
+			minRemaining = "and has <v>" .. minutes .. "</v> minutes remaining "
 		end
 	end
 
-	for index = len, 1, -1 do
-		if not to_do[index] then
-			table.remove(to_do, index)
+	sendChatFmt(
+		"<n>(%s) <n2>%s</n2> %s%s%s%s%s<g>[level %s] [ts %s] [pid %s]",
+		target,
+		kind,
+		name,
+		banState,
+		byMod,
+		forMinutes,
+		onDate,
+		minRemaining,
+		level or 0,
+		time or "-",
+		pid or "-"
+	)
+end
+
+-- returns true if it changed the file
+local function setSanction(data, playerID, playerName, time, moderator, minutes)
+	local now = os.time()
+	local sanction, sanction_data = getSanction(playerID, data.sanction.data)
+
+	time = time or (now + minutes * 60 * 1000)
+
+	if time > 0 then
+		if sanction and (sanction.time == 2 or sanction.time > now) and not minutes then
+			sendChatFmt("<r>%s is banned already.", moderator, playerName)
+			return
+		end
+	else
+		if not sanction or sanction.time < 1 then
+			sendChatFmt("<r>%s doesn't seem to be banned.", moderator, playerName)
+			return
 		end
 	end
 
-	if cached_files[fileid] ~= nil then
-		cached_files[fileid] = data
+	local sanctionLevel = sanction and sanction.level or 0
+	if time == 1 then
+		sanctionLevel = math.min(4, sanctionLevel + 1)
+		if sanctionLevel == 1 then
+			time = now + 86400000 -- 1 day
+			minutes = 1440
+		elseif sanctionLevel == 2 then
+			time = now + 86400000 * 7
+			minutes = 10080
+		elseif sanctionLevel == 3 then
+			time = now + 86400000 * 30
+			minutes = 43200
+		else
+			time = 2 -- permanent ban
+			minutes = 2
+		end
+	elseif time == -1 then
+		sanctionLevel = math.max(0, sanctionLevel - 1)
+		time = 0
+		minutes = 0
 	end
 
-	if data.sanction then
-		local skip = false -- skips parsing if already parsed
+	local mods = data.sanction.mods
+	local mod_index = table_find(mods, moderator)
 
-		-- should re-parse?
-		if SplitRW.shouldParse(data.sanction, sanction_state) then
-			-- we can reuse existing items table
-			-- as long as we never delete sanctions
-			sanction_state = {
-				items = sanction_state.items,
-				mods = data.sanction.mods,
-				ts = data.sanction.ts,
-			}
-		elseif sanction_state.parsed then
-			skip = true
+	if not mod_index then
+		mods[1 + #mods] = moderator
+		mod_index = #mods
+	end
+
+	local packet = {
+		playerID,
+		playerName,
+		time,
+		moderator,
+		minutes,
+		sanction and sanction.timestamp or "-",
+		sanction and sanction.time or "-",
+		sanction and (mods[sanction.info] or sanction.info) or "-",
+		sanction and sanction.level or "-",
+	}
+
+	if not sanction then
+		sanction = {
+			id = playerID,
+		}
+	end
+
+	sanction.timestamp = now
+	sanction.time = time
+	sanction.info = mod_index
+	sanction.level = sanctionLevel
+
+	updateSanctionFile(sanction, data, sanction_data)
+	-- our own save isn't parsed again, so the ban is cached here like cacheBans does
+	if time == 2 or time > now then
+		bans[playerID] = now
+	end
+
+	sendPacket(
+		"common",
+		packets.rooms.ban_logs,
+		table.concat(packet, "\000")
+	)
+	sendBanLog(playerID, time, moderator, minutes)
+	return true
+end
+
+-- returns true if it changed the file
+local function resetSanction(data, targetID, targetName, player)
+	local file, sanction_data = getSanction(targetID, data.sanction.data)
+	if not file or not file.level or file.level == 0 then
+		sendChatFmt("<j>%s's sanction level is already at zero.", player, targetName or targetID)
+		return
+	end
+
+	file.level = 0
+	updateSanctionFile(file, data, sanction_data)
+	sendChatFmt("<j>%s's sanction level has been reset.", player, targetName or targetID)
+	return true
+end
+
+-- answers a view from the sanction file (data.sanction)
+local function printSanctionOnLoad(sanction, targetID, targetName, player)
+	local file = getSanction(targetID, sanction.data)
+	if not file then
+		sendChatFmt("<r>%s not found in file data", player, targetID)
+		return
+	end
+	printSanctions(
+		player,
+		'file',
+		targetName or targetID,
+		targetID,
+		file.timestamp,
+		file.time,
+		file.level,
+		tostring(sanction.mods[file.info] or file.info)
+	)
+end
+
+-- runs the queued jobs in order, returns true if one changed the file
+local function runSanctionJobs(data)
+	local jobs = sanction_jobs
+	if jobs._count == 0 then return end
+
+	local changed, job, kind
+	for index = 1, jobs._count do
+		job = jobs[index]
+		jobs[index] = nil
+		kind = job[1]
+
+		if kind == "set" then
+			if setSanction(data, job[2], job[3], job[4], job[5], job[6]) then
+				changed = true
+			end
+		elseif kind == "reset" then
+			if resetSanction(data, job[2], job[3], job[4]) then
+				changed = true
+			end
+		else
+			printSanctionOnLoad(data.sanction, job[2], job[3], job[4])
 		end
+	end
+	jobs._count = 0
 
-		if not skip then
-			file_sanctions = SplitRW.parse(data.sanction.data, sanction_state, 500, "sanction")
-			cacheBans(file_sanctions, sanction_state.indexMap, sanction_state.prev, sanction_state.index - 1)
-		end
+	return changed
+end
 
-		checkBansInRoom()
+onEvent("GameDataLoaded", function(data, fileid)
+	local sanction = data.sanction
+	if not sanction then return end
 
-		local updated = SplitRW.dump(sanction_state)
-		if updated then
-			data.sanction.ts = os.time()
-			data.sanction.data = updated
-			save = true
-		end
+	-- refresh the parse before the jobs run, so they see the file as it is now
+	if SplitRW.shouldParse(sanction, sanction_state) then
+		-- we can reuse existing items table
+		-- as long as we never delete sanctions
+		sanction_state = {
+			items = sanction_state.items,
+			ts = sanction.ts,
+		}
+	end
+	sanction_state.mods = sanction.mods
+
+	if not sanction_state.parsed then
+		file_sanctions = SplitRW.parse(sanction.data, sanction_state, 500, "sanction")
+		cacheBans(file_sanctions, sanction_state.indexMap, sanction_state.prev, sanction_state.index - 1)
+	end
+	loaded_sanction = sanction
+
+	-- jobs edit the parse, or the string itself while it's still being parsed
+	local save = runSanctionJobs(data)
+
+	checkBansInRoom()
+
+	local updated = SplitRW.dump(sanction_state)
+	if updated then
+		sanction.ts = os.time()
+		sanction.data = updated
+		sanction_state.updated = nil
+		save = true
+	end
+
+	-- the parse matches what we save, so our own save isn't parsed again.
+	-- edits to the string mid-parse aren't in it, so those start a new parse
+	if sanction_state.parsed then
+		sanction_state.ts = sanction.ts
 	end
 
 	if save then
@@ -188,85 +376,7 @@ local function updateSanctions(playerID, playerName, time, moderator, minutes)
 		return sendChatFmt('<r>Invalid player id', moderator)
 	end
 
-	schedule("sanction", true, function(data)
-		local now = os.time()
-		local sanction, sanction_data = getSanction(playerID, data.sanction.data)
-
-		time = time or (now + minutes * 60 * 1000)
-
-		if time > 0 then
-			if sanction and (sanction.time == 2 or sanction.time > now) and not minutes then
-				sendChatFmt("<r>%s is banned already.", moderator, playerName)
-				return true
-			end
-		else
-			if not sanction or sanction.time < 1 then
-				sendChatFmt("<r>%s doesn't seem to be banned.", moderator, playerName)
-				return true
-			end
-		end
-
-		local sanctionLevel = sanction and sanction.level or 0
-		if time == 1 then
-			sanctionLevel = math.min(4, sanctionLevel + 1)
-			if sanctionLevel == 1 then
-				time = now + 86400000 -- 1 day
-				minutes = 1440
-			elseif sanctionLevel == 2 then
-				time = now + 86400000 * 7
-				minutes = 10080
-			elseif sanctionLevel == 3 then
-				time = now + 86400000 * 30
-				minutes = 43200
-			else
-				time = 2 -- permanent ban
-				minutes = 2
-			end
-		elseif time == -1 then
-			sanctionLevel = math.max(0, sanctionLevel - 1)
-			time = 0
-			minutes = 0
-		end
-
-		local mods = data.sanction.mods
-		local mod_index = table_find(mods, moderator)
-
-		if not mod_index then
-			mods[1 + #mods] = moderator
-			mod_index = #mods
-		end
-
-		local packet = {
-			playerID,
-			playerName,
-			time,
-			moderator,
-			minutes,
-			sanction and sanction.timestamp or "-",
-			sanction and sanction.time or "-",
-			sanction and (mods[sanction.info] or sanction.info) or "-",
-			sanction and sanction.level or "-",
-		}
-
-		if not sanction then
-			sanction = {
-				id = playerID,
-			}
-		end
-
-		sanction.timestamp = now
-		sanction.time = time
-		sanction.info = mod_index
-		sanction.level = sanctionLevel
-
-		updateSanctionFile(sanction, data, sanction_data)
-		sendPacket(
-			"common",
-			packets.rooms.ban_logs,
-			table.concat(packet, "\000")
-		)
-		sendBanLog(playerID, time, moderator, minutes)
-	end)
+	queueSanctionJob({"set", playerID, playerName, time, moderator, minutes})
 end
 
 newCmd({ name = {"ban", "unban"},
@@ -367,85 +477,15 @@ newCmd({ name = "punban",
 	handleAdminBan(player, false, targetPlayer, playerID, 0, 0)
 end })
 
-local function printSanctions(target, kind, name, pid, timestamp, time, level, mod, minutes)
-	local banState = ""
-
-	if not time then
-		banState = "has never been banned before "
-	elseif time == 0 then
-		banState = "was unbanned "
-	elseif time == 2 or time > os.time() then
-		banState = "is <r>currently banned</r> "
-	else
-		banState = "was banned "
-	end
-
-	local byMod = mod and ("by <bv>" .. mod .. "</bv> ") or ""
-	local forMinutes = ""
-	local onDate = ""
-	local minRemaining = ""
-
-	if timestamp then
-		if time then
-			if time == 2 then
-				forMinutes = "permanently "
-			elseif time > 2 then
-				local minutes = math.floor((time - timestamp) / 1000 / 60)
-				forMinutes = "for <v>" .. minutes .. "</v> minutes "
-			end
-		end
-
-		onDate = "on <bl>" .. os.date("%B %d %Y %H:%M.%S", timestamp) .. "</bl> (france time) "
-	end
-
-	if time and minutes then
-		forMinutes = "for <v>" .. minutes .. "</v> minutes "
-	end
-
-	if time and time > 2 then
-		local minutes = math.floor((time - os.time()) / 1000 / 60)
-
-		if minutes >= 0 then
-			minRemaining = "and has <v>" .. minutes .. "</v> minutes remaining "
-		end
-	end
-
-	tfm.exec.chatMessage(
-		("<v>[#] <n>(%s) <n2>%s</n2> %s%s%s%s%s<g>[level %s] [ts %s] [pid %s]"):format(
-			kind,
-			name,
-			banState,
-			byMod,
-			forMinutes,
-			onDate,
-			minRemaining,
-			level or 0,
-			time or "-",
-			pid or "-"
-		),
-		target
-	)
-end
-
-local function printSanctionOnLoad(data, targetID, targetName, player)
-	local file = getSanction(targetID, data.sanction.data)
-	if not file then
-		tfm.exec.chatMessage(
-			("<v>[#] <r>%s not found in file data"):format(targetID),
-			player
-		)
+-- answered at once from the last load, or queued until the first one
+local function viewSanction(targetID, targetName, player, shownAs)
+	if loaded_sanction then
+		printSanctionOnLoad(loaded_sanction, targetID, targetName, player)
 		return
 	end
-	printSanctions(
-		player,
-		'file',
-		targetName or targetID,
-		targetID,
-		file.timestamp,
-		file.time,
-		file.level,
-		tostring(data.sanction.mods[file.info] or file.info)
-	)
+
+	sendChatFmt("Checking file data for %s's sanctions...", player, shownAs)
+	queueSanctionJob({"view", targetID, targetName, player})
 end
 
 newCmd({ name = {"sanctions", "bancount", "baninfo"},
@@ -475,27 +515,7 @@ newCmd({ name = {"sanctions", "bancount", "baninfo"},
 			end
 
 			tfm.exec.chatMessage("<v>[#] <J>Scheduled the command.", player)
-			schedule("sanction", true, function(data)
-				local file, sanction_data = getSanction(targetID, data.sanction.data)
-				if not file or not file.level or file.level == 0 then
-					tfm.exec.chatMessage(
-						("<v>[#] <j>%s's sanction level is already at zero."):format(
-							targetName or targetID
-						),
-						player
-					)
-					return true
-				end
-
-				file.level = 0
-				updateSanctionFile(file, data, sanction_data)
-				tfm.exec.chatMessage(
-					("<v>[#] <j>%s's sanction level has been reset."):format(
-						targetName or targetID
-					),
-					player
-				)
-			end)
+			queueSanctionJob({"reset", targetID, targetName, player})
 
 			chatlogCmd(cmd, player, args)
 			logCmd(cmd, player, args)
@@ -521,10 +541,7 @@ newCmd({ name = {"sanctions", "bancount", "baninfo"},
 	end
 
 	if targetID then
-		local is_cached = schedule("sanction", false, printSanctionOnLoad, targetID, targetName, player)
-		if not is_cached then
-			sendChatFmt("Checking file data for %s's sanctions...", player, targetID)
-		end
+		viewSanction(targetID, targetName, player, targetID)
 	end
 end })
 
@@ -558,10 +575,7 @@ local function printPlayerSanctions(player, targetName, pdata, fileLookup)
 	)
 
 	if fileLookup and pdata.playerid then
-		local is_cached = schedule("sanction", false, printSanctionOnLoad, pdata.playerid, targetName, player)
-		if not is_cached then
-			sendChatFmt("Checking file data for %s's sanctions...", player, targetName)
-		end
+		viewSanction(pdata.playerid, targetName, player, targetName)
 	end
 end
 
