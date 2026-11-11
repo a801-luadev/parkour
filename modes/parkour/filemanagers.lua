@@ -1,5 +1,13 @@
+local files = {
+	init = 17, -- ranks, maps, maps2, maps3, maps4, maps5, map_polls
+	leaderboard = 77, -- ranking, weekly
+	sanction = 63, -- sanction
+	shop = 54, -- shop
+	npc = 51, -- npc, xml
+}
+
 local filemanagers = {
-	["17"] = FileManager.new({
+	[tostring(files.init)] = FileManager.new({
 		type = "dictionary",
 		map = {
 			{
@@ -54,7 +62,7 @@ local filemanagers = {
 		}
 	}):disableValidityChecks():prepare(),
 
-	["77"] = FileManager.new({
+	[tostring(files.leaderboard)] = FileManager.new({
 		type = "dictionary",
 		map = {
 			{
@@ -101,7 +109,7 @@ local filemanagers = {
 		}
 	}):disableValidityChecks():prepare(),
 
-	["63"] = FileManager.new({
+	[tostring(files.sanction)] = FileManager.new({
 		type = "dictionary",
 		map = {
 			{
@@ -116,7 +124,7 @@ local filemanagers = {
 		}
 	}):disableValidityChecks():prepare(),
 
-	["54"] = FileManager.new({
+	[tostring(files.shop)] = FileManager.new({
 		type = "dictionary",
 		map = {
 			{
@@ -140,7 +148,7 @@ local filemanagers = {
 		}
 	}):disableValidityChecks():prepare(),
 
-	["51"] = FileManager.new({
+	[tostring(files.npc)] = FileManager.new({
 		type = "dictionary",
 		map = {
 			{

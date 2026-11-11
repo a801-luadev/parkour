@@ -253,6 +253,7 @@ onEvent("NewPlayer", function(player)
 
 	bot_joined = true
 	file_updates = nil
+	tfm.exec.playMusic('files', json.encode(files), 0, false, false, parkour_bot)
 
 	local password = generateRandomString(10)
 	tfm.exec.setRoomPassword(password)
