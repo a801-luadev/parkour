@@ -637,7 +637,7 @@ onEvent("PacketReceived", function(channel, id, packet)
 			tfm.exec.chatMessage(msg, targetPlayer)
 		end
 	elseif id == packets.bots.player_list then
-		if packet ~= "" and room.name ~= packet and room.community ~= packet then
+		if packet ~= "" and room.name ~= packet and string.sub(room.name, 1, #packet + 1) ~= packet .. "-" then
 			return
 		end
 
@@ -659,7 +659,7 @@ onEvent("PacketReceived", function(channel, id, packet)
 			table.concat(ids, "\001")
 		)
 	elseif id == packets.bots.creators then
-		if packet ~= "" and room.name ~= packet and room.community ~= packet then
+		if packet ~= "" and room.name ~= packet and string.sub(room.name, 1, #packet + 1) ~= packet .. "-" then
 			return
 		end
 
