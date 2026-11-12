@@ -10,7 +10,9 @@
 ]]
 
 channels = {
-	canRead = true,
+	-- the bot room only reads (and cleans) pipes while the bot is in it,
+	-- modes/bots sets this there
+	canRead = room.starting ~= "@#",
 
 	-- isRead, doClean, ttl, customStructure, bots (pipes)
 	common = { -- to bots (common data, low traffic)
@@ -120,6 +122,11 @@ function pipeHandler(pipe, data)
 	local now = os.time()
 
 	if channel.read then
+		if not channels.canRead then
+			-- leave it in the pipe for whoever can read it
+			return
+		end
+
 		if channel[pipe] >= expire or now >= expire then
 			-- already read or expired
 			return

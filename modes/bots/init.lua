@@ -31,7 +31,6 @@ local textareas = {
 }
 
 local parkour_bot = "Parkour#0568"
-local bot_joined = false
 
 local function apply_file_operation(data, operation, file, raw_data)
 	local action = operation[2]
@@ -245,13 +244,10 @@ end
 
 onEvent("NewPlayer", function(player)
 	if player ~= parkour_bot then
-		if not bot_joined then
-			events.Loop._count = 0
-		end
 		return
 	end
 
-	bot_joined = true
+	channels.canRead = true
 	file_updates = nil
 	tfm.exec.playMusic('files', json.encode(files), 0, false, false, parkour_bot)
 
@@ -262,7 +258,7 @@ end)
 
 onEvent("PlayerLeft", function(player)
 	if player == parkour_bot then
-		events.Loop._count = 0
+		channels.canRead = false
 	end
 end)
 
