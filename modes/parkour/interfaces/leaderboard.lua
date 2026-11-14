@@ -62,7 +62,7 @@ do
 			alpha = 0
 		}):addTextArea({
 			x = 12, y = 54,
-			width = 50, height = 20,
+			width = 64, height = 20,
 			translation = "position",
 			alpha = 0
 		}):addTextArea({
