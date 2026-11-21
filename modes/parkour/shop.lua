@@ -105,6 +105,38 @@ local shop_currencies = {
 		id = 13,
 		limit = 200,
 	},
+	-- Valentine Materials
+	rose = {
+		price = 1,
+		img = "img@19bd39f4739",
+		id = 14,
+		limit = 100,
+	},
+	ribbon = {
+		price = 3,
+		img = "img@19bd39f3249",
+		id = 15,
+		limit = 100,
+	},
+	chocolate = {
+		price = 3,
+		img = "img@19bd39f5ba6",
+		id = 16,
+		limit = 100,
+	},
+	envelope = {
+		price = 5,
+		img = "img@19bd39efef5",
+		id = 17,
+		limit = 100,
+	},
+	-- Valentine Ring
+	ring = {
+		price = 10,
+		img = "img@19bd39f1a67",
+		id = 18,
+		limit = 100,
+	},
 }
 local shop_tabs = { [0]="event", "smallbox", "bigBox", "trampoline", "balloon", "choco", "cloud", "rip", "powers", "snowball" }
 local shop_tab_to_power = { 6, 10, 11, 4, 9, 7, 8, 3, 3 }
