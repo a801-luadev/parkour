@@ -372,6 +372,7 @@ do
       local topContributors = {}
       local participants, contributionRatio, potionReward = 0
       local actualTotalPotions = 0
+      local amount
 
       for player, playerValue in next, playerValues do
         participants = participants + 1
