@@ -113,8 +113,6 @@ do
 	local queue = {_first = 1, _last = 0}
 
 	local function answer(name, request, raw, data)
-		pending[name] = nil
-
 		local requested = request.kinds
 		if not data then
 			local parse = request.count >= FULL_PARSE_KINDS or requested[PDATA_FULL]
@@ -129,8 +127,12 @@ do
 			end
 			if parse then
 				data = parseOutPlayerData(name, raw)
+				-- corrupt data: the request times out
+				if not data then return end
 			end
 		end
+
+		pending[name] = nil
 
 		for kind in next, requested do
 			if data then

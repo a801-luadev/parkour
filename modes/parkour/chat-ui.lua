@@ -13,26 +13,30 @@ local visitors = { _len=0 }
 local next_easter_egg = os.time() + math.random(30, 60) * 60 * 1000
 
 onEvent("RoomDataLoaded", function(player, commu, room_name)
-	local requester = fetching_player_room[player]
-	if not requester then return end
+	local requesters = fetching_player_room[player]
+	if not requesters then return end
 	fetching_player_room[player] = nil
 
-	if commu then
-		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s community: <d>" .. commu, requester)
-	end
-	if room_name then
-		tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n>'s room: <d>" .. room_name, requester)
+	for requester in next, requesters do
+		if commu then
+			sendChatFmt("<d>%s<n>'s community: <d>%s", requester, player, commu)
+		end
+		if room_name then
+			sendChatFmt("<d>%s<n>'s room: <d>%s", requester, player, room_name)
+		end
 	end
 end)
 
 onEvent("PlayerDataTimeout", function(player, kind)
 	if kind ~= PDATA_ROOM then return end
 
-	local requester = fetching_player_room[player]
-	if not requester then return end
+	local requesters = fetching_player_room[player]
+	if not requesters then return end
 	fetching_player_room[player] = nil
 
-	tfm.exec.chatMessage("<v>[#] <d>" .. player .. "<n> is offline.", requester)
+	for requester in next, requesters do
+		sendChatFmt("<d>%s<n> is offline.", requester, player)
+	end
 end)
 
 onEvent("NewGame", function()
@@ -522,7 +526,10 @@ newCmd({ name = "room",
 			return
 		end
 
-		fetching_player_room[fetching] = player
+		if not fetching_player_room[fetching] then
+			fetching_player_room[fetching] = {}
+		end
+		fetching_player_room[fetching][player] = true
 		requestPlayerData(fetching, PDATA_ROOM)
 		logCmd(cmd, player, args)
 	end })

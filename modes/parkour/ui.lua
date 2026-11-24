@@ -48,9 +48,11 @@ local function closeAllInterfaces(player)
 end
 
 local function checkProfileRequest(player, data)
-	local requester = profile_request[player]
-	if requester then
-		profile_request[player] = nil
+	local requesters = profile_request[player]
+	if not requesters then return end
+	profile_request[player] = nil
+
+	for requester in next, requesters do
 		if Profile.open[requester] then
 			Profile:update(requester, player, data)
 		else
@@ -370,7 +372,10 @@ newCmd({ name = {"profile", "p"},
 					Profile:show(player, request)
 				end
 			else
-				profile_request[request] = player
+				if not profile_request[request] then
+					profile_request[request] = {}
+				end
+				profile_request[request][player] = true
 				requestPlayerData(request, PDATA_FULL)
 			end
 		end
@@ -598,11 +603,13 @@ onEvent("OutPlayerDataParsed", checkProfileRequest)
 onEvent("PlayerDataTimeout", function(player, kind)
 	if kind ~= PDATA_FULL then return end
 
-	local requester = profile_request[player]
-	if not requester then return end
+	local requesters = profile_request[player]
+	if not requesters then return end
 	profile_request[player] = nil
 
-	translatedChatMessage("cant_load_profile", requester, player)
+	for requester in next, requesters do
+		translatedChatMessage("cant_load_profile", requester, player)
+	end
 end)
 
 onEvent("StaffDataLoaded", function(player, commu, isHidden)

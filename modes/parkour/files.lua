@@ -886,8 +886,14 @@ local function decodePlayerData(raw)
 end
 
 -- Parses the data of a player who isn't in the room (used by requestPlayerData)
+-- Returns nil if the data is corrupt
 function parseOutPlayerData(player, data)
-	data = data ~= "" and decodePlayerData(data) or {}
+	if data == "" then
+		data = {}
+	else
+		data = decodePlayerData(data)
+		if not data then return end
+	end
 
 	if data.v ~= data_version then
 		updateData(player, data)
