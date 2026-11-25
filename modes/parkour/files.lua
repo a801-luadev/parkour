@@ -964,13 +964,34 @@ onEvent("SavingFile", function(id, data, name)
 	system.saveFile(new_data, id)
 end)
 
+-- While the server doesn't answer file loads (e.g. a community server
+-- restart), it holds them and answers them all at once when it's back, and
+-- decoding every answer in one cycle pauses the room. So a new load waits for
+-- the previous one's answer (or FILE_LOAD_TIMEOUT), and an answer that comes
+-- within FILE_ANSWER_GAP of a decoded one is dropped: loads are 10.5s+ apart,
+-- so only held answers come that close.
+local FILE_LOAD_TIMEOUT = 60000
+local FILE_ANSWER_GAP = 5000
+local file_requested -- when the load nobody answered yet was requested
+local file_decoded -- when the last answer was decoded
+
 onEvent("FileLoaded", function(id, data)
+	local now = os.time()
+	file_requested = nil
+	if file_decoded and now - file_decoded < FILE_ANSWER_GAP then return end
+	file_decoded = now
+	-- the next load's answer must not be dropped
+	if next_file_load < now + FILE_ANSWER_GAP then
+		next_file_load = now + FILE_ANSWER_GAP
+	end
+
 	data = filemanagers[id]:load(data)
 	eventGameDataLoaded(data, id)
 end)
 
 onEvent("Loop", function()
 	local now = os.time()
+	if file_requested and now < file_requested + FILE_LOAD_TIMEOUT then return end
 	if now >= next_file_load then
 		local file_id
 		if file_schedule then
@@ -988,6 +1009,7 @@ onEvent("Loop", function()
 			file_index = file_index % total_files + 1
 		end
 		system.loadFile(file_id)
+		file_requested = now
 		next_file_load = now + math.random(10500, 13000)
 	end
 end)
@@ -1006,6 +1028,7 @@ end)
 onEvent("GameStart", function()
 	system.loadFile(file_queue[file_index])
 	local ts = os.time()
+	file_requested = ts
 
 	next_file_load = ts + math.random(10500, 15500)
 	file_index = file_index % total_files + 1
