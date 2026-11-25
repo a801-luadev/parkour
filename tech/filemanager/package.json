@@ -10,5 +10,9 @@
 	{
 		"type": "require-file",
 		"file": "tech/filemanager/leaderboard.lua"
+	},
+	{
+		"type": "require-file",
+		"file": "tech/filemanager/sanction.lua"
 	}
 ]

@@ -353,6 +353,138 @@ function migrate_leaderboard_260826()
   system.loadFile(prevId)
 end
 
+-- file 63's sanction (ts, mods, data) -> file 84's, and counts of what went
+-- where. now in ms. History older than 2 years is archived (left out; the bot
+-- keeps every row), and so are the odd rows: time 1 (pending bans from 2023)
+-- and time -2 (unknown).
+local function sanctions63to84(old, now)
+  local floor, concat = math.floor, table.concat
+  local cutoff = now - 730 * 24 * 60 * 60 * 1000
+
+  -- end - ts in minutes, as SanctionRW.write stores it
+  local function minutes(ts, time)
+    if time <= ts then return 0 end
+    return math.max(1, floor((time - ts) / 60000 + 0.5))
+  end
+
+  -- the "-" entry is dropped: unknown is index 0, the rest move down
+  local mods, mod_map, dash = {}, {[0] = 0}, 0
+  for index = 1, #old.mods do
+    if old.mods[index] == "-" then
+      dash = dash + 1
+      mod_map[index] = 0
+    else
+      mods[#mods + 1] = old.mods[index]
+      mod_map[index] = #mods
+    end
+  end
+
+  local legacy, perma, temp, data = {}, {}, {}, {}
+  local counts = {rows = 0, legacy = 0, perma = 0, temp = 0, data = 0, archived = 0,
+    archived_odd = 0, archived_ts0 = 0, dashes = dash, duplicates = 0}
+  local seen = {}
+
+  for row in string.gmatch(old.data, "[^\1]+") do
+    local id, ts, time, mod, level = string.match(row, "^([^\2]*)\2([^\2]*)\2([^\2]*)\2([^\2]*)\2([^\2]*)$")
+    id, ts, time, level = tonumber(id), tonumber(ts), tonumber(time), tonumber(level) or 0
+    mod = mod_map[tonumber(mod) or 0] or 0
+    counts.rows = counts.rows + 1
+
+    if not id or not ts or not time then
+      error("bad row: " .. string.gsub(row, "\2", ","))
+    end
+    if seen[id] then counts.duplicates = counts.duplicates + 1 end
+    seen[id] = true
+
+    local seconds = floor(ts / 1000)
+    if time == 1 or time == -2 then
+      counts.archived = counts.archived + 1
+      counts.archived_odd = counts.archived_odd + 1
+    elseif ts == 0 and (time == 2 or time > now) then
+      legacy[#legacy + 1] = id
+    elseif time == 2 then
+      perma[#perma + 1] = id .. "\2" .. seconds .. "\2" .. mod
+    elseif time > now then
+      temp[#temp + 1] = concat({id, seconds, minutes(ts, time), mod, level}, "\2")
+    elseif ts >= cutoff then
+      local duration = time > 2 and minutes(ts, time) or 0
+      data[#data + 1] = concat({id, seconds, duration, mod, level}, "\2")
+    else
+      counts.archived = counts.archived + 1
+      if ts == 0 then counts.archived_ts0 = counts.archived_ts0 + 1 end
+    end
+  end
+
+  counts.legacy, counts.perma, counts.temp, counts.data = #legacy, #perma, #temp, #data
+  return {
+    ts = now,
+    mods = mods,
+    legacy = concat(legacy, "\1"),
+    perma = concat(perma, "\1"),
+    temp = concat(temp, "\1"),
+    data = concat(data, "\1"),
+    archived = floor(cutoff / 1000),
+  }, counts
+end
+
+-- file 63 -> 84: !load reads 63 and prints what the migration would write,
+-- !save writes 84. File 63 is left as it is (the backup).
+function migrate_sanctions_261125()
+  local prevId = 63
+  local newId = 84
+  local oldManager = FileManager.new({
+    type = "dictionary",
+    map = {
+      {
+        name = "sanction",
+        type = "dictionary",
+        map = {
+          { name = "ts", type = "number" },
+          { name = "mods", type = "array", objects = { type = "string" } },
+          { name = "data", type = "string" },
+        }
+      }
+    }
+  }):disableValidityChecks():prepare()
+  local converted
+
+  tfm.exec.setRoomMaxPlayers(1)
+
+  function eventLoop()end
+
+  function eventFileLoaded(fileNumber, fileData)
+    if prevId ~= tonumber(fileNumber) then return end
+
+    local old = oldManager:load(fileData).sanction
+    local counts
+    converted, counts = sanctions63to84(old, os.time())
+
+    local parts = {}
+    for name, count in next, counts do
+      parts[#parts + 1] = name .. "=" .. count
+    end
+    table.sort(parts)
+    tfm.exec.chatMessage("File 63: " .. #fileData .. " B, ts " .. tostring(old.ts) .. ", " .. #old.mods .. " mods")
+    tfm.exec.chatMessage("Rows: " .. table.concat(parts, " "))
+    tfm.exec.chatMessage(string.format("Bytes: legacy %d, perma %d, temp %d, data %d; %d mods; archived %d",
+      #converted.legacy, #converted.perma, #converted.temp, #converted.data, #converted.mods, converted.archived))
+    tfm.exec.chatMessage("Type !save to write file " .. newId .. ".")
+  end
+
+  function eventChatCommand(playerName, command)
+    if command == "load" then
+      system.loadFile(prevId)
+    elseif command == "save" then
+      if not converted then
+        tfm.exec.chatMessage("Nothing loaded, type !load first.")
+        return
+      end
+      saveFile(newId, {sanction = converted})
+      tfm.exec.chatMessage("Saved file " .. newId .. ".")
+    end
+  end
+end
+
 --init_shop()
 --init_npc()
 --migrate_leaderboard()
@@ -360,3 +492,4 @@ end
 --migrate_sanctions_2512()
 --migrate_init_260720()
 --migrate_leaderboard_260826()
+--migrate_sanctions_261125()
