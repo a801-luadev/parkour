@@ -32,6 +32,21 @@ local textareas = {
 
 local parkour_bot = "Parkour#0568"
 
+-- id's sanction file row in the shape the bot reads (ms): info is the
+-- moderator's index (0 = unknown), mod their name ("-" if unknown); nil if none
+local function sanction_row(sanction, id)
+	local ts, time, mod, level = SanctionRW.find(sanction, id)
+	if not ts then return end
+	return {
+		id = id,
+		timestamp = ts,
+		time = time,
+		info = mod,
+		mod = SanctionRW.modName(sanction, mod),
+		level = level,
+	}
+end
+
 local function apply_file_operation(data, operation, file, raw_data)
 	local action = operation[2]
 	if action == 'fetch' then
@@ -121,12 +136,9 @@ local function apply_file_operation(data, operation, file, raw_data)
 			return "invalid player id"
 		end
 
-		local sanction_data = "\1" .. data.sanction.data .. "\1"
-		local sanction = SplitRW.find(sanction_data, "sanction", playerid)
-
 		tfm.exec.playMusic(
 			'sanctiondata:' .. tostring(playerid),
-			json.encode(sanction),
+			json.encode(sanction_row(data.sanction, playerid)),
 			0, false, false, parkour_bot
 		)
 		return
@@ -144,17 +156,11 @@ local function apply_file_operation(data, operation, file, raw_data)
 			return "invalid moderator"
 		end
 
-		local sanction_data = "\1" .. data.sanction.data .. "\1"
-		local prev_sanction = SplitRW.find(sanction_data, "sanction", playerid)
+		local sanction = data.sanction
+		local prev_sanction = sanction_row(sanction, playerid)
 		local time, level = tonumber(operation[5]), tonumber(operation[6])
-		local mods = data.sanction.mods
-		local mod_index = table_find(mods, moderator)
 		local now = os.time()
-
-		if not mod_index then
-			mods[1 + #mods] = moderator
-			mod_index = #mods
-		end
+		local ts = SanctionRW.fileTs(now)
 
 		local sanctionLevel = prev_sanction and prev_sanction.level or 0
 		if level then
@@ -167,39 +173,66 @@ local function apply_file_operation(data, operation, file, raw_data)
 
 		if not time then
 			if sanctionLevel == 1 then
-				time = now + 86400000 -- 1 day
+				time = ts + 86400000 -- 1 day
 			elseif sanctionLevel == 2 then
-				time = now + 86400000 * 7
+				time = ts + 86400000 * 7
 			elseif sanctionLevel == 3 then
-				time = now + 86400000 * 30
+				time = ts + 86400000 * 30
 			elseif sanctionLevel == 4 then
 				time = 2 -- permanent ban
 			else
 				time = 0 -- unban
 			end
 		end
-
-		local new_sanction = {
-			id = playerid,
-			timestamp = now,
-			time = time,
-			info = mod_index,
-			level = sanctionLevel,
-		}
-		sanction_data = SplitRW.updateSingle(sanction_data, new_sanction, "sanction")
-		if sanction_data then
-			data.sanction.ts = now
-			data.sanction.data = sanction_data:sub(2, -2)
+		-- perma bans are always level 4
+		if time == 2 then
+			sanctionLevel = 4
 		end
+
+		SanctionRW.write(sanction, playerid, ts, time, SanctionRW.modIndex(sanction, moderator), sanctionLevel)
+		sanction.ts = now
 
 		tfm.exec.playMusic(
 			'sanction:' .. tostring(playerid),
 			json.encode({
 				prev = prev_sanction,
-				current = new_sanction,
+				-- as stored: a temp ban's end is ts + whole minutes
+				current = sanction_row(sanction, playerid),
 			}),
 			0, false, false, parkour_bot
 		)
+		return
+	elseif action == 'ensure_ban' then
+		-- a row a room logged: written if the file lost it (a room's save
+		-- went over it), never over a newer row
+		if not data.sanction then
+			return "no sanction field"
+		end
+
+		local playerid, ts, time = tonumber(operation[3]), tonumber(operation[4]), tonumber(operation[5])
+		local moderator, level = operation[6], tonumber(operation[7])
+		if not playerid then
+			return "invalid player id"
+		end
+		if not (ts and time and level) then
+			return "invalid sanction"
+		end
+
+		local sanction = data.sanction
+		ts = SanctionRW.fileTs(ts)
+		local pts = SanctionRW.find(sanction, playerid)
+		local result
+		if pts and pts > ts then
+			result = "newer"
+		elseif pts == ts then
+			result = "already"
+		else
+			result = "applied"
+			SanctionRW.write(sanction, playerid, ts, time, SanctionRW.modIndex(sanction, moderator), time == 2 and 4 or level)
+			sanction.ts = os.time()
+		end
+
+		tfm.exec.playMusic('ensure_ban:' .. tostring(playerid), result, 0, false, false, parkour_bot)
 		return
 	elseif action == 'addmap' then
 		local list = data[operation[3]]
