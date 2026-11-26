@@ -5,23 +5,6 @@ import os
 import re
 import sys
 
-if '--ui' in sys.argv:
-	with open("scripts/testui.lua", "rb") as file:
-		script = file.read()
-
-elif '--migrate' in sys.argv:
-	with open("scripts/migrate.lua", "rb") as file:
-		script = file.read()
-
-else:
-	# Reading the script
-	with open("init.lua", "rb") as file:
-		script = file.read()
-
-if '--polyfill' in sys.argv or '--dev' in sys.argv:
-	with open("scripts/polyfill.lua", "rb") as file:
-		script = file.read() + script
-
 # Evaluating tags (building the code)
 def eval_tag(data, indent):
 	if data["type"] == "require-file":
@@ -52,30 +35,62 @@ def eval_tag(data, indent):
 
 	return content.replace(b"\n", b"\n" + indent)
 
-for indent, _open, tag, close in re.findall(rb"\n((?:\t| )*)(\{%\s*)(.+?)(\s*%\})", script):
-	args = tag.split(b" ")
-	cmd = args.pop(0).lower().decode()
+def build(script):
+	for indent, _open, tag, close in re.findall(rb"\n((?:\t| )*)(\{%\s*)(.+?)(\s*%\})", script):
+		args = tag.split(b" ")
+		cmd = args.pop(0).lower().decode()
 
-	if cmd.startswith("require-"):
-		script = script.replace(_open + tag + close, eval_tag({
-			"type": cmd,
-			cmd[8:]: eval(b" ".join(args))
-		}, indent), 1)
+		if cmd.startswith("require-"):
+			script = script.replace(_open + tag + close, eval_tag({
+				"type": cmd,
+				cmd[8:]: eval(b" ".join(args))
+			}, indent), 1)
+
+		else:
+			raise TypeError("Unknown tag in init.lua: {}".format(cmd))
+
+	# Trim spaces before newlines
+	return re.sub(rb"[\t ]+\n", b"\n", script.strip())
+
+if '--migrate' in sys.argv:
+	# scripts/migrations/<name>.lua -> builds/migrations/<name>.lua, for the
+	# name after --migrate, or every migration without one
+	names = [arg for arg in sys.argv[sys.argv.index('--migrate') + 1:] if not arg.startswith("--")][:1]
+	if not names:
+		names = [file[:-4] for file in sorted(os.listdir("scripts/migrations")) if file.endswith(".lua")]
+
+	os.makedirs("builds/migrations", exist_ok=True)
+	for name in names:
+		with open("scripts/migrations/" + name + ".lua", "rb") as file:
+			script = build(file.read())
+		with open("builds/migrations/" + name + ".lua", "wb") as file:
+			file.write(script)
+		print("builds/migrations/" + name + ".lua")
+
+else:
+	if '--ui' in sys.argv:
+		with open("scripts/testui.lua", "rb") as file:
+			script = file.read()
 
 	else:
-		raise TypeError("Unknown tag in init.lua: {}".format(cmd))
+		# Reading the script
+		with open("init.lua", "rb") as file:
+			script = file.read()
 
-# Trim spaces before newlines
-script = re.sub(rb"[\t ]+\n", b"\n", script.strip())
+	if '--polyfill' in sys.argv or '--dev' in sys.argv:
+		with open("scripts/polyfill.lua", "rb") as file:
+			script = file.read() + script
 
-# Create directory if it does not exist.
-now = datetime.datetime.utcnow()
-month_year = now.strftime("%m-%Y")
-if not os.path.isdir("builds"):
-	os.mkdir("builds")
-if not os.path.isdir("builds/" + month_year):
-	os.mkdir("builds/" + month_year)
+	script = build(script)
 
-# Save built script
-with open("builds/latest.lua", "wb") as file:
-	file.write(script)
+	# Create directory if it does not exist.
+	now = datetime.datetime.utcnow()
+	month_year = now.strftime("%m-%Y")
+	if not os.path.isdir("builds"):
+		os.mkdir("builds")
+	if not os.path.isdir("builds/" + month_year):
+		os.mkdir("builds/" + month_year)
+
+	# Save built script
+	with open("builds/latest.lua", "wb") as file:
+		file.write(script)
