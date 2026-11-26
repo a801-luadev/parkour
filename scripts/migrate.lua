@@ -416,13 +416,17 @@ local function sanctions63to84(old, now)
   end
 
   counts.legacy, counts.perma, counts.temp, counts.data = #legacy, #perma, #temp, #data
+  -- every row between \1s, empty: "\1"
+  local function wrap(rows)
+    return "\1" .. concat(rows, "\1") .. (#rows > 0 and "\1" or "")
+  end
   return {
     ts = now,
     mods = mods,
-    legacy = concat(legacy, "\1"),
-    perma = concat(perma, "\1"),
-    temp = concat(temp, "\1"),
-    data = concat(data, "\1"),
+    legacy = wrap(legacy),
+    perma = wrap(perma),
+    temp = wrap(temp),
+    data = wrap(data),
     archived = floor(cutoff / 1000),
   }, counts
 end

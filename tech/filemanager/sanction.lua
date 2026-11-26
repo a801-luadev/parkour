@@ -1,5 +1,6 @@
 -- Reads and writes the sanction file's rows. data.sanction holds four
--- strings, each id in at most one of them, rows joined by \1:
+-- strings, each id in at most one of them. Every row is between \1s
+-- ("\1row\1row\1", empty "\1"), so a row is found with one plain search:
 --   legacy: ids of permas from before sanctions had a date (ts 0, unknown
 --           moderator, level 4)
 --   perma:  id \2 ts \2 mod (level 4)
@@ -20,25 +21,19 @@ do
   -- the row of id in str (legacy: only ids) -> its text, start and end in
   -- str, or nil
   local function locate(str, id, legacy)
-    local wrapped = "\1" .. str .. "\1"
-    local start = find(wrapped, "\1" .. id .. (legacy and "\1" or "\2"), 1, true)
+    local start = find(str, "\1" .. id .. (legacy and "\1" or "\2"), 1, true)
     if not start then return end
-    local stop = find(wrapped, "\1", start + 1, true)
-    -- positions in str: wrapped has one more character in front
-    return sub(wrapped, start + 1, stop - 1), start, stop - 2
+    local stop = find(str, "\1", start + 1, true)
+    return sub(str, start + 1, stop - 1), start + 1, stop - 1
   end
 
-  -- str without the row at [start, stop] and the \1 that joins it
+  -- str without the row at [start, stop] and the \1 after it
   local function cut(str, start, stop)
-    if start > 1 then
-      return sub(str, 1, start - 2) .. sub(str, stop + 1)
-    end
-    return sub(str, stop + 2)
+    return sub(str, 1, start - 1) .. sub(str, stop + 2)
   end
 
   local function append(str, row)
-    if str == "" then return row end
-    return str .. "\1" .. row
+    return str .. row .. "\1"
   end
 
   -- the row of an id in its string -> ts, time, mod, level (ms)
@@ -180,7 +175,7 @@ do
     end
     if count == 0 then return false end
 
-    sanction.temp = table.concat(keep, "\1")
+    sanction.temp = "\1" .. table.concat(keep, "\1") .. (kept > 0 and "\1" or "")
     for index = 1, count do
       sanction.data = append(sanction.data, ended[index])
     end
