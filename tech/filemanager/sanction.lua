@@ -32,7 +32,9 @@ do
     return sub(str, 1, start - 1) .. sub(str, stop + 2)
   end
 
+  -- "" counts as empty too (a string not written by this codec)
   local function append(str, row)
+    if str == "" then str = "\1" end
     return str .. row .. "\1"
   end
 
