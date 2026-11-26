@@ -431,8 +431,46 @@ local function sanctions63to84(old, now)
   }, counts
 end
 
--- file 63 -> 84: !load reads 63 and prints what the migration would write,
--- !save writes 84. File 63 is left as it is (the backup).
+-- copies file 63 rows newer than file 84's into it.
+-- -> rows written, level differences (only listed)
+local function sanctions63catchup(old, new)
+  local since = (new.archived + 730 * 24 * 60 * 60) * 1000 -- the migration
+  local written, levels = {}, {}
+
+  for row in string.gmatch(old.data, "[^\1]+") do
+    local id, ts, time, mod, level = string.match(row, "^([^\2]*)\2([^\2]*)\2([^\2]*)\2([^\2]*)\2([^\2]*)$")
+    id, ts, time, level = tonumber(id), tonumber(ts), tonumber(time), tonumber(level) or 0
+    if not id or not ts or not time then
+      error("bad row: " .. string.gsub(row, "\2", ","))
+    end
+
+    -- time 1 and -2 are the odd rows the migration archived
+    if time ~= 1 and time ~= -2 then
+      local name = old.mods[tonumber(mod) or 0]
+      local seconds = SanctionRW.fileTs(ts)
+      local fts, ftime, _, flevel = SanctionRW.find(new, id)
+
+      if fts == seconds then
+        if time ~= 2 and ftime ~= 2 and level ~= flevel then
+          levels[#levels + 1] = {id, level, flevel}
+        end
+      elseif (fts and seconds > fts) or (not fts and seconds >= since) then
+        SanctionRW.write(new, id, ts, time, SanctionRW.modIndex(new, name), level)
+        written[#written + 1] = {id, ts, time, name or "-", level}
+      end
+    end
+  end
+
+  return written, levels
+end
+
+-- file 63 -> 84. !load reads 63 and prints what the migration would write.
+-- !save writes 84, only if 84 isn't migrated yet. Once it is, !catchup
+-- lists the sanctions rooms on the old module wrote to 63 since (they run
+-- until they close), and !catchup save writes them: it reads 84 and writes
+-- it in the same event, as rooms on the new module write 84 too. Each
+-- command loads a file: wait a few seconds between them. File 63 is left as
+-- it is (the backup).
 function migrate_sanctions_261125()
   local prevId = 63
   local newId = 84
@@ -450,16 +488,14 @@ function migrate_sanctions_261125()
       }
     }
   }):disableValidityChecks():prepare()
-  local converted
+  local old, converted, action
 
   tfm.exec.setRoomMaxPlayers(1)
 
   function eventLoop()end
 
-  function eventFileLoaded(fileNumber, fileData)
-    if prevId ~= tonumber(fileNumber) then return end
-
-    local old = oldManager:load(fileData).sanction
+  local function loaded63(fileData)
+    old = oldManager:load(fileData).sanction
     local counts
     converted, counts = sanctions63to84(old, os.time())
 
@@ -472,19 +508,67 @@ function migrate_sanctions_261125()
     tfm.exec.chatMessage("Rows: " .. table.concat(parts, " "))
     tfm.exec.chatMessage(string.format("Bytes: legacy %d, perma %d, temp %d, data %d; %d mods; archived %d",
       #converted.legacy, #converted.perma, #converted.temp, #converted.data, #converted.mods, converted.archived))
-    tfm.exec.chatMessage("Type !save to write file " .. newId .. ".")
+    tfm.exec.chatMessage("Type !save to migrate, or !catchup if file 84 is migrated already.")
+  end
+
+  local function loaded84(fileData)
+    -- a file 84 that decodes with an archived ts is migrated: never overwrite it
+    local ok, data = pcall(filemanagers[tostring(newId)].load, filemanagers[tostring(newId)], fileData)
+    local migrated = ok and data.sanction and (data.sanction.archived or 0) > 0
+
+    if action == "save" then
+      if migrated then
+        tfm.exec.chatMessage("<r>File 84 is migrated already, use !catchup.")
+        return
+      end
+      saveFile(newId, {sanction = converted})
+      tfm.exec.chatMessage("Saved file " .. newId .. ".")
+      return
+    end
+
+    if not migrated then
+      tfm.exec.chatMessage("<r>File 84 isn't migrated, use !save.")
+      return
+    end
+    local written, levels = sanctions63catchup(old, data.sanction)
+    for index = 1, #written do
+      tfm.exec.chatMessage("<v>" .. table.concat(written[index], " "))
+    end
+    for index = 1, #levels do
+      local diff = levels[index]
+      tfm.exec.chatMessage(string.format("<j>%d: level %d in 63, %d in 84 (not changed)", diff[1], diff[2], diff[3]))
+    end
+    tfm.exec.chatMessage(#written .. " rows to write, " .. #levels .. " level differences.")
+
+    if action == "catchup save" and #written > 0 then
+      data.sanction.ts = os.time()
+      saveFile(newId, data)
+      tfm.exec.chatMessage("Saved file " .. newId .. ".")
+    elseif #written > 0 then
+      tfm.exec.chatMessage("Type !catchup save to write them.")
+    end
+  end
+
+  function eventFileLoaded(fileNumber, fileData)
+    fileNumber = tonumber(fileNumber)
+    if fileNumber == prevId then
+      loaded63(fileData)
+    elseif fileNumber == newId and action then
+      loaded84(fileData)
+      action = nil
+    end
   end
 
   function eventChatCommand(playerName, command)
     if command == "load" then
       system.loadFile(prevId)
-    elseif command == "save" then
-      if not converted then
+    elseif command == "save" or command == "catchup" or command == "catchup save" then
+      if not old then
         tfm.exec.chatMessage("Nothing loaded, type !load first.")
         return
       end
-      saveFile(newId, {sanction = converted})
-      tfm.exec.chatMessage("Saved file " .. newId .. ".")
+      action = command
+      system.loadFile(newId)
     end
   end
 end
