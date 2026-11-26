@@ -39,11 +39,16 @@ do
 
 	-- removes the temp bans that ended
 	function dropEndedBans(now)
+		local ended, count = {}, 0
 		for id, stop in next, ban_ends do
 			if stop <= now then
-				ban_ends[id] = nil
-				bans[id] = nil
+				count = count + 1
+				ended[count] = id
 			end
+		end
+		for index = 1, count do
+			ban_ends[ended[index]] = nil
+			bans[ended[index]] = nil
 		end
 	end
 end
@@ -419,15 +424,21 @@ do
 	-- from an older copy) are written again; returns true if it changed the file
 	local function confirmRows(sanction, now)
 		local changed, ts
+		local confirmed, count = {}, 0
 		for id, row in next, unconfirmed do
 			ts = SanctionRW.find(sanction, id)
 			if ts and ts >= SanctionRW.fileTs(row[1]) then
-				unconfirmed[id] = nil
+				count = count + 1
+				confirmed[count] = id
 			else
 				SanctionRW.write(sanction, id, row[1], row[2], SanctionRW.modIndex(sanction, row[3]), row[4])
 				cacheBan(id, row[1], row[2], now)
 				changed = true
 			end
+		end
+		-- removed after the traversal: LuaJ's next fails on a removed key
+		for index = 1, count do
+			unconfirmed[confirmed[index]] = nil
 		end
 		return changed
 	end

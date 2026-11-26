@@ -996,10 +996,10 @@ onEvent("Loop", function()
 	if now >= next_file_load then
 		local file_id
 		if file_schedule then
-			for name in next, file_schedule do
+			local name = next(file_schedule)
+			if name then
 				file_id = files[name]
 				file_schedule[name] = nil
-				break
 			end
 			if not next(file_schedule) then
 				file_schedule = nil

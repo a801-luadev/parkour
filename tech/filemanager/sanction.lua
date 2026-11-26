@@ -68,7 +68,8 @@ do
       end
     end
 
-    -- no new keys while traversing with next: collect first
+    -- no key added or removed while traversing with next (LuaJ's next
+    -- fails on a removed key): collect first
     local gone, count = {}, 0
     for id in next, bans do
       if not active[id] then
@@ -79,10 +80,15 @@ do
     for index = 1, count do
       bans[gone[index]] = nil
     end
+    count = 0
     for id in next, ends do
       if not active_ends[id] then
-        ends[id] = nil
+        count = count + 1
+        gone[count] = id
       end
+    end
+    for index = 1, count do
+      ends[gone[index]] = nil
     end
 
     for id, ts in next, active do
