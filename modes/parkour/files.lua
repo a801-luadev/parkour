@@ -14,7 +14,8 @@ local scheduleFile
 do
 local settings_length = 9
 
-local file_queue = { files.init, files.shop, files.leaderboard, files.sanction }
+-- sanction second: wins wait for its first load
+local file_queue = { files.init, files.sanction, files.shop, files.leaderboard }
 local file_schedule
 local total_files = #file_queue
 local file_index = 1

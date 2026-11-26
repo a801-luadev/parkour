@@ -1,7 +1,7 @@
 local files = {
 	init = 17, -- ranks, maps, maps2, maps3, maps4, maps5, map_polls
 	leaderboard = 77, -- ranking, weekly
-	sanction = 63, -- sanction
+	sanction = 84, -- sanction
 	shop = 54, -- shop
 	npc = 51, -- npc, xml
 }
@@ -118,7 +118,11 @@ local filemanagers = {
 				map = {
 					{ name = "ts", type = "number" },
 					{ name = "mods", type = "array", objects = { type = "string" } },
+					{ name = "legacy", type = "string" },
+					{ name = "perma", type = "string" },
+					{ name = "temp", type = "string" },
 					{ name = "data", type = "string" },
+					{ name = "archived", type = "number" },
 				}
 			}
 		}

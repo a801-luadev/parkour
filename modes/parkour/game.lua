@@ -285,7 +285,7 @@ local function checkBan(player, data, id)
 	end
 
 	if data.banned and (data.banned == 2 or os.time() < data.banned) then
-		bans[id] = data.lastsanction
+		bans[id] = data.lastsanction or 0
 
 		enableSpecMode(player, true)
 
@@ -514,6 +514,8 @@ end)
 
 onEvent("PlayerWon", function(player, time, reltime)
 	if not levels then return end
+	-- bans isn't known before the first sanction load; the Loop retries the win
+	if not sanction_ready then return end
 
 	local info = room.playerList[player]
 	if not info or bans[info.id] or victory[player] then return end
@@ -990,6 +992,8 @@ onEvent("PlayerDataParsed", function(player, data)
 		tfm.exec.chatMessage("<v>[#] <d>Your spec mode has been carried to this room since it's enabled.", player)
 	end
 
+	-- moderation.lua: their data follows the sanction file first
+	syncJoinSanction(player, data)
 	checkBan(player, data)
 end)
 

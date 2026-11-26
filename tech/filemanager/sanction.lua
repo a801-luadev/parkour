@@ -187,11 +187,36 @@ do
     return true
   end
 
+  -- ms -> the whole second the file keeps, in ms
+  local function fileTs(ts)
+    return floor(ts / 1000) * 1000
+  end
+
+  -- index of a moderator in sanction.mods, added if missing; 0 = unknown
+  local function modIndex(sanction, name)
+    if not name or name == "-" then return 0 end
+    local mods = sanction.mods
+    for index = 1, #mods do
+      if mods[index] == name then return index end
+    end
+    mods[#mods + 1] = name
+    return #mods
+  end
+
+  -- the moderator of an index: "-" if unknown, the index if not in mods
+  local function modName(sanction, index)
+    if index == 0 then return "-" end
+    return sanction.mods[index] or index
+  end
+
   SanctionRW = {
     decodeActive = decodeActive,
     find = findRow,
     write = write,
     setLevel = setLevel,
     prune = prune,
+    fileTs = fileTs,
+    modIndex = modIndex,
+    modName = modName,
   }
 end
