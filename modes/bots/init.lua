@@ -22,6 +22,7 @@ local callbacks = {
 	update_file = bit.lshift(43, 8) + 255,
 	update_pdata_bot = bit.lshift(44, 8) + 255,
 	show_textarea = bit.lshift(45, 8) + 255,
+	get_password = bit.lshift(46, 8) + 255,
 }
 local textareas = {
 	heartbeat = 1 + 255,
@@ -31,6 +32,17 @@ local textareas = {
 }
 
 local parkour_bot = "Parkour#0568"
+-- has its own bot room: can ask for the password, nothing else (no pipes)
+local module_bot = "Parkour#5522"
+local room_password -- one per load, set on the first bot join
+
+-- the bots don't keep it: they ask with get_password
+local function lock_room()
+	if not room_password then
+		room_password = generateRandomString(10)
+		tfm.exec.setRoomPassword(room_password)
+	end
+end
 
 -- id's sanction file row in the shape the bot reads (ms): info is the
 -- moderator's index (0 = unknown), mod their name ("-" if unknown); nil if none
@@ -276,6 +288,10 @@ local function apply_file_operation(data, operation, file, raw_data)
 end
 
 onEvent("NewPlayer", function(player)
+	if player == module_bot then
+		lock_room()
+		return
+	end
 	if player ~= parkour_bot then
 		return
 	end
@@ -283,10 +299,7 @@ onEvent("NewPlayer", function(player)
 	channels.canRead = true
 	file_updates = nil
 	tfm.exec.playMusic('files', json.encode(files), 0, false, false, parkour_bot)
-
-	local password = generateRandomString(10)
-	tfm.exec.setRoomPassword(password)
-	addTextArea(textareas.bot_room_pw, password, parkour_bot)
+	lock_room()
 end)
 
 onEvent("PlayerLeft", function(player)
@@ -296,6 +309,11 @@ onEvent("PlayerLeft", function(player)
 end)
 
 onEvent("TextAreaCallback", function(id, player, data)
+	if id == callbacks.get_password and (player == parkour_bot or player == module_bot) then
+		lock_room()
+		addTextArea(textareas.bot_room_pw, room_password, player)
+		return
+	end
 	if player ~= parkour_bot then return end
 
 	if id == callbacks.send_room then
